@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable-night-v21/app_widget_background_custom.xml" value="0.1" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable-v21/app_widget_background.xml" value="0.1815" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable-v21/app_widget_background_custom.xml" value="0.1" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable-v21/app_widget_inner_view_background.xml" value="0.1815" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.178" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable-v31/app_widget_background.xml" value="0.1" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable/ad_background_attr.xml" value="0.2385" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable/ic_launcher_background.xml" value="0.179" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.178" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable/ic_launcher_monochrome.xml" value="0.1" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable/ic_launcher_round.xml" value="0.1" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/activity_main.xml" value="0.3273657289002558" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/content_main.xml" value="0.2710997442455243" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/custom_adview.xml" value="0.3423336547733848" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/day_widget.xml" value="0.24259259259259258" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/day_widget_content.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/fragment_first.xml" value="0.3625" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/fragment_second.xml" value="0.3625" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/month_widget.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/month_widget_content.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/progress_card_view.xml" value="0.33" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/progress_view.xml" value="0.25" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/small_adview.xml" value="0.5" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/week_progress_content.xml" value="0.32685185185185184" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/week_widget.xml" value="0.32685185185185184" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/year_progress_content.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/layout/year_widget.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/menu/bottom_navigation_bar.xml" value="0.23055555555555557" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/menu/main_menu.xml" value="0.23055555555555557" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/menu/menu_main.xml" value="0.3625" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.178" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.179" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/nativetemplates/src/main/res/drawable/gnt_outline_shape.xml" value="0.1905" />
+        <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/nativetemplates/src/main/res/layout/gnt_medium_template_view.xml" value="0.3484848484848485" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="Yearly_Progress.app" />
+      </set>
+    </option>
+  </component>
+</project>

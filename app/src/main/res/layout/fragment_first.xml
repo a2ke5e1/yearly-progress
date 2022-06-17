@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".screens.FirstFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical">
+
+                <com.a3.yearlyprogess.components.ProgressCardView
+                    android:id="@+id/progressCardViewYear"
+                    android:layout_width="match_parent"
+                    android:layout_margin="10dp"
+                    app:dataType="YEAR"
+                    android:layout_height="135dp" />
+                <com.a3.yearlyprogess.components.ProgressCardView
+                    android:id="@+id/progressCardViewMonth"
+                    android:layout_width="match_parent"
+                    android:layout_margin="10dp"
+                    app:dataType="MONTH"
+                    android:layout_height="135dp" />
+
+                <com.a3.yearlyprogess.components.ProgressCardView
+                    android:id="@+id/progressCardViewDay"
+                    android:layout_width="match_parent"
+                    android:layout_height="135dp"
+                    android:layout_margin="10dp"
+                    app:dataType="DAY" />
+
+                <LinearLayout
+                    android:id="@+id/ad_frame"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"/>
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

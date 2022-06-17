@@ -1,0 +1,15 @@
+<resources>
+    <declare-styleable name="AppWidgetAttrs">
+        <attr name="appWidgetPadding" format="dimension" />
+        <attr name="appWidgetInnerRadius" format="dimension" />
+        <attr name="appWidgetRadius" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="ProgressCardView">
+        <attr name="dataType">
+            <enum name="YEAR" value="100" />
+            <enum name="MONTH" value="101" />
+            <enum name="WEEK" value="102" />
+            <enum name="DAY" value="103" />
+        </attr>
+    </declare-styleable>
+</resources>

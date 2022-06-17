@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.a3.yearlyprogess.MainActivity">
+
+    <item
+        android:id="@+id/infoMenu"
+        android:icon="@drawable/ic_outline_info_24"
+        app:showAsAction="never"
+        android:title="@string/about" />
+    <item
+        android:id="@+id/shareMenu"
+        android:icon="@drawable/ic_outline_share_24"
+        app:showAsAction="never"
+        android:title="@string/share" />
+
+</menu>

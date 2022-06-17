@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Yearly Progess</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">Progress</string>
+    <string name="second_fragment_label">Widgets</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">Shows progress of the year</string>
+    <string name="month_widget_info">Show the progress current month</string>
+    <string name="week_widget_description">Show the progress current week</string>
+    <string name="app_widget_description_day">Show progress of the day</string>
+    <string name="demo_date">01/19</string>
+    <string name="demo_day_per">20%</string>
+    <string name="day">Day</string>
+    <string name="demp_month">January</string>
+    <string name="demo_month_per">50%</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="demo_year_per">4.3%</string>
+    <string name="demo_year">2022</string>
+    <string name="button_text">"Add Widget "</string>
+    <string name="progress">Progress</string>
+    <string name="widget">Widget</string>
+    <string name="share">Share</string>
+    <string name="about">About</string>
+    <string name="week">Week</string>
+    <string name="demo_week">Thrusday</string>
+    <string name="demo_week_per">70.12%</string>
+
+</resources>

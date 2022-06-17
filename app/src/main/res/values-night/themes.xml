@@ -1,0 +1,44 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.YearlyProgess" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#9bc8ee</item>
+        <item name="colorOnPrimary">#0b304a</item>
+        <item name="colorPrimaryContainer">#244762</item>
+        <item name="colorOnPrimaryContainer">#c5e4ff</item>
+        <item name="colorPrimaryInverse">#3c5f7c</item>
+        <item name="colorSecondary">#bdc7cf</item>
+        <item name="colorOnSecondary">#2a3136</item>
+        <item name="colorSecondaryContainer">#40474d</item>
+        <item name="colorOnSecondaryContainer">#d9e3ec</item>
+        <item name="colorTertiary">#d3badd</item>
+        <item name="colorOnTertiary">#39283f</item>
+        <item name="colorTertiaryContainer">#503e56</item>
+        <item name="colorOnTertiaryContainer">#f0d6fa</item>
+
+        <item name="colorError">#fff2b8b5</item>
+        <item name="colorOnError">#ff601410</item>
+        <item name="colorErrorContainer">#ff8c1d18</item>
+        <item name="colorOnErrorContainer">#fff2b8b5</item>
+
+        <item name="colorOutline">#87919a</item>
+        <item name="android:colorBackground">#181c1f</item>
+        <item name="colorOnBackground">#dce3e8</item>
+        <item name="colorSurface">#181c1f</item>
+        <item name="colorOnSurface">#dce3e8</item>
+        <item name="colorSurfaceVariant">#3f474e</item>
+        <item name="colorOnSurfaceVariant">#bcc7d1</item>
+        <item name="colorSurfaceInverse">#dce3e8</item>
+        <item name="colorOnSurfaceInverse">#2c3134</item>
+
+    </style>
+
+    <style name="App.SplashScreen" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_round</item>
+        <item name="postSplashScreenTheme">@style/Theme.YearlyProgess</item>
+    </style>
+
+</resources>

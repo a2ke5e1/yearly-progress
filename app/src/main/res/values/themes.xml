@@ -1,0 +1,92 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.YearlyProgess" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="colorPrimary">#3c5f7c</item>
+        <item name="colorOnPrimary">#fff</item>
+        <item name="colorPrimaryContainer">#c5e4ff</item>
+        <item name="colorOnPrimaryContainer">#001b2e</item>
+        <item name="colorPrimaryInverse">#9bc8ee</item>
+        <item name="colorSecondary">#575f65</item>
+        <item name="colorOnSecondary">#fff</item>
+        <item name="colorSecondaryContainer">#d9e3ec</item>
+        <item name="colorOnSecondaryContainer">#151c21</item>
+        <item name="colorTertiary">#68556f</item>
+        <item name="colorOnTertiary">#fff</item>
+        <item name="colorTertiaryContainer">#f0d6fa</item>
+        <item name="colorOnTertiaryContainer">#231229</item>
+
+        <item name="colorError">#ffb3261e</item>
+        <item name="colorOnError">#ffffff</item>
+        <item name="colorErrorContainer">#fff9dedc</item>
+        <item name="colorOnErrorContainer">#ff410e0b</item>
+
+        <item name="colorOutline">#6d777f</item>
+        <item name="android:colorBackground">#f9fcff</item>
+        <item name="colorOnBackground">#181c1f</item>
+        <item name="colorSurface">#f9fcff</item>
+        <item name="colorOnSurface">#181c1f</item>
+        <item name="colorSurfaceVariant">#d7e3ee</item>
+        <item name="colorOnSurfaceVariant">#3f474e</item>
+        <item name="colorSurfaceInverse">#2c3134</item>
+        <item name="colorOnSurfaceInverse">#eaf1f7</item>
+
+
+    </style>
+
+    <style name="Theme.YearlyProgess" parent="Base.Theme.YearlyProgess">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+    </style>
+
+    <!--
+
+    Material Alert Dialog box with centered icons, title, and message.
+
+    -->
+    <style name="Widget.Catalog.Button.TextButton.Dialog.FullWidth" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:maxWidth">@null</item>
+    </style>
+    <style name="CentralCard" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
+        <item name="materialAlertDialogBodyTextStyle">@style/centeredCardMessage</item>
+        <item name="materialAlertDialogButtonSpacerVisibility">@integer/mtrl_view_gone</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.Catalog.Button.TextButton.Dialog.FullWidth</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.Catalog.Button.TextButton.Dialog.FullWidth</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.Catalog.Button.TextButton.Dialog.FullWidth</item>
+    </style>
+
+    <style name="centeredCardMessage" parent="@style/MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textAlignment">center</item>
+    </style>
+
+
+    <style name="Theme.YearlyProgess.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <!-- Radius of the outer bound of widgets to make the rounded corners -->
+        <item name="appWidgetRadius">16dp</item>
+        <!--
+        Radius of the inner view's bound of widgets to make the rounded corners.
+        It needs to be 8dp or less than the value of appWidgetRadius
+        -->
+        <item name="appWidgetInnerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.YearlyProgess.AppWidgetContainer" parent="Theme.YearlyProgess.AppWidgetContainerParent">
+        <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
+        <item name="appWidgetPadding">12dp</item>
+    </style>
+
+    <style name="App.SplashScreen" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_round</item>
+        <item name="postSplashScreenTheme">@style/Theme.YearlyProgess</item>
+    </style>
+
+
+</resources>

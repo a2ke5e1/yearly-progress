@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.SecondFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true">
+
+
+                <LinearLayout
+                    android:id="@+id/widget_year_demo"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <include
+                        layout="@layout/year_widget"
+                        android:layout_width="match_parent"
+                        android:layout_height="125dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_add_year_widget"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/button_text" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/widget_month_demo"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toEndOf="@id/widget_day_demo"
+                    android:orientation="vertical">
+
+
+                    <include
+                        layout="@layout/month_widget"
+                        android:layout_width="match_parent"
+                        android:layout_height="125dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_add_month_widget"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/button_text" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/widget_day_demo"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/widget_year_demo"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/day_widget"
+                        android:layout_width="match_parent"
+                        android:layout_height="135dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_add_day_widget"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/button_text" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/widget_week_demo"
+                    android:layout_width="150dp"
+                    android:layout_alignStart="@id/widget_month_demo"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/widget_month_demo"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/week_widget"
+                        android:layout_width="match_parent"
+                        android:layout_height="135dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_add_week_widget"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/button_text" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ad_frame"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="35dp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,10 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    style="@style/Widget.YearlyProgess.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.YearlyProgess.AppWidgetContainer">
+
+   <include layout="@layout/year_progress_content" />
+
+</RelativeLayout>

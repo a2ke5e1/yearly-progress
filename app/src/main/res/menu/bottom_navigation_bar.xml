@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.a3.yearlyprogess.MainActivity">
+
+    <item
+        android:id="@+id/firstFragment"
+        android:icon="@drawable/ic_round_bar_chart_24"
+        android:title="@string/progress" />
+
+    <item
+        android:id="@+id/secondFragment"
+        android:icon="@drawable/ic_round_widgets_24"
+        android:title="@string/widget" />
+</menu>
