@@ -8,6 +8,7 @@ import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.format
+import com.a3.yearlyprogess.manager.AlarmHandler
 import kotlin.math.roundToInt
 
 /**
@@ -22,7 +23,6 @@ class MonthWidget : AppWidgetProvider() {
 
     override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle?) {
         updateAppWidget(context, appWidgetManager, appWidgetId)
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
     }
 
 
@@ -32,13 +32,23 @@ class MonthWidget : AppWidgetProvider() {
 
         val progressPercentage = ProgressPercentage()
         val progress = progressPercentage.getPercent(ProgressPercentage.MONTH)
-        val widgetText = "${progress.format(2)}%"
+        val widgetText = "${progress.format(5)}%"
 
         smallView.setTextViewText(R.id.text_month, progressPercentage.getMonth(str = true))
         smallView.setProgressBar(R.id.progress_bar_month, 100, progress.roundToInt(), false)
         smallView.setTextViewText(R.id.progress_text_month, widgetText)
 
         appWidgetManager.updateAppWidget(appWidgetId, smallView)
+
+
+        val alarmHandler = AlarmHandler(context, AlarmHandler.MONTH_WIDGET_SERVICE)
+        alarmHandler.cancelAlarmManager()
+        alarmHandler.setAlarmManager()
+    }
+
+    override fun onDisabled(context: Context) {
+        val alarmHandler = AlarmHandler(context, AlarmHandler.MONTH_WIDGET_SERVICE)
+        alarmHandler.cancelAlarmManager()
     }
 
 }

@@ -8,6 +8,7 @@ import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
 import kotlin.math.roundToInt
 import com.a3.yearlyprogess.helper.*
+import com.a3.yearlyprogess.manager.AlarmHandler
 
 
 /**
@@ -42,7 +43,7 @@ class YearWidget : AppWidgetProvider() {
     ) {
         val progressPercentage = ProgressPercentage()
         val progress = progressPercentage.getPercent(ProgressPercentage.YEAR)
-        val widgetText = "${progress.format(2)}%"
+        val widgetText = "${progress.format(5)}%"
 
         // Construct the RemoteViews object
         val smallView = RemoteViews(context.packageName, R.layout.year_widget)
@@ -62,7 +63,18 @@ class YearWidget : AppWidgetProvider() {
          )
      */    // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, smallView)
+
+
+        val alarmHandler = AlarmHandler(context, AlarmHandler.YEAR_WIDGET_SERVICE)
+        alarmHandler.cancelAlarmManager()
+        alarmHandler.setAlarmManager()
     }
+
+    override fun onDisabled(context: Context) {
+        val alarmHandler = AlarmHandler(context, AlarmHandler.YEAR_WIDGET_SERVICE)
+        alarmHandler.cancelAlarmManager()
+    }
+
 
 }
 

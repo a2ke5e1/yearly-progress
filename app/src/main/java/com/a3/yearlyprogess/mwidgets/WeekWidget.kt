@@ -8,6 +8,7 @@ import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
 import kotlin.math.roundToInt
 import com.a3.yearlyprogess.helper.*
+import com.a3.yearlyprogess.manager.AlarmHandler
 
 
 /**
@@ -32,7 +33,6 @@ class WeekWidget : AppWidgetProvider() {
         newOptions: Bundle?
     ) {
         updateAppWidget(context, appWidgetManager, appWidgetId)
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
     }
 
     private fun updateAppWidget(
@@ -42,7 +42,7 @@ class WeekWidget : AppWidgetProvider() {
     ) {
         val progressPercentage = ProgressPercentage()
         val progress = progressPercentage.getPercent(ProgressPercentage.WEEK)
-        val widgetText = "${progress.format(2)}%"
+        val widgetText = "${progress.format(5)}%"
 
         // Construct the RemoteViews object
         val smallView = RemoteViews(context.packageName, R.layout.week_widget)
@@ -62,6 +62,14 @@ class WeekWidget : AppWidgetProvider() {
          )
      */    // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, smallView)
+        val alarmHandler = AlarmHandler(context, AlarmHandler.WEEK_WIDGET_SERVICE)
+        alarmHandler.cancelAlarmManager()
+        alarmHandler.setAlarmManager()
+    }
+
+    override fun onDisabled(context: Context) {
+        val alarmHandler = AlarmHandler(context, AlarmHandler.WEEK_WIDGET_SERVICE)
+        alarmHandler.cancelAlarmManager()
     }
 
 }

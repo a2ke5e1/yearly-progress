@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.mwidgets
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.os.Bundle
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
@@ -41,7 +42,11 @@ class DayWidget : AppWidgetProvider() {
          appWidgetManager.updateAppWidget(appWidgetId, smallView)
      }*/
 
-    private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+    private fun updateAppWidget(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int
+    ) {
 
         val smallView = RemoteViews(context.packageName, R.layout.day_widget)
         val progressPercentage = ProgressPercentage()
@@ -56,10 +61,20 @@ class DayWidget : AppWidgetProvider() {
 
         appWidgetManager.updateAppWidget(appWidgetId, smallView)
 
-        val alarmHandler = AlarmHandler(context)
+        val alarmHandler = AlarmHandler(context, AlarmHandler.DAY_WIDGET_SERVICE)
         alarmHandler.cancelAlarmManager()
         alarmHandler.setAlarmManager()
     }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        updateAppWidget(context, appWidgetManager, appWidgetId)
+    }
+
 
     override fun onUpdate(
         context: Context,
@@ -72,7 +87,7 @@ class DayWidget : AppWidgetProvider() {
     }
 
     override fun onDisabled(context: Context) {
-        val alarmHandler = AlarmHandler(context)
+        val alarmHandler = AlarmHandler(context, AlarmHandler.DAY_WIDGET_SERVICE)
         alarmHandler.cancelAlarmManager()
     }
 }

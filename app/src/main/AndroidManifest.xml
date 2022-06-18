@@ -21,6 +21,13 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_application_id"/>
 
+        <!--
+            Registration of the Widgets:-
+            1. Day
+            2. Month
+            3. Week
+            4. Year
+        -->
         <receiver
             android:name=".mwidgets.DayWidget"
             android:label="Day Progress"
@@ -33,11 +40,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/day_widget_info" />
         </receiver>
-
-        <receiver
-            android:name=".manager.services.DayWidgetService"
-            android:enabled="true" />
-
         <receiver
             android:name=".mwidgets.MonthWidget"
             android:exported="false"
@@ -74,6 +76,29 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/week_widget_info" />
         </receiver>
+
+        <!--
+            Registration of the Widget Broadcast Receiver:-
+            1. Day
+            2. Month
+            3. Week
+            4. Year
+        -->
+
+        <receiver
+            android:name=".manager.services.DayWidgetService"
+            android:enabled="true" />
+        <receiver
+            android:name=".manager.services.MonthWidgetService"
+            android:enabled="true" />
+        <receiver
+            android:name=".manager.services.WeekWidgetService"
+            android:enabled="true" />
+        <receiver
+            android:name=".manager.services.YearWidgetService"
+            android:enabled="true" />
+
+
 
         <activity
             android:name=".MainActivity"
