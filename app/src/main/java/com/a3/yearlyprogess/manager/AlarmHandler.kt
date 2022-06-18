@@ -15,7 +15,7 @@ class AlarmHandler(private val context: Context) {
 
         //get current time and add 10 seconds
         val c = Calendar.getInstance()
-        val l = c.timeInMillis + 10000
+        val l = c.timeInMillis + 1500
 
         //set the alarm for 10 seconds in the future
         am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, l, sender)
@@ -23,8 +23,7 @@ class AlarmHandler(private val context: Context) {
 
     fun cancelAlarmManager() {
         val intent = Intent(context, DayWidgetService::class.java)
-        val sender: PendingIntent
-        sender = PendingIntent.getBroadcast(context, 2, intent, PendingIntent.FLAG_IMMUTABLE)
+        val sender: PendingIntent = PendingIntent.getBroadcast(context, 2, intent, PendingIntent.FLAG_IMMUTABLE)
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         am.cancel(sender)
     }

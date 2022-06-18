@@ -46,7 +46,7 @@ class DayWidget : AppWidgetProvider() {
         val smallView = RemoteViews(context.packageName, R.layout.day_widget)
         val progressPercentage = ProgressPercentage()
         val progress = progressPercentage.getPercent(ProgressPercentage.DAY)
-        val widgetText = "${progress.format(4)}%"
+        val widgetText = "${progress.format(2)}%"
 
 
         smallView.setTextViewText(R.id.text_day, progressPercentage.getDay(true))
