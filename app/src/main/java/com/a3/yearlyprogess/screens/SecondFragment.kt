@@ -50,7 +50,11 @@ class SecondFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
         return binding.root
@@ -60,85 +64,42 @@ class SecondFragment : Fragment() {
     private lateinit var adLoader: AdLoader
     private lateinit var nativeAdView: NativeAdView
 
+    private lateinit var progressTextViewYear: TextView
+    private lateinit var progressTextViewMonth: TextView
+    private lateinit var progressTextViewDay: TextView
+    private lateinit var progressTextViewWeek: TextView
+
+    private lateinit var textViewYear: TextView
+    private lateinit var textViewDay: TextView
+    private lateinit var textViewMonth: TextView
+    private lateinit var textViewWeek: TextView
+
+    private lateinit var progressBarYear: ProgressBar
+    private lateinit var progressBarMonth: ProgressBar
+    private lateinit var progressBarDay: ProgressBar
+    private lateinit var progressBarWeek: ProgressBar
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Navigate to second fragment
-        //   findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
-        adLoader = AdLoader.Builder(requireContext(), getString(R.string.admob_native_ad_unit))
-            .forNativeAd { ad : NativeAd ->
-                // Show the ad.
-                if (!adLoader.isLoading) {
-                    nativeAdView = updateViewWithNativeAdview(adFrame, ad)
-                }
-                if (isDetached) {
-                    ad.destroy()
-                    return@forNativeAd
-                }
-            }
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    // Handle the failure by logging, altering the UI, and so on.
-                    adFrame.removeAllViews()
-                }
-            })
-            .withNativeAdOptions(
-                NativeAdOptions.Builder()
-                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
-                // Methods in the NativeAdOptions.Builder class can be
-                // used here to specify individual options settings.
-                .build())
-            .build()
-        adLoader.loadAd(AdRequest.Builder().build())
+        // Initialize and Load Ad
+        showAds()
 
+        // Show Widget Menu
+        showWidgetMenu()
 
-        // Showing menu for user to add Day widget to user Launcher's Home Screen
-        binding.btnAddDayWidget.setOnClickListener {
-            requestPinAppWidget(requireContext(), DayWidget::class.java)
-        }
+        // Initialize TextView and Progress Bar
+        initProgressBarsTextViews(view)
 
-        // Showing menu for user to add Month widget to user Launcher's Home Screen
-        binding.btnAddMonthWidget.setOnClickListener {
-            requestPinAppWidget(requireContext(), MonthWidget::class.java)
-        }
+        // Init Progress Bar and Text with animation
+        startAnimationWidget()
 
-        // Showing menu for user to add Year widget to user Launcher's Home Screen
-        binding.btnAddYearWidget.setOnClickListener {
-            requestPinAppWidget(requireContext(), YearWidget::class.java)
-        }
+        // Update Widget every 5 seconds
+        UpdateWidgetInfo(5)
+    }
 
-        // Showing menu for user to add Week widget to user Launcher's Home Screen
-        binding.btnAddWeekWidget.setOnClickListener {
-            requestPinAppWidget(requireContext(), WeekWidget::class.java)
-        }
-
-
-        val progressTextViewYear = view.findViewById<TextView>(R.id.progress_text_year)
-        val progressTextViewMonth = view.findViewById<TextView>(R.id.progress_text_month)
-        val progressTextViewDay = view.findViewById<TextView>(R.id.progress_text_day)
-        val progressTextViewWeek = view.findViewById<TextView>(R.id.progress_text_week)
-
-        val progressBarYear = view.findViewById<ProgressBar>(R.id.progress_bar_year)
-        val progressBarMonth = view.findViewById<ProgressBar>(R.id.progress_bar_month)
-        val progressBarDay = view.findViewById<ProgressBar>(R.id.progress_bar_day)
-        val progressBarWeek = view.findViewById<ProgressBar>(R.id.progress_bar_week)
-
-        val textViewYear = view.findViewById<TextView>(R.id.text_year)
-        val textViewMonth = view.findViewById<TextView>(R.id.text_month)
-        val textViewDay = view.findViewById<TextView>(R.id.text_day)
-        val textViewWeek = view.findViewById<TextView>(R.id.text_week)
-
-        updateProgressTextView(progressTextViewYear, ProgressPercentage.YEAR)
-        updateProgressTextView(progressTextViewMonth, ProgressPercentage.MONTH)
-        updateProgressTextView(progressTextViewDay, ProgressPercentage.DAY)
-        updateProgressTextView(progressTextViewWeek, ProgressPercentage.WEEK)
-
-        updateProgressBarView(progressBarYear, ProgressPercentage.YEAR)
-        updateProgressBarView(progressBarMonth, ProgressPercentage.MONTH)
-        updateProgressBarView(progressBarDay, ProgressPercentage.DAY)
-        updateProgressBarView(progressBarWeek, ProgressPercentage.WEEK)
-
+    private fun UpdateWidgetInfo(i: Long) {
         lifecycleScope.launch(Dispatchers.IO) {
 
             while (true) {
@@ -173,14 +134,99 @@ class SecondFragment : Fragment() {
                     textViewDay.text = progressPercentage.getDay(custom = true)
 
                 }
-                delay(1000)
+                delay(i * 1000)
             }
         }
 
     }
 
-    private fun updateProgressTextView(textView: TextView, type: Int) {
-        val progressTextAnimator = ValueAnimator.ofFloat(0F, ProgressPercentage().getPercent(type).toFloat() )
+    private fun startAnimationWidget() {
+        animatedUpdateProgressTextView(progressTextViewYear, ProgressPercentage.YEAR)
+        animatedUpdateProgressTextView(progressTextViewMonth, ProgressPercentage.MONTH)
+        animatedUpdateProgressTextView(progressTextViewDay, ProgressPercentage.DAY)
+        animatedUpdateProgressTextView(progressTextViewWeek, ProgressPercentage.WEEK)
+
+        animatedUpdateProgressBarView(progressBarYear, ProgressPercentage.YEAR)
+        animatedUpdateProgressBarView(progressBarMonth, ProgressPercentage.MONTH)
+        animatedUpdateProgressBarView(progressBarDay, ProgressPercentage.DAY)
+        animatedUpdateProgressBarView(progressBarWeek, ProgressPercentage.WEEK)
+    }
+
+    private fun initProgressBarsTextViews(view: View) {
+        progressTextViewYear = view.findViewById<TextView>(R.id.progress_text_year)
+        progressTextViewMonth = view.findViewById<TextView>(R.id.progress_text_month)
+        progressTextViewDay = view.findViewById<TextView>(R.id.progress_text_day)
+        progressTextViewWeek = view.findViewById<TextView>(R.id.progress_text_week)
+
+        progressBarYear = view.findViewById<ProgressBar>(R.id.progress_bar_year)
+        progressBarMonth = view.findViewById<ProgressBar>(R.id.progress_bar_month)
+        progressBarDay = view.findViewById<ProgressBar>(R.id.progress_bar_day)
+        progressBarWeek = view.findViewById<ProgressBar>(R.id.progress_bar_week)
+
+        textViewYear = view.findViewById<TextView>(R.id.text_year)
+        textViewMonth = view.findViewById<TextView>(R.id.text_month)
+        textViewDay = view.findViewById<TextView>(R.id.text_day)
+        textViewWeek = view.findViewById<TextView>(R.id.text_week)
+    }
+
+    private fun showAds() {
+
+        // Initialize Ad Loader
+        val adFrame: LinearLayout = binding.adFrame
+        adLoader = AdLoader.Builder(requireContext(), getString(R.string.admob_native_ad_unit))
+            .forNativeAd { ad: NativeAd ->
+                // Show the ad.
+                if (!adLoader.isLoading) {
+                    nativeAdView = updateViewWithNativeAdview(adFrame, ad)
+                }
+                if (isDetached) {
+                    ad.destroy()
+                    return@forNativeAd
+                }
+            }
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    // Handle the failure by logging, altering the UI, and so on.
+                    adFrame.removeAllViews()
+                }
+            })
+            .withNativeAdOptions(
+                NativeAdOptions.Builder()
+                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
+                    // Methods in the NativeAdOptions.Builder class can be
+                    // used here to specify individual options settings.
+                    .build()
+            )
+            .build()
+        // Load Ad
+        adLoader.loadAd(AdRequest.Builder().build())
+    }
+
+    private fun showWidgetMenu() {
+        // Showing menu for user to add Day widget to user Launcher's Home Screen
+        binding.btnAddDayWidget.setOnClickListener {
+            requestPinAppWidget(requireContext(), DayWidget::class.java)
+        }
+
+        // Showing menu for user to add Month widget to user Launcher's Home Screen
+        binding.btnAddMonthWidget.setOnClickListener {
+            requestPinAppWidget(requireContext(), MonthWidget::class.java)
+        }
+
+        // Showing menu for user to add Year widget to user Launcher's Home Screen
+        binding.btnAddYearWidget.setOnClickListener {
+            requestPinAppWidget(requireContext(), YearWidget::class.java)
+        }
+
+        // Showing menu for user to add Week widget to user Launcher's Home Screen
+        binding.btnAddWeekWidget.setOnClickListener {
+            requestPinAppWidget(requireContext(), WeekWidget::class.java)
+        }
+    }
+
+    private fun animatedUpdateProgressTextView(textView: TextView, type: Int) {
+        val progressTextAnimator =
+            ValueAnimator.ofFloat(0F, ProgressPercentage().getPercent(type).toFloat())
         progressTextAnimator.duration = 600
         progressTextAnimator.addUpdateListener {
             textView.text = percentString((it.animatedValue as Float).toDouble())
@@ -189,8 +235,9 @@ class SecondFragment : Fragment() {
         progressTextAnimator.start()
     }
 
-    private fun updateProgressBarView(progressBarView: ProgressBar, type: Int) {
-        val progressViewAnimator = ValueAnimator.ofInt(0, ProgressPercentage().getPercent(type).roundToInt() )
+    private fun animatedUpdateProgressBarView(progressBarView: ProgressBar, type: Int) {
+        val progressViewAnimator =
+            ValueAnimator.ofInt(0, ProgressPercentage().getPercent(type).roundToInt())
         progressViewAnimator.duration = 600
         progressViewAnimator.addUpdateListener {
             progressBarView.progress = it.animatedValue as Int
@@ -215,9 +262,11 @@ class SecondFragment : Fragment() {
 
     private fun requestPinAppWidget(context: Context, widget: Class<*>) {
 
-        val unsupportedLauncherMessage = "Your Launcher does not support this feature. Please add Widget manually"
+        val unsupportedLauncherMessage =
+            "Your Launcher does not support this feature. Please add Widget manually"
 
-        val unsupportedLauncherToast = Toast.makeText(context, unsupportedLauncherMessage, Toast.LENGTH_LONG)
+        val unsupportedLauncherToast =
+            Toast.makeText(context, unsupportedLauncherMessage, Toast.LENGTH_LONG)
 
 
         val mAppWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
@@ -225,7 +274,12 @@ class SecondFragment : Fragment() {
         val myProvider = ComponentName(requireContext(), widget)
         if (mAppWidgetManager.isRequestPinAppWidgetSupported) {
             val pinnedWidgetCallbackIntent = Intent(context, widget)
-            val successCallback = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE)
+            val successCallback = PendingIntent.getBroadcast(
+                context,
+                0,
+                pinnedWidgetCallbackIntent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
             mAppWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
         } else {
             unsupportedLauncherToast.show()
