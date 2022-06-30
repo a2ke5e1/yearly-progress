@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+          xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="true"
@@ -16,10 +15,14 @@
         android:theme="@style/App.SplashScreen"
         tools:targetApi="31">
 
+        <activity
+            android:name=".FirstScreen"
+            android:theme="@style/Theme.YearlyProgess"
+            android:exported="true"/>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_application_id"/>
-
         <!--
             Registration of the Widgets:-
             1. Day
@@ -29,53 +32,52 @@
         -->
         <receiver
             android:name=".mwidgets.DayWidget"
-            android:label="Day Progress"
-            android:exported="false">
+            android:exported="false"
+            android:label="Day Progress">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/day_widget_info" />
+                android:resource="@xml/day_widget_info"/>
         </receiver>
         <receiver
             android:name=".mwidgets.MonthWidget"
             android:exported="false"
             android:label="Month Progress">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/month_widget_info" />
+                android:resource="@xml/month_widget_info"/>
         </receiver>
         <receiver
             android:name=".mwidgets.YearWidget"
             android:exported="false"
             android:label="Year Progress">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/year_widget_info" />
+                android:resource="@xml/year_widget_info"/>
         </receiver>
         <receiver
             android:name=".mwidgets.WeekWidget"
             android:exported="false"
             android:label="Week Progress">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/week_widget_info" />
+                android:resource="@xml/week_widget_info"/>
         </receiver>
-
         <!--
             Registration of the Widget Broadcast Receiver:-
             1. Day
@@ -83,29 +85,26 @@
             3. Week
             4. Year
         -->
-
         <receiver
             android:name=".manager.services.DayWidgetService"
-            android:enabled="true" />
+            android:enabled="true"/>
         <receiver
             android:name=".manager.services.MonthWidgetService"
-            android:enabled="true" />
+            android:enabled="true"/>
         <receiver
             android:name=".manager.services.WeekWidgetService"
-            android:enabled="true" />
+            android:enabled="true"/>
         <receiver
             android:name=".manager.services.YearWidgetService"
-            android:enabled="true" />
-
-
+            android:enabled="true"/>
 
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>

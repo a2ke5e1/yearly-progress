@@ -19,15 +19,39 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val FIRST_LAUNCH = "first_launch"
+    private val YEARLY_PROGRESS_PREF = "yearly_progress_pref"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         installSplashScreen()
+
+
+        val pref = this.getSharedPreferences(YEARLY_PROGRESS_PREF, MODE_PRIVATE)
+        val firstLaunch  = pref.getBoolean(FIRST_LAUNCH, true)
+
+        /*
+        *
+        *  Checks if user is agreed to terms and conditions and privacy policy.
+        *
+        * */
+        if (firstLaunch) {
+            startActivity(
+                Intent(
+                    this,
+                    FirstScreen::class.java
+                )
+            )
+            finish()
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+
+
 
         MobileAds.initialize(this) {}
 
@@ -73,14 +97,16 @@ class MainActivity : AppCompatActivity() {
         // Creates a dialog box to show info about the app
         MaterialAlertDialogBuilder(this, R.style.CentralCard)
             .setTitle(getString(R.string.app_name))
-            .setMessage(HtmlCompat.fromHtml(
-                """
+            .setMessage(
+                HtmlCompat.fromHtml(
+                    """
                           Version: ${BuildConfig.VERSION_NAME}<br>                            
                           Build: ${BuildConfig.BUILD_TYPE.uppercase()}<br>
                           <br><br>
                           An <b>A3 Group</b> Product
-                        """.trimIndent()
-                , HtmlCompat.FROM_HTML_MODE_LEGACY))
+                        """.trimIndent(), HtmlCompat.FROM_HTML_MODE_LEGACY
+                )
+            )
             .setNeutralButton(
                 "Dismiss", null
             )
