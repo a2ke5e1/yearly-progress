@@ -1,10 +1,13 @@
 package com.a3.yearlyprogess.mwidgets
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
+import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import kotlin.math.roundToInt
 import com.a3.yearlyprogess.helper.*
@@ -52,6 +55,10 @@ class WeekWidget : AppWidgetProvider() {
         smallView.setTextViewText(R.id.text_week, progressPercentage.getWeek(str = true))
         smallView.setTextViewText(R.id.progress_text_week, widgetText)
         smallView.setProgressBar(R.id.progress_bar_week, 100, progress.roundToInt(), false)
+
+        smallView.setOnClickPendingIntent(android.R.id.background, PendingIntent.getActivity(
+            context, 0, Intent(context, MainActivity::class.java),  PendingIntent.FLAG_IMMUTABLE
+        ))
 
         /* mediumView.setTextViewText(R.id.appwidget_text, widgetText)
          mediumView.setProgressBar(R.id.appwidget_progress, 100, progress.roundToInt(), false)

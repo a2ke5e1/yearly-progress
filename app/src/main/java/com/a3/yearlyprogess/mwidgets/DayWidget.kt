@@ -1,10 +1,13 @@
 package com.a3.yearlyprogess.mwidgets
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
+import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.format
@@ -58,6 +61,9 @@ class DayWidget : AppWidgetProvider() {
         smallView.setProgressBar(R.id.progress_bar_day, 100, progress.roundToInt(), false)
         smallView.setTextViewText(R.id.progress_text_day, widgetText)
 
+        smallView.setOnClickPendingIntent(android.R.id.background, PendingIntent.getActivity(
+            context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE
+        ))
 
         appWidgetManager.updateAppWidget(appWidgetId, smallView)
 
