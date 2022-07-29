@@ -7,4 +7,43 @@
     android:layout_height="match_parent"
     tools:context=".FirstScreen">
 
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp" android:text="@string/app_name"
+        android:textColor="?attr/colorOnPrimaryContainer" android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <com.google.android.material.imageview.ShapeableImageView android:layout_width="0dp"
+                                                              android:layout_height="0dp"
+                                                              app:layout_constraintBottom_toTopOf="@+id/textView2"
+                                                              app:layout_constraintEnd_toEndOf="parent"
+                                                              app:layout_constraintStart_toStartOf="parent"
+                                                              app:layout_constraintTop_toBottomOf="@+id/textView"
+                                                              app:srcCompat="@drawable/demoscreen"/>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="By continuing, you agree our Terms of Service and Privacy Policy."
+        android:textColor="?attr/colorOnPrimaryContainer"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/materialButton"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/materialButton"
+        style="@style/Widget.Material3.Button.TonalButton" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_marginBottom="28dp"
+        android:text="Start" app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

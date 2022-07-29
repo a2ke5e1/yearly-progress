@@ -19,8 +19,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val FIRST_LAUNCH = "first_launch"
-    private val YEARLY_PROGRESS_PREF = "yearly_progress_pref"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -128,6 +126,13 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(Intent.EXTRA_TEXT, shareMessage)
         this.startActivity(Intent.createChooser(intent, "Share"))
         return true
+    }
+
+    companion object {
+
+        const val FIRST_LAUNCH = "first_launch"
+        const val YEARLY_PROGRESS_PREF = "yearly_progress_pref"
+
     }
 
 }
