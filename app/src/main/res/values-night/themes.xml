@@ -37,7 +37,8 @@
     <style name="App.SplashScreen" parent="Theme.SplashScreen">
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_round</item>
+        <item name="windowSplashScreenAnimationDuration">1600</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground_animated</item>
         <item name="postSplashScreenTheme">@style/Theme.YearlyProgess</item>
     </style>
 

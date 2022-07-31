@@ -3,11 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/ic_launcher_background.xml" value="0.269" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.3575" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/ic_launcher_foreground_animated.xml" value="0.22" />
         <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/ic_launcher_monochrome.xml" value="0.179" />
         <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/activity_first_screen.xml" value="0.25" />
         <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/day_widget.xml" value="0.1762917933130699" />
         <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/day_widget_content.xml" value="0.19610507246376813" />
         <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/fragment_second.xml" value="0.1762917933130699" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.269" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.269" />
         <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable-night-v21/app_widget_background_custom.xml" value="0.1" />
         <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable-v21/app_widget_background.xml" value="0.1815" />
         <entry key="..\:/Users/aakap/StudioProjects/YearlyProgress/app/src/main/res/drawable-v21/app_widget_background_custom.xml" value="0.1" />
