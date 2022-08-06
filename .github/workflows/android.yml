@@ -11,14 +11,14 @@ jobs:
         uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'keystore.jks'
-          fileDir: '/keystore/'
+          fileDir: './keystore/'
           encodedString: ${{ secrets.KEYSTORE }}
       - name: Decode keys
         id: decode_keys
         uses: timheuer/base64-to-file@v1.1
         with:
             fileName: 'api_keys.xml'
-            fileDir: '/src/main/res/values/'
+            fileDir: './src/main/res/values/'
             encodedString: ${{ secrets.API_KEYS }}
       - uses: actions/checkout@v2
       - name: set up JDK 1.8
