@@ -29,3 +29,5 @@ jobs:
         run: tree /home/runner/work/
       - name: Move file api_keys
         run: sudo mv /home/runner/work/_temp/api_keys.xml /home/runner/work/yearly_progress/yearly_progress/app/src/main/res/values/
+      - name: List all dir
+        run: tree /home/runner/work/
