@@ -27,6 +27,8 @@ jobs:
         run: sudo apt install tree
       - name: List all dir
         run: tree /home/runner/work/yearly_progress
+      - name: Make folder keystore
+        run: mkdir /home/runner/work/yearly_progress/yearly_progress/app/keystore/
       - name: Move file keystore.jks
         run: sudo mv /home/runner/work/_temp/keystore.jks /home/runner/work/yearly_progress/yearly_progress/app/keystore/
       - name: Move file api_keys
