@@ -26,8 +26,10 @@ jobs:
       - name: Install tree
         run: sudo apt install tree
       - name: List all dir
-        run: tree /home/runner/work/
+        run: tree /home/runner/work/yearly_progress
+      - name: Move file keystore.jks
+        run: sudo mv /home/runner/work/_temp/keystore.jks /home/runner/work/yearly_progress/yearly_progress/app/keystore/
       - name: Move file api_keys
         run: sudo mv /home/runner/work/_temp/api_keys.xml /home/runner/work/yearly_progress/yearly_progress/app/src/main/res/values/
       - name: List all dir
-        run: tree /home/runner/work/
+        run: tree /home/runner/work/yearly_progress
