@@ -12,6 +12,12 @@ jobs:
         with:
           fileName: 'keystore/keystore.jks'
           encodedString: ${{ secrets.KEYSTORE }}
+      - name: Decode API Keys
+          id: decode_api_keys
+          uses: timheuer/base64-to-file@v1
+          with:
+            fileName: 'keystore/keystore.jks'
+            encodedString: ${{ secrets.API_KEYS }}
       - uses: actions/checkout@v2
       - name: set up JDK 1.8
         uses: actions/setup-java@v1
