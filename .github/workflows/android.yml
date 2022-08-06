@@ -25,6 +25,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Install tree
+        run: sudo apt install tree
+      - name: List all dir
+        run: tree
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: build prod
