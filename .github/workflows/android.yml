@@ -11,7 +11,6 @@ jobs:
         uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'keystore.jks'
-          fileDir: './keystore/'
           encodedString: ${{ secrets.KEYSTORE }}
       - name: Decode keys
         id: decode_keys
@@ -24,6 +23,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Move file api_keys
+        run: sudo mv /home/runner/work/_temp/api_keys.xml /home/runner/work/yearly_progress/yearly_progress/app/main/res/values/
       - name: Install tree
         run: sudo apt install tree
       - name: List all dir
