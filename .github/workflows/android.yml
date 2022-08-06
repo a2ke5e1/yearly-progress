@@ -11,7 +11,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'keystore.jks'
-          fileDir: './'
+          fileDir: './home/runner/work/'
           encodedString: ${{ secrets.KEYSTORE }}
       - name: Decode keys
         id: decode_keys
