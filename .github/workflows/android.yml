@@ -11,6 +11,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'keystore.jks'
+          fileDir: './'
           encodedString: ${{ secrets.KEYSTORE }}
       - name: Decode keys
         id: decode_keys
@@ -27,16 +28,3 @@ jobs:
         run: sudo apt install tree
       - name: List all dir
         run: tree /home/runner/work/
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: build prod
-        run: ./gradlew app:bundleRelease
-        env:
-          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-      - name: Upload
-        uses: actions/upload-artifact@v2
-        with:
-          name: Build Artifacts
-          path: app/build/outputs/
