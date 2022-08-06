@@ -1,6 +1,10 @@
 name: Build Release App Bundle
 
-on: workflow_dispatch
+on:
+  push:
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
