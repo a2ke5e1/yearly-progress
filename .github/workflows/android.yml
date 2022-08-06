@@ -31,8 +31,14 @@ jobs:
         run: sudo mv /home/runner/work/_temp/api_keys.xml /home/runner/work/yearly_progress/yearly_progress/app/src/main/res/values/
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: build prod
+      - name: build aab
         run: ./gradlew app:bundleRelease
+        env:
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+      - name: build Apk
+        run: ./gradlew app:assembleRelease
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
@@ -40,5 +46,5 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-          name: Build Artifacts
-          path: app/build/outputs/
+          name: Apks and Buldles
+          path: app/build/outputs/bundle/
