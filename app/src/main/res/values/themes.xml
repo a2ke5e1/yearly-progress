@@ -53,12 +53,19 @@
         <item name="android:layout_weight">1</item>
         <item name="android:maxWidth">@null</item>
     </style>
+
     <style name="CentralCard" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
         <item name="materialAlertDialogBodyTextStyle">@style/centeredCardMessage</item>
         <item name="materialAlertDialogButtonSpacerVisibility">@integer/mtrl_view_gone</item>
-        <item name="buttonBarPositiveButtonStyle">@style/Widget.Catalog.Button.TextButton.Dialog.FullWidth</item>
-        <item name="buttonBarNegativeButtonStyle">@style/Widget.Catalog.Button.TextButton.Dialog.FullWidth</item>
-        <item name="buttonBarNeutralButtonStyle">@style/Widget.Catalog.Button.TextButton.Dialog.FullWidth</item>
+        <item name="buttonBarPositiveButtonStyle">
+            @style/Widget.Catalog.Button.TextButton.Dialog.FullWidth
+        </item>
+        <item name="buttonBarNegativeButtonStyle">
+            @style/Widget.Catalog.Button.TextButton.Dialog.FullWidth
+        </item>
+        <item name="buttonBarNeutralButtonStyle">
+            @style/Widget.Catalog.Button.TextButton.Dialog.FullWidth
+        </item>
     </style>
 
     <style name="centeredCardMessage" parent="@style/MaterialAlertDialog.Material3.Body.Text">
@@ -87,6 +94,21 @@
         <item name="windowSplashScreenAnimationDuration">1600</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground_animated</item>
         <item name="postSplashScreenTheme">@style/Theme.YearlyProgess</item>
+    </style>
+
+    <style name="App.SplashScreen.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <!-- Radius of the outer bound of widgets to make the rounded corners -->
+        <item name="appWidgetRadius">16dp</item>
+        <!--
+        Radius of the inner view's bound of widgets to make the rounded corners.
+        It needs to be 8dp or less than the value of appWidgetRadius
+        -->
+        <item name="appWidgetInnerRadius">8dp</item>
+    </style>
+
+    <style name="App.SplashScreen.AppWidgetContainer" parent="App.SplashScreen.AppWidgetContainerParent">
+        <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
+        <item name="appWidgetPadding">16dp</item>
     </style>
 
 
