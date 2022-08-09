@@ -120,6 +120,9 @@
         <receiver
             android:name=".manager.services.YearWidgetService"
             android:enabled="true" />
+        <receiver
+            android:name=".manager.services.EventWidgetService"
+            android:enabled="true" />
 
         <activity
             android:name=".MainActivity"

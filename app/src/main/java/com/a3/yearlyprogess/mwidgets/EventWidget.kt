@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.manager.AlarmHandler
 
 /**
  * Implementation of App Widget functionality.
@@ -25,7 +26,7 @@ class EventWidget : AppWidgetProvider() {
     ) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+            updateEventWidget(context, appWidgetManager, appWidgetId)
         }
     }
 
@@ -35,10 +36,12 @@ class EventWidget : AppWidgetProvider() {
 
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
+        val alarmHandler = AlarmHandler(context, AlarmHandler.EVENT_WIDGET_SERVICE)
+        alarmHandler.cancelAlarmManager()
     }
 }
 
-internal fun updateAppWidget(
+fun updateEventWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
@@ -65,4 +68,8 @@ internal fun updateAppWidget(
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+
+    val alarmHandler = AlarmHandler(context, AlarmHandler.EVENT_WIDGET_SERVICE)
+    alarmHandler.cancelAlarmManager()
+    alarmHandler.setAlarmManager()
 }

@@ -4,10 +4,7 @@ import android.content.Intent
 import android.app.PendingIntent
 import android.app.AlarmManager
 import android.content.Context
-import com.a3.yearlyprogess.manager.services.DayWidgetService
-import com.a3.yearlyprogess.manager.services.MonthWidgetService
-import com.a3.yearlyprogess.manager.services.WeekWidgetService
-import com.a3.yearlyprogess.manager.services.YearWidgetService
+import com.a3.yearlyprogess.manager.services.*
 import java.util.*
 
 class AlarmHandler(private val context: Context, private val service : Int) {
@@ -17,6 +14,7 @@ class AlarmHandler(private val context: Context, private val service : Int) {
         MONTH_WIDGET_SERVICE ->  Intent(context, MonthWidgetService::class.java)
         WEEK_WIDGET_SERVICE ->  Intent(context, WeekWidgetService::class.java)
         YEAR_WIDGET_SERVICE ->  Intent(context, YearWidgetService::class.java)
+        EVENT_WIDGET_SERVICE -> Intent(context, EventWidgetService::class.java)
         else -> Intent(context, DayWidgetService::class.java)
     }
 
@@ -43,5 +41,6 @@ class AlarmHandler(private val context: Context, private val service : Int) {
         const val MONTH_WIDGET_SERVICE = 501
         const val WEEK_WIDGET_SERVICE = 502
         const val YEAR_WIDGET_SERVICE = 503
+        const val EVENT_WIDGET_SERVICE = 504
     }
 }
