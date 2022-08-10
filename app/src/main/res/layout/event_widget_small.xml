@@ -7,9 +7,10 @@
 
 
     <TextView
-        android:id="@+id/eventName"
+        android:id="@+id/eventTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
         android:text="Lorem Ipsum"
         android:textAllCaps="false"
         android:textColor="@color/widget_text_color"

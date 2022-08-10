@@ -18,7 +18,18 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/eventName"
+                android:id="@+id/eventTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Lorem ipsum"
+                android:textAllCaps="false"
+                android:textColor="@color/widget_text_color"
+                android:textSize="12sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/eventDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
@@ -26,13 +37,14 @@
                 android:textAllCaps="false"
                 android:textColor="@color/widget_text_color"
                 android:textSize="12sp"
-                android:textStyle="normal|bold" />
+                android:textStyle="normal" />
 
 
             <TextView
                 android:id="@+id/eventTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="08/01 · 7:37 PM"
                 android:textAllCaps="false"
                 android:textColor="@color/widget_text_color"

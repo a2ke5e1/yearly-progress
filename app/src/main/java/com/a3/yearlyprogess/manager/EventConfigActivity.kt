@@ -2,6 +2,7 @@ package com.a3.yearlyprogess.manager
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
@@ -38,6 +39,9 @@ class EventConfigActivity : AppCompatActivity() {
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
         val timePicker = MaterialTimePicker.Builder().setTimeFormat(clockFormat)
 
+        val pref = this.getSharedPreferences(appWidgetId.toString(), Context.MODE_PRIVATE)
+        val edit = pref.edit()
+
 
 
 
@@ -59,7 +63,6 @@ class EventConfigActivity : AppCompatActivity() {
 
 
         }
-
         binding.editTextTime.setOnClickListener {
             timePicker.setTitleText("Select Event End Time")
                 .build().apply {
@@ -82,13 +85,24 @@ class EventConfigActivity : AppCompatActivity() {
             finish()
         }
         binding.btnSave.setOnClickListener {
+
+            val eventTitle = binding.eventTitle.text.toString().ifEmpty { "" }
+            val eventDesc = binding.eventDesc.text.toString().ifEmpty { "" }
+            val eventStartTimeInMills = System.currentTimeMillis()
+
+            edit.putString("eventTitle", eventTitle)
+            edit.putString("eventDesc", eventDesc)
+            edit.putLong("eventStartTimeInMills", eventStartTimeInMills)
+            edit.putLong("eventEndDateTimeInMillis", eventEndDateTimeInMillis)
+
+            edit.commit()
+
+            updateEventWidget(this, appWidgetManager, appWidgetId)
+
             val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             setResult(Activity.RESULT_OK, resultValue)
             finish()
         }
-
-        updateEventWidget(this, appWidgetManager, appWidgetId)
-
     }
 
     private fun modifiedEventDateTime(hour: Int, min: Int): Long {
