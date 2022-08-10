@@ -3,23 +3,19 @@ package com.a3.yearlyprogess.mwidgets
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.format.DateFormat
-import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.util.SizeF
-import android.view.View
 import android.widget.RemoteViews
-import androidx.core.content.ContextCompat
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.format
 import com.a3.yearlyprogess.manager.AlarmHandler
 import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Implementation of App Widget functionality.
@@ -62,12 +58,11 @@ fun updateEventWidget(
     appWidgetId: Int
 ) {
 
-    val pref = context.getSharedPreferences(appWidgetId.toString(), Context.MODE_PRIVATE)
-
     // Construct the RemoteViews object
     val smallView = RemoteViews(context.packageName, R.layout.event_widget_small)
     val mediumView = RemoteViews(context.packageName, R.layout.event_widget_medium)
 
+    val pref = context.getSharedPreferences(appWidgetId.toString(), Context.MODE_PRIVATE)
 
     val eventTitle = pref.getString("eventTitle", "null").toString()
     val eventDesc = pref.getString("eventDesc", "null")
@@ -75,15 +70,10 @@ fun updateEventWidget(
     val eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
 
 
-    val eventTotalSeconds = (eventEndDateTimeInMillis - eventStartTimeInMills).div(1000).toDouble()
-    val eventPassedSeconds = (System.currentTimeMillis() - eventStartTimeInMills).div(1000).toDouble()
+    val progressPercentage = ProgressPercentage()
+    progressPercentage.getSeconds(ProgressPercentage.CUSTOM_EVENT)
 
-
-    Log.d("Event_Widget", "Passed\t${eventPassedSeconds }")
-    Log.d("Event_Widget", "Total\t$eventTotalSeconds")
-
-
-    val progress =  (eventPassedSeconds / eventTotalSeconds) * 100.0
+    val progress = progressPercentage.getPercent(ProgressPercentage.CUSTOM_EVENT, eventStartTimeInMills, eventEndDateTimeInMillis)
 
     Log.d("Event_Widget", "ratio $progress")
     val progressText = "${progress.format(2)}%"
@@ -97,9 +87,9 @@ fun updateEventWidget(
     )
 
     mediumView.setTextViewText(R.id.eventProgressText, spannable)
-    mediumView.setProgressBar(R.id.eventProgressBar,100, progress.toInt(), false)
+    mediumView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
 
-    smallView.setProgressBar(R.id.eventProgressBar,100, progress.toInt(), false)
+    smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
     smallView.setTextViewText(R.id.eventProgressText, progressText)
 
 
