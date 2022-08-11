@@ -4,6 +4,7 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +43,7 @@ class EventConfigActivity : AppCompatActivity() {
         val pref = this.getSharedPreferences(appWidgetId.toString(), Context.MODE_PRIVATE)
         val edit = pref.edit()
 
+        loadWidgetDataIfExists(pref)
 
 
 
@@ -103,6 +105,26 @@ class EventConfigActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, resultValue)
             finish()
         }
+    }
+
+    private fun loadWidgetDataIfExists(pref: SharedPreferences) {
+        val eventTitle = pref.getString("eventTitle", "").toString()
+        val eventDesc = pref.getString("eventDesc", "").toString()
+        val eventStartTimeInMills = pref.getLong("eventStartTimeInMills", 0)
+        eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
+
+        binding.eventTitle.setText(eventTitle)
+        binding.eventDesc.setText(eventDesc)
+
+        val localCalendar = Calendar.getInstance()
+        localCalendar.timeInMillis = eventEndDateTimeInMillis
+        eventEndHour = localCalendar.get(Calendar.HOUR_OF_DAY)
+        eventEndMinute = localCalendar.get(Calendar.MINUTE)
+
+
+        binding.editTextDate.text =
+            SimpleDateFormat("YYYY, MMMM dd HH:mm:ss").format(eventEndDateTimeInMillis).toString()
+        binding.editTextTime.text = "${eventEndHour}:${eventEndMinute}"
     }
 
     private fun modifiedEventDateTime(hour: Int, min: Int): Long {

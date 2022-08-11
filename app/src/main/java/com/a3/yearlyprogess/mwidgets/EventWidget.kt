@@ -88,8 +88,10 @@ fun updateEventWidget(
 
     mediumView.setTextViewText(R.id.eventProgressText, spannable)
     mediumView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
+    mediumView.setTextViewText(R.id.currentDate, progressPercentage.getDay(true))
 
     smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
+    smallView.setTextViewText(R.id.currentDate, progressPercentage.getDay(true))
     smallView.setTextViewText(R.id.eventProgressText, progressText)
 
 
