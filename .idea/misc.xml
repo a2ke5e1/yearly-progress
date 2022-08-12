@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/ic_outline_time_24.xml" value="0.205" />
         <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/activity_event_config_actibity.xml" value="0.25" />
         <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/custom_widget.xml" value="0.25" />
         <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/event_widget.xml" value="0.33" />
