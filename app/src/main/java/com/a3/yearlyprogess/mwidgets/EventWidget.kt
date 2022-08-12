@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.mwidgets
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -89,18 +90,6 @@ fun updateEventWidget(
     mediumView.setTextViewText(R.id.eventProgressText, spannable)
     mediumView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
     mediumView.setTextViewText(R.id.currentDate, progressPercentage.getDay(true))
-
-    smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-    smallView.setTextViewText(R.id.currentDate, progressPercentage.getDay(true))
-    smallView.setTextViewText(R.id.eventProgressText, progressText)
-
-
-    val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-        SizeF(150f, 100f) to smallView,
-        SizeF(150f, 200f) to mediumView,
-    )
-    val remoteViews = RemoteViews(viewMapping)
-
     mediumView.setTextViewText(R.id.eventTitle, eventTitle)
     mediumView.setTextViewText(R.id.eventDesc, eventDesc)
     mediumView.setTextViewText(
@@ -110,7 +99,22 @@ fun updateEventWidget(
         ) else SimpleDateFormat("MM/dd · hh:mm a").format(eventEndDateTimeInMillis)
     )
 
+    smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
+    smallView.setTextViewText(R.id.currentDate, progressPercentage.getDay(true))
+    smallView.setTextViewText(R.id.eventProgressText, progressText)
     smallView.setTextViewText(R.id.eventTitle, eventTitle)
+
+
+
+    var remoteViews = mediumView
+    if (Build.VERSION.SDK_INT > 30) {
+        val viewMapping: Map<SizeF, RemoteViews> = mapOf(
+            SizeF(150f, 100f) to smallView,
+            SizeF(150f, 200f) to mediumView,
+        )
+        remoteViews = RemoteViews(viewMapping)
+    }
+
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
