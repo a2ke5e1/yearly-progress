@@ -79,9 +79,12 @@ class EventConfigActivity : AppCompatActivity() {
                         eventStartHour = hour
                         eventStartMinute = minute
 
-                        eventStartDateTimeInMillis = modifiedEventDateTime(eventStartDateTimeInMillis, eventEndHour, eventEndMinute)
+                        eventStartDateTimeInMillis = modifiedEventDateTime(eventStartDateTimeInMillis, eventStartHour, eventStartMinute)
 
-                        binding.editTextEndTime.text = "${hour}:${minute}"
+                        binding.editTextStartTime.text = "${hour}:${minute}"
+                        binding.editTextStartDate.text =
+                            SimpleDateFormat("YYYY, MMMM dd HH:mm:ss").format(eventStartDateTimeInMillis).toString()
+
                     }
                 }
 
@@ -115,6 +118,9 @@ class EventConfigActivity : AppCompatActivity() {
                         eventEndDateTimeInMillis = modifiedEventDateTime(eventEndDateTimeInMillis, eventEndHour, eventEndMinute)
 
                         binding.editTextEndTime.text = "${hour}:${minute}"
+                        binding.editTextEndDate.text =
+                            SimpleDateFormat("YYYY, MMMM dd HH:mm:ss").format(eventEndDateTimeInMillis).toString()
+
                     }
                 }
 
