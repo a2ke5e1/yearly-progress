@@ -161,9 +161,7 @@ class EventConfigActivity : AppCompatActivity() {
         binding.eventDesc.setText(eventDesc)
 
         val localCalendar = Calendar.getInstance()
-        localCalendar.timeInMillis = eventEndDateTimeInMillis
-        eventEndHour = localCalendar.get(Calendar.HOUR_OF_DAY)
-        eventEndMinute = localCalendar.get(Calendar.MINUTE)
+
 
         localCalendar.timeInMillis = eventStartDateTimeInMillis
         eventStartHour =  localCalendar.get(Calendar.HOUR_OF_DAY)
@@ -172,7 +170,11 @@ class EventConfigActivity : AppCompatActivity() {
 
         binding.editTextStartDate.text =
             SimpleDateFormat("YYYY, MMMM dd HH:mm:ss").format(eventStartDateTimeInMillis).toString()
-        binding.editTextStartTime.text = "${eventEndHour}:${eventEndMinute}"
+        binding.editTextStartTime.text = "${eventStartHour}:${eventStartMinute}"
+
+        localCalendar.timeInMillis = eventEndDateTimeInMillis
+        eventEndHour = localCalendar.get(Calendar.HOUR_OF_DAY)
+        eventEndMinute = localCalendar.get(Calendar.MINUTE)
 
         binding.editTextEndDate.text =
             SimpleDateFormat("YYYY, MMMM dd HH:mm:ss").format(eventEndDateTimeInMillis).toString()

@@ -47,7 +47,8 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+        tools:text="2022, August 10" />
 
     <TextView
         android:id="@+id/editTextStartTime"
@@ -57,7 +58,8 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextStartDate" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextStartDate"
+        tools:text="11:15" />
 
     <TextView
         android:id="@+id/editTextEndDate"
@@ -68,7 +70,8 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextStartTime" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextStartTime"
+        tools:text="2022, August 16" />
 
     <TextView
         android:id="@+id/editTextEndTime"
@@ -78,7 +81,8 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEndDate" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEndDate"
+        tools:text="19:25" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancel"
