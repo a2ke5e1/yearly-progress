@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".manager.EventConfigActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            style="@style/Widget.Material3.TextInputEditText.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/eventTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Event Title" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout2"
+            style="@style/Widget.Material3.TextInputEditText.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/eventDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Event Description" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <RelativeLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/eventStartLabel"
+                style="@style/TextAppearance.Material3.LabelSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="16dp"
+                android:text="Event Start"
+                android:textAllCaps="true" />
+
+            <TextView
+                android:id="@+id/editTextStartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventStartLabel"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="16dp"
+                android:layout_toStartOf="@+id/editTextStartTime"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                tools:text="2022, August 10" />
+
+            <TextView
+                android:id="@+id/editTextStartTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="16dp"
+                android:padding="10dp"
+                android:textAlignment="center"
+                tools:text="11:15" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/eventEndLabel"
+                style="@style/TextAppearance.Material3.LabelSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="16dp"
+                android:text="Event End"
+                android:textAllCaps="true" />
+
+            <TextView
+                android:id="@+id/editTextEndDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventEndLabel"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="16dp"
+                android:layout_toStartOf="@+id/editTextEndTime"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                tools:text="2022, August 10" />
+
+            <TextView
+                android:id="@+id/editTextEndTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="16dp"
+                android:padding="10dp"
+                android:textAlignment="center"
+                tools:text="11:15" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/btnSave"
+                android:layout_marginEnd="16dp"
+                android:text="Cancel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="16dp"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
