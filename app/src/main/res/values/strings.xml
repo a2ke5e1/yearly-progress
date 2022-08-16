@@ -30,5 +30,6 @@
     <string name="week">Week</string>
     <string name="demo_week">Thrusday</string>
     <string name="demo_week_per">70.12%</string>
+    <string name="save">Save</string>
 
 </resources>

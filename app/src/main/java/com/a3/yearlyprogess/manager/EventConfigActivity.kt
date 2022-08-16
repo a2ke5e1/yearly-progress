@@ -6,9 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.ActivityEventConfigActivityBinding
 import com.a3.yearlyprogess.mwidgets.updateEventWidget
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -37,6 +45,23 @@ class EventConfigActivity : AppCompatActivity() {
 
         binding = ActivityEventConfigActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.navigationBarDividerColor =
+            ContextCompat.getColor(this, android.R.color.transparent)
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = insets.top)
+            WindowInsetsCompat.CONSUMED
+        }
+
+       binding.eventTitle.doAfterTextChanged {
+           binding.collapsingToolbar.title = it.toString()
+       }
+
         setResult(Activity.RESULT_CANCELED)
 
         val appWidgetId = intent?.extras?.getInt(
@@ -70,9 +95,10 @@ class EventConfigActivity : AppCompatActivity() {
                             eventEndMinute
                         )
 
-                        binding.editTextStartDate.text =
+                        binding.editTextStartDate.setText(
                             SimpleDateFormat(DATE_FORMAT).format(eventStartDateTimeInMillis)
                                 .toString()
+                        )
                     }
                 }
 
@@ -94,11 +120,17 @@ class EventConfigActivity : AppCompatActivity() {
                             eventStartMinute
                         )
 
-                        binding.editTextStartTime.text =
-                            getHourMinuteLocal(eventStartDateTimeInMillis)
-                        binding.editTextStartDate.text =
+                        binding.editTextStartTime.setText(
+                            getHourMinuteLocal(
+                                eventStartDateTimeInMillis
+                            )
+                        )
+
+                        binding.editTextStartDate.setText(
+
                             SimpleDateFormat(DATE_FORMAT).format(eventStartDateTimeInMillis)
                                 .toString()
+                        )
 
                     }
                 }
@@ -118,9 +150,10 @@ class EventConfigActivity : AppCompatActivity() {
                             eventEndMinute
                         )
 
-                        binding.editTextEndDate.text =
+                        binding.editTextEndDate.setText(
                             SimpleDateFormat(DATE_FORMAT).format(eventEndDateTimeInMillis)
                                 .toString()
+                        )
                     }
                 }
 
@@ -142,10 +175,11 @@ class EventConfigActivity : AppCompatActivity() {
                             eventEndMinute
                         )
 
-                        binding.editTextEndTime.text = getHourMinuteLocal(eventEndDateTimeInMillis)
-                        binding.editTextEndDate.text =
+                        binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
+                        binding.editTextEndDate.setText(
                             SimpleDateFormat(DATE_FORMAT).format(eventEndDateTimeInMillis)
                                 .toString()
+                        )
 
                     }
                 }
@@ -153,26 +187,34 @@ class EventConfigActivity : AppCompatActivity() {
         }
 
 
-        binding.btnCancel.setOnClickListener {
+        binding.materialToolbar.setNavigationOnClickListener {
             finish()
         }
-        binding.btnSave.setOnClickListener {
+        binding.materialToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.save_config -> {
 
-            val eventTitle = binding.eventTitle.text.toString().ifEmpty { "" }
-            val eventDesc = binding.eventDesc.text.toString().ifEmpty { "" }
+                    val eventTitle = binding.eventTitle.text.toString().ifEmpty { "" }
+                    val eventDesc = binding.eventDesc.text.toString().ifEmpty { "" }
 
-            edit.putString("eventTitle", eventTitle)
-            edit.putString("eventDesc", eventDesc)
-            edit.putLong("eventStartTimeInMills", eventStartDateTimeInMillis)
-            edit.putLong("eventEndDateTimeInMillis", eventEndDateTimeInMillis)
+                    edit.putString("eventTitle", eventTitle)
+                    edit.putString("eventDesc", eventDesc)
+                    edit.putLong("eventStartTimeInMills", eventStartDateTimeInMillis)
+                    edit.putLong("eventEndDateTimeInMillis", eventEndDateTimeInMillis)
 
-            edit.commit()
+                    edit.commit()
 
-            updateEventWidget(this, appWidgetManager, appWidgetId)
+                    updateEventWidget(this, appWidgetManager, appWidgetId)
 
-            val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            setResult(Activity.RESULT_OK, resultValue)
-            finish()
+                    val resultValue =
+                        Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                    setResult(Activity.RESULT_OK, resultValue)
+                    finish()
+
+                    true
+                }
+                else -> false
+            }
         }
     }
 
@@ -200,17 +242,20 @@ class EventConfigActivity : AppCompatActivity() {
         eventStartMinute = localCalendar.get(Calendar.MINUTE)
 
 
-        binding.editTextStartDate.text =
+        binding.editTextStartDate.setText(
             SimpleDateFormat(DATE_FORMAT).format(eventStartDateTimeInMillis).toString()
-        binding.editTextStartTime.text = getHourMinuteLocal(eventStartDateTimeInMillis)
+        )
+        binding.editTextStartTime.setText(getHourMinuteLocal(eventStartDateTimeInMillis))
 
         localCalendar.timeInMillis = eventEndDateTimeInMillis
         eventEndHour = localCalendar.get(Calendar.HOUR_OF_DAY)
         eventEndMinute = localCalendar.get(Calendar.MINUTE)
 
-        binding.editTextEndDate.text =
+        binding.editTextEndDate.setText(
             SimpleDateFormat(DATE_FORMAT).format(eventEndDateTimeInMillis).toString()
-        binding.editTextEndTime.text = getHourMinuteLocal(eventEndDateTimeInMillis)
+        )
+        binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
+
     }
 
     private fun modifiedEventDateTime(date: Long, hour: Int, min: Int): Long {
