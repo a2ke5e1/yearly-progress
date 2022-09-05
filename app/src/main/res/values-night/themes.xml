@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.YearlyProgess" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.YearlyProgress" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">#9bc8ee</item>
@@ -39,7 +39,7 @@
         <item name="android:windowLightNavigationBar">false</item>
         <item name="windowSplashScreenAnimationDuration">1600</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground_animated</item>
-        <item name="postSplashScreenTheme">@style/Theme.YearlyProgess</item>
+        <item name="postSplashScreenTheme">@style/Theme.YearlyProgress</item>
     </style>
 
 </resources>

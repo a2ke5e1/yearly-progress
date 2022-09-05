@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@android:id/background"
-    android:theme="@style/Theme.YearlyProgess.AppWidgetContainer">
+    android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
 
    <include layout="@layout/day_widget_content" />
 

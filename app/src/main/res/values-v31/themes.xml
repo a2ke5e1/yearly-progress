@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.YearlyProgess" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.YearlyProgress" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
@@ -38,7 +38,7 @@
     Having themes.xml for v31 variant because @android:dimen/system_app_widget_background_radius
      and @android:dimen/system_app_widget_internal_padding requires API level 31
     -->
-    <style name="Theme.YearlyProgess.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault.DayNight">
+    <style name="Theme.YearlyProgress.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault.DayNight">
         <item name="appWidgetRadius">@android:dimen/system_app_widget_background_radius</item>
         <item name="appWidgetInnerRadius">@android:dimen/system_app_widget_inner_radius</item>
     </style>
