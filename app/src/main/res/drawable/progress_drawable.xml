@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingBottom="20dp"
+    android:paddingEnd="20dp"
+    android:paddingStart="20dp"
+    android:paddingTop="20dp">
+
+    <item
+        android:id="@+id/backgroundCenter">
+        <shape android:shape="oval">
+            <solid android:color="@color/widget_background_color" />
+        </shape>
+    </item>
+
+    <item android:id="@android:id/background">
+        <!--Background-->
+        <shape
+            android:innerRadiusRatio="2.31"
+            android:shape="ring"
+            android:thicknessRatio="15"
+            android:useLevel="false">
+            <solid android:color="#B5000000" />
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <rotate
+            android:fromDegrees="270"
+            android:toDegrees="270">
+            <shape
+                android:innerRadiusRatio="2.31"
+                android:shape="ring"
+                android:thicknessRatio="15"
+                android:useLevel="true">
+
+                <solid android:color="#000" />
+
+            </shape>
+        </rotate>
+    </item>
+</layer-list>

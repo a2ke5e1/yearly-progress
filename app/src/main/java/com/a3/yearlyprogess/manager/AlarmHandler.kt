@@ -15,6 +15,7 @@ class AlarmHandler(private val context: Context, private val service : Int) {
         WEEK_WIDGET_SERVICE ->  Intent(context, WeekWidgetService::class.java)
         YEAR_WIDGET_SERVICE ->  Intent(context, YearWidgetService::class.java)
         EVENT_WIDGET_SERVICE -> Intent(context, EventWidgetService::class.java)
+        ALL_IN_WIDGET_SERVICE -> Intent(context, AllInWidgetService::class.java)
         else -> Intent(context, DayWidgetService::class.java)
     }
 
@@ -42,5 +43,6 @@ class AlarmHandler(private val context: Context, private val service : Int) {
         const val WEEK_WIDGET_SERVICE = 502
         const val YEAR_WIDGET_SERVICE = 503
         const val EVENT_WIDGET_SERVICE = 504
+        const val ALL_IN_WIDGET_SERVICE = 505
     }
 }

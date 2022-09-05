@@ -15,15 +15,25 @@
         android:supportsRtl="true"
         android:theme="@style/App.SplashScreen"
         tools:targetApi="31">
-        <activity
-            android:name=".manager.EventConfigActivity"
-            android:theme="@style/Theme.YearlyProgress"
-            android:exported="true" >
-
+        <receiver
+            android:name=".mwidgets.AllInWidget"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/all_in_widget_info" />
+        </receiver>
+
+        <activity
+            android:name=".manager.EventConfigActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YearlyProgress">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
         </activity>
 
         <receiver
@@ -122,6 +132,9 @@
             android:enabled="true" />
         <receiver
             android:name=".manager.services.EventWidgetService"
+            android:enabled="true" />
+        <receiver
+            android:name=".manager.services.AllInWidgetService"
             android:enabled="true" />
 
         <activity
