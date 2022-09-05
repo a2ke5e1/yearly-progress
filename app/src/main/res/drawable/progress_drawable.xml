@@ -8,6 +8,7 @@
     <item
         android:id="@+id/backgroundCenter">
         <shape android:shape="oval">
+            <size android:height="80dp" android:width="80dp" />
             <solid android:color="@color/widget_background_color" />
         </shape>
     </item>
@@ -15,9 +16,9 @@
     <item android:id="@android:id/background">
         <!--Background-->
         <shape
-            android:innerRadiusRatio="2.31"
             android:shape="ring"
-            android:thicknessRatio="15"
+            android:innerRadiusRatio="2.58"
+            android:thicknessRatio="9"
             android:useLevel="false">
             <solid android:color="#B5000000" />
         </shape>
@@ -27,11 +28,10 @@
             android:fromDegrees="270"
             android:toDegrees="270">
             <shape
-                android:innerRadiusRatio="2.31"
                 android:shape="ring"
-                android:thicknessRatio="15"
+                android:innerRadiusRatio="2.6"
+                android:thicknessRatio="9"
                 android:useLevel="true">
-
                 <solid android:color="#000" />
 
             </shape>
