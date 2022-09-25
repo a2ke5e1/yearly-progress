@@ -20,9 +20,9 @@
             android:id="@+id/material_card_progress"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:backgroundTint="#32ACABAB"
+            android:backgroundTint="#12ACABAB"
             android:backgroundTintMode="multiply"
-            app:cardBackgroundColor="@color/widget_background_color"
+            app:cardBackgroundColor="?attr/colorPrimary"
             app:cardCornerRadius="0dp"
             app:strokeWidth="0dp">
 
