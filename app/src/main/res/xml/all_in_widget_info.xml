@@ -4,7 +4,7 @@
     android:initialKeyguardLayout="@layout/all_in_widget"
     android:initialLayout="@layout/all_in_widget"
     android:previewImage="@drawable/example_appwidget_preview"
-    android:previewLayout="@layout/all_in_widget"
+    android:previewLayout="@layout/all_in_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:minWidth="80dp"
     android:targetCellWidth="5"

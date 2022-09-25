@@ -16,7 +16,7 @@
         <!--Background-->
         <shape
             android:shape="ring"
-            android:innerRadiusRatio="2.57"
+            android:innerRadiusRatio="2.58"
             android:thicknessRatio="9"
             android:useLevel="false">
             <solid android:color="#B5000000" />
@@ -28,10 +28,10 @@
             android:toDegrees="270">
             <shape
                 android:shape="ring"
-                android:innerRadiusRatio="2.58"
+                android:innerRadiusRatio="2.59"
                 android:thicknessRatio="9"
                 android:useLevel="true">
-                <solid android:color="#000" />
+                <solid android:color="#FFFFFF" />
 
             </shape>
         </rotate>
