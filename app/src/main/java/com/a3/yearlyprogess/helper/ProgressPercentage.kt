@@ -1,12 +1,15 @@
 package com.a3.yearlyprogess.helper
 
-import android.content.Context
+import androidx.annotation.IntDef
+import androidx.annotation.RestrictTo
+import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 class ProgressPercentage {
 
 
     private val calendar: Calendar = Calendar.getInstance()
+
 
     private fun isLeapYear(year: Int): Boolean =
         (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
@@ -38,7 +41,7 @@ class ProgressPercentage {
         return weekName.toString()
     }
 
-    fun getSeconds(field: Int,  eventStartTimeInMills: Long = 0, eventEndDateTimeInMillis:Long = 0,): Long {
+    fun getSeconds(@Field field: Int, eventStartTimeInMills: Long = 0, eventEndDateTimeInMillis: Long = 0): Long {
         return when (field) {
             YEAR -> {
                 if (isLeapYear(getYear().toInt())) {
@@ -57,7 +60,7 @@ class ProgressPercentage {
         }.toLong()
     }
 
-    fun getSecondsPassed(field: Int, eventStartTimeInMills: Long = 0): Long {
+    fun getSecondsPassed(@Field field: Int, eventStartTimeInMills: Long = 0): Long {
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currentMinute = calendar.get(Calendar.MINUTE)
         val currentSecond = calendar.get(Calendar.SECOND)
@@ -94,7 +97,7 @@ class ProgressPercentage {
         }
     }
 
-    fun getPercent(field: Int, eventStartTimeInMills: Long = 0, eventEndDateTimeInMillis: Long = 0): Double {
+    fun getPercent(@Field field: Int, eventStartTimeInMills: Long = 0, eventEndDateTimeInMillis: Long = 0): Double {
         return when (field) {
             CUSTOM_EVENT -> (getSecondsPassed(field, eventStartTimeInMills).toDouble() / getSeconds(field, eventStartTimeInMills, eventEndDateTimeInMillis)) * 100
             else -> (getSecondsPassed(field).toDouble() / getSeconds(field)) * 100
@@ -102,6 +105,11 @@ class ProgressPercentage {
     }
 
     companion object {
+        @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP_PREFIX)
+        @IntDef(YEAR, MONTH, WEEK, DAY, CUSTOM_EVENT)
+        @Retention(AnnotationRetention.SOURCE)
+        annotation class Field
+
         const val YEAR = 100
         const val MONTH = 101
         const val WEEK = 102
