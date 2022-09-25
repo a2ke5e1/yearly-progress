@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         installSplashScreen()
-
+        DynamicColors.applyToActivityIfAvailable(this)
 
         val pref = this.getSharedPreferences(YEARLY_PROGRESS_PREF, MODE_PRIVATE)
         val firstLaunch  = pref.getBoolean(FIRST_LAUNCH, true)
