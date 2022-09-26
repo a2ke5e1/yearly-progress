@@ -31,6 +31,7 @@
         <activity
             android:name=".manager.EventConfigActivity"
             android:exported="true"
+            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden"
             android:theme="@style/Theme.YearlyProgress">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

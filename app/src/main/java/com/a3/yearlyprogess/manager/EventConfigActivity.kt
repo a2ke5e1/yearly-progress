@@ -8,6 +8,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -58,9 +60,6 @@ class EventConfigActivity : AppCompatActivity() {
             WindowInsetsCompat.CONSUMED
         }
 
-       binding.eventTitle.doAfterTextChanged {
-           binding.collapsingToolbar.title = it.toString()
-       }
 
         setResult(Activity.RESULT_CANCELED)
 
@@ -79,7 +78,22 @@ class EventConfigActivity : AppCompatActivity() {
 
         loadWidgetDataIfExists(pref)
 
+        binding.eventTitle.requestFocus()
+        val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(binding.eventTitle, InputMethodManager.SHOW_IMPLICIT)
 
+        binding.eventTitle.setOnEditorActionListener { v, actionId, event ->
+            if ( actionId == EditorInfo.IME_ACTION_NEXT) {
+                binding.eventDesc.apply {
+                    requestFocus()
+                    setSelection(this.text.toString().length)
+                }
+
+                true
+            } else {
+                false
+            }
+        }
 
         binding.editTextStartDate.setOnClickListener {
             datePicker.setTitleText("Select Event Start Date")
