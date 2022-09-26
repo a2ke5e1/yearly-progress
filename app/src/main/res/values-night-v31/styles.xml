@@ -2,7 +2,7 @@
     <style name="CircularProgressIndicator" parent="Widget.AppCompat.ProgressBar">
         <item name="android:padding">5dp</item>
         <item name="android:progressDrawable">@drawable/progress_drawable</item>
-        <item name="android:progressTint">@android:color/system_accent1_300</item>
+        <item name="android:progressTint">@color/widget_text_color</item>
         <item name="android:progressBackgroundTint">@android:color/system_neutral2_900</item>
     </style>
 </resources>
