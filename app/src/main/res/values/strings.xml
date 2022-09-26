@@ -31,5 +31,7 @@
     <string name="demo_week">Thrusday</string>
     <string name="demo_week_per">70.12%</string>
     <string name="save">Save</string>
+    <string name="app_widget_description_all_in_one">It shows progress of day, week, month and year all in one widget</string>
+    <string name="app_widget_description_event">Track the progress of any event.</string>
 
 </resources>

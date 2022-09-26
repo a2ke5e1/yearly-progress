@@ -23,7 +23,7 @@
                 android:indeterminateOnly="false"
                 android:max="100"
                 style="@style/CircularProgressIndicator"
-                tools:progress="70" />
+                android:progress="25" />
 
             <TextView
                 android:id="@+id/progressTextDay"
@@ -38,7 +38,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/widget_text_color"
                 android:textSize="12sp"
-                tools:text="70%" />
+                android:text="25%" />
 
             <TextView
                 android:id="@+id/progressTitle"
@@ -50,7 +50,6 @@
                 android:layout_alignBottom="@id/progressBarDay"
                 android:layout_marginBottom="20dp"
                 android:text="@string/day"
-                android:paddingStart="-3dp"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/widget_text_color"
@@ -70,7 +69,7 @@
                 android:indeterminateOnly="false"
                 android:max="100"
                 style="@style/CircularProgressIndicator"
-                tools:progress="24" />
+                android:progress="25" />
 
             <TextView
                 android:id="@+id/progressTextWeek"
@@ -85,7 +84,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/widget_text_color"
                 android:textSize="12sp"
-                tools:text="24%" />
+                android:text="25%" />
 
             <TextView
                 android:id="@+id/progressWeekTitle"
@@ -116,7 +115,7 @@
                 android:indeterminateOnly="false"
                 android:max="100"
                 style="@style/CircularProgressIndicator"
-                tools:progress="15" />
+                android:progress="25" />
 
             <TextView
                 android:id="@+id/progressTextMonth"
@@ -131,7 +130,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/widget_text_color"
                 android:textSize="11sp"
-                tools:text="15%" />
+                android:text="25%" />
 
             <TextView
                 android:id="@+id/progressMonthTitle"
@@ -162,7 +161,7 @@
                 android:layout_height="80dp"
                 android:indeterminateOnly="false"
                 android:max="100"
-                tools:progress="67" />
+                android:progress="25" />
 
             <TextView
                 android:id="@+id/progressTextYear"
@@ -177,7 +176,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/widget_text_color"
                 android:textSize="12sp"
-                tools:text="67%" />
+                android:text="25%" />
 
             <TextView
                 android:id="@+id/progressYearTitle"
