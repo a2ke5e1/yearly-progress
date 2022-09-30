@@ -68,7 +68,15 @@ internal fun updateAppWidget(
     views.setProgressBar(R.id.progressBarMonth, 100, monthProgress, false)
     views.setProgressBar(R.id.progressBarYear, 100, yearProgress, false)
 
-    val spannable = SpannableString("${progressPercentage.getDay()}th")
+    val day = progressPercentage.getDay()
+    val spannable = SpannableString("${day}${
+        when (day.last()) {
+            '1' -> "st"
+            '2' -> "nd"
+            '3' -> "rd"
+            else -> "th"
+        }
+    }")
     spannable.setSpan(
         SuperscriptSpan(),
         spannable.length - 2,
