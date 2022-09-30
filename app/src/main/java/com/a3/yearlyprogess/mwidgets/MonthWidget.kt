@@ -5,7 +5,12 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
+import android.util.SizeF
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
@@ -35,7 +40,15 @@ class MonthWidget : AppWidgetProvider() {
 
         val progressPercentage = ProgressPercentage()
         val progress = progressPercentage.getPercent(ProgressPercentage.MONTH)
-        val widgetText = "${progress.format(5)}%"
+
+        val widgetText = SpannableString("${progress.format(2)}%")
+        widgetText.setSpan(
+            RelativeSizeSpan(0.7f),
+            3,
+            widgetText.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
 
         smallView.setTextViewText(R.id.text_month, progressPercentage.getMonth(str = true))
         smallView.setProgressBar(R.id.progress_bar_month, 100, progress.roundToInt(), false)

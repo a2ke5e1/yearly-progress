@@ -7,9 +7,9 @@
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_centerInParent="true"
         android:columnCount="4"
-        android:useDefaultMargins="true"
-        android:layout_centerInParent="true">
+        android:useDefaultMargins="true">
 
 
         <RelativeLayout
@@ -18,11 +18,11 @@
 
             <ProgressBar
                 android:id="@+id/progressBarDay"
+                style="@style/CircularProgressIndicator"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:indeterminateOnly="false"
                 android:max="100"
-                style="@style/CircularProgressIndicator"
                 android:progress="25" />
 
             <TextView
@@ -34,11 +34,12 @@
                 android:layout_alignEnd="@id/progressBarDay"
                 android:layout_alignBottom="@id/progressBarDay"
                 android:gravity="center"
+                android:paddingStart="5dp"
                 android:paddingBottom="5dp"
+                android:text="25%"
                 android:textAlignment="center"
                 android:textColor="@color/widget_text_color"
-                android:textSize="12sp"
-                android:text="25%" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/progressTitle"
@@ -49,7 +50,56 @@
                 android:layout_alignEnd="@id/progressBarDay"
                 android:layout_alignBottom="@id/progressBarDay"
                 android:layout_marginBottom="20dp"
+                tools:text="29th"   android:paddingStart="5dp"
                 android:text="@string/day"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/widget_text_color"
+                android:textSize="8sp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:id="@+id/progressBarWeek"
+                style="@style/CircularProgressIndicator"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:indeterminateOnly="false"
+                android:max="100"
+                android:progress="25" />
+
+            <TextView
+                android:id="@+id/progressTextWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarWeek"
+                android:layout_alignTop="@id/progressBarWeek"
+                android:layout_alignEnd="@id/progressBarWeek"
+                android:layout_alignBottom="@id/progressBarWeek"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:text="25%"
+                android:paddingStart="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/widget_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/progressWeekTitle"
+                style="@style/TextAppearance.Material3.LabelMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarWeek"
+                android:layout_alignEnd="@id/progressBarWeek"
+                android:layout_alignBottom="@id/progressBarWeek"
+                android:layout_marginBottom="20dp"
+                android:text="@string/week"
+                tools:text="FRI"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/widget_text_color"
@@ -63,89 +113,44 @@
             android:layout_height="wrap_content">
 
             <ProgressBar
-                android:id="@+id/progressBarWeek"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:indeterminateOnly="false"
-                android:max="100"
-                style="@style/CircularProgressIndicator"
-                android:progress="25" />
-
-            <TextView
-                android:id="@+id/progressTextWeek"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/progressBarWeek"
-                android:layout_alignTop="@id/progressBarWeek"
-                android:layout_alignEnd="@id/progressBarWeek"
-                android:layout_alignBottom="@id/progressBarWeek"
-                android:gravity="center"
-                android:paddingBottom="5dp"
-                android:textAlignment="center"
-                android:textColor="@color/widget_text_color"
-                android:textSize="12sp"
-                android:text="25%" />
-
-            <TextView
-                android:id="@+id/progressWeekTitle"
-                style="@style/TextAppearance.Material3.LabelMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:textSize="8sp"
-                android:layout_alignBottom="@id/progressBarWeek"
-                android:layout_alignStart="@id/progressBarWeek"
-                android:layout_alignEnd="@id/progressBarWeek"
-                android:text="@string/week"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/widget_text_color" />
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ProgressBar
                 android:id="@+id/progressBarMonth"
+                style="@style/CircularProgressIndicator"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:indeterminateOnly="false"
                 android:max="100"
-                style="@style/CircularProgressIndicator"
                 android:progress="25" />
 
             <TextView
                 android:id="@+id/progressTextMonth"
                 android:layout_width="wrap_content"
-                android:paddingBottom="5dp"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/progressBarMonth"
                 android:layout_alignTop="@id/progressBarMonth"
                 android:layout_alignEnd="@id/progressBarMonth"
                 android:layout_alignBottom="@id/progressBarMonth"
                 android:gravity="center"
+                android:paddingBottom="5dp"
+                android:text="25%"
                 android:textAlignment="center"
                 android:textColor="@color/widget_text_color"
-                android:textSize="11sp"
-                android:text="25%" />
+                android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/progressMonthTitle"
                 style="@style/TextAppearance.Material3.LabelMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_alignBottom="@id/progressBarMonth"
                 android:layout_alignStart="@id/progressBarMonth"
                 android:layout_alignEnd="@id/progressBarMonth"
+                android:layout_alignBottom="@id/progressBarMonth"
+                android:layout_marginBottom="20dp"
                 android:text="@string/month"
-                android:textSize="8sp"
+                tools:text="DEC"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/widget_text_color" />
+                android:textColor="@color/widget_text_color"
+                android:textSize="8sp" />
 
 
         </RelativeLayout>
@@ -173,26 +178,28 @@
                 android:layout_alignBottom="@id/progressBarYear"
                 android:gravity="center"
                 android:paddingBottom="5dp"
+                android:text="25%"
+                android:paddingStart="5dp"
                 android:textAlignment="center"
                 android:textColor="@color/widget_text_color"
-                android:textSize="12sp"
-                android:text="25%" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/progressYearTitle"
                 style="@style/TextAppearance.Material3.LabelMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_alignBottom="@id/progressBarYear"
                 android:layout_alignStart="@id/progressBarYear"
                 android:layout_alignEnd="@id/progressBarYear"
+                android:layout_alignBottom="@id/progressBarYear"
                 android:layout_marginTop="0dp"
+                android:layout_marginBottom="20dp"
                 android:text="@string/year"
-                android:textSize="8sp"
+                tools:text="2022"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/widget_text_color" />
+                android:textColor="@color/widget_text_color"
+                android:textSize="8sp" />
 
 
         </RelativeLayout>
