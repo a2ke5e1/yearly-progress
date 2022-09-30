@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingBottom="20dp"
-    android:paddingEnd="20dp"
     android:paddingStart="20dp"
-    android:paddingTop="20dp">
+    android:paddingTop="20dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="20dp">
 
-    <item
-        android:id="@+id/backgroundCenter">
+    <item android:id="@+id/backgroundCenter">
         <shape android:shape="oval">
-            <solid android:color="@color/widget_background_color" />
+                        <solid android:color="@color/widget_background_color" />
+<!--            <solid android:color="#F80000" />-->
         </shape>
     </item>
-
     <item android:id="@android:id/background">
         <!--Background-->
         <shape
+            android:innerRadiusRatio="2.5"
             android:shape="ring"
-            android:innerRadiusRatio="2.58"
-            android:thicknessRatio="9"
+            android:thicknessRatio="10"
             android:useLevel="false">
-            <solid android:color="#B5000000" />
+            <solid android:color="#BE000000" />
         </shape>
     </item>
     <item android:id="@android:id/progress">
@@ -28,8 +27,8 @@
             android:toDegrees="270">
             <shape
                 android:shape="ring"
-                android:innerRadiusRatio="2.59"
-                android:thicknessRatio="9"
+                android:innerRadiusRatio="2.5"
+                android:thicknessRatio="10"
                 android:useLevel="true">
                 <solid android:color="#FFFFFF" />
 
