@@ -6,6 +6,9 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
@@ -46,8 +49,13 @@ class YearWidget : AppWidgetProvider() {
     ) {
         val progressPercentage = ProgressPercentage()
         val progress = progressPercentage.getPercent(ProgressPercentage.YEAR)
-        val widgetText = "${progress.format(5)}%"
-
+        val widgetText = SpannableString("${progress.format(2)}%")
+        widgetText.setSpan(
+            RelativeSizeSpan(0.7f),
+            widgetText.indexOf('.'),
+            widgetText.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         // Construct the RemoteViews object
         val smallView = RemoteViews(context.packageName, R.layout.year_widget)
         //   val mediumView = RemoteViews(context.packageName, R.layout.year_progress_medium)

@@ -3,12 +3,38 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
-        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/content_main.xml" value="0.358695652173913" />
-        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/fragment_second.xml" value="0.358695652173913" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.139" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.139" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/ic_launcher_monochrome.xml" value="0.27" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/ic_outline_time_24.xml" value="0.205" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/drawable/progress_drawable.xml" value="0.27" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/activity_event_config_actibity.xml" value="0.33" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/activity_event_config_activity.xml" value="0.22" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/activity_first_screen.xml" value="0.22894736842105262" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/activity_main.xml" value="0.22894736842105262" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/all_in_widget.xml" value="0.7732142857142857" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/allinone_widget.xml" value="0.1837837837837838" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/content_main.xml" value="0.16458333333333333" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/custom_widget.xml" value="0.25" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/day_widget_content.xml" value="0.22894736842105262" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/event_widget.xml" value="0.33" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/event_widget_medium.xml" value="0.18" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/event_widget_small.xml" value="0.1" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/fragment_first.xml" value="0.30092592592592593" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/progress_card_view.xml" value="0.22894736842105262" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/year_progress_content.xml" value="0.1" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/layout/year_widget.xml" value="0.1762917933130699" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/menu/bottom_navigation_bar.xml" value="0.22152777777777777" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/menu/event_config_menu.xml" value="0.22152777777777777" />
+        <entry key="..\:/Projects/android_studio_projects/YearlyProgress/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.27" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
 </project>

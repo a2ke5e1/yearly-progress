@@ -9,4 +9,21 @@
         <item name="android:background">?android:attr/colorBackground</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
+
+    <style name="Widget.YearlyProgress.AppWidget.Container" parent="android:Widget">
+        <item name="android:id">@android:id/background</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+    </style>
+
+    <style name="Widget.YearlyProgress.AppWidget.InnerView" parent="android:Widget">
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="CircularProgressIndicator" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:padding">5dp</item>
+        <item name="android:progressDrawable">@drawable/progress_drawable</item>
+        <item name="android:progressTint">@color/light_blue_900</item>
+        <item name="android:progressBackgroundTint">@color/light_blue_50</item>
+    </style>
 </resources>

@@ -20,7 +20,7 @@
             android:id="@+id/material_card_progress"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:backgroundTint="#33FFFFFF"
+            android:backgroundTint="#12ACABAB"
             android:backgroundTintMode="multiply"
             app:cardBackgroundColor="?attr/colorPrimary"
             app:cardCornerRadius="0dp"
@@ -76,7 +76,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="22dp"
                 android:text="of 32456758s"
-                android:textColor="?attr/colorSecondaryVariant"
+                android:textColor="@color/widget_text_color"
                 android:textSize="15sp" />
 
         </RelativeLayout>

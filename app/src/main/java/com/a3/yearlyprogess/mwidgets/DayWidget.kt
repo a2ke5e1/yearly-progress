@@ -6,6 +6,9 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
@@ -54,8 +57,13 @@ class DayWidget : AppWidgetProvider() {
         val smallView = RemoteViews(context.packageName, R.layout.day_widget)
         val progressPercentage = ProgressPercentage()
         val progress = progressPercentage.getPercent(ProgressPercentage.DAY)
-        val widgetText = "${progress.format(2)}%"
-
+        val widgetText = SpannableString("${progress.format(2)}%")
+        widgetText.setSpan(
+            RelativeSizeSpan(0.7f),
+            widgetText.indexOf('.'),
+            widgetText.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         smallView.setTextViewText(R.id.text_day, progressPercentage.getDay(true))
         smallView.setProgressBar(R.id.progress_bar_day, 100, progress.roundToInt(), false)
