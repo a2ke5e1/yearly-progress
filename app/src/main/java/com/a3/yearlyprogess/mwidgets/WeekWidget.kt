@@ -51,7 +51,7 @@ class WeekWidget : AppWidgetProvider() {
         val widgetText = SpannableString("${progress.format(2)}%")
         widgetText.setSpan(
             RelativeSizeSpan(0.7f),
-            3,
+            widgetText.indexOf('.'),
             widgetText.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
