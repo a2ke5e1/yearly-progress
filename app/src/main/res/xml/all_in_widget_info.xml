@@ -3,7 +3,7 @@
     android:description="@string/app_widget_description_all_in_one"
     android:initialKeyguardLayout="@layout/all_in_widget"
     android:initialLayout="@layout/all_in_widget"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/all_in_one_widget_preview"
     android:previewLayout="@layout/all_in_widget"
     android:resizeMode="horizontal|vertical"
     android:minWidth="80dp"
