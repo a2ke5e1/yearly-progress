@@ -13,8 +13,11 @@
 
 
         <RelativeLayout
+            android:id="@+id/testDay"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            >
 
             <ProgressBar
                 android:id="@+id/progressBarDay"
@@ -61,8 +64,11 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/testWeek"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            >
 
             <ProgressBar
                 android:id="@+id/progressBarWeek"
@@ -109,8 +115,11 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/testMonth"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            >
 
             <ProgressBar
                 android:id="@+id/progressBarMonth"
@@ -156,8 +165,10 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/testYear"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="visible">
 
             <ProgressBar
                 android:id="@+id/progressBarYear"

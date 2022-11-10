@@ -3,18 +3,20 @@ package com.a3.yearlyprogess.mwidgets
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
+import android.util.SizeF
+import android.view.View
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.roundToInt
 
 /**
  * Implementation of App Widget functionality.
@@ -46,10 +48,50 @@ internal fun updateAppWidget(
     context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int
 ) {
 
-    val views = RemoteViews(context.packageName, R.layout.all_in_widget)
+    val small = RemoteViews(context.packageName, R.layout.all_in_widget)
+    val medium = RemoteViews(context.packageName, R.layout.all_in_widget)
+    val large = RemoteViews(context.packageName, R.layout.all_in_widget)
+    val xlarge = RemoteViews(context.packageName, R.layout.all_in_widget)
+
+    initiateView(small)
+    initiateView(medium)
+    initiateView(large)
+    initiateView(xlarge)
+
+    small.setViewVisibility(R.id.testWeek, View.GONE)
+    small.setViewVisibility(R.id.testMonth, View.GONE)
+    small.setViewVisibility(R.id.testYear, View.GONE)
+
+    medium.setViewVisibility(R.id.testWeek, View.GONE)
+    medium.setViewVisibility(R.id.testYear, View.GONE)
+
+    large.setViewVisibility(R.id.testWeek, View.GONE)
 
 
+    // Instruct the widget manager to update the widget
 
+    var remoteViews = small
+    if (Build.VERSION.SDK_INT > 30) {
+
+
+        val viewMapping: Map<SizeF, RemoteViews> = mapOf(
+            SizeF(300f, 100f) to xlarge,
+            SizeF(220f, 100f) to large,
+            SizeF(160f, 100f) to medium,
+            SizeF(100f, 100f) to small,
+        )
+
+        remoteViews = RemoteViews(viewMapping)
+    }
+
+    appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+
+    val alarmHandler = AlarmHandler(context, AlarmHandler.ALL_IN_WIDGET_SERVICE)
+    alarmHandler.cancelAlarmManager()
+    alarmHandler.setAlarmManager()
+}
+
+internal fun initiateView(views: RemoteViews) {
     val progressPercentage = ProgressPercentage()
 
     val dayProgress = progressPercentage.getPercent(ProgressPercentage.DAY).toInt()
@@ -70,14 +112,16 @@ internal fun updateAppWidget(
     views.setProgressBar(R.id.progressBarYear, 100, yearProgress, false)
 
     val day = progressPercentage.getDay()
-    val spannable = SpannableString("${day}${
-        when (day.last()) {
-            '1' -> "st"
-            '2' -> "nd"
-            '3' -> "rd"
-            else -> "th"
-        }
-    }")
+    val spannable = SpannableString(
+        "${day}${
+            when (day.last()) {
+                '1' -> "st"
+                '2' -> "nd"
+                '3' -> "rd"
+                else -> "th"
+            }
+        }"
+    )
     spannable.setSpan(
         SuperscriptSpan(),
         spannable.length - 2,
@@ -86,10 +130,10 @@ internal fun updateAppWidget(
 
     )
     spannable.setSpan(
-            RelativeSizeSpan(0.5f),
-    spannable.length - 2,
-    spannable.length,
-    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        RelativeSizeSpan(0.5f),
+        spannable.length - 2,
+        spannable.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 
     )
     views.setTextViewText(R.id.progressTitle, spannable)
@@ -103,12 +147,11 @@ internal fun updateAppWidget(
     )
     views.setTextViewText(R.id.progressYearTitle, progressPercentage.getYear())
 
-    // Instruct the widget manager to update the widget
-    appWidgetManager.updateAppWidget(appWidgetId, views)
 
-    val alarmHandler = AlarmHandler(context, AlarmHandler.ALL_IN_WIDGET_SERVICE)
-    alarmHandler.cancelAlarmManager()
-    alarmHandler.setAlarmManager()
+    views.setViewVisibility(R.id.testDay, View.VISIBLE)
+    views.setViewVisibility(R.id.testWeek, View.VISIBLE)
+    views.setViewVisibility(R.id.testMonth, View.VISIBLE)
+    views.setViewVisibility(R.id.testYear, View.VISIBLE)
 }
 
 internal fun formatProgress(progress: Int): SpannableString {
