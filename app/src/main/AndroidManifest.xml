@@ -29,7 +29,7 @@
                 android:resource="@xml/all_in_widget_info" />
         </receiver>
 
-        <!--<activity
+        <activity
             android:name=".manager.EventConfigActivity"
             android:exported="true"
             android:windowSoftInputMode="stateVisible|adjustResize|stateHidden"
@@ -37,9 +37,9 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
-        </activity>-->
+        </activity>
 
-        <!--<receiver
+        <receiver
             android:name=".mwidgets.EventWidget"
             android:label="Event Progress Tracker"
             android:exported="false">
@@ -50,7 +50,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/event_widget_info" />
-        </receiver>-->
+        </receiver>
 
         <activity
             android:name=".FirstScreen"

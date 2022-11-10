@@ -45,9 +45,10 @@ class AllInWidget : AppWidgetProvider() {
 internal fun updateAppWidget(
     context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int
 ) {
-    val widgetText = context.getString(R.string.appwidget_text)
-    // Construct the RemoteViews object
+
     val views = RemoteViews(context.packageName, R.layout.all_in_widget)
+
+
 
     val progressPercentage = ProgressPercentage()
 
