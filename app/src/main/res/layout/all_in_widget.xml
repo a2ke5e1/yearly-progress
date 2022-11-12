@@ -14,16 +14,16 @@
 
         <RelativeLayout
             android:id="@+id/testDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:visibility="visible"
             >
 
             <ProgressBar
                 android:id="@+id/progressBarDay"
                 style="@style/CircularProgressIndicator"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:indeterminateOnly="false"
                 android:max="100"
                 android:progress="25" />
@@ -65,16 +65,16 @@
 
         <RelativeLayout
             android:id="@+id/testWeek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:visibility="visible"
             >
 
             <ProgressBar
                 android:id="@+id/progressBarWeek"
                 style="@style/CircularProgressIndicator"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:indeterminateOnly="false"
                 android:max="100"
                 android:progress="25" />
@@ -116,16 +116,16 @@
 
         <RelativeLayout
             android:id="@+id/testMonth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:visibility="visible"
             >
 
             <ProgressBar
                 android:id="@+id/progressBarMonth"
                 style="@style/CircularProgressIndicator"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:indeterminateOnly="false"
                 android:max="100"
                 android:progress="25" />
@@ -166,15 +166,15 @@
 
         <RelativeLayout
             android:id="@+id/testYear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:visibility="visible">
 
             <ProgressBar
                 android:id="@+id/progressBarYear"
                 style="@style/CircularProgressIndicator"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:indeterminateOnly="false"
                 android:max="100"
                 android:progress="25" />

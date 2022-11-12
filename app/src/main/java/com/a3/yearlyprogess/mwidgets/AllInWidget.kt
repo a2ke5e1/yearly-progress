@@ -70,7 +70,7 @@ internal fun updateAppWidget(
 
     // Instruct the widget manager to update the widget
 
-    var remoteViews = small
+    var remoteViews = xlarge
     if (Build.VERSION.SDK_INT > 30) {
 
 
