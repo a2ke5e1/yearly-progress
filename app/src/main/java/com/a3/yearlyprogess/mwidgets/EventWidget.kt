@@ -81,12 +81,15 @@ fun updateEventWidget(
     val progressText = "${progress.format(2)}%"
 
     val spannable = SpannableString(progressText)
-    spannable.setSpan(
-        RelativeSizeSpan(2f),
-        0,
-        progressText.indexOf('.'),
-        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-    )
+
+    try {
+        spannable.setSpan(
+            RelativeSizeSpan(2f),
+            0,
+            progressText.indexOf('.'),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+    } catch (ignored: java.lang.IndexOutOfBoundsException) {}
 
     mediumView.setTextViewText(R.id.eventProgressText, spannable)
     mediumView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
