@@ -17,6 +17,7 @@ import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.format
 import com.a3.yearlyprogess.manager.AlarmHandler
 import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Implementation of App Widget functionality.
@@ -83,7 +84,7 @@ fun updateEventWidget(
     spannable.setSpan(
         RelativeSizeSpan(2f),
         0,
-        2,
+        progressText.indexOf('.'),
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
     )
 
@@ -94,9 +95,9 @@ fun updateEventWidget(
     mediumView.setTextViewText(R.id.eventDesc, eventDesc)
     mediumView.setTextViewText(
         R.id.eventTime,
-        if (DateFormat.is24HourFormat(context)) SimpleDateFormat("MM/dd · HH:mm").format(
+        if (DateFormat.is24HourFormat(context)) SimpleDateFormat("MM/dd · HH:mm", Locale.getDefault()).format(
             eventEndDateTimeInMillis
-        ) else SimpleDateFormat("MM/dd · hh:mm a").format(eventEndDateTimeInMillis)
+        ) else SimpleDateFormat("MM/dd · hh:mm a", Locale.getDefault()).format(eventEndDateTimeInMillis)
     )
 
     smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
