@@ -111,6 +111,37 @@ internal fun initiateView(views: RemoteViews) {
     views.setProgressBar(R.id.progressBarMonth, 100, monthProgress, false)
     views.setProgressBar(R.id.progressBarYear, 100, yearProgress, false)
 
+
+    views.setTextViewText(R.id.progressTitle, formatCurrentDay(progressPercentage))
+    views.setTextViewText(
+        R.id.progressWeekTitle,
+        SimpleDateFormat("EEE", Locale.getDefault()).format(System.currentTimeMillis())
+    )
+    views.setTextViewText(
+        R.id.progressMonthTitle,
+        SimpleDateFormat("MMM", Locale.getDefault()).format(System.currentTimeMillis())
+    )
+    views.setTextViewText(R.id.progressYearTitle, progressPercentage.getYear())
+
+
+    views.setViewVisibility(R.id.testDay, View.VISIBLE)
+    views.setViewVisibility(R.id.testWeek, View.VISIBLE)
+    views.setViewVisibility(R.id.testMonth, View.VISIBLE)
+    views.setViewVisibility(R.id.testYear, View.VISIBLE)
+}
+
+fun formatProgress(progress: Int): SpannableString {
+    val spannable = SpannableString("${progress}%")
+    spannable.setSpan(
+        RelativeSizeSpan(0.7f),
+        spannable.length - 1,
+        spannable.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+    return spannable
+}
+
+fun formatCurrentDay(progressPercentage: ProgressPercentage): SpannableString {
     val day = progressPercentage.getDay()
     val spannable = SpannableString(
         "${day}${
@@ -135,32 +166,6 @@ internal fun initiateView(views: RemoteViews) {
         spannable.length,
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 
-    )
-    views.setTextViewText(R.id.progressTitle, spannable)
-    views.setTextViewText(
-        R.id.progressWeekTitle,
-        SimpleDateFormat("EEE", Locale.getDefault()).format(System.currentTimeMillis())
-    )
-    views.setTextViewText(
-        R.id.progressMonthTitle,
-        SimpleDateFormat("MMM", Locale.getDefault()).format(System.currentTimeMillis())
-    )
-    views.setTextViewText(R.id.progressYearTitle, progressPercentage.getYear())
-
-
-    views.setViewVisibility(R.id.testDay, View.VISIBLE)
-    views.setViewVisibility(R.id.testWeek, View.VISIBLE)
-    views.setViewVisibility(R.id.testMonth, View.VISIBLE)
-    views.setViewVisibility(R.id.testYear, View.VISIBLE)
-}
-
-internal fun formatProgress(progress: Int): SpannableString {
-    val spannable = SpannableString("${progress}%")
-    spannable.setSpan(
-        RelativeSizeSpan(0.7f),
-        spannable.length - 1,
-        spannable.length,
-        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
     )
     return spannable
 }
