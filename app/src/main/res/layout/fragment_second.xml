@@ -152,6 +152,14 @@
             android:layout_height="120dp"
             layout="@layout/all_in_widget" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_all_in_one_widget"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="35dp"
+            android:text="@string/button_text" />
 
         <LinearLayout
             android:id="@+id/ad_frame"
@@ -161,15 +169,6 @@
             android:layout_marginEnd="35dp"
             android:layout_marginTop="10dp"
             android:layout_marginStart="35dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_add_all_in_one_widget"
-            style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp"
-            android:text="@string/button_text" />
 
     </LinearLayout>
 
