@@ -32,14 +32,19 @@
 
             <EditText
                 android:id="@+id/eventTitle"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:maxLines="1"
-                android:imeOptions="actionNext"
-                android:singleLine="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@null"
+                android:hint="Title"
+                android:imeOptions="actionNext"
+                android:inputType="text|textAutoComplete"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="25sp" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -76,34 +81,36 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
                 android:text="Event Settings"
                 android:textAllCaps="true" />
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/eventStartLabel"
+                style="@style/TextAppearance.Material3.TitleSmall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:text="Start Of the Event" />
 
-                <TextView
-                    android:id="@+id/eventStartLabel"
-                    style="@style/TextAppearance.Material3.TitleSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="16dp"
-                    android:text="Start Of the Event" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout3"
                     style="@style/Widget.Material3.TextInputEditText.FilledBox"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:layout_below="@id/eventStartLabel"
-                    android:layout_alignParentStart="true"
-                    app:startIconDrawable="@drawable/ic_outline_edit_calendar_24">
+                    android:layout_weight="1"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="5dp"
+                    app:endIconDrawable="@drawable/ic_outline_edit_calendar_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextStartDate"
@@ -112,7 +119,6 @@
                         android:focusable="false"
                         android:hint="Date"
                         android:inputType="date"
-
                         tools:text="2022, August 10" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -120,50 +126,54 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout4"
                     style="@style/Widget.Material3.TextInputEditText.FilledBox"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:layout_below="@id/eventStartLabel"
-                    android:layout_alignParentEnd="true"
-                    app:startIconDrawable="@drawable/ic_outline_access_time_24">
+                    android:layout_weight="1"
+                    android:paddingStart="5dp"
+                    android:paddingTop="10dp"
+                    app:endIconDrawable="@drawable/ic_outline_access_time_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextStartTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:hint="Date"
+                        android:hint="Time"
                         android:inputType="time"
                         tools:text="11:15 AM" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-            </RelativeLayout>
+            </LinearLayout>
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/eventEndLabel"
+                style="@style/TextAppearance.Material3.TitleSmall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:text="End Of the Event" />
 
-                <TextView
-                    android:id="@+id/eventEndLabel"
-                    style="@style/TextAppearance.Material3.TitleSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="16dp"
-                    android:text="End Of the Event" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout5"
                     style="@style/Widget.Material3.TextInputEditText.FilledBox"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/eventEndLabel"
-                    android:paddingTop="5dp"
-                    android:layout_alignParentStart="true"
-                    app:startIconDrawable="@drawable/ic_outline_edit_calendar_24">
+                    android:layout_weight="1"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="5dp"
+                    app:endIconDrawable="@drawable/ic_outline_edit_calendar_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextEndDate"
@@ -172,7 +182,6 @@
                         android:focusable="false"
                         android:hint="Date"
                         android:inputType="date"
-
                         tools:text="2022, August 10" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -180,26 +189,27 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout6"
                     style="@style/Widget.Material3.TextInputEditText.FilledBox"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:paddingTop="5dp"
-                    android:layout_alignParentBottom="true"
-                    app:startIconDrawable="@drawable/ic_outline_access_time_24">
+                    android:layout_weight="1"
+                    android:paddingStart="5dp"
+                    android:paddingTop="10dp"
+                    app:endIconDrawable="@drawable/ic_outline_access_time_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextEndTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:hint="Date"
+                        android:hint="Time"
                         android:inputType="time"
                         tools:text="11:15 PM" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-            </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

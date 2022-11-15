@@ -40,7 +40,6 @@ class EventConfigActivity : AppCompatActivity() {
     private var eventEndHour: Int = 0
     private var eventEndMinute: Int = 0
 
-    private val DATE_FORMAT = "MMMM dd, YYYY"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,7 +109,7 @@ class EventConfigActivity : AppCompatActivity() {
                         )
 
                         binding.editTextStartDate.setText(
-                            SimpleDateFormat(DATE_FORMAT).format(eventStartDateTimeInMillis)
+                            SimpleDateFormat.getDateInstance().format(eventStartDateTimeInMillis)
                                 .toString()
                         )
                     }
@@ -142,7 +141,7 @@ class EventConfigActivity : AppCompatActivity() {
 
                         binding.editTextStartDate.setText(
 
-                            SimpleDateFormat(DATE_FORMAT).format(eventStartDateTimeInMillis)
+                            SimpleDateFormat.getDateInstance().format(eventStartDateTimeInMillis)
                                 .toString()
                         )
 
@@ -165,7 +164,7 @@ class EventConfigActivity : AppCompatActivity() {
                         )
 
                         binding.editTextEndDate.setText(
-                            SimpleDateFormat(DATE_FORMAT).format(eventEndDateTimeInMillis)
+                            SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis)
                                 .toString()
                         )
                     }
@@ -191,7 +190,7 @@ class EventConfigActivity : AppCompatActivity() {
 
                         binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
                         binding.editTextEndDate.setText(
-                            SimpleDateFormat(DATE_FORMAT).format(eventEndDateTimeInMillis)
+                            SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis)
                                 .toString()
                         )
 
@@ -233,16 +232,16 @@ class EventConfigActivity : AppCompatActivity() {
     }
 
     private fun getHourMinuteLocal(time: Long): String {
-        return if (is24HourFormat(this)) SimpleDateFormat("HH:mm").format(
+        return if (is24HourFormat(this)) SimpleDateFormat("HH:mm", Locale.getDefault()).format(
             time
-        ) else SimpleDateFormat("hh:mm a").format(time)
+        ) else SimpleDateFormat("hh:mm a", Locale.getDefault()).format(time)
     }
 
     private fun loadWidgetDataIfExists(pref: SharedPreferences) {
         val eventTitle = pref.getString("eventTitle", "").toString()
         val eventDesc = pref.getString("eventDesc", "").toString()
-        eventStartDateTimeInMillis = pref.getLong("eventStartTimeInMills", 0)
-        eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
+        eventStartDateTimeInMillis = pref.getLong("eventStartTimeInMills", System.currentTimeMillis())
+        eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", System.currentTimeMillis())
 
 
         binding.eventTitle.setText(eventTitle)
@@ -257,7 +256,7 @@ class EventConfigActivity : AppCompatActivity() {
 
 
         binding.editTextStartDate.setText(
-            SimpleDateFormat(DATE_FORMAT).format(eventStartDateTimeInMillis).toString()
+            SimpleDateFormat.getDateInstance().format(eventStartDateTimeInMillis).toString()
         )
         binding.editTextStartTime.setText(getHourMinuteLocal(eventStartDateTimeInMillis))
 
@@ -266,7 +265,7 @@ class EventConfigActivity : AppCompatActivity() {
         eventEndMinute = localCalendar.get(Calendar.MINUTE)
 
         binding.editTextEndDate.setText(
-            SimpleDateFormat(DATE_FORMAT).format(eventEndDateTimeInMillis).toString()
+            SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis).toString()
         )
         binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
 

@@ -7,6 +7,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
+import android.text.style.SuperscriptSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,10 +26,7 @@ import com.a3.yearlyprogess.databinding.FragmentSecondBinding
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.format
 import com.a3.yearlyprogess.mAdview.updateViewWithNativeAdview
-import com.a3.yearlyprogess.mwidgets.DayWidget
-import com.a3.yearlyprogess.mwidgets.MonthWidget
-import com.a3.yearlyprogess.mwidgets.WeekWidget
-import com.a3.yearlyprogess.mwidgets.YearWidget
+import com.a3.yearlyprogess.mwidgets.*
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -36,6 +37,8 @@ import com.google.android.gms.ads.nativead.NativeAdView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.roundToInt
 
 
@@ -79,6 +82,20 @@ class SecondFragment : Fragment() {
     private lateinit var progressBarDay: ProgressBar
     private lateinit var progressBarWeek: ProgressBar
 
+    private lateinit var allInOneProgressTextViewYear: TextView
+    private lateinit var allInOneProgressTextViewMonth: TextView
+    private lateinit var allInOneProgressTextViewDay: TextView
+    private lateinit var allInOneProgressTextViewWeek: TextView
+
+    private lateinit var allInOneProgressBarYear: ProgressBar
+    private lateinit var allInOneProgressBarMonth: ProgressBar
+    private lateinit var allInOneProgressBarDay: ProgressBar
+    private lateinit var allInOneProgressBarWeek: ProgressBar
+
+    private lateinit var allInOneTitleTextViewYear: TextView
+    private lateinit var allInOneTitleTextViewDay: TextView
+    private lateinit var allInOneTitleTextViewMonth: TextView
+    private lateinit var allInOneTitleTextViewWeek: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -118,10 +135,10 @@ class SecondFragment : Fragment() {
 
 
                 lifecycleScope.launch(Dispatchers.Main) {
-                    progressTextViewYear.text = percentString(progressTextYear)
-                    progressTextViewMonth.text = percentString(progressTextMonth)
-                    progressTextViewDay.text = percentString(progressTextDay)
-                    progressTextViewWeek.text = percentString(progressTextWeek)
+                    progressTextViewYear.text = formatProgressStyle(progressTextYear)
+                    progressTextViewMonth.text = formatProgressStyle(progressTextMonth)
+                    progressTextViewDay.text = formatProgressStyle(progressTextDay)
+                    progressTextViewWeek.text = formatProgressStyle(progressTextWeek)
 
                     progressBarYear.progress = progressYear
                     progressBarMonth.progress = progressMonth
@@ -132,6 +149,23 @@ class SecondFragment : Fragment() {
                     textViewMonth.text = progressPercentage.getMonth(str = true)
                     textViewWeek.text = progressPercentage.getWeek(str = true)
                     textViewDay.text = progressPercentage.getDay(custom = true)
+
+
+                    // All In One Widget
+                    allInOneProgressTextViewYear.text = formatProgress(progressYear)
+                    allInOneProgressTextViewMonth.text = formatProgress(progressMonth)
+                    allInOneProgressTextViewDay.text = formatProgress(progressDay)
+                    allInOneProgressTextViewWeek.text = formatProgress(progressWeek)
+
+                    allInOneProgressBarYear.progress = progressYear
+                    allInOneProgressBarMonth.progress = progressMonth
+                    allInOneProgressBarDay.progress = progressDay
+                    allInOneProgressBarWeek.progress = progressWeek
+
+                    allInOneTitleTextViewYear.text = progressPercentage.getYear()
+                    allInOneTitleTextViewMonth.text = SimpleDateFormat("MMM", Locale.getDefault()).format(System.currentTimeMillis())
+                    allInOneTitleTextViewDay.text = formatCurrentDay(progressPercentage)
+                    allInOneTitleTextViewWeek.text = SimpleDateFormat("EEE", Locale.getDefault()).format(System.currentTimeMillis())
 
                 }
                 delay(i * 1000)
@@ -150,6 +184,20 @@ class SecondFragment : Fragment() {
         animatedUpdateProgressBarView(progressBarMonth, ProgressPercentage.MONTH)
         animatedUpdateProgressBarView(progressBarDay, ProgressPercentage.DAY)
         animatedUpdateProgressBarView(progressBarWeek, ProgressPercentage.WEEK)
+
+        animatedUpdateProgressTextView(allInOneProgressTextViewYear, ProgressPercentage.YEAR, true)
+        animatedUpdateProgressTextView(
+            allInOneProgressTextViewMonth,
+            ProgressPercentage.MONTH,
+            true
+        )
+        animatedUpdateProgressTextView(allInOneProgressTextViewDay, ProgressPercentage.DAY, true)
+        animatedUpdateProgressTextView(allInOneProgressTextViewWeek, ProgressPercentage.WEEK, true)
+
+        animatedUpdateProgressBarView(allInOneProgressBarYear, ProgressPercentage.YEAR)
+        animatedUpdateProgressBarView(allInOneProgressBarMonth, ProgressPercentage.MONTH)
+        animatedUpdateProgressBarView(allInOneProgressBarDay, ProgressPercentage.DAY)
+        animatedUpdateProgressBarView(allInOneProgressBarWeek, ProgressPercentage.WEEK)
     }
 
     private fun initProgressBarsTextViews(view: View) {
@@ -167,6 +215,24 @@ class SecondFragment : Fragment() {
         textViewMonth = view.findViewById<TextView>(R.id.text_month)
         textViewDay = view.findViewById<TextView>(R.id.text_day)
         textViewWeek = view.findViewById<TextView>(R.id.text_week)
+
+
+        allInOneProgressTextViewYear = view.findViewById<TextView>(R.id.progressTextYear)
+        allInOneProgressTextViewMonth = view.findViewById<TextView>(R.id.progressTextMonth)
+        allInOneProgressTextViewDay = view.findViewById<TextView>(R.id.progressTextDay)
+        allInOneProgressTextViewWeek = view.findViewById<TextView>(R.id.progressTextWeek)
+
+        allInOneProgressBarYear = view.findViewById<ProgressBar>(R.id.progressBarYear)
+        allInOneProgressBarMonth = view.findViewById<ProgressBar>(R.id.progressBarMonth)
+        allInOneProgressBarDay = view.findViewById<ProgressBar>(R.id.progressBarDay)
+        allInOneProgressBarWeek = view.findViewById<ProgressBar>(R.id.progressBarWeek)
+
+        allInOneTitleTextViewYear = view.findViewById<TextView>(R.id.progressYearTitle)
+        allInOneTitleTextViewDay = view.findViewById<TextView>(R.id.progressTitle)
+        allInOneTitleTextViewMonth = view.findViewById<TextView>(R.id.progressMonthTitle)
+        allInOneTitleTextViewWeek = view.findViewById<TextView>(R.id.progressWeekTitle)
+
+
     }
 
     private fun showAds() {
@@ -222,14 +288,31 @@ class SecondFragment : Fragment() {
         binding.btnAddWeekWidget.setOnClickListener {
             requestPinAppWidget(requireContext(), WeekWidget::class.java)
         }
+
+        // Showing menu for user to add All In One widget to user Launcher's Home Screen
+        binding.btnAddAllInOneWidget.setOnClickListener {
+            requestPinAppWidget(requireContext(), AllInWidget::class.java)
+        }
     }
 
-    private fun animatedUpdateProgressTextView(textView: TextView, type: Int) {
+    private fun animatedUpdateProgressTextView(
+        textView: TextView,
+        type: Int,
+        isAllInOne: Boolean = false
+    ) {
         val progressTextAnimator =
-            ValueAnimator.ofFloat(0F, ProgressPercentage().getPercent(type).toFloat())
+            if (isAllInOne) {
+                ValueAnimator.ofInt(0, ProgressPercentage().getPercent(type).roundToInt())
+            } else {
+                ValueAnimator.ofFloat(0F, ProgressPercentage().getPercent(type).toFloat())
+            }
         progressTextAnimator.duration = 600
         progressTextAnimator.addUpdateListener {
-            textView.text = percentString((it.animatedValue as Float).toDouble())
+            textView.text = if (isAllInOne) {
+                formatProgress(it.animatedValue as Int)
+            } else {
+                formatProgressStyle((it.animatedValue as Float).toDouble())
+            }
             textView.requestLayout()
         }
         progressTextAnimator.start()
@@ -246,9 +329,6 @@ class SecondFragment : Fragment() {
         progressViewAnimator.start()
     }
 
-    private fun percentString(progress: Double): String {
-        return "${progress.format(2)}%"
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

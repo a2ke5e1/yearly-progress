@@ -16,6 +16,35 @@
         android:supportsRtl="true"
         android:theme="@style/App.SplashScreen"
         tools:targetApi="31">
+
+        <activity
+            android:name=".manager.EventConfigActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden"
+            android:theme="@style/Theme.YearlyProgress">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FirstScreen"
+            android:exported="true"
+            android:theme="@style/Theme.YearlyProgress" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_application_id" />
+        <!--
+            Registration of the Widgets
+        -->
         <receiver
             android:name=".mwidgets.AllInWidget"
             android:label="All in One"
@@ -28,18 +57,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/all_in_widget_info" />
         </receiver>
-
-        <!--<activity
-            android:name=".manager.EventConfigActivity"
-            android:exported="true"
-            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden"
-            android:theme="@style/Theme.YearlyProgress">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>-->
-
-        <!--<receiver
+        <receiver
             android:name=".mwidgets.EventWidget"
             android:label="Event Progress Tracker"
             android:exported="false">
@@ -50,23 +68,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/event_widget_info" />
-        </receiver>-->
-
-        <activity
-            android:name=".FirstScreen"
-            android:exported="true"
-            android:theme="@style/Theme.YearlyProgress" />
-
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/admob_application_id" />
-        <!--
-            Registration of the Widgets:-
-            1. Day
-            2. Month
-            3. Week
-            4. Year
-        -->
+        </receiver>
         <receiver
             android:name=".mwidgets.DayWidget"
             android:exported="false"
@@ -116,11 +118,7 @@
                 android:resource="@xml/week_widget_info" />
         </receiver>
         <!--
-            Registration of the Widget Broadcast Receiver:-
-            1. Day
-            2. Month
-            3. Week
-            4. Year
+            Registration of the Widget Broadcast Receiver
         -->
         <receiver
             android:name=".manager.services.DayWidgetService"
@@ -134,21 +132,13 @@
         <receiver
             android:name=".manager.services.YearWidgetService"
             android:enabled="true" />
-       <!-- <receiver
+        <receiver
             android:name=".manager.services.EventWidgetService"
-            android:enabled="true" />-->
+            android:enabled="true" />
         <receiver
             android:name=".manager.services.AllInWidgetService"
             android:enabled="true" />
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

@@ -57,13 +57,7 @@ class DayWidget : AppWidgetProvider() {
         val smallView = RemoteViews(context.packageName, R.layout.day_widget)
         val progressPercentage = ProgressPercentage()
         val progress = progressPercentage.getPercent(ProgressPercentage.DAY)
-        val widgetText = SpannableString("${progress.format(2)}%")
-        widgetText.setSpan(
-            RelativeSizeSpan(0.7f),
-            widgetText.indexOf('.'),
-            widgetText.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+        val widgetText = formatProgressStyle(progress)
 
         smallView.setTextViewText(R.id.text_day, progressPercentage.getDay(true))
         smallView.setProgressBar(R.id.progress_bar_day, 100, progress.roundToInt(), false)
@@ -104,4 +98,15 @@ class DayWidget : AppWidgetProvider() {
         val alarmHandler = AlarmHandler(context, AlarmHandler.DAY_WIDGET_SERVICE)
         alarmHandler.cancelAlarmManager()
     }
+}
+
+fun formatProgressStyle(progress: Double): SpannableString {
+    val widgetText = SpannableString("${progress.format(2)}%")
+    widgetText.setSpan(
+        RelativeSizeSpan(0.7f),
+        widgetText.indexOf('.'),
+        widgetText.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+    return widgetText
 }
