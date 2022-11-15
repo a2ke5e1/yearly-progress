@@ -38,7 +38,7 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         alarmHandler.cancelAlarmManager()
     }
 
-    private fun updateAppWidget(
+    open fun updateAppWidget(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int

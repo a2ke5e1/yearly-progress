@@ -15,7 +15,7 @@ class ProgressPercentage {
         (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
 
     fun getMonth(str: Boolean = false): String {
-        val monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+        val monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
         if (monthName == null || !str) {
             return (calendar.get(Calendar.MONTH) + 1).toString()
         }
@@ -34,7 +34,7 @@ class ProgressPercentage {
 
     fun getWeek(str: Boolean = false): String {
         val weekName =
-            calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
+            calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
         if (weekName == null || !str) {
             return calendar.get(Calendar.DAY_OF_WEEK).toString()
         }
@@ -115,9 +115,10 @@ class ProgressPercentage {
         const val WEEK = 102
         const val DAY = 103
         const val CUSTOM_EVENT = 104
+
+
+        fun Double.format(digits: Int): Double = "%.${digits}f".format(this).toDouble()
     }
 
 
 }
-
-fun Double.format(digits: Int): Double = "%.${digits}f".format(this).toDouble()

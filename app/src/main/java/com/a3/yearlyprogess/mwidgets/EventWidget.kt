@@ -14,7 +14,7 @@ import android.util.SizeF
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.helper.format
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.format
 import com.a3.yearlyprogess.manager.AlarmHandler
 import java.text.SimpleDateFormat
 import java.util.*

@@ -7,10 +7,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
-import android.text.style.SuperscriptSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +20,9 @@ import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentSecondBinding
 import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.helper.format
 import com.a3.yearlyprogess.mAdview.updateViewWithNativeAdview
 import com.a3.yearlyprogess.mwidgets.*
+import com.a3.yearlyprogess.mwidgets.util.StandaloneWidget.Companion.formatProgressStyle
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -163,9 +159,15 @@ class SecondFragment : Fragment() {
                     allInOneProgressBarWeek.progress = progressWeek
 
                     allInOneTitleTextViewYear.text = progressPercentage.getYear()
-                    allInOneTitleTextViewMonth.text = SimpleDateFormat("MMM", Locale.getDefault()).format(System.currentTimeMillis())
+                    allInOneTitleTextViewMonth.text = SimpleDateFormat(
+                        "MMM",
+                        Locale.getDefault()
+                    ).format(System.currentTimeMillis())
                     allInOneTitleTextViewDay.text = formatCurrentDay(progressPercentage)
-                    allInOneTitleTextViewWeek.text = SimpleDateFormat("EEE", Locale.getDefault()).format(System.currentTimeMillis())
+                    allInOneTitleTextViewWeek.text = SimpleDateFormat(
+                        "EEE",
+                        Locale.getDefault()
+                    ).format(System.currentTimeMillis())
 
                 }
                 delay(i * 1000)
