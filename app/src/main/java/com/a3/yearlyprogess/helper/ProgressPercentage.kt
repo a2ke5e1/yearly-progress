@@ -2,7 +2,6 @@ package com.a3.yearlyprogess.helper
 
 import androidx.annotation.IntDef
 import androidx.annotation.RestrictTo
-import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 class ProgressPercentage {

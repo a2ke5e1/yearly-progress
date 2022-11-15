@@ -1,13 +1,11 @@
 package com.a3.yearlyprogess.mAdview
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.a3.yearlyprogess.R
-import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.material.button.MaterialButton
