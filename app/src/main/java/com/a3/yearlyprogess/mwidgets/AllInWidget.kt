@@ -1,8 +1,10 @@
 package com.a3.yearlyprogess.mwidgets
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
@@ -12,6 +14,7 @@ import android.text.style.SuperscriptSpan
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
+import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
@@ -53,10 +56,10 @@ internal fun updateAppWidget(
     val large = RemoteViews(context.packageName, R.layout.all_in_widget)
     val xlarge = RemoteViews(context.packageName, R.layout.all_in_widget)
 
-    initiateView(small)
-    initiateView(medium)
-    initiateView(large)
-    initiateView(xlarge)
+    initiateView(context, small)
+    initiateView(context, medium)
+    initiateView(context, large)
+    initiateView(context, xlarge)
 
     small.setViewVisibility(R.id.testWeek, View.GONE)
     small.setViewVisibility(R.id.testMonth, View.GONE)
@@ -91,7 +94,7 @@ internal fun updateAppWidget(
     alarmHandler.setAlarmManager()
 }
 
-internal fun initiateView(views: RemoteViews) {
+internal fun initiateView(context: Context, views: RemoteViews) {
     val progressPercentage = ProgressPercentage()
 
     val dayProgress = progressPercentage.getPercent(ProgressPercentage.DAY).toInt()
@@ -122,6 +125,10 @@ internal fun initiateView(views: RemoteViews) {
         SimpleDateFormat("MMM", Locale.getDefault()).format(System.currentTimeMillis())
     )
     views.setTextViewText(R.id.progressYearTitle, progressPercentage.getYear())
+
+    views.setOnClickPendingIntent(R.id.gridLayout, PendingIntent.getActivity(
+        context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE
+    ))
 
 
     views.setViewVisibility(R.id.testDay, View.VISIBLE)
