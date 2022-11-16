@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/month_widget_info"
-    android:initialKeyguardLayout="@layout/month_widget"
-    android:initialLayout="@layout/month_widget"
+    android:initialKeyguardLayout="@layout/month_widget_preview"
+    android:initialLayout="@layout/month_widget_preview"
     android:minWidth="110dp"
     android:minHeight="40dp"
     android:previewLayout="@layout/month_widget_preview"
