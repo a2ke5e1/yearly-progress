@@ -111,10 +111,10 @@ class SecondFragment : Fragment() {
         startAnimationWidget()
 
         // Update Widget every 5 seconds
-        UpdateWidgetInfo(5)
+        updateWidgetInfo(5)
     }
 
-    private fun UpdateWidgetInfo(i: Long) {
+    private fun updateWidgetInfo(i: Long) {
         lifecycleScope.launch(Dispatchers.IO) {
 
             while (true) {
@@ -205,20 +205,27 @@ class SecondFragment : Fragment() {
     }
 
     private fun initProgressBarsTextViews(view: View) {
-        progressTextViewYear = view.findViewById<TextView>(R.id.progress_text_year)
-        progressTextViewMonth = view.findViewById<TextView>(R.id.progress_text_month)
-        progressTextViewDay = view.findViewById<TextView>(R.id.progress_text_day)
-        progressTextViewWeek = view.findViewById<TextView>(R.id.progress_text_week)
 
-        progressBarYear = view.findViewById<ProgressBar>(R.id.progress_bar_year)
-        progressBarMonth = view.findViewById<ProgressBar>(R.id.progress_bar_month)
-        progressBarDay = view.findViewById<ProgressBar>(R.id.progress_bar_day)
-        progressBarWeek = view.findViewById<ProgressBar>(R.id.progress_bar_week)
+        binding.widgetYearDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.year)
+        binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.month)
+        binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.week)
+        binding.widgetDayDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.day)
 
-        textViewYear = view.findViewById<TextView>(R.id.text_year)
-        textViewMonth = view.findViewById<TextView>(R.id.text_month)
-        textViewDay = view.findViewById<TextView>(R.id.text_day)
-        textViewWeek = view.findViewById<TextView>(R.id.text_week)
+        progressTextViewDay = binding.widgetDayDemo.findViewById<TextView>(R.id.widgetProgress)
+        progressTextViewWeek = binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetProgress)
+        progressTextViewMonth = binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetProgress)
+        progressTextViewYear = binding.widgetYearDemo.findViewById<TextView>(R.id.widgetProgress)
+
+        textViewYear = binding.widgetYearDemo.findViewById<TextView>(R.id.widgetCurrentValue)
+        textViewMonth = binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetCurrentValue)
+        textViewDay = binding.widgetDayDemo.findViewById<TextView>(R.id.widgetCurrentValue)
+        textViewWeek = binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetCurrentValue)
+
+        progressBarYear = binding.widgetYearDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
+        progressBarMonth = binding.widgetMonthDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
+        progressBarDay = binding.widgetDayDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
+        progressBarWeek = binding.widgetWeekDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
+
 
 
         allInOneProgressTextViewYear = view.findViewById<TextView>(R.id.progressTextYear)

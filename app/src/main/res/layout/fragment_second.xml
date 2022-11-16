@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,38 +12,127 @@
 
         <TextView
             style="?attr/textAppearanceLabelSmall"
-            android:layout_marginStart="45dp"
-            android:layout_marginTop="10dp"
-            android:textAllCaps="true"
-            android:layout_marginEnd="45dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="45dp"
             android:text="Classic Widgets"
-            />
+            android:textAllCaps="true" />
 
-        <GridView
+        <GridLayout
             android:id="@+id/classicWidgetContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginTop="10dp"
+            android:columnCount="2"
+            android:useDefaultMargins="true">
+
+            <LinearLayout
+                android:id="@+id/widget_year_demo"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
-        </GridView>
+                <include
+                    layout="@layout/standalone_widget_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_year_widget"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/button_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_month_demo"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <include
+                    layout="@layout/standalone_widget_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_month_widget"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/button_text" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_day_demo"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    layout="@layout/standalone_widget_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_day_widget"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/button_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_week_demo"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    layout="@layout/standalone_widget_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_week_widget"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/button_text" />
+
+            </LinearLayout>
+
+        </GridLayout>
 
         <TextView
             style="?attr/textAppearanceLabelSmall"
-            android:layout_marginStart="45dp"
-            android:layout_marginTop="20dp"
-            android:textAllCaps="true"
-            android:layout_marginEnd="45dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="45dp"
             android:text="All in One Widget"
-            />
+            android:textAllCaps="true" />
 
         <include
+            layout="@layout/all_in_widget"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            layout="@layout/all_in_widget" />
+            android:layout_height="120dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_all_in_one_widget"
@@ -58,11 +146,11 @@
         <LinearLayout
             android:id="@+id/ad_frame"
             android:layout_width="match_parent"
-            android:orientation="vertical"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="35dp"
+            android:layout_marginStart="35dp"
             android:layout_marginTop="10dp"
-            android:layout_marginStart="35dp" />
+            android:layout_marginEnd="35dp"
+            android:orientation="vertical" />
 
     </LinearLayout>
 
