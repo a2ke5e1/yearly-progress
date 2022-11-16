@@ -5,7 +5,7 @@
     android:initialLayout="@layout/month_widget"
     android:minWidth="110dp"
     android:minHeight="40dp"
-    android:previewLayout="@layout/month_widget"
+    android:previewLayout="@layout/month_widget_preview"
     android:previewImage="@drawable/month_widget_preview"
     android:resizeMode="horizontal"
     android:targetCellWidth="2"
