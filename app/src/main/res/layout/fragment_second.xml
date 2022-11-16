@@ -24,9 +24,9 @@
             android:id="@+id/classicWidgetContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="45dp"
-            android:layout_marginEnd="45dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="40dp"
             android:columnCount="2"
             android:useDefaultMargins="true">
 
@@ -34,6 +34,8 @@
                 android:id="@+id/widget_year_demo"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_columnWeight="1"
                 android:orientation="vertical">
 
 
@@ -55,7 +57,9 @@
             <LinearLayout
                 android:id="@+id/widget_month_demo"
                 android:layout_width="150dp"
+                android:layout_gravity="end"
                 android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
                 android:orientation="vertical">
 
 
@@ -78,7 +82,9 @@
             <LinearLayout
                 android:id="@+id/widget_day_demo"
                 android:layout_width="150dp"
+                android:layout_gravity="start"
                 android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
                 android:orientation="vertical">
 
                 <include
@@ -100,6 +106,8 @@
                 android:id="@+id/widget_week_demo"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="end"
                 android:orientation="vertical">
 
                 <include
