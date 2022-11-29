@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.helper
 import androidx.annotation.IntDef
 import androidx.annotation.RestrictTo
 import java.util.*
+import kotlin.math.pow
 
 class ProgressPercentage {
 
@@ -116,7 +117,10 @@ class ProgressPercentage {
         const val CUSTOM_EVENT = 104
 
 
-        fun Double.format(digits: Int): Double = "%.${digits}f".format(this).toDouble()
+        fun Double.format(digits: Int): Double  {
+            val p = 10.0.pow(digits.toDouble())
+            return (this * p).toInt() / p
+        }
     }
 
 
