@@ -35,7 +35,6 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_columnWeight="1"
                 android:orientation="vertical">
 
 
@@ -59,7 +58,6 @@
                 android:layout_width="150dp"
                 android:layout_gravity="end"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:orientation="vertical">
 
 
@@ -84,7 +82,6 @@
                 android:layout_width="150dp"
                 android:layout_gravity="start"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:orientation="vertical">
 
                 <include
@@ -106,7 +103,6 @@
                 android:id="@+id/widget_week_demo"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_gravity="end"
                 android:orientation="vertical">
 
