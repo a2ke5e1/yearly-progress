@@ -65,7 +65,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/demo_year_per"
                 android:textColor="@color/widget_text_color"
-                android:textSize="25sp"
+                android:textSize="32sp"
                 android:textStyle="bold" />
 
             <TextView

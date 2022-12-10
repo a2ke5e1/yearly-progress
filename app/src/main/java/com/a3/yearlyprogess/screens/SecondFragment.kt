@@ -20,11 +20,11 @@ import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentSecondBinding
 import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatCurrentDay
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.mAdview.updateViewWithNativeAdview
 import com.a3.yearlyprogess.mwidgets.*
-import com.a3.yearlyprogess.mwidgets.AllInWidget.Companion.formatCurrentDay
-import com.a3.yearlyprogess.mwidgets.AllInWidget.Companion.formatProgress
-import com.a3.yearlyprogess.mwidgets.util.StandaloneWidget.Companion.formatProgressStyle
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest

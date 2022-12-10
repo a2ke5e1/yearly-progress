@@ -5,16 +5,14 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
-import android.text.style.SuperscriptSpan
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatCurrentDay
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
 import com.a3.yearlyprogess.manager.AlarmHandler
 import com.a3.yearlyprogess.mwidgets.util.BaseWidget
 import java.text.SimpleDateFormat
@@ -114,47 +112,6 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
         views.setViewVisibility(R.id.testYear, View.VISIBLE)
     }
 
-    companion object {
-        fun formatProgress(progress: Int): SpannableString {
-            val spannable = SpannableString("${progress}%")
-            spannable.setSpan(
-                RelativeSizeSpan(0.7f),
-                spannable.length - 1,
-                spannable.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            return spannable
-        }
-
-        fun formatCurrentDay(progressPercentage: ProgressPercentage): SpannableString {
-            val day = progressPercentage.getDay()
-            val spannable = SpannableString(
-                "${day}${
-                    when (day.last()) {
-                        '1' -> "st"
-                        '2' -> "nd"
-                        '3' -> "rd"
-                        else -> "th"
-                    }
-                }"
-            )
-            spannable.setSpan(
-                SuperscriptSpan(),
-                spannable.length - 2,
-                spannable.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-
-            )
-            spannable.setSpan(
-                RelativeSizeSpan(0.5f),
-                spannable.length - 2,
-                spannable.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-
-            )
-            return spannable
-        }
-    }
 }
 
 

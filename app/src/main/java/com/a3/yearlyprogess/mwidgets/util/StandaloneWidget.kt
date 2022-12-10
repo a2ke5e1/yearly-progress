@@ -12,6 +12,7 @@ import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.format
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.manager.AlarmHandler
 import kotlin.math.roundToInt
 
@@ -47,7 +48,7 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
             AlarmHandler.YEAR_WIDGET_SERVICE ->  context.getString(R.string.year)
             else -> ""
         }
-        val widgetCurrentValue: String = when(widgetServiceType) {
+        val widgetCurrentValue = when(widgetServiceType) {
             AlarmHandler.DAY_WIDGET_SERVICE -> progressPercentage.getDay(custom = true)
             AlarmHandler.MONTH_WIDGET_SERVICE -> progressPercentage.getMonth(str = true)
             AlarmHandler.WEEK_WIDGET_SERVICE -> progressPercentage.getWeek(str = true)
@@ -69,16 +70,4 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
 
     }
 
-    companion object {
-        fun formatProgressStyle(progress: Double): SpannableString {
-            val widgetText = SpannableString("${progress.format(2)}%")
-            widgetText.setSpan(
-                RelativeSizeSpan(0.7f),
-                widgetText.indexOf('.'),
-                widgetText.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            return widgetText
-        }
-    }
 }
