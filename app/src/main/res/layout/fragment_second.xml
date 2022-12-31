@@ -45,7 +45,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_year_widget"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -68,7 +68,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_month_widget"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -91,7 +91,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_day_widget"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -113,7 +113,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_week_widget"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -140,7 +140,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_all_in_one_widget"
-            style="@style/Widget.Material3.Button.TonalButton"
+            style="@style/Widget.Material3.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"

@@ -32,7 +32,7 @@
         android:layout_marginBottom="20dp"
         android:gravity="center"
         android:padding="6dp"
-        android:text="By continuing, you agree our Terms of Service and Privacy Policy."
+        android:text="@string/by_continuing_you_agree_our_terms_of_service_and_privacy_policy"
         android:textColor="?attr/colorOnPrimaryContainer"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/materialButton"
@@ -42,7 +42,7 @@
         android:id="@+id/materialButton"
         style="@style/Widget.Material3.Button.TonalButton" android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:layout_marginBottom="28dp"
-        android:text="Start" app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/start" app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"/>
 

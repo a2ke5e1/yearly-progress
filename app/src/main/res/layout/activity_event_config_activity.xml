@@ -39,7 +39,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:background="@null"
-                android:hint="Title"
+                android:hint="@string/title"
                 android:imeOptions="actionNext"
                 android:inputType="text|textAutoComplete"
                 android:maxLines="1"
@@ -71,7 +71,7 @@
                     android:id="@+id/eventDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Description" />
+                    android:hint="@string/description" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -83,7 +83,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="Event Settings"
+                android:text="@string/event_settings"
                 android:textAllCaps="true" />
 
             <TextView
@@ -94,7 +94,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="16dp"
-                android:text="Start Of the Event" />
+                android:text="@string/start_of_the_event" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,14 +110,15 @@
                     android:paddingTop="10dp"
                     android:paddingEnd="5dp"
                     app:endIconDrawable="@drawable/ic_outline_edit_calendar_24"
-                    app:endIconMode="custom">
+                    app:endIconMode="custom"
+                    tools:ignore="RtlSymmetry">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextStartDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:hint="Date"
+                        android:hint="@string/date"
                         android:inputType="date"
                         tools:text="2022, August 10" />
 
@@ -132,14 +133,15 @@
                     android:paddingStart="5dp"
                     android:paddingTop="10dp"
                     app:endIconDrawable="@drawable/ic_outline_access_time_24"
-                    app:endIconMode="custom">
+                    app:endIconMode="custom"
+                    tools:ignore="RtlSymmetry">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextStartTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:hint="Time"
+                        android:hint="@string/time"
                         android:inputType="time"
                         tools:text="11:15 AM" />
 
