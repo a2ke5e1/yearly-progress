@@ -12,7 +12,7 @@ android {
         applicationId "com.a3.yearlyprogess"
         minSdk 28
         targetSdk 33
-        versionCode 29
+        versionCode 30
         versionName "1.0.2.${versionCode - 25}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

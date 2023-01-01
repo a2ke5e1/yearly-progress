@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FirstScreen"
+            android:name=".WelcomeScreen"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress" />
         <activity

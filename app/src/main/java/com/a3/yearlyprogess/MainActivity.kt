@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(
                 Intent(
                     this,
-                    FirstScreen::class.java
+                    WelcomeScreen::class.java
                 )
             )
             finish()

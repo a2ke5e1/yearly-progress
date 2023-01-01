@@ -9,7 +9,7 @@ import android.text.style.URLSpan
 import androidx.appcompat.app.AppCompatActivity
 import com.a3.yearlyprogess.databinding.ActivityFirstScreenBinding
 
-class FirstScreen : AppCompatActivity() {
+class WelcomeScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityFirstScreenBinding
     private val TOS_URL = "https://www.a3group.co.in/yearly_progress/TOS"
