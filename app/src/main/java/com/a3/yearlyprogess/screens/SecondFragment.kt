@@ -24,7 +24,7 @@ import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatCurrentDay
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.mAdview.CustomAdView.Companion.updateViewWithNativeAdview
-import com.a3.yearlyprogess.mwidgets.*
+import com.a3.yearlyprogess.mWidgets.*
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest

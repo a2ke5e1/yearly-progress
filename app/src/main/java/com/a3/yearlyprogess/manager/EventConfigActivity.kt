@@ -17,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.ActivityEventConfigActivityBinding
-import com.a3.yearlyprogess.mwidgets.EventWidget
+import com.a3.yearlyprogess.mWidgets.EventWidget
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat

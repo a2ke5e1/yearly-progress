@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.mwidgets
+package com.a3.yearlyprogess.mWidgets
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -14,7 +14,7 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.format
 import com.a3.yearlyprogess.manager.AlarmHandler
-import com.a3.yearlyprogess.mwidgets.util.BaseWidget
+import com.a3.yearlyprogess.mWidgets.util.BaseWidget
 import java.text.SimpleDateFormat
 import java.util.*
 

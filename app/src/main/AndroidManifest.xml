@@ -46,7 +46,7 @@
             Registration of the Widgets
         -->
         <receiver
-            android:name=".mwidgets.AllInWidget"
+            android:name=".mWidgets.AllInWidget"
             android:label="All in One"
             android:exported="false">
             <intent-filter>
@@ -58,7 +58,7 @@
                 android:resource="@xml/all_in_widget_info" />
         </receiver>
         <receiver
-            android:name=".mwidgets.EventWidget"
+            android:name=".mWidgets.EventWidget"
             android:label="Event Progress Tracker"
             android:exported="false">
             <intent-filter>
@@ -70,7 +70,7 @@
                 android:resource="@xml/event_widget_info" />
         </receiver>
         <receiver
-            android:name=".mwidgets.DayWidget"
+            android:name=".mWidgets.DayWidget"
             android:exported="false"
             android:label="Day Progress">
             <intent-filter>
@@ -82,7 +82,7 @@
                 android:resource="@xml/day_widget_info" />
         </receiver>
         <receiver
-            android:name=".mwidgets.MonthWidget"
+            android:name=".mWidgets.MonthWidget"
             android:exported="false"
             android:label="Month Progress">
             <intent-filter>
@@ -94,7 +94,7 @@
                 android:resource="@xml/month_widget_info" />
         </receiver>
         <receiver
-            android:name=".mwidgets.YearWidget"
+            android:name=".mWidgets.YearWidget"
             android:exported="false"
             android:label="Year Progress">
             <intent-filter>
@@ -106,7 +106,7 @@
                 android:resource="@xml/year_widget_info" />
         </receiver>
         <receiver
-            android:name=".mwidgets.WeekWidget"
+            android:name=".mWidgets.WeekWidget"
             android:exported="false"
             android:label="Week Progress">
             <intent-filter>

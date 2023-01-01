@@ -1,17 +1,13 @@
-package com.a3.yearlyprogess.mwidgets.util
+package com.a3.yearlyprogess.mWidgets.util
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.format
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.manager.AlarmHandler
 import kotlin.math.roundToInt

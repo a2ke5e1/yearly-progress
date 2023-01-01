@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import com.a3.yearlyprogess.manager.WakeLocker
-import com.a3.yearlyprogess.mwidgets.DayWidget
 
 abstract class BaseWidgetService : BroadcastReceiver() {
 
