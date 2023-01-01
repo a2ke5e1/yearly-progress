@@ -54,10 +54,10 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
 
 
             val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-                SizeF(300f, 100f) to xlarge,
-                SizeF(220f, 100f) to large,
-                SizeF(160f, 100f) to medium,
-                SizeF(100f, 100f) to small,
+                SizeF(300f, 80f) to xlarge,
+                SizeF(220f, 80f) to large,
+                SizeF(160f, 80f) to medium,
+                SizeF(100f, 80f) to small,
             )
 
             remoteViews = RemoteViews(viewMapping)
