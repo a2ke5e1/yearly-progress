@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.manager
+package com.a3.yearlyprogess.eventManager
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager

@@ -22,7 +22,7 @@ import com.google.android.gms.ads.nativead.NativeAdView
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class ProgressScreenFragment : Fragment() {
 
     private var _binding: FragmentScreenProgressBinding? = null
 
