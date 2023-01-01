@@ -19,4 +19,12 @@
         tools:layout="@layout/fragment_widget_screen">
 
     </fragment>
+
+    <fragment
+        android:id="@+id/events_list"
+        android:name="com.a3.yearlyprogess.screens.EventsListScreenFragment"
+        android:label="Events"
+        tools:layout="@layout/fragment_screen_list_events">
+
+    </fragment>
 </navigation>

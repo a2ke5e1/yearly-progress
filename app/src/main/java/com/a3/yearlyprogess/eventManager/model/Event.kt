@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.eventManager.data
+package com.a3.yearlyprogess.eventManager.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
