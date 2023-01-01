@@ -18,7 +18,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.databinding.FragmentSecondBinding
+import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatCurrentDay
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
@@ -45,7 +45,7 @@ import kotlin.math.roundToInt
  */
 class SecondFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentWidgetScreenBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -57,7 +57,7 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        _binding = FragmentWidgetScreenBinding.inflate(inflater, container, false)
         return binding.root
 
     }

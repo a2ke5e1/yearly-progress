@@ -4,12 +4,12 @@
     tools:context="com.a3.yearlyprogess.MainActivity">
 
     <item
-        android:id="@+id/firstFragment"
+        android:id="@+id/progress_screen"
         android:icon="@drawable/ic_round_bar_chart_24"
         android:title="@string/progress" />
 
     <item
-        android:id="@+id/secondFragment"
+        android:id="@+id/widget_screen"
         android:icon="@drawable/ic_round_widgets_24"
         android:title="@string/widget" />
 </menu>

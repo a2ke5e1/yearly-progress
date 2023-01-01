@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/firstFragment">
+    app:startDestination="@id/progress_screen">
 
     <fragment
-        android:id="@+id/firstFragment"
+        android:id="@+id/progress_screen"
         android:name="com.a3.yearlyprogess.screens.FirstFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_screen_progress">
 
     </fragment>
     <fragment
-        android:id="@+id/secondFragment"
+        android:id="@+id/widget_screen"
         android:name="com.a3.yearlyprogess.screens.SecondFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_widget_screen">
 
     </fragment>
 </navigation>

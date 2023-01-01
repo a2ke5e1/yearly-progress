@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.databinding.FragmentFirstBinding
+import com.a3.yearlyprogess.databinding.FragmentScreenProgressBinding
 import com.a3.yearlyprogess.mAdview.CustomAdView.Companion.updateViewWithNativeAdview
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
@@ -24,7 +24,7 @@ import com.google.android.gms.ads.nativead.NativeAdView
  */
 class FirstFragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentScreenProgressBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -36,7 +36,7 @@ class FirstFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentScreenProgressBinding.inflate(inflater, container, false)
         return binding.root
 
     }
