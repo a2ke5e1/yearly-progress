@@ -27,4 +27,22 @@ class EventViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun updateEvent(event: Event) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateEvent(event)
+        }
+    }
+
+    fun deleteEvent(event: Event) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteEvent(event)
+        }
+    }
+
+    fun deleteAllEvent() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllEvent()
+        }
+    }
+
 }
