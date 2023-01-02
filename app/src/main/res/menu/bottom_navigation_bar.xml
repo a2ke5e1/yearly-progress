@@ -15,6 +15,6 @@
 
     <item
         android:id="@+id/events_list"
-        android:icon="@drawable/ic_round_widgets_24"
+        android:icon="@drawable/ic_outline_event_24"
         android:title="Events" />
 </menu>
