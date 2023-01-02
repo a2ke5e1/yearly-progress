@@ -23,16 +23,16 @@ class EventsListViewAdapter(private val mEventViewModel: EventViewModel) :
     }
 
     override fun onBindViewHolder(holder: EventListViewHolder, position: Int) {
-        holder.bind(eventList[position])
+        val currentEvent = eventList[position]
+        holder.bind(currentEvent)
 
         holder.itemView.findViewById<LinearLayout>(R.id.parent).setOnLongClickListener {
-            mEventViewModel.deleteEvent(eventList[position])
+            mEventViewModel.deleteEvent(currentEvent)
             notifyItemRemoved(position)
             false
         }
 
         holder.itemView.findViewById<LinearLayout>(R.id.parent).setOnClickListener {
-            val currentEvent = eventList[position]
             mEventViewModel.updateEvent(Event(
                 id = currentEvent.id,
                 eventTitle = "event update",
