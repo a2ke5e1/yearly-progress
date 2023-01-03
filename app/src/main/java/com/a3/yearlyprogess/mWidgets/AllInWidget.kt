@@ -13,10 +13,12 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatCurrentDay
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
+import com.a3.yearlyprogess.helper.ProgressPercentageV2
 import com.a3.yearlyprogess.manager.AlarmHandler
 import com.a3.yearlyprogess.mWidgets.util.BaseWidget
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
 
 /**
  * Implementation of App Widget functionality.
@@ -68,12 +70,11 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
 
 
     private fun initiateView(context: Context, views: RemoteViews) {
-        val progressPercentage = ProgressPercentage()
 
-        val dayProgress = progressPercentage.getPercent(ProgressPercentage.DAY).toInt()
-        val weekProgress = progressPercentage.getPercent(ProgressPercentage.WEEK).toInt()
-        val monthProgress = progressPercentage.getPercent(ProgressPercentage.MONTH).toInt()
-        val yearProgress = progressPercentage.getPercent(ProgressPercentage.YEAR).toInt()
+        val dayProgress = ProgressPercentageV2.getProgress(ProgressPercentageV2.DAY).roundToInt()
+        val weekProgress = ProgressPercentageV2.getProgress(ProgressPercentageV2.WEEK).roundToInt()
+        val monthProgress = ProgressPercentageV2.getProgress(ProgressPercentageV2.MONTH).roundToInt()
+        val yearProgress = ProgressPercentageV2.getProgress(ProgressPercentageV2.YEAR).roundToInt()
 
 
 
@@ -88,16 +89,16 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
         views.setProgressBar(R.id.progressBarYear, 100, yearProgress, false)
 
 
-        views.setTextViewText(R.id.progressTitle, formatCurrentDay(progressPercentage))
+        views.setTextViewText(R.id.progressTitle, ProgressPercentageV2.getDay(formatted = true))
         views.setTextViewText(
             R.id.progressWeekTitle,
-            SimpleDateFormat("EEE", Locale.getDefault()).format(System.currentTimeMillis())
+            ProgressPercentageV2.getWeek(isLong = false)
         )
         views.setTextViewText(
             R.id.progressMonthTitle,
-            SimpleDateFormat("MMM", Locale.getDefault()).format(System.currentTimeMillis())
+            ProgressPercentageV2.getMonth(isLong = false)
         )
-        views.setTextViewText(R.id.progressYearTitle, progressPercentage.getYear())
+        views.setTextViewText(R.id.progressYearTitle, ProgressPercentageV2.getYear().toString())
 
         views.setOnClickPendingIntent(
             R.id.gridLayout, PendingIntent.getActivity(

@@ -9,6 +9,7 @@ import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
+import com.a3.yearlyprogess.helper.ProgressPercentageV2
 import com.a3.yearlyprogess.manager.AlarmHandler
 import kotlin.math.roundToInt
 
@@ -22,8 +23,7 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
 
         val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
 
-        val progressPercentage = ProgressPercentage()
-        val progress = progressPercentage.getPercent(
+        val progress = ProgressPercentageV2.getProgress(
             when (widgetServiceType) {
                 AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.DAY
                 AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.MONTH
@@ -45,10 +45,10 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
             else -> ""
         }
         val widgetCurrentValue = when(widgetServiceType) {
-            AlarmHandler.DAY_WIDGET_SERVICE -> progressPercentage.getDay(custom = true)
-            AlarmHandler.MONTH_WIDGET_SERVICE -> progressPercentage.getMonth(str = true)
-            AlarmHandler.WEEK_WIDGET_SERVICE -> progressPercentage.getWeek(str = true)
-            AlarmHandler.YEAR_WIDGET_SERVICE -> progressPercentage.getYear()
+            AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentageV2.getDay(formatted = true)
+            AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentageV2.getMonth(isLong = false)
+            AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentageV2.getWeek(isLong = false)
+            AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentageV2.getYear().toString()
             else -> ""
         }
 
