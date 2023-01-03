@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
-import com.a3.yearlyprogess.helper.ProgressPercentageV2
+import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -35,7 +35,7 @@ class ProgressCardView @JvmOverloads constructor(
     private var widgetProgressCard: MaterialCardView
 
     private var job: Job
-    private var field: Int = ProgressPercentageV2.YEAR
+    private var field: Int = ProgressPercentage.YEAR
 
 
     init {
@@ -62,33 +62,33 @@ class ProgressCardView @JvmOverloads constructor(
 
         // data that doesn't change
         titleTextView.text = when (field) {
-            ProgressPercentageV2.YEAR -> context.getString(R.string.year)
-            ProgressPercentageV2.MONTH -> context.getString(R.string.month)
-            ProgressPercentageV2.WEEK -> context.getString(R.string.week)
-            ProgressPercentageV2.DAY -> context.getString(R.string.day)
+            ProgressPercentage.YEAR -> context.getString(R.string.year)
+            ProgressPercentage.MONTH -> context.getString(R.string.month)
+            ProgressPercentage.WEEK -> context.getString(R.string.week)
+            ProgressPercentage.DAY -> context.getString(R.string.day)
             else -> ""
         }
 
         // Calculate frequency to update constant values
         val freq =
-            ProgressPercentageV2.getEndOfTimeMillis(field) - ProgressPercentageV2.getCurrentTimeMillis() // in milliseconds
+            ProgressPercentage.getEndOfTimeMillis(field) - ProgressPercentage.getCurrentTimeMillis() // in milliseconds
 
         // update constant values
         launch(Dispatchers.IO) {
             while (true) {
                 val currentProgressType = when (field) {
-                    ProgressPercentageV2.YEAR -> ProgressPercentageV2.getYear().toString()
-                    ProgressPercentageV2.MONTH -> ProgressPercentageV2.getMonth(
+                    ProgressPercentage.YEAR -> ProgressPercentage.getYear().toString()
+                    ProgressPercentage.MONTH -> ProgressPercentage.getMonth(
                         isLong = true
                     )
-                    ProgressPercentageV2.WEEK -> ProgressPercentageV2.getWeek(isLong = true)
-                    ProgressPercentageV2.DAY -> ProgressPercentageV2.getDay(formatted = true)
+                    ProgressPercentage.WEEK -> ProgressPercentage.getWeek(isLong = true)
+                    ProgressPercentage.DAY -> ProgressPercentage.getDay(formatted = true)
                     else -> ""
                 }
                 widgetDataTextView.text = currentProgressType
                 widgetDataInfoTextView.text = "of ${
-                    (ProgressPercentageV2.getEndOfTimeMillis(field)
-                            - ProgressPercentageV2.getStartOfTimeMillis(field)) / 1000
+                    (ProgressPercentage.getEndOfTimeMillis(field)
+                            - ProgressPercentage.getStartOfTimeMillis(field)) / 1000
                 }s"
                 delay(freq)
             }
@@ -97,7 +97,7 @@ class ProgressCardView @JvmOverloads constructor(
         // update the progress every seconds
         launch(Dispatchers.IO) {
             while (true) {
-                val progress: Double = ProgressPercentageV2.getProgress(field)
+                val progress: Double = ProgressPercentage.getProgress(field)
                 launch(Dispatchers.Main) {
                     updateView(progress)
                 }

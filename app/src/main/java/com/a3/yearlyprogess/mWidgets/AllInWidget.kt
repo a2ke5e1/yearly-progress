@@ -11,7 +11,7 @@ import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
-import com.a3.yearlyprogess.helper.ProgressPercentageV2
+import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
 import com.a3.yearlyprogess.mWidgets.util.BaseWidget
 import java.util.*
@@ -68,10 +68,10 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
 
     private fun initiateView(context: Context, views: RemoteViews) {
 
-        val dayProgress = ProgressPercentageV2.getProgress(ProgressPercentageV2.DAY).roundToInt()
-        val weekProgress = ProgressPercentageV2.getProgress(ProgressPercentageV2.WEEK).roundToInt()
-        val monthProgress = ProgressPercentageV2.getProgress(ProgressPercentageV2.MONTH).roundToInt()
-        val yearProgress = ProgressPercentageV2.getProgress(ProgressPercentageV2.YEAR).roundToInt()
+        val dayProgress = ProgressPercentage.getProgress(ProgressPercentage.DAY).roundToInt()
+        val weekProgress = ProgressPercentage.getProgress(ProgressPercentage.WEEK).roundToInt()
+        val monthProgress = ProgressPercentage.getProgress(ProgressPercentage.MONTH).roundToInt()
+        val yearProgress = ProgressPercentage.getProgress(ProgressPercentage.YEAR).roundToInt()
 
 
 
@@ -86,16 +86,16 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
         views.setProgressBar(R.id.progressBarYear, 100, yearProgress, false)
 
 
-        views.setTextViewText(R.id.progressTitle, ProgressPercentageV2.getDay(formatted = true))
+        views.setTextViewText(R.id.progressTitle, ProgressPercentage.getDay(formatted = true))
         views.setTextViewText(
             R.id.progressWeekTitle,
-            ProgressPercentageV2.getWeek(isLong = false)
+            ProgressPercentage.getWeek(isLong = false)
         )
         views.setTextViewText(
             R.id.progressMonthTitle,
-            ProgressPercentageV2.getMonth(isLong = false)
+            ProgressPercentage.getMonth(isLong = false)
         )
-        views.setTextViewText(R.id.progressYearTitle, ProgressPercentageV2.getYear().toString())
+        views.setTextViewText(R.id.progressYearTitle, ProgressPercentage.getYear().toString())
 
         views.setOnClickPendingIntent(
             R.id.gridLayout, PendingIntent.getActivity(

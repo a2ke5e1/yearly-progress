@@ -8,7 +8,7 @@ import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
-import com.a3.yearlyprogess.helper.ProgressPercentageV2
+import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
 import kotlin.math.roundToInt
 
@@ -22,12 +22,12 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
 
         val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
 
-        val progress = ProgressPercentageV2.getProgress(
+        val progress = ProgressPercentage.getProgress(
             when (widgetServiceType) {
-                AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentageV2.DAY
-                AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentageV2.MONTH
-                AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentageV2.WEEK
-                AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentageV2.YEAR
+                AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.DAY
+                AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.MONTH
+                AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentage.WEEK
+                AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentage.YEAR
                 else -> -1
             }
         )
@@ -44,10 +44,10 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
             else -> ""
         }
         val widgetCurrentValue = when(widgetServiceType) {
-            AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentageV2.getDay(formatted = true)
-            AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentageV2.getMonth(isLong = false)
-            AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentageV2.getWeek(isLong = false)
-            AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentageV2.getYear().toString()
+            AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.getDay(formatted = true)
+            AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.getMonth(isLong = false)
+            AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentage.getWeek(isLong = false)
+            AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentage.getYear().toString()
             else -> ""
         }
 

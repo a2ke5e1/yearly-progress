@@ -9,7 +9,7 @@ import android.util.SizeF
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
-import com.a3.yearlyprogess.helper.ProgressPercentageV2
+import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.mWidgets.util.BaseWidget
 import com.a3.yearlyprogess.manager.AlarmHandler
 import java.text.SimpleDateFormat
@@ -38,8 +38,8 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         val eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
 
 
-        val progress = ProgressPercentageV2.getProgress(
-            ProgressPercentageV2.CUSTOM_EVENT,
+        val progress = ProgressPercentage.getProgress(
+            ProgressPercentage.CUSTOM_EVENT,
             eventStartTimeInMills,
             eventEndDateTimeInMillis
         )
@@ -50,7 +50,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
         mediumView.setTextViewText(R.id.eventProgressText, progressText)
         mediumView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-        mediumView.setTextViewText(R.id.currentDate, ProgressPercentageV2.getDay(formatted = true))
+        mediumView.setTextViewText(R.id.currentDate, ProgressPercentage.getDay(formatted = true))
         mediumView.setTextViewText(R.id.eventTitle, eventTitle)
         mediumView.setTextViewText(R.id.eventDesc, eventDesc)
         mediumView.setTextViewText(
@@ -66,7 +66,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         )
 
         smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-        smallView.setTextViewText(R.id.currentDate, ProgressPercentageV2.getDay(formatted = true))
+        smallView.setTextViewText(R.id.currentDate, ProgressPercentage.getDay(formatted = true))
         smallView.setTextViewText(R.id.eventProgressText, progressText)
         smallView.setTextViewText(R.id.eventTitle, eventTitle)
 
