@@ -145,14 +145,20 @@ class ProgressPercentage {
         }
 
         fun formatProgressStyle(progress: Double): SpannableString {
-            val widgetText = SpannableString("${progress.format(2)}%")
+            val widgetText = SpannableString("%,.2f".format(progress) +"%")
             return formatProgressStyle(widgetText)
         }
 
         fun formatProgressStyle(widgetText: SpannableString): SpannableString {
+
+            var dotPos = widgetText.indexOf('.')
+            if (dotPos == -1) {
+                dotPos = widgetText.indexOf(',')
+            }
+
             widgetText.setSpan(
                 RelativeSizeSpan(0.7f),
-                widgetText.indexOf('.'),
+                dotPos,
                 widgetText.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
