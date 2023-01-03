@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -16,11 +15,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.ActivityEventConfigActivityBinding
-import com.a3.yearlyprogess.mwidgets.updateEventWidget
+import com.a3.yearlyprogess.mwidgets.EventWidget
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -78,11 +75,12 @@ class EventConfigActivity : AppCompatActivity() {
         loadWidgetDataIfExists(pref)
 
         binding.eventTitle.requestFocus()
-        val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(binding.eventTitle, InputMethodManager.SHOW_IMPLICIT)
 
         binding.eventTitle.setOnEditorActionListener { v, actionId, event ->
-            if ( actionId == EditorInfo.IME_ACTION_NEXT) {
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
                 binding.eventDesc.apply {
                     requestFocus()
                     setSelection(this.text.toString().length)
@@ -217,7 +215,8 @@ class EventConfigActivity : AppCompatActivity() {
 
                     edit.commit()
 
-                    updateEventWidget(this, appWidgetManager, appWidgetId)
+                    EventWidget().updateWidget(this, appWidgetManager, appWidgetId)
+
 
                     val resultValue =
                         Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -240,8 +239,10 @@ class EventConfigActivity : AppCompatActivity() {
     private fun loadWidgetDataIfExists(pref: SharedPreferences) {
         val eventTitle = pref.getString("eventTitle", "").toString()
         val eventDesc = pref.getString("eventDesc", "").toString()
-        eventStartDateTimeInMillis = pref.getLong("eventStartTimeInMills", System.currentTimeMillis())
-        eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", System.currentTimeMillis())
+        eventStartDateTimeInMillis =
+            pref.getLong("eventStartTimeInMills", System.currentTimeMillis())
+        eventEndDateTimeInMillis =
+            pref.getLong("eventEndDateTimeInMillis", System.currentTimeMillis())
 
 
         binding.eventTitle.setText(eventTitle)

@@ -1,9 +1,13 @@
 package com.a3.yearlyprogess.helper
 
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
+import android.text.style.SuperscriptSpan
 import androidx.annotation.IntDef
 import androidx.annotation.RestrictTo
-import androidx.recyclerview.widget.RecyclerView
 import java.util.*
+import kotlin.math.pow
 
 class ProgressPercentage {
 
@@ -14,8 +18,15 @@ class ProgressPercentage {
     private fun isLeapYear(year: Int): Boolean =
         (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
 
-    fun getMonth(str: Boolean = false): String {
-        val monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+
+    fun getMonth(str: Boolean = false, isLong: Boolean = false): String {
+        val monthName = calendar.getDisplayName(
+            Calendar.MONTH, if (isLong) {
+                Calendar.LONG
+            } else {
+                Calendar.SHORT
+            }, Locale.getDefault()
+        )
         if (monthName == null || !str) {
             return (calendar.get(Calendar.MONTH) + 1).toString()
         }
@@ -23,25 +34,28 @@ class ProgressPercentage {
     }
 
     fun getYear(): String = calendar.get(Calendar.YEAR).toString()
-    fun getDay(custom: Boolean = false): String {
+    fun getDay(): String = calendar.get(Calendar.DAY_OF_MONTH).toString()
+    fun getDay(custom: Boolean = false): SpannableString {
         if (custom) {
-            val currentDay = getDay()
-            val currentMonth = "%02d".format(getMonth().toInt())
-            return "$currentMonth/$currentDay"
+            return formatCurrentDay(this)
         }
-        return calendar.get(Calendar.DAY_OF_MONTH).toString()
+        return SpannableString(calendar.get(Calendar.DAY_OF_MONTH).toString())
     }
 
     fun getWeek(str: Boolean = false): String {
         val weekName =
-            calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
+            calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
         if (weekName == null || !str) {
             return calendar.get(Calendar.DAY_OF_WEEK).toString()
         }
         return weekName.toString()
     }
 
-    fun getSeconds(@Field field: Int, eventStartTimeInMills: Long = 0, eventEndDateTimeInMillis: Long = 0): Long {
+    fun getSeconds(
+        @Field field: Int,
+        eventStartTimeInMills: Long = 0,
+        eventEndDateTimeInMillis: Long = 0
+    ): Long {
         return when (field) {
             YEAR -> {
                 if (isLeapYear(getYear().toInt())) {
@@ -97,9 +111,17 @@ class ProgressPercentage {
         }
     }
 
-    fun getPercent(@Field field: Int, eventStartTimeInMills: Long = 0, eventEndDateTimeInMillis: Long = 0): Double {
+    fun getPercent(
+        @Field field: Int,
+        eventStartTimeInMills: Long = 0,
+        eventEndDateTimeInMillis: Long = 0
+    ): Double {
         return when (field) {
-            CUSTOM_EVENT -> (getSecondsPassed(field, eventStartTimeInMills).toDouble() / getSeconds(field, eventStartTimeInMills, eventEndDateTimeInMillis)) * 100
+            CUSTOM_EVENT -> (getSecondsPassed(field, eventStartTimeInMills).toDouble() / getSeconds(
+                field,
+                eventStartTimeInMills,
+                eventEndDateTimeInMillis
+            )) * 100
             else -> (getSecondsPassed(field).toDouble() / getSeconds(field)) * 100
         }
     }
@@ -115,9 +137,75 @@ class ProgressPercentage {
         const val WEEK = 102
         const val DAY = 103
         const val CUSTOM_EVENT = 104
+
+
+        fun Double.format( digits: Int): Double {
+            val p = 10.0.pow(digits.toDouble())
+            return (this * p).toLong() / p
+        }
+
+        fun formatProgressStyle(progress: Double): SpannableString {
+            val widgetText = SpannableString("%,.2f".format(progress) +"%")
+            return formatProgressStyle(widgetText)
+        }
+
+        fun formatProgressStyle(widgetText: SpannableString): SpannableString {
+
+            var dotPos = widgetText.indexOf('.')
+            if (dotPos == -1) {
+                dotPos = widgetText.indexOf(',')
+            }
+
+            widgetText.setSpan(
+                RelativeSizeSpan(0.7f),
+                dotPos,
+                widgetText.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return widgetText
+        }
+
+        fun formatProgress(progress: Int): SpannableString {
+            val spannable = SpannableString("${progress}%")
+            spannable.setSpan(
+                RelativeSizeSpan(0.7f),
+                spannable.length - 1,
+                spannable.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return spannable
+        }
+
+        fun formatCurrentDay(progressPercentage: ProgressPercentage): SpannableString {
+            val day = progressPercentage.getDay()
+            val spannable = SpannableString(
+                "${day}${
+                    when (day.last()) {
+                        '1' -> "st"
+                        '2' -> "nd"
+                        '3' -> "rd"
+                        else -> "th"
+                    }
+                }"
+            )
+            spannable.setSpan(
+                SuperscriptSpan(),
+                spannable.length - 2,
+                spannable.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+
+            )
+            spannable.setSpan(
+                RelativeSizeSpan(0.5f),
+                spannable.length - 2,
+                spannable.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+
+            )
+            return spannable
+        }
+
     }
 
 
 }
-
-fun Double.format(digits: Int): Double = "%.${digits}f".format(this).toDouble()

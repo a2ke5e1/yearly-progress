@@ -3,12 +3,14 @@ package com.a3.yearlyprogess.components
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.SpannableString
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -76,13 +78,17 @@ class ProgressCardView @JvmOverloads constructor(
         launch(Dispatchers.IO) {
             while (true) {
                 val percentageProgress = ProgressPercentage()
-                widgetDataTextView.text = when (field) {
+                val currentProgressType = when (field) {
                     ProgressPercentage.YEAR -> percentageProgress.getYear()
-                    ProgressPercentage.MONTH -> percentageProgress.getMonth(str = true)
+                    ProgressPercentage.MONTH -> percentageProgress.getMonth(
+                        str = true,
+                        isLong = true
+                    )
                     ProgressPercentage.WEEK -> percentageProgress.getWeek(str = true)
                     ProgressPercentage.DAY -> percentageProgress.getDay(custom = true)
                     else -> ""
                 }
+                widgetDataTextView.text = currentProgressType
                 widgetDataInfoTextView.text = "of ${percentageProgress.getSeconds(field)}s"
                 delay(freq)
             }
@@ -106,7 +112,7 @@ class ProgressCardView @JvmOverloads constructor(
     @SuppressLint("SetTextI18n")
     private fun updateView(progress: Double) {
 
-        perTextView.text = "${progress}%"
+        perTextView.text = formatProgressStyle(SpannableString("%,.15f".format(progress) + "%"))
 
         val params = widgetProgressCard.layoutParams
         val target = (progress * 0.01 * widgetParentCard.width).toInt()

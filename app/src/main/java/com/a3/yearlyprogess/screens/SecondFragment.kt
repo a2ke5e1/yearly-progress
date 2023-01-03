@@ -7,10 +7,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
-import android.text.style.SuperscriptSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,8 +20,10 @@ import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentSecondBinding
 import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.helper.format
-import com.a3.yearlyprogess.mAdview.updateViewWithNativeAdview
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatCurrentDay
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
+import com.a3.yearlyprogess.mAdview.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.mwidgets.*
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
@@ -113,10 +111,10 @@ class SecondFragment : Fragment() {
         startAnimationWidget()
 
         // Update Widget every 5 seconds
-        UpdateWidgetInfo(5)
+        updateWidgetInfo(5)
     }
 
-    private fun UpdateWidgetInfo(i: Long) {
+    private fun updateWidgetInfo(i: Long) {
         lifecycleScope.launch(Dispatchers.IO) {
 
             while (true) {
@@ -163,9 +161,15 @@ class SecondFragment : Fragment() {
                     allInOneProgressBarWeek.progress = progressWeek
 
                     allInOneTitleTextViewYear.text = progressPercentage.getYear()
-                    allInOneTitleTextViewMonth.text = SimpleDateFormat("MMM", Locale.getDefault()).format(System.currentTimeMillis())
+                    allInOneTitleTextViewMonth.text = SimpleDateFormat(
+                        "MMM",
+                        Locale.getDefault()
+                    ).format(System.currentTimeMillis())
                     allInOneTitleTextViewDay.text = formatCurrentDay(progressPercentage)
-                    allInOneTitleTextViewWeek.text = SimpleDateFormat("EEE", Locale.getDefault()).format(System.currentTimeMillis())
+                    allInOneTitleTextViewWeek.text = SimpleDateFormat(
+                        "EEE",
+                        Locale.getDefault()
+                    ).format(System.currentTimeMillis())
 
                 }
                 delay(i * 1000)
@@ -201,20 +205,27 @@ class SecondFragment : Fragment() {
     }
 
     private fun initProgressBarsTextViews(view: View) {
-        progressTextViewYear = view.findViewById<TextView>(R.id.progress_text_year)
-        progressTextViewMonth = view.findViewById<TextView>(R.id.progress_text_month)
-        progressTextViewDay = view.findViewById<TextView>(R.id.progress_text_day)
-        progressTextViewWeek = view.findViewById<TextView>(R.id.progress_text_week)
 
-        progressBarYear = view.findViewById<ProgressBar>(R.id.progress_bar_year)
-        progressBarMonth = view.findViewById<ProgressBar>(R.id.progress_bar_month)
-        progressBarDay = view.findViewById<ProgressBar>(R.id.progress_bar_day)
-        progressBarWeek = view.findViewById<ProgressBar>(R.id.progress_bar_week)
+        binding.widgetYearDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.year)
+        binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.month)
+        binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.week)
+        binding.widgetDayDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.day)
 
-        textViewYear = view.findViewById<TextView>(R.id.text_year)
-        textViewMonth = view.findViewById<TextView>(R.id.text_month)
-        textViewDay = view.findViewById<TextView>(R.id.text_day)
-        textViewWeek = view.findViewById<TextView>(R.id.text_week)
+        progressTextViewDay = binding.widgetDayDemo.findViewById<TextView>(R.id.widgetProgress)
+        progressTextViewWeek = binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetProgress)
+        progressTextViewMonth = binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetProgress)
+        progressTextViewYear = binding.widgetYearDemo.findViewById<TextView>(R.id.widgetProgress)
+
+        textViewYear = binding.widgetYearDemo.findViewById<TextView>(R.id.widgetCurrentValue)
+        textViewMonth = binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetCurrentValue)
+        textViewDay = binding.widgetDayDemo.findViewById<TextView>(R.id.widgetCurrentValue)
+        textViewWeek = binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetCurrentValue)
+
+        progressBarYear = binding.widgetYearDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
+        progressBarMonth = binding.widgetMonthDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
+        progressBarDay = binding.widgetDayDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
+        progressBarWeek = binding.widgetWeekDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
+
 
 
         allInOneProgressTextViewYear = view.findViewById<TextView>(R.id.progressTextYear)

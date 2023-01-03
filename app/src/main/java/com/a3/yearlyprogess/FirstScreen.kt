@@ -1,17 +1,12 @@
 package com.a3.yearlyprogess
 
 import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
 import android.text.style.URLSpan
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.a3.yearlyprogess.databinding.ActivityFirstScreenBinding
 
 class FirstScreen : AppCompatActivity() {

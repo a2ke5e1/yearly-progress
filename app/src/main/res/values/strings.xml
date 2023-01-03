@@ -33,5 +33,13 @@
     <string name="save">Save</string>
     <string name="app_widget_description_all_in_one">It shows progress of day, week, month and year all in one widget</string>
     <string name="app_widget_description_event">Track the progress of any event.</string>
+    <string name="start">Start</string>
+    <string name="by_continuing_you_agree_our_terms_of_service_and_privacy_policy">By continuing, you agree our Terms of Service and Privacy Policy.</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="event_settings">Event Settings</string>
+    <string name="start_of_the_event">Start Of the Event</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 
 </resources>

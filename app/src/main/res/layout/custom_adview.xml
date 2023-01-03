@@ -17,6 +17,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            tools:ignore="HardcodedText"
             android:layout_height="match_parent">
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -41,7 +42,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/textView2"
                 app:layout_constraintStart_toEndOf="@+id/icon"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                 />
 
             <TextView
                 android:id="@+id/body"
@@ -98,7 +100,7 @@
                 android:paddingBottom="2dp"
                 android:text="Ad"
                 android:textColor="#009688"
-                android:textSize="11dp"
+                android:textSize="11sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

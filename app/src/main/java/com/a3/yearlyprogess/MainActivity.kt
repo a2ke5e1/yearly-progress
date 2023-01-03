@@ -8,7 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.text.HtmlCompat
-import androidx.core.view.*
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
