@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.helper.ProgressPercentageV2
 import com.google.android.material.card.MaterialCardView
@@ -36,7 +35,7 @@ class ProgressCardView @JvmOverloads constructor(
     private var widgetProgressCard: MaterialCardView
 
     private var job: Job
-    private var field: Int = ProgressPercentage.YEAR
+    private var field: Int = ProgressPercentageV2.YEAR
 
 
     init {
@@ -63,10 +62,10 @@ class ProgressCardView @JvmOverloads constructor(
 
         // data that doesn't change
         titleTextView.text = when (field) {
-            ProgressPercentage.YEAR -> context.getString(R.string.year)
-            ProgressPercentage.MONTH -> context.getString(R.string.month)
-            ProgressPercentage.WEEK -> context.getString(R.string.week)
-            ProgressPercentage.DAY -> context.getString(R.string.day)
+            ProgressPercentageV2.YEAR -> context.getString(R.string.year)
+            ProgressPercentageV2.MONTH -> context.getString(R.string.month)
+            ProgressPercentageV2.WEEK -> context.getString(R.string.week)
+            ProgressPercentageV2.DAY -> context.getString(R.string.day)
             else -> ""
         }
 
@@ -78,12 +77,12 @@ class ProgressCardView @JvmOverloads constructor(
         launch(Dispatchers.IO) {
             while (true) {
                 val currentProgressType = when (field) {
-                    ProgressPercentage.YEAR -> ProgressPercentageV2.getYear().toString()
-                    ProgressPercentage.MONTH -> ProgressPercentageV2.getMonth(
+                    ProgressPercentageV2.YEAR -> ProgressPercentageV2.getYear().toString()
+                    ProgressPercentageV2.MONTH -> ProgressPercentageV2.getMonth(
                         isLong = true
                     )
-                    ProgressPercentage.WEEK -> ProgressPercentageV2.getWeek(isLong = true)
-                    ProgressPercentage.DAY -> ProgressPercentageV2.getDay(formatted = true)
+                    ProgressPercentageV2.WEEK -> ProgressPercentageV2.getWeek(isLong = true)
+                    ProgressPercentageV2.DAY -> ProgressPercentageV2.getDay(formatted = true)
                     else -> ""
                 }
                 widgetDataTextView.text = currentProgressType

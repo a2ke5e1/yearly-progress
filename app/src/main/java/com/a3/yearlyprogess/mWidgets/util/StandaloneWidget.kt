@@ -7,7 +7,6 @@ import android.content.Intent
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.helper.ProgressPercentageV2
 import com.a3.yearlyprogess.manager.AlarmHandler
@@ -25,10 +24,10 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
 
         val progress = ProgressPercentageV2.getProgress(
             when (widgetServiceType) {
-                AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.DAY
-                AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.MONTH
-                AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentage.WEEK
-                AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentage.YEAR
+                AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentageV2.DAY
+                AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentageV2.MONTH
+                AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentageV2.WEEK
+                AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentageV2.YEAR
                 else -> -1
             }
         )

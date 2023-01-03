@@ -3,18 +3,15 @@ package com.a3.yearlyprogess.mWidgets
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.os.Build
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.format.DateFormat
-import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.util.SizeF
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.format
-import com.a3.yearlyprogess.manager.AlarmHandler
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
+import com.a3.yearlyprogess.helper.ProgressPercentageV2
 import com.a3.yearlyprogess.mWidgets.util.BaseWidget
+import com.a3.yearlyprogess.manager.AlarmHandler
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,33 +38,19 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         val eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
 
 
-        val progressPercentage = ProgressPercentage()
-        progressPercentage.getSeconds(ProgressPercentage.CUSTOM_EVENT)
-
-        val progress = progressPercentage.getPercent(
-            ProgressPercentage.CUSTOM_EVENT,
+        val progress = ProgressPercentageV2.getProgress(
+            ProgressPercentageV2.CUSTOM_EVENT,
             eventStartTimeInMills,
             eventEndDateTimeInMillis
         )
 
         Log.d("Event_Widget", "ratio $progress")
-        val progressText = "${progress.format(2)}%"
+        val progressText = formatProgressStyle(progress)
 
-        val spannable = SpannableString(progressText)
 
-        try {
-            spannable.setSpan(
-                RelativeSizeSpan(2f),
-                0,
-                progressText.indexOf('.'),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        } catch (ignored: java.lang.IndexOutOfBoundsException) {
-        }
-
-        mediumView.setTextViewText(R.id.eventProgressText, spannable)
+        mediumView.setTextViewText(R.id.eventProgressText, progressText)
         mediumView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-        mediumView.setTextViewText(R.id.currentDate, progressPercentage.getDay(true))
+        mediumView.setTextViewText(R.id.currentDate, ProgressPercentageV2.getDay(formatted = true))
         mediumView.setTextViewText(R.id.eventTitle, eventTitle)
         mediumView.setTextViewText(R.id.eventDesc, eventDesc)
         mediumView.setTextViewText(
@@ -83,7 +66,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         )
 
         smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-        smallView.setTextViewText(R.id.currentDate, progressPercentage.getDay(true))
+        smallView.setTextViewText(R.id.currentDate, ProgressPercentageV2.getDay(formatted = true))
         smallView.setTextViewText(R.id.eventProgressText, progressText)
         smallView.setTextViewText(R.id.eventTitle, eventTitle)
 
@@ -91,8 +74,8 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         var remoteViews = mediumView
         if (Build.VERSION.SDK_INT > 30) {
             val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-                SizeF(150f, 100f) to smallView,
-                SizeF(150f, 200f) to mediumView,
+                SizeF(80f, 50f) to smallView,
+                SizeF(80f, 200f) to mediumView,
             )
             remoteViews = RemoteViews(viewMapping)
         }

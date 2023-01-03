@@ -19,8 +19,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
-import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatCurrentDay
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.helper.ProgressPercentageV2
@@ -36,8 +34,6 @@ import com.google.android.gms.ads.nativead.NativeAdView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.math.roundToInt
 
 
@@ -183,14 +179,22 @@ class WidgetScreenFragment : Fragment() {
         animatedUpdateProgressBarView(progressBarDay, ProgressPercentageV2.DAY)
         animatedUpdateProgressBarView(progressBarWeek, ProgressPercentageV2.WEEK)
 
-        animatedUpdateProgressTextView(allInOneProgressTextViewYear, ProgressPercentageV2.YEAR, true)
+        animatedUpdateProgressTextView(
+            allInOneProgressTextViewYear,
+            ProgressPercentageV2.YEAR,
+            true
+        )
         animatedUpdateProgressTextView(
             allInOneProgressTextViewMonth,
             ProgressPercentageV2.MONTH,
             true
         )
         animatedUpdateProgressTextView(allInOneProgressTextViewDay, ProgressPercentageV2.DAY, true)
-        animatedUpdateProgressTextView(allInOneProgressTextViewWeek, ProgressPercentageV2.WEEK, true)
+        animatedUpdateProgressTextView(
+            allInOneProgressTextViewWeek,
+            ProgressPercentageV2.WEEK,
+            true
+        )
 
         animatedUpdateProgressBarView(allInOneProgressBarYear, ProgressPercentageV2.YEAR)
         animatedUpdateProgressBarView(allInOneProgressBarMonth, ProgressPercentageV2.MONTH)
@@ -200,10 +204,14 @@ class WidgetScreenFragment : Fragment() {
 
     private fun initProgressBarsTextViews(view: View) {
 
-        binding.widgetYearDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.year)
-        binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.month)
-        binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.week)
-        binding.widgetDayDemo.findViewById<TextView>(R.id.widgetType).text = context?.getString(R.string.day)
+        binding.widgetYearDemo.findViewById<TextView>(R.id.widgetType).text =
+            context?.getString(R.string.year)
+        binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetType).text =
+            context?.getString(R.string.month)
+        binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetType).text =
+            context?.getString(R.string.week)
+        binding.widgetDayDemo.findViewById<TextView>(R.id.widgetType).text =
+            context?.getString(R.string.day)
 
         progressTextViewDay = binding.widgetDayDemo.findViewById<TextView>(R.id.widgetProgress)
         progressTextViewWeek = binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetProgress)

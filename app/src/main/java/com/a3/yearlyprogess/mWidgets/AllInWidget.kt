@@ -10,13 +10,10 @@ import android.view.View
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatCurrentDay
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
 import com.a3.yearlyprogess.helper.ProgressPercentageV2
 import com.a3.yearlyprogess.manager.AlarmHandler
 import com.a3.yearlyprogess.mWidgets.util.BaseWidget
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
