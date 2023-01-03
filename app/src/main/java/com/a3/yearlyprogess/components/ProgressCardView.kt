@@ -112,7 +112,7 @@ class ProgressCardView @JvmOverloads constructor(
     @SuppressLint("SetTextI18n")
     private fun updateView(progress: Double) {
 
-        perTextView.text = formatProgressStyle(SpannableString("%,.15f".format(progress) + "%"))
+        perTextView.text = formatProgressStyle(SpannableString("%,.13f".format(progress) + "%"))
 
         val params = widgetProgressCard.layoutParams
         val target = (progress * 0.01 * widgetParentCard.width).toInt()
