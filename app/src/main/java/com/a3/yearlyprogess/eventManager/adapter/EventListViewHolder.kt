@@ -11,9 +11,17 @@ import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
+import kotlin.coroutines.CoroutineContext
 
-class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), CoroutineScope {
+
+
+    private var job: Job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.IO + job
 
     private val eventTitle = itemView.findViewById<TextView>(R.id.eventTitle)
     private val eventDescription = itemView.findViewById<TextView>(R.id.eventDesc)
@@ -23,8 +31,6 @@ class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val progressBar = itemView.findViewById<LinearProgressIndicator>(R.id.progressBar)
 
     fun bind(event: Event) {
-
-        val progress = ProgressPercentage.getProgress(ProgressPercentage.CUSTOM_EVENT, event.eventStartTime, event.eventEndTime)
 
 
         eventTitle.text = event.eventTitle
@@ -38,8 +44,23 @@ class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             event.eventEndTime
         )
 
-        progressText.text = formatProgressStyle(progress)
-        progressBar.progress = progress.toInt()
+
+
+        launch(Dispatchers.IO) {
+            while (true) {
+                val progress = ProgressPercentage.getProgress(
+                    ProgressPercentage.CUSTOM_EVENT,
+                    event.eventStartTime,
+                    event.eventEndTime
+                )
+                launch(Dispatchers.Main) {
+                    progressText.text = formatProgressStyle(progress)
+                    progressBar.progress = progress.toInt()
+                }
+                delay(5000)
+            }
+        }
+
 
     }
 
