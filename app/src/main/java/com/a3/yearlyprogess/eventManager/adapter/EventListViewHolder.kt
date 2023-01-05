@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
+import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import java.text.SimpleDateFormat
 
 class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -16,16 +19,27 @@ class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val eventDescription = itemView.findViewById<TextView>(R.id.eventDesc)
     private val eventStart = itemView.findViewById<TextView>(R.id.eventStart)
     private val eventEnd = itemView.findViewById<TextView>(R.id.eventEnd)
+    private val progressText = itemView.findViewById<TextView>(R.id.progressText)
+    private val progressBar = itemView.findViewById<LinearProgressIndicator>(R.id.progressBar)
 
     fun bind(event: Event) {
+
+        val progress = ProgressPercentage.getProgress(ProgressPercentage.CUSTOM_EVENT, event.eventStartTime, event.eventEndTime)
+
+
         eventTitle.text = event.eventTitle
         eventDescription.text = event.eventDescription
+
+
         eventStart.text = SimpleDateFormat.getDateTimeInstance().format(
             event.eventStartTime
         )
         eventEnd.text = SimpleDateFormat.getDateTimeInstance().format(
             event.eventEndTime
         )
+
+        progressText.text = formatProgressStyle(progress)
+        progressBar.progress = progress.toInt()
 
     }
 

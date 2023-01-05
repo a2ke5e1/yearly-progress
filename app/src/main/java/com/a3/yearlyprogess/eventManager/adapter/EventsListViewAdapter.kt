@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
+import com.google.android.material.card.MaterialCardView
 
 class EventsListViewAdapter(private val mEventViewModel: EventViewModel) :
     RecyclerView.Adapter<EventListViewHolder>() {
@@ -26,13 +27,13 @@ class EventsListViewAdapter(private val mEventViewModel: EventViewModel) :
         val currentEvent = eventList[position]
         holder.bind(currentEvent)
 
-        holder.itemView.findViewById<LinearLayout>(R.id.parent).setOnLongClickListener {
+        holder.itemView.findViewById<MaterialCardView>(R.id.parent).setOnLongClickListener {
             mEventViewModel.deleteEvent(currentEvent)
             notifyItemRemoved(position)
             false
         }
 
-        holder.itemView.findViewById<LinearLayout>(R.id.parent).setOnClickListener {
+        holder.itemView.findViewById<MaterialCardView>(R.id.parent).setOnClickListener {
             mEventViewModel.updateEvent(Event(
                 id = currentEvent.id,
                 eventTitle = "event update",
