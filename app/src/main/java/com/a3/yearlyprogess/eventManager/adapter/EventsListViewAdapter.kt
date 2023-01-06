@@ -4,11 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class EventsListViewAdapter(private val mEventViewModel: EventViewModel) :
     RecyclerView.Adapter<EventListViewHolder>() {
@@ -43,6 +45,12 @@ class EventsListViewAdapter(private val mEventViewModel: EventViewModel) :
             ))
             notifyItemChanged(position)
         }
+
+       /* mEventViewModel.updateProgressBar(
+            currentEvent,
+            holder.itemView.findViewById<TextView>(R.id.progressText),
+            holder.itemView.findViewById<LinearProgressIndicator>(R.id.progressBar),
+        )*/
 
     }
 

@@ -15,13 +15,7 @@ import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import kotlin.coroutines.CoroutineContext
 
-class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), CoroutineScope {
-
-
-    private var job: Job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO + job
+class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val eventTitle = itemView.findViewById<TextView>(R.id.eventTitle)
     private val eventDescription = itemView.findViewById<TextView>(R.id.eventDesc)
@@ -44,22 +38,14 @@ class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), C
             event.eventEndTime
         )
 
+        val progress = ProgressPercentage.getProgress(
+            ProgressPercentage.CUSTOM_EVENT,
+            event.eventStartTime,
+            event.eventEndTime
+        )
 
-
-        launch(Dispatchers.IO) {
-            while (true) {
-                val progress = ProgressPercentage.getProgress(
-                    ProgressPercentage.CUSTOM_EVENT,
-                    event.eventStartTime,
-                    event.eventEndTime
-                )
-                launch(Dispatchers.Main) {
-                    progressText.text = formatProgressStyle(progress)
-                    progressBar.progress = progress.toInt()
-                }
-                delay(5000)
-            }
-        }
+        progressText.text = formatProgressStyle(progress)
+        progressBar.progress = progress.toInt()
 
 
     }
