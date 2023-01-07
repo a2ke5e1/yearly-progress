@@ -1,0 +1,36 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Style">
+
+        <SeekBarPreference
+            android:max="13"
+            app:defaultValue="13"
+            app:iconSpaceReserved="false"
+            app:key="@string/app_widget_decimal_point"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:summary="Decimal Places maximum which will be visible in app."
+            app:title="Decimal Places" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Week Day">
+
+        <ListPreference
+            app:defaultValue="0"
+            app:entries="@array/week_start_entries"
+            app:entryValues="@array/week_start_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/app_week_widget_start_day"
+            app:summary="Select first day of the week"
+            app:title="First Day of Week" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

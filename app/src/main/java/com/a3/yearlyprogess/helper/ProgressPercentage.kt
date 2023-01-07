@@ -1,19 +1,33 @@
 package com.a3.yearlyprogess.helper
 
+import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
+import android.util.Log
+import androidx.preference.PreferenceManager
+import com.a3.yearlyprogess.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ProgressPercentage {
+class ProgressPercentage(private val context: Context) {
+
+    fun setDefaultWeek() {
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
+        val weekStartDay = settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0")
+        Log.d("week_set", weekStartDay.toString())
+        DEFAULT_WEEK_PREF = weekStartDay!!.toInt()
+    }
+
     companion object {
         const val YEAR = 100
         const val MONTH = 101
         const val WEEK = 102
         const val DAY = 103
         const val CUSTOM_EVENT = 104
+
+        private var DEFAULT_WEEK_PREF = 0
 
         fun getYear(): Int = Calendar.getInstance().get(Calendar.YEAR)
         fun getMonth(): Int = Calendar.getInstance().get(Calendar.MONTH) + 1
@@ -96,7 +110,9 @@ class ProgressPercentage {
                     calendar.clear(Calendar.SECOND)
                     calendar.clear(Calendar.MILLISECOND)
 
-                    // calendar.firstDayOfWeek = Calendar.MONDAY
+                    if (DEFAULT_WEEK_PREF > 0) {
+                        calendar.firstDayOfWeek = DEFAULT_WEEK_PREF
+                    }
 
                     calendar.set(
                         Calendar.DAY_OF_WEEK,
@@ -213,6 +229,8 @@ class InvalidProgressType(msg: String) : Exception(msg)
 
 fun main(args: Array<String>) {
 
+
+    // ProgressPercentage().setDefaultWeek(1)
     val _s = ProgressPercentage.getStartOfTimeMillis(ProgressPercentage.WEEK)
     val _e = ProgressPercentage.getEndOfTimeMillis(ProgressPercentage.WEEK)
     val s = SimpleDateFormat.getDateTimeInstance().format(_s)

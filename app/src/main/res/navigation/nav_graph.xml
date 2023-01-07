@@ -27,4 +27,8 @@
         tools:layout="@layout/fragment_screen_list_events">
 
     </fragment>
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="com.a3.yearlyprogess.SettingsActivity"
+        android:label="SettingsActivity" />
 </navigation>

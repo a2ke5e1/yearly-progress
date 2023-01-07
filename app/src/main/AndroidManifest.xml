@@ -16,12 +16,20 @@
         android:supportsRtl="true"
         android:theme="@style/App.SplashScreen"
         tools:targetApi="31">
-
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YearlyProgress.Settings"
+            android:label="@string/title_activity_settings">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".eventManager.EventConfigActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden"
-            android:theme="@style/Theme.YearlyProgress">
+            android:theme="@style/Theme.YearlyProgress"
+            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -35,6 +43,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,13 +51,11 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_application_id" />
-        <!--
-            Registration of the Widgets
-        -->
+        <!--             Registration of the Widgets -->
         <receiver
             android:name=".mWidgets.AllInWidget"
-            android:label="All in One"
-            android:exported="false">
+            android:exported="false"
+            android:label="All in One">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -59,8 +66,8 @@
         </receiver>
         <receiver
             android:name=".mWidgets.EventWidget"
-            android:label="Event Progress Tracker"
-            android:exported="false">
+            android:exported="false"
+            android:label="Event Progress Tracker">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -117,9 +124,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/week_widget_info" />
         </receiver>
-        <!--
-            Registration of the Widget Broadcast Receiver
-        -->
+        <!--             Registration of the Widget Broadcast Receiver -->
         <receiver
             android:name=".manager.services.DayWidgetService"
             android:enabled="true" />
@@ -138,7 +143,6 @@
         <receiver
             android:name=".manager.services.AllInWidgetService"
             android:enabled="true" />
-
     </application>
 
 </manifest>

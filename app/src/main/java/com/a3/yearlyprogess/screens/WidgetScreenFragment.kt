@@ -113,9 +113,9 @@ class WidgetScreenFragment : Fragment() {
 
     private fun updateWidgetInfo(i: Long) {
         lifecycleScope.launch(Dispatchers.IO) {
-
             while (true) {
 
+                ProgressPercentage(requireContext()).setDefaultWeek()
 
                 val progressTextYear = ProgressPercentage.getProgress(ProgressPercentage.YEAR)
                 val progressTextMonth = ProgressPercentage.getProgress(ProgressPercentage.MONTH)
@@ -203,6 +203,7 @@ class WidgetScreenFragment : Fragment() {
     }
 
     private fun initProgressBarsTextViews(view: View) {
+        ProgressPercentage(requireContext()).setDefaultWeek()
 
         binding.widgetYearDemo.findViewById<TextView>(R.id.widgetType).text =
             context?.getString(R.string.year)

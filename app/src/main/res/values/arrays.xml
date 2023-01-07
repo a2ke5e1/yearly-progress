@@ -1,0 +1,16 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="week_start_entries">
+        <item>Default</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+    </string-array>
+
+    <string-array name="week_start_values">
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+</resources>
