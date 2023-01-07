@@ -4,6 +4,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ProgressPercentage {
@@ -95,6 +96,8 @@ class ProgressPercentage {
                     calendar.clear(Calendar.SECOND)
                     calendar.clear(Calendar.MILLISECOND)
 
+                    // calendar.firstDayOfWeek = Calendar.MONDAY
+
                     calendar.set(
                         Calendar.DAY_OF_WEEK,
                         calendar.firstDayOfWeek,
@@ -135,12 +138,8 @@ class ProgressPercentage {
                     calendar.timeInMillis
                 }
                 WEEK -> {
-                    calendar.set(
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.firstDayOfWeek + calendar.getActualMaximum(Calendar.DAY_OF_WEEK),
-                        0, 0, 0
-                    )
+                    calendar.timeInMillis =
+                        getStartOfTimeMillis(WEEK) + (calendar.getActualMaximum(Calendar.DAY_OF_WEEK) * 24 * 60 * 60 * 1000)
                     calendar.timeInMillis
                 }
                 DAY -> {
@@ -190,7 +189,8 @@ class ProgressPercentage {
                     widgetText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
-            } catch (ignored: IndexOutOfBoundsException) {}
+            } catch (ignored: IndexOutOfBoundsException) {
+            }
             return widgetText
         }
 
@@ -210,3 +210,18 @@ class ProgressPercentage {
 }
 
 class InvalidProgressType(msg: String) : Exception(msg)
+
+fun main(args: Array<String>) {
+
+    val _s = ProgressPercentage.getStartOfTimeMillis(ProgressPercentage.WEEK)
+    val _e = ProgressPercentage.getEndOfTimeMillis(ProgressPercentage.WEEK)
+    val s = SimpleDateFormat.getDateTimeInstance().format(_s)
+    val e = SimpleDateFormat.getDateTimeInstance().format(_e)
+    val p = ProgressPercentage.getProgress(ProgressPercentage.WEEK)
+    println(s)
+    println(_s)
+    println(e)
+    println(_e)
+    println(p)
+
+}
