@@ -21,11 +21,8 @@ class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val eventDescription = itemView.findViewById<TextView>(R.id.eventDesc)
     private val eventStart = itemView.findViewById<TextView>(R.id.eventStart)
     private val eventEnd = itemView.findViewById<TextView>(R.id.eventEnd)
-    private val progressText = itemView.findViewById<TextView>(R.id.progressText)
-    private val progressBar = itemView.findViewById<LinearProgressIndicator>(R.id.progressBar)
 
     fun bind(event: Event) {
-
 
         eventTitle.text = event.eventTitle
         eventDescription.text = event.eventDescription
@@ -37,16 +34,6 @@ class EventListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         eventEnd.text = SimpleDateFormat.getDateTimeInstance().format(
             event.eventEndTime
         )
-
-        val progress = ProgressPercentage.getProgress(
-            ProgressPercentage.CUSTOM_EVENT,
-            event.eventStartTime,
-            event.eventEndTime
-        )
-
-        progressText.text = formatProgressStyle(progress)
-        progressBar.progress = progress.toInt()
-
 
     }
 

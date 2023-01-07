@@ -12,11 +12,6 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/custom_event_item_view" />
 
-    <Button
-        android:id="@+id/test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addEventFab"

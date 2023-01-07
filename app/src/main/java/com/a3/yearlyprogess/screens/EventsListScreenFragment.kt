@@ -23,9 +23,7 @@ class EventsListScreenFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
@@ -40,15 +38,19 @@ class EventsListScreenFragment : Fragment() {
             eventAdapter.setData(events)
         }
 
-        binding.test.setOnClickListener {
-            mEventViewModel.addEvent(
-                Event(0,"test", "test desc", System.currentTimeMillis()
-                    , System.currentTimeMillis() + 100000000L
+        binding.addEventFab.setOnClickListener {
+                mEventViewModel.addEvent(
+                    Event(
+                        0,
+                        "Lorem Ipsum",
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+                        System.currentTimeMillis(),
+                        System.currentTimeMillis() + 100000000L
+                    )
                 )
-            )
-        }
+            }
 
-        binding.test.setOnLongClickListener {
+        binding.addEventFab.setOnLongClickListener {
             mEventViewModel.deleteAllEvent()
             true
         }

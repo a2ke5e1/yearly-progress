@@ -183,12 +183,14 @@ class ProgressPercentage {
                 dotPos = widgetText.indexOf(',')
             }
 
-            widgetText.setSpan(
-                RelativeSizeSpan(0.7f),
-                dotPos,
-                widgetText.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            try {
+                widgetText.setSpan(
+                    RelativeSizeSpan(0.7f),
+                    dotPos,
+                    widgetText.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (ignored: IndexOutOfBoundsException) {}
             return widgetText
         }
 
