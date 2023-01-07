@@ -135,15 +135,11 @@ class ProgressPercentage {
                     calendar.timeInMillis
                 }
                 WEEK -> {
-
-                    calendar.set(Calendar.HOUR_OF_DAY, 0)
-                    calendar.clear(Calendar.MINUTE)
-                    calendar.clear(Calendar.SECOND)
-                    calendar.clear(Calendar.MILLISECOND)
-
                     calendar.set(
-                        Calendar.DAY_OF_WEEK,
-                        calendar.firstDayOfWeek + calendar.getActualMaximum(Calendar.DAY_OF_WEEK) - 1,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.firstDayOfWeek + calendar.getActualMaximum(Calendar.DAY_OF_WEEK),
+                        0, 0, 0
                     )
                     calendar.timeInMillis
                 }
@@ -176,7 +172,7 @@ class ProgressPercentage {
         }
 
         fun formatProgressStyle(progress: Double): SpannableString {
-            val widgetText = SpannableString("%,.2f".format(progress) +"%")
+            val widgetText = SpannableString("%,.2f".format(progress) + "%")
             return formatProgressStyle(widgetText)
         }
 
