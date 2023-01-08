@@ -7,6 +7,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
@@ -49,9 +51,7 @@ class WidgetScreenFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentWidgetScreenBinding.inflate(inflater, container, false)
@@ -129,10 +129,36 @@ class WidgetScreenFragment : Fragment() {
 
 
                 lifecycleScope.launch(Dispatchers.Main) {
-                    progressTextViewYear.text = formatProgressStyle(progressTextYear)
-                    progressTextViewMonth.text = formatProgressStyle(progressTextMonth)
-                    progressTextViewDay.text = formatProgressStyle(progressTextDay)
-                    progressTextViewWeek.text = formatProgressStyle(progressTextWeek)
+
+
+                    val pref = PreferenceManager.getDefaultSharedPreferences(context)
+                    val decimalPlace: Int = pref.getInt(
+                        requireContext().getString(R.string.widget_widget_decimal_point), 2
+                    )
+
+
+
+
+                    progressTextViewYear.text =  formatProgressStyle(
+                        SpannableString(
+                            "%,.${decimalPlace}f".format(progressTextYear) + "%"
+                        )
+                    )
+                    progressTextViewMonth.text = formatProgressStyle(
+                        SpannableString(
+                            "%,.${decimalPlace}f".format(progressTextMonth) + "%"
+                        )
+                    )
+                    progressTextViewDay.text = formatProgressStyle(
+                        SpannableString(
+                            "%,.${decimalPlace}f".format(progressTextDay) + "%"
+                        )
+                    )
+                    progressTextViewWeek.text = formatProgressStyle(
+                        SpannableString(
+                            "%,.${decimalPlace}f".format(progressTextWeek) + "%"
+                        )
+                    )
 
                     progressBarYear.progress = progressYear
                     progressBarMonth.progress = progressMonth
@@ -180,20 +206,14 @@ class WidgetScreenFragment : Fragment() {
         animatedUpdateProgressBarView(progressBarWeek, ProgressPercentage.WEEK)
 
         animatedUpdateProgressTextView(
-            allInOneProgressTextViewYear,
-            ProgressPercentage.YEAR,
-            true
+            allInOneProgressTextViewYear, ProgressPercentage.YEAR, true
         )
         animatedUpdateProgressTextView(
-            allInOneProgressTextViewMonth,
-            ProgressPercentage.MONTH,
-            true
+            allInOneProgressTextViewMonth, ProgressPercentage.MONTH, true
         )
         animatedUpdateProgressTextView(allInOneProgressTextViewDay, ProgressPercentage.DAY, true)
         animatedUpdateProgressTextView(
-            allInOneProgressTextViewWeek,
-            ProgressPercentage.WEEK,
-            true
+            allInOneProgressTextViewWeek, ProgressPercentage.WEEK, true
         )
 
         animatedUpdateProgressBarView(allInOneProgressBarYear, ProgressPercentage.YEAR)
@@ -263,21 +283,18 @@ class WidgetScreenFragment : Fragment() {
                     ad.destroy()
                     return@forNativeAd
                 }
-            }
-            .withAdListener(object : AdListener() {
+            }.withAdListener(object : AdListener() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     // Handle the failure by logging, altering the UI, and so on.
                     adFrame.removeAllViews()
                 }
-            })
-            .withNativeAdOptions(
+            }).withNativeAdOptions(
                 NativeAdOptions.Builder()
                     .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
                     // Methods in the NativeAdOptions.Builder class can be
                     // used here to specify individual options settings.
                     .build()
-            )
-            .build()
+            ).build()
         // Load Ad
         adLoader.loadAd(AdRequest.Builder().build())
     }
@@ -310,16 +327,13 @@ class WidgetScreenFragment : Fragment() {
     }
 
     private fun animatedUpdateProgressTextView(
-        textView: TextView,
-        type: Int,
-        isAllInOne: Boolean = false
+        textView: TextView, type: Int, isAllInOne: Boolean = false
     ) {
-        val progressTextAnimator =
-            if (isAllInOne) {
-                ValueAnimator.ofInt(0, ProgressPercentage.getProgress(type).roundToInt())
-            } else {
-                ValueAnimator.ofFloat(0F, ProgressPercentage.getProgress(type).toFloat())
-            }
+        val progressTextAnimator = if (isAllInOne) {
+            ValueAnimator.ofInt(0, ProgressPercentage.getProgress(type).roundToInt())
+        } else {
+            ValueAnimator.ofFloat(0F, ProgressPercentage.getProgress(type).toFloat())
+        }
         progressTextAnimator.duration = 600
         progressTextAnimator.addUpdateListener {
             textView.text = if (isAllInOne) {
@@ -369,10 +383,7 @@ class WidgetScreenFragment : Fragment() {
         if (mAppWidgetManager.isRequestPinAppWidgetSupported) {
             val pinnedWidgetCallbackIntent = Intent(context, widget)
             val successCallback = PendingIntent.getBroadcast(
-                context,
-                0,
-                pinnedWidgetCallbackIntent,
-                PendingIntent.FLAG_IMMUTABLE
+                context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
             )
             mAppWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
         } else {
