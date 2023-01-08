@@ -7,7 +7,6 @@
     android:minHeight="40dp"
     android:previewLayout="@layout/month_widget_preview"
     android:previewImage="@drawable/month_widget_preview"
-    android:resizeMode="horizontal"
     android:targetCellWidth="2"
     android:targetCellHeight="1"
     android:updatePeriodMillis="8400000"
