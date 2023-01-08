@@ -3,13 +3,30 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="Style">
+        app:title="App">
 
         <SeekBarPreference
             android:max="13"
+            app:allowDividerBelow="false"
             app:defaultValue="13"
             app:iconSpaceReserved="false"
             app:key="@string/app_widget_decimal_point"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:summary="Decimal Places maximum which will be visible in app."
+            app:title="Decimal Places" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Widget">
+
+        <SeekBarPreference
+            android:max="5"
+            app:defaultValue="2"
+            app:iconSpaceReserved="false"
+            app:key="@string/widget_widget_decimal_point"
             app:min="0"
             app:showSeekBarValue="true"
             app:summary="Decimal Places maximum which will be visible in app."

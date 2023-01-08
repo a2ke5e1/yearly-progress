@@ -4,7 +4,9 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.text.SpannableString
 import android.widget.RemoteViews
+import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
@@ -33,7 +35,12 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
             }
         )
 
-        val widgetProgressText = formatProgressStyle(progress)
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val decimalPlace: Int = pref.getInt(context.getString(R.string.widget_widget_decimal_point), 2)
+
+        val widgetProgressText = formatProgressStyle(SpannableString(
+            "%,.${decimalPlace}f".format(progress) + "%"
+        ))
         val widgetProgressBarValue = progress.roundToInt()
 
         val  widgetType: String = when (widgetServiceType) {

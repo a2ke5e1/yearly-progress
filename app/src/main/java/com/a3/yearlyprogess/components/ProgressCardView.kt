@@ -5,9 +5,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.text.SpannableString
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.helper.ProgressPercentage
@@ -110,7 +112,10 @@ class ProgressCardView @JvmOverloads constructor(
     @SuppressLint("SetTextI18n")
     private fun updateView(progress: Double) {
 
-        perTextView.text = formatProgressStyle(SpannableString("%,.13f".format(progress) + "%"))
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val decimalPlace: Int = pref.getInt(context.getString(R.string.app_widget_decimal_point), 13)
+
+        perTextView.text = formatProgressStyle(SpannableString("%,.${decimalPlace}f".format(progress) + "%"))
 
         val params = widgetProgressCard.layoutParams
         val target = (progress * 0.01 * widgetParentCard.width).toInt()
