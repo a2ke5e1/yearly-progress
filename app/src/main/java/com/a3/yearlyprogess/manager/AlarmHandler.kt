@@ -20,7 +20,7 @@ class AlarmHandler(private val context: Context, private val service : Int) {
     }
 
     fun setAlarmManager() {
-        val sender = PendingIntent.getBroadcast(context, 2, intent, PendingIntent.FLAG_IMMUTABLE)
+        val sender = PendingIntent.getBroadcast(context, intent.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE)
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         //get current time and add 1.5 seconds

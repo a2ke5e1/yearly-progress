@@ -17,7 +17,7 @@ abstract class BaseWidgetService : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         //wake the device
-        WakeLocker.acquire(context)
+        //WakeLocker.acquire(context)
 
         //force widget update
         val widgetIntent = setIntent(context)
@@ -28,6 +28,6 @@ abstract class BaseWidgetService : BroadcastReceiver() {
         context.sendBroadcast(widgetIntent)
 
         //go back to sleep
-        WakeLocker.release()
+        //WakeLocker.release()
     }
 }
