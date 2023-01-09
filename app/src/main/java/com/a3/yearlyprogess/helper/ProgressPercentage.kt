@@ -16,7 +16,7 @@ class ProgressPercentage(private val context: Context) {
     fun setDefaultWeek() {
         val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
         val weekStartDay = settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0")
-        Log.d("week_set", weekStartDay.toString())
+        // Log.d("week_set", weekStartDay.toString())
         DEFAULT_WEEK_PREF = weekStartDay!!.toInt()
     }
 
@@ -226,20 +226,3 @@ class ProgressPercentage(private val context: Context) {
 }
 
 class InvalidProgressType(msg: String) : Exception(msg)
-
-fun main(args: Array<String>) {
-
-
-    // ProgressPercentage().setDefaultWeek(1)
-    val _s = ProgressPercentage.getStartOfTimeMillis(ProgressPercentage.WEEK)
-    val _e = ProgressPercentage.getEndOfTimeMillis(ProgressPercentage.WEEK)
-    val s = SimpleDateFormat.getDateTimeInstance().format(_s)
-    val e = SimpleDateFormat.getDateTimeInstance().format(_e)
-    val p = ProgressPercentage.getProgress(ProgressPercentage.WEEK)
-    println(s)
-    println(_s)
-    println(e)
-    println(_e)
-    println(p)
-
-}

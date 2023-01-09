@@ -58,5 +58,10 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="settings">Settings</string>
+    <string name="pref_title_week_day">Select first day of week</string>
+    <string name="pref_title_widget_decimal_places">Decimal places of widgets</string>
+    <string name="pref_title_app_decimal_places">Decimal places in progress page</string>
+    <string name="pref_summary_app_decimal_places">Number of digits after a decimal in progress page of the app</string>
+    <string name="pref_summary_widget_decimal_places">Number of digits after a decimal in widgets</string>
 
 </resources>

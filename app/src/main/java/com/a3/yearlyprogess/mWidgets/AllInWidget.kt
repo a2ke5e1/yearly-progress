@@ -68,6 +68,9 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
 
     private fun initiateView(context: Context, views: RemoteViews) {
 
+        ProgressPercentage(context).setDefaultWeek()
+
+
         val dayProgress = ProgressPercentage.getProgress(ProgressPercentage.DAY).roundToInt()
         val weekProgress = ProgressPercentage.getProgress(ProgressPercentage.WEEK).roundToInt()
         val monthProgress = ProgressPercentage.getProgress(ProgressPercentage.MONTH).roundToInt()
