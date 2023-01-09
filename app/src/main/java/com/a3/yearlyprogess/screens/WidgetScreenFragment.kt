@@ -131,7 +131,7 @@ class WidgetScreenFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.Main) {
 
 
-                    val pref = PreferenceManager.getDefaultSharedPreferences(context)
+                    val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
                     val decimalPlace: Int = pref.getInt(
                         requireContext().getString(R.string.widget_widget_decimal_point), 2
                     )
