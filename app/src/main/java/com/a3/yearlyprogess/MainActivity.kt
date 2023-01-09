@@ -15,6 +15,7 @@ import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
+import com.a3.yearlyprogess.screens.AboutDialogFragment
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
@@ -102,24 +103,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showInfoMenu(): Boolean {
-        // Creates a dialog box to show info about the app
-        MaterialAlertDialogBuilder(this, R.style.CentralCard)
-            .setTitle(getString(R.string.app_name))
-            .setMessage(
-                HtmlCompat.fromHtml(
-                    """
-                          Version: ${BuildConfig.VERSION_NAME}<br>                            
-                          Build: ${BuildConfig.BUILD_TYPE.uppercase()}<br>
-                          <br><br>
-                          An <b>A3 Group</b> Product
-                        """.trimIndent(), HtmlCompat.FROM_HTML_MODE_LEGACY
-                )
-            )
-            .setNeutralButton(
-                "Dismiss", null
-            )
-            .setIcon(R.mipmap.ic_launcher_round)
-            .show()
+        val aboutDialogBox = AboutDialogFragment()
+        aboutDialogBox.show(supportFragmentManager, "about_dialog_box")
         return true
     }
 
