@@ -23,11 +23,11 @@ class AlarmHandler(private val context: Context, private val service : Int) {
         val sender = PendingIntent.getBroadcast(context, intent.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE)
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        //get current time and add 1.5 seconds
+        //get current time and add 2 seconds
         val c = Calendar.getInstance()
-        val l = c.timeInMillis + 1500
+        val l = c.timeInMillis + 2000
 
-        //set the alarm for 10 seconds in the future
+        //set the alarm for 2 seconds in the future
         am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, l, sender)
     }
 

@@ -17,7 +17,7 @@ object WakeLocker {
                     PowerManager.ON_AFTER_RELEASE,
             "WIDGET: Wake lock acquired!"
         )
-        wakeLock?.acquire(1500)
+        wakeLock?.acquire(2000)
     }
 
     fun release() {
