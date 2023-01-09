@@ -4,14 +4,20 @@
     tools:context="com.a3.yearlyprogess.MainActivity">
 
     <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_round_settings_24"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/infoMenu"
         android:icon="@drawable/ic_outline_info_24"
-        app:showAsAction="never"
-        android:title="@string/about" />
+        android:title="@string/about"
+        app:showAsAction="never" />
     <item
         android:id="@+id/shareMenu"
         android:icon="@drawable/ic_outline_share_24"
-        app:showAsAction="never"
-        android:title="@string/share" />
+        android:title="@string/share"
+        app:showAsAction="never" />
 
 </menu>

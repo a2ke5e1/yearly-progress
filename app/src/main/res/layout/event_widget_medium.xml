@@ -64,7 +64,7 @@
         android:layout_above="@id/eventProgressBar"
         android:text="40.48%"
         android:textColor="@color/widget_text_color"
-        android:textSize="18sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
 
@@ -75,6 +75,7 @@
         android:layout_above="@id/eventProgressBar"
         android:layout_alignParentEnd="true"
         android:text="08/09"
+        android:layout_alignBaseline="@id/eventProgressText"
         android:textAlignment="textEnd"
         android:textColor="@color/widget_text_color_tertiary"
         android:textSize="11sp" />

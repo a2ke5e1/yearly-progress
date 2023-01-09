@@ -1,18 +1,16 @@
-package com.a3.yearlyprogess.mwidgets.util
+package com.a3.yearlyprogess.mWidgets.util
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.text.Spannable
 import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
 import android.widget.RemoteViews
+import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.format
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
+import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
 import kotlin.math.roundToInt
 
@@ -25,9 +23,9 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
     ) {
 
         val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
+        ProgressPercentage(context).setDefaultWeek()
 
-        val progressPercentage = ProgressPercentage()
-        val progress = progressPercentage.getPercent(
+        val progress = ProgressPercentage.getProgress(
             when (widgetServiceType) {
                 AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.DAY
                 AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.MONTH
@@ -37,7 +35,12 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
             }
         )
 
-        val widgetProgressText = formatProgressStyle(progress)
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val decimalPlace: Int = pref.getInt(context.getString(R.string.widget_widget_decimal_point), 2)
+
+        val widgetProgressText = formatProgressStyle(SpannableString(
+            "%,.${decimalPlace}f".format(progress) + "%"
+        ))
         val widgetProgressBarValue = progress.roundToInt()
 
         val  widgetType: String = when (widgetServiceType) {
@@ -49,10 +52,10 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) : BaseWidget
             else -> ""
         }
         val widgetCurrentValue = when(widgetServiceType) {
-            AlarmHandler.DAY_WIDGET_SERVICE -> progressPercentage.getDay(custom = true)
-            AlarmHandler.MONTH_WIDGET_SERVICE -> progressPercentage.getMonth(str = true)
-            AlarmHandler.WEEK_WIDGET_SERVICE -> progressPercentage.getWeek(str = true)
-            AlarmHandler.YEAR_WIDGET_SERVICE -> progressPercentage.getYear()
+            AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.getDay(formatted = true)
+            AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.getMonth(isLong = false)
+            AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentage.getWeek(isLong = false)
+            AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentage.getYear().toString()
             else -> ""
         }
 

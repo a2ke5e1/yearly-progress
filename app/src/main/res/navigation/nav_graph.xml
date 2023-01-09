@@ -3,20 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/firstFragment">
+    app:startDestination="@id/progress_screen">
 
     <fragment
-        android:id="@+id/firstFragment"
-        android:name="com.a3.yearlyprogess.screens.FirstFragment"
+        android:id="@+id/progress_screen"
+        android:name="com.a3.yearlyprogess.screens.ProgressScreenFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_screen_progress">
 
     </fragment>
     <fragment
-        android:id="@+id/secondFragment"
-        android:name="com.a3.yearlyprogess.screens.SecondFragment"
+        android:id="@+id/widget_screen"
+        android:name="com.a3.yearlyprogess.screens.WidgetScreenFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_widget_screen">
 
     </fragment>
+
+    <fragment
+        android:id="@+id/events_list"
+        android:name="com.a3.yearlyprogess.screens.EventsListScreenFragment"
+        android:label="Events"
+        tools:layout="@layout/fragment_screen_list_events">
+
+    </fragment>
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="com.a3.yearlyprogess.SettingsActivity"
+        android:label="SettingsActivity" />
 </navigation>

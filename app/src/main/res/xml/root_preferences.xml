@@ -1,0 +1,53 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="App">
+
+        <SeekBarPreference
+            android:max="13"
+            app:allowDividerBelow="false"
+            app:defaultValue="13"
+            app:iconSpaceReserved="false"
+            app:key="@string/app_widget_decimal_point"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:summary="@string/pref_summary_app_decimal_places"
+            app:title="@string/pref_title_app_decimal_places" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Widget">
+
+        <SeekBarPreference
+            android:max="5"
+            app:defaultValue="2"
+            app:iconSpaceReserved="false"
+            app:key="@string/widget_widget_decimal_point"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:summary="@string/pref_summary_widget_decimal_places"
+            app:title="@string/pref_title_widget_decimal_places" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Week Day">
+
+        <ListPreference
+            app:defaultValue="0"
+            app:entries="@array/week_start_entries"
+            app:entryValues="@array/week_start_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/app_week_widget_start_day"
+            app:summary="%s"
+            app:title="@string/pref_title_week_day" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

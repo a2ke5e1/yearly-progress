@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import com.a3.yearlyprogess.manager.WakeLocker
-import com.a3.yearlyprogess.mwidgets.DayWidget
 
 abstract class BaseWidgetService : BroadcastReceiver() {
 
@@ -18,7 +17,7 @@ abstract class BaseWidgetService : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         //wake the device
-        WakeLocker.acquire(context)
+        //WakeLocker.acquire(context)
 
         //force widget update
         val widgetIntent = setIntent(context)
@@ -29,6 +28,6 @@ abstract class BaseWidgetService : BroadcastReceiver() {
         context.sendBroadcast(widgetIntent)
 
         //go back to sleep
-        WakeLocker.release()
+        //WakeLocker.release()
     }
 }

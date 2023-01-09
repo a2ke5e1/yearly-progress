@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.mwidgets
+package com.a3.yearlyprogess.mWidgets
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -10,13 +10,12 @@ import android.view.View
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatCurrentDay
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
+import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
-import com.a3.yearlyprogess.mwidgets.util.BaseWidget
-import java.text.SimpleDateFormat
+import com.a3.yearlyprogess.mWidgets.util.BaseWidget
 import java.util.*
+import kotlin.math.roundToInt
 
 /**
  * Implementation of App Widget functionality.
@@ -54,10 +53,10 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
 
 
             val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-                SizeF(300f, 100f) to xlarge,
-                SizeF(220f, 100f) to large,
-                SizeF(160f, 100f) to medium,
-                SizeF(100f, 100f) to small,
+                SizeF(300f, 80f) to xlarge,
+                SizeF(220f, 80f) to large,
+                SizeF(160f, 80f) to medium,
+                SizeF(100f, 80f) to small,
             )
 
             remoteViews = RemoteViews(viewMapping)
@@ -68,12 +67,14 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
 
 
     private fun initiateView(context: Context, views: RemoteViews) {
-        val progressPercentage = ProgressPercentage()
 
-        val dayProgress = progressPercentage.getPercent(ProgressPercentage.DAY).toInt()
-        val weekProgress = progressPercentage.getPercent(ProgressPercentage.WEEK).toInt()
-        val monthProgress = progressPercentage.getPercent(ProgressPercentage.MONTH).toInt()
-        val yearProgress = progressPercentage.getPercent(ProgressPercentage.YEAR).toInt()
+        ProgressPercentage(context).setDefaultWeek()
+
+
+        val dayProgress = ProgressPercentage.getProgress(ProgressPercentage.DAY).roundToInt()
+        val weekProgress = ProgressPercentage.getProgress(ProgressPercentage.WEEK).roundToInt()
+        val monthProgress = ProgressPercentage.getProgress(ProgressPercentage.MONTH).roundToInt()
+        val yearProgress = ProgressPercentage.getProgress(ProgressPercentage.YEAR).roundToInt()
 
 
 
@@ -88,16 +89,16 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
         views.setProgressBar(R.id.progressBarYear, 100, yearProgress, false)
 
 
-        views.setTextViewText(R.id.progressTitle, formatCurrentDay(progressPercentage))
+        views.setTextViewText(R.id.progressTitle, ProgressPercentage.getDay(formatted = true))
         views.setTextViewText(
             R.id.progressWeekTitle,
-            SimpleDateFormat("EEE", Locale.getDefault()).format(System.currentTimeMillis())
+            ProgressPercentage.getWeek(isLong = false)
         )
         views.setTextViewText(
             R.id.progressMonthTitle,
-            SimpleDateFormat("MMM", Locale.getDefault()).format(System.currentTimeMillis())
+            ProgressPercentage.getMonth(isLong = false)
         )
-        views.setTextViewText(R.id.progressYearTitle, progressPercentage.getYear())
+        views.setTextViewText(R.id.progressYearTitle, ProgressPercentage.getYear().toString())
 
         views.setOnClickPendingIntent(
             R.id.gridLayout, PendingIntent.getActivity(

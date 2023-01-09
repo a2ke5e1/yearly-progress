@@ -7,7 +7,7 @@
     android:minHeight="40dp"
     android:previewImage="@drawable/day_widget_preview"
     android:previewLayout="@layout/day_widget_preview"
-    android:resizeMode="horizontal"
+    android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
     android:targetCellHeight="1"
     android:updatePeriodMillis="8400000"
