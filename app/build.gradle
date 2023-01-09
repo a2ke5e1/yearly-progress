@@ -12,8 +12,17 @@ android {
         applicationId "com.a3.yearlyprogess"
         minSdk 28
         targetSdk 33
-        versionCode 32
-        versionName "1.0.3.${versionCode - 32}"
+        versionCode 34
+
+        /*
+        Version:
+
+        About - x.1.x.x
+        Event - x.2.x.x
+        New Widgets Styles - x.3.x.x
+        */
+
+        versionName "1.2.3.${versionCode - 32}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
