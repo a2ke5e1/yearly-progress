@@ -1,183 +1,64 @@
 package com.a3.yearlyprogess.helper
 
+import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
-import androidx.annotation.IntDef
-import androidx.annotation.RestrictTo
+import android.util.Log
+import androidx.preference.PreferenceManager
+import com.a3.yearlyprogess.R
+import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.pow
 
-class ProgressPercentage {
+class ProgressPercentage(private val context: Context) {
 
-
-    private val calendar: Calendar = Calendar.getInstance()
-
-
-    private fun isLeapYear(year: Int): Boolean =
-        (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
-
-
-    fun getMonth(str: Boolean = false, isLong: Boolean = false): String {
-        val monthName = calendar.getDisplayName(
-            Calendar.MONTH, if (isLong) {
-                Calendar.LONG
-            } else {
-                Calendar.SHORT
-            }, Locale.getDefault()
-        )
-        if (monthName == null || !str) {
-            return (calendar.get(Calendar.MONTH) + 1).toString()
-        }
-        return monthName.toString()
-    }
-
-    fun getYear(): String = calendar.get(Calendar.YEAR).toString()
-    fun getDay(): String = calendar.get(Calendar.DAY_OF_MONTH).toString()
-    fun getDay(custom: Boolean = false): SpannableString {
-        if (custom) {
-            return formatCurrentDay(this)
-        }
-        return SpannableString(calendar.get(Calendar.DAY_OF_MONTH).toString())
-    }
-
-    fun getWeek(str: Boolean = false): String {
-        val weekName =
-            calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
-        if (weekName == null || !str) {
-            return calendar.get(Calendar.DAY_OF_WEEK).toString()
-        }
-        return weekName.toString()
-    }
-
-    fun getSeconds(
-        @Field field: Int,
-        eventStartTimeInMills: Long = 0,
-        eventEndDateTimeInMillis: Long = 0
-    ): Long {
-        return when (field) {
-            YEAR -> {
-                if (isLeapYear(getYear().toInt())) {
-                    366 * 24 * 60 * 60
-                } else {
-                    365 * 24 * 60 * 60
-                }
-            }
-            MONTH -> calendar.getActualMaximum(Calendar.DAY_OF_MONTH) * 24 * 60 * 60
-            WEEK -> 7 * 24 * 60 * 60
-            DAY -> 24 * 60 * 60
-            CUSTOM_EVENT -> {
-                (eventEndDateTimeInMillis - eventStartTimeInMills).div(1000).toLong()
-            }
-            else -> -1
-        }.toLong()
-    }
-
-    fun getSecondsPassed(@Field field: Int, eventStartTimeInMills: Long = 0): Long {
-        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-        val currentMinute = calendar.get(Calendar.MINUTE)
-        val currentSecond = calendar.get(Calendar.SECOND)
-        val currentDay = calendar.get(Calendar.DAY_OF_MONTH) - 1
-
-        when (field) {
-            YEAR -> {
-                // Need to have its own instance to set the date without interfering other calculation
-                val localCalendar = Calendar.getInstance()
-                localCalendar.set(getYear().toInt(), 0, 1, 0, 0, 0)
-                val firstJan = localCalendar.timeInMillis
-                val today = System.currentTimeMillis()
-                return (today - firstJan) / 1000
-            }
-            MONTH -> {
-                val secondsPassed =
-                    currentDay * 24 * 60 * 60 + currentHour * 60 * 60 + currentMinute * 60 + currentSecond
-                return secondsPassed.toLong()
-            }
-            WEEK -> {
-                val secondsPassed =
-                    (getWeek().toInt() - 1) * 24 * 60 * 60 + currentHour * 60 * 60 + currentMinute * 60 + currentSecond
-                return secondsPassed.toLong()
-            }
-            DAY -> {
-                val secondsPassed =
-                    currentHour * 60 * 60 + currentMinute * 60 + currentSecond
-                return secondsPassed.toLong()
-            }
-            CUSTOM_EVENT -> {
-                return (System.currentTimeMillis() - eventStartTimeInMills).div(1000).toLong()
-            }
-            else -> return -1
-        }
-    }
-
-    fun getPercent(
-        @Field field: Int,
-        eventStartTimeInMills: Long = 0,
-        eventEndDateTimeInMillis: Long = 0
-    ): Double {
-        return when (field) {
-            CUSTOM_EVENT -> (getSecondsPassed(field, eventStartTimeInMills).toDouble() / getSeconds(
-                field,
-                eventStartTimeInMills,
-                eventEndDateTimeInMillis
-            )) * 100
-            else -> (getSecondsPassed(field).toDouble() / getSeconds(field)) * 100
-        }
+    fun setDefaultWeek() {
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
+        val weekStartDay = settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0")
+        // Log.d("week_set", weekStartDay.toString())
+        DEFAULT_WEEK_PREF = weekStartDay!!.toInt()
     }
 
     companion object {
-        @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP_PREFIX)
-        @IntDef(YEAR, MONTH, WEEK, DAY, CUSTOM_EVENT)
-        @Retention(AnnotationRetention.SOURCE)
-        annotation class Field
-
         const val YEAR = 100
         const val MONTH = 101
         const val WEEK = 102
         const val DAY = 103
         const val CUSTOM_EVENT = 104
 
+        private var DEFAULT_WEEK_PREF = 0
 
-        fun Double.format( digits: Int): Double {
-            val p = 10.0.pow(digits.toDouble())
-            return (this * p).toLong() / p
+        fun getYear(): Int = Calendar.getInstance().get(Calendar.YEAR)
+        fun getMonth(): Int = Calendar.getInstance().get(Calendar.MONTH) + 1
+        fun getWeek(): Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+        fun getDay(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+
+        fun getMonth(isLong: Boolean): String {
+            return Calendar.getInstance().getDisplayName(
+                Calendar.MONTH, if (isLong) {
+                    Calendar.LONG
+                } else {
+                    Calendar.SHORT
+                }, Locale.getDefault()
+            ) ?: getMonth().toString()
         }
 
-        fun formatProgressStyle(progress: Double): SpannableString {
-            val widgetText = SpannableString("%,.2f".format(progress) +"%")
-            return formatProgressStyle(widgetText)
+        fun getWeek(isLong: Boolean): String {
+            return Calendar.getInstance().getDisplayName(
+                Calendar.DAY_OF_WEEK, if (isLong) {
+                    Calendar.LONG
+                } else {
+                    Calendar.SHORT
+                }, Locale.getDefault()
+            ) ?: getWeek().toString()
         }
 
-        fun formatProgressStyle(widgetText: SpannableString): SpannableString {
-
-            var dotPos = widgetText.indexOf('.')
-            if (dotPos == -1) {
-                dotPos = widgetText.indexOf(',')
+        fun getDay(formatted: Boolean): SpannableString {
+            val day = getDay().toString()
+            if (!formatted) {
+                return SpannableString(day)
             }
-
-            widgetText.setSpan(
-                RelativeSizeSpan(0.7f),
-                dotPos,
-                widgetText.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            return widgetText
-        }
-
-        fun formatProgress(progress: Int): SpannableString {
-            val spannable = SpannableString("${progress}%")
-            spannable.setSpan(
-                RelativeSizeSpan(0.7f),
-                spannable.length - 1,
-                spannable.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            return spannable
-        }
-
-        fun formatCurrentDay(progressPercentage: ProgressPercentage): SpannableString {
-            val day = progressPercentage.getDay()
             val spannable = SpannableString(
                 "${day}${
                     when (day.last()) {
@@ -205,7 +86,143 @@ class ProgressPercentage {
             return spannable
         }
 
+        fun getStartOfTimeMillis(
+            field: Int, eventStartMilliSeconds: Long = 0
+        ): Long {
+            val calendar = Calendar.getInstance(Locale.getDefault())
+            return when (field) {
+                YEAR -> {
+                    calendar.set(
+                        calendar.get(Calendar.YEAR), 0, 1, 0, 0, 0
+                    )
+                    calendar.timeInMillis
+                }
+                MONTH -> {
+                    calendar.set(
+                        calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1, 0, 0, 0
+                    )
+                    calendar.timeInMillis
+                }
+                WEEK -> {
+
+                    calendar.set(Calendar.HOUR_OF_DAY, 0)
+                    calendar.clear(Calendar.MINUTE)
+                    calendar.clear(Calendar.SECOND)
+                    calendar.clear(Calendar.MILLISECOND)
+
+                    if (DEFAULT_WEEK_PREF > 0) {
+                        calendar.firstDayOfWeek = DEFAULT_WEEK_PREF
+                    }
+
+                    calendar.set(
+                        Calendar.DAY_OF_WEEK,
+                        calendar.firstDayOfWeek,
+                    )
+                    calendar.timeInMillis
+                }
+                DAY -> {
+                    calendar.set(
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH),
+                        0,
+                        0,
+                        0
+                    )
+                    calendar.timeInMillis
+                }
+                CUSTOM_EVENT -> eventStartMilliSeconds
+                else -> throw InvalidProgressType("Invalid Progress Type $field")
+            }
+        }
+
+        fun getEndOfTimeMillis(
+            field: Int, eventEndMilliSeconds: Long = 0
+        ): Long {
+            val calendar = Calendar.getInstance(Locale.getDefault())
+            return when (field) {
+                YEAR -> {
+                    calendar.set(
+                        calendar.get(Calendar.YEAR) + 1, 0, 1, 0, 0, 0
+                    )
+                    calendar.timeInMillis
+                }
+                MONTH -> {
+                    calendar.set(
+                        calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 1, 0, 0, 0
+                    )
+                    calendar.timeInMillis
+                }
+                WEEK -> {
+                    calendar.timeInMillis =
+                        getStartOfTimeMillis(WEEK) + (calendar.getActualMaximum(Calendar.DAY_OF_WEEK) * 24 * 60 * 60 * 1000)
+                    calendar.timeInMillis
+                }
+                DAY -> {
+                    calendar.set(
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH) + 1,
+                        0,
+                        0,
+                        0
+                    )
+                    calendar.timeInMillis
+                }
+                CUSTOM_EVENT -> eventEndMilliSeconds
+                else -> throw InvalidProgressType("Invalid Progress Type $field")
+            }
+        }
+
+        fun getCurrentTimeMillis(): Long = System.currentTimeMillis()
+
+        fun getProgress(
+            field: Int, eventStartMilliSeconds: Long = 0, eventEndMilliSeconds: Long = 0
+        ): Double {
+            return (getCurrentTimeMillis() - getStartOfTimeMillis(
+                field, eventStartMilliSeconds
+            )) * 100.0 / (getEndOfTimeMillis(
+                field, eventEndMilliSeconds
+            ) - getStartOfTimeMillis(field, eventStartMilliSeconds))
+        }
+
+        fun formatProgressStyle(progress: Double): SpannableString {
+            val widgetText = SpannableString("%,.2f".format(progress) + "%")
+            return formatProgressStyle(widgetText)
+        }
+
+        fun formatProgressStyle(widgetText: SpannableString): SpannableString {
+
+            var dotPos = widgetText.indexOf('.')
+            if (dotPos == -1) {
+                dotPos = widgetText.indexOf(',')
+            }
+
+            try {
+                widgetText.setSpan(
+                    RelativeSizeSpan(0.7f),
+                    dotPos,
+                    widgetText.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (ignored: IndexOutOfBoundsException) {
+            }
+            return widgetText
+        }
+
+        fun formatProgress(progress: Int): SpannableString {
+            val spannable = SpannableString("${progress}%")
+            spannable.setSpan(
+                RelativeSizeSpan(0.7f),
+                spannable.length - 1,
+                spannable.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return spannable
+        }
+
+
     }
-
-
 }
+
+class InvalidProgressType(msg: String) : Exception(msg)

@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.mwidgets.util
+package com.a3.yearlyprogess.mWidgets.util
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider

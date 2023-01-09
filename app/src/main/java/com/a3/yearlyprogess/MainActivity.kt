@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         DynamicColors.applyToActivityIfAvailable(this)
 
         val pref = this.getSharedPreferences(YEARLY_PROGRESS_PREF, MODE_PRIVATE)
-        val firstLaunch  = pref.getBoolean(FIRST_LAUNCH, true)
+        val firstLaunch = pref.getBoolean(FIRST_LAUNCH, true)
 
         /*
         *
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(
                 Intent(
                     this,
-                    FirstScreen::class.java
+                    WelcomeScreen::class.java
                 )
             )
             finish()
@@ -91,6 +91,12 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.infoMenu -> showInfoMenu()
             R.id.shareMenu -> showShareScreen()
+            R.id.settings -> {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(
+                    R.id.settingsActivity
+                )
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

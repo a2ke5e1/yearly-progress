@@ -43,6 +43,10 @@
         <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
     </style>
 
+    <style name="Theme.YearlyProgress.Settings" parent="Theme.YearlyProgress">
+
+    </style>
+
     <!--
 
     Material Alert Dialog box with centered icons, title, and message.
