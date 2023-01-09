@@ -64,7 +64,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/all_in_widget_info" />
         </receiver>
-        <receiver
+        <!--<receiver
             android:name=".mWidgets.EventWidget"
             android:exported="false"
             android:label="Event Progress Tracker">
@@ -75,7 +75,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/event_widget_info" />
-        </receiver>
+        </receiver>-->
         <receiver
             android:name=".mWidgets.DayWidget"
             android:exported="false"
