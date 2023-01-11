@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.RemoteViews
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -26,6 +27,8 @@ import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressSt
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.mAdview.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.mWidgets.*
+import com.a3.yearlyprogess.mWidgets.util.StandaloneWidget
+import com.a3.yearlyprogess.manager.AlarmHandler
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -139,7 +142,7 @@ class WidgetScreenFragment : Fragment() {
 
 
 
-                    progressTextViewYear.text =  formatProgressStyle(
+                    progressTextViewYear.text = formatProgressStyle(
                         SpannableString(
                             "%,.${decimalPlace}f".format(progressTextYear) + "%"
                         )
@@ -302,27 +305,47 @@ class WidgetScreenFragment : Fragment() {
     private fun showWidgetMenu() {
         // Showing menu for user to add Day widget to user Launcher's Home Screen
         binding.btnAddDayWidget.setOnClickListener {
-            requestPinAppWidget(requireContext(), DayWidget::class.java)
+            requestPinAppWidget(
+                requireContext(),
+                DayWidget::class.java,
+                AlarmHandler.DAY_WIDGET_SERVICE
+            )
         }
 
         // Showing menu for user to add Month widget to user Launcher's Home Screen
         binding.btnAddMonthWidget.setOnClickListener {
-            requestPinAppWidget(requireContext(), MonthWidget::class.java)
+            requestPinAppWidget(
+                requireContext(),
+                MonthWidget::class.java,
+                AlarmHandler.MONTH_WIDGET_SERVICE
+            )
         }
 
         // Showing menu for user to add Year widget to user Launcher's Home Screen
         binding.btnAddYearWidget.setOnClickListener {
-            requestPinAppWidget(requireContext(), YearWidget::class.java)
+            requestPinAppWidget(
+                requireContext(),
+                YearWidget::class.java,
+                AlarmHandler.YEAR_WIDGET_SERVICE
+            )
         }
 
         // Showing menu for user to add Week widget to user Launcher's Home Screen
         binding.btnAddWeekWidget.setOnClickListener {
-            requestPinAppWidget(requireContext(), WeekWidget::class.java)
+            requestPinAppWidget(
+                requireContext(),
+                WeekWidget::class.java,
+                AlarmHandler.WEEK_WIDGET_SERVICE
+            )
         }
 
         // Showing menu for user to add All In One widget to user Launcher's Home Screen
         binding.btnAddAllInOneWidget.setOnClickListener {
-            requestPinAppWidget(requireContext(), AllInWidget::class.java)
+            requestPinAppWidget(
+                requireContext(),
+                AllInWidget::class.java,
+                AlarmHandler.ALL_IN_WIDGET_SERVICE
+            )
         }
     }
 
@@ -368,26 +391,33 @@ class WidgetScreenFragment : Fragment() {
         _binding = null
     }
 
-    private fun requestPinAppWidget(context: Context, widget: Class<*>) {
-
-        val unsupportedLauncherMessage =
-            "Your Launcher does not support this feature. Please add Widget manually"
-
-        val unsupportedLauncherToast =
-            Toast.makeText(context, unsupportedLauncherMessage, Toast.LENGTH_LONG)
-
-
+    /**
+     * https://sigute.medium.com/android-oreo-widget-pinning-in-kotlin-398d529eab28
+     */
+    private fun requestPinAppWidget(context: Context, widget: Class<*>, widgetServiceType: Int) {
         val mAppWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
-
         val myProvider = ComponentName(requireContext(), widget)
-        if (mAppWidgetManager.isRequestPinAppWidgetSupported) {
-            val pinnedWidgetCallbackIntent = Intent(context, widget)
-            val successCallback = PendingIntent.getBroadcast(
-                context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
-            )
-            mAppWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
-        } else {
-            unsupportedLauncherToast.show()
+        if (!mAppWidgetManager.isRequestPinAppWidgetSupported) {
+            Toast.makeText(
+                context, getString(R.string.unsupported_launcher), Toast.LENGTH_LONG
+            ).show()
+            return
         }
+
+        var remoteViews: RemoteViews? = null
+
+        if (widgetServiceType == AlarmHandler.ALL_IN_WIDGET_SERVICE) {
+            remoteViews = AllInWidget.AllInOneWidgetRemoteView(context)
+        } else if (widgetServiceType < AlarmHandler.ALL_IN_WIDGET_SERVICE) {
+            remoteViews = StandaloneWidget.standaloneWidgetRemoteView(context, widgetServiceType)
+        }
+
+        var bundle: Bundle? = null
+        if (remoteViews != null) {
+            bundle = Bundle()
+            bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
+        }
+
+        mAppWidgetManager.requestPinAppWidget(myProvider, bundle, null)
     }
 }
