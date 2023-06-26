@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.a3.yearlyprogess"
         minSdk 28
-        targetSdk 33
+        targetSdk 34
         versionCode 36
 
         /*
@@ -57,8 +57,8 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.preference:preference:1.2.0'
     testImplementation 'junit:junit:4.13.2'
@@ -66,24 +66,24 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Material Design 3.0
-    implementation 'com.google.android.material:material:1.8.0-beta01'
+    implementation 'com.google.android.material:material:1.10.0-alpha04'
 
     // Splash Screen for android 11 and below
-    implementation "androidx.core:core-splashscreen:1.0.0"
+    implementation "androidx.core:core-splashscreen:1.0.1"
 
     // Ads
-    implementation 'com.google.android.gms:play-services-ads:21.4.0'
+    implementation 'com.google.android.gms:play-services-ads:22.1.0'
 
     // Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     // Room
-    def room_version = "2.4.3"
+    def room_version = "2.5.2"
 
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
