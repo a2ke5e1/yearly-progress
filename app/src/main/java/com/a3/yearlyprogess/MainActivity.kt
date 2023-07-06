@@ -7,7 +7,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,11 +18,19 @@ import com.a3.yearlyprogess.screens.AboutDialogFragment
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.ump.ConsentDebugSettings
+import com.google.android.ump.ConsentForm
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.UserMessagingPlatform
+import kotlin.concurrent.thread
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var consentInformation: ConsentInformation
+    private var consentForm: ConsentForm? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -47,6 +54,14 @@ class MainActivity : AppCompatActivity() {
                 )
             )
             finish()
+        }
+
+        /*
+        *   Loads Consent Form to EU
+        * */
+        // loads EU Consent Form
+        thread {
+            loadEUForm()
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -121,6 +136,47 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(Intent.EXTRA_TEXT, shareMessage)
         this.startActivity(Intent.createChooser(intent, "Share"))
         return true
+    }
+
+    private fun loadEUForm() {
+
+        /*val debugSettings = ConsentDebugSettings.Builder(this)
+            .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+            .addTestDeviceHashedId("D8E90FB07673BFE0C11C8F378F64B61F")
+            .build()*/
+
+        val params = ConsentRequestParameters.Builder()
+            .setTagForUnderAgeOfConsent(false)
+            //.setConsentDebugSettings(debugSettings)
+            .build()
+        consentInformation = UserMessagingPlatform.getConsentInformation(this)
+        consentInformation.requestConsentInfoUpdate(
+            this, params,
+            {
+                if (consentInformation.isConsentFormAvailable) {
+                    loadForm();
+                }
+            },
+            {
+            }
+        )
+    }
+
+    private fun loadForm() {
+        UserMessagingPlatform.loadConsentForm(
+            this,
+            { consentForm ->
+                this.consentForm = consentForm
+                if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.REQUIRED) {
+                    consentForm.show(
+                        this
+                    ) { // Handle dismissal by reloading form.
+                        loadForm()
+                    }
+                }
+            }
+        ) {
+        }
     }
 
     companion object {
