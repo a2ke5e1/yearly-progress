@@ -32,6 +32,16 @@
             app:summary="@string/pref_summary_widget_decimal_places"
             app:title="@string/pref_title_widget_decimal_places" />
 
+        <SeekBarPreference
+            android:max="5"
+            app:defaultValue="2"
+            app:iconSpaceReserved="false"
+            app:key="@string/widget_event_widget_decimal_point"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:summary="@string/pref_summary_widget_decimal_places"
+            app:title="@string/pref_title_widget_event_decimal_place" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

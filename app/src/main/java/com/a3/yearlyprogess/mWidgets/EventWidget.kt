@@ -3,10 +3,12 @@ package com.a3.yearlyprogess.mWidgets
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.os.Build
+import android.text.SpannableString
 import android.text.format.DateFormat
 import android.util.Log
 import android.util.SizeF
 import android.widget.RemoteViews
+import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.helper.ProgressPercentage
@@ -44,9 +46,15 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             eventEndDateTimeInMillis
         )
 
-        Log.d("Event_Widget", "ratio $progress")
-        val progressText = formatProgressStyle(progress)
+        val settingsPref = PreferenceManager.getDefaultSharedPreferences(context)
+        val decimalPlace: Int =
+            settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
 
+        val progressText = formatProgressStyle(
+            SpannableString(
+                "%,.${decimalPlace}f".format(progress) + "%"
+            )
+        )
 
         mediumView.setTextViewText(R.id.eventProgressText, progressText)
         mediumView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
