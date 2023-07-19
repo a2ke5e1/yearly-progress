@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Yearly Progress"
-include ':app'
+include(":app")
