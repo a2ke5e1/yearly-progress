@@ -8,49 +8,63 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+        android:layout_height="wrap_content">
+
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow"
-            app:flow_wrapMode="aligned"
-            app:flow_horizontalAlign="center"
+            app:flow_wrapMode="chain"
             app:flow_horizontalStyle="packed"
             app:flow_horizontalGap="30dp"
-            app:flow_maxElementsWrap="2"
-            app:flow_verticalGap="10dp"
+            app:flow_verticalGap="30dp"
             app:flow_lastHorizontalStyle="spread"
+            app:flow_maxElementsWrap="2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewDay,ad_frame"
-             />
+            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewWeek,progressCardViewDay,ad_frame"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.a3.yearlyprogess.components.ProgressCardView
             android:id="@+id/progressCardViewYear"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="135dp"
             app:dataType="YEAR"
-           />
+            tools:layout_editor_absoluteX="95dp"
+            tools:layout_editor_absoluteY="10dp" />
 
         <com.a3.yearlyprogess.components.ProgressCardView
             android:id="@+id/progressCardViewMonth"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="135dp"
             app:dataType="MONTH"
-             />
+            tools:layout_editor_absoluteX="590dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <com.a3.yearlyprogess.components.ProgressCardView
+            android:id="@+id/progressCardViewWeek"
+            android:layout_width="400dp"
+            android:layout_height="135dp"
+            app:dataType="MONTH"
+            tools:layout_editor_absoluteX="90dp"
+            tools:layout_editor_absoluteY="155dp" />
 
         <com.a3.yearlyprogess.components.ProgressCardView
             android:id="@+id/progressCardViewDay"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="135dp"
-            app:dataType="DAY"
-             />
+            app:dataType="WEEK"
+            tools:layout_editor_absoluteX="585dp"
+            tools:layout_editor_absoluteY="161dp" />
 
         <LinearLayout
             android:id="@+id/ad_frame"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="90dp"
+            tools:layout_editor_absoluteY="300dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
