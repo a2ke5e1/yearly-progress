@@ -12,7 +12,7 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 28
         targetSdk = 34
-        versionCode = 40
+        versionCode = 41
 
         /*
         Version:
