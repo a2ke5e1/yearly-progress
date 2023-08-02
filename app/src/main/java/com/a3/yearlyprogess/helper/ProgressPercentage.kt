@@ -13,21 +13,19 @@ import java.util.*
 
 class ProgressPercentage(private val context: Context) {
 
-    private val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
 
-    init {
-        setDefaultWeek()
-        setDefaultCalculationMode()
-    }
+
 
     fun setDefaultWeek() {
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
         val weekStartDay =
             settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0")
         // Log.d("week_set", weekStartDay.toString())
         DEFAULT_WEEK_PREF = weekStartDay!!.toInt()
     }
 
-    private fun setDefaultCalculationMode() {
+    fun setDefaultCalculationMode() {
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
         val calculationMode =
             settingPref.getString(context.getString(R.string.app_calculation_type), "0")
         // Log.d("calculation_set", calculationMode.toString())
@@ -203,6 +201,8 @@ class ProgressPercentage(private val context: Context) {
             field: Int, eventStartMilliSeconds: Long = 0, eventEndMilliSeconds: Long = 0
         ): Double {
             return when (DEFAULT_CALCULATION_MODE) {
+
+
                 1 -> {
                     (getEndOfTimeMillis(
                         field, eventEndMilliSeconds
@@ -210,13 +210,16 @@ class ProgressPercentage(private val context: Context) {
                         field, eventEndMilliSeconds
                     ) - getStartOfTimeMillis(field, eventStartMilliSeconds))
                 }
-                else -> {
+
+                0 -> {
                     (getCurrentTimeMillis() - getStartOfTimeMillis(
                         field, eventStartMilliSeconds
                     )) * 100.0 / (getEndOfTimeMillis(
                         field, eventEndMilliSeconds
                     ) - getStartOfTimeMillis(field, eventStartMilliSeconds))
                 }
+
+                else -> throw InvalidProgressType("Invalid Calculation mode $DEFAULT_CALCULATION_MODE")
             }
         }
 

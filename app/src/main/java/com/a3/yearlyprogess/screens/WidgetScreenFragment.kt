@@ -118,7 +118,9 @@ class WidgetScreenFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             while (true) {
 
+                // Loads user preferences and set default values if not set
                 ProgressPercentage(requireContext()).setDefaultWeek()
+                ProgressPercentage(requireContext()).setDefaultCalculationMode()
 
                 val progressTextYear = ProgressPercentage.getProgress(ProgressPercentage.YEAR)
                 val progressTextMonth = ProgressPercentage.getProgress(ProgressPercentage.MONTH)
@@ -227,6 +229,7 @@ class WidgetScreenFragment : Fragment() {
 
     private fun initProgressBarsTextViews(view: View) {
         ProgressPercentage(requireContext()).setDefaultWeek()
+                ProgressPercentage(requireContext()).setDefaultCalculationMode()
 
         binding.widgetYearDemo.findViewById<TextView>(R.id.widgetType).text =
             context?.getString(R.string.year)

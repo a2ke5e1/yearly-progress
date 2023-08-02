@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.os.Bundle
+import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
 
 abstract class BaseWidget(private val widgetServiceType: Int) :
@@ -19,6 +20,11 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray
     ) {
         // There may be multiple widgets active, so update all of them
+
+        // Set default week and calculation mode
+        ProgressPercentage(context).setDefaultWeek()
+        ProgressPercentage(context).setDefaultCalculationMode()
+
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }

@@ -44,6 +44,9 @@ class ProgressCardView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.progress_card_view, this, true)
         orientation = VERTICAL
 
+        ProgressPercentage(context).setDefaultWeek()
+        ProgressPercentage(context).setDefaultCalculationMode()
+
         job = Job()
 
         perTextView = findViewById(R.id.widget_per)
