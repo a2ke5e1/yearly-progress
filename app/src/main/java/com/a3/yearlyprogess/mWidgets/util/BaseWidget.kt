@@ -39,7 +39,6 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         appWidgetId: Int,
         newOptions: Bundle?
     ) {
-        Log.d("WIDGET_UPDATE", widgetServiceType.toString())
         updateAppWidget(context, appWidgetManager, appWidgetId)
     }
 

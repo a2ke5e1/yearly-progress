@@ -30,14 +30,7 @@ class AlarmHandler(private val context: Context, private val service : Int) {
         val l = c.timeInMillis + 2000
 
         //set the alarm for 2 seconds in the future
-        Log.d("ALARM_SET", service.toString())
-        try {
-            am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, l, sender)
-        } catch (e: RuntimeException) {
-            am.cancel(sender)
-            Log.d("AM_FAILURE", e.stackTraceToString())
-            am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, l, sender)
-        }
+        am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, l, sender)
         // am.setAlarmClock( AlarmManager.AlarmClockInfo(l,sender),sender)
     }
 
