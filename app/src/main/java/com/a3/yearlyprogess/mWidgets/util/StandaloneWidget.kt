@@ -20,7 +20,10 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
     companion object {
         fun standaloneWidgetRemoteView(context: Context, widgetServiceType: Int): RemoteViews {
             val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
+
+            // Set default week and calculation mode
             ProgressPercentage(context).setDefaultWeek()
+            ProgressPercentage(context).setDefaultCalculationMode()
 
             val progress = ProgressPercentage.getProgress(
                 when (widgetServiceType) {

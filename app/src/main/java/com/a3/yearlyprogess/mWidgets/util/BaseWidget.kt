@@ -20,11 +20,6 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray
     ) {
         // There may be multiple widgets active, so update all of them
-
-        // Set default week and calculation mode
-        ProgressPercentage(context).setDefaultWeek()
-        ProgressPercentage(context).setDefaultCalculationMode()
-
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
