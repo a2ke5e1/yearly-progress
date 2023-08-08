@@ -27,11 +27,11 @@ class AlarmHandler(private val context: Context, private val service : Int) {
 
         //get current time and add 2 seconds
         val c = Calendar.getInstance()
-        val l = c.timeInMillis + 2000
+        val l = c.timeInMillis
 
         //set the alarm for 2 seconds in the future
-        am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, l, sender)
-        // am.setAlarmClock( AlarmManager.AlarmClockInfo(l,sender),sender)
+        am.setAndAllowWhileIdle(AlarmManager.RTC, l, sender)
+        // am.setInexactRepeating(AlarmManager.RTC_WAKEUP, l, 2000, sender)
     }
 
     fun cancelAlarmManager() {

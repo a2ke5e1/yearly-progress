@@ -52,7 +52,7 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int
     ) {
-
+        Log.d("updateAppWidget", widgetServiceType.toString())
         updateWidget(context, appWidgetManager, appWidgetId)
 
         val alarmHandler = AlarmHandler(context, widgetServiceType)
