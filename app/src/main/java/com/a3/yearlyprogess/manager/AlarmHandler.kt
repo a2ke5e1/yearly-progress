@@ -22,7 +22,7 @@ class AlarmHandler(private val context: Context, private val service : Int) {
     }
 
     fun setAlarmManager() {
-        val sender = PendingIntent.getBroadcast(context, intent.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE)
+        val sender = PendingIntent.getBroadcast(context, service, intent, PendingIntent.FLAG_IMMUTABLE)
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         //get current time and add 2 seconds
@@ -30,6 +30,7 @@ class AlarmHandler(private val context: Context, private val service : Int) {
         val l = c.timeInMillis + 2000
 
         //set the alarm for 2 seconds in the future
+        Log.d("ALARM_SET", service.toString())
         try {
             am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, l, sender)
         } catch (e: RuntimeException) {
@@ -41,7 +42,7 @@ class AlarmHandler(private val context: Context, private val service : Int) {
     }
 
     fun cancelAlarmManager() {
-        val sender: PendingIntent = PendingIntent.getBroadcast(context, 2, intent, PendingIntent.FLAG_IMMUTABLE)
+        val sender: PendingIntent = PendingIntent.getBroadcast(context, service, intent, PendingIntent.FLAG_IMMUTABLE)
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         am.cancel(sender)
     }
