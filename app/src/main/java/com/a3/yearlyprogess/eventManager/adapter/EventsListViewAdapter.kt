@@ -28,7 +28,7 @@ class EventsListViewAdapter(private val mEventViewModel: EventViewModel) :
     override fun onBindViewHolder(holder: EventListViewHolder, position: Int) {
         val currentEvent = eventList[position]
         holder.bind(currentEvent)
-
+/*
         holder.itemView.findViewById<MaterialCardView>(R.id.parent).setOnLongClickListener {
             mEventViewModel.deleteEvent(currentEvent)
             notifyItemRemoved(position)
@@ -44,7 +44,7 @@ class EventsListViewAdapter(private val mEventViewModel: EventViewModel) :
                 eventEndTime = System.currentTimeMillis() + 72000000
             ))
             notifyItemChanged(position)
-        }
+        }*/
 
        /* mEventViewModel.updateProgressBar(
             currentEvent,

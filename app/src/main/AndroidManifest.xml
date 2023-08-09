@@ -143,6 +143,7 @@
         <receiver
             android:name=".manager.services.AllInWidgetService"
             android:enabled="true" />
+
     </application>
 
 </manifest>

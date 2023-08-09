@@ -25,9 +25,9 @@ class AlarmHandler(private val context: Context, private val service : Int) {
         val sender = PendingIntent.getBroadcast(context, service, intent, PendingIntent.FLAG_IMMUTABLE)
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        //get current time and add 2 seconds
+        // minimum widget update time is 5 seconds
         val c = Calendar.getInstance()
-        val l = c.timeInMillis
+        val l = c.timeInMillis + 5000
 
         //set the alarm for 2 seconds in the future
         am.setAndAllowWhileIdle(AlarmManager.RTC, l, sender)

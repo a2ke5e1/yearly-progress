@@ -22,7 +22,7 @@ android {
         New Widgets Styles - x.3.x.x
         */
         val localVersionCode = versionCode
-        versionName = "1.1.3.${localVersionCode!! - 32}"
+        versionName = "1.2.0.${localVersionCode!! - 44}"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
