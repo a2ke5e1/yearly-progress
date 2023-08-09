@@ -3,10 +3,9 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
+    <com.a3.yearlyprogess.components.CustomEventCardView
+        android:id="@+id/customEventCardView"
         android:layout_width="match_parent"
-        android:padding="8dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/eventName" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>
