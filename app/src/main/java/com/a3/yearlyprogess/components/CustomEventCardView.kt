@@ -139,6 +139,11 @@ class CustomEventCardView @JvmOverloads constructor(
         binding.editButton.setOnClickListener(listener)
     }
 
+    fun setOnAddWidgetClickListener(listener: OnClickListener) {
+        binding.addButton.visibility = VISIBLE
+        binding.addButton.setOnClickListener(listener)
+    }
+
 
 
 }

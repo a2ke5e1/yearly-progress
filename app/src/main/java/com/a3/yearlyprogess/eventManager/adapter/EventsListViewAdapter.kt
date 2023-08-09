@@ -1,15 +1,23 @@
 package com.a3.yearlyprogess.eventManager.adapter
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.RemoteViews
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.CustomEventSelectorItemViewBinding
 import com.a3.yearlyprogess.eventManager.EventManagerActivity
+import com.a3.yearlyprogess.eventManager.EventSelectorActivity
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.mWidgets.EventWidget
+
 
 class EventsListViewAdapter(
     private val appWidgetId: Int,
@@ -39,6 +47,11 @@ class EventsListViewAdapter(
             it.context.startActivity(intent)
 
         }
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            holder.binding.customEventCardView.setOnAddWidgetClickListener {
+                requestPinWidget(it.context, currentEvent)
+            }
+        }
 
 
         holder.binding.customEventCardView.setOnClickListener {
@@ -60,6 +73,38 @@ class EventsListViewAdapter(
 
         }
 
+
+    }
+
+    private fun requestPinWidget(context: Context, currentEvent: Event) {
+        val mAppWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
+        val myProvider = ComponentName(context, EventWidget::class.java)
+        if (!mAppWidgetManager.isRequestPinAppWidgetSupported) {
+            Toast.makeText(
+                context, context.getString(R.string.unsupported_launcher), Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        val remoteViews: RemoteViews =  EventWidget.eventWidgetPreview(context, currentEvent)
+        val bundle = Bundle()
+        bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
+
+        val pinnedWidgetCallbackIntent =
+            Intent(context, EventSelectorActivity::class.java)
+
+        val extras = Bundle()
+        extras.putParcelable("event", currentEvent)
+
+        pinnedWidgetCallbackIntent.putExtra("event", currentEvent)
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            pinnedWidgetCallbackIntent,
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        mAppWidgetManager.requestPinAppWidget(myProvider, bundle, pendingIntent)
 
     }
 

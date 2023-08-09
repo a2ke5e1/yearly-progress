@@ -3,8 +3,11 @@ package com.a3.yearlyprogess.eventManager
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -14,7 +17,9 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a3.yearlyprogess.databinding.EventSelectorScreenListEventsBinding
 import com.a3.yearlyprogess.eventManager.adapter.EventsListViewAdapter
+import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
+import com.a3.yearlyprogess.mWidgets.EventWidget
 
 class EventSelectorActivity : AppCompatActivity() {
 
@@ -41,6 +46,7 @@ class EventSelectorActivity : AppCompatActivity() {
             WindowInsetsCompat.CONSUMED
         }
 
+        val appWidgetManager = AppWidgetManager.getInstance(this)
 
         val appWidgetId = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -49,6 +55,37 @@ class EventSelectorActivity : AppCompatActivity() {
 
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(Activity.RESULT_CANCELED, resultValue)
+
+        val event: Event? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.extras?.getParcelable(
+                "event",
+                Event::class.java
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            intent.extras?.getParcelable(
+                "event"
+            )
+        }
+
+        if (event != null && appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            val pref = getSharedPreferences("eventWidget_${appWidgetId}", MODE_PRIVATE)
+            val edit = pref.edit()
+
+            edit.putInt("eventId", event.id)
+            edit.putString("eventTitle", event.eventTitle)
+            edit.putString("eventDesc", event.eventDescription)
+            edit.putLong("eventStartTimeInMills", event.eventStartTime)
+            edit.putLong("eventEndDateTimeInMillis", event.eventEndTime)
+
+            edit.commit()
+            EventWidget().updateWidget(this, appWidgetManager, appWidgetId)
+
+            val resultValue =
+                Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            setResult(Activity.RESULT_OK, resultValue)
+            finish()
+        }
 
         val eventAdapter = EventsListViewAdapter(appWidgetId) {
             val resultValue =
