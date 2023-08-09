@@ -2,13 +2,17 @@ package com.a3.yearlyprogess.eventManager
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -16,7 +20,9 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.databinding.ActivityEventConfigActivityBinding
+import com.a3.yearlyprogess.databinding.ActivityEventManagerActivityBinding
+import com.a3.yearlyprogess.eventManager.model.Event
+import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.mWidgets.EventWidget
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -24,9 +30,10 @@ import com.google.android.material.timepicker.TimeFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventConfigActivity : AppCompatActivity() {
+class EventManagerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityEventConfigActivityBinding
+    private lateinit var binding: ActivityEventManagerActivityBinding
+    private val mEventViewModel: EventViewModel by viewModels()
 
     private var eventStartDateTimeInMillis: Long = -1
     private var eventStartHour: Int = 0
@@ -41,7 +48,7 @@ class EventConfigActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityEventConfigActivityBinding.inflate(layoutInflater)
+        binding = ActivityEventManagerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         window.navigationBarDividerColor =
@@ -56,23 +63,34 @@ class EventConfigActivity : AppCompatActivity() {
             WindowInsetsCompat.CONSUMED
         }
 
+        val event: Event? =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra("event", Event::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra("event")
+            }
+        val isAddMode = intent.getBooleanExtra("addMode", true)
 
-        setResult(Activity.RESULT_CANCELED)
 
         val appWidgetId = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+
+        val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        setResult(Activity.RESULT_CANCELED, resultValue)
+
         val appWidgetManager = AppWidgetManager.getInstance(this)
         val datePicker = MaterialDatePicker.Builder.datePicker()
         val isSystem24Hour = is24HourFormat(this)
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
         val timePicker = MaterialTimePicker.Builder().setTimeFormat(clockFormat)
 
-        val pref = this.getSharedPreferences(appWidgetId.toString(), Context.MODE_PRIVATE)
-        val edit = pref.edit()
 
-        loadWidgetDataIfExists(pref)
+        if (event != null && !isAddMode) {
+            loadWidgetDataFromEvent(event)
+        }
 
         binding.eventTitle.requestFocus()
         val inputMethodManager =
@@ -85,7 +103,6 @@ class EventConfigActivity : AppCompatActivity() {
                     requestFocus()
                     setSelection(this.text.toString().length)
                 }
-
                 true
             } else {
                 false
@@ -205,26 +222,63 @@ class EventConfigActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.save_config -> {
 
-                    val eventTitle = binding.eventTitle.text.toString().ifEmpty { "" }
-                    val eventDesc = binding.eventDesc.text.toString().ifEmpty { "" }
+                    if (!isAddMode) {
 
-                    edit.putString("eventTitle", eventTitle)
-                    edit.putString("eventDesc", eventDesc)
-                    edit.putLong("eventStartTimeInMills", eventStartDateTimeInMillis)
-                    edit.putLong("eventEndDateTimeInMillis", eventEndDateTimeInMillis)
+                        val updatedEvent = Event(
+                            event!!.id,
+                            binding.eventTitle.text.toString().ifEmpty { "" },
+                            binding.eventDesc.text.toString().ifEmpty { "" },
+                            eventStartDateTimeInMillis,
+                            eventEndDateTimeInMillis
+                        )
+                        mEventViewModel.updateEvent(updatedEvent)
 
-                    edit.commit()
+                        val appWidgetManager = AppWidgetManager.getInstance(this)
+                        val appWidgetIds = appWidgetManager.getAppWidgetIds(
+                            ComponentName(
+                                this,
+                                EventWidget::class.java
+                            )
+                        )
 
-                    EventWidget().updateWidget(this, appWidgetManager, appWidgetId)
+                        appWidgetIds.forEach { appWidgetId ->
+                            val pref = getSharedPreferences("eventWidget_${appWidgetId}", Context.MODE_PRIVATE)
+                            val prefEventId = pref.getInt("eventId", -1)
+                            if (prefEventId == updatedEvent.id) {
+                                val edit = pref.edit()
+
+                                edit.putInt("eventId", updatedEvent.id)
+                                edit.putString("eventTitle", updatedEvent.eventTitle)
+                                edit.putString("eventDesc", updatedEvent.eventDescription)
+                                edit.putLong("eventStartTimeInMills", updatedEvent.eventStartTime)
+                                edit.putLong("eventEndDateTimeInMillis", updatedEvent.eventEndTime)
+
+                                edit.commit()
+                                EventWidget().updateWidget(this, appWidgetManager, appWidgetId)
+                            }
+                        }
 
 
-                    val resultValue =
-                        Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                    setResult(Activity.RESULT_OK, resultValue)
+
+                    } else {
+                        mEventViewModel.addEvent(
+                            Event(
+                                0,
+                                binding.eventTitle.text.toString().ifEmpty { "" },
+                                binding.eventDesc.text.toString().ifEmpty { "" },
+                                eventStartDateTimeInMillis,
+                                eventEndDateTimeInMillis
+                            )
+                        )
+                    }
+
+
+
                     finish()
 
                     true
                 }
+
                 else -> false
             }
         }
@@ -236,17 +290,15 @@ class EventConfigActivity : AppCompatActivity() {
         ) else SimpleDateFormat("hh:mm a", Locale.getDefault()).format(time)
     }
 
-    private fun loadWidgetDataIfExists(pref: SharedPreferences) {
-        val eventTitle = pref.getString("eventTitle", "").toString()
-        val eventDesc = pref.getString("eventDesc", "").toString()
+    private fun loadWidgetDataFromEvent(event: Event) {
+
+        binding.eventTitle.setText(event.eventTitle)
+        binding.eventDesc.setText(event.eventDescription)
+
         eventStartDateTimeInMillis =
-            pref.getLong("eventStartTimeInMills", System.currentTimeMillis())
-        eventEndDateTimeInMillis =
-            pref.getLong("eventEndDateTimeInMillis", System.currentTimeMillis())
+            event.eventStartTime
+        eventEndDateTimeInMillis = event.eventEndTime
 
-
-        binding.eventTitle.setText(eventTitle)
-        binding.eventDesc.setText(eventDesc)
 
         val localCalendar = Calendar.getInstance()
 

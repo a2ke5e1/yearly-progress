@@ -130,5 +130,10 @@ class CustomEventCardView @JvmOverloads constructor(
         progressTextValueAnimator.start()
     }
 
+    fun setOnEditButtonClickListener(listener: OnClickListener) {
+        binding.editButton.setOnClickListener(listener)
+    }
+
+
 
 }

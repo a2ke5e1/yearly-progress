@@ -26,13 +26,20 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".eventManager.EventConfigActivity"
+            android:name=".eventManager.EventSelectorActivity"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress"
             android:windowSoftInputMode="stateVisible|adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".eventManager.EventManagerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YearlyProgress"
+            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden">
         </activity>
         <activity
             android:name=".WelcomeScreen"
@@ -51,7 +58,7 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_application_id" />
-        <!--             Registration of the Widgets -->
+        <!-- Registration of the Widgets -->
         <receiver
             android:name=".mWidgets.AllInWidget"
             android:exported="false"
@@ -124,7 +131,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/week_widget_info" />
         </receiver>
-        <!--             Registration of the Widget Broadcast Receiver -->
+        <!-- Registration of the Widget Broadcast Receiver -->
         <receiver
             android:name=".manager.services.DayWidgetService"
             android:enabled="true" />
@@ -143,7 +150,6 @@
         <receiver
             android:name=".manager.services.AllInWidgetService"
             android:enabled="true" />
-
     </application>
 
 </manifest>

@@ -32,7 +32,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         val smallView = RemoteViews(context.packageName, R.layout.event_widget_small)
         val mediumView = RemoteViews(context.packageName, R.layout.event_widget_medium)
 
-        val pref = context.getSharedPreferences(appWidgetId.toString(), Context.MODE_PRIVATE)
+        val pref = context.getSharedPreferences("eventWidget_${appWidgetId}", Context.MODE_PRIVATE)
 
         val eventTitle = pref.getString("eventTitle", "null").toString()
         val eventDesc = pref.getString("eventDesc", "null")
