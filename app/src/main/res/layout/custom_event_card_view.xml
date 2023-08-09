@@ -83,7 +83,7 @@
                     style="@style/TextAppearance.Material3.HeadlineMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="25%"
+                    android:text="0%"
                     android:textColor="?attr/colorOnSecondaryContainer" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:indeterminate="false"
                     android:max="100"
-                    android:progress="25"
+                    android:progress="0"
                     app:indicatorColor="?attr/colorOnSecondaryContainer"
                     app:trackColor="?colorSecondaryContainer"
                     app:trackCornerRadius="32dp"
