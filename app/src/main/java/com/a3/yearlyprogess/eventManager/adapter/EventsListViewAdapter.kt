@@ -1,62 +1,64 @@
 package com.a3.yearlyprogess.eventManager.adapter
 
+import android.appwidget.AppWidgetManager
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.a3.yearlyprogess.databinding.CustomEventItemViewBinding
+import com.a3.yearlyprogess.databinding.CustomEventSelectorItemViewBinding
 import com.a3.yearlyprogess.eventManager.EventManagerActivity
-import com.a3.yearlyprogess.eventManager.EventSelectorActivity
 import com.a3.yearlyprogess.eventManager.model.Event
+import com.a3.yearlyprogess.mWidgets.EventWidget
 
-class EventsListViewAdapter :
-    RecyclerView.Adapter<EventListViewHolder>() {
+class EventsListViewAdapter(
+    private val appWidgetId: Int,
+    private val sendResult: () -> Unit
+) :
+    RecyclerView.Adapter<EventsSelectorListViewHolder>() {
 
     private var eventList = emptyList<Event>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventListViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): EventsSelectorListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = CustomEventItemViewBinding.inflate(inflater, parent, false)
-        return EventListViewHolder(binding)
+        val binding = CustomEventSelectorItemViewBinding.inflate(inflater, parent, false)
+        return EventsSelectorListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: EventListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: EventsSelectorListViewHolder, position: Int) {
         val currentEvent = eventList[position]
-        holder.binding.customEventCardView.setEvent(currentEvent)
 
-        // Opens Event Manager Activity in edit mode
+        holder.binding.customEventCardView.setEvent(currentEvent)
         holder.binding.customEventCardView.setOnEditButtonClickListener {
             val intent = Intent(it.context, EventManagerActivity::class.java)
             intent.putExtra("event", currentEvent)
             intent.putExtra("addMode", false)
             it.context.startActivity(intent)
+
         }
 
 
+        holder.binding.customEventCardView.setOnClickListener {
+            val appWidgetManager = AppWidgetManager.getInstance(it.context)
+            val pref =
+                it.context.getSharedPreferences("eventWidget_${appWidgetId}", Context.MODE_PRIVATE)
+            val edit = pref.edit()
 
-        /*
-                holder.itemView.findViewById<MaterialCardView>(R.id.parent).setOnLongClickListener {
-                    mEventViewModel.deleteEvent(currentEvent)
-                    notifyItemRemoved(position)
-                    false
-                }
+            edit.putInt("eventId", currentEvent.id)
+            edit.putString("eventTitle", currentEvent.eventTitle)
+            edit.putString("eventDesc", currentEvent.eventDescription)
+            edit.putLong("eventStartTimeInMills", currentEvent.eventStartTime)
+            edit.putLong("eventEndDateTimeInMillis", currentEvent.eventEndTime)
 
-                holder.itemView.findViewById<MaterialCardView>(R.id.parent).setOnClickListener {
-                    mEventViewModel.updateEvent(Event(
-                        id = currentEvent.id,
-                        eventTitle = "event update",
-                        eventDescription = "event desc update",
-                        eventStartTime = System.currentTimeMillis() + 36000000,
-                        eventEndTime = System.currentTimeMillis() + 72000000
-                    ))
-                    notifyItemChanged(position)
-                }*/
+            edit.commit()
 
-        /* mEventViewModel.updateProgressBar(
-             currentEvent,
-             holder.itemView.findViewById<TextView>(R.id.progressText),
-             holder.itemView.findViewById<LinearProgressIndicator>(R.id.progressBar),
-         )*/
+            EventWidget().updateWidget(it.context, appWidgetManager, appWidgetId)
+            sendResult()
+
+        }
 
 
     }
@@ -71,6 +73,6 @@ class EventsListViewAdapter :
 
 }
 
-class EventListViewHolder(val binding: CustomEventItemViewBinding) :
+class EventsSelectorListViewHolder(val binding: CustomEventSelectorItemViewBinding) :
     RecyclerView.ViewHolder(binding.root)
 

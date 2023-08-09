@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a3.yearlyprogess.databinding.EventSelectorScreenListEventsBinding
-import com.a3.yearlyprogess.eventManager.adapter.EventsSelectorListViewAdapter
+import com.a3.yearlyprogess.eventManager.adapter.EventsListViewAdapter
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 
 class EventSelectorActivity : AppCompatActivity() {
@@ -50,7 +50,7 @@ class EventSelectorActivity : AppCompatActivity() {
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(Activity.RESULT_CANCELED, resultValue)
 
-        val eventAdapter = EventsSelectorListViewAdapter(appWidgetId) {
+        val eventAdapter = EventsListViewAdapter(appWidgetId) {
             val resultValue =
                 Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             setResult(Activity.RESULT_OK, resultValue)

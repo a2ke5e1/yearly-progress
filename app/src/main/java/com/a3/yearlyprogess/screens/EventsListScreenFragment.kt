@@ -1,5 +1,6 @@
 package com.a3.yearlyprogess.screens
 
+import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a3.yearlyprogess.databinding.FragmentScreenListEventsBinding
 import com.a3.yearlyprogess.eventManager.EventManagerActivity
-import com.a3.yearlyprogess.eventManager.EventSelectorActivity
 import com.a3.yearlyprogess.eventManager.adapter.EventsListViewAdapter
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 
@@ -31,7 +31,10 @@ class EventsListScreenFragment : Fragment() {
         _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
         // mEventViewModel = ViewModelProvider(this)[EventViewModel::class.java]
 
-        val eventAdapter = EventsListViewAdapter()
+        val eventAdapter = EventsListViewAdapter(
+            AppWidgetManager.INVALID_APPWIDGET_ID) {
+
+        }
         binding.eventsRecyclerViewer.apply {
             adapter = eventAdapter
             layoutManager = LinearLayoutManager(requireContext())
