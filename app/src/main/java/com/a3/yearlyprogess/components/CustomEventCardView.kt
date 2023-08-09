@@ -58,6 +58,11 @@ class CustomEventCardView @JvmOverloads constructor(
         )
 
 
+        // cancel the previous job
+        job.cancel()
+        // make a job
+        job = Job()
+
         launch(Dispatchers.IO) {
 
             val progress = ProgressPercentage.getProgress(
