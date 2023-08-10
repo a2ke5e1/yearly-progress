@@ -13,7 +13,7 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 28
         targetSdk = 34
-        versionCode = 44
+        versionCode = 45
 
         /*
         Version:
@@ -98,6 +98,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
 
     // UMP SDK
-    implementation("com.google.android.ump:user-messaging-platform:2.0.0")
+    implementation("com.google.android.ump:user-messaging-platform:2.1.0")
 
 }
