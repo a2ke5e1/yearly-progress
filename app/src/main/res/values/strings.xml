@@ -37,7 +37,7 @@
     <string name="by_continuing_you_agree_our_terms_of_service_and_privacy_policy">By continuing, you agree our Terms of Service and Privacy Policy.</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
-    <string name="event_settings">Event Settings</string>
+    <string name="event_settings">Event Duration</string>
     <string name="start_of_the_event">From</string>
     <string name="end_of_the_event">To</string>
     <string name="date">Date</string>

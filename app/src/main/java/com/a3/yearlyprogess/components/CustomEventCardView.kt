@@ -7,6 +7,7 @@ import android.icu.text.SimpleDateFormat
 import android.text.SpannableString
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
@@ -34,7 +35,6 @@ class CustomEventCardView @JvmOverloads constructor(
     private val settingsPref = PreferenceManager.getDefaultSharedPreferences(context)
 
     private var job: Job
-    private var event: Event? = null
 
 
     init {
@@ -43,33 +43,41 @@ class CustomEventCardView @JvmOverloads constructor(
     }
 
     fun setEvent(event: Event) {
-        this.event = event
-
-
-        binding.eventTitle.text = event.eventTitle
-        binding.eventTitle.text = event.eventTitle
-        binding.eventDesc.text = event.eventDescription
-
-        binding.eventStart.text = SimpleDateFormat.getDateTimeInstance().format(
-            event.eventStartTime
-        )
-        binding.eventEnd.text = SimpleDateFormat.getDateTimeInstance().format(
-            event.eventEndTime
-        )
-
 
         // cancel the previous job
         job.cancel()
         // make a job
         job = Job()
 
+        binding.eventTitle.text = event.eventTitle
+        if (event.eventDescription.isNotEmpty()) {
+            binding.eventDesc.visibility = View.VISIBLE
+            binding.eventDesc.text = event.eventDescription
+        } else {
+            binding.eventDesc.visibility = View.GONE
+        }
+
+        binding.eventStart.text = displayRelativeDifferenceMessage(
+            event.eventStartTime,
+            event.eventEndTime
+        )
+        binding.eventEnd.visibility = View.GONE
+
         launch(Dispatchers.IO) {
 
-            val progress = ProgressPercentage.getProgress(
+            var progress = ProgressPercentage.getProgress(
                 ProgressPercentage.CUSTOM_EVENT,
                 event.eventStartTime,
                 event.eventEndTime
             )
+
+            if (progress > 100) {
+                progress = 100.0
+            }
+
+            if (progress < 0) {
+                progress = 0.0
+            }
 
             launch(Dispatchers.Main) {
                 updateView(progress)
@@ -78,23 +86,51 @@ class CustomEventCardView @JvmOverloads constructor(
             while (true) {
 
                 val decimalPlace: Int =
-                    settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
+                    settingsPref.getInt(
+                        context.getString(R.string.widget_event_widget_decimal_point),
+                        2
+                    )
 
                 ProgressPercentage(context).setDefaultWeek()
                 ProgressPercentage(context).setDefaultCalculationMode()
 
-                val progress = ProgressPercentage.getProgress(
+                progress = ProgressPercentage.getProgress(
                     ProgressPercentage.CUSTOM_EVENT,
                     event.eventStartTime,
                     event.eventEndTime
                 )
+
+                if (progress > 100) {
+                    progress = 100.0
+                }
+
+                if (progress < 0) {
+                    progress = 0.0
+                }
+
 
                 val progressText = formatProgressStyle(
                     SpannableString(
                         "%,.${decimalPlace}f".format(progress) + "%"
                     )
                 )
+
                 launch(Dispatchers.Main) {
+
+                    binding.eventTitle.text = event.eventTitle
+                    if (event.eventDescription.isNotEmpty()) {
+                        binding.eventDesc.visibility = View.VISIBLE
+                        binding.eventDesc.text = event.eventDescription
+                    } else {
+                        binding.eventDesc.visibility = View.GONE
+                    }
+
+                    binding.eventStart.text = displayRelativeDifferenceMessage(
+                        event.eventStartTime,
+                        event.eventEndTime
+                    )
+                    binding.eventEnd.visibility = View.GONE
+
                     binding.progressText.text = progressText
                     binding.progressBar.progress = progress.toInt()
                 }
@@ -106,7 +142,9 @@ class CustomEventCardView @JvmOverloads constructor(
 
     private fun updateView(progress: Double) {
 
-        val decimalPlace: Int = settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
+        val decimalPlace: Int =
+            settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
+
 
 
 
@@ -135,6 +173,34 @@ class CustomEventCardView @JvmOverloads constructor(
         progressTextValueAnimator.start()
     }
 
+    /**
+     * It will return a string that will display relative difference between two dates
+     * such as if there is difference is time but not in day then it will display
+     * Aug 12, 2023
+     * 12:00 AM - 11:59 PM
+     *
+     * if there is difference in day then it will display
+     * Aug 12, 2023 12:00 AM - Aug 13, 2023 11:59 PM
+     *
+     * @param startTime in milliseconds
+     * @param endTime in milliseconds
+
+     */
+    fun displayRelativeDifferenceMessage(startTime: Long, endTime: Long): String {
+
+            val startDay = SimpleDateFormat.getDateInstance().format(startTime)
+            val endDay = SimpleDateFormat.getDateInstance().format(endTime)
+
+            val startTimeString = SimpleDateFormat.getTimeInstance().format(startTime)
+            val endTimeString = SimpleDateFormat.getTimeInstance().format(endTime)
+
+            return if (startDay == endDay) {
+                "$startDay \n$startTimeString - $endTimeString"
+            } else {
+                "$startDay $startTimeString - $endDay $endTimeString"
+            }
+    }
+
     fun setOnEditButtonClickListener(listener: OnClickListener) {
         binding.editButton.setOnClickListener(listener)
     }
@@ -143,7 +209,6 @@ class CustomEventCardView @JvmOverloads constructor(
         binding.addButton.visibility = VISIBLE
         binding.addButton.setOnClickListener(listener)
     }
-
 
 
 }

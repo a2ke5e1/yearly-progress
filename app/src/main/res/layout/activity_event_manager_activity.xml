@@ -30,21 +30,32 @@
 
             </com.google.android.material.appbar.MaterialToolbar>
 
-            <EditText
-                android:id="@+id/eventTitle"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventTitleContainer"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                app:boxBackgroundMode="none"
+                app:placeholderText="@string/title"
                 android:layout_marginBottom="8dp"
-                android:background="@null"
-                android:hint="@string/title"
-                android:imeOptions="actionNext"
-                android:inputType="text|textAutoComplete"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textSize="25sp" />
+                app:counterEnabled="true"
+                app:counterMaxLength="30"
+                app:placeholderTextAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:maxLength="30"
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -80,9 +91,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="18dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/event_settings"
                 android:textAllCaps="true" />
 

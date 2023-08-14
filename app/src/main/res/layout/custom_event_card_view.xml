@@ -76,7 +76,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <TextView
                     android:id="@+id/progressText"
@@ -84,19 +85,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0%"
-                    android:textColor="?attr/colorOnSecondaryContainer" />
+                    android:textColor="?attr/colorPrimary" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
+                    style="@style/Widget.Material3.LinearProgressIndicator"
                     android:id="@+id/progressBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:indeterminate="false"
                     android:max="100"
-                    android:progress="0"
-                    app:indicatorColor="?attr/colorOnSecondaryContainer"
-                    app:trackColor="?colorSecondaryContainer"
-                    app:trackCornerRadius="32dp"
-                    app:trackThickness="5dp" />
+                    app:trackCornerRadius="24dp"
+                    android:progress="0" />
 
 
             </LinearLayout>

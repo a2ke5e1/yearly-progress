@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.core.widget.doAfterTextChanged
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.ActivityEventManagerActivityBinding
 import com.a3.yearlyprogess.eventManager.model.Event
@@ -72,6 +73,34 @@ class EventManagerActivity : AppCompatActivity() {
             }
         val isAddMode = intent.getBooleanExtra("addMode", true)
 
+        // Set Start Date and Time and End Date and Time to current date and time
+        if (isAddMode) {
+            val localCalendar = Calendar.getInstance()
+            val ONE_HOUR = 60 * 60 * 1000L
+
+            eventStartDateTimeInMillis = System.currentTimeMillis()
+            eventEndDateTimeInMillis = System.currentTimeMillis() + ONE_HOUR
+
+            localCalendar.timeInMillis = eventStartDateTimeInMillis
+            eventStartHour = localCalendar.get(Calendar.HOUR_OF_DAY)
+            eventStartMinute = localCalendar.get(Calendar.MINUTE)
+
+
+            binding.editTextStartDate.setText(
+                SimpleDateFormat.getDateInstance().format(eventStartDateTimeInMillis).toString()
+            )
+            binding.editTextStartTime.setText(getHourMinuteLocal(eventStartDateTimeInMillis))
+
+            localCalendar.timeInMillis = eventEndDateTimeInMillis
+            eventEndHour = localCalendar.get(Calendar.HOUR_OF_DAY)
+            eventEndMinute = localCalendar.get(Calendar.MINUTE)
+
+            binding.editTextEndDate.setText(
+                SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis).toString()
+            )
+            binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
+
+        }
 
         val appWidgetId = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -81,59 +110,54 @@ class EventManagerActivity : AppCompatActivity() {
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(Activity.RESULT_CANCELED, resultValue)
 
-        val appWidgetManager = AppWidgetManager.getInstance(this)
+        
+
+        if (event != null && !isAddMode) {
+            loadWidgetDataFromEvent(event)
+        }
+
+
+        setUpToolbarActions(isAddMode, event)
+        setUpDateTimePickers()
+
+
+    }
+
+    private fun setUpDateTimePickers() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
         val isSystem24Hour = is24HourFormat(this)
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
         val timePicker = MaterialTimePicker.Builder().setTimeFormat(clockFormat)
 
 
-        if (event != null && !isAddMode) {
-            loadWidgetDataFromEvent(event)
-        }
-
-        binding.eventTitle.requestFocus()
-        val inputMethodManager =
-            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(binding.eventTitle, InputMethodManager.SHOW_IMPLICIT)
-
-        binding.eventTitle.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                binding.eventDesc.apply {
-                    requestFocus()
-                    setSelection(this.text.toString().length)
-                }
-                true
-            } else {
-                false
-            }
-        }
 
         binding.editTextStartDate.setOnClickListener {
-            datePicker.setTitleText("Select Event Start Date")
+            datePicker.setTitleText("Choose event first day")
+                .setSelection(eventStartDateTimeInMillis)
                 .build().apply {
                     show(supportFragmentManager, "tag")
                     addOnPositiveButtonClickListener {
 
 
                         eventStartDateTimeInMillis = it.toLong()
-                        eventStartDateTimeInMillis = modifiedEventDateTime(
+                        /*eventStartDateTimeInMillis = modifiedEventDateTime(
                             eventStartDateTimeInMillis,
                             eventEndHour,
                             eventEndMinute
-                        )
+                        )*/
 
                         binding.editTextStartDate.setText(
                             SimpleDateFormat.getDateInstance().format(eventStartDateTimeInMillis)
                                 .toString()
                         )
+                        setUpDateTimePickers()
                     }
                 }
 
 
         }
         binding.editTextStartTime.setOnClickListener {
-            timePicker.setTitleText("Select Event Start Time")
+            timePicker.setTitleText("Choose event starting time")
                 .setHour(eventStartHour)
                 .setMinute(eventStartMinute)
                 .build().apply {
@@ -160,35 +184,40 @@ class EventManagerActivity : AppCompatActivity() {
                                 .toString()
                         )
 
+                        setUpDateTimePickers()
+
                     }
                 }
 
         }
         binding.editTextEndDate.setOnClickListener {
-            datePicker.setTitleText("Select Event End Date")
+            datePicker.setTitleText("Choose event last day")
+                .setSelection(eventEndDateTimeInMillis)
                 .build().apply {
                     show(supportFragmentManager, "tag")
                     addOnPositiveButtonClickListener {
 
 
                         eventEndDateTimeInMillis = it.toLong()
-                        eventEndDateTimeInMillis = modifiedEventDateTime(
+                        /*eventEndDateTimeInMillis = modifiedEventDateTime(
                             eventEndDateTimeInMillis,
                             eventEndHour,
                             eventEndMinute
-                        )
+                        )*/
 
                         binding.editTextEndDate.setText(
                             SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis)
                                 .toString()
                         )
+
+                        setUpDateTimePickers()
                     }
                 }
 
 
         }
         binding.editTextEndTime.setOnClickListener {
-            timePicker.setTitleText("Select Event End Time")
+            timePicker.setTitleText("Choose event ending time")
                 .setHour(eventEndHour)
                 .setMinute(eventEndMinute)
                 .build().apply {
@@ -208,19 +237,48 @@ class EventManagerActivity : AppCompatActivity() {
                             SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis)
                                 .toString()
                         )
-
+                        setUpDateTimePickers()
                     }
                 }
 
         }
+    }
 
 
+    private fun setUpToolbarActions(
+        isAddMode: Boolean,
+        event: Event?
+    ) {
+
+        binding.eventTitle.requestFocus()
+        val inputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(binding.eventTitle, InputMethodManager.SHOW_IMPLICIT)
+
+
+        binding.eventTitle.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                binding.eventDesc.apply {
+                    requestFocus()
+                    setSelection(this.text.toString().length)
+                }
+                true
+            } else {
+                false
+            }
+        }
         binding.materialToolbar.setNavigationOnClickListener {
             finish()
         }
         binding.materialToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.save_config -> {
+
+                    if (binding.eventTitle.text.toString().isEmpty()) {
+                        binding.eventTitleContainer.error = "Event title is required"
+                        return@setOnMenuItemClickListener true
+                    }
+
 
                     if (!isAddMode) {
 
@@ -242,7 +300,8 @@ class EventManagerActivity : AppCompatActivity() {
                         )
 
                         appWidgetIds.forEach { appWidgetId ->
-                            val pref = getSharedPreferences("eventWidget_${appWidgetId}", Context.MODE_PRIVATE)
+                            val pref =
+                                getSharedPreferences("eventWidget_${appWidgetId}", MODE_PRIVATE)
                             val prefEventId = pref.getInt("eventId", -1)
                             if (prefEventId == updatedEvent.id) {
                                 val edit = pref.edit()
@@ -257,7 +316,6 @@ class EventManagerActivity : AppCompatActivity() {
                                 EventWidget().updateWidget(this, appWidgetManager, appWidgetId)
                             }
                         }
-
 
 
                     } else {
@@ -280,6 +338,11 @@ class EventManagerActivity : AppCompatActivity() {
                 }
 
                 else -> false
+            }
+        }
+        binding.eventTitle.doAfterTextChanged {
+            if (it.toString().isNotEmpty()) {
+                binding.eventTitleContainer.error = null
             }
         }
     }
