@@ -5,11 +5,14 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.CustomEventSelectorItemViewBinding
@@ -26,6 +29,11 @@ class EventsListViewAdapter(
     RecyclerView.Adapter<EventsSelectorListViewHolder>() {
 
     private var eventList = emptyList<Event>()
+    private var _selectedEventList = MutableLiveData(emptyList<Event>())
+
+    val selectedEventList: MutableLiveData<List<Event>>
+        get() = _selectedEventList
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -38,6 +46,7 @@ class EventsListViewAdapter(
 
     override fun onBindViewHolder(holder: EventsSelectorListViewHolder, position: Int) {
         val currentEvent = eventList[position]
+        holder.binding.customEventCardView.background = null
 
         holder.binding.customEventCardView.setEvent(currentEvent)
         holder.binding.customEventCardView.setOnEditButtonClickListener {
@@ -71,6 +80,29 @@ class EventsListViewAdapter(
             EventWidget().updateWidget(it.context, appWidgetManager, appWidgetId)
             sendResult()
 
+        }
+
+
+        holder.binding.customEventCardView.setOnLongClickListener {
+
+            val copied = _selectedEventList.value!!.toMutableList()
+
+            if (copied.contains(currentEvent)) {
+                copied.remove(currentEvent)
+
+                _selectedEventList.value = copied
+                holder.binding.customEventCardView.background = null
+            } else {
+                copied.add(currentEvent)
+                holder.binding.customEventCardView.setBackgroundColor(
+                    Color.parseColor(
+                        "#FF6200EE"
+                    )
+                )
+
+                _selectedEventList.value = copied
+            }
+            true
         }
 
 
@@ -112,6 +144,7 @@ class EventsListViewAdapter(
 
     fun setData(events: List<Event>) {
         eventList = events
+        _selectedEventList.value = emptyList()
         notifyDataSetChanged()
     }
 
