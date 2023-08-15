@@ -48,13 +48,23 @@ class EventsListScreenFragment : Fragment() {
 
         val toolbar = (activity as AppCompatActivity).supportActionBar
         mEventViewModel.readAllData.observe(viewLifecycleOwner) { events ->
+
+            if (events.isEmpty()) {
+                binding.noEvents.visibility = View.VISIBLE
+                binding.eventsRecyclerViewer.visibility = View.GONE
+            } else {
+                binding.noEvents.visibility = View.GONE
+                binding.eventsRecyclerViewer.visibility = View.VISIBLE
+            }
+
             eventAdapter.setData(events)
             eventAdapter.selectedEventList.observe(viewLifecycleOwner) { selectedEvents ->
                 val lengthItems = selectedEvents.size
                 if (lengthItems > 0) {
-                    toolbar?.title = "$lengthItems events selected"
+
 
                     val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+                    mt.title = "$lengthItems selected"
                     mt.menu.clear()
 
                     mt.setNavigationIcon(R.drawable.ic_baseline_close_24)
@@ -90,8 +100,8 @@ class EventsListScreenFragment : Fragment() {
                     }
 
                 } else {
-                    toolbar?.title = "Events"
                     val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+                    mt.title = "Events"
                     mt.navigationIcon = null
                     mt.isTitleCentered = true
                     (activity as AppCompatActivity).setSupportActionBar(mt)
