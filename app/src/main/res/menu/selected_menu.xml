@@ -8,4 +8,16 @@
         app:showAsAction="always"
         android:title="Delete Selected" />
 
+    <item
+        android:id="@+id/action_select_all"
+        android:icon="@drawable/outline_select_all_24"
+        app:showAsAction="ifRoom"
+        android:title="Select All" />
+
+    <item
+        android:id="@+id/action_delete_all"
+        android:icon="@drawable/outline_delete_24"
+        app:showAsAction="never"
+        android:title="Delete All" />
+
 </menu>

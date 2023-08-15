@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,6 +56,12 @@ class EventsListScreenFragment : Fragment() {
 
                     val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
                     mt.menu.clear()
+
+                    mt.setNavigationIcon(R.drawable.ic_baseline_close_24)
+                    mt.setNavigationOnClickListener {
+                        eventAdapter.clearSelection()
+                    }
+                    mt.isTitleCentered = false
                     mt.inflateMenu(R.menu.selected_menu)
                     mt.setOnMenuItemClickListener { menuItem ->
 
@@ -67,6 +74,16 @@ class EventsListScreenFragment : Fragment() {
                                 true
                             }
 
+                            R.id.action_select_all -> {
+                                eventAdapter.selectAll()
+                                true
+                            }
+
+                            R.id.action_delete_all -> {
+                                mEventViewModel.deleteAllEvent()
+                                true
+                            }
+
                             else -> true
 
                         }
@@ -75,6 +92,8 @@ class EventsListScreenFragment : Fragment() {
                 } else {
                     toolbar?.title = "Events"
                     val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+                    mt.navigationIcon = null
+                    mt.isTitleCentered = true
                     (activity as AppCompatActivity).setSupportActionBar(mt)
                 }
             }
@@ -98,6 +117,8 @@ class EventsListScreenFragment : Fragment() {
 
     override fun onDestroy() {
         val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+        mt.navigationIcon = null
+        mt.isTitleCentered = true
         (activity as AppCompatActivity).setSupportActionBar(mt)
         super.onDestroy()
         _binding = null

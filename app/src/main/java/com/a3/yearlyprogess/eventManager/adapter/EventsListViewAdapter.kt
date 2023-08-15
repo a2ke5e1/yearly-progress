@@ -7,7 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.RemoteViews
 import android.widget.Toast
@@ -23,10 +25,8 @@ import com.a3.yearlyprogess.mWidgets.EventWidget
 
 
 class EventsListViewAdapter(
-    private val appWidgetId: Int,
-    private val sendResult: () -> Unit
-) :
-    RecyclerView.Adapter<EventsSelectorListViewHolder>() {
+    private val appWidgetId: Int, private val sendResult: () -> Unit
+) : RecyclerView.Adapter<EventsSelectorListViewHolder>() {
 
     private var eventList = emptyList<Event>()
     private var _selectedEventList = MutableLiveData(emptyList<Event>())
@@ -36,8 +36,7 @@ class EventsListViewAdapter(
 
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): EventsSelectorListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CustomEventSelectorItemViewBinding.inflate(inflater, parent, false)
@@ -46,7 +45,8 @@ class EventsListViewAdapter(
 
     override fun onBindViewHolder(holder: EventsSelectorListViewHolder, position: Int) {
         val currentEvent = eventList[position]
-        holder.binding.customEventCardView.background = null
+        holder.binding.customEventCardView.root.eventCheck.isChecked = false
+        holder.binding.customEventCardView.root.eventCheck.visibility = View.GONE
 
         holder.binding.customEventCardView.setEvent(currentEvent)
         holder.binding.customEventCardView.setOnEditButtonClickListener {
@@ -60,52 +60,87 @@ class EventsListViewAdapter(
             holder.binding.customEventCardView.setOnAddWidgetClickListener {
                 requestPinWidget(it.context, currentEvent)
             }
-        }
+
+            holder.binding.customEventCardView.root.eventCheck.isChecked =
+                _selectedEventList.value!!.contains(currentEvent)
+            holder.binding.customEventCardView.root.eventCheck.visibility =
+                if (_selectedEventList.value!!.contains(currentEvent)) View.VISIBLE else View.GONE
 
 
-        holder.binding.customEventCardView.setOnClickListener {
-            val appWidgetManager = AppWidgetManager.getInstance(it.context)
-            val pref =
-                it.context.getSharedPreferences("eventWidget_${appWidgetId}", Context.MODE_PRIVATE)
-            val edit = pref.edit()
 
-            edit.putInt("eventId", currentEvent.id)
-            edit.putString("eventTitle", currentEvent.eventTitle)
-            edit.putString("eventDesc", currentEvent.eventDescription)
-            edit.putLong("eventStartTimeInMills", currentEvent.eventStartTime)
-            edit.putLong("eventEndDateTimeInMillis", currentEvent.eventEndTime)
-
-            edit.commit()
-
-            EventWidget().updateWidget(it.context, appWidgetManager, appWidgetId)
-            sendResult()
-
-        }
-
-
-        holder.binding.customEventCardView.setOnLongClickListener {
-
-            val copied = _selectedEventList.value!!.toMutableList()
-
-            if (copied.contains(currentEvent)) {
-                copied.remove(currentEvent)
-
-                _selectedEventList.value = copied
-                holder.binding.customEventCardView.background = null
-            } else {
-                copied.add(currentEvent)
-                holder.binding.customEventCardView.setBackgroundColor(
-                    Color.parseColor(
-                        "#FF6200EE"
-                    )
-                )
-
-                _selectedEventList.value = copied
+            holder.binding.customEventCardView.root.eventCheck.setOnCheckedChangeListener { compoundButton, b ->
+                if (b) {
+                    val copied = _selectedEventList.value!!.toMutableList()
+                    copied.add(currentEvent)
+                    _selectedEventList.value = copied
+                } else {
+                    val copied = _selectedEventList.value!!.toMutableList()
+                    copied.remove(currentEvent)
+                    _selectedEventList.value = copied
+                }
             }
-            true
+
+            holder.binding.customEventCardView.setOnClickListener {
+                if (_selectedEventList.value!!.isNotEmpty()) {
+                    selectCurrentEvent(it.context, currentEvent, holder)
+                }
+            }
+
+
+            holder.binding.customEventCardView.setOnLongClickListener {
+                selectCurrentEvent(it.context, currentEvent, holder)
+                true
+            }
+
+        } else {
+
+
+            holder.binding.customEventCardView.setOnClickListener {
+                val appWidgetManager = AppWidgetManager.getInstance(it.context)
+                val pref = it.context.getSharedPreferences(
+                    "eventWidget_${appWidgetId}", Context.MODE_PRIVATE
+                )
+                val edit = pref.edit()
+
+                edit.putInt("eventId", currentEvent.id)
+                edit.putString("eventTitle", currentEvent.eventTitle)
+                edit.putString("eventDesc", currentEvent.eventDescription)
+                edit.putLong("eventStartTimeInMills", currentEvent.eventStartTime)
+                edit.putLong("eventEndDateTimeInMillis", currentEvent.eventEndTime)
+
+                edit.commit()
+
+                EventWidget().updateWidget(it.context, appWidgetManager, appWidgetId)
+                sendResult()
+
+            }
+
         }
 
 
+    }
+
+    private fun selectCurrentEvent(
+        context: Context,
+        currentEvent: Event, holder: EventsSelectorListViewHolder
+    ) {
+        val copied = _selectedEventList.value!!.toMutableList()
+        val cardBinding = holder.binding.customEventCardView.root
+
+
+
+        if (copied.contains(currentEvent)) {
+            copied.remove(currentEvent)
+            _selectedEventList.value = copied
+            holder.binding.customEventCardView.root.eventCheck.visibility = View.GONE
+            cardBinding.eventCheck.isChecked = false
+
+        } else {
+            copied.add(currentEvent)
+            holder.binding.customEventCardView.root.eventCheck.visibility = View.VISIBLE
+            cardBinding.eventCheck.isChecked = true
+            _selectedEventList.value = copied
+        }
     }
 
     private fun requestPinWidget(context: Context, currentEvent: Event) {
@@ -118,12 +153,11 @@ class EventsListViewAdapter(
             return
         }
 
-        val remoteViews: RemoteViews =  EventWidget.eventWidgetPreview(context, currentEvent)
+        val remoteViews: RemoteViews = EventWidget.eventWidgetPreview(context, currentEvent)
         val bundle = Bundle()
         bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
 
-        val pinnedWidgetCallbackIntent =
-            Intent(context, EventSelectorActivity::class.java)
+        val pinnedWidgetCallbackIntent = Intent(context, EventSelectorActivity::class.java)
 
         val extras = Bundle()
         extras.putParcelable("event", currentEvent)
@@ -146,6 +180,16 @@ class EventsListViewAdapter(
         eventList = events
         _selectedEventList.value = emptyList()
         notifyDataSetChanged()
+    }
+
+    fun selectAll() {
+        _selectedEventList.value = eventList
+        notifyItemRangeChanged(0, eventList.size)
+    }
+
+    fun clearSelection() {
+        _selectedEventList.value = emptyList()
+        notifyItemRangeChanged(0, eventList.size)
     }
 
 

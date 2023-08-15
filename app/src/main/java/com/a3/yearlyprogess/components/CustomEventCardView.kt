@@ -36,6 +36,10 @@ class CustomEventCardView @JvmOverloads constructor(
 
     private var job: Job
 
+    val root: CustomEventCardViewBinding
+        get() = binding
+
+
 
     init {
         orientation = VERTICAL
