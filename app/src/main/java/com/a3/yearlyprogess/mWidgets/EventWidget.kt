@@ -24,15 +24,14 @@ import java.util.*
 class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
     companion object {
-        fun eventWidgetPreview(context: Context, event: Event) : RemoteViews {
+        fun eventWidgetPreview(context: Context, event: Event): RemoteViews {
             // Construct the RemoteViews object
             val smallView = RemoteViews(context.packageName, R.layout.event_widget_small)
             val mediumView = RemoteViews(context.packageName, R.layout.event_widget_medium)
 
 
-
             val eventTitle = event.eventTitle
-            val eventDesc =  event.eventDescription
+            val eventDesc = event.eventDescription
             val eventStartTimeInMills = event.eventStartTime
             val eventEndDateTimeInMillis = event.eventEndTime
 
@@ -45,7 +44,10 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
             val settingsPref = PreferenceManager.getDefaultSharedPreferences(context)
             val decimalPlace: Int =
-                settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
+                settingsPref.getInt(
+                    context.getString(R.string.widget_event_widget_decimal_point),
+                    2
+                )
 
             val progressText = formatProgressStyle(
                 SpannableString(
@@ -55,7 +57,10 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
             mediumView.setTextViewText(R.id.eventProgressText, progressText)
             mediumView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-            mediumView.setTextViewText(R.id.currentDate, ProgressPercentage.getDay(formatted = true))
+            mediumView.setTextViewText(
+                R.id.currentDate,
+                ProgressPercentage.getDay(formatted = true)
+            )
             mediumView.setTextViewText(R.id.eventTitle, eventTitle)
             mediumView.setTextViewText(R.id.eventDesc, eventDesc)
             mediumView.setTextViewText(
@@ -116,5 +121,15 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
 
     }
+    /** Delete all cached widget information in the memory
+     *  after widget has been deleted.  */
+    override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
+        super.onDeleted(context, appWidgetIds)
+        appWidgetIds?.forEach { id ->
+            context?.getSharedPreferences("eventWidget_${id}", Context.MODE_PRIVATE)?.edit()
+                ?.clear()?.apply()
+        }
+    }
+
 }
 
