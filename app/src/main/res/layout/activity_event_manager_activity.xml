@@ -47,7 +47,7 @@
                     android:id="@+id/eventTitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="flagNavigateNext"
                     android:inputType="text"
                     android:maxLength="30"
                     android:maxLines="1"
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content">
 
 
-            <com.google.android.material.textfield.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout2"
                 style="@style/Widget.Material3.TextInputEditText.FilledBox"
                 android:layout_width="match_parent"
@@ -81,13 +81,13 @@
                     android:id="@+id/eventDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
                     android:hint="@string/description" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <TextView
                 android:id="@+id/eventSettingsLabel"
-                style="@style/TextAppearance.Material3.LabelSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -96,6 +96,7 @@
                 android:layout_marginBottom="4dp"
                 android:text="@string/event_settings"
                 android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayout2" />
 
 
@@ -122,139 +123,97 @@
 
             <TextView
                 android:id="@+id/eventStartLabel"
-                style="@style/TextAppearance.Material3.TitleSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="18dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/start_of_the_event"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 app:layout_constraintTop_toBottomOf="@id/allDaySwitch" />
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/from_flow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flow_maxElementsWrap="2"
-                app:flow_lastHorizontalStyle="packed"
-                app:flow_wrapMode="aligned"
-                app:constraint_referenced_ids="textInputLayout3,textInputLayout4"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:constraint_referenced_ids="editTextStartDate,editTextStartTime"
+                app:flow_maxElementsWrap="3"
+                app:flow_wrapMode="chain"
                 app:layout_constraintTop_toBottomOf="@id/eventStartLabel" />
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/to_flow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flow_maxElementsWrap="2"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:constraint_referenced_ids="editTextEndDate,editTextEndTime"
                 app:flow_lastHorizontalStyle="packed"
+                app:flow_maxElementsWrap="2"
                 app:flow_wrapMode="aligned"
-                app:constraint_referenced_ids="textInputLayout5,textInputLayout6"
                 app:layout_constraintTop_toBottomOf="@id/eventEndLabel" />
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout3"
-                style="@style/Widget.Material3.TextInputEditText.FilledBox"
+
+
+            <TextView
+                android:id="@+id/editTextStartDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingEnd="5dp"
-                app:startIconDrawable="@drawable/ic_outline_edit_calendar_24"
-                tools:ignore="RtlSymmetry">
+                android:padding="8dp"
+                android:paddingStart="0dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                tools:text="2022, August 10" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextStartDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:hint="@string/date"
-                    android:inputType="date"
-                    tools:text="2022, August 10" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout4"
-                style="@style/Widget.Material3.TextInputEditText.FilledBox"
+            <TextView
+                android:id="@+id/editTextStartTime"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingStart="5dp"
-                android:paddingTop="10dp"
-                app:endIconDrawable="@drawable/ic_outline_access_time_24"
-                app:endIconMode="custom"
-                tools:ignore="RtlSymmetry">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextStartTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:hint="@string/time"
-                    android:inputType="time"
-                    tools:text="11:15 AM" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="0dp"
+                android:gravity="bottom|end"
+                android:padding="8dp"
+                android:paddingEnd="0dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                tools:text="11:15 AM" />
 
 
             <TextView
                 android:id="@+id/eventEndLabel"
-                style="@style/TextAppearance.Material3.TitleSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="18dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/end_of_the_event"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout3" />
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                app:layout_constraintTop_toBottomOf="@id/from_flow" />
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout5"
-                style="@style/Widget.Material3.TextInputEditText.FilledBox"
+            <TextView
+                android:id="@+id/editTextEndDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingEnd="5dp"
-                app:startIconDrawable="@drawable/ic_outline_edit_calendar_24"
-                >
+                android:padding="8dp"
+                android:paddingStart="0dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                tools:text="2022, August 10" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextEndDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:hint="Date"
-                    android:inputType="date"
-                    tools:text="2022, August 10" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout6"
-                style="@style/Widget.Material3.TextInputEditText.FilledBox"
+            <TextView
+                android:id="@+id/editTextEndTime"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingStart="5dp"
-                android:paddingTop="10dp"
-                app:endIconDrawable="@drawable/ic_outline_access_time_24"
-                app:endIconMode="custom"
-
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextEndTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:hint="Time"
-                    android:inputType="time"
-                    tools:text="11:15 PM" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="0dp"
+                android:gravity="bottom|end"
+                android:padding="8dp"
+                android:paddingEnd="0dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                tools:text="11:15 PM" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

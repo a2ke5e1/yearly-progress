@@ -8,8 +8,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.text.format.DateFormat.format
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
@@ -28,6 +30,7 @@ import com.a3.yearlyprogess.mWidgets.EventWidget
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -87,7 +90,7 @@ class EventManagerActivity : AppCompatActivity() {
 
 
             binding.editTextStartDate.setText(
-                SimpleDateFormat.getDateInstance().format(eventStartDateTimeInMillis).toString()
+                format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
             )
             binding.editTextStartTime.setText(getHourMinuteLocal(eventStartDateTimeInMillis))
 
@@ -96,7 +99,7 @@ class EventManagerActivity : AppCompatActivity() {
             eventEndMinute = localCalendar.get(Calendar.MINUTE)
 
             binding.editTextEndDate.setText(
-                SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis).toString()
+                format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
             )
             binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
 
@@ -110,7 +113,7 @@ class EventManagerActivity : AppCompatActivity() {
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(Activity.RESULT_CANCELED, resultValue)
 
-        
+
 
         if (event != null && !isAddMode) {
             loadWidgetDataFromEvent(event)
@@ -121,6 +124,12 @@ class EventManagerActivity : AppCompatActivity() {
         setUpDateTimePickers()
 
 
+        Log.d(
+            "TAG",
+            "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}"
+        )
+
+
     }
 
     private fun setUpDateTimePickers() {
@@ -129,26 +138,86 @@ class EventManagerActivity : AppCompatActivity() {
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
         val timePicker = MaterialTimePicker.Builder().setTimeFormat(clockFormat)
 
+        binding.allDaySwitch.setOnCheckedChangeListener { compoundButton, b ->
+            // animate visibility of time pickers
+            if (b) {
+                binding.editTextStartTime.animate().alpha(0f).setDuration(200).start()
+                binding.editTextEndTime.animate().alpha(0f).setDuration(200).start()
+
+                binding.editTextStartTime.visibility = View.GONE
+                binding.editTextEndTime.visibility = View.GONE
+
+                val localCalendar = Calendar.getInstance()
+                localCalendar.timeInMillis = eventStartDateTimeInMillis
+                localCalendar.set(Calendar.HOUR_OF_DAY, 0)
+                localCalendar.set(Calendar.MINUTE, 0)
+                localCalendar.set(Calendar.SECOND, 0)
+                localCalendar.set(Calendar.MILLISECOND, 0)
+
+                eventStartDateTimeInMillis = localCalendar.timeInMillis
+
+                localCalendar.timeInMillis = eventEndDateTimeInMillis
+                localCalendar.set(Calendar.HOUR_OF_DAY, 23)
+                localCalendar.set(Calendar.MINUTE, 59)
+                localCalendar.set(Calendar.SECOND, 59)
+                localCalendar.set(Calendar.MILLISECOND, 999)
+
+                eventEndDateTimeInMillis = localCalendar.timeInMillis
+
+
+            } else {
+                binding.editTextStartTime.animate().alpha(1f).setDuration(200).start()
+                binding.editTextEndTime.animate().alpha(1f).setDuration(200).start()
+
+                binding.editTextStartTime.visibility = View.VISIBLE
+                binding.editTextEndTime.visibility = View.VISIBLE
+
+                val localCalendar = Calendar.getInstance()
+                localCalendar.timeInMillis = eventStartDateTimeInMillis
+
+                localCalendar.set(Calendar.HOUR_OF_DAY, eventStartHour)
+                localCalendar.set(Calendar.MINUTE, eventStartMinute)
+
+                eventStartDateTimeInMillis = localCalendar.timeInMillis
+
+                localCalendar.timeInMillis = eventEndDateTimeInMillis
+
+                localCalendar.set(Calendar.HOUR_OF_DAY, eventEndHour)
+                localCalendar.set(Calendar.MINUTE, eventEndMinute)
+
+                eventEndDateTimeInMillis = localCalendar.timeInMillis
+
+            }
+
+            Log.d(
+                "TAG",
+                "EventStart: ${
+                    SimpleDateFormat.getDateTimeInstance().format(eventStartDateTimeInMillis)
+                }"
+            )
+            Log.d(
+                "TAG",
+                "EventEnd: ${
+                    SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)
+                }"
+            )
+
+
+        }
+
 
 
         binding.editTextStartDate.setOnClickListener {
+
+
             datePicker.setTitleText("Choose event first day")
-                .setSelection(eventStartDateTimeInMillis)
+                .setSelection(removeTimeFromDate(eventStartDateTimeInMillis))
                 .build().apply {
                     show(supportFragmentManager, "tag")
                     addOnPositiveButtonClickListener {
-
-
                         eventStartDateTimeInMillis = it.toLong()
-                        /*eventStartDateTimeInMillis = modifiedEventDateTime(
-                            eventStartDateTimeInMillis,
-                            eventEndHour,
-                            eventEndMinute
-                        )*/
-
                         binding.editTextStartDate.setText(
-                            SimpleDateFormat.getDateInstance().format(eventStartDateTimeInMillis)
-                                .toString()
+                            format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
                         )
                         setUpDateTimePickers()
                     }
@@ -179,9 +248,7 @@ class EventManagerActivity : AppCompatActivity() {
                         )
 
                         binding.editTextStartDate.setText(
-
-                            SimpleDateFormat.getDateInstance().format(eventStartDateTimeInMillis)
-                                .toString()
+                            format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
                         )
 
                         setUpDateTimePickers()
@@ -192,22 +259,13 @@ class EventManagerActivity : AppCompatActivity() {
         }
         binding.editTextEndDate.setOnClickListener {
             datePicker.setTitleText("Choose event last day")
-                .setSelection(eventEndDateTimeInMillis)
+                .setSelection(removeTimeFromDate(eventEndDateTimeInMillis))
                 .build().apply {
                     show(supportFragmentManager, "tag")
                     addOnPositiveButtonClickListener {
-
-
                         eventEndDateTimeInMillis = it.toLong()
-                        /*eventEndDateTimeInMillis = modifiedEventDateTime(
-                            eventEndDateTimeInMillis,
-                            eventEndHour,
-                            eventEndMinute
-                        )*/
-
                         binding.editTextEndDate.setText(
-                            SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis)
-                                .toString()
+                            format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
                         )
 
                         setUpDateTimePickers()
@@ -234,8 +292,7 @@ class EventManagerActivity : AppCompatActivity() {
 
                         binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
                         binding.editTextEndDate.setText(
-                            SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis)
-                                .toString()
+                            format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
                         )
                         setUpDateTimePickers()
                     }
@@ -372,7 +429,7 @@ class EventManagerActivity : AppCompatActivity() {
 
 
         binding.editTextStartDate.setText(
-            SimpleDateFormat.getDateInstance().format(eventStartDateTimeInMillis).toString()
+            format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
         )
         binding.editTextStartTime.setText(getHourMinuteLocal(eventStartDateTimeInMillis))
 
@@ -381,7 +438,7 @@ class EventManagerActivity : AppCompatActivity() {
         eventEndMinute = localCalendar.get(Calendar.MINUTE)
 
         binding.editTextEndDate.setText(
-            SimpleDateFormat.getDateInstance().format(eventEndDateTimeInMillis).toString()
+            format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
         )
         binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
 
@@ -393,6 +450,15 @@ class EventManagerActivity : AppCompatActivity() {
         localCalendar.set(Calendar.MINUTE, min)
         localCalendar.set(Calendar.HOUR_OF_DAY, hour)
 
+        return localCalendar.timeInMillis
+    }
+
+    private fun removeTimeFromDate(date: Long): Long {
+        val localCalendar = Calendar.getInstance()
+        localCalendar.timeInMillis = date
+
+        // add localCalendar.timeZone.rawOffset to get the correct date
+        localCalendar.timeInMillis = localCalendar.timeInMillis + localCalendar.timeZone.rawOffset
         return localCalendar.timeInMillis
     }
 }
