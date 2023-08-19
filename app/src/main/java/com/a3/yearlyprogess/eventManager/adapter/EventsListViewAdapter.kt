@@ -5,18 +5,14 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RemoteViews
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
@@ -99,6 +95,7 @@ class EventsListViewAdapter(
                 edit.putInt("eventId", currentEvent.id)
                 edit.putString("eventTitle", currentEvent.eventTitle)
                 edit.putString("eventDesc", currentEvent.eventDescription)
+                edit.putBoolean("allDayEvent", currentEvent.allDayEvent)
                 edit.putLong("eventStartTimeInMills", currentEvent.eventStartTime)
                 edit.putLong("eventEndDateTimeInMillis", currentEvent.eventEndTime)
 
@@ -134,11 +131,17 @@ class EventsListViewAdapter(
         bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
 
         val pinnedWidgetCallbackIntent = Intent(context, EventSelectorActivity::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pinnedWidgetCallbackIntent.putExtra("event", currentEvent)
+        } else {
+            pinnedWidgetCallbackIntent.putExtra("eventId", currentEvent.id)
+            pinnedWidgetCallbackIntent.putExtra("eventTitle", currentEvent.eventTitle)
+            pinnedWidgetCallbackIntent.putExtra("eventDesc", currentEvent.eventDescription)
+            pinnedWidgetCallbackIntent.putExtra("allDayEvent", currentEvent.allDayEvent)
+            pinnedWidgetCallbackIntent.putExtra("eventStartTimeInMills", currentEvent.eventStartTime)
+            pinnedWidgetCallbackIntent.putExtra("eventEndDateTimeInMillis", currentEvent.eventEndTime)
+        }
 
-        val extras = Bundle()
-        extras.putParcelable("event", currentEvent)
-
-        pinnedWidgetCallbackIntent.putExtra("event", currentEvent)
         val pendingIntent = PendingIntent.getActivity(
             context,
             0,

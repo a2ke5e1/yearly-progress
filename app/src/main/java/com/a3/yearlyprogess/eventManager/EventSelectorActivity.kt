@@ -6,10 +6,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.IntentCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -58,15 +60,20 @@ class EventSelectorActivity : AppCompatActivity() {
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(Activity.RESULT_CANCELED, resultValue)
 
+
         val event: Event? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.extras?.getParcelable(
                 "event",
                 Event::class.java
             )
         } else {
-            @Suppress("DEPRECATION")
-            intent.extras?.getParcelable(
-                "event"
+            Event(
+                intent?.getIntExtra("eventId", 0) ?: 0,
+                intent?.getStringExtra("eventTitle") ?: "",
+                intent?.getStringExtra("eventDesc") ?: "",
+                intent?.getBooleanExtra("allDayEvent", false) ?: false,
+                intent?.getLongExtra("eventStartTimeInMills", 0) ?: 0,
+                intent?.getLongExtra("eventEndDateTimeInMillis", 0) ?: 0
             )
         }
 
@@ -103,6 +110,11 @@ class EventSelectorActivity : AppCompatActivity() {
         }
         mEventViewModel.readAllData.observe(this) { events ->
             eventAdapter.setData(events)
+            if (events.isEmpty()) {
+                binding.noEvents.visibility  = View.VISIBLE
+            } else {
+                binding.noEvents.visibility  = View.GONE
+            }
         }
 
 

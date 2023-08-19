@@ -83,7 +83,7 @@ class EventsListScreenFragment : Fragment() {
                 override fun onSelectionChanged() {
                     super.onSelectionChanged()
                     val lengthItems = tracker!!.selection.size()
-                    Log.d("TAG", "onCreateView: ${tracker!!.selection}")
+                    // Log.d("TAG", "onCreateView: ${tracker!!.selection}")
 
                     if (lengthItems != 0) {
 

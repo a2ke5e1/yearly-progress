@@ -94,8 +94,11 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 tallView.setViewVisibility(R.id.eventDesc, View.GONE)
 
 
-                wideView.setTextViewTextSize(R.id.eventTitle, 0, 85f)
-                tallView.setTextViewTextSize(R.id.eventTitle, 0, 60f)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    wideView.setTextViewTextSize(R.id.eventTitle, 0, 85f)
+                    tallView.setTextViewTextSize(R.id.eventTitle, 0, 60f)
+                }
 
             } else {
                 wideView.setTextViewText(R.id.eventDesc, eventDesc)
@@ -104,10 +107,13 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 wideView.setViewVisibility(R.id.eventDesc, View.VISIBLE)
                 tallView.setViewVisibility(R.id.eventDesc, View.VISIBLE)
 
-                wideView.setTextViewTextSize(R.id.eventTitle, 0, 45f)
-                tallView.setTextViewTextSize(R.id.eventTitle, 0, 45f)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    wideView.setTextViewTextSize(R.id.eventTitle, 0, 45f)
+                    tallView.setTextViewTextSize(R.id.eventTitle, 0, 45f)
+                }
 
             }
+
 
             wideView.setTextViewText(
                 R.id.eventTime,
