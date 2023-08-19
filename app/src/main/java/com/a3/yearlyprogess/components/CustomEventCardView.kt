@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.text.SpannableString
+import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -63,9 +64,10 @@ class CustomEventCardView @JvmOverloads constructor(
 
         binding.eventStart.text = displayRelativeDifferenceMessage(
             event.eventStartTime,
-            event.eventEndTime
+            event.eventEndTime,
+            event.allDayEvent
         )
-        binding.eventEnd.visibility = View.GONE
+        // binding.eventEnd.visibility = View.GONE
 
         launch(Dispatchers.IO) {
 
@@ -131,9 +133,10 @@ class CustomEventCardView @JvmOverloads constructor(
 
                     binding.eventStart.text = displayRelativeDifferenceMessage(
                         event.eventStartTime,
-                        event.eventEndTime
+                        event.eventEndTime,
+                        event.allDayEvent
                     )
-                    binding.eventEnd.visibility = View.GONE
+                    // binding.eventEnd.visibility = View.GONE
 
                     binding.progressText.text = progressText
                     binding.progressBar.progress = progress.toInt()
@@ -190,7 +193,7 @@ class CustomEventCardView @JvmOverloads constructor(
      * @param endTime in milliseconds
 
      */
-    fun displayRelativeDifferenceMessage(startTime: Long, endTime: Long): String {
+    fun displayRelativeDifferenceMessage(startTime: Long, endTime: Long, allDayEvent: Boolean): String {
 
             val startDay = SimpleDateFormat.getDateInstance().format(startTime)
             val endDay = SimpleDateFormat.getDateInstance().format(endTime)
@@ -198,10 +201,16 @@ class CustomEventCardView @JvmOverloads constructor(
             val startTimeString = SimpleDateFormat.getTimeInstance().format(startTime)
             val endTimeString = SimpleDateFormat.getTimeInstance().format(endTime)
 
-            return if (startDay == endDay) {
-                "$startDay \n$startTimeString - $endTimeString"
+            // center dot unicode is \u00B7
+
+            return if (allDayEvent) {
+                "${DateFormat.format("MMM dd, yyyy", startTime)} - ${DateFormat.format("MMM dd, yyyy", endTime)} \u00B7 All Day"
             } else {
-                "$startDay $startTimeString - $endDay $endTimeString"
+                if (startDay == endDay) {
+                    "$startDay \n$startTimeString - $endTimeString"
+                } else {
+                    "$startDay $startTimeString - $endDay $endTimeString"
+                }
             }
     }
 
