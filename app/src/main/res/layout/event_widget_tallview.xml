@@ -64,7 +64,7 @@
         android:layout_above="@id/eventProgressBar"
         android:text="40.48%"
         android:textColor="@color/widget_text_color"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
 
