@@ -10,12 +10,15 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.CustomEventSelectorItemViewBinding
@@ -30,11 +33,17 @@ class EventsListViewAdapter(
 ) : RecyclerView.Adapter<EventsSelectorListViewHolder>() {
 
     private var eventList = emptyList<Event>()
-    private val _selectedEventList = MutableLiveData(emptyList<Event>())
+    val currentEventList: List<Event>
+        get() = eventList
 
-    val selectedEventList: MutableLiveData<List<Event>>
-        get() = _selectedEventList
 
+    private lateinit var tracker: SelectionTracker<Long>
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long = position.toLong()
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
@@ -62,37 +71,20 @@ class EventsListViewAdapter(
                 requestPinWidget(it.context, currentEvent)
             }
 
-            holder.binding.customEventCardView.root.eventCheck.isChecked =
-                selectedEventList.value!!.contains(currentEvent)
 
             holder.binding.customEventCardView.root.eventCheck.visibility =
-                if (selectedEventList.value!!.contains(currentEvent)) View.VISIBLE else View.GONE
-
-
+                if (tracker.hasSelection() || tracker.selection.size() > 0) View.VISIBLE else View.GONE
+            holder.binding.customEventCardView.root.eventCheck.isChecked =
+                tracker.isSelected(position.toLong())
 
             holder.binding.customEventCardView.root.eventCheck.setOnCheckedChangeListener { compoundButton, b ->
                 if (b) {
-                    val copied = _selectedEventList.value!!.toMutableList()
-                    copied.add(currentEvent)
-                    _selectedEventList.value = copied
+                    tracker.select(position.toLong())
                 } else {
-                    val copied = _selectedEventList.value!!.toMutableList()
-                    copied.remove(currentEvent)
-                    _selectedEventList.value = copied
+                    tracker.deselect(position.toLong())
                 }
             }
 
-            holder.binding.customEventCardView.setOnClickListener {
-                if (_selectedEventList.value!!.isNotEmpty()) {
-                    selectCurrentEvent(currentEvent, holder)
-                }
-            }
-
-
-            holder.binding.customEventCardView.setOnLongClickListener {
-                selectCurrentEvent(currentEvent, holder)
-                true
-            }
 
         } else {
 
@@ -122,27 +114,10 @@ class EventsListViewAdapter(
 
     }
 
-    private fun selectCurrentEvent(
-        currentEvent: Event, holder: EventsSelectorListViewHolder
-    ) {
-        val copied = _selectedEventList.value!!.toMutableList()
-        val cardBinding = holder.binding.customEventCardView.root
-
-
-
-        if (copied.contains(currentEvent)) {
-            copied.remove(currentEvent)
-            _selectedEventList.value = copied
-            holder.binding.customEventCardView.root.eventCheck.visibility = View.GONE
-            cardBinding.eventCheck.isChecked = false
-
-        } else {
-            copied.add(currentEvent)
-            holder.binding.customEventCardView.root.eventCheck.visibility = View.VISIBLE
-            cardBinding.eventCheck.isChecked = true
-            _selectedEventList.value = copied
-        }
+    fun setTracker(tracker: SelectionTracker<Long>) {
+        this.tracker = tracker
     }
+
 
     private fun requestPinWidget(context: Context, currentEvent: Event) {
         val mAppWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
@@ -179,23 +154,39 @@ class EventsListViewAdapter(
 
     fun setData(events: List<Event>) {
         eventList = events
-        _selectedEventList.value = emptyList()
         notifyDataSetChanged()
     }
 
     fun selectAll() {
-        _selectedEventList.value = eventList
-        notifyDataSetChanged()
+        if (tracker.hasSelection() && tracker.selection.size() == itemCount) {
+            tracker.clearSelection()
+        } else {
+            for (i in 0 until itemCount) {
+                tracker.select(i.toLong())
+            }
+        }
     }
-
-    fun clearSelection() {
-        _selectedEventList.value = (emptyList())
-        notifyDataSetChanged()
-    }
-
 
 }
 
 class EventsSelectorListViewHolder(val binding: CustomEventSelectorItemViewBinding) :
-    RecyclerView.ViewHolder(binding.root)
+    RecyclerView.ViewHolder(binding.root) {
+    fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
+        object : ItemDetailsLookup.ItemDetails<Long>() {
+            override fun getPosition(): Int = adapterPosition
+            override fun getSelectionKey(): Long = itemId
+        }
+}
+
+class MyItemDetailsLookup(private val recyclerView: RecyclerView) :
+    ItemDetailsLookup<Long>() {
+    override fun getItemDetails(event: MotionEvent): ItemDetails<Long>? {
+        val view = recyclerView.findChildViewUnder(event.x, event.y)
+        if (view != null) {
+            return (recyclerView.getChildViewHolder(view) as EventsSelectorListViewHolder)
+                .getItemDetails()
+        }
+        return null
+    }
+}
 
