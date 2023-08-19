@@ -27,7 +27,8 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         fun eventWidgetPreview(context: Context, event: Event): RemoteViews {
             // Construct the RemoteViews object
             val smallView = RemoteViews(context.packageName, R.layout.event_widget_small)
-            val mediumView = RemoteViews(context.packageName, R.layout.event_widget_medium)
+            val wideView = RemoteViews(context.packageName, R.layout.event_widget_wideview)
+            val tallView = RemoteViews(context.packageName, R.layout.event_widget_tallview)
 
 
             val eventTitle = event.eventTitle
@@ -55,15 +56,32 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 )
             )
 
-            mediumView.setTextViewText(R.id.eventProgressText, progressText)
-            mediumView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-            mediumView.setTextViewText(
+            wideView.setTextViewText(R.id.eventProgressText, progressText)
+            wideView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
+            wideView.setTextViewText(
                 R.id.currentDate,
                 ProgressPercentage.getDay(formatted = true)
             )
-            mediumView.setTextViewText(R.id.eventTitle, eventTitle)
-            mediumView.setTextViewText(R.id.eventDesc, eventDesc)
-            mediumView.setTextViewText(
+            wideView.setTextViewText(R.id.eventTitle, eventTitle)
+            wideView.setTextViewText(R.id.eventDesc, eventDesc)
+            wideView.setTextViewText(
+                R.id.eventTime,
+                if (DateFormat.is24HourFormat(context)) SimpleDateFormat(
+                    "MM/dd · HH:mm",
+                    Locale.getDefault()
+                ).format(
+                    eventEndDateTimeInMillis
+                ) else SimpleDateFormat("MM/dd · hh:mm a", Locale.getDefault()).format(
+                    eventEndDateTimeInMillis
+                )
+            )
+
+            tallView.setTextViewText(R.id.eventProgressText, progressText)
+            tallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
+            tallView.setTextViewText(R.id.currentDate, ProgressPercentage.getDay(formatted = true))
+            tallView.setTextViewText(R.id.eventTitle, eventTitle)
+            tallView.setTextViewText(R.id.eventDesc, eventDesc)
+            tallView.setTextViewText(
                 R.id.eventTime,
                 if (DateFormat.is24HourFormat(context)) SimpleDateFormat(
                     "MM/dd · HH:mm",
@@ -81,11 +99,12 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             smallView.setTextViewText(R.id.eventTitle, eventTitle)
 
 
-            var remoteViews = mediumView
+            var remoteViews = wideView
             if (Build.VERSION.SDK_INT > 30) {
                 val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-                    SizeF(80f, 50f) to smallView,
-                    SizeF(80f, 200f) to mediumView,
+                    SizeF(60f, 140f) to smallView,
+                    SizeF(200f, 200f) to wideView,
+                    SizeF(130f, 140f) to tallView
                 )
                 remoteViews = RemoteViews(viewMapping)
             }
