@@ -17,6 +17,7 @@ import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import kotlinx.coroutines.*
+import java.util.Locale
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
@@ -199,18 +200,18 @@ class CustomEventCardView @JvmOverloads constructor(
             val startDay = SimpleDateFormat.getDateInstance().format(startTime)
             val endDay = SimpleDateFormat.getDateInstance().format(endTime)
 
-            val startTimeString = SimpleDateFormat.getTimeInstance().format(startTime)
-            val endTimeString = SimpleDateFormat.getTimeInstance().format(endTime)
+            val startTimeString = DateFormat.format(if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a",startTime).toString().uppercase()
+            val endTimeString = DateFormat.format(if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a",endTime).toString().uppercase()
 
-            // center dot unicode is \u00B7
+            // long dash unicode is \u2014
 
             return if (allDayEvent) {
-                "${DateFormat.format("MMM dd, yyyy", startTime)} - ${DateFormat.format("MMM dd, yyyy", endTime)} \u00B7 All Day"
+                "${DateFormat.format("MMM dd, yyyy", startTime)} \u2014 ${DateFormat.format("MMM dd, yyyy", endTime)} \u00B7 All Day"
             } else {
                 if (startDay == endDay) {
-                    "$startDay \n$startTimeString - $endTimeString"
+                    "${DateFormat.format("MMM dd, yyyy", startTime)} \u00B7 $startTimeString \u2014 $endTimeString"
                 } else {
-                    "$startDay $startTimeString - $endDay $endTimeString"
+                    "${DateFormat.format("MMM dd, yyyy ", startTime)} $startTimeString \u2014 ${DateFormat.format("MMM dd, yyyy", endTime)} $endTimeString"
                 }
             }
     }
