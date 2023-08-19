@@ -12,6 +12,7 @@ data class Event(
     val id: Int,
     val eventTitle: String,
     val eventDescription: String,
+    val allDayEvent: Boolean = false,
     val eventStartTime: Long,
     val eventEndTime: Long
 ): Parcelable

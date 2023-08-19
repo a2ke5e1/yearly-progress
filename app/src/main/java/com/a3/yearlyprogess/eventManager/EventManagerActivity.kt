@@ -132,6 +132,66 @@ class EventManagerActivity : AppCompatActivity() {
 
     }
 
+    private fun handleAllDayUIChanges(isChecked : Boolean) {
+        if (isChecked) {
+            binding.editTextStartTime.animate().alpha(0f).setDuration(200).start()
+            binding.editTextEndTime.animate().alpha(0f).setDuration(200).start()
+
+            binding.editTextStartTime.visibility = View.GONE
+            binding.editTextEndTime.visibility = View.GONE
+        } else {
+            binding.editTextStartTime.animate().alpha(1f).setDuration(200).start()
+            binding.editTextEndTime.animate().alpha(1f).setDuration(200).start()
+
+            binding.editTextStartTime.visibility = View.VISIBLE
+            binding.editTextEndTime.visibility = View.VISIBLE
+        }
+    }
+
+    private fun handleAllDayTimeOffset(isChecked: Boolean) {
+        if (isChecked) {
+
+
+            val localCalendar = Calendar.getInstance()
+            localCalendar.timeInMillis = eventStartDateTimeInMillis
+            localCalendar.set(Calendar.HOUR_OF_DAY, 0)
+            localCalendar.set(Calendar.MINUTE, 0)
+            localCalendar.set(Calendar.SECOND, 0)
+            localCalendar.set(Calendar.MILLISECOND, 0)
+
+            eventStartDateTimeInMillis = localCalendar.timeInMillis
+
+            localCalendar.timeInMillis = eventEndDateTimeInMillis
+            localCalendar.set(Calendar.HOUR_OF_DAY, 23)
+            localCalendar.set(Calendar.MINUTE, 59)
+            localCalendar.set(Calendar.SECOND, 59)
+            localCalendar.set(Calendar.MILLISECOND, 999)
+
+            eventEndDateTimeInMillis = localCalendar.timeInMillis
+
+
+        }
+        else {
+
+
+            val localCalendar = Calendar.getInstance()
+            localCalendar.timeInMillis = eventStartDateTimeInMillis
+
+            localCalendar.set(Calendar.HOUR_OF_DAY, eventStartHour)
+            localCalendar.set(Calendar.MINUTE, eventStartMinute)
+
+            eventStartDateTimeInMillis = localCalendar.timeInMillis
+
+            localCalendar.timeInMillis = eventEndDateTimeInMillis
+
+            localCalendar.set(Calendar.HOUR_OF_DAY, eventEndHour)
+            localCalendar.set(Calendar.MINUTE, eventEndMinute)
+
+            eventEndDateTimeInMillis = localCalendar.timeInMillis
+
+        }
+    }
+
     private fun setUpDateTimePickers() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
         val isSystem24Hour = is24HourFormat(this)
@@ -140,68 +200,8 @@ class EventManagerActivity : AppCompatActivity() {
 
         binding.allDaySwitch.setOnCheckedChangeListener { compoundButton, b ->
             // animate visibility of time pickers
-            if (b) {
-                binding.editTextStartTime.animate().alpha(0f).setDuration(200).start()
-                binding.editTextEndTime.animate().alpha(0f).setDuration(200).start()
-
-                binding.editTextStartTime.visibility = View.GONE
-                binding.editTextEndTime.visibility = View.GONE
-
-                val localCalendar = Calendar.getInstance()
-                localCalendar.timeInMillis = eventStartDateTimeInMillis
-                localCalendar.set(Calendar.HOUR_OF_DAY, 0)
-                localCalendar.set(Calendar.MINUTE, 0)
-                localCalendar.set(Calendar.SECOND, 0)
-                localCalendar.set(Calendar.MILLISECOND, 0)
-
-                eventStartDateTimeInMillis = localCalendar.timeInMillis
-
-                localCalendar.timeInMillis = eventEndDateTimeInMillis
-                localCalendar.set(Calendar.HOUR_OF_DAY, 23)
-                localCalendar.set(Calendar.MINUTE, 59)
-                localCalendar.set(Calendar.SECOND, 59)
-                localCalendar.set(Calendar.MILLISECOND, 999)
-
-                eventEndDateTimeInMillis = localCalendar.timeInMillis
-
-
-            } else {
-                binding.editTextStartTime.animate().alpha(1f).setDuration(200).start()
-                binding.editTextEndTime.animate().alpha(1f).setDuration(200).start()
-
-                binding.editTextStartTime.visibility = View.VISIBLE
-                binding.editTextEndTime.visibility = View.VISIBLE
-
-                val localCalendar = Calendar.getInstance()
-                localCalendar.timeInMillis = eventStartDateTimeInMillis
-
-                localCalendar.set(Calendar.HOUR_OF_DAY, eventStartHour)
-                localCalendar.set(Calendar.MINUTE, eventStartMinute)
-
-                eventStartDateTimeInMillis = localCalendar.timeInMillis
-
-                localCalendar.timeInMillis = eventEndDateTimeInMillis
-
-                localCalendar.set(Calendar.HOUR_OF_DAY, eventEndHour)
-                localCalendar.set(Calendar.MINUTE, eventEndMinute)
-
-                eventEndDateTimeInMillis = localCalendar.timeInMillis
-
-            }
-
-            Log.d(
-                "TAG",
-                "EventStart: ${
-                    SimpleDateFormat.getDateTimeInstance().format(eventStartDateTimeInMillis)
-                }"
-            )
-            Log.d(
-                "TAG",
-                "EventEnd: ${
-                    SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)
-                }"
-            )
-
+            handleAllDayUIChanges(b)
+            handleAllDayTimeOffset(b)
 
         }
 
@@ -216,6 +216,7 @@ class EventManagerActivity : AppCompatActivity() {
                     show(supportFragmentManager, "tag")
                     addOnPositiveButtonClickListener {
                         eventStartDateTimeInMillis = it.toLong()
+                        handleAllDayTimeOffset(binding.allDaySwitch.isChecked)
                         binding.editTextStartDate.setText(
                             format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
                         )
@@ -241,6 +242,7 @@ class EventManagerActivity : AppCompatActivity() {
                             eventStartMinute
                         )
 
+
                         binding.editTextStartTime.setText(
                             getHourMinuteLocal(
                                 eventStartDateTimeInMillis
@@ -264,10 +266,10 @@ class EventManagerActivity : AppCompatActivity() {
                     show(supportFragmentManager, "tag")
                     addOnPositiveButtonClickListener {
                         eventEndDateTimeInMillis = it.toLong()
+                        handleAllDayTimeOffset(binding.allDaySwitch.isChecked)
                         binding.editTextEndDate.setText(
                             format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
                         )
-
                         setUpDateTimePickers()
                     }
                 }
@@ -289,6 +291,7 @@ class EventManagerActivity : AppCompatActivity() {
                             eventEndHour,
                             eventEndMinute
                         )
+
 
                         binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
                         binding.editTextEndDate.setText(
@@ -343,6 +346,7 @@ class EventManagerActivity : AppCompatActivity() {
                             event!!.id,
                             binding.eventTitle.text.toString().ifEmpty { "" },
                             binding.eventDesc.text.toString().ifEmpty { "" },
+                            binding.allDaySwitch.isChecked,
                             eventStartDateTimeInMillis,
                             eventEndDateTimeInMillis
                         )
@@ -366,6 +370,7 @@ class EventManagerActivity : AppCompatActivity() {
                                 edit.putInt("eventId", updatedEvent.id)
                                 edit.putString("eventTitle", updatedEvent.eventTitle)
                                 edit.putString("eventDesc", updatedEvent.eventDescription)
+                                edit.putBoolean("allDayEvent", updatedEvent.allDayEvent)
                                 edit.putLong("eventStartTimeInMills", updatedEvent.eventStartTime)
                                 edit.putLong("eventEndDateTimeInMillis", updatedEvent.eventEndTime)
 
@@ -381,6 +386,7 @@ class EventManagerActivity : AppCompatActivity() {
                                 0,
                                 binding.eventTitle.text.toString().ifEmpty { "" },
                                 binding.eventDesc.text.toString().ifEmpty { "" },
+                                binding.allDaySwitch.isChecked,
                                 eventStartDateTimeInMillis,
                                 eventEndDateTimeInMillis
                             )
@@ -414,6 +420,8 @@ class EventManagerActivity : AppCompatActivity() {
 
         binding.eventTitle.setText(event.eventTitle)
         binding.eventDesc.setText(event.eventDescription)
+        binding.allDaySwitch.isChecked = event.allDayEvent
+        handleAllDayUIChanges(event.allDayEvent)
 
         eventStartDateTimeInMillis =
             event.eventStartTime

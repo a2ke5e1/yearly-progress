@@ -105,6 +105,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         val eventId = pref.getInt("eventId", 0)
         val eventTitle = pref.getString("eventTitle", "Loading").toString()
         val eventDesc = pref.getString("eventDesc", "").toString()
+        val allDayEvent = pref.getBoolean("allDayEvent", false)
         val eventStartTimeInMills = pref.getLong("eventStartTimeInMills", 0)
         val eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
 
@@ -112,6 +113,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             eventId,
             eventTitle,
             eventDesc,
+            allDayEvent,
             eventStartTimeInMills,
             eventEndDateTimeInMillis
         )
