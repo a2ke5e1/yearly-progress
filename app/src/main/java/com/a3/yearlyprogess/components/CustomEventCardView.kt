@@ -64,6 +64,7 @@ class CustomEventCardView @JvmOverloads constructor(
         }
 
         binding.eventStart.text = displayRelativeDifferenceMessage(
+            context,
             event.eventStartTime,
             event.eventEndTime,
             event.allDayEvent
@@ -133,6 +134,7 @@ class CustomEventCardView @JvmOverloads constructor(
                     }
 
                     binding.eventStart.text = displayRelativeDifferenceMessage(
+                        context,
                         event.eventStartTime,
                         event.eventEndTime,
                         event.allDayEvent
@@ -195,7 +197,19 @@ class CustomEventCardView @JvmOverloads constructor(
      * @param endTime in milliseconds
 
      */
-    fun displayRelativeDifferenceMessage(startTime: Long, endTime: Long, allDayEvent: Boolean): String {
+
+
+    fun setOnEditButtonClickListener(listener: OnClickListener) {
+        binding.editButton.setOnClickListener(listener)
+    }
+
+    fun setOnAddWidgetClickListener(listener: OnClickListener) {
+        binding.addButton.visibility = VISIBLE
+        binding.addButton.setOnClickListener(listener)
+    }
+
+    companion object {
+        fun displayRelativeDifferenceMessage(context:Context, startTime: Long, endTime: Long, allDayEvent: Boolean): String {
 
             val startDay = SimpleDateFormat.getDateInstance().format(startTime)
             val endDay = SimpleDateFormat.getDateInstance().format(endTime)
@@ -214,15 +228,7 @@ class CustomEventCardView @JvmOverloads constructor(
                     "${DateFormat.format("MMM dd, yyyy ", startTime)} $startTimeString \u2014 ${DateFormat.format("MMM dd, yyyy", endTime)} $endTimeString"
                 }
             }
-    }
-
-    fun setOnEditButtonClickListener(listener: OnClickListener) {
-        binding.editButton.setOnClickListener(listener)
-    }
-
-    fun setOnAddWidgetClickListener(listener: OnClickListener) {
-        binding.addButton.visibility = VISIBLE
-        binding.addButton.setOnClickListener(listener)
+        }
     }
 
 

@@ -7,9 +7,11 @@ import android.text.SpannableString
 import android.text.format.DateFormat
 import android.util.Log
 import android.util.SizeF
+import android.view.View
 import android.widget.RemoteViews
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.components.CustomEventCardView.Companion.displayRelativeDifferenceMessage
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.helper.ProgressPercentage
@@ -56,6 +58,23 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 )
             )
 
+
+
+            val formattedEndTime = DateFormat.format(
+                if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a",
+                eventEndDateTimeInMillis
+            ).toString().uppercase()
+
+            val formattedEndDateTime = DateFormat.format(
+                if (DateFormat.is24HourFormat(context)) "MMM dd, yyyy" else "MMM dd, yyyy",
+                eventEndDateTimeInMillis
+            ).toString() + " · " + formattedEndTime
+
+
+
+
+
+
             wideView.setTextViewText(R.id.eventProgressText, progressText)
             wideView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
             wideView.setTextViewText(
@@ -63,16 +82,33 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 ProgressPercentage.getDay(formatted = true)
             )
             wideView.setTextViewText(R.id.eventTitle, eventTitle)
-            wideView.setTextViewText(R.id.eventDesc, eventDesc)
+            if (eventDesc.isEmpty()) {
+                wideView.setViewVisibility(R.id.eventDesc, View.GONE)
+                tallView.setViewVisibility(R.id.eventDesc, View.GONE)
+
+
+                wideView.setTextViewTextSize(R.id.eventTitle, 0, 85f)
+                tallView.setTextViewTextSize(R.id.eventTitle, 0, 60f)
+
+            } else {
+                wideView.setTextViewText(R.id.eventDesc, eventDesc)
+                tallView.setTextViewText(R.id.eventDesc, eventDesc)
+
+                wideView.setViewVisibility(R.id.eventDesc, View.VISIBLE)
+                tallView.setViewVisibility(R.id.eventDesc, View.VISIBLE)
+
+                wideView.setTextViewTextSize(R.id.eventTitle, 0, 45f)
+                tallView.setTextViewTextSize(R.id.eventTitle, 0, 45f)
+
+            }
+
             wideView.setTextViewText(
                 R.id.eventTime,
-                if (DateFormat.is24HourFormat(context)) SimpleDateFormat(
-                    "MM/dd · HH:mm",
-                    Locale.getDefault()
-                ).format(
-                    eventEndDateTimeInMillis
-                ) else SimpleDateFormat("MM/dd · hh:mm a", Locale.getDefault()).format(
-                    eventEndDateTimeInMillis
+                displayRelativeDifferenceMessage(
+                    context,
+                    eventStartTimeInMills,
+                    eventEndDateTimeInMillis,
+                    event.allDayEvent
                 )
             )
 
@@ -80,17 +116,9 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             tallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
             tallView.setTextViewText(R.id.currentDate, ProgressPercentage.getDay(formatted = true))
             tallView.setTextViewText(R.id.eventTitle, eventTitle)
-            tallView.setTextViewText(R.id.eventDesc, eventDesc)
             tallView.setTextViewText(
                 R.id.eventTime,
-                if (DateFormat.is24HourFormat(context)) SimpleDateFormat(
-                    "MM/dd · HH:mm",
-                    Locale.getDefault()
-                ).format(
-                    eventEndDateTimeInMillis
-                ) else SimpleDateFormat("MM/dd · hh:mm a", Locale.getDefault()).format(
-                    eventEndDateTimeInMillis
-                )
+                formattedEndDateTime
             )
 
             smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)

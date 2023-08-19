@@ -17,6 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="18dp"
             android:orientation="vertical">
 
             <TextView
@@ -39,6 +41,8 @@
                 android:textAllCaps="false"
                 android:textColor="@color/widget_text_color"
                 android:textSize="12sp"
+                android:ellipsize="end"
+                android:maxLines="3"
                 android:textStyle="normal" />
 
 
@@ -46,7 +50,7 @@
                 android:id="@+id/eventTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:text="08/01 · 7:37 PM"
                 android:textAllCaps="false"
                 android:textColor="@color/widget_text_color"
