@@ -74,11 +74,14 @@ class ProgressPercentage(private val context: Context) {
             }
             val spannable = SpannableString(
                 "${day}${
-                    when (day.last()) {
-                        '1' -> "st"
-                        '2' -> "nd"
-                        '3' -> "rd"
-                        else -> "th"
+                    when (day){
+                        "11", "12", "13" -> "th"
+                        else -> when (day.last()) {
+                            '1' -> "st"
+                            '2' -> "nd"
+                            '3' -> "rd"
+                            else -> "th"
+                        }
                     }
                 }"
             )
