@@ -56,16 +56,6 @@ class EventsListScreenFragment : Fragment() {
             true
         }
 
-        return binding.root
-
-    }
-
-    private var tracker: SelectionTracker<Long>? = null
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         val eventAdapter = EventsListViewAdapter(
             AppWidgetManager.INVALID_APPWIDGET_ID
         ) {
@@ -143,6 +133,8 @@ class EventsListScreenFragment : Fragment() {
                         mt.navigationIcon = null
                         mt.isTitleCentered = true
                         (activity as AppCompatActivity).setSupportActionBar(mt)
+
+                        eventAdapter.notifyDataSetChanged()
                     }
 
                 }
@@ -213,7 +205,13 @@ class EventsListScreenFragment : Fragment() {
             }*/
         }
 
+        return binding.root
+
     }
+
+    private var tracker: SelectionTracker<Long>? = null
+
+
 
     override fun onDestroy() {
         val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
