@@ -155,17 +155,18 @@ class CustomEventCardView @JvmOverloads constructor(
 
 
 
-        // val params = widgetProgressCard.layoutParams
-        // val target = (progress * 0.01 * widgetParentCard.width).toInt()
-        val progressBarValueAnimator = ValueAnimator.ofInt(0, progress.toInt())
+
+        val params = binding.customProgressBar.layoutParams
+        val target = (progress * 0.01 * binding.parent.width).toInt()
+        val progressBarValueAnimator = ValueAnimator.ofInt(params.width, target)
         val progressTextValueAnimator = ValueAnimator.ofFloat(0F, progress.toFloat())
 
         progressBarValueAnimator.duration = 500
         progressTextValueAnimator.duration = 500
 
         progressBarValueAnimator.addUpdateListener {
-            binding.progressBar.progress = it.animatedValue as Int
-            binding.progressBar.requestLayout()
+            binding.customProgressBar.layoutParams.width = it.animatedValue as Int
+            binding.customProgressBar.requestLayout()
         }
 
         progressTextValueAnimator.addUpdateListener {

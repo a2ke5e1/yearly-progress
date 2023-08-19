@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +30,7 @@ class EventsListViewAdapter(
 ) : RecyclerView.Adapter<EventsSelectorListViewHolder>() {
 
     private var eventList = emptyList<Event>()
-    private var _selectedEventList = MutableLiveData(emptyList<Event>())
+    private val _selectedEventList = MutableLiveData(emptyList<Event>())
 
     val selectedEventList: MutableLiveData<List<Event>>
         get() = _selectedEventList
@@ -62,9 +63,10 @@ class EventsListViewAdapter(
             }
 
             holder.binding.customEventCardView.root.eventCheck.isChecked =
-                _selectedEventList.value!!.contains(currentEvent)
+                selectedEventList.value!!.contains(currentEvent)
+
             holder.binding.customEventCardView.root.eventCheck.visibility =
-                if (_selectedEventList.value!!.contains(currentEvent)) View.VISIBLE else View.GONE
+                if (selectedEventList.value!!.contains(currentEvent)) View.VISIBLE else View.GONE
 
 
 
@@ -82,13 +84,13 @@ class EventsListViewAdapter(
 
             holder.binding.customEventCardView.setOnClickListener {
                 if (_selectedEventList.value!!.isNotEmpty()) {
-                    selectCurrentEvent(it.context, currentEvent, holder)
+                    selectCurrentEvent(currentEvent, holder)
                 }
             }
 
 
             holder.binding.customEventCardView.setOnLongClickListener {
-                selectCurrentEvent(it.context, currentEvent, holder)
+                selectCurrentEvent(currentEvent, holder)
                 true
             }
 
@@ -121,7 +123,6 @@ class EventsListViewAdapter(
     }
 
     private fun selectCurrentEvent(
-        context: Context,
         currentEvent: Event, holder: EventsSelectorListViewHolder
     ) {
         val copied = _selectedEventList.value!!.toMutableList()
@@ -184,12 +185,12 @@ class EventsListViewAdapter(
 
     fun selectAll() {
         _selectedEventList.value = eventList
-        notifyItemRangeChanged(0, eventList.size)
+        notifyDataSetChanged()
     }
 
     fun clearSelection() {
-        _selectedEventList.value = emptyList()
-        notifyItemRangeChanged(0, eventList.size)
+        _selectedEventList.value = (emptyList())
+        notifyDataSetChanged()
     }
 
 

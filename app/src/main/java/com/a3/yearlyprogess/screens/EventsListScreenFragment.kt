@@ -36,6 +36,30 @@ class EventsListScreenFragment : Fragment() {
         _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
         // mEventViewModel = ViewModelProvider(this)[EventViewModel::class.java]
 
+
+
+        val toolbar = (activity as AppCompatActivity).supportActionBar
+
+
+        binding.addEventFab.setOnClickListener {
+            val intent = Intent(it.context, EventManagerActivity::class.java)
+            intent.putExtra("addMode", true)
+            startActivity(intent)
+        }
+
+        binding.addEventFab.setOnLongClickListener {
+            mEventViewModel.deleteAllEvent()
+            true
+        }
+
+        return binding.root
+
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val eventAdapter = EventsListViewAdapter(
             AppWidgetManager.INVALID_APPWIDGET_ID
         ) {
@@ -46,7 +70,6 @@ class EventsListScreenFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        val toolbar = (activity as AppCompatActivity).supportActionBar
         mEventViewModel.readAllData.observe(viewLifecycleOwner) { events ->
 
             if (events.isEmpty()) {
@@ -60,7 +83,8 @@ class EventsListScreenFragment : Fragment() {
             eventAdapter.setData(events)
             eventAdapter.selectedEventList.observe(viewLifecycleOwner) { selectedEvents ->
                 val lengthItems = selectedEvents.size
-                if (lengthItems > 0) {
+                Log.d("TAG", "onCreateView: $selectedEvents")
+                if (lengthItems != 0) {
 
 
                     val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
@@ -109,21 +133,7 @@ class EventsListScreenFragment : Fragment() {
             }
         }
 
-        binding.addEventFab.setOnClickListener {
-            val intent = Intent(it.context, EventManagerActivity::class.java)
-            intent.putExtra("addMode", true)
-            startActivity(intent)
-        }
-
-        binding.addEventFab.setOnLongClickListener {
-            mEventViewModel.deleteAllEvent()
-            true
-        }
-
-        return binding.root
-
     }
-
 
     override fun onDestroy() {
         val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)

@@ -12,10 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical">
+
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/eventCheck"
@@ -40,17 +41,17 @@
 
                 <TextView
                     android:id="@+id/eventTitle"
-                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
                     android:textColor="?attr/colorPrimary"
                     tools:text="Lorem Ipsum" />
 
                 <TextView
                     android:id="@+id/eventStart"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                     android:textColor="?attr/colorSecondary"
                     tools:text="Wed - Thru" />
 
@@ -70,9 +71,9 @@
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:ellipsize="end"
                     android:maxLines="2"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" />
 
             </LinearLayout>
@@ -82,8 +83,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingStart="16dp"
-                android:paddingBottom="16dp"
-                android:paddingEnd="16dp">
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp">
 
                 <TextView
                     android:id="@+id/progressText"
@@ -94,17 +95,19 @@
                     android:textColor="?attr/colorPrimary" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
-                    style="@style/Widget.Material3.LinearProgressIndicator"
                     android:id="@+id/progressBar"
+                    style="@style/Widget.Material3.LinearProgressIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:indeterminate="false"
                     android:max="100"
-                    app:trackCornerRadius="24dp"
-                    android:progress="0" />
+                    android:progress="0"
+                    android:visibility="gone"
+                    app:trackCornerRadius="24dp" />
 
 
             </LinearLayout>
+
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="1dp" />
@@ -120,11 +123,11 @@
                 android:paddingBottom="8dp">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/editButton"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Edit"
-                    android:id="@+id/editButton"
                     app:icon="@drawable/ic_outline_event_24" />
 
                 <Space
@@ -132,19 +135,29 @@
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addButton"
                     style="@style/Widget.Material3.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_widget"
-                    android:visibility="gone"
-                    android:id="@+id/addButton" />
-
+                    android:visibility="gone" />
 
 
             </LinearLayout>
 
 
         </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/custom_progress_bar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="#12ACABAB"
+            android:backgroundTintMode="multiply"
+            app:cardBackgroundColor="?attr/colorPrimary"
+            app:cardCornerRadius="0dp"
+            app:strokeWidth="0dp" />
+
 
     </com.google.android.material.card.MaterialCardView>
 
