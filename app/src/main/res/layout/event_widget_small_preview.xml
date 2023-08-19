@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/background"
+    tools:ignore="HardcodedText"
+    style="@style/Widget.YearlyProgress.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/App.SplashScreen.AppWidgetContainer">
+
+
+    <TextView
+        android:id="@+id/eventTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="Your Event Name"
+        android:textAllCaps="false"
+        android:textColor="@color/widget_text_color"
+        android:textSize="12sp"
+        android:textStyle="normal|bold" />
+
+
+
+    <LinearLayout
+        android:id="@+id/progress_text_day"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/eventProgressBar"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="41."
+            android:textColor="@color/widget_text_color"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="58%"
+            android:textColor="@color/widget_text_color"
+            android:textSize="12.6sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/currentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/eventProgressBar"
+        android:layout_alignParentEnd="true"
+        android:text="19"
+        android:textAlignment="textEnd"
+        android:textColor="@color/widget_text_color_tertiary"
+        android:textSize="11sp" />
+
+
+    <ProgressBar
+        android:id="@+id/eventProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="41"
+        android:progressBackgroundTint="@color/widget_text_color"
+        android:progressTint="@color/widget_text_color" />
+
+</RelativeLayout>

@@ -40,11 +40,13 @@ class EventSelectorActivity : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.eventsRecyclerViewer) { view, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(top = insets.top, left = insets.left, right = insets.right)
             WindowInsetsCompat.CONSUMED
         }
+
+        setSupportActionBar(binding.toolbar)
 
         val appWidgetManager = AppWidgetManager.getInstance(this)
 
@@ -74,6 +76,7 @@ class EventSelectorActivity : AppCompatActivity() {
 
             edit.putInt("eventId", event.id)
             edit.putString("eventTitle", event.eventTitle)
+            edit.putBoolean("allDayEvent", event.allDayEvent)
             edit.putString("eventDesc", event.eventDescription)
             edit.putLong("eventStartTimeInMills", event.eventStartTime)
             edit.putLong("eventEndDateTimeInMillis", event.eventEndTime)

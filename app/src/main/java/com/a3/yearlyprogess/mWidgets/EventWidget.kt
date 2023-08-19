@@ -39,11 +39,18 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             val eventEndDateTimeInMillis = event.eventEndTime
 
 
-            val progress = ProgressPercentage.getProgress(
+            var progress = ProgressPercentage.getProgress(
                 ProgressPercentage.CUSTOM_EVENT,
                 eventStartTimeInMills,
                 eventEndDateTimeInMillis
             )
+
+            if (progress > 100) {
+                progress = 100.0
+            }
+            if (progress < 0) {
+                progress = 0.0
+            }
 
             val settingsPref = PreferenceManager.getDefaultSharedPreferences(context)
             val decimalPlace: Int =
