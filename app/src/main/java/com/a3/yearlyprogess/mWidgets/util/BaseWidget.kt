@@ -4,6 +4,8 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
 
 abstract class BaseWidget(private val widgetServiceType: Int) :
@@ -14,6 +16,13 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int
     )
+
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+
+        val alarmHandler = AlarmHandler(context, widgetServiceType)
+        alarmHandler.setAlarmManager()
+    }
 
     override fun onUpdate(
         context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray
@@ -43,7 +52,7 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int
     ) {
-
+        // Log.d("updateAppWidget", widgetServiceType.toString())
         updateWidget(context, appWidgetManager, appWidgetId)
 
         val alarmHandler = AlarmHandler(context, widgetServiceType)

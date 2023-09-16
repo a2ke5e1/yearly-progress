@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    tools:context=".eventManager.EventSelectorActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:expanded="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
+            style="?attr/collapsingToolbarLayoutLargeSize"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize">
+
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:menu="@menu/event_config_menu"
+                app:navigationIcon="@drawable/ic_baseline_close_24"
+                app:title="">
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventTitleContainer"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="8dp"
+                app:boxBackgroundMode="none"
+                app:counterEnabled="true"
+                app:counterMaxLength="30"
+                app:placeholderText="@string/title"
+                app:placeholderTextAppearance="@style/TextAppearance.Material3.HeadlineMedium">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="flagNavigateNext"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout2"
+                style="@style/Widget.Material3.TextInputEditText.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:hint="@string/description" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/eventSettingsLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/event_settings"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout2" />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/allDaySwitch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/eventSettingsLabel"
+                app:srcCompat="@drawable/ic_outline_access_time_24" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/allDaySwitch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="All Day"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView2"
+                app:layout_constraintTop_toBottomOf="@id/eventSettingsLabel" />
+
+            <TextView
+                android:id="@+id/eventStartLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/start_of_the_event"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                app:layout_constraintTop_toBottomOf="@id/allDaySwitch" />
+
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/from_flow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:constraint_referenced_ids="editTextStartDate,editTextStartTime"
+                app:flow_maxElementsWrap="3"
+                app:flow_wrapMode="chain"
+                app:layout_constraintTop_toBottomOf="@id/eventStartLabel" />
+
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/to_flow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:constraint_referenced_ids="editTextEndDate,editTextEndTime"
+                app:flow_lastHorizontalStyle="packed"
+                app:flow_maxElementsWrap="2"
+                app:flow_wrapMode="aligned"
+                app:layout_constraintTop_toBottomOf="@id/eventEndLabel" />
+
+
+
+
+            <TextView
+                android:id="@+id/editTextStartDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:paddingStart="0dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                tools:text="2022, August 10" />
+
+
+            <TextView
+                android:id="@+id/editTextStartTime"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="bottom|end"
+                android:padding="8dp"
+                android:paddingEnd="0dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                tools:text="11:15 AM" />
+
+
+            <TextView
+                android:id="@+id/eventEndLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/end_of_the_event"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                app:layout_constraintTop_toBottomOf="@id/from_flow" />
+
+
+            <TextView
+                android:id="@+id/editTextEndDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:paddingStart="0dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                tools:text="2022, August 10" />
+
+
+            <TextView
+                android:id="@+id/editTextEndTime"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="bottom|end"
+                android:padding="8dp"
+                android:paddingEnd="0dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                tools:text="11:15 PM" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

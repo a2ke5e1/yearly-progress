@@ -44,6 +44,7 @@ class ProgressCardView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.progress_card_view, this, true)
         orientation = VERTICAL
 
+
         job = Job()
 
         perTextView = findViewById(R.id.widget_per)
@@ -99,6 +100,10 @@ class ProgressCardView @JvmOverloads constructor(
         // update the progress every seconds
         launch(Dispatchers.IO) {
             while (true) {
+
+                ProgressPercentage(context).setDefaultWeek()
+                ProgressPercentage(context).setDefaultCalculationMode()
+
                 val progress: Double = ProgressPercentage.getProgress(field)
                 launch(Dispatchers.Main) {
                     updateView(progress)

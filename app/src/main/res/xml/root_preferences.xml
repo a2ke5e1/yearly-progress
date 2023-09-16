@@ -5,6 +5,15 @@
         app:iconSpaceReserved="false"
         app:title="App">
 
+        <ListPreference
+            app:defaultValue="0"
+            app:entries="@array/calc_entries"
+            app:entryValues="@array/calc_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/app_calculation_type"
+            app:summary="%s"
+            app:title="@string/calculation_mode" />
+
         <SeekBarPreference
             android:max="13"
             app:allowDividerBelow="false"
@@ -15,6 +24,8 @@
             app:showSeekBarValue="true"
             app:summary="@string/pref_summary_app_decimal_places"
             app:title="@string/pref_title_app_decimal_places" />
+
+
 
     </PreferenceCategory>
 

@@ -10,7 +10,33 @@
         android:id="@+id/eventsRecyclerViewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         tools:listitem="@layout/custom_event_item_view" />
+
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/noEvents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="noEventsImage,noEventsText"
+        app:flow_maxElementsWrap="1"
+        app:flow_wrapMode="chain"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/noEventsImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/baseline_event_24" />
+
+    <TextView
+        android:id="@+id/noEventsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_events"
+        android:textSize="20sp" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -19,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_round_add_24"
+        android:contentDescription="@string/add_event"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.93"

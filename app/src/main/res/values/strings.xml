@@ -13,7 +13,7 @@
     <string name="week_widget_description">Show the progress current week</string>
     <string name="app_widget_description_day">Show progress of the day</string>
     <string name="custom_widget_desc">A widget to track upcoming events.</string>
-    <string name="demo_date">01/19</string>
+    <string name="demo_date">19th</string>
     <string name="demo_day_per">20%</string>
     <string name="day">Day</string>
     <string name="demp_month">January</string>
@@ -37,7 +37,7 @@
     <string name="by_continuing_you_agree_our_terms_of_service_and_privacy_policy">By continuing, you agree our Terms of Service and Privacy Policy.</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
-    <string name="event_settings">Event Settings</string>
+    <string name="event_settings">Event Duration</string>
     <string name="start_of_the_event">From</string>
     <string name="end_of_the_event">To</string>
     <string name="date">Date</string>
@@ -67,5 +67,9 @@
     <string name="unsupported_launcher">Your Launcher does not support this feature. Please add Widget manually</string>
     <string name="pref_title_widget_event_decimal_place">Decimal places for Event Widget</string>
     <string name="widget_event_widget_decimal_point">widget_event_widget_decimal_point</string>
+    <string name="app_calculation_type">app_calculation_type</string>
+    <string name="calculation_mode">Calculation Mode</string>
+    <string name="no_events">No Events</string>
+    <string name="add_event">Add Event</string>
 
 </resources>

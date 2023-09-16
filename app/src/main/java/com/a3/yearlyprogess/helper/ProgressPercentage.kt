@@ -13,11 +13,23 @@ import java.util.*
 
 class ProgressPercentage(private val context: Context) {
 
+
+
+
     fun setDefaultWeek() {
         val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
-        val weekStartDay = settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0")
+        val weekStartDay =
+            settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0")
         // Log.d("week_set", weekStartDay.toString())
         DEFAULT_WEEK_PREF = weekStartDay!!.toInt()
+    }
+
+    fun setDefaultCalculationMode() {
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
+        val calculationMode =
+            settingPref.getString(context.getString(R.string.app_calculation_type), "0")
+        // Log.d("calculation_set", calculationMode.toString())
+        DEFAULT_CALCULATION_MODE = calculationMode!!.toInt()
     }
 
     companion object {
@@ -28,6 +40,7 @@ class ProgressPercentage(private val context: Context) {
         const val CUSTOM_EVENT = 104
 
         private var DEFAULT_WEEK_PREF = 0
+        private var DEFAULT_CALCULATION_MODE = 0
 
         fun getYear(): Int = Calendar.getInstance().get(Calendar.YEAR)
         fun getMonth(): Int = Calendar.getInstance().get(Calendar.MONTH) + 1
@@ -61,11 +74,14 @@ class ProgressPercentage(private val context: Context) {
             }
             val spannable = SpannableString(
                 "${day}${
-                    when (day.last()) {
-                        '1' -> "st"
-                        '2' -> "nd"
-                        '3' -> "rd"
-                        else -> "th"
+                    when (day){
+                        "11", "12", "13" -> "th"
+                        else -> when (day.last()) {
+                            '1' -> "st"
+                            '2' -> "nd"
+                            '3' -> "rd"
+                            else -> "th"
+                        }
                     }
                 }"
             )
@@ -97,12 +113,14 @@ class ProgressPercentage(private val context: Context) {
                     )
                     calendar.timeInMillis
                 }
+
                 MONTH -> {
                     calendar.set(
                         calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1, 0, 0, 0
                     )
                     calendar.timeInMillis
                 }
+
                 WEEK -> {
 
                     calendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -120,6 +138,7 @@ class ProgressPercentage(private val context: Context) {
                     )
                     calendar.timeInMillis
                 }
+
                 DAY -> {
                     calendar.set(
                         calendar.get(Calendar.YEAR),
@@ -131,6 +150,7 @@ class ProgressPercentage(private val context: Context) {
                     )
                     calendar.timeInMillis
                 }
+
                 CUSTOM_EVENT -> eventStartMilliSeconds
                 else -> throw InvalidProgressType("Invalid Progress Type $field")
             }
@@ -147,17 +167,20 @@ class ProgressPercentage(private val context: Context) {
                     )
                     calendar.timeInMillis
                 }
+
                 MONTH -> {
                     calendar.set(
                         calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 1, 0, 0, 0
                     )
                     calendar.timeInMillis
                 }
+
                 WEEK -> {
                     calendar.timeInMillis =
                         getStartOfTimeMillis(WEEK) + (calendar.getActualMaximum(Calendar.DAY_OF_WEEK) * 24 * 60 * 60 * 1000)
                     calendar.timeInMillis
                 }
+
                 DAY -> {
                     calendar.set(
                         calendar.get(Calendar.YEAR),
@@ -169,6 +192,7 @@ class ProgressPercentage(private val context: Context) {
                     )
                     calendar.timeInMillis
                 }
+
                 CUSTOM_EVENT -> eventEndMilliSeconds
                 else -> throw InvalidProgressType("Invalid Progress Type $field")
             }
@@ -179,11 +203,27 @@ class ProgressPercentage(private val context: Context) {
         fun getProgress(
             field: Int, eventStartMilliSeconds: Long = 0, eventEndMilliSeconds: Long = 0
         ): Double {
-            return (getCurrentTimeMillis() - getStartOfTimeMillis(
-                field, eventStartMilliSeconds
-            )) * 100.0 / (getEndOfTimeMillis(
-                field, eventEndMilliSeconds
-            ) - getStartOfTimeMillis(field, eventStartMilliSeconds))
+            return when (DEFAULT_CALCULATION_MODE) {
+
+
+                1 -> {
+                    (getEndOfTimeMillis(
+                        field, eventEndMilliSeconds
+                    ) - getCurrentTimeMillis()) * 100.0 / (getEndOfTimeMillis(
+                        field, eventEndMilliSeconds
+                    ) - getStartOfTimeMillis(field, eventStartMilliSeconds))
+                }
+
+                0 -> {
+                    (getCurrentTimeMillis() - getStartOfTimeMillis(
+                        field, eventStartMilliSeconds
+                    )) * 100.0 / (getEndOfTimeMillis(
+                        field, eventEndMilliSeconds
+                    ) - getStartOfTimeMillis(field, eventStartMilliSeconds))
+                }
+
+                else -> throw InvalidProgressType("Invalid Calculation mode $DEFAULT_CALCULATION_MODE")
+            }
         }
 
         fun formatProgressStyle(progress: Double): SpannableString {

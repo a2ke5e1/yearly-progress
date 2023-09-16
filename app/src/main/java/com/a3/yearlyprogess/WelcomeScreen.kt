@@ -7,6 +7,11 @@ import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.a3.yearlyprogess.databinding.ActivityFirstScreenBinding
 
 class WelcomeScreen : AppCompatActivity() {
@@ -19,6 +24,13 @@ class WelcomeScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFirstScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.navigationBarDividerColor =
+            ContextCompat.getColor(this, android.R.color.transparent)
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
 
         val TOSSpan = URLSpan(TOS_URL)
         val privacyPolicySpan = URLSpan(PP_URL)
