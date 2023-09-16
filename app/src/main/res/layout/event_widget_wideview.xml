@@ -91,7 +91,7 @@
         android:indeterminate="false"
         android:max="100"
         android:progress="41"
-        android:progressBackgroundTint="@color/widget_text_color"
+        android:progressBackgroundTint="@color/widget_progress_bar_background_color"
         android:progressTint="@color/widget_text_color" />
 
 </RelativeLayout>
