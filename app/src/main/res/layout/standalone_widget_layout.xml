@@ -49,7 +49,7 @@
           style="?android:attr/progressBarStyleHorizontal"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:progressBackgroundTint="@color/widget_text_color"
+          android:progressBackgroundTint="@color/widget_progress_bar_background_color"
           android:progressTint="@color/widget_text_color"
           android:layout_below="@id/widgetProgress"
           android:indeterminate="false"

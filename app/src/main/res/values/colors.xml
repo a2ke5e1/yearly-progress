@@ -10,4 +10,5 @@
     <color name="widget_text_color">#3c5f7c</color>
     <color name="widget_text_color_tertiary">#8c9196</color>
     <color name="widget_background_color">#e5f2fd</color>
+    <color name="widget_progress_bar_background_color">#CAD3DB</color>
 </resources>

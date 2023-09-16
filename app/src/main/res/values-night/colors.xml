@@ -3,4 +3,5 @@
     <color name="widget_text_color">#c5e4ff</color>
     <color name="widget_text_color_tertiary">#8c9196</color>
     <color name="widget_background_color">#293137</color>
+    <color name="widget_progress_bar_background_color">#484D51</color>
 </resources>
