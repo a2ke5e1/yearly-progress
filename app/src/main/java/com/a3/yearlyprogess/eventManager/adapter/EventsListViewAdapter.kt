@@ -131,7 +131,7 @@ class EventsListViewAdapter(
         bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
 
         val pinnedWidgetCallbackIntent = Intent(context, EventSelectorActivity::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             pinnedWidgetCallbackIntent.putExtra("event", currentEvent)
         } else {
             pinnedWidgetCallbackIntent.putExtra("eventId", currentEvent.id)

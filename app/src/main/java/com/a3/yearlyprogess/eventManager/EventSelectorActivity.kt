@@ -67,14 +67,24 @@ class EventSelectorActivity : AppCompatActivity() {
                 Event::class.java
             )
         } else {
-            Event(
-                intent?.getIntExtra("eventId", 0) ?: 0,
-                intent?.getStringExtra("eventTitle") ?: "",
-                intent?.getStringExtra("eventDesc") ?: "",
-                intent?.getBooleanExtra("allDayEvent", false) ?: false,
-                intent?.getLongExtra("eventStartTimeInMills", 0) ?: 0,
-                intent?.getLongExtra("eventEndDateTimeInMillis", 0) ?: 0
-            )
+
+            val eventId = intent?.getIntExtra("eventId", -1)
+
+            // Checks if there is an event object or not
+            // Event can't have id less than 0
+            if (eventId == null || eventId == -1) {
+                null
+            } else {
+                Event(
+                    eventId,
+                    intent?.getStringExtra("eventTitle") ?: "",
+                    intent?.getStringExtra("eventDesc") ?: "",
+                    intent?.getBooleanExtra("allDayEvent", false) ?: false,
+                    intent?.getLongExtra("eventStartTimeInMills", 0) ?: 0,
+                    intent?.getLongExtra("eventEndDateTimeInMillis", 0) ?: 0
+                )
+            }
+
         }
 
         if (event != null && appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
