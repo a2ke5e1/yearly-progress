@@ -33,7 +33,7 @@ class EventsListViewAdapter(
         get() = eventList
 
 
-    private lateinit var tracker: SelectionTracker<Long>
+    private var tracker: SelectionTracker<Long>? = null
 
     init {
         setHasStableIds(true)
@@ -68,19 +68,21 @@ class EventsListViewAdapter(
             }
 
 
-            holder.binding.customEventCardView.root.eventCheck.visibility =
-                if (tracker.hasSelection() || tracker.selection.size() > 0) View.VISIBLE else View.GONE
-            holder.binding.customEventCardView.root.eventCheck.isChecked =
-                tracker.isSelected(position.toLong())
+            if ( tracker != null) {
+                holder.binding.customEventCardView.root.eventCheck.visibility =
+                    if (tracker!!.hasSelection() || tracker!!.selection.size() > 0) View.VISIBLE else View.GONE
+                holder.binding.customEventCardView.root.eventCheck.isChecked =
+                    tracker!!.isSelected(position.toLong())
 
-            holder.binding.customEventCardView.root.eventCheck.setOnCheckedChangeListener { compoundButton, b ->
-                if (b) {
-                    tracker.select(position.toLong())
-                } else {
-                    tracker.deselect(position.toLong())
+                holder.binding.customEventCardView.root.eventCheck.setOnCheckedChangeListener { compoundButton, b ->
+                    if (b) {
+                        tracker!!.select(position.toLong())
+                    } else {
+                        tracker!!.deselect(position.toLong())
+                    }
                 }
-            }
 
+            }
 
         } else {
 
@@ -131,7 +133,7 @@ class EventsListViewAdapter(
         bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
 
         val pinnedWidgetCallbackIntent = Intent(context, EventSelectorActivity::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             pinnedWidgetCallbackIntent.putExtra("event", currentEvent)
         } else {
             pinnedWidgetCallbackIntent.putExtra("eventId", currentEvent.id)
@@ -161,11 +163,14 @@ class EventsListViewAdapter(
     }
 
     fun selectAll() {
-        if (tracker.hasSelection() && tracker.selection.size() == itemCount) {
-            tracker.clearSelection()
-        } else {
-            for (i in 0 until itemCount) {
-                tracker.select(i.toLong())
+
+        if (tracker != null) {
+            if (tracker!!.hasSelection() && tracker!!.selection.size() == itemCount) {
+                tracker!!.clearSelection()
+            } else {
+                for (i in 0 until itemCount) {
+                    tracker!!.select(i.toLong())
+                }
             }
         }
     }
