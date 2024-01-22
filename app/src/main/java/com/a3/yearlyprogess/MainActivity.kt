@@ -2,8 +2,10 @@ package com.a3.yearlyprogess
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -14,20 +16,22 @@ import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
+import com.a3.yearlyprogess.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.screens.AboutDialogFragment
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
-import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup
 import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
 
+    private var roomBackup: RoomBackup? = null
     private lateinit var binding: ActivityMainBinding
     private lateinit var consentInformation: ConsentInformation
     private var consentForm: ConsentForm? = null
@@ -72,6 +76,8 @@ class MainActivity : AppCompatActivity() {
 
 
         MobileAds.initialize(this) {}
+        roomBackup = RoomBackup(this)
+
 
         window.navigationBarDividerColor =
             ContextCompat.getColor(this, android.R.color.transparent)
@@ -113,6 +119,9 @@ class MainActivity : AppCompatActivity() {
                 )
                 true
             }
+
+            R.id.backupMenu -> backupDatabase()
+            R.id.restoreMenu -> restoreDatabase()
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -179,10 +188,56 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun backupDatabase(): Boolean {
+        if (roomBackup != null) {
+            roomBackup!!.database(EventDatabase.getDatabase(this)).enableLogDebug(true)
+                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG)
+                .maxFileCount(5)
+                .apply {
+                    onCompleteListener { success, message, exitCode ->
+                        Log.d(TAG, "success: $success, message: $message, exitCode: $exitCode")
+                        if (success)
+                            Toast.makeText(
+                                this@MainActivity,
+                                "success: $success, message: $message, exitCode: $exitCode",
+                                Toast.LENGTH_LONG
+                            ).show()
+                    }
+                }
+                .backup()
+        }
+        return true
+    }
+
+    private fun restoreDatabase(): Boolean {
+        if (roomBackup != null) {
+            roomBackup!!.database(EventDatabase.getDatabase(this)).enableLogDebug(true)
+                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG)
+                .maxFileCount(5)
+                .apply {
+                    onCompleteListener { success, message, exitCode ->
+                        Log.d(TAG, "success: $success, message: $message, exitCode: $exitCode")
+                        if (success) {
+                            restartApp(Intent(this@MainActivity, MainActivity::class.java))
+                            Toast.makeText(
+                                this@MainActivity,
+                                "success: $success, message: $message, exitCode: $exitCode",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                    }
+                }
+                .restore()
+        }
+        return true
+    }
+
     companion object {
 
         const val FIRST_LAUNCH = "first_launch"
         const val YEARLY_PROGRESS_PREF = "yearly_progress_pref"
+        const val TAG = "yearly_progress"
 
     }
 
