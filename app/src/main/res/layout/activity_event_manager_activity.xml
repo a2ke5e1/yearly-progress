@@ -11,6 +11,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
         app:expanded="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
