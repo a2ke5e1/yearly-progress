@@ -71,5 +71,7 @@
     <string name="calculation_mode">Calculation Mode</string>
     <string name="no_events">No Events</string>
     <string name="add_event">Add Event</string>
+    <string name="backup">Backup</string>
+    <string name="restore">Restore</string>
 
 </resources>

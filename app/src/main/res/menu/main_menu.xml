@@ -3,6 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.a3.yearlyprogess.MainActivity">
 
+
+    <item
+        android:id="@+id/backupMenu"
+        android:icon="@drawable/ic_outline_share_24"
+        android:title="@string/backup"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/restoreMenu"
+        android:icon="@drawable/ic_outline_share_24"
+        android:title="@string/restore"
+        app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/shareMenu"
+        android:icon="@drawable/ic_outline_share_24"
+        android:title="@string/share"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_round_settings_24"
@@ -14,10 +34,6 @@
         android:icon="@drawable/ic_outline_info_24"
         android:title="@string/about"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/shareMenu"
-        android:icon="@drawable/ic_outline_share_24"
-        android:title="@string/share"
-        app:showAsAction="never" />
+
 
 </menu>

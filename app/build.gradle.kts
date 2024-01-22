@@ -47,9 +47,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         viewBinding = true
         buildConfig = true
@@ -95,8 +92,11 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     androidTestImplementation("androidx.room:room-testing:$room_version")
 
+    // Room backup and restore
+    implementation("de.raphaelebner:roomdatabasebackup:1.0.0-beta14")
+
     // Lifecycle Components
-    val lifecycle_version = "2.6.1"
+    val lifecycle_version = "2.7.0"
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
