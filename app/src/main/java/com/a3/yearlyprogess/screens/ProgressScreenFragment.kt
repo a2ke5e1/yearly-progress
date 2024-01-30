@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentScreenProgressBinding
-import com.a3.yearlyprogess.mAdview.CustomAdView.Companion.updateViewWithNativeAdview
+import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest

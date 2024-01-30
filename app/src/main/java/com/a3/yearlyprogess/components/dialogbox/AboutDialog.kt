@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.screens
+package com.a3.yearlyprogess.components.dialogbox
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -8,17 +8,17 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.a3.yearlyprogess.BuildConfig
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.databinding.FragmentDialogAboutBinding
+import com.a3.yearlyprogess.databinding.DialogAboutBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
-class AboutDialogFragment : DialogFragment() {
+class AboutDialog : DialogFragment() {
     @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = MaterialAlertDialogBuilder(it)
             val inflater = requireActivity().layoutInflater
-            val binding = FragmentDialogAboutBinding.inflate(inflater)
+            val binding = DialogAboutBinding.inflate(inflater)
 
             binding.buildVersion.text = "Version: ${BuildConfig.VERSION_NAME}"
             binding.telegramLink.setOnClickListener {

@@ -1,11 +1,9 @@
 package com.a3.yearlyprogess.screens
 
 import android.animation.ValueAnimator
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.util.Log
@@ -25,9 +23,9 @@ import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.mAdview.CustomAdView.Companion.updateViewWithNativeAdview
-import com.a3.yearlyprogess.mWidgets.*
-import com.a3.yearlyprogess.mWidgets.util.StandaloneWidget
+import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
+import com.a3.yearlyprogess.widgets.*
+import com.a3.yearlyprogess.widgets.util.StandaloneWidget
 import com.a3.yearlyprogess.manager.AlarmHandler
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader

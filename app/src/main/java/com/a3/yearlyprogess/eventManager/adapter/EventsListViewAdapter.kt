@@ -21,7 +21,7 @@ import com.a3.yearlyprogess.databinding.CustomEventSelectorItemViewBinding
 import com.a3.yearlyprogess.eventManager.EventManagerActivity
 import com.a3.yearlyprogess.eventManager.EventSelectorActivity
 import com.a3.yearlyprogess.eventManager.model.Event
-import com.a3.yearlyprogess.mWidgets.EventWidget
+import com.a3.yearlyprogess.widgets.EventWidget
 
 
 class EventsListViewAdapter(

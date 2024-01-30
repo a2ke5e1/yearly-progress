@@ -14,5 +14,5 @@
 .cxx
 local.properties
 /app/src/main/res/values/api_keys.xml
-/app/keystore
-app/keystore/keystore.jks
+*.jks
+*.pepk

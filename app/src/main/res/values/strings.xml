@@ -73,5 +73,7 @@
     <string name="add_event">Add Event</string>
     <string name="backup">Backup</string>
     <string name="restore">Restore</string>
+    <string name="backup_restore"><![CDATA[Backup & Restore]]></string>
+    <string name="backup_restore_message">Time to reunite with your data – it missed you more than you know!</string>
 
 </resources>

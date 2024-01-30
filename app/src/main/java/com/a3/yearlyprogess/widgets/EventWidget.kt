@@ -1,11 +1,10 @@
-package com.a3.yearlyprogess.mWidgets
+package com.a3.yearlyprogess.widgets
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.os.Build
 import android.text.SpannableString
 import android.text.format.DateFormat
-import android.util.Log
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
@@ -15,10 +14,8 @@ import com.a3.yearlyprogess.components.CustomEventCardView.Companion.displayRela
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
 import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.a3.yearlyprogess.mWidgets.util.BaseWidget
+import com.a3.yearlyprogess.widgets.util.BaseWidget
 import com.a3.yearlyprogess.manager.AlarmHandler
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Implementation of App Widget functionality.
