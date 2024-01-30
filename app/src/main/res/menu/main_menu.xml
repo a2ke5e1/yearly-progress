@@ -5,17 +5,10 @@
 
 
     <item
-        android:id="@+id/backupMenu"
+        android:id="@+id/backupRestoreMenu"
         android:icon="@drawable/ic_outline_share_24"
-        android:title="@string/backup"
+        android:title="@string/backup_restore"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/restoreMenu"
-        android:icon="@drawable/ic_outline_share_24"
-        android:title="@string/restore"
-        app:showAsAction="never" />
-
 
     <item
         android:id="@+id/shareMenu"

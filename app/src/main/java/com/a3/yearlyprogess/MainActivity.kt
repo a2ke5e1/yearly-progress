@@ -17,7 +17,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
 import com.a3.yearlyprogess.eventManager.data.EventDatabase
-import com.a3.yearlyprogess.screens.AboutDialogFragment
+import com.a3.yearlyprogess.screens.AboutDialog
+import com.a3.yearlyprogess.screens.BackupRestoreDialog
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
@@ -119,15 +120,19 @@ class MainActivity : AppCompatActivity() {
                 )
                 true
             }
-
-            R.id.backupMenu -> backupDatabase()
-            R.id.restoreMenu -> restoreDatabase()
+            R.id.backupRestoreMenu -> showBackupRestoreDialogBox()
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    private fun showBackupRestoreDialogBox(): Boolean {
+        val backupRestoreDialog = roomBackup?.let { BackupRestoreDialog(it) }
+        backupRestoreDialog?.show(supportFragmentManager, "backup_restore_dialog_box")
+        return true
+    }
+
     private fun showInfoMenu(): Boolean {
-        val aboutDialogBox = AboutDialogFragment()
+        val aboutDialogBox = AboutDialog()
         aboutDialogBox.show(supportFragmentManager, "about_dialog_box")
         return true
     }
@@ -188,50 +193,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun backupDatabase(): Boolean {
-        if (roomBackup != null) {
-            roomBackup!!.database(EventDatabase.getDatabase(this)).enableLogDebug(true)
-                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG)
-                .maxFileCount(5)
-                .apply {
-                    onCompleteListener { success, message, exitCode ->
-                        Log.d(TAG, "success: $success, message: $message, exitCode: $exitCode")
-                        if (success)
-                            Toast.makeText(
-                                this@MainActivity,
-                                "success: $success, message: $message, exitCode: $exitCode",
-                                Toast.LENGTH_LONG
-                            ).show()
-                    }
-                }
-                .backup()
-        }
-        return true
-    }
 
-    private fun restoreDatabase(): Boolean {
-        if (roomBackup != null) {
-            roomBackup!!.database(EventDatabase.getDatabase(this)).enableLogDebug(true)
-                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG)
-                .maxFileCount(5)
-                .apply {
-                    onCompleteListener { success, message, exitCode ->
-                        Log.d(TAG, "success: $success, message: $message, exitCode: $exitCode")
-                        if (success) {
-                            restartApp(Intent(this@MainActivity, MainActivity::class.java))
-                            Toast.makeText(
-                                this@MainActivity,
-                                "success: $success, message: $message, exitCode: $exitCode",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-
-                    }
-                }
-                .restore()
-        }
-        return true
-    }
 
     companion object {
 

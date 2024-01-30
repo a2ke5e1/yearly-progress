@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
+import com.a3.yearlyprogess.manager.WakeLocker
 
 abstract class BaseWidget(private val widgetServiceType: Int) :
     AppWidgetProvider() {
@@ -45,6 +46,7 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
     override fun onDisabled(context: Context) {
         val alarmHandler = AlarmHandler(context, widgetServiceType)
         alarmHandler.cancelAlarmManager()
+        WakeLocker.release()
     }
 
     open fun updateAppWidget(
@@ -56,6 +58,7 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         updateWidget(context, appWidgetManager, appWidgetId)
 
         val alarmHandler = AlarmHandler(context, widgetServiceType)
+        WakeLocker.acquire(context)
         alarmHandler.cancelAlarmManager()
         alarmHandler.setAlarmManager()
     }
