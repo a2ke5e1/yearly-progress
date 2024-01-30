@@ -2,6 +2,7 @@ package com.a3.yearlyprogess.widgets
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.text.SpannableString
 import android.text.format.DateFormat
@@ -136,6 +137,25 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             smallView.setTextViewText(R.id.eventProgressText, progressText)
             smallView.setTextViewText(R.id.eventTitle, eventTitle)
 
+
+            // Loads user preference if widgets needs to be transparent or
+            // not. Other prefs might be loaded the same way.
+
+            // TODO: Make a better way to load user prefs that
+            //  applies to kind of the widgets.
+            val enableTransparentWidgetBackground = settingsPref.getBoolean(
+                context.getString(R.string.widget_widget_transparent),
+                false
+            )
+            if (enableTransparentWidgetBackground) {
+                smallView.setInt(R.id.background, "setBackgroundColor", Color.TRANSPARENT)
+                tallView.setInt(R.id.background, "setBackgroundColor", Color.TRANSPARENT)
+                wideView.setInt(R.id.background, "setBackgroundColor", Color.TRANSPARENT)
+            } else {
+                smallView.setInt(R.id.background, "setBackgroundColor",context.getColor(R.color.widget_background_color))
+                tallView.setInt(R.id.background, "setBackgroundColor",context.getColor(R.color.widget_background_color))
+                wideView.setInt(R.id.background, "setBackgroundColor",context.getColor(R.color.widget_background_color))
+            }
 
             var remoteViews = wideView
             if (Build.VERSION.SDK_INT > 30) {

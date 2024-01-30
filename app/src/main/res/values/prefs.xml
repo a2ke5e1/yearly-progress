@@ -3,4 +3,5 @@
     <string name="app_widget_decimal_point" translatable="false">app_widget_decimal_point</string>
     <string name="app_week_widget_start_day" translatable="false">app_week_widget_start_day</string>
     <string name="widget_widget_decimal_point" translatable="false">widget_widget_decimal_point</string>
+    <string name="widget_widget_transparent" translatable="false">widget_widget_transparent</string>
 </resources>
