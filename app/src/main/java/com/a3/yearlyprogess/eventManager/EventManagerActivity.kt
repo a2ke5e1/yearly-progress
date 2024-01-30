@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.format
@@ -26,11 +25,10 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.ActivityEventManagerActivityBinding
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
-import com.a3.yearlyprogess.mWidgets.EventWidget
+import com.a3.yearlyprogess.widgets.EventWidget
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 

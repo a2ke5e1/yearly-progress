@@ -1,11 +1,9 @@
-package com.a3.yearlyprogess.mWidgets.util
+package com.a3.yearlyprogess.widgets.util
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
 import com.a3.yearlyprogess.manager.WakeLocker
 

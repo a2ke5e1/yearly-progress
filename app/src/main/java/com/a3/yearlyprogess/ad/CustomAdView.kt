@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.mAdview
+package com.a3.yearlyprogess.ad
 
 import android.content.Context
 import android.view.LayoutInflater

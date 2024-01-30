@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.mWidgets
+package com.a3.yearlyprogess.widgets
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -13,8 +13,7 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
 import com.a3.yearlyprogess.helper.ProgressPercentage
 import com.a3.yearlyprogess.manager.AlarmHandler
-import com.a3.yearlyprogess.mWidgets.util.BaseWidget
-import java.util.*
+import com.a3.yearlyprogess.widgets.util.BaseWidget
 import kotlin.math.roundToInt
 
 /**

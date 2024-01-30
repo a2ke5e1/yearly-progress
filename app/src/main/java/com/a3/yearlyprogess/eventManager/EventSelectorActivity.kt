@@ -5,13 +5,10 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.IntentCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,7 +18,7 @@ import com.a3.yearlyprogess.databinding.EventSelectorScreenListEventsBinding
 import com.a3.yearlyprogess.eventManager.adapter.EventsListViewAdapter
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
-import com.a3.yearlyprogess.mWidgets.EventWidget
+import com.a3.yearlyprogess.widgets.EventWidget
 
 class EventSelectorActivity : AppCompatActivity() {
 

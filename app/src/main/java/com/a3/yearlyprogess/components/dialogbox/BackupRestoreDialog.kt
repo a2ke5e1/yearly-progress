@@ -1,16 +1,13 @@
-package com.a3.yearlyprogess.screens
+package com.a3.yearlyprogess.components.dialogbox
 
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.a3.yearlyprogess.BuildConfig
 import com.a3.yearlyprogess.MainActivity
-import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.DialogRestoreBackupBinding
 import com.a3.yearlyprogess.eventManager.data.EventDatabase
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

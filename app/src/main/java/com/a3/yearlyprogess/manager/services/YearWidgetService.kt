@@ -3,7 +3,7 @@ package com.a3.yearlyprogess.manager.services
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import com.a3.yearlyprogess.mWidgets.YearWidget
+import com.a3.yearlyprogess.widgets.YearWidget
 
 class YearWidgetService : BaseWidgetService() {
 

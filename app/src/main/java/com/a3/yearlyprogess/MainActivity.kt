@@ -2,10 +2,8 @@ package com.a3.yearlyprogess
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -16,9 +14,8 @@ import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
-import com.a3.yearlyprogess.eventManager.data.EventDatabase
-import com.a3.yearlyprogess.screens.AboutDialog
-import com.a3.yearlyprogess.screens.BackupRestoreDialog
+import com.a3.yearlyprogess.components.dialogbox.AboutDialog
+import com.a3.yearlyprogess.components.dialogbox.BackupRestoreDialog
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors

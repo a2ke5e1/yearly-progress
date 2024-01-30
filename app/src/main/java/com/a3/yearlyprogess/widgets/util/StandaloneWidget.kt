@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.mWidgets.util
+package com.a3.yearlyprogess.widgets.util
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager

@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.screens
+package com.a3.yearlyprogess.components.dialogbox
 
 import android.annotation.SuppressLint
 import android.app.Dialog
