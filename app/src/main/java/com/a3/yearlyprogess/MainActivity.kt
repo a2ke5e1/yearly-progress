@@ -14,6 +14,7 @@ import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
+import com.a3.yearlyprogess.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.components.dialogbox.AboutDialog
 import com.a3.yearlyprogess.components.dialogbox.BackupRestoreDialog
 import com.google.android.gms.ads.MobileAds
