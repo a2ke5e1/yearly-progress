@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.text.SpannableString
 import android.widget.RemoteViews
 import androidx.preference.PreferenceManager
@@ -69,13 +70,29 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
             view.setProgressBar(R.id.widgetProgressBar, 100, widgetProgressBarValue, false)
 
             view.setOnClickPendingIntent(
-                android.R.id.background, PendingIntent.getActivity(
+                R.id.background, PendingIntent.getActivity(
                     context,
                     0,
                     Intent(context, MainActivity::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
             )
+
+
+            // Loads user preference if widgets needs to be transparent or
+            // not. Other prefs might be loaded the same way.
+
+            // TODO: Make a better way to load user prefs that
+            //  applies to kind of the widgets.
+            val enableTransparentWidgetBackground = pref.getBoolean(
+                context.getString(R.string.widget_widget_transparent),
+                false
+            )
+            if (enableTransparentWidgetBackground) {
+                view.setInt(R.id.background, "setBackgroundColor", Color.TRANSPARENT)
+            } else {
+                view.setInt(R.id.background, "setBackgroundColor",context.getColor(R.color.widget_background_color))
+            }
 
             return view
         }

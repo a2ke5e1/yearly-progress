@@ -2,7 +2,7 @@
     style="@style/Widget.YearlyProgess.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@android:id/background"
+    android:id="@+id/background"
     android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
 
    <TextView
