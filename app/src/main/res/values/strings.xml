@@ -75,5 +75,9 @@
     <string name="restore">Restore</string>
     <string name="backup_restore"><![CDATA[Backup & Restore]]></string>
     <string name="backup_restore_message">Time to reunite with your data – it missed you more than you know!</string>
+    <string name="widget_transparency">Widget Transparency</string>
+    <string name="adjust_opacity_of_the_standalone_and_event_widget">Adjust opacity of the standalone and event widget.</string>
+    <string name="time_left_counter">Time left counter</string>
+    <string name="shows_how_much_time_left_in_the_widget">Shows how much time left in the widget.</string>
 
 </resources>

@@ -10,26 +10,25 @@ import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class ProgressPercentage(private val context: Context) {
 
-
-
+    private val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
 
     fun setDefaultWeek() {
-        val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
         val weekStartDay =
-            settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0")
+            settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0") ?: "0"
         // Log.d("week_set", weekStartDay.toString())
-        DEFAULT_WEEK_PREF = weekStartDay!!.toInt()
+        DEFAULT_WEEK_PREF = weekStartDay.toInt()
     }
 
     fun setDefaultCalculationMode() {
-        val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
         val calculationMode =
-            settingPref.getString(context.getString(R.string.app_calculation_type), "0")
+            settingPref.getString(context.getString(R.string.app_calculation_type), "0") ?: "0"
         // Log.d("calculation_set", calculationMode.toString())
-        DEFAULT_CALCULATION_MODE = calculationMode!!.toInt()
+        DEFAULT_CALCULATION_MODE = calculationMode.toInt()
     }
 
     companion object {
@@ -196,6 +195,12 @@ class ProgressPercentage(private val context: Context) {
                 CUSTOM_EVENT -> eventEndMilliSeconds
                 else -> throw InvalidProgressType("Invalid Progress Type $field")
             }
+        }
+
+        fun getDaysLeft(field: Int, eventEndMilliSeconds: Long = 0): String {
+            return (getEndOfTimeMillis(
+                field, eventEndMilliSeconds
+            ) - getCurrentTimeMillis()).toDuration(DurationUnit.MILLISECONDS).toString()
         }
 
         fun getCurrentTimeMillis(): Long = System.currentTimeMillis()

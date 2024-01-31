@@ -5,9 +5,13 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.text.SpannableString
+import android.view.View
 import android.widget.RemoteViews
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
@@ -64,9 +68,20 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
                 else -> ""
             }
 
+            val widgetDaysLeftCounter = ProgressPercentage.getDaysLeft(
+                when (widgetServiceType) {
+                    AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.DAY
+                    AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.MONTH
+                    AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentage.WEEK
+                    AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentage.YEAR
+                    else -> -1
+                }
+            ) + " left"
+
 
             view.setTextViewText(R.id.widgetType, widgetType)
             view.setTextViewText(R.id.widgetCurrentValue, widgetCurrentValue)
+            view.setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
             view.setTextViewText(R.id.widgetProgress, widgetProgressText)
             view.setProgressBar(R.id.widgetProgressBar, 100, widgetProgressBarValue, false)
 
@@ -89,8 +104,17 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
                 context.getString(R.string.widget_widget_background_transparency),
                 255
             )
-            view.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
-
+            val timeLeftCounter =
+                pref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
+            view.setInt(
+                R.id.widgetContainer,
+                "setImageAlpha",
+                widgetBackgroundAlpha
+            )
+            view.setViewVisibility(
+                R.id.widgetDaysLeft,
+                if (timeLeftCounter) View.VISIBLE else View.GONE
+            )
 
 
             return view

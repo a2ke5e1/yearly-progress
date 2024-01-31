@@ -4,4 +4,5 @@
     <string name="app_week_widget_start_day" translatable="false">app_week_widget_start_day</string>
     <string name="widget_widget_decimal_point" translatable="false">widget_widget_decimal_point</string>
     <string name="widget_widget_background_transparency" translatable="false">widget_widget_background_transparency</string>
+    <string name="widget_widget_time_left">widget_widget_time_left</string>
 </resources>

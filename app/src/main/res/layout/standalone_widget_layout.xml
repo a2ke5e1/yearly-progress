@@ -1,65 +1,94 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Widget.YearlyProgess.AppWidget.Container"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/background"
-    android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
+    >
 
-   <TextView
-       android:id="@+id/widgetType"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="@string/day"
-       android:textAllCaps="true"
-       android:textColor="@color/widget_text_color"
-       android:textSize="11sp"
-       android:textStyle="normal"
-       android:layout_alignParentTop="true"
-       android:layout_above="@id/bottomContainer"
-       />
+    <ImageView
+        android:id="@+id/widgetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/app_widget_background"/>
 
+    <RelativeLayout
+        style="@style/Widget.YearlyProgress.AppWidget.Container.Transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
 
-   <RelativeLayout
-       android:id="@+id/bottomContainer"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_centerHorizontal="true"
-       android:layout_alignParentBottom="true">
-
-      <TextView
-          android:id="@+id/widgetProgress"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignStart="@id/widgetProgressBar"
-          android:layout_toStartOf="@+id/widgetCurrentValue"
-          android:text="@string/demo_day_per"
-          android:textColor="@color/widget_text_color"
-          android:textSize="18sp"
-          android:textStyle="bold" />
-
-      <TextView
-          android:id="@+id/widgetCurrentValue"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_above="@id/widgetProgressBar"
-          android:layout_alignEnd="@id/widgetProgressBar"
-          android:text="@string/demo_date"
-          android:textColor="@color/widget_text_color_tertiary"
-          android:textSize="11sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/bottomContainer"
+            android:orientation="vertical">
 
 
-      <ProgressBar
-          android:id="@+id/widgetProgressBar"
-          style="?android:attr/progressBarStyleHorizontal"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:progressBackgroundTint="@color/widget_progress_bar_background_color"
-          android:progressTint="@color/widget_text_color"
-          android:layout_below="@id/widgetProgress"
-          android:indeterminate="false"
-          android:max="100"
-          android:progress="20" />
+            <TextView
+                android:id="@+id/widgetType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/day"
+                android:textAllCaps="true"
+                android:textColor="@color/widget_text_color"
+                android:textSize="11sp"
+                android:textStyle="normal" />
 
-   </RelativeLayout>
+            <TextView
+                android:id="@+id/widgetDaysLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/widget_text_color_tertiary"
+                android:textSize="10sp"
+                android:textStyle="normal" />
 
-</RelativeLayout>
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/bottomContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/widgetProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/widgetProgressBar"
+                android:layout_toStartOf="@+id/widgetCurrentValue"
+                android:text="@string/demo_day_per"
+                android:textColor="@color/widget_text_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/widgetCurrentValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/widgetProgressBar"
+                android:layout_alignEnd="@id/widgetProgressBar"
+                android:text="@string/demo_date"
+                android:textColor="@color/widget_text_color_tertiary"
+                android:textSize="11sp" />
+
+
+            <ProgressBar
+                android:id="@+id/widgetProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/widgetProgress"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="20"
+                android:progressBackgroundTint="@color/widget_progress_bar_background_color"
+                android:progressTint="@color/widget_text_color" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</FrameLayout>
+
