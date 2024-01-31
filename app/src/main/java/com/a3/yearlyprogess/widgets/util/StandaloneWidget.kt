@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.text.SpannableString
+import android.view.View
 import android.widget.RemoteViews
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.DrawableCompat
@@ -103,10 +104,16 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
                 context.getString(R.string.widget_widget_background_transparency),
                 255
             )
-           view.setInt(
+            val timeLeftCounter =
+                pref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
+            view.setInt(
                 R.id.widgetContainer,
                 "setImageAlpha",
                 widgetBackgroundAlpha
+            )
+            view.setViewVisibility(
+                R.id.widgetDaysLeft,
+                if (timeLeftCounter) View.VISIBLE else View.GONE
             )
 
 

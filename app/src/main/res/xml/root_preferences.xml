@@ -73,14 +73,21 @@
 
 
         <SeekBarPreference
-            app:title="Widget Transparency"
-            app:summary="Adjust opacity of the standalone and event widget."
+            app:title="@string/widget_transparency"
+            app:summary="@string/adjust_opacity_of_the_standalone_and_event_widget"
             android:max="255"
             app:defaultValue="255"
             app:iconSpaceReserved="false"
             app:min="0"
             app:showSeekBarValue="false"
             app:key="@string/widget_widget_background_transparency" />
+
+        <SwitchPreference
+            app:title="@string/time_left_counter"
+            app:summary="@string/shows_how_much_time_left_in_the_widget"
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/widget_widget_time_left" />
 
     </PreferenceCategory>
 
