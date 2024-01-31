@@ -64,9 +64,20 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
                 else -> ""
             }
 
+            val widgetDaysLeftCounter = ProgressPercentage.getDaysLeft(
+                when (widgetServiceType) {
+                    AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.DAY
+                    AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.MONTH
+                    AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentage.WEEK
+                    AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentage.YEAR
+                    else -> -1
+                }
+            ) + " left"
+
 
             view.setTextViewText(R.id.widgetType, widgetType)
             view.setTextViewText(R.id.widgetCurrentValue, widgetCurrentValue)
+            view.setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
             view.setTextViewText(R.id.widgetProgress, widgetProgressText)
             view.setProgressBar(R.id.widgetProgressBar, 100, widgetProgressBarValue, false)
 
@@ -89,7 +100,14 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
                 context.getString(R.string.widget_widget_background_transparency),
                 255
             )
-            view.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
+            view.setInt(
+                R.id.background,
+                "setBackgroundColor",
+                ColorUtils.setAlphaComponent(
+                    context.getColor(R.color.widget_background_color),
+                    widgetBackgroundAlpha
+                )
+            )
 
 
 
