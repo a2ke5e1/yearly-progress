@@ -153,6 +153,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             wideView.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
 
 
+
             var remoteViews = wideView
             if (Build.VERSION.SDK_INT > 30) {
                 val viewMapping: Map<SizeF, RemoteViews> = mapOf(

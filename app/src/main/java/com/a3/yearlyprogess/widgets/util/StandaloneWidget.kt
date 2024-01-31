@@ -92,6 +92,7 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
             view.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
 
 
+
             return view
         }
     }
