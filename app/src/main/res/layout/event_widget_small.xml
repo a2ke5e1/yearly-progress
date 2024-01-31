@@ -1,58 +1,68 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/background"
-    tools:ignore="HardcodedText"
-    style="@style/Widget.YearlyProgress.AppWidget.Container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:theme="@style/App.SplashScreen.AppWidgetContainer">
+    android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/eventTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="Lorem Ipsum"
-        android:textAllCaps="false"
-        android:textColor="@color/widget_text_color"
-        android:textSize="12sp"
-        android:textStyle="normal|bold" />
-
-
-
-    <TextView
-        android:id="@+id/eventProgressText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/eventProgressBar"
-        android:text="40.48%"
-        android:textColor="@color/widget_text_color"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-
-    <TextView
-        android:id="@+id/currentDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/eventProgressBar"
-        android:layout_alignParentEnd="true"
-        android:text="08/09"
-        android:textAlignment="textEnd"
-        android:textColor="@color/widget_text_color_tertiary"
-        android:textSize="11sp" />
-
-    <ProgressBar
-        android:id="@+id/eventProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <ImageView
+        android:id="@+id/widgetContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="41"
-        android:progressBackgroundTint="@color/widget_progress_bar_background_color"
-        android:progressTint="@color/widget_text_color" />
+        android:layout_height="match_parent"
+        android:src="@drawable/app_widget_background" />
 
-</RelativeLayout>
+    <RelativeLayout
+        style="@style/Widget.YearlyProgress.AppWidget.Container.Transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/App.SplashScreen.AppWidgetContainer"
+        tools:ignore="HardcodedText">
+
+
+        <TextView
+            android:id="@+id/eventTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="Lorem Ipsum"
+            android:textAllCaps="false"
+            android:textColor="@color/widget_text_color"
+            android:textSize="12sp"
+            android:textStyle="normal|bold" />
+
+
+        <TextView
+            android:id="@+id/eventProgressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/eventProgressBar"
+            android:text="40.48%"
+            android:textColor="@color/widget_text_color"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/currentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/eventProgressBar"
+            android:layout_alignParentEnd="true"
+            android:text="08/09"
+            android:textAlignment="textEnd"
+            android:textColor="@color/widget_text_color_tertiary"
+            android:textSize="11sp" />
+
+        <ProgressBar
+            android:id="@+id/eventProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="41"
+            android:progressBackgroundTint="@color/widget_progress_bar_background_color"
+            android:progressTint="@color/widget_text_color" />
+
+    </RelativeLayout>
+</FrameLayout>

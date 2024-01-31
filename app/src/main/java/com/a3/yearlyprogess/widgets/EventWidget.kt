@@ -65,7 +65,6 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             )
 
 
-
             val formattedEndTime = DateFormat.format(
                 if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a",
                 eventEndDateTimeInMillis
@@ -148,11 +147,21 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 context.getString(R.string.widget_widget_background_transparency),
                 255
             )
-            // smallView.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
-            // tallView.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
-            // wideView.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
-
-
+            smallView.setInt(
+                R.id.widgetContainer,
+                "setImageAlpha",
+                widgetBackgroundAlpha
+            )
+            tallView.setInt(
+                R.id.widgetContainer,
+                "setImageAlpha",
+                widgetBackgroundAlpha
+            )
+            wideView.setInt(
+                R.id.widgetContainer,
+                "setImageAlpha",
+                widgetBackgroundAlpha
+            )
 
             var remoteViews = wideView
             if (Build.VERSION.SDK_INT > 30) {
@@ -197,6 +206,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
 
     }
+
     /** Delete all cached widget information in the memory
      *  after widget has been deleted.  */
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
