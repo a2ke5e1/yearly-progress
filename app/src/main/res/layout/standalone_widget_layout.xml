@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/background"
-    style="@style/Widget.YearlyProgess.AppWidget.Container"
+    style="@style/Widget.YearlyProgress.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
