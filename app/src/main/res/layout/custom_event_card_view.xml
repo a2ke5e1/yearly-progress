@@ -14,6 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        app:cardElevation="0dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical">
 
@@ -43,7 +44,7 @@
                     android:id="@+id/eventTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                     android:textColor="?attr/colorPrimary"
                     tools:text="Lorem Ipsum" />
 
@@ -68,7 +69,7 @@
 
                 <TextView
                     android:id="@+id/eventDesc"
-                    style="@style/TextAppearance.Material3.BodyMedium"
+                    style="@style/TextAppearance.Material3.BodySmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -88,7 +89,7 @@
 
                 <TextView
                     android:id="@+id/progressText"
-                    style="@style/TextAppearance.Material3.HeadlineMedium"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0%"
@@ -102,15 +103,12 @@
                     android:indeterminate="false"
                     android:max="100"
                     android:progress="0"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:trackCornerRadius="24dp" />
 
 
             </LinearLayout>
 
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="1dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
