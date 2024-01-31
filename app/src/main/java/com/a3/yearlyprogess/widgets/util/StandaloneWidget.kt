@@ -5,9 +5,12 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.text.SpannableString
 import android.widget.RemoteViews
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
@@ -100,15 +103,11 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
                 context.getString(R.string.widget_widget_background_transparency),
                 255
             )
-            view.setInt(
-                R.id.background,
-                "setBackgroundColor",
-                ColorUtils.setAlphaComponent(
-                    context.getColor(R.color.widget_background_color),
-                    widgetBackgroundAlpha
-                )
+           view.setInt(
+                R.id.widgetContainer,
+                "setImageAlpha",
+                widgetBackgroundAlpha
             )
-
 
 
             return view
