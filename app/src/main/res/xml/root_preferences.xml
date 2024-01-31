@@ -7,6 +7,16 @@
 
         <ListPreference
             app:defaultValue="0"
+            app:entries="@array/week_start_entries"
+            app:entryValues="@array/week_start_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/app_week_widget_start_day"
+            app:summary="%s"
+            app:title="@string/pref_title_week_day" />
+
+
+        <ListPreference
+            app:defaultValue="0"
             app:entries="@array/calc_entries"
             app:entryValues="@array/calc_values"
             app:iconSpaceReserved="false"
@@ -35,7 +45,6 @@
             app:title="@string/pref_title_week_day" />
 
 
-
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -62,12 +71,16 @@
             app:summary="@string/pref_summary_widget_decimal_places"
             app:title="@string/pref_title_widget_event_decimal_place" />
 
-        <SwitchPreference
-            app:title="Transparent Widget"
-            app:summary="Removes box surrounding the widget"
+
+        <SeekBarPreference
+            app:title="Widget Transparency"
+            app:summary="Adjust opacity of the standalone and event widget."
+            android:max="255"
+            app:defaultValue="255"
             app:iconSpaceReserved="false"
-            app:defaultValue="false"
-            app:key="@string/widget_widget_transparent" />
+            app:min="0"
+            app:showSeekBarValue="false"
+            app:key="@string/widget_widget_background_transparency" />
 
     </PreferenceCategory>
 

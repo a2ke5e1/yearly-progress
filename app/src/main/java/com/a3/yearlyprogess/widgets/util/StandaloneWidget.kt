@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.text.SpannableString
 import android.widget.RemoteViews
+import androidx.core.graphics.ColorUtils
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
@@ -84,15 +85,13 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
 
             // TODO: Make a better way to load user prefs that
             //  applies to kind of the widgets.
-            val enableTransparentWidgetBackground = pref.getBoolean(
-                context.getString(R.string.widget_widget_transparent),
-                false
+            val widgetBackgroundAlpha = pref.getInt(
+                context.getString(R.string.widget_widget_background_transparency),
+                255
             )
-            if (enableTransparentWidgetBackground) {
-                view.setInt(R.id.background, "setBackgroundColor", Color.TRANSPARENT)
-            } else {
-                view.setInt(R.id.background, "setBackgroundColor",context.getColor(R.color.widget_background_color))
-            }
+            view.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
+
+
 
             return view
         }

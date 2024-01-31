@@ -9,6 +9,7 @@ import android.text.format.DateFormat
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
+import androidx.core.graphics.ColorUtils
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.components.CustomEventCardView.Companion.displayRelativeDifferenceMessage
@@ -143,19 +144,15 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
             // TODO: Make a better way to load user prefs that
             //  applies to kind of the widgets.
-            val enableTransparentWidgetBackground = settingsPref.getBoolean(
-                context.getString(R.string.widget_widget_transparent),
-                false
+            val widgetBackgroundAlpha = settingsPref.getInt(
+                context.getString(R.string.widget_widget_background_transparency),
+                255
             )
-            if (enableTransparentWidgetBackground) {
-                smallView.setInt(R.id.background, "setBackgroundColor", Color.TRANSPARENT)
-                tallView.setInt(R.id.background, "setBackgroundColor", Color.TRANSPARENT)
-                wideView.setInt(R.id.background, "setBackgroundColor", Color.TRANSPARENT)
-            } else {
-                smallView.setInt(R.id.background, "setBackgroundColor",context.getColor(R.color.widget_background_color))
-                tallView.setInt(R.id.background, "setBackgroundColor",context.getColor(R.color.widget_background_color))
-                wideView.setInt(R.id.background, "setBackgroundColor",context.getColor(R.color.widget_background_color))
-            }
+            smallView.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
+            tallView.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
+            wideView.setInt(R.id.background, "setBackgroundColor", ColorUtils.setAlphaComponent(context.getColor(R.color.widget_background_color), widgetBackgroundAlpha))
+
+
 
             var remoteViews = wideView
             if (Build.VERSION.SDK_INT > 30) {
