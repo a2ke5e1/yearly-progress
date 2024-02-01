@@ -143,10 +143,13 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
             // TODO: Make a better way to load user prefs that
             //  applies to kind of the widgets.
-            val widgetBackgroundAlpha = settingsPref.getInt(
+            var widgetBackgroundAlpha = settingsPref.getInt(
                 context.getString(R.string.widget_widget_background_transparency),
                 255
             )
+
+            widgetBackgroundAlpha = (( widgetBackgroundAlpha / 100.0) * 255).toInt()
+
             smallView.setInt(
                 R.id.widgetContainer,
                 "setImageAlpha",

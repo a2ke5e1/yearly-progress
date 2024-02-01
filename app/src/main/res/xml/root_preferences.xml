@@ -35,15 +35,6 @@
             app:summary="@string/pref_summary_app_decimal_places"
             app:title="@string/pref_title_app_decimal_places" />
 
-        <ListPreference
-            app:defaultValue="0"
-            app:entries="@array/week_start_entries"
-            app:entryValues="@array/week_start_values"
-            app:iconSpaceReserved="false"
-            app:key="@string/app_week_widget_start_day"
-            app:summary="%s"
-            app:title="@string/pref_title_week_day" />
-
 
     </PreferenceCategory>
 
@@ -75,11 +66,11 @@
         <SeekBarPreference
             app:title="@string/widget_transparency"
             app:summary="@string/adjust_opacity_of_the_standalone_and_event_widget"
-            android:max="255"
-            app:defaultValue="255"
+            android:max="100"
+            app:defaultValue="100"
             app:iconSpaceReserved="false"
             app:min="0"
-            app:showSeekBarValue="false"
+            app:showSeekBarValue="true"
             app:key="@string/widget_widget_background_transparency" />
 
         <SwitchPreference
