@@ -4,7 +4,9 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
+import android.provider.CalendarContract.Colors
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
@@ -78,11 +80,19 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
             val medium = RemoteViews(context.packageName, R.layout.all_in_widget)
             val large = RemoteViews(context.packageName, R.layout.all_in_widget)
             val xlarge = RemoteViews(context.packageName, R.layout.all_in_widget)
+            val square = RemoteViews(context.packageName, R.layout.all_in_widget)
 
             initiateView(context, small)
             initiateView(context, medium)
             initiateView(context, large)
             initiateView(context, xlarge)
+            initiateView(context, square)
+
+            /*small.setInt(R.id.testBg, "setBackgroundColor", Color.RED)
+            medium.setInt(R.id.testBg, "setBackgroundColor", Color.GREEN)
+            large.setInt(R.id.testBg, "setBackgroundColor", Color.YELLOW)
+            xlarge.setInt(R.id.testBg, "setBackgroundColor", Color.GRAY)
+            square.setInt(R.id.testBg, "setBackgroundColor", Color.BLUE)*/
 
             small.setViewVisibility(R.id.testWeek, View.GONE)
             small.setViewVisibility(R.id.testMonth, View.GONE)
@@ -92,6 +102,8 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
             medium.setViewVisibility(R.id.testYear, View.GONE)
 
             large.setViewVisibility(R.id.testWeek, View.GONE)
+
+            square.setInt(R.id.gridLayout, "setColumnCount", 2)
 
 
             // Instruct the widget manager to update the widget
@@ -103,12 +115,15 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
                 val viewMapping: Map<SizeF, RemoteViews> = mapOf(
                     SizeF(300f, 80f) to xlarge,
                     SizeF(220f, 80f) to large,
+                    SizeF(130f, 130f) to square,
                     SizeF(160f, 80f) to medium,
                     SizeF(100f, 80f) to small,
                 )
 
                 remoteViews = RemoteViews(viewMapping)
             }
+
+
             return remoteViews
         }
     }
