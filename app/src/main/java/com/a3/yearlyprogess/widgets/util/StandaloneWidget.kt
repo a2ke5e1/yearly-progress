@@ -100,10 +100,13 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
 
             // TODO: Make a better way to load user prefs that
             //  applies to kind of the widgets.
-            val widgetBackgroundAlpha = pref.getInt(
+            var widgetBackgroundAlpha = pref.getInt(
                 context.getString(R.string.widget_widget_background_transparency),
-                255
+                100
             )
+
+            widgetBackgroundAlpha = (( widgetBackgroundAlpha / 100.0) * 255).toInt()
+
             val timeLeftCounter =
                 pref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
             view.setInt(
