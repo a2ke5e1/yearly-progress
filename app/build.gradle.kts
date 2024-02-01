@@ -13,7 +13,7 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 28
         targetSdk = 34
-        versionCode = 55
+        versionCode = 56
 
         /*
         Version:
@@ -23,7 +23,7 @@ android {
         New Widgets Styles - x.3.x.x
         */
         val localVersionCode = versionCode
-        versionName = "1.2.1.${localVersionCode!! - 47}"
+        versionName = "1.2.2.${localVersionCode!! - 56}"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
