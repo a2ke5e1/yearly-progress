@@ -72,6 +72,9 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
             views.setViewVisibility(R.id.testWeek, View.VISIBLE)
             views.setViewVisibility(R.id.testMonth, View.VISIBLE)
             views.setViewVisibility(R.id.testYear, View.VISIBLE)
+
+            views.setInt(R.id.gridLayout, "setColumnCount", 4)
+
         }
 
 
@@ -81,12 +84,14 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
             val large = RemoteViews(context.packageName, R.layout.all_in_widget)
             val xlarge = RemoteViews(context.packageName, R.layout.all_in_widget)
             val square = RemoteViews(context.packageName, R.layout.all_in_widget)
+            val tall = RemoteViews(context.packageName, R.layout.all_in_widget)
 
             initiateView(context, small)
             initiateView(context, medium)
             initiateView(context, large)
             initiateView(context, xlarge)
             initiateView(context, square)
+            initiateView(context, tall)
 
             /*small.setInt(R.id.testBg, "setBackgroundColor", Color.RED)
             medium.setInt(R.id.testBg, "setBackgroundColor", Color.GREEN)
@@ -104,6 +109,7 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
             large.setViewVisibility(R.id.testWeek, View.GONE)
 
             square.setInt(R.id.gridLayout, "setColumnCount", 2)
+            tall.setInt(R.id.gridLayout, "setColumnCount", 1)
 
 
             // Instruct the widget manager to update the widget
@@ -116,6 +122,7 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
                     SizeF(300f, 80f) to xlarge,
                     SizeF(220f, 80f) to large,
                     SizeF(130f, 130f) to square,
+                    SizeF(102f, 276f) to tall,
                     SizeF(160f, 80f) to medium,
                     SizeF(100f, 80f) to small,
                 )
