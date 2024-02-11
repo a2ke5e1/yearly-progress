@@ -2,20 +2,18 @@ package com.a3.yearlyprogess.widgets
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.graphics.Color
 import android.os.Build
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.graphics.ColorUtils
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.components.CustomEventCardView.Companion.displayRelativeDifferenceMessage
 import com.a3.yearlyprogess.eventManager.model.Event
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
-import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.widgets.util.BaseWidget
 import com.a3.yearlyprogess.manager.AlarmHandler
 
@@ -38,8 +36,8 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             val eventEndDateTimeInMillis = event.eventEndTime
 
 
-            var progress = ProgressPercentage.getProgress(
-                ProgressPercentage.CUSTOM_EVENT,
+            var progress = YearlyProgressManager.getProgress(
+                YearlyProgressManager.CUSTOM_EVENT,
                 eventStartTimeInMills,
                 eventEndDateTimeInMillis
             )
@@ -84,7 +82,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             wideView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
             wideView.setTextViewText(
                 R.id.currentDate,
-                ProgressPercentage.getDay(formatted = true)
+                YearlyProgressManager.getDay(formatted = true)
             )
             wideView.setTextViewText(R.id.eventTitle, eventTitle)
             if (eventDesc.isEmpty()) {
@@ -125,7 +123,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
             tallView.setTextViewText(R.id.eventProgressText, progressText)
             tallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-            tallView.setTextViewText(R.id.currentDate, ProgressPercentage.getDay(formatted = true))
+            tallView.setTextViewText(R.id.currentDate, YearlyProgressManager.getDay(formatted = true))
             tallView.setTextViewText(R.id.eventTitle, eventTitle)
             tallView.setTextViewText(
                 R.id.eventTime,
@@ -133,7 +131,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             )
 
             smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-            smallView.setTextViewText(R.id.currentDate, ProgressPercentage.getDay(formatted = true))
+            smallView.setTextViewText(R.id.currentDate, YearlyProgressManager.getDay(formatted = true))
             smallView.setTextViewText(R.id.eventProgressText, progressText)
             smallView.setTextViewText(R.id.eventTitle, eventTitle)
 

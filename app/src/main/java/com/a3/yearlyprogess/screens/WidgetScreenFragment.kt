@@ -20,9 +20,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
-import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
+import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.widgets.*
 import com.a3.yearlyprogess.widgets.util.StandaloneWidget
@@ -117,13 +117,13 @@ class WidgetScreenFragment : Fragment() {
             while (true) {
 
                 // Loads user preferences and set default values if not set
-                ProgressPercentage(requireContext()).setDefaultWeek()
-                ProgressPercentage(requireContext()).setDefaultCalculationMode()
+                YearlyProgressManager(requireContext()).setDefaultWeek()
+                YearlyProgressManager(requireContext()).setDefaultCalculationMode()
 
-                val progressTextYear = ProgressPercentage.getProgress(ProgressPercentage.YEAR)
-                val progressTextMonth = ProgressPercentage.getProgress(ProgressPercentage.MONTH)
-                val progressTextDay = ProgressPercentage.getProgress(ProgressPercentage.DAY)
-                val progressTextWeek = ProgressPercentage.getProgress(ProgressPercentage.WEEK)
+                val progressTextYear = YearlyProgressManager.getProgress(YearlyProgressManager.YEAR)
+                val progressTextMonth = YearlyProgressManager.getProgress(YearlyProgressManager.MONTH)
+                val progressTextDay = YearlyProgressManager.getProgress(YearlyProgressManager.DAY)
+                val progressTextWeek = YearlyProgressManager.getProgress(YearlyProgressManager.WEEK)
 
                 val progressYear = progressTextYear.roundToInt()
                 val progressMonth = progressTextMonth.roundToInt()
@@ -168,10 +168,10 @@ class WidgetScreenFragment : Fragment() {
                     progressBarDay.progress = progressDay
                     progressBarWeek.progress = progressWeek
 
-                    textViewYear.text = ProgressPercentage.getYear().toString()
-                    textViewMonth.text = ProgressPercentage.getMonth(isLong = false)
-                    textViewWeek.text = ProgressPercentage.getWeek(isLong = false)
-                    textViewDay.text = ProgressPercentage.getDay(formatted = true)
+                    textViewYear.text = YearlyProgressManager.getYear().toString()
+                    textViewMonth.text = YearlyProgressManager.getMonth(isLong = false)
+                    textViewWeek.text = YearlyProgressManager.getWeek(isLong = false)
+                    textViewDay.text = YearlyProgressManager.getDay(formatted = true)
 
 
                     // All In One Widget
@@ -185,10 +185,10 @@ class WidgetScreenFragment : Fragment() {
                     allInOneProgressBarDay.progress = progressDay
                     allInOneProgressBarWeek.progress = progressWeek
 
-                    allInOneTitleTextViewYear.text = ProgressPercentage.getYear().toString()
-                    allInOneTitleTextViewMonth.text = ProgressPercentage.getMonth(isLong = false)
-                    allInOneTitleTextViewDay.text = ProgressPercentage.getDay(formatted = true)
-                    allInOneTitleTextViewWeek.text = ProgressPercentage.getWeek(isLong = false)
+                    allInOneTitleTextViewYear.text = YearlyProgressManager.getYear().toString()
+                    allInOneTitleTextViewMonth.text = YearlyProgressManager.getMonth(isLong = false)
+                    allInOneTitleTextViewDay.text = YearlyProgressManager.getDay(formatted = true)
+                    allInOneTitleTextViewWeek.text = YearlyProgressManager.getWeek(isLong = false)
 
                 }
                 delay(i * 1000)
@@ -198,36 +198,36 @@ class WidgetScreenFragment : Fragment() {
     }
 
     private fun startAnimationWidget() {
-        animatedUpdateProgressTextView(progressTextViewYear, ProgressPercentage.YEAR)
-        animatedUpdateProgressTextView(progressTextViewMonth, ProgressPercentage.MONTH)
-        animatedUpdateProgressTextView(progressTextViewDay, ProgressPercentage.DAY)
-        animatedUpdateProgressTextView(progressTextViewWeek, ProgressPercentage.WEEK)
+        animatedUpdateProgressTextView(progressTextViewYear, YearlyProgressManager.YEAR)
+        animatedUpdateProgressTextView(progressTextViewMonth, YearlyProgressManager.MONTH)
+        animatedUpdateProgressTextView(progressTextViewDay, YearlyProgressManager.DAY)
+        animatedUpdateProgressTextView(progressTextViewWeek, YearlyProgressManager.WEEK)
 
-        animatedUpdateProgressBarView(progressBarYear, ProgressPercentage.YEAR)
-        animatedUpdateProgressBarView(progressBarMonth, ProgressPercentage.MONTH)
-        animatedUpdateProgressBarView(progressBarDay, ProgressPercentage.DAY)
-        animatedUpdateProgressBarView(progressBarWeek, ProgressPercentage.WEEK)
+        animatedUpdateProgressBarView(progressBarYear, YearlyProgressManager.YEAR)
+        animatedUpdateProgressBarView(progressBarMonth, YearlyProgressManager.MONTH)
+        animatedUpdateProgressBarView(progressBarDay, YearlyProgressManager.DAY)
+        animatedUpdateProgressBarView(progressBarWeek, YearlyProgressManager.WEEK)
 
         animatedUpdateProgressTextView(
-            allInOneProgressTextViewYear, ProgressPercentage.YEAR, true
+            allInOneProgressTextViewYear, YearlyProgressManager.YEAR, true
         )
         animatedUpdateProgressTextView(
-            allInOneProgressTextViewMonth, ProgressPercentage.MONTH, true
+            allInOneProgressTextViewMonth, YearlyProgressManager.MONTH, true
         )
-        animatedUpdateProgressTextView(allInOneProgressTextViewDay, ProgressPercentage.DAY, true)
+        animatedUpdateProgressTextView(allInOneProgressTextViewDay, YearlyProgressManager.DAY, true)
         animatedUpdateProgressTextView(
-            allInOneProgressTextViewWeek, ProgressPercentage.WEEK, true
+            allInOneProgressTextViewWeek, YearlyProgressManager.WEEK, true
         )
 
-        animatedUpdateProgressBarView(allInOneProgressBarYear, ProgressPercentage.YEAR)
-        animatedUpdateProgressBarView(allInOneProgressBarMonth, ProgressPercentage.MONTH)
-        animatedUpdateProgressBarView(allInOneProgressBarDay, ProgressPercentage.DAY)
-        animatedUpdateProgressBarView(allInOneProgressBarWeek, ProgressPercentage.WEEK)
+        animatedUpdateProgressBarView(allInOneProgressBarYear, YearlyProgressManager.YEAR)
+        animatedUpdateProgressBarView(allInOneProgressBarMonth, YearlyProgressManager.MONTH)
+        animatedUpdateProgressBarView(allInOneProgressBarDay, YearlyProgressManager.DAY)
+        animatedUpdateProgressBarView(allInOneProgressBarWeek, YearlyProgressManager.WEEK)
     }
 
     private fun initProgressBarsTextViews(view: View) {
-        ProgressPercentage(requireContext()).setDefaultWeek()
-                ProgressPercentage(requireContext()).setDefaultCalculationMode()
+        YearlyProgressManager(requireContext()).setDefaultWeek()
+                YearlyProgressManager(requireContext()).setDefaultCalculationMode()
 
         binding.widgetYearDemo.findViewById<TextView>(R.id.widgetType).text =
             context?.getString(R.string.year)
@@ -354,9 +354,9 @@ class WidgetScreenFragment : Fragment() {
         textView: TextView, type: Int, isAllInOne: Boolean = false
     ) {
         val progressTextAnimator = if (isAllInOne) {
-            ValueAnimator.ofInt(0, ProgressPercentage.getProgress(type).roundToInt())
+            ValueAnimator.ofInt(0, YearlyProgressManager.getProgress(type).roundToInt())
         } else {
-            ValueAnimator.ofFloat(0F, ProgressPercentage.getProgress(type).toFloat())
+            ValueAnimator.ofFloat(0F, YearlyProgressManager.getProgress(type).toFloat())
         }
         progressTextAnimator.duration = 600
         progressTextAnimator.addUpdateListener {
@@ -372,7 +372,7 @@ class WidgetScreenFragment : Fragment() {
 
     private fun animatedUpdateProgressBarView(progressBarView: ProgressBar, type: Int) {
         val progressViewAnimator =
-            ValueAnimator.ofInt(0, ProgressPercentage.getProgress(type).roundToInt())
+            ValueAnimator.ofInt(0, YearlyProgressManager.getProgress(type).roundToInt())
         progressViewAnimator.duration = 600
         progressViewAnimator.addUpdateListener {
             progressBarView.progress = it.animatedValue as Int

@@ -4,16 +4,14 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
-import android.provider.CalendarContract.Colors
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgress
-import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
+import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.manager.AlarmHandler
 import com.a3.yearlyprogess.widgets.util.BaseWidget
 import kotlin.math.roundToInt
@@ -28,14 +26,14 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
         private fun initiateView(context: Context, views: RemoteViews) {
 
             // Set default week and calculation mode
-            ProgressPercentage(context).setDefaultWeek()
-            ProgressPercentage(context).setDefaultCalculationMode()
+            YearlyProgressManager(context).setDefaultWeek()
+            YearlyProgressManager(context).setDefaultCalculationMode()
 
 
-            val dayProgress = ProgressPercentage.getProgress(ProgressPercentage.DAY).roundToInt()
-            val weekProgress = ProgressPercentage.getProgress(ProgressPercentage.WEEK).roundToInt()
-            val monthProgress = ProgressPercentage.getProgress(ProgressPercentage.MONTH).roundToInt()
-            val yearProgress = ProgressPercentage.getProgress(ProgressPercentage.YEAR).roundToInt()
+            val dayProgress = YearlyProgressManager.getProgress(YearlyProgressManager.DAY).roundToInt()
+            val weekProgress = YearlyProgressManager.getProgress(YearlyProgressManager.WEEK).roundToInt()
+            val monthProgress = YearlyProgressManager.getProgress(YearlyProgressManager.MONTH).roundToInt()
+            val yearProgress = YearlyProgressManager.getProgress(YearlyProgressManager.YEAR).roundToInt()
 
 
 
@@ -50,16 +48,16 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
             views.setProgressBar(R.id.progressBarYear, 100, yearProgress, false)
 
 
-            views.setTextViewText(R.id.progressTitle, ProgressPercentage.getDay(formatted = true))
+            views.setTextViewText(R.id.progressTitle, YearlyProgressManager.getDay(formatted = true))
             views.setTextViewText(
                 R.id.progressWeekTitle,
-                ProgressPercentage.getWeek(isLong = false)
+                YearlyProgressManager.getWeek(isLong = false)
             )
             views.setTextViewText(
                 R.id.progressMonthTitle,
-                ProgressPercentage.getMonth(isLong = false)
+                YearlyProgressManager.getMonth(isLong = false)
             )
-            views.setTextViewText(R.id.progressYearTitle, ProgressPercentage.getYear().toString())
+            views.setTextViewText(R.id.progressYearTitle, YearlyProgressManager.getYear().toString())
 
             views.setOnClickPendingIntent(
                 R.id.gridLayout, PendingIntent.getActivity(

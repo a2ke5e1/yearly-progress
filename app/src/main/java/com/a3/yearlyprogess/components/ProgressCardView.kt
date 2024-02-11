@@ -5,14 +5,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.text.SpannableString
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
-import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.YearlyProgressManager
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -37,7 +36,7 @@ class ProgressCardView @JvmOverloads constructor(
     private var widgetProgressCard: MaterialCardView
 
     private var job: Job
-    private var field: Int = ProgressPercentage.YEAR
+    private var field: Int = YearlyProgressManager.YEAR
 
 
     init {
@@ -65,33 +64,33 @@ class ProgressCardView @JvmOverloads constructor(
 
         // data that doesn't change
         titleTextView.text = when (field) {
-            ProgressPercentage.YEAR -> context.getString(R.string.year)
-            ProgressPercentage.MONTH -> context.getString(R.string.month)
-            ProgressPercentage.WEEK -> context.getString(R.string.week)
-            ProgressPercentage.DAY -> context.getString(R.string.day)
+            YearlyProgressManager.YEAR -> context.getString(R.string.year)
+            YearlyProgressManager.MONTH -> context.getString(R.string.month)
+            YearlyProgressManager.WEEK -> context.getString(R.string.week)
+            YearlyProgressManager.DAY -> context.getString(R.string.day)
             else -> ""
         }
 
         // Calculate frequency to update constant values
         val freq =
-            ProgressPercentage.getEndOfTimeMillis(field) - ProgressPercentage.getCurrentTimeMillis() // in milliseconds
+            YearlyProgressManager.getEndOfTimeMillis(field) - YearlyProgressManager.getCurrentTimeMillis() // in milliseconds
 
         // update constant values
         launch(Dispatchers.IO) {
             while (true) {
                 val currentProgressType = when (field) {
-                    ProgressPercentage.YEAR -> ProgressPercentage.getYear().toString()
-                    ProgressPercentage.MONTH -> ProgressPercentage.getMonth(
+                    YearlyProgressManager.YEAR -> YearlyProgressManager.getYear().toString()
+                    YearlyProgressManager.MONTH -> YearlyProgressManager.getMonth(
                         isLong = true
                     )
-                    ProgressPercentage.WEEK -> ProgressPercentage.getWeek(isLong = true)
-                    ProgressPercentage.DAY -> ProgressPercentage.getDay(formatted = true)
+                    YearlyProgressManager.WEEK -> YearlyProgressManager.getWeek(isLong = true)
+                    YearlyProgressManager.DAY -> YearlyProgressManager.getDay(formatted = true)
                     else -> ""
                 }
                 widgetDataTextView.text = currentProgressType
                 widgetDataInfoTextView.text = "of ${
-                    (ProgressPercentage.getEndOfTimeMillis(field)
-                            - ProgressPercentage.getStartOfTimeMillis(field)) / 1000
+                    (YearlyProgressManager.getEndOfTimeMillis(field)
+                            - YearlyProgressManager.getStartOfTimeMillis(field)) / 1000
                 }s"
                 delay(freq)
             }
@@ -101,10 +100,10 @@ class ProgressCardView @JvmOverloads constructor(
         launch(Dispatchers.IO) {
             while (true) {
 
-                ProgressPercentage(context).setDefaultWeek()
-                ProgressPercentage(context).setDefaultCalculationMode()
+                YearlyProgressManager(context).setDefaultWeek()
+                YearlyProgressManager(context).setDefaultCalculationMode()
 
-                val progress: Double = ProgressPercentage.getProgress(field)
+                val progress: Double = YearlyProgressManager.getProgress(field)
                 launch(Dispatchers.Main) {
                     updateView(progress)
                 }

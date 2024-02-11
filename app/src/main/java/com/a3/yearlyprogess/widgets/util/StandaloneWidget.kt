@@ -4,19 +4,14 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.text.SpannableString
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
-import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.manager.AlarmHandler
 import kotlin.math.roundToInt
 
@@ -28,15 +23,15 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
             val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
 
             // Set default week and calculation mode
-            ProgressPercentage(context).setDefaultWeek()
-            ProgressPercentage(context).setDefaultCalculationMode()
+            YearlyProgressManager(context).setDefaultWeek()
+            YearlyProgressManager(context).setDefaultCalculationMode()
 
-            val progress = ProgressPercentage.getProgress(
+            val progress = YearlyProgressManager.getProgress(
                 when (widgetServiceType) {
-                    AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.DAY
-                    AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.MONTH
-                    AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentage.WEEK
-                    AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentage.YEAR
+                    AlarmHandler.DAY_WIDGET_SERVICE -> YearlyProgressManager.DAY
+                    AlarmHandler.MONTH_WIDGET_SERVICE -> YearlyProgressManager.MONTH
+                    AlarmHandler.WEEK_WIDGET_SERVICE -> YearlyProgressManager.WEEK
+                    AlarmHandler.YEAR_WIDGET_SERVICE -> YearlyProgressManager.YEAR
                     else -> -1
                 }
             )
@@ -61,19 +56,19 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
                 else -> ""
             }
             val widgetCurrentValue = when (widgetServiceType) {
-                AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.getDay(formatted = true)
-                AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.getMonth(isLong = false)
-                AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentage.getWeek(isLong = false)
-                AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentage.getYear().toString()
+                AlarmHandler.DAY_WIDGET_SERVICE -> YearlyProgressManager.getDay(formatted = true)
+                AlarmHandler.MONTH_WIDGET_SERVICE -> YearlyProgressManager.getMonth(isLong = false)
+                AlarmHandler.WEEK_WIDGET_SERVICE -> YearlyProgressManager.getWeek(isLong = false)
+                AlarmHandler.YEAR_WIDGET_SERVICE -> YearlyProgressManager.getYear().toString()
                 else -> ""
             }
 
-            val widgetDaysLeftCounter = ProgressPercentage.getDaysLeft(
+            val widgetDaysLeftCounter = YearlyProgressManager.getDaysLeft(
                 when (widgetServiceType) {
-                    AlarmHandler.DAY_WIDGET_SERVICE -> ProgressPercentage.DAY
-                    AlarmHandler.MONTH_WIDGET_SERVICE -> ProgressPercentage.MONTH
-                    AlarmHandler.WEEK_WIDGET_SERVICE -> ProgressPercentage.WEEK
-                    AlarmHandler.YEAR_WIDGET_SERVICE -> ProgressPercentage.YEAR
+                    AlarmHandler.DAY_WIDGET_SERVICE -> YearlyProgressManager.DAY
+                    AlarmHandler.MONTH_WIDGET_SERVICE -> YearlyProgressManager.MONTH
+                    AlarmHandler.WEEK_WIDGET_SERVICE -> YearlyProgressManager.WEEK
+                    AlarmHandler.YEAR_WIDGET_SERVICE -> YearlyProgressManager.YEAR
                     else -> -1
                 }
             ) + " left"

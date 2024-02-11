@@ -14,10 +14,9 @@ import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
 import com.a3.yearlyprogess.eventManager.model.Event
-import com.a3.yearlyprogess.helper.ProgressPercentage.Companion.formatProgressStyle
-import com.a3.yearlyprogess.helper.ProgressPercentage
+import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.YearlyProgressManager
 import kotlinx.coroutines.*
-import java.util.Locale
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
@@ -73,8 +72,8 @@ class CustomEventCardView @JvmOverloads constructor(
 
         launch(Dispatchers.IO) {
 
-            var progress = ProgressPercentage.getProgress(
-                ProgressPercentage.CUSTOM_EVENT,
+            var progress = YearlyProgressManager.getProgress(
+                YearlyProgressManager.CUSTOM_EVENT,
                 event.eventStartTime,
                 event.eventEndTime
             )
@@ -99,11 +98,11 @@ class CustomEventCardView @JvmOverloads constructor(
                         2
                     )
 
-                ProgressPercentage(context).setDefaultWeek()
-                ProgressPercentage(context).setDefaultCalculationMode()
+                YearlyProgressManager(context).setDefaultWeek()
+                YearlyProgressManager(context).setDefaultCalculationMode()
 
-                progress = ProgressPercentage.getProgress(
-                    ProgressPercentage.CUSTOM_EVENT,
+                progress = YearlyProgressManager.getProgress(
+                    YearlyProgressManager.CUSTOM_EVENT,
                     event.eventStartTime,
                     event.eventEndTime
                 )
