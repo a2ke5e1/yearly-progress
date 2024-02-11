@@ -4,19 +4,79 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.DialogRestoreBackupBinding
 import com.a3.yearlyprogess.eventManager.data.EventDatabase
+import com.a3.yearlyprogess.eventManager.model.Event
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.raphaelebner.roomdatabasebackup.core.OnCompleteListener.Companion as RoomBackupCodes
 import de.raphaelebner.roomdatabasebackup.core.RoomBackup
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment() {
+
+    private fun readEventsFromCalender() {
+        // TODO: Request permission to read calender
+        // TODO: Let user select which events to import
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            val uri = CalendarContract.Events.CONTENT_URI
+            val projection = arrayOf(
+                CalendarContract.Events.TITLE,
+                CalendarContract.Events.DESCRIPTION,
+                CalendarContract.Events.DTSTART,
+                CalendarContract.Events.DTEND
+            )
+
+            val cursor = requireActivity().contentResolver.query(
+                uri,
+                projection,
+                null,
+                null,
+                null
+            )
+
+            val eventList = mutableListOf<Event>()
+            cursor?.use {
+                val titleColumn = it.getColumnIndex(CalendarContract.Events.TITLE)
+                val descriptionColumn = it.getColumnIndex(CalendarContract.Events.DESCRIPTION)
+                val dtStartColumn = it.getColumnIndex(CalendarContract.Events.DTSTART)
+                val dtEndColumn = it.getColumnIndex(CalendarContract.Events.DTEND)
+
+                while (it.moveToNext()) {
+                    val title = it.getString(titleColumn)
+                    val description = it.getString(descriptionColumn)
+                    val dtStart = it.getLong(dtStartColumn)
+                    val dtEnd = it.getLong(dtEndColumn)
+
+                    val event = Event(
+                        id = 0,
+                        eventTitle = title,
+                        eventDescription = description,
+                        eventStartTime = dtStart,
+                        eventEndTime = dtEnd
+                    )
+                    eventList.add(event)
+                }
+            }
+
+            cursor?.close()
+
+            val eventDao = EventDatabase.getDatabase(requireContext()).eventDao()
+            eventDao.insertAllEvents(eventList)
+
+
+        }
+
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -66,6 +126,10 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
 
             binding.restoreButton.setOnClickListener {
                 restoreDatabase()
+            }
+
+            binding.restoreGoogleCalenderButton.setOnClickListener {
+                readEventsFromCalender()
             }
 
             binding.dismissButton.setOnClickListener {
