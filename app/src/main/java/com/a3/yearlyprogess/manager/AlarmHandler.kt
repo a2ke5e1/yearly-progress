@@ -11,6 +11,8 @@ import java.util.*
 
 class AlarmHandler(private val context: Context, private val service : Int) {
 
+    private val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+
     private val intent = when (service) {
         DAY_WIDGET_SERVICE ->  Intent(context, DayWidgetService::class.java)
         MONTH_WIDGET_SERVICE ->  Intent(context, MonthWidgetService::class.java)
@@ -23,21 +25,19 @@ class AlarmHandler(private val context: Context, private val service : Int) {
 
     fun setAlarmManager() {
         val sender = PendingIntent.getBroadcast(context, service, intent, PendingIntent.FLAG_IMMUTABLE)
-        val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         // minimum widget update time is 5 seconds
         val c = Calendar.getInstance()
         val l = c.timeInMillis + 5000
 
         //set the alarm for 2 seconds in the future
-        am.setAndAllowWhileIdle(AlarmManager.RTC, l, sender)
+        am?.setAndAllowWhileIdle(AlarmManager.RTC, l, sender)
         // am.setInexactRepeating(AlarmManager.RTC_WAKEUP, l, 2000, sender)
     }
 
     fun cancelAlarmManager() {
         val sender: PendingIntent = PendingIntent.getBroadcast(context, service, intent, PendingIntent.FLAG_IMMUTABLE)
-        val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        am.cancel(sender)
+        am?.cancel(sender)
     }
 
     companion object {
