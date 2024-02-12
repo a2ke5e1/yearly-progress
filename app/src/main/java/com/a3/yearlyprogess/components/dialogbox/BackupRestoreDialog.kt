@@ -1,12 +1,17 @@
 package com.a3.yearlyprogess.components.dialogbox
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.MainActivity
@@ -23,8 +28,22 @@ import kotlinx.coroutines.launch
 
 class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment() {
 
+    // Contract for reading events from calender
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission is granted. Continue the action or workflow in your app.
+            readEventsFromCalender()
+        } else {
+            // Explain to the user that the feature is unavailable because the
+            // features requires a permission that the user has denied. At the
+            // same time, respect the user's decision. Don't link to system
+            // settings in an effort to convince the user to change their decision.
+        }
+    }
+
     private fun readEventsFromCalender() {
-        // TODO: Request permission to read calender
         // TODO: Let user select which events to import
         lifecycleScope.launch(Dispatchers.IO) {
 
@@ -41,7 +60,7 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
                 projection,
                 null,
                 null,
-                null
+                "${CalendarContract.Events.DTSTART} ASC"
             )
 
             val eventList = mutableListOf<Event>()
@@ -73,7 +92,9 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
             val eventDao = EventDatabase.getDatabase(requireContext()).eventDao()
             eventDao.insertAllEvents(eventList)
 
-
+            dismiss()
+            // Weird way to restart the app
+            roomBackup.restartApp(Intent(requireContext(), MainActivity::class.java))
         }
 
     }
@@ -129,7 +150,30 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
             }
 
             binding.restoreGoogleCalenderButton.setOnClickListener {
-                readEventsFromCalender()
+                when {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.READ_CALENDAR
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        // You can use the API that requires the permission.
+                        readEventsFromCalender()
+                    }
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        requireActivity(), Manifest.permission.READ_CALENDAR) -> {
+                        // In an educational UI, explain to the user why your app requires this
+                        // permission for a specific feature to behave as expected, and what
+                        // features are disabled if it's declined. In this UI, include a
+                        // "cancel" or "no thanks" button that lets the user continue
+                        // using your app without granting the permission.
+                        // showInContextUI(...)
+                    }
+                    else -> {
+                        // You can directly ask for the permission.
+                        // The registered ActivityResultCallback gets the result of this request.
+                        requestPermissionLauncher.launch(
+                            Manifest.permission.READ_CALENDAR)
+                    }
+                }
             }
 
             binding.dismissButton.setOnClickListener {
