@@ -43,9 +43,6 @@ class ImportEventCalendarActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // You can use the API that requires the permission.
                 readEventsFromCalender()
-                binding.testBtn.setOnClickListener {
-                    Log.d("TAG", "onCreate: ${tracker!!.selection}")
-                }
             }
             ActivityCompat.shouldShowRequestPermissionRationale(
                 this, Manifest.permission.READ_CALENDAR) -> {
@@ -161,6 +158,10 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 }
             }
         )
+
+        binding.testBtn.setOnClickListener {
+            adapter.selectAll()
+        }
 
 
 

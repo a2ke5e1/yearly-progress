@@ -64,25 +64,22 @@ class ImportEventAdapter(
         holder.binding.eventCheck.isChecked = tracker?.isSelected(position.toLong()) ?: false
 
 
-        holder.binding.eventCheck.setOnCheckedChangeListener { _, b ->
-            if (b) {
-                tracker?.select(position.toLong())
-            } else {
-                tracker?.deselect(position.toLong())
-            }
+        holder.binding.eventCheck.setOnClickListener {
+            handleSelection(holder, position)
         }
-
         holder.binding.parent.setOnClickListener {
-            if (tracker?.isSelected(position.toLong()) == true) {
-                tracker?.deselect(position.toLong())
-                holder.binding.eventCheck.isChecked = false
-            } else {
-                tracker?.select(position.toLong())
-                holder.binding.eventCheck.isChecked = true
-            }
-
+            handleSelection(holder, position)
         }
 
+    }
+
+    private fun handleSelection(holder: ImportEventsViewHolder, position: Int) {
+        if (tracker?.isSelected(position.toLong()) == true) {
+            tracker?.deselect(position.toLong())
+        } else {
+            tracker?.select(position.toLong())
+        }
+        holder.binding.eventCheck.isChecked = tracker?.isSelected(position.toLong()) ?: false
     }
 
     override fun getItemCount(): Int = eventsList.size
