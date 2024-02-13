@@ -24,6 +24,8 @@ import com.a3.yearlyprogess.eventManager.adapter.MyItemDetailsLookup
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.google.android.material.appbar.MaterialToolbar
 
+// TODO: Redo event list screen with better UI and functionality
+//          stability and performance
 class EventsListScreenFragment : Fragment() {
 
 
