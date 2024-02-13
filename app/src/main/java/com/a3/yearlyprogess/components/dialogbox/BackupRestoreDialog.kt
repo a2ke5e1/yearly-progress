@@ -1,22 +1,35 @@
 package com.a3.yearlyprogess.components.dialogbox
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.DialogRestoreBackupBinding
+import com.a3.yearlyprogess.eventManager.ImportEventCalendarActivity
 import com.a3.yearlyprogess.eventManager.data.EventDatabase
+import com.a3.yearlyprogess.eventManager.model.Event
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.raphaelebner.roomdatabasebackup.core.OnCompleteListener.Companion as RoomBackupCodes
 import de.raphaelebner.roomdatabasebackup.core.RoomBackup
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment() {
+
+
 
     @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -24,7 +37,7 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
         roomBackup.database(EventDatabase.getDatabase(requireContext())).enableLogDebug(true)
             .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG)
             .backupIsEncrypted(true)
-            .customEncryptPassword("haha idc if you forgot")
+            .customEncryptPassword("haha idc if you forgot") // DON'T CHANGE THIS, It's in the production version
             .apply {
                 onCompleteListener { success, message, exitCode ->
                     when (exitCode) {
@@ -66,6 +79,12 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
 
             binding.restoreButton.setOnClickListener {
                 restoreDatabase()
+            }
+
+            binding.restoreGoogleCalenderButton.setOnClickListener {
+                val intent = Intent(this.context, ImportEventCalendarActivity::class.java)
+                startActivity(intent)
+                dismiss()
             }
 
             binding.dismissButton.setOnClickListener {

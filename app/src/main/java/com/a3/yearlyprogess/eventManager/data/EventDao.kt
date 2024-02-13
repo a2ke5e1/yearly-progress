@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.a3.yearlyprogess.eventManager.model.Event
 
@@ -14,6 +15,14 @@ interface EventDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addEvent(event: Event)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addAllEvents(events: List<Event>)
+
+    @Transaction
+    suspend fun insertAllEvents(events: List<Event>) {
+        addAllEvents(events)
+    }
 
     @Update
     suspend fun updateEvent(event: Event)

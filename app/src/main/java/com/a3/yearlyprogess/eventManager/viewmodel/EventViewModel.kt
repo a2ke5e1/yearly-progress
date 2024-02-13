@@ -1,17 +1,13 @@
 package com.a3.yearlyprogess.eventManager.viewmodel
 
 import android.app.Application
-import android.widget.TextView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.eventManager.repo.EventRepository
-import com.a3.yearlyprogess.helper.ProgressPercentage
-import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class EventViewModel(application: Application): AndroidViewModel(application) {

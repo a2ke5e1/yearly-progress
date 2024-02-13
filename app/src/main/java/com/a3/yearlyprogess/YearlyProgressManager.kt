@@ -1,19 +1,16 @@
-package com.a3.yearlyprogess.helper
+package com.a3.yearlyprogess
 
 import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
-import android.util.Log
 import androidx.preference.PreferenceManager
-import com.a3.yearlyprogess.R
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class ProgressPercentage(private val context: Context) {
+class YearlyProgressManager(private val context: Context) {
 
     private val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
 

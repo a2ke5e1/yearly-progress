@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.a3.yearlyprogess.eventManager.ImportEventCalendarActivity">
+
+    <item
+        android:id="@+id/select_events"
+        android:icon="@drawable/outline_select_all_24"
+        android:title="@string/select_all"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/events_import"
+        android:icon="@drawable/ic_baseline_check_24"
+        android:title="@string/events_imports"
+        app:showAsAction="always" />
+
+
+</menu>

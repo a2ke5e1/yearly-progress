@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
@@ -20,10 +21,15 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentScreenListEventsBinding
 import com.a3.yearlyprogess.eventManager.EventManagerActivity
 import com.a3.yearlyprogess.eventManager.adapter.EventsListViewAdapter
+import com.a3.yearlyprogess.eventManager.adapter.ImportEventItemKeyProvider
 import com.a3.yearlyprogess.eventManager.adapter.MyItemDetailsLookup
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+// TODO: Redo event list screen with better UI and functionality
+//          stability and performance
 class EventsListScreenFragment : Fragment() {
 
 
@@ -39,11 +45,6 @@ class EventsListScreenFragment : Fragment() {
     ): View {
 
         _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
-        // mEventViewModel = ViewModelProvider(this)[EventViewModel::class.java]
-
-
-        val toolbar = (activity as AppCompatActivity).supportActionBar
-
 
         binding.addEventFab.setOnClickListener {
             val intent = Intent(it.context, EventManagerActivity::class.java)
@@ -69,7 +70,7 @@ class EventsListScreenFragment : Fragment() {
         tracker = SelectionTracker.Builder<Long>(
             "mySelection",
             binding.eventsRecyclerViewer,
-            StableIdKeyProvider(binding.eventsRecyclerViewer),
+            ImportEventItemKeyProvider(binding.eventsRecyclerViewer),
             MyItemDetailsLookup(binding.eventsRecyclerViewer),
             StorageStrategy.createLongStorage()
         ).withSelectionPredicate(
@@ -88,7 +89,8 @@ class EventsListScreenFragment : Fragment() {
                     if (lengthItems != 0) {
 
 
-                        val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+                        val mt =
+                            (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
                         mt.title = "$lengthItems selected"
                         mt.menu.clear()
 
@@ -128,13 +130,16 @@ class EventsListScreenFragment : Fragment() {
                         }
 
                     } else {
-                        val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+                        val mt =
+                            (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
                         mt.title = "Events"
                         mt.navigationIcon = null
                         mt.isTitleCentered = true
                         (activity as AppCompatActivity).setSupportActionBar(mt)
 
-                        eventAdapter.notifyDataSetChanged()
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            eventAdapter.notifyDataSetChanged()
+                        }
                     }
 
                 }
@@ -153,56 +158,6 @@ class EventsListScreenFragment : Fragment() {
             }
 
             eventAdapter.setData(events)
-            /*eventAdapter.selectedEventList.observe(viewLifecycleOwner) { selectedEvents ->
-                val lengthItems = selectedEvents.size
-                Log.d("TAG", "onCreateView: $selectedEvents")
-                if (lengthItems != 0) {
-
-
-                    val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
-                    mt.title = "$lengthItems selected"
-                    mt.menu.clear()
-
-                    mt.setNavigationIcon(R.drawable.ic_baseline_close_24)
-                    mt.setNavigationOnClickListener {
-                        eventAdapter.clearSelection()
-                    }
-                    mt.isTitleCentered = false
-                    mt.inflateMenu(R.menu.selected_menu)
-                    mt.setOnMenuItemClickListener { menuItem ->
-
-                        when (menuItem.itemId) {
-
-                            R.id.action_delete -> {
-                                selectedEvents.forEach { event ->
-                                    mEventViewModel.deleteEvent(event)
-                                }
-                                true
-                            }
-
-                            R.id.action_select_all -> {
-                                eventAdapter.selectAll()
-                                true
-                            }
-
-                            R.id.action_delete_all -> {
-                                mEventViewModel.deleteAllEvent()
-                                true
-                            }
-
-                            else -> true
-
-                        }
-                    }
-
-                } else {
-                    val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
-                    mt.title = "Events"
-                    mt.navigationIcon = null
-                    mt.isTitleCentered = true
-                    (activity as AppCompatActivity).setSupportActionBar(mt)
-                }
-            }*/
         }
 
         return binding.root
@@ -210,7 +165,6 @@ class EventsListScreenFragment : Fragment() {
     }
 
     private var tracker: SelectionTracker<Long>? = null
-
 
 
     override fun onDestroy() {
