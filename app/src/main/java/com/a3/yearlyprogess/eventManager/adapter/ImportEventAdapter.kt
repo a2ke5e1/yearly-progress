@@ -84,17 +84,18 @@ class ImportEventAdapter(
 
     override fun getItemCount(): Int = eventsList.size
 
-    fun selectAll() {
-        for (i in 0 until itemCount) {
-            tracker?.select(i.toLong())
+    fun toggleSelectAll() {
+        if (tracker?.hasSelection() == true) {
+            tracker?.clearSelection()
+        } else {
+            tracker?.let {
+                for (i in 0 until itemCount) {
+                    it.select(i.toLong())
+                }
+            }
         }
     }
 
-    fun deselectAll() {
-        for (i in 0 until itemCount) {
-            tracker?.deselect(i.toLong())
-        }
-    }
 
     fun getSelectedEvents(): List<Event> {
         val selectedEvents = mutableListOf<Event>()

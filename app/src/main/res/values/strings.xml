@@ -79,5 +79,7 @@
     <string name="adjust_opacity_of_the_standalone_and_event_widget">Adjust opacity of the standalone and event widget.</string>
     <string name="time_left_counter">Time left counter</string>
     <string name="shows_how_much_time_left_in_the_widget">Shows how much time left in the widget.</string>
+    <string name="events_imports">Import Events</string>
+    <string name="select_all">Select All</string>
 
 </resources>

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.util.Log
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -15,15 +16,20 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.ActivityImportEventCalendarBinding
 import com.a3.yearlyprogess.eventManager.adapter.ImportEventAdapter
 import com.a3.yearlyprogess.eventManager.adapter.ImportEventItemDetailsLookup
 import com.a3.yearlyprogess.eventManager.adapter.ImportEventItemKeyProvider
 import com.a3.yearlyprogess.eventManager.adapter.MyItemDetailsLookup
+import com.a3.yearlyprogess.eventManager.data.EventDao
 import com.a3.yearlyprogess.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.eventManager.model.Event
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class ImportEventCalendarActivity : AppCompatActivity() {
 
@@ -34,18 +40,22 @@ class ImportEventCalendarActivity : AppCompatActivity() {
         binding = ActivityImportEventCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
+        binding.toolbar.title = getString(R.string.events_imports)
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
         when {
             ContextCompat.checkSelfPermission(
-               this,
+                this,
                 Manifest.permission.READ_CALENDAR
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // You can use the API that requires the permission.
                 readEventsFromCalender()
             }
+
             ActivityCompat.shouldShowRequestPermissionRationale(
-                this, Manifest.permission.READ_CALENDAR) -> {
+                this, Manifest.permission.READ_CALENDAR
+            ) -> {
                 // In an educational UI, explain to the user why your app requires this
                 // permission for a specific feature to behave as expected, and what
                 // features are disabled if it's declined. In this UI, include a
@@ -53,11 +63,13 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 // using your app without granting the permission.
                 // showInContextUI(...)
             }
+
             else -> {
                 // You can directly ask for the permission.
                 // The registered ActivityResultCallback gets the result of this request.
                 requestPermissionLauncher.launch(
-                    Manifest.permission.READ_CALENDAR)
+                    Manifest.permission.READ_CALENDAR
+                )
             }
         }
     }
@@ -82,14 +94,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
         val eventDao = EventDatabase.getDatabase(this).eventDao()
         val eventList = mutableListOf<Event>()
 
-
-
-
-
-
-        // TODO: Let user select which events to import
         lifecycleScope.launch(Dispatchers.IO) {
-
             val uri = CalendarContract.Events.CONTENT_URI
             val projection = arrayOf(
                 CalendarContract.Events.TITLE,
@@ -97,7 +102,6 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 CalendarContract.Events.DTSTART,
                 CalendarContract.Events.DTEND
             )
-
             val cursor = contentResolver.query(
                 uri,
                 projection,
@@ -105,7 +109,6 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 null,
                 "${CalendarContract.Events.DTSTART} ASC"
             )
-
             cursor?.use {
                 val titleColumn = it.getColumnIndex(CalendarContract.Events.TITLE)
                 val descriptionColumn = it.getColumnIndex(CalendarContract.Events.DESCRIPTION)
@@ -128,12 +131,20 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                     eventList.add(event)
                 }
             }
-
             cursor?.close()
-            // eventDao.insertAllEvents(eventList)
+        }.invokeOnCompletion {
+            runOnUiThread {
+                setupUI(eventList, eventDao)
+            }
         }
 
+    }
 
+    private fun setupUI(
+        eventList: MutableList<Event>,
+        eventDao: EventDao
+    ) {
+        binding.progressBar.visibility = View.GONE
         val adapter = ImportEventAdapter(eventList)
         binding.importedEventCalendarRecyclerView.adapter = adapter
         binding.importedEventCalendarRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -159,12 +170,25 @@ class ImportEventCalendarActivity : AppCompatActivity() {
             }
         )
 
-        binding.testBtn.setOnClickListener {
-            adapter.selectAll()
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.events_import -> {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val selectedEvents = adapter.getSelectedEvents()
+                        eventDao.insertAllEvents(selectedEvents)
+                    }.invokeOnCompletion {
+                        finish()
+                    }
+                    true
+                }
+
+                R.id.select_events -> {
+                    adapter.toggleSelectAll()
+                    true
+                }
+
+                else -> false
+            }
         }
-
-
-
-
     }
 }

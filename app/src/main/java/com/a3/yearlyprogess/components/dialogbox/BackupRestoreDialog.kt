@@ -84,6 +84,7 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
             binding.restoreGoogleCalenderButton.setOnClickListener {
                 val intent = Intent(this.context, ImportEventCalendarActivity::class.java)
                 startActivity(intent)
+                dismiss()
             }
 
             binding.dismissButton.setOnClickListener {
