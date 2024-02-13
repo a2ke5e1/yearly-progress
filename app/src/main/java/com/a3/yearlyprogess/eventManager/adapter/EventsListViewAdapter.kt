@@ -74,11 +74,11 @@ class EventsListViewAdapter(
                 holder.binding.customEventCardView.root.eventCheck.isChecked =
                     tracker!!.isSelected(position.toLong())
 
-                holder.binding.customEventCardView.root.eventCheck.setOnCheckedChangeListener { compoundButton, b ->
-                    if (b) {
-                        tracker!!.select(position.toLong())
-                    } else {
+                holder.binding.customEventCardView.root.eventCheck.setOnClickListener {
+                    if (tracker!!.isSelected(position.toLong())) {
                         tracker!!.deselect(position.toLong())
+                    } else {
+                        tracker!!.select(position.toLong())
                     }
                 }
 

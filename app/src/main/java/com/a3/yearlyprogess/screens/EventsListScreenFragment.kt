@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
@@ -20,9 +21,12 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentScreenListEventsBinding
 import com.a3.yearlyprogess.eventManager.EventManagerActivity
 import com.a3.yearlyprogess.eventManager.adapter.EventsListViewAdapter
+import com.a3.yearlyprogess.eventManager.adapter.ImportEventItemKeyProvider
 import com.a3.yearlyprogess.eventManager.adapter.MyItemDetailsLookup
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // TODO: Redo event list screen with better UI and functionality
 //          stability and performance
@@ -71,7 +75,7 @@ class EventsListScreenFragment : Fragment() {
         tracker = SelectionTracker.Builder<Long>(
             "mySelection",
             binding.eventsRecyclerViewer,
-            StableIdKeyProvider(binding.eventsRecyclerViewer),
+            ImportEventItemKeyProvider(binding.eventsRecyclerViewer),
             MyItemDetailsLookup(binding.eventsRecyclerViewer),
             StorageStrategy.createLongStorage()
         ).withSelectionPredicate(
@@ -136,7 +140,9 @@ class EventsListScreenFragment : Fragment() {
                         mt.isTitleCentered = true
                         (activity as AppCompatActivity).setSupportActionBar(mt)
 
-                        eventAdapter.notifyDataSetChanged()
+                       lifecycleScope.launch(Dispatchers.Main) {
+                           eventAdapter.notifyDataSetChanged()
+                        }
                     }
 
                 }
