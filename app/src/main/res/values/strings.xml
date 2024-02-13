@@ -81,5 +81,6 @@
     <string name="shows_how_much_time_left_in_the_widget">Shows how much time left in the widget.</string>
     <string name="events_imports">Import Events</string>
     <string name="select_all">Select All</string>
+    <string name="import_from_calender">Import from Calendar</string>
 
 </resources>

@@ -96,8 +96,8 @@
                             android:id="@+id/restore_google_calender_button"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Calender Restore"
-                            app:icon="@drawable/settings_backup_restore"
+                            android:text="@string/import_from_calender"
+                            app:icon="@drawable/ic_import_events"
                             style="@style/Widget.Material3.Button.OutlinedButton"
                             />
                     </LinearLayout>

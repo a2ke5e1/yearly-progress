@@ -37,7 +37,7 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
         roomBackup.database(EventDatabase.getDatabase(requireContext())).enableLogDebug(true)
             .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG)
             .backupIsEncrypted(true)
-            .customEncryptPassword("haha idc if you forgot")
+            .customEncryptPassword("haha idc if you forgot") // DON'T CHANGE THIS, It's in the production version
             .apply {
                 onCompleteListener { success, message, exitCode ->
                     when (exitCode) {
