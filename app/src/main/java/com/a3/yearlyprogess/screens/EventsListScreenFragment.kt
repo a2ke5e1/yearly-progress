@@ -45,11 +45,6 @@ class EventsListScreenFragment : Fragment() {
     ): View {
 
         _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
-        // mEventViewModel = ViewModelProvider(this)[EventViewModel::class.java]
-
-
-        val toolbar = (activity as AppCompatActivity).supportActionBar
-
 
         binding.addEventFab.setOnClickListener {
             val intent = Intent(it.context, EventManagerActivity::class.java)
@@ -94,7 +89,8 @@ class EventsListScreenFragment : Fragment() {
                     if (lengthItems != 0) {
 
 
-                        val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+                        val mt =
+                            (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
                         mt.title = "$lengthItems selected"
                         mt.menu.clear()
 
@@ -134,14 +130,15 @@ class EventsListScreenFragment : Fragment() {
                         }
 
                     } else {
-                        val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+                        val mt =
+                            (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
                         mt.title = "Events"
                         mt.navigationIcon = null
                         mt.isTitleCentered = true
                         (activity as AppCompatActivity).setSupportActionBar(mt)
 
-                       lifecycleScope.launch(Dispatchers.Main) {
-                           eventAdapter.notifyDataSetChanged()
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            eventAdapter.notifyDataSetChanged()
                         }
                     }
 
@@ -161,56 +158,6 @@ class EventsListScreenFragment : Fragment() {
             }
 
             eventAdapter.setData(events)
-            /*eventAdapter.selectedEventList.observe(viewLifecycleOwner) { selectedEvents ->
-                val lengthItems = selectedEvents.size
-                Log.d("TAG", "onCreateView: $selectedEvents")
-                if (lengthItems != 0) {
-
-
-                    val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
-                    mt.title = "$lengthItems selected"
-                    mt.menu.clear()
-
-                    mt.setNavigationIcon(R.drawable.ic_baseline_close_24)
-                    mt.setNavigationOnClickListener {
-                        eventAdapter.clearSelection()
-                    }
-                    mt.isTitleCentered = false
-                    mt.inflateMenu(R.menu.selected_menu)
-                    mt.setOnMenuItemClickListener { menuItem ->
-
-                        when (menuItem.itemId) {
-
-                            R.id.action_delete -> {
-                                selectedEvents.forEach { event ->
-                                    mEventViewModel.deleteEvent(event)
-                                }
-                                true
-                            }
-
-                            R.id.action_select_all -> {
-                                eventAdapter.selectAll()
-                                true
-                            }
-
-                            R.id.action_delete_all -> {
-                                mEventViewModel.deleteAllEvent()
-                                true
-                            }
-
-                            else -> true
-
-                        }
-                    }
-
-                } else {
-                    val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
-                    mt.title = "Events"
-                    mt.navigationIcon = null
-                    mt.isTitleCentered = true
-                    (activity as AppCompatActivity).setSupportActionBar(mt)
-                }
-            }*/
         }
 
         return binding.root
@@ -218,7 +165,6 @@ class EventsListScreenFragment : Fragment() {
     }
 
     private var tracker: SelectionTracker<Long>? = null
-
 
 
     override fun onDestroy() {
