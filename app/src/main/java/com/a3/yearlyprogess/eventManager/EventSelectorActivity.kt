@@ -16,6 +16,7 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a3.yearlyprogess.databinding.EventSelectorScreenListEventsBinding
 import com.a3.yearlyprogess.eventManager.adapter.EventsListViewAdapter
+import com.a3.yearlyprogess.eventManager.model.Converters
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.EventWidget
@@ -24,7 +25,6 @@ class EventSelectorActivity : AppCompatActivity() {
 
     private lateinit var binding: EventSelectorScreenListEventsBinding
     private val mEventViewModel: EventViewModel by viewModels()
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,30 +58,24 @@ class EventSelectorActivity : AppCompatActivity() {
         setResult(Activity.RESULT_CANCELED, resultValue)
 
 
-        val event: Event? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.extras?.getParcelable(
-                "event",
-                Event::class.java
-            )
+        val eventId = intent?.getIntExtra("eventId", -1)
+        val conv = Converters()
+        val eventDays = conv.toRepeatDaysList(
+            intent?.getStringExtra("eventRepeatDays") ?: ""
+        )
+
+        val event: Event? = if (eventId == null || eventId == -1) {
+            null
         } else {
-
-            val eventId = intent?.getIntExtra("eventId", -1)
-
-            // Checks if there is an event object or not
-            // Event can't have id less than 0
-            if (eventId == null || eventId == -1) {
-                null
-            } else {
-                Event(
-                    eventId,
-                    intent?.getStringExtra("eventTitle") ?: "",
-                    intent?.getStringExtra("eventDesc") ?: "",
-                    intent?.getBooleanExtra("allDayEvent", false) ?: false,
-                    intent?.getLongExtra("eventStartTimeInMills", 0) ?: 0,
-                    intent?.getLongExtra("eventEndDateTimeInMillis", 0) ?: 0
-                )
-            }
-
+            Event(
+                eventId,
+                intent?.getStringExtra("eventTitle") ?: "",
+                intent?.getStringExtra("eventDesc") ?: "",
+                intent?.getBooleanExtra("allDayEvent", false) ?: false,
+                intent?.getLongExtra("eventStartTimeInMills", 0) ?: 0,
+                intent?.getLongExtra("eventEndDateTimeInMillis", 0) ?: 0,
+                eventDays
+            )
         }
 
         if (event != null && appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
@@ -94,6 +88,10 @@ class EventSelectorActivity : AppCompatActivity() {
             edit.putString("eventDesc", event.eventDescription)
             edit.putLong("eventStartTimeInMills", event.eventStartTime)
             edit.putLong("eventEndDateTimeInMillis", event.eventEndTime)
+            edit.putString(
+                "eventRepeatDays",
+                conv.fromRepeatDaysList(event.repeatEventDays)
+            )
 
             edit.commit()
             EventWidget().updateWidget(this, appWidgetManager, appWidgetId)
@@ -118,9 +116,9 @@ class EventSelectorActivity : AppCompatActivity() {
         mEventViewModel.readAllData.observe(this) { events ->
             eventAdapter.setData(events)
             if (events.isEmpty()) {
-                binding.noEvents.visibility  = View.VISIBLE
+                binding.noEvents.visibility = View.VISIBLE
             } else {
-                binding.noEvents.visibility  = View.GONE
+                binding.noEvents.visibility = View.GONE
             }
         }
 

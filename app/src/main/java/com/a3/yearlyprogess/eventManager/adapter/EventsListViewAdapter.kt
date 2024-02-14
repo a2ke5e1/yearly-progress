@@ -20,6 +20,7 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.CustomEventSelectorItemViewBinding
 import com.a3.yearlyprogess.eventManager.EventManagerActivity
 import com.a3.yearlyprogess.eventManager.EventSelectorActivity
+import com.a3.yearlyprogess.eventManager.model.Converters
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.EventWidget
 
@@ -68,7 +69,7 @@ class EventsListViewAdapter(
             }
 
 
-            if ( tracker != null) {
+            if (tracker != null) {
                 holder.binding.customEventCardView.root.eventCheck.visibility =
                     if (tracker!!.hasSelection() || tracker!!.selection.size() > 0) View.VISIBLE else View.GONE
                 holder.binding.customEventCardView.root.eventCheck.isChecked =
@@ -93,6 +94,10 @@ class EventsListViewAdapter(
                     "eventWidget_${appWidgetId}", Context.MODE_PRIVATE
                 )
                 val edit = pref.edit()
+                val conv = Converters()
+                val eventDays = conv.fromRepeatDaysList(
+                    currentEvent.repeatEventDays
+                )
 
                 edit.putInt("eventId", currentEvent.id)
                 edit.putString("eventTitle", currentEvent.eventTitle)
@@ -100,6 +105,10 @@ class EventsListViewAdapter(
                 edit.putBoolean("allDayEvent", currentEvent.allDayEvent)
                 edit.putLong("eventStartTimeInMills", currentEvent.eventStartTime)
                 edit.putLong("eventEndDateTimeInMillis", currentEvent.eventEndTime)
+                edit.putString(
+                    "eventRepeatDays",
+                    eventDays
+                )
 
                 edit.commit()
 
@@ -127,22 +136,22 @@ class EventsListViewAdapter(
             ).show()
             return
         }
+        val conv = Converters()
+        val eventDays = conv.fromRepeatDaysList(currentEvent.repeatEventDays)
 
         val remoteViews: RemoteViews = EventWidget.eventWidgetPreview(context, currentEvent)
         val bundle = Bundle()
         bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
 
         val pinnedWidgetCallbackIntent = Intent(context, EventSelectorActivity::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            pinnedWidgetCallbackIntent.putExtra("event", currentEvent)
-        } else {
-            pinnedWidgetCallbackIntent.putExtra("eventId", currentEvent.id)
-            pinnedWidgetCallbackIntent.putExtra("eventTitle", currentEvent.eventTitle)
-            pinnedWidgetCallbackIntent.putExtra("eventDesc", currentEvent.eventDescription)
-            pinnedWidgetCallbackIntent.putExtra("allDayEvent", currentEvent.allDayEvent)
-            pinnedWidgetCallbackIntent.putExtra("eventStartTimeInMills", currentEvent.eventStartTime)
-            pinnedWidgetCallbackIntent.putExtra("eventEndDateTimeInMillis", currentEvent.eventEndTime)
-        }
+        pinnedWidgetCallbackIntent.putExtra("eventId", currentEvent.id)
+        pinnedWidgetCallbackIntent.putExtra("eventTitle", currentEvent.eventTitle)
+        pinnedWidgetCallbackIntent.putExtra("eventDesc", currentEvent.eventDescription)
+        pinnedWidgetCallbackIntent.putExtra("allDayEvent", currentEvent.allDayEvent)
+        pinnedWidgetCallbackIntent.putExtra("eventStartTimeInMills", currentEvent.eventStartTime)
+        pinnedWidgetCallbackIntent.putExtra("eventEndDateTimeInMillis", currentEvent.eventEndTime)
+        pinnedWidgetCallbackIntent.putExtra("eventRepeatDays", eventDays)
+
 
         val pendingIntent = PendingIntent.getActivity(
             context,
