@@ -76,7 +76,7 @@
             android:layout_height="wrap_content">
 
 
-                <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout2"
                 style="@style/Widget.Material3.TextInputEditText.FilledBox"
                 android:layout_width="match_parent"
@@ -87,8 +87,8 @@
                     android:id="@+id/eventDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:hint="@string/description" />
+                    android:hint="@string/description"
+                    android:imeOptions="actionDone" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -138,7 +138,7 @@
                 android:text="@string/start_of_the_event"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-                app:layout_constraintTop_toBottomOf="@id/allDaySwitch" />
+                app:layout_constraintTop_toBottomOf="@id/repeatDays" />
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/from_flow"
@@ -162,8 +162,6 @@
                 app:flow_maxElementsWrap="2"
                 app:flow_wrapMode="aligned"
                 app:layout_constraintTop_toBottomOf="@id/eventEndLabel" />
-
-
 
 
             <TextView
@@ -220,6 +218,62 @@
                 android:paddingEnd="0dp"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                 tools:text="11:15 PM" />
+
+            <!-- TODO: Redesign the repeat days checkbox UI -->
+
+            <LinearLayout
+                android:id="@+id/repeatDays"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/allDaySwitch">
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/btnSunday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/btnMonday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="M" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/btnTuesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="T" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/btnWednesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="W" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/btnThursday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="T" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/btnFriday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="F" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/btnSaturday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S" />
+
+
+            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
