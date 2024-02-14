@@ -14,6 +14,13 @@ data class Event(
     val eventDescription: String,
     val allDayEvent: Boolean = false,
     val eventStartTime: Long,
-    val eventEndTime: Long
+    val eventEndTime: Long,
+    val repeatEventDays: List<RepeatDays> = emptyList(),
 ): Parcelable
+
+
+// Enum class for days event will be repeated
+enum class RepeatDays {
+    SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY
+}
 
