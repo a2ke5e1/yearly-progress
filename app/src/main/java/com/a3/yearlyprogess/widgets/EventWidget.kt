@@ -76,30 +76,26 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 }
 
                 if (repeatDays.contains(RepeatDays.EVERY_MONTH)) {
+
                     val calendar = Calendar.getInstance()
                     val currentMonth = calendar.get(Calendar.MONTH)
+                    val currentYear = calendar.get(Calendar.YEAR)
 
                     // change the month of the eventStartTimeInMills and eventEndDateTimeInMillis
                     // to the current month
-
                     val eventStartCalendar = Calendar.getInstance()
                     eventStartCalendar.timeInMillis = eventStartTimeInMills
 
                     val eventEndCalendar = Calendar.getInstance()
                     eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
 
-                    val diffMonth =
-                        eventEndCalendar.get(Calendar.MONTH) - eventStartCalendar.get(Calendar.MONTH)
+                    var diffMonth = currentMonth - eventStartCalendar.get(Calendar.MONTH)
+                    val diffYear = currentYear - eventStartCalendar.get(Calendar.YEAR)
 
-                    Log.d("EventWidget", "DiffMonth: $diffMonth")
+                    diffMonth += diffYear * 12
 
-                    if (diffMonth < 0) {
-                        eventEndCalendar.set(Calendar.YEAR, eventEndCalendar.get(Calendar.YEAR) + 1)
-                        eventEndCalendar.set(Calendar.MONTH, eventEndCalendar.get(Calendar.MONTH) + 12)
-                    }
-
-                    eventStartCalendar.set(Calendar.MONTH, currentMonth)
-                    eventEndCalendar.set(Calendar.MONTH, currentMonth + diffMonth)
+                    eventStartCalendar.add(Calendar.MONTH, diffMonth)
+                    eventEndCalendar.add(Calendar.MONTH, diffMonth)
 
                     eventStartTimeInMills = eventStartCalendar.timeInMillis
                     eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
