@@ -65,11 +65,10 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                     val eventEndCalendar = Calendar.getInstance()
                     eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
 
-                    val diffYear =
-                        eventEndCalendar.get(Calendar.YEAR) - eventStartCalendar.get(Calendar.YEAR)
+                    val diffYear = currentYear - eventStartCalendar.get(Calendar.YEAR)
 
-                    eventStartCalendar.set(Calendar.YEAR, currentYear)
-                    eventEndCalendar.set(Calendar.YEAR, currentYear + diffYear)
+                    eventStartCalendar.add(Calendar.YEAR, diffYear)
+                    eventEndCalendar.add(Calendar.YEAR, diffYear)
 
                     eventStartTimeInMills = eventStartCalendar.timeInMillis
                     eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
