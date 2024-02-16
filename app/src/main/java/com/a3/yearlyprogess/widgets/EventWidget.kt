@@ -161,7 +161,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             //  applies to kind of the widgets.
             var widgetBackgroundAlpha = settingsPref.getInt(
                 context.getString(R.string.widget_widget_background_transparency),
-                255
+                100
             )
 
             widgetBackgroundAlpha = ((widgetBackgroundAlpha / 100.0) * 255).toInt()
