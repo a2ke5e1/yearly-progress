@@ -504,6 +504,12 @@ class EventManagerActivity : AppCompatActivity() {
         if (binding.btnSaturday.isChecked) {
             repeatDays.add(RepeatDays.SATURDAY)
         }
+        if (binding.everyMonthSwitch.isChecked) {
+            repeatDays.add(RepeatDays.EVERY_MONTH)
+        }
+        if (binding.everyYearSwitch.isChecked) {
+            repeatDays.add(RepeatDays.EVERY_YEAR)
+        }
         return repeatDays
     }
 
@@ -517,6 +523,8 @@ class EventManagerActivity : AppCompatActivity() {
                 RepeatDays.THURSDAY -> binding.btnThursday.isChecked = true
                 RepeatDays.FRIDAY -> binding.btnFriday.isChecked = true
                 RepeatDays.SATURDAY -> binding.btnSaturday.isChecked = true
+                RepeatDays.EVERY_MONTH -> binding.everyMonthSwitch.isChecked = true
+                RepeatDays.EVERY_YEAR -> binding.everyYearSwitch.isChecked = true
             }
         }
     }

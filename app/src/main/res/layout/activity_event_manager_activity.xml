@@ -69,11 +69,13 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp">
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -126,6 +128,49 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageView2"
                 app:layout_constraintTop_toBottomOf="@id/eventSettingsLabel" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/everyYearSwitch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/allDaySwitch"
+                app:srcCompat="@drawable/ic_outline_access_time_24" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/everyYearSwitch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="Every Year"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView3"
+                app:layout_constraintTop_toBottomOf="@id/allDaySwitch" />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/everyMonthSwitch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/everyYearSwitch"
+                app:srcCompat="@drawable/ic_outline_access_time_24" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/everyMonthSwitch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="Every Month"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView4"
+                app:layout_constraintTop_toBottomOf="@id/everyYearSwitch" />
 
             <TextView
                 android:id="@+id/eventStartLabel"
@@ -228,7 +273,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/allDaySwitch">
+                app:layout_constraintTop_toBottomOf="@id/everyMonthSwitch">
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/btnSunday"

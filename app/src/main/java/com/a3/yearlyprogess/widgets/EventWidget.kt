@@ -16,8 +16,10 @@ import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.eventManager.model.Converters
+import com.a3.yearlyprogess.eventManager.model.RepeatDays
 import com.a3.yearlyprogess.widgets.util.BaseWidget
 import com.a3.yearlyprogess.manager.AlarmHandler
+import java.util.Calendar
 
 /**
  * Implementation of App Widget functionality.
@@ -34,9 +36,28 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
             val eventTitle = event.eventTitle
             val eventDesc = event.eventDescription
-            val eventStartTimeInMills = event.eventStartTime
-            val eventEndDateTimeInMillis = event.eventEndTime
+            val repeatDays = event.repeatEventDays
+            var eventStartTimeInMills = event.eventStartTime
+            var eventEndDateTimeInMillis = event.eventEndTime
 
+            if (repeatDays.contains(RepeatDays.EVERY_YEAR)) {
+                val calendar = Calendar.getInstance()
+                val currentYear = calendar.get(Calendar.YEAR)
+
+                // change the year of the eventStartTimeInMills and eventEndDateTimeInMillis
+                // to the current year
+
+                val eventStartCalendar = Calendar.getInstance()
+                eventStartCalendar.timeInMillis = eventStartTimeInMills
+                eventStartCalendar.set(Calendar.YEAR, currentYear)
+
+                val eventEndCalendar = Calendar.getInstance()
+                eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
+                eventEndCalendar.set(Calendar.YEAR, currentYear)
+
+                eventStartTimeInMills = eventStartCalendar.timeInMillis
+                eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
+            }
 
 
             var progress = YearlyProgressManager.getProgress(
@@ -126,7 +147,10 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
             tallView.setTextViewText(R.id.eventProgressText, progressText)
             tallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-            tallView.setTextViewText(R.id.currentDate, YearlyProgressManager.getDay(formatted = true))
+            tallView.setTextViewText(
+                R.id.currentDate,
+                YearlyProgressManager.getDay(formatted = true)
+            )
             tallView.setTextViewText(R.id.eventTitle, eventTitle)
             tallView.setTextViewText(
                 R.id.eventTime,
@@ -134,7 +158,10 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             )
 
             smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-            smallView.setTextViewText(R.id.currentDate, YearlyProgressManager.getDay(formatted = true))
+            smallView.setTextViewText(
+                R.id.currentDate,
+                YearlyProgressManager.getDay(formatted = true)
+            )
             smallView.setTextViewText(R.id.eventProgressText, progressText)
             smallView.setTextViewText(R.id.eventTitle, eventTitle)
 
@@ -149,7 +176,7 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 255
             )
 
-            widgetBackgroundAlpha = (( widgetBackgroundAlpha / 100.0) * 255).toInt()
+            widgetBackgroundAlpha = ((widgetBackgroundAlpha / 100.0) * 255).toInt()
 
             smallView.setInt(
                 R.id.widgetContainer,
@@ -197,7 +224,8 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         val allDayEvent = pref.getBoolean("allDayEvent", false)
         val eventStartTimeInMills = pref.getLong("eventStartTimeInMills", 0)
         val eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
-        val eventRepeatDays = conv.toRepeatDaysList(pref.getString("eventRepeatDays", "").toString())
+        val eventRepeatDays =
+            conv.toRepeatDaysList(pref.getString("eventRepeatDays", "").toString())
 
         Log.d("EventWidget", "Event: $eventRepeatDays")
 

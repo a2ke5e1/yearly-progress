@@ -129,13 +129,13 @@ class EventsListViewAdapter(
 
     private fun requestPinWidget(context: Context, currentEvent: Event) {
         val mAppWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
-        val myProvider = ComponentName(context, EventWidget::class.java)
         if (!mAppWidgetManager.isRequestPinAppWidgetSupported) {
             Toast.makeText(
                 context, context.getString(R.string.unsupported_launcher), Toast.LENGTH_LONG
             ).show()
             return
         }
+        val myProvider = ComponentName(context, EventWidget::class.java)
         val conv = Converters()
         val eventDays = conv.fromRepeatDaysList(currentEvent.repeatEventDays)
 
