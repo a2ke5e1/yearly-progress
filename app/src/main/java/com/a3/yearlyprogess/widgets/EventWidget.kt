@@ -107,9 +107,9 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 )
 
             }
-            if (progress < 0) {
-                progress = 0.0
-            }
+
+            progress = if (progress > 100) 100.0 else progress
+            progress = if (progress < 0) 0.0 else progress
 
             val settingsPref = PreferenceManager.getDefaultSharedPreferences(context)
             val decimalPlace: Int =
