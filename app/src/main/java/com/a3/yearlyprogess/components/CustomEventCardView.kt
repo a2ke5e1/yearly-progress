@@ -79,12 +79,18 @@ class CustomEventCardView @JvmOverloads constructor(
             )
 
             if (progress > 100) {
-                progress = 100.0
+                val (newEventStart, newEventEnd, newProgress) = YearlyProgressManager.getEventProgress(
+                    event.eventStartTime,
+                    event.eventEndTime,
+                    event.repeatEventDays)
+
+                // eventStartTimeInMills = newEventStart
+                // eventEndDateTimeInMillis = newEventEnd
+                progress = newProgress
             }
 
-            if (progress < 0) {
-                progress = 0.0
-            }
+            progress = if (progress > 100) 100.0 else progress
+            progress = if (progress < 0) 0.0 else progress
 
             launch(Dispatchers.Main) {
                 updateView(progress)
@@ -101,19 +107,19 @@ class CustomEventCardView @JvmOverloads constructor(
                 YearlyProgressManager(context).setDefaultWeek()
                 YearlyProgressManager(context).setDefaultCalculationMode()
 
-                progress = YearlyProgressManager.getProgress(
-                    YearlyProgressManager.CUSTOM_EVENT,
-                    event.eventStartTime,
-                    event.eventEndTime
-                )
-
                 if (progress > 100) {
-                    progress = 100.0
+                    val (newEventStart, newEventEnd, newProgress) = YearlyProgressManager.getEventProgress(
+                        event.eventStartTime,
+                        event.eventEndTime,
+                        event.repeatEventDays)
+
+                    // eventStartTimeInMills = newEventStart
+                    // eventEndDateTimeInMillis = newEventEnd
+                    progress = newProgress
                 }
 
-                if (progress < 0) {
-                    progress = 0.0
-                }
+                progress = if (progress > 100) 100.0 else progress
+                progress = if (progress < 0) 0.0 else progress
 
 
                 val progressText = formatProgressStyle(

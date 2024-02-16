@@ -48,64 +48,14 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             )
 
             if (progress > 100) {
-
-
-                if (repeatDays.contains(RepeatDays.EVERY_YEAR)) {
-                    val calendar = Calendar.getInstance()
-                    val currentYear = calendar.get(Calendar.YEAR)
-
-
-                    // change the year of the eventStartTimeInMills and eventEndDateTimeInMillis
-                    // to the current year
-
-                    val eventStartCalendar = Calendar.getInstance()
-                    eventStartCalendar.timeInMillis = eventStartTimeInMills
-
-
-                    val eventEndCalendar = Calendar.getInstance()
-                    eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
-
-                    val diffYear = currentYear - eventStartCalendar.get(Calendar.YEAR)
-
-                    eventStartCalendar.add(Calendar.YEAR, diffYear)
-                    eventEndCalendar.add(Calendar.YEAR, diffYear)
-
-                    eventStartTimeInMills = eventStartCalendar.timeInMillis
-                    eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
-                }
-
-                if (repeatDays.contains(RepeatDays.EVERY_MONTH)) {
-
-                    val calendar = Calendar.getInstance()
-                    val currentMonth = calendar.get(Calendar.MONTH)
-                    val currentYear = calendar.get(Calendar.YEAR)
-
-                    // change the month of the eventStartTimeInMills and eventEndDateTimeInMillis
-                    // to the current month
-                    val eventStartCalendar = Calendar.getInstance()
-                    eventStartCalendar.timeInMillis = eventStartTimeInMills
-
-                    val eventEndCalendar = Calendar.getInstance()
-                    eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
-
-                    var diffMonth = currentMonth - eventStartCalendar.get(Calendar.MONTH)
-                    val diffYear = currentYear - eventStartCalendar.get(Calendar.YEAR)
-
-                    diffMonth += diffYear * 12
-
-                    eventStartCalendar.add(Calendar.MONTH, diffMonth)
-                    eventEndCalendar.add(Calendar.MONTH, diffMonth)
-
-                    eventStartTimeInMills = eventStartCalendar.timeInMillis
-                    eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
-                }
-
-                progress = YearlyProgressManager.getProgress(
-                    YearlyProgressManager.CUSTOM_EVENT,
+                val (newEventStart, newEventEnd, newProgress) = YearlyProgressManager.getEventProgress(
                     eventStartTimeInMills,
-                    eventEndDateTimeInMillis
-                )
+                    eventEndDateTimeInMillis,
+                    repeatDays)
 
+                eventStartTimeInMills = newEventStart
+                eventEndDateTimeInMillis = newEventEnd
+                progress = newProgress
             }
 
             progress = if (progress > 100) 100.0 else progress
