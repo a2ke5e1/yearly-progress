@@ -40,25 +40,6 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             var eventStartTimeInMills = event.eventStartTime
             var eventEndDateTimeInMillis = event.eventEndTime
 
-            if (repeatDays.contains(RepeatDays.EVERY_YEAR)) {
-                val calendar = Calendar.getInstance()
-                val currentYear = calendar.get(Calendar.YEAR)
-
-                // change the year of the eventStartTimeInMills and eventEndDateTimeInMillis
-                // to the current year
-
-                val eventStartCalendar = Calendar.getInstance()
-                eventStartCalendar.timeInMillis = eventStartTimeInMills
-                eventStartCalendar.set(Calendar.YEAR, currentYear)
-
-                val eventEndCalendar = Calendar.getInstance()
-                eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
-                eventEndCalendar.set(Calendar.YEAR, currentYear)
-
-                eventStartTimeInMills = eventStartCalendar.timeInMillis
-                eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
-            }
-
 
             var progress = YearlyProgressManager.getProgress(
                 YearlyProgressManager.CUSTOM_EVENT,
@@ -67,7 +48,69 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             )
 
             if (progress > 100) {
-                progress = 100.0
+
+
+                if (repeatDays.contains(RepeatDays.EVERY_YEAR)) {
+                    val calendar = Calendar.getInstance()
+                    val currentYear = calendar.get(Calendar.YEAR)
+
+
+                    // change the year of the eventStartTimeInMills and eventEndDateTimeInMillis
+                    // to the current year
+
+                    val eventStartCalendar = Calendar.getInstance()
+                    eventStartCalendar.timeInMillis = eventStartTimeInMills
+
+
+                    val eventEndCalendar = Calendar.getInstance()
+                    eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
+
+                    val diffYear =
+                        eventEndCalendar.get(Calendar.YEAR) - eventStartCalendar.get(Calendar.YEAR)
+
+                    eventStartCalendar.set(Calendar.YEAR, currentYear)
+                    eventEndCalendar.set(Calendar.YEAR, currentYear + diffYear)
+
+                    eventStartTimeInMills = eventStartCalendar.timeInMillis
+                    eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
+                }
+
+                if (repeatDays.contains(RepeatDays.EVERY_MONTH)) {
+                    val calendar = Calendar.getInstance()
+                    val currentMonth = calendar.get(Calendar.MONTH)
+
+                    // change the month of the eventStartTimeInMills and eventEndDateTimeInMillis
+                    // to the current month
+
+                    val eventStartCalendar = Calendar.getInstance()
+                    eventStartCalendar.timeInMillis = eventStartTimeInMills
+
+                    val eventEndCalendar = Calendar.getInstance()
+                    eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
+
+                    val diffMonth =
+                        eventEndCalendar.get(Calendar.MONTH) - eventStartCalendar.get(Calendar.MONTH)
+
+                    Log.d("EventWidget", "DiffMonth: $diffMonth")
+
+                    if (diffMonth < 0) {
+                        eventEndCalendar.set(Calendar.YEAR, eventEndCalendar.get(Calendar.YEAR) + 1)
+                        eventEndCalendar.set(Calendar.MONTH, eventEndCalendar.get(Calendar.MONTH) + 12)
+                    }
+
+                    eventStartCalendar.set(Calendar.MONTH, currentMonth)
+                    eventEndCalendar.set(Calendar.MONTH, currentMonth + diffMonth)
+
+                    eventStartTimeInMills = eventStartCalendar.timeInMillis
+                    eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
+                }
+
+                progress = YearlyProgressManager.getProgress(
+                    YearlyProgressManager.CUSTOM_EVENT,
+                    eventStartTimeInMills,
+                    eventEndDateTimeInMillis
+                )
+
             }
             if (progress < 0) {
                 progress = 0.0
