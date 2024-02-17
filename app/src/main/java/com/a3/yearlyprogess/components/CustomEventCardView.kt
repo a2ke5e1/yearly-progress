@@ -167,10 +167,11 @@ class CustomEventCardView @JvmOverloads constructor(
         val params = binding.customProgressBar.layoutParams
         val target = (progress * 0.01 * binding.parent.width).toInt()
         val progressBarValueAnimator = ValueAnimator.ofInt(params.width, target)
-        val progressTextValueAnimator = ValueAnimator.ofFloat(0F, progress.toFloat())
+        val currentProgress = binding.progressBar.progress.toFloat()
+        val progressTextValueAnimator = ValueAnimator.ofFloat(currentProgress, progress.toFloat())
 
-        progressBarValueAnimator.duration = 500
-        progressTextValueAnimator.duration = 500
+        progressBarValueAnimator.duration = ANIMATION_DURATION
+        progressTextValueAnimator.duration = ANIMATION_DURATION
 
         progressBarValueAnimator.addUpdateListener {
             binding.customProgressBar.layoutParams.width = it.animatedValue as Int
@@ -189,21 +190,6 @@ class CustomEventCardView @JvmOverloads constructor(
         progressTextValueAnimator.start()
     }
 
-    /**
-     * It will return a string that will display relative difference between two dates
-     * such as if there is difference is time but not in day then it will display
-     * Aug 12, 2023
-     * 12:00 AM - 11:59 PM
-     *
-     * if there is difference in day then it will display
-     * Aug 12, 2023 12:00 AM - Aug 13, 2023 11:59 PM
-     *
-     * @param startTime in milliseconds
-     * @param endTime in milliseconds
-
-     */
-
-
     fun setOnEditButtonClickListener(listener: OnClickListener) {
         binding.editButton.setOnClickListener(listener)
     }
@@ -214,6 +200,20 @@ class CustomEventCardView @JvmOverloads constructor(
     }
 
     companion object {
+
+        /**
+         * It will return a string that will display relative difference between two dates
+         * such as if there is difference is time but not in day then it will display
+         * Aug 12, 2023
+         * 12:00 AM - 11:59 PM
+         *
+         * if there is difference in day then it will display
+         * Aug 12, 2023 12:00 AM - Aug 13, 2023 11:59 PM
+         *
+         * @param startTime in milliseconds
+         * @param endTime in milliseconds
+
+         */
         fun displayRelativeDifferenceMessage(context:Context, startTime: Long, endTime: Long, allDayEvent: Boolean): String {
 
             val startDay = SimpleDateFormat.getDateInstance().format(startTime)
@@ -234,6 +234,8 @@ class CustomEventCardView @JvmOverloads constructor(
                 }
             }
         }
+
+        private const val ANIMATION_DURATION = 500L
     }
 
 
