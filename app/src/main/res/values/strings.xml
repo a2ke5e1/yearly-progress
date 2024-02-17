@@ -84,5 +84,9 @@
     <string name="import_from_calender">Import from Calendar</string>
     <string name="replace_progress_with_days_left_counter">Replace Progress with Days Left Counter</string>
     <string name="this_will_only_work_if_the_time_left_counter_is_enabled">This will only work if the time left counter is enabled.</string>
+    <string name="delete_the_selected_events_message">Are you sure you want to delete the selected events?</string>
+    <string name="delete_selected_events">Delete %1$d selected events?</string>
+    <string name="delete_all_events">Delete all events?</string>
+    <string name="delete_all_events_message">Are you sure you want to delete all events?</string>
 
 </resources>

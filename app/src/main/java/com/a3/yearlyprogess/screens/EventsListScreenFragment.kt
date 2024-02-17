@@ -23,8 +23,10 @@ import com.a3.yearlyprogess.eventManager.EventManagerActivity
 import com.a3.yearlyprogess.eventManager.adapter.EventsListViewAdapter
 import com.a3.yearlyprogess.eventManager.adapter.ImportEventItemKeyProvider
 import com.a3.yearlyprogess.eventManager.adapter.MyItemDetailsLookup
+import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -105,11 +107,8 @@ class EventsListScreenFragment : Fragment() {
                             when (menuItem.itemId) {
 
                                 R.id.action_delete -> {
-                                    tracker!!.selection.forEach { i ->
-                                        val copy = eventAdapter.currentEventList
-                                        mEventViewModel.deleteEvent(copy[i.toInt()])
-                                    }
-                                    tracker!!.clearSelection()
+                                    val events = eventAdapter.getSelectedEvents()
+                                    showDeleteConfirmationDialog(events)
                                     true
                                 }
 
@@ -119,8 +118,7 @@ class EventsListScreenFragment : Fragment() {
                                 }
 
                                 R.id.action_delete_all -> {
-                                    mEventViewModel.deleteAllEvent()
-                                    tracker!!.clearSelection()
+                                    showDeleteConfirmationDialog()
                                     true
                                 }
 
@@ -175,4 +173,37 @@ class EventsListScreenFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+
+    private fun showDeleteConfirmationDialog(
+        events: List<Event> = emptyList()
+    ) {
+        val count = events.size
+        var title = getString(R.string.delete_selected_events, count)
+        var message = getString(R.string.delete_the_selected_events_message)
+
+        if (count == 0) {
+            title = getString(R.string.delete_all_events)
+            message = getString(R.string.delete_all_events_message)
+        }
+
+
+        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.CentralCard)
+            .setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.outline_delete_24))
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Yes") { _, _ ->
+                if (count == 0) {
+                    mEventViewModel.deleteAllEvent()
+                } else {
+                    events.forEach { event ->
+                        mEventViewModel.deleteEvent(event)
+                    }
+                }
+                tracker?.clearSelection()
+            }
+            .setNegativeButton("No") { _, _ -> }
+            .create()
+        dialog.show()
+    }
+
 }
