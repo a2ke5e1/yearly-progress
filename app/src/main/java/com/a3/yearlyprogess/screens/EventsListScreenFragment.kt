@@ -17,6 +17,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentScreenListEventsBinding
 import com.a3.yearlyprogess.eventManager.EventManagerActivity
@@ -48,16 +49,8 @@ class EventsListScreenFragment : Fragment() {
 
         _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
 
-        binding.addEventFab.setOnClickListener {
-            val intent = Intent(it.context, EventManagerActivity::class.java)
-            intent.putExtra("addMode", true)
-            startActivity(intent)
-        }
+        manageEventAddButton()
 
-        binding.addEventFab.setOnLongClickListener {
-            mEventViewModel.deleteAllEvent()
-            true
-        }
 
         val eventAdapter = EventsListViewAdapter(
             AppWidgetManager.INVALID_APPWIDGET_ID
@@ -160,6 +153,32 @@ class EventsListScreenFragment : Fragment() {
 
         return binding.root
 
+    }
+
+    // Adds the floating action button to add events
+    // and hides it while scrolling
+    private fun manageEventAddButton() {
+
+        binding.addEventFab.setOnClickListener {
+            val intent = Intent(it.context, EventManagerActivity::class.java)
+            intent.putExtra("addMode", true)
+            startActivity(intent)
+        }
+
+        binding.eventsRecyclerViewer.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(
+                recyclerView: RecyclerView,
+                dx: Int,
+                dy: Int
+            ) {
+                if (dy > 0 && binding.addEventFab.visibility == View.VISIBLE) {
+                    binding.addEventFab.hide()
+                } else if (dy < 0 && binding.addEventFab.visibility != View.VISIBLE) {
+                    binding.addEventFab.show()
+                }
+            }
+        })
     }
 
     private var tracker: SelectionTracker<Long>? = null
