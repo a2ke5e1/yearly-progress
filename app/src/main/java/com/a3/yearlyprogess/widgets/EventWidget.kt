@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.text.SpannableString
 import android.text.format.DateFormat
+import android.util.Log
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
@@ -14,8 +15,11 @@ import com.a3.yearlyprogess.components.CustomEventCardView.Companion.displayRela
 import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.YearlyProgressManager
+import com.a3.yearlyprogess.eventManager.model.Converters
+import com.a3.yearlyprogess.eventManager.model.RepeatDays
 import com.a3.yearlyprogess.widgets.util.BaseWidget
 import com.a3.yearlyprogess.manager.AlarmHandler
+import java.util.Calendar
 
 /**
  * Implementation of App Widget functionality.
@@ -32,8 +36,9 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
             val eventTitle = event.eventTitle
             val eventDesc = event.eventDescription
-            val eventStartTimeInMills = event.eventStartTime
-            val eventEndDateTimeInMillis = event.eventEndTime
+            val repeatDays = event.repeatEventDays
+            var eventStartTimeInMills = event.eventStartTime
+            var eventEndDateTimeInMillis = event.eventEndTime
 
 
             var progress = YearlyProgressManager.getProgress(
@@ -43,11 +48,18 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             )
 
             if (progress > 100) {
-                progress = 100.0
+                val (newEventStart, newEventEnd, newProgress) = YearlyProgressManager.getEventProgress(
+                    eventStartTimeInMills,
+                    eventEndDateTimeInMillis,
+                    repeatDays)
+
+                eventStartTimeInMills = newEventStart
+                eventEndDateTimeInMillis = newEventEnd
+                progress = newProgress
             }
-            if (progress < 0) {
-                progress = 0.0
-            }
+
+            progress = if (progress > 100) 100.0 else progress
+            progress = if (progress < 0) 0.0 else progress
 
             val settingsPref = PreferenceManager.getDefaultSharedPreferences(context)
             val decimalPlace: Int =
@@ -123,7 +135,10 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
 
             tallView.setTextViewText(R.id.eventProgressText, progressText)
             tallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-            tallView.setTextViewText(R.id.currentDate, YearlyProgressManager.getDay(formatted = true))
+            tallView.setTextViewText(
+                R.id.currentDate,
+                YearlyProgressManager.getDay(formatted = true)
+            )
             tallView.setTextViewText(R.id.eventTitle, eventTitle)
             tallView.setTextViewText(
                 R.id.eventTime,
@@ -131,7 +146,10 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             )
 
             smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-            smallView.setTextViewText(R.id.currentDate, YearlyProgressManager.getDay(formatted = true))
+            smallView.setTextViewText(
+                R.id.currentDate,
+                YearlyProgressManager.getDay(formatted = true)
+            )
             smallView.setTextViewText(R.id.eventProgressText, progressText)
             smallView.setTextViewText(R.id.eventTitle, eventTitle)
 
@@ -143,10 +161,10 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             //  applies to kind of the widgets.
             var widgetBackgroundAlpha = settingsPref.getInt(
                 context.getString(R.string.widget_widget_background_transparency),
-                255
+                100
             )
 
-            widgetBackgroundAlpha = (( widgetBackgroundAlpha / 100.0) * 255).toInt()
+            widgetBackgroundAlpha = ((widgetBackgroundAlpha / 100.0) * 255).toInt()
 
             smallView.setInt(
                 R.id.widgetContainer,
@@ -185,6 +203,8 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
     ) {
 
         val pref = context.getSharedPreferences("eventWidget_${appWidgetId}", Context.MODE_PRIVATE)
+        val conv = Converters()
+
 
         val eventId = pref.getInt("eventId", 0)
         val eventTitle = pref.getString("eventTitle", "Loading").toString()
@@ -192,6 +212,11 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
         val allDayEvent = pref.getBoolean("allDayEvent", false)
         val eventStartTimeInMills = pref.getLong("eventStartTimeInMills", 0)
         val eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
+        val eventRepeatDays =
+            conv.toRepeatDaysList(pref.getString("eventRepeatDays", "").toString())
+
+        Log.d("EventWidget", "Event: $eventRepeatDays")
+
 
         val event = Event(
             eventId,
@@ -199,7 +224,8 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             eventDesc,
             allDayEvent,
             eventStartTimeInMills,
-            eventEndDateTimeInMillis
+            eventEndDateTimeInMillis,
+            eventRepeatDays
         )
 
         // Instruct the widget manager to update the widget

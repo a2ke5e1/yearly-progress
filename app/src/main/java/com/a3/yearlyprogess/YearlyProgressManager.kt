@@ -6,6 +6,7 @@ import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
 import androidx.preference.PreferenceManager
+import com.a3.yearlyprogess.eventManager.model.RepeatDays
 import java.util.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -70,7 +71,7 @@ class YearlyProgressManager(private val context: Context) {
             }
             val spannable = SpannableString(
                 "${day}${
-                    when (day){
+                    when (day) {
                         "11", "12", "13" -> "th"
                         else -> when (day.last()) {
                             '1' -> "st"
@@ -263,7 +264,69 @@ class YearlyProgressManager(private val context: Context) {
             return spannable
         }
 
+        fun getEventProgress(
+            eventStartMilliSeconds: Long,
+            eventEndMilliSeconds: Long,
+            repeatDays: List<RepeatDays>
+        ): Triple<Long, Long, Double> {
 
+            var eventStartTimeInMills = eventStartMilliSeconds
+            var eventEndDateTimeInMillis = eventEndMilliSeconds
+
+            if (repeatDays.contains(RepeatDays.EVERY_YEAR)) {
+                val calendar = Calendar.getInstance()
+                val currentYear = calendar.get(Calendar.YEAR)
+
+
+                // change the year of the eventStartTimeInMills and eventEndDateTimeInMillis
+                // to the current year
+
+                val eventStartCalendar = Calendar.getInstance()
+                eventStartCalendar.timeInMillis = eventStartTimeInMills
+
+
+                val eventEndCalendar = Calendar.getInstance()
+                eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
+
+                val diffYear = currentYear - eventStartCalendar.get(Calendar.YEAR)
+
+                eventStartCalendar.add(Calendar.YEAR, diffYear)
+                eventEndCalendar.add(Calendar.YEAR, diffYear)
+
+                eventStartTimeInMills = eventStartCalendar.timeInMillis
+                eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
+            }
+
+            if (repeatDays.contains(RepeatDays.EVERY_MONTH)) {
+
+                val calendar = Calendar.getInstance()
+                val currentMonth = calendar.get(Calendar.MONTH)
+                val currentYear = calendar.get(Calendar.YEAR)
+
+                // change the month of the eventStartTimeInMills and eventEndDateTimeInMillis
+                // to the current month
+                val eventStartCalendar = Calendar.getInstance()
+                eventStartCalendar.timeInMillis = eventStartTimeInMills
+
+                val eventEndCalendar = Calendar.getInstance()
+                eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
+
+                var diffMonth = currentMonth - eventStartCalendar.get(Calendar.MONTH)
+                val diffYear = currentYear - eventStartCalendar.get(Calendar.YEAR)
+
+                diffMonth += diffYear * 12
+
+                eventStartCalendar.add(Calendar.MONTH, diffMonth)
+                eventEndCalendar.add(Calendar.MONTH, diffMonth)
+
+                eventStartTimeInMills = eventStartCalendar.timeInMillis
+                eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
+            }
+
+            val progress = getProgress(CUSTOM_EVENT, eventStartTimeInMills, eventEndDateTimeInMillis)
+
+            return Triple(eventStartTimeInMills, eventEndDateTimeInMillis, progress)
+        }
     }
 }
 

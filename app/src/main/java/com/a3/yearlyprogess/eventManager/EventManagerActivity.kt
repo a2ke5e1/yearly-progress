@@ -23,7 +23,9 @@ import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.ActivityEventManagerActivityBinding
+import com.a3.yearlyprogess.eventManager.model.Converters
 import com.a3.yearlyprogess.eventManager.model.Event
+import com.a3.yearlyprogess.eventManager.model.RepeatDays
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.EventWidget
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -130,7 +132,7 @@ class EventManagerActivity : AppCompatActivity() {
 
     }
 
-    private fun handleAllDayUIChanges(isChecked : Boolean) {
+    private fun handleAllDayUIChanges(isChecked: Boolean) {
         if (isChecked) {
             binding.editTextStartTime.animate().alpha(0f).setDuration(200).start()
             binding.editTextEndTime.animate().alpha(0f).setDuration(200).start()
@@ -168,8 +170,7 @@ class EventManagerActivity : AppCompatActivity() {
             eventEndDateTimeInMillis = localCalendar.timeInMillis
 
 
-        }
-        else {
+        } else {
 
 
             val localCalendar = Calendar.getInstance()
@@ -338,15 +339,18 @@ class EventManagerActivity : AppCompatActivity() {
                     }
 
 
-                    if (!isAddMode) {
 
+
+                    if (!isAddMode) {
+                        val repeatDays = getRepeatDays()
                         val updatedEvent = Event(
                             event!!.id,
                             binding.eventTitle.text.toString().ifEmpty { "" },
                             binding.eventDesc.text.toString().ifEmpty { "" },
                             binding.allDaySwitch.isChecked,
                             eventStartDateTimeInMillis,
-                            eventEndDateTimeInMillis
+                            eventEndDateTimeInMillis,
+                            repeatDays
                         )
                         mEventViewModel.updateEvent(updatedEvent)
 
@@ -364,6 +368,7 @@ class EventManagerActivity : AppCompatActivity() {
                             val prefEventId = pref.getInt("eventId", -1)
                             if (prefEventId == updatedEvent.id) {
                                 val edit = pref.edit()
+                                val conv = Converters()
 
                                 edit.putInt("eventId", updatedEvent.id)
                                 edit.putString("eventTitle", updatedEvent.eventTitle)
@@ -371,6 +376,10 @@ class EventManagerActivity : AppCompatActivity() {
                                 edit.putBoolean("allDayEvent", updatedEvent.allDayEvent)
                                 edit.putLong("eventStartTimeInMills", updatedEvent.eventStartTime)
                                 edit.putLong("eventEndDateTimeInMillis", updatedEvent.eventEndTime)
+                                edit.putString(
+                                    "eventRepeatDays",
+                                    conv.fromRepeatDaysList(updatedEvent.repeatEventDays)
+                                )
 
                                 edit.commit()
                                 EventWidget().updateWidget(this, appWidgetManager, appWidgetId)
@@ -379,6 +388,7 @@ class EventManagerActivity : AppCompatActivity() {
 
 
                     } else {
+                        val repeatDays = getRepeatDays()
                         mEventViewModel.addEvent(
                             Event(
                                 0,
@@ -386,7 +396,8 @@ class EventManagerActivity : AppCompatActivity() {
                                 binding.eventDesc.text.toString().ifEmpty { "" },
                                 binding.allDaySwitch.isChecked,
                                 eventStartDateTimeInMillis,
-                                eventEndDateTimeInMillis
+                                eventEndDateTimeInMillis,
+                                repeatDays
                             )
                         )
                     }
@@ -448,6 +459,8 @@ class EventManagerActivity : AppCompatActivity() {
         )
         binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
 
+        setRepeatDays(event.repeatEventDays)
+
     }
 
     private fun modifiedEventDateTime(date: Long, hour: Int, min: Int): Long {
@@ -466,5 +479,53 @@ class EventManagerActivity : AppCompatActivity() {
         // add localCalendar.timeZone.rawOffset to get the correct date
         localCalendar.timeInMillis = localCalendar.timeInMillis + localCalendar.timeZone.rawOffset
         return localCalendar.timeInMillis
+    }
+
+    private fun getRepeatDays(): List<RepeatDays> {
+        val repeatDays = mutableListOf<RepeatDays>()
+        if (binding.btnSunday.isChecked) {
+            repeatDays.add(RepeatDays.SUNDAY)
+        }
+        if (binding.btnMonday.isChecked) {
+            repeatDays.add(RepeatDays.MONDAY)
+        }
+        if (binding.btnTuesday.isChecked) {
+            repeatDays.add(RepeatDays.TUESDAY)
+        }
+        if (binding.btnWednesday.isChecked) {
+            repeatDays.add(RepeatDays.WEDNESDAY)
+        }
+        if (binding.btnThursday.isChecked) {
+            repeatDays.add(RepeatDays.THURSDAY)
+        }
+        if (binding.btnFriday.isChecked) {
+            repeatDays.add(RepeatDays.FRIDAY)
+        }
+        if (binding.btnSaturday.isChecked) {
+            repeatDays.add(RepeatDays.SATURDAY)
+        }
+        if (binding.everyMonthSwitch.isChecked) {
+            repeatDays.add(RepeatDays.EVERY_MONTH)
+        }
+        if (binding.everyYearSwitch.isChecked) {
+            repeatDays.add(RepeatDays.EVERY_YEAR)
+        }
+        return repeatDays
+    }
+
+    private fun setRepeatDays(repeatDays: List<RepeatDays>) {
+        repeatDays.forEach {
+            when (it) {
+                RepeatDays.SUNDAY -> binding.btnSunday.isChecked = true
+                RepeatDays.MONDAY -> binding.btnMonday.isChecked = true
+                RepeatDays.TUESDAY -> binding.btnTuesday.isChecked = true
+                RepeatDays.WEDNESDAY -> binding.btnWednesday.isChecked = true
+                RepeatDays.THURSDAY -> binding.btnThursday.isChecked = true
+                RepeatDays.FRIDAY -> binding.btnFriday.isChecked = true
+                RepeatDays.SATURDAY -> binding.btnSaturday.isChecked = true
+                RepeatDays.EVERY_MONTH -> binding.everyMonthSwitch.isChecked = true
+                RepeatDays.EVERY_YEAR -> binding.everyYearSwitch.isChecked = true
+            }
+        }
     }
 }
