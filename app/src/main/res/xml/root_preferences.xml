@@ -43,14 +43,31 @@
         app:title="Widget Customization">
         >
         <SeekBarPreference
-            app:title="@string/widget_transparency"
-            app:summary="@string/adjust_opacity_of_the_standalone_and_event_widget"
             android:max="100"
             app:defaultValue="100"
             app:iconSpaceReserved="false"
+            app:key="@string/widget_widget_background_transparency"
             app:min="0"
             app:showSeekBarValue="true"
-            app:key="@string/widget_widget_background_transparency" />
+            app:summary="@string/adjust_opacity_of_the_standalone_and_event_widget"
+            app:title="@string/widget_transparency" />
+
+        <SwitchPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/widget_widget_time_left"
+            app:summary="@string/shows_how_much_time_left_in_the_widget"
+            app:title="@string/time_left_counter" />
+
+
+        <SwitchPreference
+            app:defaultValue="false"
+            app:dependency="@string/widget_widget_time_left"
+            app:iconSpaceReserved="false"
+            app:key="@string/widget_widget_event_replace_progress_with_days_counter"
+            app:summary="@string/this_will_only_work_if_the_time_left_counter_is_enabled"
+            app:title="@string/replace_progress_with_days_left_counter" />
+
     </PreferenceCategory>
 
 
@@ -67,13 +84,6 @@
             app:showSeekBarValue="true"
             app:summary="@string/pref_summary_widget_decimal_places"
             app:title="@string/pref_title_widget_decimal_places" />
-
-        <SwitchPreference
-            app:title="@string/time_left_counter"
-            app:summary="@string/shows_how_much_time_left_in_the_widget"
-            app:defaultValue="false"
-            app:iconSpaceReserved="false"
-            app:key="@string/widget_widget_time_left" />
 
     </PreferenceCategory>
 

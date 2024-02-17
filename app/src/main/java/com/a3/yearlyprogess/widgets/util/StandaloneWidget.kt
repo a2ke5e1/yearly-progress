@@ -100,10 +100,17 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
                 100
             )
 
-            widgetBackgroundAlpha = (( widgetBackgroundAlpha / 100.0) * 255).toInt()
+            widgetBackgroundAlpha = ((widgetBackgroundAlpha / 100.0) * 255).toInt()
 
             val timeLeftCounter =
                 pref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
+
+            val replaceProgressWithDaysLeft =
+                pref.getBoolean(
+                    context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
+                    false
+                )
+
             view.setInt(
                 R.id.widgetContainer,
                 "setImageAlpha",
@@ -111,8 +118,12 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
             )
             view.setViewVisibility(
                 R.id.widgetDaysLeft,
-                if (timeLeftCounter) View.VISIBLE else View.GONE
+                if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE
             )
+            if (replaceProgressWithDaysLeft) {
+                view.setTextViewText(R.id.widgetProgress, widgetDaysLeftCounter)
+                view.setTextViewTextSize(R.id.widgetProgress, 0, 35f)
+            }
 
 
             return view

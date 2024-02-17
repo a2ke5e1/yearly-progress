@@ -51,7 +51,8 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
                 val (newEventStart, newEventEnd, newProgress) = YearlyProgressManager.getEventProgress(
                     eventStartTimeInMills,
                     eventEndDateTimeInMillis,
-                    repeatDays)
+                    repeatDays
+                )
 
                 eventStartTimeInMills = newEventStart
                 eventEndDateTimeInMillis = newEventEnd
@@ -152,6 +153,39 @@ class EventWidget : BaseWidget(AlarmHandler.EVENT_WIDGET_SERVICE) {
             )
             smallView.setTextViewText(R.id.eventProgressText, progressText)
             smallView.setTextViewText(R.id.eventTitle, eventTitle)
+
+
+            val timeLeftCounter =
+                settingsPref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
+
+            val replaceProgressWithDaysLeft =
+                settingsPref.getBoolean(
+                    context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
+                    false
+                )
+
+            val eventTimeLeft = YearlyProgressManager.getDaysLeft(
+                YearlyProgressManager.CUSTOM_EVENT,
+                eventEndDateTimeInMillis
+            )
+
+            if (timeLeftCounter && replaceProgressWithDaysLeft) {
+                smallView.setTextViewText(
+                    R.id.eventProgressText,
+                    eventTimeLeft
+                )
+                wideView.setTextViewText(
+                    R.id.eventProgressText,
+                    eventTimeLeft
+                )
+                tallView.setTextViewText(
+                    R.id.eventProgressText,
+                    eventTimeLeft
+                )
+                smallView.setTextViewTextSize(R.id.eventProgressText, 0, 35f)
+                wideView.setTextViewTextSize(R.id.eventProgressText, 0, 35f)
+                tallView.setTextViewTextSize(R.id.eventProgressText, 0, 35f)
+            }
 
 
             // Loads user preference if widgets needs to be transparent or
