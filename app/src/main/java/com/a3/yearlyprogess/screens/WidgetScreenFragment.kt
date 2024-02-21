@@ -24,9 +24,13 @@ import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
-import com.a3.yearlyprogess.widgets.*
-import com.a3.yearlyprogess.widgets.util.StandaloneWidget
-import com.a3.yearlyprogess.manager.AlarmHandler
+import com.a3.yearlyprogess.widgets.ui.util.StandaloneWidget
+import com.a3.yearlyprogess.widgets.manager.updateManager.AlarmHandler
+import com.a3.yearlyprogess.widgets.ui.AllInWidget
+import com.a3.yearlyprogess.widgets.ui.DayWidget
+import com.a3.yearlyprogess.widgets.ui.MonthWidget
+import com.a3.yearlyprogess.widgets.ui.WeekWidget
+import com.a3.yearlyprogess.widgets.ui.YearWidget
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest

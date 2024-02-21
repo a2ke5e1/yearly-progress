@@ -6,7 +6,7 @@ import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
 import androidx.preference.PreferenceManager
-import com.a3.yearlyprogess.eventManager.model.RepeatDays
+import com.a3.yearlyprogess.widgets.manager.eventManager.model.RepeatDays
 import java.util.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration

@@ -20,7 +20,7 @@
         tools:targetApi="31">
         <activity
             android:theme="@style/Theme.YearlyProgress"
-            android:name=".eventManager.ImportEventCalendarActivity"
+            android:name=".widgets.manager.eventManager.ImportEventCalendarActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
@@ -32,7 +32,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".eventManager.EventSelectorActivity"
+            android:name=".widgets.manager.eventManager.EventSelectorActivity"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress"
             android:windowSoftInputMode="stateVisible|adjustResize|stateHidden">
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".eventManager.EventManagerActivity"
+            android:name=".widgets.manager.eventManager.EventManagerActivity"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress"
             android:windowSoftInputMode="stateVisible|adjustResize|stateHidden"></activity>
@@ -63,7 +63,7 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_application_id" /> <!-- Registration of the Widgets -->
         <receiver
-            android:name=".widgets.AllInWidget"
+            android:name=".widgets.ui.AllInWidget"
             android:exported="false"
             android:label="All in One">
             <intent-filter>
@@ -75,7 +75,7 @@
                 android:resource="@xml/all_in_widget_info" />
         </receiver>
         <receiver
-            android:name=".widgets.EventWidget"
+            android:name=".widgets.ui.EventWidget"
             android:exported="false"
             android:label="Event Progress Tracker">
             <intent-filter>
@@ -87,7 +87,7 @@
                 android:resource="@xml/event_widget_info" />
         </receiver>
         <receiver
-            android:name=".widgets.DayWidget"
+            android:name=".widgets.ui.DayWidget"
             android:exported="false"
             android:label="Day Progress">
             <intent-filter>
@@ -99,7 +99,7 @@
                 android:resource="@xml/day_widget_info" />
         </receiver>
         <receiver
-            android:name=".widgets.MonthWidget"
+            android:name=".widgets.ui.MonthWidget"
             android:exported="false"
             android:label="Month Progress">
             <intent-filter>
@@ -111,7 +111,7 @@
                 android:resource="@xml/month_widget_info" />
         </receiver>
         <receiver
-            android:name=".widgets.YearWidget"
+            android:name=".widgets.ui.YearWidget"
             android:exported="false"
             android:label="Year Progress">
             <intent-filter>
@@ -123,7 +123,7 @@
                 android:resource="@xml/year_widget_info" />
         </receiver>
         <receiver
-            android:name=".widgets.WeekWidget"
+            android:name=".widgets.ui.WeekWidget"
             android:exported="false"
             android:label="Week Progress">
             <intent-filter>
@@ -135,22 +135,22 @@
                 android:resource="@xml/week_widget_info" />
         </receiver> <!-- Registration of the Widget Broadcast Receiver -->
         <receiver
-            android:name=".manager.services.DayWidgetService"
+            android:name=".widgets.manager.updateManager.services.DayWidgetService"
             android:enabled="true" />
         <receiver
-            android:name=".manager.services.MonthWidgetService"
+            android:name=".widgets.manager.updateManager.services.MonthWidgetService"
             android:enabled="true" />
         <receiver
-            android:name=".manager.services.WeekWidgetService"
+            android:name=".widgets.manager.updateManager.services.WeekWidgetService"
             android:enabled="true" />
         <receiver
-            android:name=".manager.services.YearWidgetService"
+            android:name=".widgets.manager.updateManager.services.YearWidgetService"
             android:enabled="true" />
         <receiver
-            android:name=".manager.services.EventWidgetService"
+            android:name=".widgets.manager.updateManager.services.EventWidgetService"
             android:enabled="true" />
         <receiver
-            android:name=".manager.services.AllInWidgetService"
+            android:name=".widgets.manager.updateManager.services.AllInWidgetService"
             android:enabled="true" />
     </application>
 
