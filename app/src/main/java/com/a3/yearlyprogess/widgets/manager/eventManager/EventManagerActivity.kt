@@ -129,7 +129,27 @@ class EventManagerActivity : AppCompatActivity() {
             "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}"
         )
 
+        binding.everyYearSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.everyMonthSwitch.isChecked = false
+                binding.repeatWeekdaysSwitch.isChecked = false
+            }
+        }
+
+        binding.everyMonthSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.everyYearSwitch.isChecked = false
+                binding.repeatWeekdaysSwitch.isChecked = false
+            }
+        }
+
         binding.repeatWeekdaysSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.everyMonthSwitch.isChecked = false
+                binding.everyYearSwitch.isChecked = false
+            }
+
+
             if (isChecked) {
                 binding.repeatDays.animate().alpha(1f).setDuration(200).start()
             } else {
