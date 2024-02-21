@@ -244,10 +244,16 @@ class EventManagerActivity : AppCompatActivity() {
                 .build().apply {
                     show(supportFragmentManager, "tag")
                     addOnPositiveButtonClickListener {
+
+                        val isEveryYearChecked = binding.everyYearSwitch.isChecked
+
                         eventStartDateTimeInMillis = it.toLong()
                         handleAllDayTimeOffset(binding.allDaySwitch.isChecked)
                         binding.editTextStartDate.setText(
-                            format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
+                            if (isEveryYearChecked)
+                                format("MMMM dd", eventStartDateTimeInMillis).toString()
+                            else
+                                format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
                         )
                         setUpDateTimePickers()
                     }
@@ -294,10 +300,16 @@ class EventManagerActivity : AppCompatActivity() {
                 .build().apply {
                     show(supportFragmentManager, "tag")
                     addOnPositiveButtonClickListener {
+
+                        val isEveryYearChecked = binding.everyYearSwitch.isChecked
+
                         eventEndDateTimeInMillis = it.toLong()
                         handleAllDayTimeOffset(binding.allDaySwitch.isChecked)
                         binding.editTextEndDate.setText(
-                            format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
+                            if (isEveryYearChecked)
+                                format("MMMM dd", eventEndDateTimeInMillis).toString()
+                            else
+                                format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
                         )
                         setUpDateTimePickers()
                     }

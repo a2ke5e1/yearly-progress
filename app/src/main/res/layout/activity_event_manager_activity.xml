@@ -102,7 +102,7 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="4dp"
-                android:text="@string/event_settings"
+                android:text="Repeat Events"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayout2" />
