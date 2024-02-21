@@ -49,7 +49,7 @@
                     android:maxLines="4"
                     android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu magna ut nisi laoreet tempus."
                     android:textAllCaps="false"
-                    android:textColor="@color/widget_text_color"
+                    android:textColor="@color/widget_text_color_tertiary"
                     android:textSize="12sp"
                     android:textStyle="normal" />
 
@@ -62,7 +62,7 @@
                     android:text="08/01 · 7:37 PM"
                     android:textAllCaps="false"
                     android:textColor="@color/widget_text_color"
-                    android:textSize="11sp"
+                    android:textSize="8sp"
                     android:textStyle="normal" />
 
             </LinearLayout>
