@@ -129,6 +129,14 @@ class EventManagerActivity : AppCompatActivity() {
             "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}"
         )
 
+        binding.repeatWeekdaysSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.repeatDays.animate().alpha(1f).setDuration(200).start()
+            } else {
+                binding.repeatDays.animate().alpha(0f).setDuration(200).start()
+            }
+            binding.repeatDays.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
 
     }
 
