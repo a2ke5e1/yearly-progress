@@ -184,6 +184,18 @@ class EventsListViewAdapter(
         }
     }
 
+    fun getSelectedEvents(): List<Event> {
+        val selectedEvents = mutableListOf<Event>()
+        if (tracker != null) {
+            for (i in 0 until itemCount) {
+                if (tracker!!.isSelected(i.toLong())) {
+                    selectedEvents.add(eventList[i])
+                }
+            }
+        }
+        return selectedEvents
+    }
+
 }
 
 class EventsSelectorListViewHolder(val binding: CustomEventSelectorItemViewBinding) :

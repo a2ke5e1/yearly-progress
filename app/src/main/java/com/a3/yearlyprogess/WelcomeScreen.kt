@@ -31,6 +31,14 @@ class WelcomeScreen : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val navigationBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            view.updatePadding(
+                bottom = navigationBarInsets.bottom
+            )
+            insets
+        }
+
 
         val TOSSpan = URLSpan(TOS_URL)
         val privacyPolicySpan = URLSpan(PP_URL)

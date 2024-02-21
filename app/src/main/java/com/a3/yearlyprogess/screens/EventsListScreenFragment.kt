@@ -17,14 +17,17 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentScreenListEventsBinding
 import com.a3.yearlyprogess.eventManager.EventManagerActivity
 import com.a3.yearlyprogess.eventManager.adapter.EventsListViewAdapter
 import com.a3.yearlyprogess.eventManager.adapter.ImportEventItemKeyProvider
 import com.a3.yearlyprogess.eventManager.adapter.MyItemDetailsLookup
+import com.a3.yearlyprogess.eventManager.model.Event
 import com.a3.yearlyprogess.eventManager.viewmodel.EventViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -46,16 +49,8 @@ class EventsListScreenFragment : Fragment() {
 
         _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
 
-        binding.addEventFab.setOnClickListener {
-            val intent = Intent(it.context, EventManagerActivity::class.java)
-            intent.putExtra("addMode", true)
-            startActivity(intent)
-        }
+        manageEventAddButton()
 
-        binding.addEventFab.setOnLongClickListener {
-            mEventViewModel.deleteAllEvent()
-            true
-        }
 
         val eventAdapter = EventsListViewAdapter(
             AppWidgetManager.INVALID_APPWIDGET_ID
@@ -105,11 +100,8 @@ class EventsListScreenFragment : Fragment() {
                             when (menuItem.itemId) {
 
                                 R.id.action_delete -> {
-                                    tracker!!.selection.forEach { i ->
-                                        val copy = eventAdapter.currentEventList
-                                        mEventViewModel.deleteEvent(copy[i.toInt()])
-                                    }
-                                    tracker!!.clearSelection()
+                                    val events = eventAdapter.getSelectedEvents()
+                                    showDeleteConfirmationDialog(events)
                                     true
                                 }
 
@@ -119,8 +111,7 @@ class EventsListScreenFragment : Fragment() {
                                 }
 
                                 R.id.action_delete_all -> {
-                                    mEventViewModel.deleteAllEvent()
-                                    tracker!!.clearSelection()
+                                    showDeleteConfirmationDialog()
                                     true
                                 }
 
@@ -164,6 +155,32 @@ class EventsListScreenFragment : Fragment() {
 
     }
 
+    // Adds the floating action button to add events
+    // and hides it while scrolling
+    private fun manageEventAddButton() {
+
+        binding.addEventFab.setOnClickListener {
+            val intent = Intent(it.context, EventManagerActivity::class.java)
+            intent.putExtra("addMode", true)
+            startActivity(intent)
+        }
+
+        binding.eventsRecyclerViewer.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(
+                recyclerView: RecyclerView,
+                dx: Int,
+                dy: Int
+            ) {
+                if (dy > 0 && binding.addEventFab.visibility == View.VISIBLE) {
+                    binding.addEventFab.hide()
+                } else if (dy < 0 && binding.addEventFab.visibility != View.VISIBLE) {
+                    binding.addEventFab.show()
+                }
+            }
+        })
+    }
+
     private var tracker: SelectionTracker<Long>? = null
 
 
@@ -175,4 +192,37 @@ class EventsListScreenFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+
+    private fun showDeleteConfirmationDialog(
+        events: List<Event> = emptyList()
+    ) {
+        val count = events.size
+        var title = getString(R.string.delete_selected_events, count)
+        var message = getString(R.string.delete_the_selected_events_message)
+
+        if (count == 0) {
+            title = getString(R.string.delete_all_events)
+            message = getString(R.string.delete_all_events_message)
+        }
+
+
+        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.CentralCard)
+            .setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.outline_delete_24))
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Yes") { _, _ ->
+                if (count == 0) {
+                    mEventViewModel.deleteAllEvent()
+                } else {
+                    events.forEach { event ->
+                        mEventViewModel.deleteEvent(event)
+                    }
+                }
+                tracker?.clearSelection()
+            }
+            .setNegativeButton("No") { _, _ -> }
+            .create()
+        dialog.show()
+    }
+
 }
