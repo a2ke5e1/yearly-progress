@@ -323,6 +323,54 @@ class YearlyProgressManager(private val context: Context) {
                 eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
             }
 
+            val weekDays = mapOf(
+                Calendar.SUNDAY to RepeatDays.SUNDAY,
+                RepeatDays.MONDAY to Calendar.MONDAY,
+                RepeatDays.TUESDAY to Calendar.TUESDAY,
+                RepeatDays.WEDNESDAY to Calendar.WEDNESDAY,
+                RepeatDays.THURSDAY to Calendar.THURSDAY,
+                RepeatDays.FRIDAY to Calendar.FRIDAY,
+                RepeatDays.SATURDAY to Calendar.SATURDAY
+            )
+
+
+
+            if (repeatDays.any { it in weekDays }) {
+                val calendar = Calendar.getInstance()
+                val currentWeek = weekDays.filter { it.value == calendar.get(Calendar.DAY_OF_WEEK) }.keys.first()
+
+                val eventStartCalendar = Calendar.getInstance()
+                eventStartCalendar.timeInMillis = eventStartTimeInMills
+                val eventStartHour = eventStartCalendar.get(Calendar.HOUR_OF_DAY)
+                val eventStartMinute = eventStartCalendar.get(Calendar.MINUTE)
+
+                val eventEndCalendar = Calendar.getInstance()
+                eventEndCalendar.timeInMillis = eventEndDateTimeInMillis
+                val eventEndHour = eventEndCalendar.get(Calendar.HOUR_OF_DAY)
+                val eventEndMinute = eventEndCalendar.get(Calendar.MINUTE)
+
+                if (repeatDays.contains(currentWeek)) {
+                    // Sets the eventStartTimeInMills and eventEndDateTimeInMillis to the current day
+                    // since the event is repeating every week, so we don't need to change the time
+                    // of the event only the date.
+                    eventStartCalendar.set(Calendar.DATE, calendar.get(Calendar.DATE))
+                    eventEndCalendar.set(Calendar.DATE, calendar.get(Calendar.DATE))
+
+
+                    eventStartCalendar.set(Calendar.HOUR_OF_DAY, eventStartHour)
+                    eventStartCalendar.set(Calendar.MINUTE, eventStartMinute)
+
+
+                    eventEndCalendar.set(Calendar.HOUR_OF_DAY, eventEndHour)
+                    eventEndCalendar.set(Calendar.MINUTE, eventEndMinute)
+
+                    eventStartTimeInMills = eventStartCalendar.timeInMillis
+                    eventEndDateTimeInMillis = eventEndCalendar.timeInMillis
+                }
+
+            }
+
+
             val progress = getProgress(CUSTOM_EVENT, eventStartTimeInMills, eventEndDateTimeInMillis)
 
             return Triple(eventStartTimeInMills, eventEndDateTimeInMillis, progress)
