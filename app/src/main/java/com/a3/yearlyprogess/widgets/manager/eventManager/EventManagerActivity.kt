@@ -113,7 +113,7 @@ class EventManagerActivity : AppCompatActivity() {
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(Activity.RESULT_CANCELED, resultValue)
 
-
+        handleRepeatEventSwitch()
 
         if (event != null && !isAddMode) {
             loadWidgetDataFromEvent(event)
@@ -129,6 +129,9 @@ class EventManagerActivity : AppCompatActivity() {
             "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}"
         )
 
+    }
+
+    private fun handleRepeatEventSwitch() {
         binding.everyYearSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.everyMonthSwitch.isChecked = false
@@ -157,7 +160,6 @@ class EventManagerActivity : AppCompatActivity() {
             }
             binding.repeatDays.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
-
     }
 
     private fun handleAllDayUIChanges(isChecked: Boolean) {
@@ -555,5 +557,16 @@ class EventManagerActivity : AppCompatActivity() {
                 RepeatDays.EVERY_YEAR -> binding.everyYearSwitch.isChecked = true
             }
         }
+
+        val checkRepeatWeekdays = repeatDays.any {
+            it in listOf(
+                RepeatDays.SUNDAY, RepeatDays.MONDAY,
+                RepeatDays.TUESDAY, RepeatDays.WEDNESDAY,
+                RepeatDays.THURSDAY, RepeatDays.FRIDAY,
+                RepeatDays.SATURDAY
+            )
+        }
+
+        binding.repeatWeekdaysSwitch.isChecked = checkRepeatWeekdays
     }
 }
