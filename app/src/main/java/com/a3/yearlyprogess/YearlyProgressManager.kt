@@ -5,6 +5,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
+import android.util.Log
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.RepeatDays
 import java.util.*
@@ -337,7 +338,7 @@ class YearlyProgressManager(private val context: Context) {
 
             if (repeatDays.any { it in weekDays }) {
                 val calendar = Calendar.getInstance()
-                val currentWeek = weekDays.filter { it.value == calendar.get(Calendar.DAY_OF_WEEK) }.keys.first()
+                val currentWeek = weekDays.filter { it.value == calendar.get(Calendar.DAY_OF_WEEK) }.keys
 
                 val eventStartCalendar = Calendar.getInstance()
                 eventStartCalendar.timeInMillis = eventStartTimeInMills
@@ -349,7 +350,7 @@ class YearlyProgressManager(private val context: Context) {
                 val eventEndHour = eventEndCalendar.get(Calendar.HOUR_OF_DAY)
                 val eventEndMinute = eventEndCalendar.get(Calendar.MINUTE)
 
-                if (repeatDays.contains(currentWeek)) {
+                if (currentWeek.isNotEmpty() && repeatDays.contains(currentWeek.first())) {
                     // Sets the eventStartTimeInMills and eventEndDateTimeInMillis to the current day
                     // since the event is repeating every week, so we don't need to change the time
                     // of the event only the date.
