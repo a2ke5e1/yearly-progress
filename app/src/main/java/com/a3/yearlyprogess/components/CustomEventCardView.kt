@@ -13,7 +13,7 @@ import android.widget.LinearLayout
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
-import com.a3.yearlyprogess.eventManager.model.Event
+import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.YearlyProgressManager
 import kotlinx.coroutines.*

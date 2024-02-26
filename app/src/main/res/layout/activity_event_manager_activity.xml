@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    tools:context=".eventManager.EventSelectorActivity">
+    tools:context=".widgets.manager.eventManager.EventSelectorActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -102,7 +102,7 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="4dp"
-                android:text="@string/event_settings"
+                android:text="Repeat Events"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayout2" />
@@ -171,6 +171,28 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageView4"
                 app:layout_constraintTop_toBottomOf="@id/everyYearSwitch" />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/repeatWeekdaysSwitch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/everyMonthSwitch"
+                app:srcCompat="@drawable/ic_outline_access_time_24" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/repeatWeekdaysSwitch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="Repeat Weekdays"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView5"
+                app:layout_constraintTop_toBottomOf="@id/everyMonthSwitch" />
 
             <TextView
                 android:id="@+id/eventStartLabel"
@@ -269,11 +291,13 @@
             <LinearLayout
                 android:id="@+id/repeatDays"
                 android:layout_width="match_parent"
+                android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/everyMonthSwitch">
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/repeatWeekdaysSwitch">
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/btnSunday"
