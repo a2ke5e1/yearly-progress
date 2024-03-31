@@ -30,10 +30,14 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
             YearlyProgressManager(context).setDefaultCalculationMode()
 
 
-            val dayProgress = YearlyProgressManager.getProgress(YearlyProgressManager.DAY).roundToInt()
-            val weekProgress = YearlyProgressManager.getProgress(YearlyProgressManager.WEEK).roundToInt()
-            val monthProgress = YearlyProgressManager.getProgress(YearlyProgressManager.MONTH).roundToInt()
-            val yearProgress = YearlyProgressManager.getProgress(YearlyProgressManager.YEAR).roundToInt()
+            val dayProgress =
+                YearlyProgressManager.getProgress(YearlyProgressManager.DAY).roundToInt()
+            val weekProgress =
+                YearlyProgressManager.getProgress(YearlyProgressManager.WEEK).roundToInt()
+            val monthProgress =
+                YearlyProgressManager.getProgress(YearlyProgressManager.MONTH).roundToInt()
+            val yearProgress =
+                YearlyProgressManager.getProgress(YearlyProgressManager.YEAR).roundToInt()
 
 
 
@@ -48,7 +52,10 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
             views.setProgressBar(R.id.progressBarYear, 100, yearProgress, false)
 
 
-            views.setTextViewText(R.id.progressTitle, YearlyProgressManager.getDay(formatted = true))
+            views.setTextViewText(
+                R.id.progressTitle,
+                YearlyProgressManager.getDay(formatted = true)
+            )
             views.setTextViewText(
                 R.id.progressWeekTitle,
                 YearlyProgressManager.getWeek(isLong = false)
@@ -57,11 +64,17 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
                 R.id.progressMonthTitle,
                 YearlyProgressManager.getMonth(isLong = false)
             )
-            views.setTextViewText(R.id.progressYearTitle, YearlyProgressManager.getYear().toString())
+            views.setTextViewText(
+                R.id.progressYearTitle,
+                YearlyProgressManager.getYear().toString()
+            )
 
             views.setOnClickPendingIntent(
                 R.id.gridLayout, PendingIntent.getActivity(
-                    context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE
+                    context,
+                    0,
+                    Intent(context, MainActivity::class.java),
+                    PendingIntent.FLAG_IMMUTABLE
                 )
             )
 
@@ -71,31 +84,33 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
             views.setViewVisibility(R.id.testMonth, View.VISIBLE)
             views.setViewVisibility(R.id.testYear, View.VISIBLE)
 
-            views.setInt(R.id.gridLayout, "setColumnCount", 4)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                views.setInt(R.id.gridLayout, "setColumnCount", 4)
 
+            }
         }
 
 
         fun AllInOneWidgetRemoteView(context: Context): RemoteViews {
+            val xlarge = RemoteViews(context.packageName, R.layout.all_in_widget)
+            initiateView(context, xlarge)
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                return xlarge
+            }
+
+
             val small = RemoteViews(context.packageName, R.layout.all_in_widget)
             val medium = RemoteViews(context.packageName, R.layout.all_in_widget)
             val large = RemoteViews(context.packageName, R.layout.all_in_widget)
-            val xlarge = RemoteViews(context.packageName, R.layout.all_in_widget)
             val square = RemoteViews(context.packageName, R.layout.all_in_widget)
             val tall = RemoteViews(context.packageName, R.layout.all_in_widget)
 
             initiateView(context, small)
             initiateView(context, medium)
             initiateView(context, large)
-            initiateView(context, xlarge)
             initiateView(context, square)
             initiateView(context, tall)
-
-            /*small.setInt(R.id.testBg, "setBackgroundColor", Color.RED)
-            medium.setInt(R.id.testBg, "setBackgroundColor", Color.GREEN)
-            large.setInt(R.id.testBg, "setBackgroundColor", Color.YELLOW)
-            xlarge.setInt(R.id.testBg, "setBackgroundColor", Color.GRAY)
-            square.setInt(R.id.testBg, "setBackgroundColor", Color.BLUE)*/
 
             small.setViewVisibility(R.id.testWeek, View.GONE)
             small.setViewVisibility(R.id.testMonth, View.GONE)
@@ -112,24 +127,18 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
 
             // Instruct the widget manager to update the widget
 
-            var remoteViews = xlarge
-            if (Build.VERSION.SDK_INT > 30) {
 
+            val viewMapping: Map<SizeF, RemoteViews> = mapOf(
+                SizeF(300f, 80f) to xlarge,
+                SizeF(220f, 80f) to large,
+                SizeF(130f, 130f) to square,
+                SizeF(102f, 276f) to tall,
+                SizeF(160f, 80f) to medium,
+                SizeF(100f, 80f) to small,
+            )
 
-                val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-                    SizeF(300f, 80f) to xlarge,
-                    SizeF(220f, 80f) to large,
-                    SizeF(130f, 130f) to square,
-                    SizeF(102f, 276f) to tall,
-                    SizeF(160f, 80f) to medium,
-                    SizeF(100f, 80f) to small,
-                )
+            return RemoteViews(viewMapping)
 
-                remoteViews = RemoteViews(viewMapping)
-            }
-
-
-            return remoteViews
         }
     }
 
@@ -142,7 +151,6 @@ class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
 
         appWidgetManager.updateAppWidget(appWidgetId, AllInOneWidgetRemoteView(context))
     }
-
 
 
 }

@@ -111,19 +111,23 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 val dtEndColumn = it.getColumnIndex(CalendarContract.Events.DTEND)
 
                 while (it.moveToNext()) {
-                    val title = it.getString(titleColumn)
-                    val description = it.getString(descriptionColumn)
-                    val dtStart = it.getLong(dtStartColumn)
-                    val dtEnd = it.getLong(dtEndColumn)
+                    try {
+                        val title = it.getString(titleColumn)
+                        val description = it.getString(descriptionColumn)
+                        val dtStart = it.getLong(dtStartColumn)
+                        val dtEnd = it.getLong(dtEndColumn)
 
-                    val event = Event(
-                        id = 0,
-                        eventTitle = title,
-                        eventDescription = description,
-                        eventStartTime = dtStart,
-                        eventEndTime = dtEnd
-                    )
-                    eventList.add(event)
+                        val event = Event(
+                            id = 0,
+                            eventTitle = title,
+                            eventDescription = description,
+                            eventStartTime = dtStart,
+                            eventEndTime = dtEnd
+                        )
+                        eventList.add(event)
+                    } catch (e: Exception) {
+                        Log.d("YearlyProgress.ImportFailed", "${e.printStackTrace()}")
+                    }
                 }
             }
             cursor?.close()
