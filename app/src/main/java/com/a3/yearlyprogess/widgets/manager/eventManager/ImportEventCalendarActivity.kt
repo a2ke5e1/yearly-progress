@@ -23,7 +23,6 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventItem
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDao
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
