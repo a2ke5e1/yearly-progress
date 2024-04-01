@@ -40,5 +40,15 @@
         android:layout_gravity="center"
         android:indeterminate="true" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/importEventsFab"
+        style="@style/ThemeOverlay.Material3.FloatingActionButton.Tertiary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/add_event"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_baseline_check_24" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

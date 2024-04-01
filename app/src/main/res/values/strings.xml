@@ -88,5 +88,6 @@
     <string name="delete_selected_events">Delete %1$d selected events?</string>
     <string name="delete_all_events">Delete all events?</string>
     <string name="delete_all_events_message">Are you sure you want to delete all events?</string>
+    <string name="search">Search</string>
 
 </resources>

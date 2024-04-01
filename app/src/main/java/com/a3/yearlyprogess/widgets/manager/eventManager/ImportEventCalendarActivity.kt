@@ -15,6 +15,7 @@ import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.ActivityImportEventCalendarBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventAdapter
@@ -171,22 +172,36 @@ class ImportEventCalendarActivity : AppCompatActivity() {
 
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.events_import -> {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val selectedEvents = adapter.getSelectedEvents()
-                        eventDao.insertAllEvents(selectedEvents)
-                    }.invokeOnCompletion {
-                        finish()
-                    }
-                    true
-                }
-
                 R.id.select_events -> {
                     adapter.toggleSelectAll()
                     true
                 }
 
                 else -> false
+            }
+        }
+
+        binding.importedEventCalendarRecyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(
+                recyclerView: RecyclerView,
+                dx: Int,
+                dy: Int
+            ) {
+                if (dy > 0 && binding.importEventsFab.visibility == View.VISIBLE) {
+                    binding.importEventsFab.hide()
+                } else if (dy < 0 && binding.importEventsFab.visibility != View.VISIBLE) {
+                    binding.importEventsFab.show()
+                }
+            }
+        })
+
+        binding.importEventsFab.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val selectedEvents = adapter.getSelectedEvents()
+                eventDao.insertAllEvents(selectedEvents)
+            }.invokeOnCompletion {
+                finish()
             }
         }
     }
