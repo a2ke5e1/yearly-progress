@@ -2,6 +2,7 @@ package com.a3.yearlyprogess.widgets.manager.eventManager.adapter
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
@@ -48,6 +49,12 @@ class ImportEventAdapter(
         holder.binding.eventStart.text = timeDesc
         holder.binding.eventCheck.isChecked = tracker?.isSelected(position.toLong()) ?: false
 
+        // hide description if it is empty
+        if (currentEvent.eventDescription.isEmpty()) {
+            holder.binding.eventDesc.visibility = View.GONE
+        } else {
+            holder.binding.eventDesc.visibility = View.VISIBLE
+        }
 
         holder.binding.eventCheck.setOnClickListener {
             handleSelection(holder, position)
