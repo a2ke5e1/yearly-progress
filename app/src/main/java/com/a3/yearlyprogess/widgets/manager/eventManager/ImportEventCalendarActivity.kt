@@ -6,8 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -27,19 +31,18 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ImportEventCalendarActivity : AppCompatActivity() {
+class ImportEventCalendarActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: ActivityImportEventCalendarBinding
     private var tracker: SelectionTracker<Long>? = null
+    private val adapter = ImportEventAdapter(mutableListOf())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImportEventCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.toolbar.title = getString(R.string.events_imports)
-        binding.toolbar.setNavigationOnClickListener {
-            finish()
-        }
+        // setSupportActionBar(binding.toolbar)
         when {
             ContextCompat.checkSelfPermission(
                 this,
@@ -145,7 +148,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
         eventDao: EventDao
     ) {
         binding.progressBar.visibility = View.GONE
-        val adapter = ImportEventAdapter(eventList)
+        adapter.updateEvents(eventList)
         binding.importedEventCalendarRecyclerView.adapter = adapter
         binding.importedEventCalendarRecyclerView.layoutManager = LinearLayoutManager(this)
         tracker = SelectionTracker.Builder<Long>(
@@ -205,4 +208,42 @@ class ImportEventCalendarActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_import, menu)
+        val searchItem = menu?.findItem(R.id.search_events)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.setOnQueryTextListener(this)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onQueryTextSubmit(query: String): Boolean {
+        if (query.isEmpty()) {
+            adapter.resetFilter()
+        } else {
+            adapter.filter(query);
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String): Boolean {
+        if (newText.isEmpty()) {
+            adapter.resetFilter()
+        } else {
+            adapter.filter(newText);
+        }
+        return true
+    }
+
+
 }

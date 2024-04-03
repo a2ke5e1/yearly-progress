@@ -8,7 +8,8 @@
         android:id="@+id/search_events"
         android:icon="@drawable/ic_search_24"
         android:title="@string/search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
     <item
         android:id="@+id/select_events"

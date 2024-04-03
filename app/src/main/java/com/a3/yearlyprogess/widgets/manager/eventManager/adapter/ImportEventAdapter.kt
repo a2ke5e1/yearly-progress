@@ -14,11 +14,11 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 
 
 class ImportEventAdapter(
-    private val eventsList: List<Event>,
+    private val _eventsList: List<Event>,
 ) : RecyclerView.Adapter<ImportEventsViewHolder>() {
 
     var tracker: SelectionTracker<Long>? = null
-
+    private val eventsList = _eventsList.toMutableList()
     init {
         setHasStableIds(true)
     }
@@ -97,6 +97,24 @@ class ImportEventAdapter(
             }
         }
         return selectedEvents
+    }
+
+    fun updateEvents(events: List<Event>) {
+        eventsList.clear()
+        eventsList.addAll(events)
+        notifyDataSetChanged()
+    }
+
+    fun filter(query: String) {
+        val filteredEvents = eventsList.filter {
+            it.eventTitle.contains(query, ignoreCase = true) ||
+                    it.eventDescription.contains(query, ignoreCase = true)
+        }
+        updateEvents(filteredEvents)
+    }
+
+    fun resetFilter() {
+        updateEvents(_eventsList)
     }
 
 }
