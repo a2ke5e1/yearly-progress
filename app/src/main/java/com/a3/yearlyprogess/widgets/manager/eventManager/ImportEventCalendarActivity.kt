@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
@@ -31,7 +32,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ImportEventCalendarActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+class ImportEventCalendarActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityImportEventCalendarBinding
     private var tracker: SelectionTracker<Long>? = null
@@ -42,7 +43,7 @@ class ImportEventCalendarActivity : AppCompatActivity(), SearchView.OnQueryTextL
         setContentView(binding.root)
 
         binding.toolbar.title = getString(R.string.events_imports)
-        // setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
         when {
             ContextCompat.checkSelfPermission(
                 this,
@@ -148,7 +149,7 @@ class ImportEventCalendarActivity : AppCompatActivity(), SearchView.OnQueryTextL
         eventDao: EventDao
     ) {
         binding.progressBar.visibility = View.GONE
-        adapter.updateEvents(eventList)
+        adapter.setEvents(eventList)
         binding.importedEventCalendarRecyclerView.adapter = adapter
         binding.importedEventCalendarRecyclerView.layoutManager = LinearLayoutManager(this)
         tracker = SelectionTracker.Builder<Long>(
@@ -179,6 +180,15 @@ class ImportEventCalendarActivity : AppCompatActivity(), SearchView.OnQueryTextL
                     adapter.toggleSelectAll()
                     true
                 }
+                R.id.search_events -> {
+                    if (binding.searchViewContainer.visibility == View.VISIBLE) {
+                        binding.searchViewContainer.visibility = View.GONE
+                    } else {
+                        binding.searchViewContainer.visibility = View.VISIBLE
+                    }
+                    Log.d("TAG", "onOptionsItemSelected: Search")
+                    true
+                }
 
                 else -> false
             }
@@ -207,13 +217,22 @@ class ImportEventCalendarActivity : AppCompatActivity(), SearchView.OnQueryTextL
                 finish()
             }
         }
+
+        binding.searchViewEditText.doAfterTextChanged { text ->
+           if (text.toString().isNotEmpty()) {
+               adapter.filter(text.toString())
+           }
+        }
+
+        binding.searchViewEditText.setOnLongClickListener {
+            binding.searchViewEditText.text?.clear()
+            adapter.resetFilter()
+            true
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_import, menu)
-        val searchItem = menu?.findItem(R.id.search_events)
-        val searchView = searchItem?.actionView as SearchView
-        searchView.setOnQueryTextListener(this)
         return true
     }
 
@@ -227,23 +246,6 @@ class ImportEventCalendarActivity : AppCompatActivity(), SearchView.OnQueryTextL
         }
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean {
-        if (query.isEmpty()) {
-            adapter.resetFilter()
-        } else {
-            adapter.filter(query);
-        }
-        return true
-    }
-
-    override fun onQueryTextChange(newText: String): Boolean {
-        if (newText.isEmpty()) {
-            adapter.resetFilter()
-        } else {
-            adapter.filter(newText);
-        }
-        return true
-    }
 
 
 }

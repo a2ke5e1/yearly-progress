@@ -1,5 +1,6 @@
 package com.a3.yearlyprogess.widgets.manager.eventManager.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -14,7 +15,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 
 
 class ImportEventAdapter(
-    private val _eventsList: List<Event>,
+    private var _eventsList: List<Event>,
 ) : RecyclerView.Adapter<ImportEventsViewHolder>() {
 
     var tracker: SelectionTracker<Long>? = null
@@ -99,6 +100,13 @@ class ImportEventAdapter(
         return selectedEvents
     }
 
+    fun setEvents(events: List<Event>) {
+        _eventsList = events
+        eventsList.clear()
+        eventsList.addAll(events)
+        notifyDataSetChanged()
+    }
+
     fun updateEvents(events: List<Event>) {
         eventsList.clear()
         eventsList.addAll(events)
@@ -106,14 +114,16 @@ class ImportEventAdapter(
     }
 
     fun filter(query: String) {
-        val filteredEvents = eventsList.filter {
+        val filteredEvents = _eventsList.filter {
             it.eventTitle.contains(query, ignoreCase = true) ||
                     it.eventDescription.contains(query, ignoreCase = true)
         }
+        Log.d("EventAdapter", "eventsList: ${eventsList.size}, org: ${_eventsList.size}, filtered: ${filteredEvents.size}")
         updateEvents(filteredEvents)
     }
 
     fun resetFilter() {
+        Log.d("EventAdapter", "eventsList: ${eventsList.size}, org: ${_eventsList.size}")
         updateEvents(_eventsList)
     }
 
