@@ -182,9 +182,14 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 }
                 R.id.search_events -> {
                     if (binding.searchViewContainer.visibility == View.VISIBLE) {
-                        binding.searchViewContainer.visibility = View.GONE
+                        binding.searchViewContainer.animate().alpha(0f).withEndAction {
+                            binding.searchViewContainer.visibility = View.GONE
+                        }.setDuration(500)
                     } else {
-                        binding.searchViewContainer.visibility = View.VISIBLE
+                        binding.searchViewContainer.animate().alpha(1f).withStartAction {
+                            binding.searchViewContainer.visibility = View.VISIBLE
+                            binding.searchViewEditText.requestFocus()
+                        }.setDuration(500)
                     }
                     Log.d("TAG", "onOptionsItemSelected: Search")
                     true
