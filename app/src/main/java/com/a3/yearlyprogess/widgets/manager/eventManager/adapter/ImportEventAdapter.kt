@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.util.Pair
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
@@ -113,10 +114,11 @@ class ImportEventAdapter(
         notifyDataSetChanged()
     }
 
-    fun filter(query: String) {
-        val filteredEvents = _eventsList.filter {
+    fun filter(query: String, range: Pair<Long,Long>? = null) {
+        val filteredEvents = _eventsList.filter {(
             it.eventTitle.contains(query, ignoreCase = true) ||
-                    it.eventDescription.contains(query, ignoreCase = true)
+                    it.eventDescription.contains(query, ignoreCase = true)) &&
+                    (range == null || it.eventStartTime in range.first..range.second)
         }
         Log.d("EventAdapter", "eventsList: ${eventsList.size}, org: ${_eventsList.size}, filtered: ${filteredEvents.size}")
         updateEvents(filteredEvents)
@@ -125,6 +127,13 @@ class ImportEventAdapter(
     fun resetFilter() {
         Log.d("EventAdapter", "eventsList: ${eventsList.size}, org: ${_eventsList.size}")
         updateEvents(_eventsList)
+    }
+
+    fun filterByDateRange(startDate: Long, endDate: Long) {
+        val filteredEvents = _eventsList.filter {
+            it.eventStartTime in startDate..endDate
+        }
+        updateEvents(filteredEvents)
     }
 
 }

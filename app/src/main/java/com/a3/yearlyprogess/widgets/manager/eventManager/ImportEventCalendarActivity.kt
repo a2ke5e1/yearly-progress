@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.SelectionPredicates
@@ -22,6 +24,7 @@ import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.components.CustomEventCardView
 import com.a3.yearlyprogess.databinding.ActivityImportEventCalendarBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventAdapter
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventItemDetailsLookup
@@ -29,6 +32,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventItem
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDao
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -37,6 +41,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
     private lateinit var binding: ActivityImportEventCalendarBinding
     private var tracker: SelectionTracker<Long>? = null
     private val adapter = ImportEventAdapter(mutableListOf())
+    private var selectedDateRange: Pair<Long, Long>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImportEventCalendarBinding.inflate(layoutInflater)
@@ -184,12 +189,12 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                     if (binding.searchViewContainer.visibility == View.VISIBLE) {
                         binding.searchViewContainer.animate().alpha(0f).withEndAction {
                             binding.searchViewContainer.visibility = View.GONE
-                        }.setDuration(500)
+                        }.setDuration(150)
                     } else {
                         binding.searchViewContainer.animate().alpha(1f).withStartAction {
                             binding.searchViewContainer.visibility = View.VISIBLE
                             binding.searchViewEditText.requestFocus()
-                        }.setDuration(500)
+                        }.setDuration(150)
                     }
                     Log.d("TAG", "onOptionsItemSelected: Search")
                     true
@@ -225,7 +230,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
 
         binding.searchViewEditText.doAfterTextChanged { text ->
            if (text.toString().isNotEmpty()) {
-               adapter.filter(text.toString())
+               adapter.filter(text.toString(), selectedDateRange)
            }
         }
 
@@ -234,6 +239,29 @@ class ImportEventCalendarActivity : AppCompatActivity() {
             adapter.resetFilter()
             true
         }
+
+        binding.eventFilterRange.setOnClickListener {
+            val datePicker = MaterialDatePicker.Builder.dateRangePicker().build()
+            datePicker.show(supportFragmentManager, "date_range_picker")
+            datePicker.addOnPositiveButtonClickListener {
+                val selectedRange = datePicker.selection
+                selectedRange?.let {
+                    adapter.filterByDateRange(it.first, it.second)
+                    selectedDateRange = it
+                }
+                binding.eventFilterRange.text =
+                    "${DateFormat.format("MMM dd, yyyy ", it.first)} \u2014" +
+                            " ${DateFormat.format("MMM dd, yyyy", it.second)}"
+
+            }
+        }
+
+        binding.eventFilterClear.setOnClickListener {
+            adapter.resetFilter()
+            selectedDateRange = null
+            binding.eventFilterRange.text = getString(R.string.all)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

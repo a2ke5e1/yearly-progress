@@ -89,5 +89,6 @@
     <string name="delete_all_events">Delete all events?</string>
     <string name="delete_all_events_message">Are you sure you want to delete all events?</string>
     <string name="search">Search</string>
+    <string name="all">All</string>
 
 </resources>
