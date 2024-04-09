@@ -107,7 +107,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 projection,
                 null,
                 null,
-                "${CalendarContract.Events.DTSTART} ASC"
+                "${CalendarContract.Events.DTSTART} DESC"
             )
             cursor?.use {
                 val titleColumn = it.getColumnIndex(CalendarContract.Events.TITLE)

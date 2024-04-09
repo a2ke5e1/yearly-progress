@@ -39,6 +39,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:visibility="gone"
+            app:boxCornerRadiusBottomStart="32dp"
+            app:boxCornerRadiusBottomEnd="32dp"
+            app:boxCornerRadiusTopStart="32dp"
+            app:boxCornerRadiusTopEnd="32dp"
             app:placeholderText="Search for events"
             android:layout_marginEnd="16dp">
 
