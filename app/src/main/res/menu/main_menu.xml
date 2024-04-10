@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/backupRestoreMenu"
-        android:icon="@drawable/ic_outline_share_24"
+        android:icon="@drawable/settings_backup_restore"
         android:title="@string/backup_restore"
         app:showAsAction="never" />
 
