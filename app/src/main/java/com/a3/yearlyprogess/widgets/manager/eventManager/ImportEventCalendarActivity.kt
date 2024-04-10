@@ -260,6 +260,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
             adapter.resetFilter()
             selectedDateRange = null
             binding.eventFilterRange.text = getString(R.string.all)
+            binding.searchViewEditText.text?.clear()
         }
 
     }
