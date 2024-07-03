@@ -19,9 +19,9 @@
         android:theme="@style/App.SplashScreen"
         tools:targetApi="31">
         <activity
-            android:theme="@style/Theme.YearlyProgress"
             android:name=".widgets.manager.eventManager.ImportEventCalendarActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.YearlyProgress" />
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
