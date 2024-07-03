@@ -28,4 +28,8 @@ class EventRepository(private val eventDao: EventDao) {
         eventDao.insertAllEvents(events)
     }
 
+    suspend fun filterEvent(query: String): List<Event> {
+        return eventDao.filterEvent(query)
+    }
+
 }

@@ -5,16 +5,15 @@
     tools:context="com.a3.yearlyprogess.widgets.manager.eventManager.ImportEventCalendarActivity">
 
     <item
+        android:id="@+id/search_events"
+        android:icon="@drawable/ic_search_24"
+        android:title="@string/search"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/select_events"
         android:icon="@drawable/outline_select_all_24"
         android:title="@string/select_all"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/events_import"
-        android:icon="@drawable/ic_baseline_check_24"
-        android:title="@string/events_imports"
-        app:showAsAction="always" />
-
 
 </menu>

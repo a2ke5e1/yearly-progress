@@ -1,8 +1,11 @@
 package com.a3.yearlyprogess.widgets.manager.eventManager.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.util.Pair
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
@@ -13,11 +16,11 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 
 
 class ImportEventAdapter(
-    private val eventsList: List<Event>,
+    private var _eventsList: List<Event>,
 ) : RecyclerView.Adapter<ImportEventsViewHolder>() {
 
     var tracker: SelectionTracker<Long>? = null
-
+    private val eventsList = _eventsList.toMutableList()
     init {
         setHasStableIds(true)
     }
@@ -48,6 +51,12 @@ class ImportEventAdapter(
         holder.binding.eventStart.text = timeDesc
         holder.binding.eventCheck.isChecked = tracker?.isSelected(position.toLong()) ?: false
 
+        // hide description if it is empty
+        if (currentEvent.eventDescription.isEmpty()) {
+            holder.binding.eventDesc.visibility = View.GONE
+        } else {
+            holder.binding.eventDesc.visibility = View.VISIBLE
+        }
 
         holder.binding.eventCheck.setOnClickListener {
             handleSelection(holder, position)
@@ -90,6 +99,41 @@ class ImportEventAdapter(
             }
         }
         return selectedEvents
+    }
+
+    fun setEvents(events: List<Event>) {
+        _eventsList = events
+        eventsList.clear()
+        eventsList.addAll(events)
+        notifyDataSetChanged()
+    }
+
+    fun updateEvents(events: List<Event>) {
+        eventsList.clear()
+        eventsList.addAll(events)
+        notifyDataSetChanged()
+    }
+
+    fun filter(query: String, range: Pair<Long,Long>? = null) {
+        val filteredEvents = _eventsList.filter {(
+            it.eventTitle.contains(query, ignoreCase = true) ||
+                    it.eventDescription.contains(query, ignoreCase = true)) &&
+                    (range == null || it.eventStartTime in range.first..range.second)
+        }
+        Log.d("EventAdapter", "eventsList: ${eventsList.size}, org: ${_eventsList.size}, filtered: ${filteredEvents.size}")
+        updateEvents(filteredEvents)
+    }
+
+    fun resetFilter() {
+        Log.d("EventAdapter", "eventsList: ${eventsList.size}, org: ${_eventsList.size}")
+        updateEvents(_eventsList)
+    }
+
+    fun filterByDateRange(startDate: Long, endDate: Long) {
+        val filteredEvents = _eventsList.filter {
+            it.eventStartTime in startDate..endDate
+        }
+        updateEvents(filteredEvents)
     }
 
 }

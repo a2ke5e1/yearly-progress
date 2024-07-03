@@ -31,6 +31,8 @@ import kotlinx.coroutines.launch
 
 // TODO: Redo event list screen with better UI and functionality
 //          stability and performance
+
+// TODO: Implement a search feature
 class EventsListScreenFragment : Fragment() {
 
 

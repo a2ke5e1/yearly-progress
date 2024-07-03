@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
@@ -44,6 +45,20 @@ class EventViewModel(application: Application): AndroidViewModel(application) {
             repository.deleteAllEvent()
         }
     }
+
+    /*fun filterEvent(query: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            _readAllData.postValue(repository.filterEvent(query))
+        }
+    }
+
+    fun resetFilter(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _readAllData.postValue(repository.getAllEvent.value)
+        }
+    }*/
+
+
 
    /* fun updateProgressBar(event: Event, progressTextView: TextView, progressBar: LinearProgressIndicator) {
         viewModelScope.launch(Dispatchers.IO) {

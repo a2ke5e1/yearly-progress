@@ -5,17 +5,26 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.text.format.DateFormat
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.components.CustomEventCardView
 import com.a3.yearlyprogess.databinding.ActivityImportEventCalendarBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventAdapter
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventItemDetailsLookup
@@ -23,6 +32,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventItem
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDao
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -30,15 +40,15 @@ class ImportEventCalendarActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityImportEventCalendarBinding
     private var tracker: SelectionTracker<Long>? = null
+    private val adapter = ImportEventAdapter(mutableListOf())
+    private var selectedDateRange: Pair<Long, Long>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImportEventCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.toolbar.title = getString(R.string.events_imports)
-        binding.toolbar.setNavigationOnClickListener {
-            finish()
-        }
+        setSupportActionBar(binding.toolbar)
         when {
             ContextCompat.checkSelfPermission(
                 this,
@@ -102,7 +112,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 projection,
                 null,
                 null,
-                "${CalendarContract.Events.DTSTART} ASC"
+                "${CalendarContract.Events.DTSTART} DESC"
             )
             cursor?.use {
                 val titleColumn = it.getColumnIndex(CalendarContract.Events.TITLE)
@@ -144,7 +154,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
         eventDao: EventDao
     ) {
         binding.progressBar.visibility = View.GONE
-        val adapter = ImportEventAdapter(eventList)
+        adapter.setEvents(eventList)
         binding.importedEventCalendarRecyclerView.adapter = adapter
         binding.importedEventCalendarRecyclerView.layoutManager = LinearLayoutManager(this)
         tracker = SelectionTracker.Builder<Long>(
@@ -171,23 +181,105 @@ class ImportEventCalendarActivity : AppCompatActivity() {
 
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.events_import -> {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val selectedEvents = adapter.getSelectedEvents()
-                        eventDao.insertAllEvents(selectedEvents)
-                    }.invokeOnCompletion {
-                        finish()
-                    }
-                    true
-                }
-
                 R.id.select_events -> {
                     adapter.toggleSelectAll()
+                    true
+                }
+                R.id.search_events -> {
+                    if (binding.searchViewContainer.visibility == View.VISIBLE) {
+                        binding.searchViewContainer.animate().alpha(0f).withEndAction {
+                            binding.searchViewContainer.visibility = View.GONE
+                        }.setDuration(150)
+                    } else {
+                        binding.searchViewContainer.animate().alpha(1f).withStartAction {
+                            binding.searchViewContainer.visibility = View.VISIBLE
+                            binding.searchViewEditText.requestFocus()
+                        }.setDuration(150)
+                    }
+                    Log.d("TAG", "onOptionsItemSelected: Search")
                     true
                 }
 
                 else -> false
             }
         }
+
+        binding.importedEventCalendarRecyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(
+                recyclerView: RecyclerView,
+                dx: Int,
+                dy: Int
+            ) {
+                if (dy > 0 && binding.importEventsFab.visibility == View.VISIBLE) {
+                    binding.importEventsFab.hide()
+                } else if (dy < 0 && binding.importEventsFab.visibility != View.VISIBLE) {
+                    binding.importEventsFab.show()
+                }
+            }
+        })
+
+        binding.importEventsFab.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val selectedEvents = adapter.getSelectedEvents()
+                eventDao.insertAllEvents(selectedEvents)
+            }.invokeOnCompletion {
+                finish()
+            }
+        }
+
+        binding.searchViewEditText.doAfterTextChanged { text ->
+           if (text.toString().isNotEmpty()) {
+               adapter.filter(text.toString(), selectedDateRange)
+           }
+        }
+
+        binding.searchViewEditText.setOnLongClickListener {
+            binding.searchViewEditText.text?.clear()
+            adapter.resetFilter()
+            true
+        }
+
+        binding.eventFilterRange.setOnClickListener {
+            val datePicker = MaterialDatePicker.Builder.dateRangePicker().build()
+            datePicker.show(supportFragmentManager, "date_range_picker")
+            datePicker.addOnPositiveButtonClickListener {
+                val selectedRange = datePicker.selection
+                selectedRange?.let {
+                    adapter.filterByDateRange(it.first, it.second)
+                    selectedDateRange = it
+                }
+                binding.eventFilterRange.text =
+                    "${DateFormat.format("MMM dd, yyyy ", it.first)} \u2014" +
+                            " ${DateFormat.format("MMM dd, yyyy", it.second)}"
+
+            }
+        }
+
+        binding.eventFilterClear.setOnClickListener {
+            adapter.resetFilter()
+            selectedDateRange = null
+            binding.eventFilterRange.text = getString(R.string.all)
+            binding.searchViewEditText.text?.clear()
+        }
+
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_import, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
+
 }
