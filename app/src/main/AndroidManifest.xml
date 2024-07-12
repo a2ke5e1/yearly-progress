@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/App.SplashScreen"
+        android:theme="@style/Theme.YearlyProgress"
         tools:targetApi="31">
         <activity
             android:name=".widgets.manager.eventManager.ImportEventCalendarActivity"
@@ -44,14 +44,16 @@
             android:name=".widgets.manager.eventManager.EventManagerActivity"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress"
-            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden" />
         <activity
             android:name=".WelcomeScreen"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/App.SplashScreen"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

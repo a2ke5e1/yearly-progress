@@ -47,7 +47,7 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         WakeLocker.release()
     }
 
-    open fun updateAppWidget(
+    private fun updateAppWidget(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int

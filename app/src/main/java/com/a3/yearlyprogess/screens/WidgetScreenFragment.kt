@@ -24,7 +24,7 @@ import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
-import com.a3.yearlyprogess.widgets.ui.util.StandaloneWidget
+import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
 import com.a3.yearlyprogess.widgets.manager.updateManager.AlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayWidget

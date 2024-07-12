@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.widgets.ui.util
+package com.a3.yearlyprogess.widgets.ui
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -13,6 +13,7 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.widgets.manager.updateManager.AlarmHandler
+import com.a3.yearlyprogess.widgets.ui.util.BaseWidget
 import kotlin.math.roundToInt
 
 abstract class StandaloneWidget(private val widgetServiceType: Int) :
@@ -143,3 +144,8 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
     }
 
 }
+
+class DayWidget : StandaloneWidget(AlarmHandler.DAY_WIDGET_SERVICE)
+class MonthWidget : StandaloneWidget(AlarmHandler.MONTH_WIDGET_SERVICE)
+class WeekWidget : StandaloneWidget(AlarmHandler.WEEK_WIDGET_SERVICE)
+class YearWidget : StandaloneWidget(AlarmHandler.YEAR_WIDGET_SERVICE)
