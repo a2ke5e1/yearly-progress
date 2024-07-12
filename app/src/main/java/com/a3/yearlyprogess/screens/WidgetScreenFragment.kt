@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RemoteViews
@@ -108,6 +109,7 @@ class WidgetScreenFragment : Fragment() {
                 .apply(
                     activity, container
                 )
+        widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener {  }
         container.removeAllViews()
         container.addView(widgetRemoteView)
     }

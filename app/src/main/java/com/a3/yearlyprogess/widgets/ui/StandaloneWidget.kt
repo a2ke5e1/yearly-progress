@@ -121,7 +121,7 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
                 R.id.widgetDaysLeft,
                 if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE
             )
-            if (replaceProgressWithDaysLeft) {
+            if (timeLeftCounter && replaceProgressWithDaysLeft) {
                 view.setTextViewText(R.id.widgetProgress, widgetDaysLeftCounter)
                 view.setTextViewTextSize(R.id.widgetProgress, 0, 35f)
             }
