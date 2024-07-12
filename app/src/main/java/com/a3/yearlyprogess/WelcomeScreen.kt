@@ -17,8 +17,6 @@ import com.a3.yearlyprogess.databinding.ActivityFirstScreenBinding
 class WelcomeScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityFirstScreenBinding
-    private val TOS_URL = "https://www.a3group.co.in/yearly-progress/TOS"
-    private val PP_URL = "https://www.a3group.co.in/yearly-progress/privacy-policy"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,5 +68,10 @@ class WelcomeScreen : AppCompatActivity() {
         }
 
 
+    }
+
+    companion object {
+        private const val TOS_URL = "https://www.a3group.co.in/yearly-progress/TOS"
+        private const val PP_URL = "https://www.a3group.co.in/yearly-progress/privacy-policy"
     }
 }
