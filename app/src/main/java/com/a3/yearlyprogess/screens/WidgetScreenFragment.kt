@@ -103,7 +103,7 @@ class WidgetScreenFragment : Fragment() {
         updateWidgetInfo(1)
     }
 
-    private fun updateWidgetRemoteView(context: Context, container: FrameLayout, widgetType: Int) {
+    private fun updateWidgetRemoteView(context: Context, container: FrameLayout, widgetType: Int): View {
         val widgetRemoteView =
             StandaloneWidget.standaloneWidgetRemoteView(context, widgetType)
                 .apply(
@@ -112,6 +112,8 @@ class WidgetScreenFragment : Fragment() {
         widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener {  }
         container.removeAllViews()
         container.addView(widgetRemoteView)
+
+        return widgetRemoteView
     }
 
 
@@ -186,6 +188,40 @@ class WidgetScreenFragment : Fragment() {
     }
 
     private fun startAnimationWidget() {
+
+        val yearRemoteView = updateWidgetRemoteView(
+            requireContext(),
+            binding.widgetYearContainer,
+            AlarmHandler.YEAR_WIDGET_SERVICE
+        )
+        val monthRemoteView = updateWidgetRemoteView(
+            requireContext(),
+            binding.widgetMonthContainer,
+            AlarmHandler.YEAR_WIDGET_SERVICE
+        )
+        val weekRemoteView = updateWidgetRemoteView(
+            requireContext(),
+            binding.widgetWeekContainer,
+            AlarmHandler.YEAR_WIDGET_SERVICE
+        )
+        val dayRemoteView = updateWidgetRemoteView(
+            requireContext(),
+            binding.widgetDayContainer,
+            AlarmHandler.YEAR_WIDGET_SERVICE
+        )
+
+        animatedUpdateProgressBarView(yearRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.YEAR)
+        animatedUpdateProgressTextView(yearRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.YEAR)
+
+        animatedUpdateProgressBarView(monthRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.MONTH)
+        animatedUpdateProgressTextView(monthRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.MONTH)
+
+        animatedUpdateProgressBarView(weekRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.WEEK)
+        animatedUpdateProgressTextView(weekRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.WEEK)
+
+        animatedUpdateProgressBarView(dayRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.DAY)
+        animatedUpdateProgressTextView(dayRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.DAY)
+
 
 
         animatedUpdateProgressTextView(
