@@ -5,11 +5,11 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
-import android.text.SpannableString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RemoteViews
@@ -19,16 +19,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
+import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
-import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
-import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
+import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
 import com.a3.yearlyprogess.widgets.manager.updateManager.AlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayWidget
 import com.a3.yearlyprogess.widgets.ui.MonthWidget
+import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.widgets.ui.YearWidget
 import com.google.android.gms.ads.AdListener
@@ -67,20 +67,6 @@ class WidgetScreenFragment : Fragment() {
     private lateinit var adLoader: AdLoader
     private lateinit var nativeAdView: NativeAdView
 
-    private lateinit var progressTextViewYear: TextView
-    private lateinit var progressTextViewMonth: TextView
-    private lateinit var progressTextViewDay: TextView
-    private lateinit var progressTextViewWeek: TextView
-
-    private lateinit var textViewYear: TextView
-    private lateinit var textViewDay: TextView
-    private lateinit var textViewMonth: TextView
-    private lateinit var textViewWeek: TextView
-
-    private lateinit var progressBarYear: ProgressBar
-    private lateinit var progressBarMonth: ProgressBar
-    private lateinit var progressBarDay: ProgressBar
-    private lateinit var progressBarWeek: ProgressBar
 
     private lateinit var allInOneProgressTextViewYear: TextView
     private lateinit var allInOneProgressTextViewMonth: TextView
@@ -113,8 +99,19 @@ class WidgetScreenFragment : Fragment() {
         startAnimationWidget()
 
         // Update Widget every 5 seconds
-        updateWidgetInfo(5)
+        updateWidgetInfo(1)
     }
+
+    private fun updateWidgetRemoteView(context: Context, container: FrameLayout, widgetType: Int) {
+        val widgetRemoteView =
+            StandaloneWidget.standaloneWidgetRemoteView(context, widgetType)
+                .apply(
+                    activity, container
+                )
+        container.removeAllViews()
+        container.addView(widgetRemoteView)
+    }
+
 
     private fun updateWidgetInfo(i: Long) {
         lifecycleScope.launch(Dispatchers.IO) {
@@ -124,8 +121,10 @@ class WidgetScreenFragment : Fragment() {
                 YearlyProgressManager(requireContext()).setDefaultWeek()
                 YearlyProgressManager(requireContext()).setDefaultCalculationMode()
 
+
                 val progressTextYear = YearlyProgressManager.getProgress(YearlyProgressManager.YEAR)
-                val progressTextMonth = YearlyProgressManager.getProgress(YearlyProgressManager.MONTH)
+                val progressTextMonth =
+                    YearlyProgressManager.getProgress(YearlyProgressManager.MONTH)
                 val progressTextDay = YearlyProgressManager.getProgress(YearlyProgressManager.DAY)
                 val progressTextWeek = YearlyProgressManager.getProgress(YearlyProgressManager.WEEK)
 
@@ -137,45 +136,28 @@ class WidgetScreenFragment : Fragment() {
 
                 lifecycleScope.launch(Dispatchers.Main) {
 
-
-                    val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
-                    val decimalPlace: Int = pref.getInt(
-                        requireContext().getString(R.string.widget_widget_decimal_point), 2
-                    )
-
-
-
-
-                    progressTextViewYear.text = formatProgressStyle(
-                        SpannableString(
-                            "%,.${decimalPlace}f".format(progressTextYear) + "%"
+                    context?.let {
+                        updateWidgetRemoteView(
+                            it,
+                            binding.widgetYearContainer,
+                            AlarmHandler.YEAR_WIDGET_SERVICE
                         )
-                    )
-                    progressTextViewMonth.text = formatProgressStyle(
-                        SpannableString(
-                            "%,.${decimalPlace}f".format(progressTextMonth) + "%"
+                        updateWidgetRemoteView(
+                            it,
+                            binding.widgetMonthContainer,
+                            AlarmHandler.MONTH_WIDGET_SERVICE
                         )
-                    )
-                    progressTextViewDay.text = formatProgressStyle(
-                        SpannableString(
-                            "%,.${decimalPlace}f".format(progressTextDay) + "%"
+                        updateWidgetRemoteView(
+                            it,
+                            binding.widgetWeekContainer,
+                            AlarmHandler.WEEK_WIDGET_SERVICE
                         )
-                    )
-                    progressTextViewWeek.text = formatProgressStyle(
-                        SpannableString(
-                            "%,.${decimalPlace}f".format(progressTextWeek) + "%"
+                        updateWidgetRemoteView(
+                            it,
+                            binding.widgetDayContainer,
+                            AlarmHandler.DAY_WIDGET_SERVICE
                         )
-                    )
-
-                    progressBarYear.progress = progressYear
-                    progressBarMonth.progress = progressMonth
-                    progressBarDay.progress = progressDay
-                    progressBarWeek.progress = progressWeek
-
-                    textViewYear.text = YearlyProgressManager.getYear().toString()
-                    textViewMonth.text = YearlyProgressManager.getMonth(isLong = false)
-                    textViewWeek.text = YearlyProgressManager.getWeek(isLong = false)
-                    textViewDay.text = YearlyProgressManager.getDay(formatted = true)
+                    }
 
 
                     // All In One Widget
@@ -202,15 +184,7 @@ class WidgetScreenFragment : Fragment() {
     }
 
     private fun startAnimationWidget() {
-        animatedUpdateProgressTextView(progressTextViewYear, YearlyProgressManager.YEAR)
-        animatedUpdateProgressTextView(progressTextViewMonth, YearlyProgressManager.MONTH)
-        animatedUpdateProgressTextView(progressTextViewDay, YearlyProgressManager.DAY)
-        animatedUpdateProgressTextView(progressTextViewWeek, YearlyProgressManager.WEEK)
 
-        animatedUpdateProgressBarView(progressBarYear, YearlyProgressManager.YEAR)
-        animatedUpdateProgressBarView(progressBarMonth, YearlyProgressManager.MONTH)
-        animatedUpdateProgressBarView(progressBarDay, YearlyProgressManager.DAY)
-        animatedUpdateProgressBarView(progressBarWeek, YearlyProgressManager.WEEK)
 
         animatedUpdateProgressTextView(
             allInOneProgressTextViewYear, YearlyProgressManager.YEAR, true
@@ -231,31 +205,9 @@ class WidgetScreenFragment : Fragment() {
 
     private fun initProgressBarsTextViews(view: View) {
         YearlyProgressManager(requireContext()).setDefaultWeek()
-                YearlyProgressManager(requireContext()).setDefaultCalculationMode()
+        YearlyProgressManager(requireContext()).setDefaultCalculationMode()
 
-        binding.widgetYearDemo.findViewById<TextView>(R.id.widgetType).text =
-            context?.getString(R.string.year)
-        binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetType).text =
-            context?.getString(R.string.month)
-        binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetType).text =
-            context?.getString(R.string.week)
-        binding.widgetDayDemo.findViewById<TextView>(R.id.widgetType).text =
-            context?.getString(R.string.day)
 
-        progressTextViewDay = binding.widgetDayDemo.findViewById<TextView>(R.id.widgetProgress)
-        progressTextViewWeek = binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetProgress)
-        progressTextViewMonth = binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetProgress)
-        progressTextViewYear = binding.widgetYearDemo.findViewById<TextView>(R.id.widgetProgress)
-
-        textViewYear = binding.widgetYearDemo.findViewById<TextView>(R.id.widgetCurrentValue)
-        textViewMonth = binding.widgetMonthDemo.findViewById<TextView>(R.id.widgetCurrentValue)
-        textViewDay = binding.widgetDayDemo.findViewById<TextView>(R.id.widgetCurrentValue)
-        textViewWeek = binding.widgetWeekDemo.findViewById<TextView>(R.id.widgetCurrentValue)
-
-        progressBarYear = binding.widgetYearDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
-        progressBarMonth = binding.widgetMonthDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
-        progressBarDay = binding.widgetDayDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
-        progressBarWeek = binding.widgetWeekDemo.findViewById<ProgressBar>(R.id.widgetProgressBar)
 
 
 
@@ -306,6 +258,7 @@ class WidgetScreenFragment : Fragment() {
         // Load Ad
         adLoader.loadAd(AdRequest.Builder().build())
     }
+
 
     private fun showWidgetMenu() {
         // Showing menu for user to add Day widget to user Launcher's Home Screen

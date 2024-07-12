@@ -34,7 +34,7 @@
             app:flow_wrapMode="chain"
             app:flow_horizontalBias="0.1"
             app:flow_verticalGap="10dp"
-            app:constraint_referenced_ids="widget_year_demo,widget_month_demo,widget_week_demo,widget_day_demo "
+            app:constraint_referenced_ids="widget_year_demo,widget_month_demo,widget_week_demo,widget_day_demo"
             android:layout_height="wrap_content" />
 
 
@@ -85,8 +85,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include
-                layout="@layout/standalone_widget_layout"
+            <FrameLayout
+                android:id="@+id/widget_year_container"
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
 
@@ -106,8 +106,8 @@
             android:orientation="vertical">
 
 
-            <include
-                layout="@layout/standalone_widget_layout"
+            <FrameLayout
+                android:id="@+id/widget_month_container"
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
 
@@ -127,10 +127,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include
-                layout="@layout/standalone_widget_layout"
+            <FrameLayout
+                android:id="@+id/widget_day_container"
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_day_widget"
@@ -147,8 +148,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include
-                layout="@layout/standalone_widget_layout"
+            <FrameLayout
+                android:id="@+id/widget_week_container"
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
 
