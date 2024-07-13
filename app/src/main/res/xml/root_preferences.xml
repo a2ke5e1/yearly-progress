@@ -42,6 +42,15 @@
         app:iconSpaceReserved="false"
         app:title="Widget Customization">
         >
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/widget_widget_use_foreground_service"
+            app:summary="@string/use_foreground_service_to_update_widgets"
+            app:title="@string/use_latest_widget_update_method" />
+
+
         <SeekBarPreference
             android:max="100"
             app:defaultValue="100"

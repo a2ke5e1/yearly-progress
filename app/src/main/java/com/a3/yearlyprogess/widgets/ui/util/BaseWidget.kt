@@ -4,10 +4,14 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import androidx.preference.PreferenceManager
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
+import com.a3.yearlyprogess.widgets.manager.updateManager.services.useForegroundService
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayWidget
 import com.a3.yearlyprogess.widgets.ui.EventWidget
@@ -18,6 +22,7 @@ import com.a3.yearlyprogess.widgets.ui.YearWidget
 abstract class BaseWidget :
     AppWidgetProvider() {
 
+
     abstract fun updateWidget(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -26,6 +31,8 @@ abstract class BaseWidget :
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
+
+        if (useForegroundService(context)) return
 
         val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
         widgetUpdateAlarmHandler.setAlarmManager()
@@ -50,10 +57,13 @@ abstract class BaseWidget :
     }
 
 
-
     // Checks if any other widgets are active.
     // If not, cancels the alarm.
     override fun onDisabled(context: Context) {
+
+        if (useForegroundService(context)) return
+
+
         val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
 
         val widgetIntentsAndComponents = arrayOf(
@@ -91,6 +101,15 @@ abstract class BaseWidget :
         // Log.d("updateAppWidget", widgetServiceType.toString())
         updateWidget(context, appWidgetManager, appWidgetId)
 
+        /*
+        Checks if user want to use foreground service
+        to update widgets.
+
+        If does then skips the alarm manager system to update the widget.
+        */
+        if (useForegroundService(context)) return
+
+
         val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
         WakeLocker.acquire(context)
         widgetUpdateAlarmHandler.cancelAlarmManager()
@@ -100,5 +119,4 @@ abstract class BaseWidget :
     companion object {
         private const val TAG = "BaseWidget"
     }
-
 }

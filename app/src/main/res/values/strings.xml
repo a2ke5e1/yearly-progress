@@ -90,5 +90,7 @@
     <string name="delete_all_events_message">Are you sure you want to delete all events?</string>
     <string name="search">Search</string>
     <string name="all">All</string>
+    <string name="use_foreground_service_to_update_widgets">Use foreground service to update widgets. (Recommended, but increases battery usage)</string>
+    <string name="use_latest_widget_update_method">Use Latest Widget Update Method</string>
 
 </resources>

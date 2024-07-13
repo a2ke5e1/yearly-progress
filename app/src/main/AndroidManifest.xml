@@ -5,6 +5,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".App"
@@ -139,6 +143,17 @@
         <receiver
             android:name=".widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver"
             android:enabled="true" />
+
+        <receiver android:name=".widgets.manager.updateManager.service.AutoStartService" android:exported="true" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.a3.yearlyprogress.RESTART_WIDGET_UPDATE_SERVICE" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".widgets.manager.updateManager.services.WidgetUpdateService"
+            android:foregroundServiceType="dataSync" />
     </application>
 
 </manifest>
