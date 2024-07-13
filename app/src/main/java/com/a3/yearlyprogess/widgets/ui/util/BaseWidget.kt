@@ -2,12 +2,20 @@ package com.a3.yearlyprogess.widgets.ui.util
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
-import com.a3.yearlyprogess.widgets.manager.updateManager.AlarmHandler
+import android.util.Log
+import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
+import com.a3.yearlyprogess.widgets.ui.AllInWidget
+import com.a3.yearlyprogess.widgets.ui.DayWidget
+import com.a3.yearlyprogess.widgets.ui.EventWidget
+import com.a3.yearlyprogess.widgets.ui.MonthWidget
+import com.a3.yearlyprogess.widgets.ui.WeekWidget
+import com.a3.yearlyprogess.widgets.ui.YearWidget
 
-abstract class BaseWidget(private val widgetServiceType: Int) :
+abstract class BaseWidget :
     AppWidgetProvider() {
 
     abstract fun updateWidget(
@@ -19,8 +27,8 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
 
-        val alarmHandler = AlarmHandler(context, widgetServiceType)
-        alarmHandler.setAlarmManager()
+        val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
+        widgetUpdateAlarmHandler.setAlarmManager()
     }
 
     override fun onUpdate(
@@ -41,9 +49,37 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         updateAppWidget(context, appWidgetManager, appWidgetId)
     }
 
+
+
+    // Checks if any other widgets are active.
+    // If not, cancels the alarm.
     override fun onDisabled(context: Context) {
-        val alarmHandler = AlarmHandler(context, widgetServiceType)
-        alarmHandler.cancelAlarmManager()
+        val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
+
+        val widgetIntentsAndComponents = arrayOf(
+            DayWidget::class.java,
+            WeekWidget::class.java,
+            MonthWidget::class.java,
+            YearWidget::class.java,
+            AllInWidget::class.java,
+            EventWidget::class.java
+        )
+
+        var totalWidgets = 0
+        widgetIntentsAndComponents.forEach {
+            val ids = AppWidgetManager.getInstance(context)
+                .getAppWidgetIds(ComponentName(context, it))
+            totalWidgets += ids.size
+        }
+
+        if (totalWidgets > 0) {
+            Log.d(TAG, "canceling alarm shutdown, $totalWidgets still active")
+            WakeLocker.release()
+            return
+        }
+
+
+        widgetUpdateAlarmHandler.cancelAlarmManager()
         WakeLocker.release()
     }
 
@@ -55,10 +91,14 @@ abstract class BaseWidget(private val widgetServiceType: Int) :
         // Log.d("updateAppWidget", widgetServiceType.toString())
         updateWidget(context, appWidgetManager, appWidgetId)
 
-        val alarmHandler = AlarmHandler(context, widgetServiceType)
+        val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
         WakeLocker.acquire(context)
-        alarmHandler.cancelAlarmManager()
-        alarmHandler.setAlarmManager()
+        widgetUpdateAlarmHandler.cancelAlarmManager()
+        widgetUpdateAlarmHandler.setAlarmManager()
+    }
+
+    companion object {
+        private const val TAG = "BaseWidget"
     }
 
 }

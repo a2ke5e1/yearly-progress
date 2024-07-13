@@ -4,27 +4,14 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.a3.yearlyprogess.widgets.manager.updateManager.services.AllInWidgetService
-import com.a3.yearlyprogess.widgets.manager.updateManager.services.DayWidgetService
-import com.a3.yearlyprogess.widgets.manager.updateManager.services.EventWidgetService
-import com.a3.yearlyprogess.widgets.manager.updateManager.services.MonthWidgetService
-import com.a3.yearlyprogess.widgets.manager.updateManager.services.WeekWidgetService
-import com.a3.yearlyprogess.widgets.manager.updateManager.services.YearWidgetService
+import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
 import java.util.*
 
-class AlarmHandler(private val context: Context, private val service : Int) {
+class WidgetUpdateAlarmHandler(private val context: Context) {
 
     private val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
-
-    private val intent = when (service) {
-        DAY_WIDGET_SERVICE ->  Intent(context, DayWidgetService::class.java)
-        MONTH_WIDGET_SERVICE ->  Intent(context, MonthWidgetService::class.java)
-        WEEK_WIDGET_SERVICE ->  Intent(context, WeekWidgetService::class.java)
-        YEAR_WIDGET_SERVICE ->  Intent(context, YearWidgetService::class.java)
-        EVENT_WIDGET_SERVICE -> Intent(context, EventWidgetService::class.java)
-        ALL_IN_WIDGET_SERVICE -> Intent(context, AllInWidgetService::class.java)
-        else -> Intent(context, DayWidgetService::class.java)
-    }
+    private val intent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+    private val service = 100
 
     fun setAlarmManager() {
         val sender = PendingIntent.getBroadcast(context, service, intent, PendingIntent.FLAG_IMMUTABLE)
@@ -50,5 +37,6 @@ class AlarmHandler(private val context: Context, private val service : Int) {
         const val YEAR_WIDGET_SERVICE = 503
         const val EVENT_WIDGET_SERVICE = 504
         const val ALL_IN_WIDGET_SERVICE = 505
+        private const val TAG = "AlarmHandler"
     }
 }

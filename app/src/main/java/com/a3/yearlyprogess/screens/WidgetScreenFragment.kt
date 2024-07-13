@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RemoteViews
@@ -18,14 +17,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
-import com.a3.yearlyprogess.widgets.manager.updateManager.AlarmHandler
+import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayWidget
 import com.a3.yearlyprogess.widgets.ui.MonthWidget
@@ -144,22 +142,22 @@ class WidgetScreenFragment : Fragment() {
                         updateWidgetRemoteView(
                             it,
                             binding.widgetYearContainer,
-                            AlarmHandler.YEAR_WIDGET_SERVICE
+                            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
                         )
                         updateWidgetRemoteView(
                             it,
                             binding.widgetMonthContainer,
-                            AlarmHandler.MONTH_WIDGET_SERVICE
+                            WidgetUpdateAlarmHandler.MONTH_WIDGET_SERVICE
                         )
                         updateWidgetRemoteView(
                             it,
                             binding.widgetWeekContainer,
-                            AlarmHandler.WEEK_WIDGET_SERVICE
+                            WidgetUpdateAlarmHandler.WEEK_WIDGET_SERVICE
                         )
                         updateWidgetRemoteView(
                             it,
                             binding.widgetDayContainer,
-                            AlarmHandler.DAY_WIDGET_SERVICE
+                            WidgetUpdateAlarmHandler.DAY_WIDGET_SERVICE
                         )
                     }
 
@@ -192,22 +190,22 @@ class WidgetScreenFragment : Fragment() {
         val yearRemoteView = updateWidgetRemoteView(
             requireContext(),
             binding.widgetYearContainer,
-            AlarmHandler.YEAR_WIDGET_SERVICE
+            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
         )
         val monthRemoteView = updateWidgetRemoteView(
             requireContext(),
             binding.widgetMonthContainer,
-            AlarmHandler.YEAR_WIDGET_SERVICE
+            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
         )
         val weekRemoteView = updateWidgetRemoteView(
             requireContext(),
             binding.widgetWeekContainer,
-            AlarmHandler.YEAR_WIDGET_SERVICE
+            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
         )
         val dayRemoteView = updateWidgetRemoteView(
             requireContext(),
             binding.widgetDayContainer,
-            AlarmHandler.YEAR_WIDGET_SERVICE
+            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
         )
 
         animatedUpdateProgressBarView(yearRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.YEAR)
@@ -304,7 +302,7 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 DayWidget::class.java,
-                AlarmHandler.DAY_WIDGET_SERVICE
+                WidgetUpdateAlarmHandler.DAY_WIDGET_SERVICE
             )
         }
 
@@ -313,7 +311,7 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 MonthWidget::class.java,
-                AlarmHandler.MONTH_WIDGET_SERVICE
+                WidgetUpdateAlarmHandler.MONTH_WIDGET_SERVICE
             )
         }
 
@@ -322,7 +320,7 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 YearWidget::class.java,
-                AlarmHandler.YEAR_WIDGET_SERVICE
+                WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
             )
         }
 
@@ -331,7 +329,7 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 WeekWidget::class.java,
-                AlarmHandler.WEEK_WIDGET_SERVICE
+                WidgetUpdateAlarmHandler.WEEK_WIDGET_SERVICE
             )
         }
 
@@ -340,7 +338,7 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 AllInWidget::class.java,
-                AlarmHandler.ALL_IN_WIDGET_SERVICE
+                WidgetUpdateAlarmHandler.ALL_IN_WIDGET_SERVICE
             )
         }
     }
@@ -402,9 +400,9 @@ class WidgetScreenFragment : Fragment() {
 
         var remoteViews: RemoteViews? = null
 
-        if (widgetServiceType == AlarmHandler.ALL_IN_WIDGET_SERVICE) {
+        if (widgetServiceType == WidgetUpdateAlarmHandler.ALL_IN_WIDGET_SERVICE) {
             remoteViews = AllInWidget.AllInOneWidgetRemoteView(context)
-        } else if (widgetServiceType < AlarmHandler.ALL_IN_WIDGET_SERVICE) {
+        } else if (widgetServiceType < WidgetUpdateAlarmHandler.ALL_IN_WIDGET_SERVICE) {
             remoteViews = StandaloneWidget.standaloneWidgetRemoteView(context, widgetServiceType)
         }
 

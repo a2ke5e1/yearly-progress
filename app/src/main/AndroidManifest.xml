@@ -137,22 +137,7 @@
                 android:resource="@xml/week_widget_info" />
         </receiver> <!-- Registration of the Widget Broadcast Receiver -->
         <receiver
-            android:name=".widgets.manager.updateManager.services.DayWidgetService"
-            android:enabled="true" />
-        <receiver
-            android:name=".widgets.manager.updateManager.services.MonthWidgetService"
-            android:enabled="true" />
-        <receiver
-            android:name=".widgets.manager.updateManager.services.WeekWidgetService"
-            android:enabled="true" />
-        <receiver
-            android:name=".widgets.manager.updateManager.services.YearWidgetService"
-            android:enabled="true" />
-        <receiver
-            android:name=".widgets.manager.updateManager.services.EventWidgetService"
-            android:enabled="true" />
-        <receiver
-            android:name=".widgets.manager.updateManager.services.AllInWidgetService"
+            android:name=".widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver"
             android:enabled="true" />
     </application>
 

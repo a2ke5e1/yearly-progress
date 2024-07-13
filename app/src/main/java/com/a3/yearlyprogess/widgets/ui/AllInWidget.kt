@@ -12,14 +12,13 @@ import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager
-import com.a3.yearlyprogess.widgets.manager.updateManager.AlarmHandler
 import com.a3.yearlyprogess.widgets.ui.util.BaseWidget
 import kotlin.math.roundToInt
 
 /**
  * Implementation of App Widget functionality.
  */
-class AllInWidget : BaseWidget(AlarmHandler.ALL_IN_WIDGET_SERVICE) {
+class AllInWidget : BaseWidget() {
 
     companion object {
 
