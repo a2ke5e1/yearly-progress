@@ -117,6 +117,7 @@ class WidgetScreenFragment : Fragment() {
 
     private fun updateWidgetInfo(i: Long) {
         lifecycleScope.launch(Dispatchers.IO) {
+            delay(5000) // Wait 5 seconds for animation to complete
             while (true) {
 
                 // Loads user preferences and set default values if not set
