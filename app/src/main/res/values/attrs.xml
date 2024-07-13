@@ -6,10 +6,10 @@
     </declare-styleable>
     <declare-styleable name="ProgressCardView">
         <attr name="dataType">
-            <enum name="YEAR" value="100" />
-            <enum name="MONTH" value="101" />
-            <enum name="WEEK" value="102" />
-            <enum name="DAY" value="103" />
+            <enum name="YEAR" value="3" />
+            <enum name="MONTH" value="2" />
+            <enum name="WEEK" value="1" />
+            <enum name="DAY" value="0" />
         </attr>
     </declare-styleable>
 </resources>

@@ -10,8 +10,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.YearlyProgressManager
+import com.a3.yearlyprogess.calculateEndTime
+import com.a3.yearlyprogess.calculateProgress
+import com.a3.yearlyprogess.calculateStartTime
+import com.a3.yearlyprogess.getCurrentPeriodValue
+import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
+import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -36,7 +43,7 @@ class ProgressCardView @JvmOverloads constructor(
     private var widgetProgressCard: MaterialCardView
 
     private var job: Job
-    private var field: Int = YearlyProgressManager.YEAR
+    private var field: TimePeriod = TimePeriod.DAY
 
 
     init {
@@ -57,40 +64,30 @@ class ProgressCardView @JvmOverloads constructor(
             val obtainAttributeSet =
                 context.obtainStyledAttributes(attrs, R.styleable.ProgressCardView)
             if (obtainAttributeSet.hasValue(R.styleable.ProgressCardView_dataType)) {
-                field = obtainAttributeSet.getInt(R.styleable.ProgressCardView_dataType, 100)
+                field = TimePeriod.entries[obtainAttributeSet.getInt(
+                    R.styleable.ProgressCardView_dataType,
+                    0
+                )]
             }
             obtainAttributeSet.recycle()
         }
 
         // data that doesn't change
-        titleTextView.text = when (field) {
-            YearlyProgressManager.YEAR -> context.getString(R.string.year)
-            YearlyProgressManager.MONTH -> context.getString(R.string.month)
-            YearlyProgressManager.WEEK -> context.getString(R.string.week)
-            YearlyProgressManager.DAY -> context.getString(R.string.day)
-            else -> ""
-        }
+        titleTextView.text = field.name
 
         // Calculate frequency to update constant values
         val freq =
-            YearlyProgressManager.getEndOfTimeMillis(field) - YearlyProgressManager.getCurrentTimeMillis() // in milliseconds
+            calculateEndTime(context, field) -
+                    calculateStartTime(context, field) // in milliseconds
 
         // update constant values
         launch(Dispatchers.IO) {
             while (true) {
-                val currentProgressType = when (field) {
-                    YearlyProgressManager.YEAR -> YearlyProgressManager.getYear().toString()
-                    YearlyProgressManager.MONTH -> YearlyProgressManager.getMonth(
-                        isLong = true
-                    )
-                    YearlyProgressManager.WEEK -> YearlyProgressManager.getWeek(isLong = true)
-                    YearlyProgressManager.DAY -> YearlyProgressManager.getDay(formatted = true)
-                    else -> ""
-                }
-                widgetDataTextView.text = currentProgressType
+                val currentPeriodValue = getCurrentPeriodValue(field).toFormattedTimePeriod(field)
+                widgetDataTextView.text = currentPeriodValue
                 widgetDataInfoTextView.text = "of ${
-                    (YearlyProgressManager.getEndOfTimeMillis(field)
-                            - YearlyProgressManager.getStartOfTimeMillis(field)) / 1000
+                    (calculateEndTime(context, field)
+                            - calculateStartTime(context, field)) / 1000
                 }s"
                 delay(freq)
             }
@@ -100,10 +97,10 @@ class ProgressCardView @JvmOverloads constructor(
         launch(Dispatchers.IO) {
             while (true) {
 
-                YearlyProgressManager(context).setDefaultWeek()
-                YearlyProgressManager(context).setDefaultCalculationMode()
+                val startTime = calculateStartTime(context, field)
+                val endTime = calculateEndTime(context, field)
+                val progress: Double = calculateProgress(context, startTime, endTime)
 
-                val progress: Double = YearlyProgressManager.getProgress(field)
                 launch(Dispatchers.Main) {
                     updateView(progress)
                 }
@@ -117,9 +114,10 @@ class ProgressCardView @JvmOverloads constructor(
     private fun updateView(progress: Double) {
 
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        val decimalPlace: Int = pref.getInt(context.getString(R.string.app_widget_decimal_point), 13)
+        val decimalPlace: Int =
+            pref.getInt(context.getString(R.string.app_widget_decimal_point), 13)
 
-        perTextView.text = formatProgressStyle(SpannableString("%,.${decimalPlace}f".format(progress) + "%"))
+        perTextView.text = progress.styleFormatted(decimalPlace)
 
         val params = widgetProgressCard.layoutParams
         val target = (progress * 0.01 * widgetParentCard.width).toInt()
