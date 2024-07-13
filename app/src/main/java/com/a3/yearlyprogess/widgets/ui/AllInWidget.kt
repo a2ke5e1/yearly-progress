@@ -10,8 +10,15 @@ import android.view.View
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager
+import com.a3.yearlyprogess.calculateEndTime
+import com.a3.yearlyprogess.calculateProgress
+import com.a3.yearlyprogess.calculateStartTime
+import com.a3.yearlyprogess.getCurrentPeriodValue
+import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
+import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import kotlin.math.roundToInt
 
 /**
@@ -21,50 +28,57 @@ class AllInWidget : BaseWidget() {
 
     companion object {
 
+        private fun calculateProgress(context: Context, timePeriod: TimePeriod): Double {
+            val startTime = calculateStartTime(context, timePeriod)
+            val endTime = calculateEndTime(context, timePeriod)
+            val progress = calculateProgress(context, startTime, endTime)
+            return progress
+        }
+
         private fun initiateView(context: Context, views: RemoteViews) {
 
-            // Set default week and calculation mode
-            YearlyProgressManager(context).setDefaultWeek()
-            YearlyProgressManager(context).setDefaultCalculationMode()
+
+            val dayProgress = calculateProgress(context, TimePeriod.DAY)
+            val weekProgress = calculateProgress(context, TimePeriod.WEEK)
+            val monthProgress = calculateProgress(context, TimePeriod.MONTH)
+            val yearProgress = calculateProgress(context, TimePeriod.YEAR)
+
+            val dayCurrentValue =
+                getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY)
+            val weekCurrentValue =
+                getCurrentPeriodValue(TimePeriod.WEEK).toFormattedTimePeriod(TimePeriod.WEEK)
+            val monthCurrentValue =
+                getCurrentPeriodValue(TimePeriod.MONTH).toFormattedTimePeriod(TimePeriod.MONTH)
+            val yearCurrentValue =
+                getCurrentPeriodValue(TimePeriod.YEAR).toFormattedTimePeriod(TimePeriod.YEAR)
 
 
-            val dayProgress =
-                YearlyProgressManager.getProgress(YearlyProgressManager.DAY).roundToInt()
-            val weekProgress =
-                YearlyProgressManager.getProgress(YearlyProgressManager.WEEK).roundToInt()
-            val monthProgress =
-                YearlyProgressManager.getProgress(YearlyProgressManager.MONTH).roundToInt()
-            val yearProgress =
-                YearlyProgressManager.getProgress(YearlyProgressManager.YEAR).roundToInt()
+
+            views.setTextViewText(R.id.progressTextDay, dayProgress.styleFormatted(0))
+            views.setTextViewText(R.id.progressTextWeek, weekProgress.styleFormatted(0))
+            views.setTextViewText(R.id.progressTextMonth, monthProgress.styleFormatted(0))
+            views.setTextViewText(R.id.progressTextYear, yearProgress.styleFormatted(0))
+
+            views.setProgressBar(R.id.progressBarDay, 100, dayProgress.toInt(), false)
+            views.setProgressBar(R.id.progressBarWeek, 100, weekProgress.toInt(), false)
+            views.setProgressBar(R.id.progressBarMonth, 100, monthProgress.toInt(), false)
+            views.setProgressBar(R.id.progressBarYear, 100, yearProgress.toInt(), false)
 
 
-
-            views.setTextViewText(R.id.progressTextDay, formatProgress(dayProgress))
-            views.setTextViewText(R.id.progressTextWeek, formatProgress(weekProgress))
-            views.setTextViewText(R.id.progressTextMonth, formatProgress(monthProgress))
-            views.setTextViewText(R.id.progressTextYear, formatProgress(yearProgress))
-
-            views.setProgressBar(R.id.progressBarDay, 100, dayProgress, false)
-            views.setProgressBar(R.id.progressBarWeek, 100, weekProgress, false)
-            views.setProgressBar(R.id.progressBarMonth, 100, monthProgress, false)
-            views.setProgressBar(R.id.progressBarYear, 100, yearProgress, false)
 
 
             views.setTextViewText(
                 R.id.progressTitle,
-                YearlyProgressManager.getDay(formatted = true)
+                dayCurrentValue
             )
             views.setTextViewText(
-                R.id.progressWeekTitle,
-                YearlyProgressManager.getWeek(isLong = false)
+                R.id.progressWeekTitle, weekCurrentValue
             )
             views.setTextViewText(
-                R.id.progressMonthTitle,
-                YearlyProgressManager.getMonth(isLong = false)
+                R.id.progressMonthTitle, monthCurrentValue
             )
             views.setTextViewText(
-                R.id.progressYearTitle,
-                YearlyProgressManager.getYear().toString()
+                R.id.progressYearTitle, yearCurrentValue
             )
 
             views.setOnClickPendingIntent(
@@ -141,12 +155,8 @@ class AllInWidget : BaseWidget() {
     }
 
     override fun updateWidget(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetId: Int
+        context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int
     ) {
-
-
         appWidgetManager.updateAppWidget(appWidgetId, AllInOneWidgetRemoteView(context))
     }
 

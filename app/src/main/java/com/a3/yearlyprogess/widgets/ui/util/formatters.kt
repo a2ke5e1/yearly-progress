@@ -25,9 +25,21 @@ fun Double.styleFormatted(digits: Int = 2): SpannableString {
 
     val dotPos = formattedNumber.indexOf(decimalSeparator)
     val spannable = SpannableString(formattedNumber)
-    spannable.setSpan(
-        RelativeSizeSpan(0.7f), dotPos, formattedNumber.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-    )
+    if (dotPos != -1) {
+        spannable.setSpan(
+            RelativeSizeSpan(0.7f),
+            dotPos,
+            formattedNumber.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+    } else {
+        spannable.setSpan(
+            RelativeSizeSpan(0.7f),
+            formattedNumber.length - 1,
+            formattedNumber.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+    }
     return spannable
 
 }
@@ -74,27 +86,28 @@ fun Int.toFormattedTimePeriod(
 fun Long.toTimePeriodLeftText(timePeriod: TimePeriod): String {
 
     val stringBuilder = StringBuilder()
-    this.toDuration(DurationUnit.MILLISECONDS).toComponents { days, hours, minutes, seconds, nanoseconds ->
-        if (days > 0) {
-            stringBuilder.append(days)
-            stringBuilder.append("d ")
-        }
+    this.toDuration(DurationUnit.MILLISECONDS)
+        .toComponents { days, hours, minutes, seconds, nanoseconds ->
+            if (days > 0) {
+                stringBuilder.append(days)
+                stringBuilder.append("d ")
+            }
 
-        if (days > 0 || hours > 0) {
-            stringBuilder.append(hours)
-            stringBuilder.append("h ")
-        }
+            if (days > 0 || hours > 0) {
+                stringBuilder.append(hours)
+                stringBuilder.append("h ")
+            }
 
-        if (days > 0 || hours > 0 || minutes > 0) {
-            stringBuilder.append(minutes)
-            stringBuilder.append("m ")
-        }
+            if (days > 0 || hours > 0 || minutes > 0) {
+                stringBuilder.append(minutes)
+                stringBuilder.append("m ")
+            }
 
-        if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
-            stringBuilder.append(seconds)
-            stringBuilder.append("s")
+            if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
+                stringBuilder.append(seconds)
+                stringBuilder.append("s")
+            }
         }
-    }
 
     return stringBuilder.toString()
 
