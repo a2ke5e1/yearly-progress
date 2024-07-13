@@ -1,23 +1,14 @@
-package com.a3.yearlyprogess.widgets.ui.util
+package com.a3.yearlyprogess.widgets.ui
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import androidx.preference.PreferenceManager
-import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.useForegroundService
-import com.a3.yearlyprogess.widgets.ui.AllInWidget
-import com.a3.yearlyprogess.widgets.ui.DayWidget
-import com.a3.yearlyprogess.widgets.ui.EventWidget
-import com.a3.yearlyprogess.widgets.ui.MonthWidget
-import com.a3.yearlyprogess.widgets.ui.WeekWidget
-import com.a3.yearlyprogess.widgets.ui.YearWidget
 
 abstract class BaseWidget :
     AppWidgetProvider() {

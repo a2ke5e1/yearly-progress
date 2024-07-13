@@ -12,7 +12,6 @@ import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager
-import com.a3.yearlyprogess.widgets.ui.util.BaseWidget
 import kotlin.math.roundToInt
 
 /**

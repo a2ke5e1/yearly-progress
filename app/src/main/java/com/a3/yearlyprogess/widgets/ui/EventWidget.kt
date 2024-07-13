@@ -16,7 +16,6 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
-import com.a3.yearlyprogess.widgets.ui.util.BaseWidget
 
 /**
  * Implementation of App Widget functionality.

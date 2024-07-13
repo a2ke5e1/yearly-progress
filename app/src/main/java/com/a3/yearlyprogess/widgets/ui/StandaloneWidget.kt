@@ -16,8 +16,11 @@ import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.calculateEndTime
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.calculateStartTime
-import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
-import com.a3.yearlyprogess.widgets.ui.util.BaseWidget
+import com.a3.yearlyprogess.calculateTimeLeft
+import com.a3.yearlyprogess.getCurrentPeriodValue
+import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
+import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
+import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
 import kotlin.math.roundToInt
 
 abstract class StandaloneWidget(private val widgetType: TimePeriod) :
@@ -26,44 +29,33 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) :
     companion object {
         fun standaloneWidgetRemoteView(context: Context, widgetType: TimePeriod): RemoteViews {
             val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
-
-            // Set default week and calculation mode
-            YearlyProgressManager(context).setDefaultWeek()
-            YearlyProgressManager(context).setDefaultCalculationMode()
-
-            val startTime = calculateStartTime(widgetType)
-            val endTime = calculateEndTime(widgetType)
-            val progress = calculateProgress(startTime, endTime)
-
             val pref = PreferenceManager.getDefaultSharedPreferences(context)
+
+            // Load user preferences
             val decimalPlace: Int =
                 pref.getInt(context.getString(R.string.widget_widget_decimal_point), 2)
-
-            val widgetProgressText = formatProgressStyle(
-                SpannableString(
-                    "%,.${decimalPlace}f".format(progress) + "%"
+            val timeLeftCounter =
+                pref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
+            val replaceProgressWithDaysLeft =
+                pref.getBoolean(
+                    context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
+                    false
                 )
-            )
+
+            // Calculate progress
+            val startTime = calculateStartTime(context, widgetType)
+            val endTime = calculateEndTime(context, widgetType)
+            val progress = calculateProgress(context, startTime, endTime)
+
+
+            // Apply styles to the text
+            val widgetProgressText = progress.styleFormatted(decimalPlace)
             val widgetProgressBarValue = progress.roundToInt()
+            val widgetCurrentValue =
+                getCurrentPeriodValue(widgetType).toFormattedTimePeriod(widgetType)
+            val widgetDaysLeftCounter = calculateTimeLeft(endTime).toTimePeriodLeftText(widgetType)
 
-
-            val widgetCurrentValue = when (widgetType) {
-                TimePeriod.DAY -> YearlyProgressManager.getDay(formatted = true)
-                TimePeriod.MONTH -> YearlyProgressManager.getMonth(isLong = false)
-                TimePeriod.WEEK -> YearlyProgressManager.getWeek(isLong = false)
-                TimePeriod.YEAR -> YearlyProgressManager.getYear().toString()
-            }
-
-            val widgetDaysLeftCounter = YearlyProgressManager.getDaysLeft(
-                when (widgetType) {
-                    TimePeriod.DAY -> YearlyProgressManager.DAY
-                    TimePeriod.MONTH -> YearlyProgressManager.MONTH
-                    TimePeriod.WEEK -> YearlyProgressManager.WEEK
-                    TimePeriod.YEAR -> YearlyProgressManager.YEAR
-                }
-            ) + " left"
-
-
+            // Set text and progress bar values
             view.setTextViewText(R.id.widgetType, widgetType.name.uppercase())
             view.setTextViewText(R.id.widgetCurrentValue, widgetCurrentValue)
             view.setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
@@ -80,27 +72,11 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) :
             )
 
 
-            // Loads user preference if widgets needs to be transparent or
-            // not. Other prefs might be loaded the same way.
-
-            // TODO: Make a better way to load user prefs that
-            //  applies to kind of the widgets.
             var widgetBackgroundAlpha = pref.getInt(
                 context.getString(R.string.widget_widget_background_transparency),
                 100
             )
-
             widgetBackgroundAlpha = ((widgetBackgroundAlpha / 100.0) * 255).toInt()
-
-            val timeLeftCounter =
-                pref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
-
-            val replaceProgressWithDaysLeft =
-                pref.getBoolean(
-                    context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
-                    false
-                )
-
             view.setInt(
                 R.id.widgetContainer,
                 "setImageAlpha",
@@ -115,7 +91,6 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) :
                 view.setTextViewTextSize(R.id.widgetProgress, 0, 35f)
             }
 
-
             return view
         }
     }
@@ -128,7 +103,7 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) :
     ) {
         appWidgetManager.updateAppWidget(
             appWidgetId,
-            standaloneWidgetRemoteView(context,widgetType)
+            standaloneWidgetRemoteView(context, widgetType)
         )
     }
 
