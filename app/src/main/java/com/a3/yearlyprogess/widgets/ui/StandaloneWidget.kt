@@ -10,32 +10,30 @@ import android.widget.RemoteViews
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressManager
+import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.calculateEndTime
+import com.a3.yearlyprogess.calculateProgress
+import com.a3.yearlyprogess.calculateStartTime
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.util.BaseWidget
 import kotlin.math.roundToInt
 
-abstract class StandaloneWidget(private val widgetServiceType: Int) :
+abstract class StandaloneWidget(private val widgetType: TimePeriod) :
     BaseWidget() {
 
     companion object {
-        fun standaloneWidgetRemoteView(context: Context, widgetServiceType: Int): RemoteViews {
+        fun standaloneWidgetRemoteView(context: Context, widgetType: TimePeriod): RemoteViews {
             val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
 
             // Set default week and calculation mode
             YearlyProgressManager(context).setDefaultWeek()
             YearlyProgressManager(context).setDefaultCalculationMode()
 
-            val progress = YearlyProgressManager.getProgress(
-                when (widgetServiceType) {
-                    WidgetUpdateAlarmHandler.DAY_WIDGET_SERVICE -> YearlyProgressManager.DAY
-                    WidgetUpdateAlarmHandler.MONTH_WIDGET_SERVICE -> YearlyProgressManager.MONTH
-                    WidgetUpdateAlarmHandler.WEEK_WIDGET_SERVICE -> YearlyProgressManager.WEEK
-                    WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE -> YearlyProgressManager.YEAR
-                    else -> -1
-                }
-            )
+            val startTime = calculateStartTime(widgetType)
+            val endTime = calculateEndTime(widgetType)
+            val progress = calculateProgress(startTime, endTime)
 
             val pref = PreferenceManager.getDefaultSharedPreferences(context)
             val decimalPlace: Int =
@@ -48,34 +46,25 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
             )
             val widgetProgressBarValue = progress.roundToInt()
 
-            val widgetType: String = when (widgetServiceType) {
 
-                WidgetUpdateAlarmHandler.DAY_WIDGET_SERVICE -> context.getString(R.string.day)
-                WidgetUpdateAlarmHandler.MONTH_WIDGET_SERVICE -> context.getString(R.string.month)
-                WidgetUpdateAlarmHandler.WEEK_WIDGET_SERVICE -> context.getString(R.string.week)
-                WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE -> context.getString(R.string.year)
-                else -> ""
-            }
-            val widgetCurrentValue = when (widgetServiceType) {
-                WidgetUpdateAlarmHandler.DAY_WIDGET_SERVICE -> YearlyProgressManager.getDay(formatted = true)
-                WidgetUpdateAlarmHandler.MONTH_WIDGET_SERVICE -> YearlyProgressManager.getMonth(isLong = false)
-                WidgetUpdateAlarmHandler.WEEK_WIDGET_SERVICE -> YearlyProgressManager.getWeek(isLong = false)
-                WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE -> YearlyProgressManager.getYear().toString()
-                else -> ""
+            val widgetCurrentValue = when (widgetType) {
+                TimePeriod.DAY -> YearlyProgressManager.getDay(formatted = true)
+                TimePeriod.MONTH -> YearlyProgressManager.getMonth(isLong = false)
+                TimePeriod.WEEK -> YearlyProgressManager.getWeek(isLong = false)
+                TimePeriod.YEAR -> YearlyProgressManager.getYear().toString()
             }
 
             val widgetDaysLeftCounter = YearlyProgressManager.getDaysLeft(
-                when (widgetServiceType) {
-                    WidgetUpdateAlarmHandler.DAY_WIDGET_SERVICE -> YearlyProgressManager.DAY
-                    WidgetUpdateAlarmHandler.MONTH_WIDGET_SERVICE -> YearlyProgressManager.MONTH
-                    WidgetUpdateAlarmHandler.WEEK_WIDGET_SERVICE -> YearlyProgressManager.WEEK
-                    WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE -> YearlyProgressManager.YEAR
-                    else -> -1
+                when (widgetType) {
+                    TimePeriod.DAY -> YearlyProgressManager.DAY
+                    TimePeriod.MONTH -> YearlyProgressManager.MONTH
+                    TimePeriod.WEEK -> YearlyProgressManager.WEEK
+                    TimePeriod.YEAR -> YearlyProgressManager.YEAR
                 }
             ) + " left"
 
 
-            view.setTextViewText(R.id.widgetType, widgetType)
+            view.setTextViewText(R.id.widgetType, widgetType.name.uppercase())
             view.setTextViewText(R.id.widgetCurrentValue, widgetCurrentValue)
             view.setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
             view.setTextViewText(R.id.widgetProgress, widgetProgressText)
@@ -139,13 +128,13 @@ abstract class StandaloneWidget(private val widgetServiceType: Int) :
     ) {
         appWidgetManager.updateAppWidget(
             appWidgetId,
-            standaloneWidgetRemoteView(context, widgetServiceType)
+            standaloneWidgetRemoteView(context,widgetType)
         )
     }
 
 }
 
-class DayWidget : StandaloneWidget(WidgetUpdateAlarmHandler.DAY_WIDGET_SERVICE)
-class MonthWidget : StandaloneWidget(WidgetUpdateAlarmHandler.MONTH_WIDGET_SERVICE)
-class WeekWidget : StandaloneWidget(WidgetUpdateAlarmHandler.WEEK_WIDGET_SERVICE)
-class YearWidget : StandaloneWidget(WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE)
+class DayWidget : StandaloneWidget(TimePeriod.DAY)
+class MonthWidget : StandaloneWidget(TimePeriod.MONTH)
+class WeekWidget : StandaloneWidget(TimePeriod.WEEK)
+class YearWidget : StandaloneWidget(TimePeriod.YEAR)

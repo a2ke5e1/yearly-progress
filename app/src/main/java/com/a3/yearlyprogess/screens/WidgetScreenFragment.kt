@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
@@ -101,13 +102,17 @@ class WidgetScreenFragment : Fragment() {
         updateWidgetInfo(1)
     }
 
-    private fun updateWidgetRemoteView(context: Context, container: FrameLayout, widgetType: Int): View {
+    private fun updateWidgetRemoteView(
+        context: Context,
+        container: FrameLayout,
+        widgetType: TimePeriod
+    ): View {
         val widgetRemoteView =
             StandaloneWidget.standaloneWidgetRemoteView(context, widgetType)
                 .apply(
                     activity, container
                 )
-        widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener {  }
+        widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener { }
         container.removeAllViews()
         container.addView(widgetRemoteView)
 
@@ -117,7 +122,7 @@ class WidgetScreenFragment : Fragment() {
 
     private fun updateWidgetInfo(i: Long) {
         lifecycleScope.launch(Dispatchers.IO) {
-            delay(5000) // Wait 5 seconds for animation to complete
+            delay(700) // Wait 700 millisecond for animation to complete
             while (true) {
 
                 // Loads user preferences and set default values if not set
@@ -143,22 +148,22 @@ class WidgetScreenFragment : Fragment() {
                         updateWidgetRemoteView(
                             it,
                             binding.widgetYearContainer,
-                            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
+                            TimePeriod.YEAR
                         )
                         updateWidgetRemoteView(
                             it,
                             binding.widgetMonthContainer,
-                            WidgetUpdateAlarmHandler.MONTH_WIDGET_SERVICE
+                            TimePeriod.MONTH
                         )
                         updateWidgetRemoteView(
                             it,
                             binding.widgetWeekContainer,
-                            WidgetUpdateAlarmHandler.WEEK_WIDGET_SERVICE
+                            TimePeriod.WEEK
                         )
                         updateWidgetRemoteView(
                             it,
                             binding.widgetDayContainer,
-                            WidgetUpdateAlarmHandler.DAY_WIDGET_SERVICE
+                            TimePeriod.DAY
                         )
                     }
 
@@ -191,35 +196,63 @@ class WidgetScreenFragment : Fragment() {
         val yearRemoteView = updateWidgetRemoteView(
             requireContext(),
             binding.widgetYearContainer,
-            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
+            TimePeriod.YEAR
+
         )
         val monthRemoteView = updateWidgetRemoteView(
             requireContext(),
             binding.widgetMonthContainer,
-            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
+            TimePeriod.MONTH
+
         )
         val weekRemoteView = updateWidgetRemoteView(
             requireContext(),
             binding.widgetWeekContainer,
-            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
+            TimePeriod.WEEK
+
         )
         val dayRemoteView = updateWidgetRemoteView(
             requireContext(),
             binding.widgetDayContainer,
-            WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
+            TimePeriod.DAY
+
         )
 
-        animatedUpdateProgressBarView(yearRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.YEAR)
-        animatedUpdateProgressTextView(yearRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.YEAR)
+        animatedUpdateProgressBarView(
+            yearRemoteView.findViewById(R.id.widgetProgressBar),
+            YearlyProgressManager.YEAR
+        )
+        animatedUpdateProgressTextView(
+            yearRemoteView.findViewById(R.id.widgetProgress),
+            YearlyProgressManager.YEAR
+        )
 
-        animatedUpdateProgressBarView(monthRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.MONTH)
-        animatedUpdateProgressTextView(monthRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.MONTH)
+        animatedUpdateProgressBarView(
+            monthRemoteView.findViewById(R.id.widgetProgressBar),
+            YearlyProgressManager.MONTH
+        )
+        animatedUpdateProgressTextView(
+            monthRemoteView.findViewById(R.id.widgetProgress),
+            YearlyProgressManager.MONTH
+        )
 
-        animatedUpdateProgressBarView(weekRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.WEEK)
-        animatedUpdateProgressTextView(weekRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.WEEK)
+        animatedUpdateProgressBarView(
+            weekRemoteView.findViewById(R.id.widgetProgressBar),
+            YearlyProgressManager.WEEK
+        )
+        animatedUpdateProgressTextView(
+            weekRemoteView.findViewById(R.id.widgetProgress),
+            YearlyProgressManager.WEEK
+        )
 
-        animatedUpdateProgressBarView(dayRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.DAY)
-        animatedUpdateProgressTextView(dayRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.DAY)
+        animatedUpdateProgressBarView(
+            dayRemoteView.findViewById(R.id.widgetProgressBar),
+            YearlyProgressManager.DAY
+        )
+        animatedUpdateProgressTextView(
+            dayRemoteView.findViewById(R.id.widgetProgress),
+            YearlyProgressManager.DAY
+        )
 
 
 
@@ -303,8 +336,8 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 DayWidget::class.java,
-                WidgetUpdateAlarmHandler.DAY_WIDGET_SERVICE
-            )
+                StandaloneWidget.standaloneWidgetRemoteView(requireContext(), TimePeriod.DAY)
+                            )
         }
 
         // Showing menu for user to add Month widget to user Launcher's Home Screen
@@ -312,7 +345,8 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 MonthWidget::class.java,
-                WidgetUpdateAlarmHandler.MONTH_WIDGET_SERVICE
+                StandaloneWidget.standaloneWidgetRemoteView(requireContext(), TimePeriod.MONTH)
+
             )
         }
 
@@ -321,7 +355,8 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 YearWidget::class.java,
-                WidgetUpdateAlarmHandler.YEAR_WIDGET_SERVICE
+                StandaloneWidget.standaloneWidgetRemoteView(requireContext(), TimePeriod.YEAR)
+
             )
         }
 
@@ -330,7 +365,8 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 WeekWidget::class.java,
-                WidgetUpdateAlarmHandler.WEEK_WIDGET_SERVICE
+                StandaloneWidget.standaloneWidgetRemoteView(requireContext(), TimePeriod.WEEK)
+
             )
         }
 
@@ -339,7 +375,7 @@ class WidgetScreenFragment : Fragment() {
             requestPinAppWidget(
                 requireContext(),
                 AllInWidget::class.java,
-                WidgetUpdateAlarmHandler.ALL_IN_WIDGET_SERVICE
+                AllInWidget.AllInOneWidgetRemoteView(requireContext())
             )
         }
     }
@@ -389,7 +425,9 @@ class WidgetScreenFragment : Fragment() {
     /**
      * https://sigute.medium.com/android-oreo-widget-pinning-in-kotlin-398d529eab28
      */
-    private fun requestPinAppWidget(context: Context, widget: Class<*>, widgetServiceType: Int) {
+    private fun requestPinAppWidget(
+        context: Context, widget: Class<*>, remoteViews: RemoteViews? = null
+    ) {
         val mAppWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
         val myProvider = ComponentName(requireContext(), widget)
         if (!mAppWidgetManager.isRequestPinAppWidgetSupported) {
@@ -399,13 +437,6 @@ class WidgetScreenFragment : Fragment() {
             return
         }
 
-        var remoteViews: RemoteViews? = null
-
-        if (widgetServiceType == WidgetUpdateAlarmHandler.ALL_IN_WIDGET_SERVICE) {
-            remoteViews = AllInWidget.AllInOneWidgetRemoteView(context)
-        } else if (widgetServiceType < WidgetUpdateAlarmHandler.ALL_IN_WIDGET_SERVICE) {
-            remoteViews = StandaloneWidget.standaloneWidgetRemoteView(context, widgetServiceType)
-        }
 
         var bundle: Bundle? = null
         if (remoteViews != null) {
