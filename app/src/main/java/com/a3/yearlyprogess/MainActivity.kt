@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        enableEdgeToEdge()
         DynamicColors.applyToActivityIfAvailable(this)
 
         val pref = this.getSharedPreferences(YEARLY_PROGRESS_PREF, MODE_PRIVATE)
@@ -77,17 +79,7 @@ class MainActivity : AppCompatActivity() {
         roomBackup = RoomBackup(this)
 
 
-        window.navigationBarDividerColor =
-            ContextCompat.getColor(this, android.R.color.transparent)
-        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
-        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.updatePadding(top = insets.top)
-            WindowInsetsCompat.CONSUMED
-        }
 
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
