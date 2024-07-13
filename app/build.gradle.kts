@@ -15,7 +15,7 @@ android {
         targetSdk = 35
         versionCode = 64
         val localVersionCode = versionCode
-        versionName = "2.${localVersionCode!! - 64}"
+        versionName = "2.${localVersionCode!! - 64}-alpha"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
