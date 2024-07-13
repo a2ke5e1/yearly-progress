@@ -144,7 +144,7 @@
             android:name=".widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver"
             android:enabled="true" />
 
-        <receiver android:name=".widgets.manager.updateManager.service.AutoStartService" android:exported="true" android:enabled="true">
+        <receiver android:name=".widgets.manager.updateManager.services.AutoStartService" android:exported="true" android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="com.a3.yearlyprogress.RESTART_WIDGET_UPDATE_SERVICE" />
