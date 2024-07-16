@@ -11,7 +11,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.widgets.manager.updateManager.services.AutoStartService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -58,13 +57,6 @@ class WidgetUpdateService : Service() {
 
     override fun onDestroy() {
         coroutineScope.cancel()
-
-
-        Intent(this, AutoStartService::class.java).apply {
-            action = "com.a3.yearlyprogress.RESTART_WIDGET_UPDATE_SERVICE"
-            sendBroadcast(this)
-        }
-
         super.onDestroy()
 
     }
