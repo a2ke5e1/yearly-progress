@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateService
 
 // This service will be started on boot up
@@ -17,8 +18,8 @@ class AutoStartService : BroadcastReceiver() {
                 Log.d("AutoStartService", "Starting foreground service is not supported on android 15 and above")
                 return
             }
-            val serviceIntent = Intent(context, WidgetUpdateService::class.java)
-            context.startForegroundService(serviceIntent)
+            val am = WidgetUpdateAlarmHandler(context)
+            am.scheduleRestartWidgetUpdateForegroundService()
         }
     }
 }

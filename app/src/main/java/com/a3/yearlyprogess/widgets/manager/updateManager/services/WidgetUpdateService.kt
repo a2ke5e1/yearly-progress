@@ -1,8 +1,10 @@
 package com.a3.yearlyprogess.widgets.manager.updateManager.services
 
+import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -11,6 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,10 +21,12 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 class WidgetUpdateService : Service() {
 
     private val channelId = "yearly_progress_service_channel"
     private lateinit var coroutineScope: CoroutineScope
+
 
     override fun onCreate() {
         super.onCreate()
@@ -58,7 +63,9 @@ class WidgetUpdateService : Service() {
     override fun onDestroy() {
         coroutineScope.cancel()
         super.onDestroy()
+         val am = WidgetUpdateAlarmHandler(this)
 
+        am.scheduleRestartWidgetUpdateForegroundService()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
