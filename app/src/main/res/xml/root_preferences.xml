@@ -48,10 +48,10 @@
             app:iconSpaceReserved="false"
             app:key="@string/widget_widget_update_frequency"
             app:summary="@string/adjust_widget_frequency_summary"
-            app:min="1"
-            android:max="100"
+            app:min="5"
+            android:max="900"
             android:defaultValue="5"
-            app:showSeekBarValue="true"
+            app:showSeekBarValue="false"
             app:title="@string/adjust_widget_frequency" />
 
 
