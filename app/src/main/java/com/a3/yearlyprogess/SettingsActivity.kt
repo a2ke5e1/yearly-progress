@@ -55,15 +55,21 @@ class SettingsActivity : AppCompatActivity() {
             val updateFrequencyPreference =
                 findPreference<Preference>(getString(R.string.widget_widget_update_frequency))
             val defaultUpdateFrequencyPreferenceSummary = getString(R.string.adjust_widget_frequency_summary)
-            val updateFPCurrentValue = updateFrequencyPreference?.sharedPreferences?.getInt(
-                updateFrequencyPreference.key, 5) ?: 5
-            val formattedValue = updateFPCurrentValue.toDuration(DurationUnit.SECONDS).toString()
-            updateFrequencyPreference?.summary = "$defaultUpdateFrequencyPreferenceSummary\nCurrent value: $formattedValue"
-            updateFrequencyPreference?.setOnPreferenceChangeListener { preference, newValue ->
-                val value = newValue.toString().toInt()
-                val formattedValue = value.toDuration(DurationUnit.SECONDS).toString()
-                preference.summary = "$defaultUpdateFrequencyPreferenceSummary\nCurrent value: $formattedValue"
-                true
+
+            updatePreferenceSummary(updateFrequencyPreference, defaultUpdateFrequencyPreferenceSummary) { value ->
+                (value as? Int ?: 5).toDuration(DurationUnit.SECONDS).toString()
+            }
+
+        }
+
+        private fun updatePreferenceSummary(preference: Preference?, defaultSummary: String, formatValue: (Any?) -> String) {
+            preference?.let {
+                val currentValue = it.sharedPreferences?.all?.get(it.key) ?: return
+                it.summary = "$defaultSummary\nCurrent value: ${formatValue(currentValue)}"
+                it.setOnPreferenceChangeListener { pref, newValue ->
+                    pref.summary = "$defaultSummary\nCurrent value: ${formatValue(newValue)}"
+                    true
+                }
             }
         }
     }
