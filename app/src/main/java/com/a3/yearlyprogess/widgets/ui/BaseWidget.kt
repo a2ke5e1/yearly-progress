@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
-import com.a3.yearlyprogess.widgets.manager.updateManager.services.useForegroundService
 
 abstract class BaseWidget :
     AppWidgetProvider() {
@@ -22,8 +21,6 @@ abstract class BaseWidget :
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
-
-        if (useForegroundService(context)) return
 
         val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
         widgetUpdateAlarmHandler.setAlarmManager()
@@ -51,9 +48,6 @@ abstract class BaseWidget :
     // Checks if any other widgets are active.
     // If not, cancels the alarm.
     override fun onDisabled(context: Context) {
-
-        if (useForegroundService(context)) return
-
 
         val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
 
@@ -91,14 +85,6 @@ abstract class BaseWidget :
     ) {
         // Log.d("updateAppWidget", widgetServiceType.toString())
         updateWidget(context, appWidgetManager, appWidgetId)
-
-        /*
-        Checks if user want to use foreground service
-        to update widgets.
-
-        If does then skips the alarm manager system to update the widget.
-        */
-        if (useForegroundService(context)) return
 
 
         val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
