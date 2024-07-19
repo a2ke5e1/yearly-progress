@@ -17,7 +17,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
 import com.a3.yearlyprogess.components.dialogbox.AboutDialog
 import com.a3.yearlyprogess.components.dialogbox.BackupRestoreDialog
-import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateService
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
@@ -91,7 +90,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        startForegroundService(Intent(this, WidgetUpdateService::class.java))
 
 
     }

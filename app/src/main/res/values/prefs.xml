@@ -6,5 +6,5 @@
     <string name="widget_widget_background_transparency" translatable="false">widget_widget_background_transparency</string>
     <string name="widget_widget_time_left" translatable="false">widget_widget_time_left</string>
     <string name="widget_widget_event_replace_progress_with_days_counter" translatable="false">widget_widget_event_replace_progress_with_days_counter</string>
-    <string name="widget_widget_use_foreground_service" translatable="false">widget_widget_use_foreground_service</string>
+    <string name="widget_widget_update_frequency" translatable="false">widget_widget_update_frequency</string>
 </resources>

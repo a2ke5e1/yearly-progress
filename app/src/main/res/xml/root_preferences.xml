@@ -43,12 +43,16 @@
         app:title="Widget Customization">
         >
 
-        <SwitchPreference
+        <SeekBarPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="@string/widget_widget_use_foreground_service"
-            app:summary="@string/use_foreground_service_to_update_widgets"
-            app:title="@string/use_latest_widget_update_method" />
+            app:key="@string/widget_widget_update_frequency"
+            app:summary="@string/adjust_widget_frequency_summary"
+            app:min="1"
+            android:max="100"
+            android:defaultValue="5"
+            app:showSeekBarValue="true"
+            app:title="@string/adjust_widget_frequency" />
 
 
         <SeekBarPreference
