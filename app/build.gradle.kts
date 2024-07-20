@@ -96,4 +96,7 @@ dependencies {
     // UMP SDK
     implementation("com.google.android.ump:user-messaging-platform:2.2.0")
 
+    // Preference
+    implementation("androidx.preference:preference-ktx:1.2.1")
+
 }
