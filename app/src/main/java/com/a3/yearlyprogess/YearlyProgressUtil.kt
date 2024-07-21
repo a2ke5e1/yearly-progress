@@ -17,15 +17,21 @@ fun calculateProgress(context: Context, startTime: Long, endTime: Long): Double 
 
 
     val currentTime = System.currentTimeMillis()
-    return if (currentTime in startTime..endTime) {
 
-        if (calculationMode == "1") {
-            (endTime - currentTime).toDouble() / (endTime - startTime) * 100
-        } else {
-            (currentTime - startTime).toDouble() / (endTime - startTime) * 100
-        }
+    if (currentTime < startTime) {
+        return 0.0
+    }
 
-    } else 0.0
+    if (currentTime > endTime) {
+        return 100.0
+    }
+
+    return if (calculationMode == "1") {
+        (endTime - currentTime).toDouble() / (endTime - startTime) * 100
+    } else {
+        (currentTime - startTime).toDouble() / (endTime - startTime) * 100
+    }
+
 }
 
 fun calculateTimeLeft(endTime: Long): Long {

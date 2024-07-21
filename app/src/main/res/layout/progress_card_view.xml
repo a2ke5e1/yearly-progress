@@ -43,6 +43,7 @@
                 android:text="@string/year"
                 android:textSize="12sp"
                 android:textAllCaps="true"
+                android:textFontWeight="500"
                 android:textColor="@color/widget_text_color" />
 
             <TextView
@@ -51,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/widget_title"
                 android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="0dp"
                 android:text="@string/demo_year"
                 android:textColor="@color/widget_text_color"

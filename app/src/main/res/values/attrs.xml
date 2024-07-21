@@ -12,4 +12,7 @@
             <enum name="DAY" value="0" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="DayNightLightProgressView">
+        <attr name="day_light" format="boolean" />
+    </declare-styleable>
 </resources>
