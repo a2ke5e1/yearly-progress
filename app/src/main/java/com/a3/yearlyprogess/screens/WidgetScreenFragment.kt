@@ -1,9 +1,11 @@
 package com.a3.yearlyprogess.screens
 
+import android.Manifest
 import android.animation.ValueAnimator
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import android.widget.ProgressBar
 import android.widget.RemoteViews
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.R
@@ -294,29 +297,6 @@ class WidgetScreenFragment : Fragment() {
         )
 
 
-        animatedUpdateProgressTextView(
-            dayLightRemoteView.findViewById(R.id.widgetProgress),
-            YearlyProgressManager.DAY,
-            dayLight = true
-        )
-        animatedUpdateProgressBarView(
-            dayLightRemoteView.findViewById(R.id.widgetProgressBar),
-            YearlyProgressManager.DAY,
-            dayLight = true
-        )
-
-        animatedUpdateProgressTextView(
-            nightLightRemoteView.findViewById(R.id.widgetProgress),
-            YearlyProgressManager.DAY,
-            dayLight = false
-        )
-        animatedUpdateProgressBarView(
-            nightLightRemoteView.findViewById(R.id.widgetProgressBar),
-            YearlyProgressManager.DAY,
-            dayLight = false
-        )
-
-
 
         animatedUpdateProgressTextView(
             allInOneProgressTextViewYear, YearlyProgressManager.YEAR, true
@@ -333,6 +313,37 @@ class WidgetScreenFragment : Fragment() {
         animatedUpdateProgressBarView(allInOneProgressBarMonth, YearlyProgressManager.MONTH)
         animatedUpdateProgressBarView(allInOneProgressBarDay, YearlyProgressManager.DAY)
         animatedUpdateProgressBarView(allInOneProgressBarWeek, YearlyProgressManager.WEEK)
+
+
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            animatedUpdateProgressTextView(
+                dayLightRemoteView.findViewById(R.id.widgetProgress),
+                YearlyProgressManager.DAY,
+                dayLight = true
+            )
+            animatedUpdateProgressBarView(
+                dayLightRemoteView.findViewById(R.id.widgetProgressBar),
+                YearlyProgressManager.DAY,
+                dayLight = true
+            )
+
+            animatedUpdateProgressTextView(
+                nightLightRemoteView.findViewById(R.id.widgetProgress),
+                YearlyProgressManager.DAY,
+                dayLight = false
+            )
+            animatedUpdateProgressBarView(
+                nightLightRemoteView.findViewById(R.id.widgetProgressBar),
+                YearlyProgressManager.DAY,
+                dayLight = false
+            )
+        }
+
     }
 
     private fun initProgressBarsTextViews(view: View) {
