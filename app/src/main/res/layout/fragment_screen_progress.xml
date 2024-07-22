@@ -27,33 +27,33 @@
         <com.a3.yearlyprogess.components.ProgressCardView
             android:id="@+id/progressCardViewYear"
             android:layout_width="match_parent"
-            android:layout_height="135dp"
+            android:layout_height="145dp"
             app:dataType="YEAR" />
 
         <com.a3.yearlyprogess.components.ProgressCardView
             android:id="@+id/progressCardViewMonth"
             android:layout_width="match_parent"
-            android:layout_height="135dp"
+            android:layout_height="145dp"
             app:dataType="MONTH" />
 
         <com.a3.yearlyprogess.components.ProgressCardView
             android:id="@+id/progressCardViewDay"
             android:layout_width="match_parent"
-            android:layout_height="135dp"
+            android:layout_height="145dp"
             app:dataType="DAY" />
 
         <com.a3.yearlyprogess.components.DayNightLightProgressView
             android:id="@+id/dayLightProgressView"
             android:layout_width="match_parent"
             app:day_light="true"
-            android:layout_height="135dp" />
+            android:layout_height="145dp" />
 
 
         <com.a3.yearlyprogess.components.DayNightLightProgressView
             android:id="@+id/nightLightProgressView"
             android:layout_width="match_parent"
             app:day_light="false"
-            android:layout_height="135dp" />
+            android:layout_height="145dp" />
 
         <LinearLayout
             android:id="@+id/ad_frame"
