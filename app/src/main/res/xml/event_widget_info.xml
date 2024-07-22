@@ -3,7 +3,7 @@
     android:description="@string/app_widget_description_event"
     android:configure="com.a3.yearlyprogess.widgets.manager.eventManager.EventSelectorActivity"
     android:initialKeyguardLayout="@layout/event_widget_small_preview"
-    android:initialLayout="@layout/event_widget_small_initial_preview"
+    android:initialLayout="@layout/loading_widget"
     android:widgetFeatures="reconfigurable"
     android:minWidth="130dp"
     android:minHeight="40dp"

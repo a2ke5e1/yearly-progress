@@ -2,7 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/month_widget_info"
     android:initialKeyguardLayout="@layout/month_widget_preview"
-    android:initialLayout="@layout/month_widget_initial_preview"
+    android:initialLayout="@layout/loading_widget"
     android:minWidth="110dp"
     android:minResizeWidth="110dp"
     android:minHeight="40dp"
