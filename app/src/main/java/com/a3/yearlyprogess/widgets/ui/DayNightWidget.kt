@@ -4,8 +4,10 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.view.View
 import android.widget.RemoteViews
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
@@ -37,12 +39,41 @@ abstract class DayNightWidget(private val dayLight: Boolean) :
 
             val sunriseSunset = loadSunriseSunset(context)
 
+            if (
+                ContextCompat.checkSelfPermission(
+                    context,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED)  {
+
+                val _view = RemoteViews(context.packageName, R.layout.error_widget)
+                _view.setTextViewText(R.id.error_text, "No location permission")
+
+                _view.setOnClickPendingIntent(
+                    R.id.background, PendingIntent.getActivity(
+                        context,
+                        0,
+                        Intent(context, MainActivity::class.java),
+                        PendingIntent.FLAG_IMMUTABLE
+                    )
+                )
+                return _view
+            }
+
             if (sunriseSunset == null) {
-                view.setTextViewText(R.id.widgetType, "No sunrise/sunset data")
-                view.setTextViewText(R.id.widgetCurrentValue, "")
-                view.setTextViewText(R.id.widgetDaysLeft, "")
-                view.setTextViewText(R.id.widgetProgress, "")
-                return view
+
+                val _view = RemoteViews(context.packageName, R.layout.error_widget)
+                _view.setTextViewText(R.id.error_text, "No data, Tap to retry")
+
+                _view.setOnClickPendingIntent(
+                    R.id.background, PendingIntent.getActivity(
+                        context,
+                        0,
+                        Intent(context, MainActivity::class.java),
+                        PendingIntent.FLAG_IMMUTABLE
+                    )
+                )
+                return _view
+
             }
 
             val widgetType = if (dayLight) "Day Light" else "Night Light"
@@ -55,7 +86,7 @@ abstract class DayNightWidget(private val dayLight: Boolean) :
             // Apply styles to the text
             val widgetProgressText = progress.styleFormatted(decimalPlace)
             val widgetProgressBarValue = progress.roundToInt()
-            val widgetDescription = "TODO"
+            val widgetDescription = if (dayLight) "🌇 ${sunriseSunset.results[1].sunset}" else "🌅 ${sunriseSunset.results[1].sunrise}"
             val widgetDaysLeftCounter = calculateTimeLeft(endTime).toTimePeriodLeftText()
 
             // Set text and progress bar values
@@ -64,6 +95,7 @@ abstract class DayNightWidget(private val dayLight: Boolean) :
             view.setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
             view.setTextViewText(R.id.widgetProgress, widgetProgressText)
             view.setProgressBar(R.id.widgetProgressBar, 100, widgetProgressBarValue, false)
+            view.setFloat(R.id.widgetCurrentValue, "setTextSize", 8f)
 
             view.setOnClickPendingIntent(
                 R.id.background, PendingIntent.getActivity(
