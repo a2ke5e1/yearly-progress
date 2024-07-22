@@ -17,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
 import com.a3.yearlyprogess.components.dialogbox.AboutDialog
 import com.a3.yearlyprogess.components.dialogbox.BackupRestoreDialog
+import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
@@ -90,7 +91,10 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
+        // Start widget update service
+        // It ensures that the widget is updated when the app is opened.
+        val widgetUpdateServiceIntent = Intent(this, WidgetUpdateBroadcastReceiver::class.java)
+        sendBroadcast(widgetUpdateServiceIntent)
 
     }
 
