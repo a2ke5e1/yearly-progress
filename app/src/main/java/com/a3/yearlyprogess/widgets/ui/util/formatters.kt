@@ -3,11 +3,9 @@ package com.a3.yearlyprogess.widgets.ui.util
 
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.SpannedString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
 import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.YearlyProgressManager.Companion.getDay
 import com.a3.yearlyprogess.getMonthName
 import com.a3.yearlyprogess.getOrdinalSuffix
 import com.a3.yearlyprogess.getWeekDayName
@@ -83,7 +81,7 @@ fun Int.toFormattedTimePeriod(
     }
 }
 
-fun Long.toTimePeriodLeftText(timePeriod: TimePeriod): String {
+fun Long.toTimePeriodLeftText(): String {
 
     val stringBuilder = StringBuilder()
     this.toDuration(DurationUnit.MILLISECONDS)
@@ -108,6 +106,10 @@ fun Long.toTimePeriodLeftText(timePeriod: TimePeriod): String {
                 stringBuilder.append("s")
             }
         }
+
+    if (stringBuilder.isEmpty()) {
+        stringBuilder.append("0s")
+    }
 
     return stringBuilder.toString()
 

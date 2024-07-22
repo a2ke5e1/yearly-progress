@@ -7,9 +7,11 @@ import android.content.Context
 import android.content.Intent
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
+import com.a3.yearlyprogess.widgets.ui.DayLightWidget
 import com.a3.yearlyprogess.widgets.ui.DayWidget
 import com.a3.yearlyprogess.widgets.ui.EventWidget
 import com.a3.yearlyprogess.widgets.ui.MonthWidget
+import com.a3.yearlyprogess.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.widgets.ui.YearWidget
 
@@ -25,7 +27,9 @@ import com.a3.yearlyprogess.widgets.ui.YearWidget
             MonthWidget::class.java,
             YearWidget::class.java,
             AllInWidget::class.java,
-            EventWidget::class.java
+            EventWidget::class.java,
+            DayLightWidget::class.java,
+            NightLightWidget::class.java
         )
 
 

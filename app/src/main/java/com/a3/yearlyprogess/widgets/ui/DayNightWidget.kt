@@ -9,22 +9,18 @@ import android.widget.RemoteViews
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.calculateEndTime
 import com.a3.yearlyprogess.calculateProgress
-import com.a3.yearlyprogess.calculateStartTime
 import com.a3.yearlyprogess.calculateTimeLeft
-import com.a3.yearlyprogess.getCurrentPeriodValue
+import com.a3.yearlyprogess.loadSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
-import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
 import kotlin.math.roundToInt
 
-abstract class StandaloneWidget(private val widgetType: TimePeriod) :
+abstract class DayNightWidget(private val dayLight: Boolean) :
     BaseWidget() {
 
     companion object {
-        fun standaloneWidgetRemoteView(context: Context, widgetType: TimePeriod): RemoteViews {
+        fun dayNightLightWidgetRemoteView(context: Context, dayLight: Boolean): RemoteViews {
             val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
             val pref = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -39,22 +35,32 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) :
                     false
                 )
 
+            val sunriseSunset = loadSunriseSunset(context)
+
+            if (sunriseSunset == null) {
+                view.setTextViewText(R.id.widgetType, "No sunrise/sunset data")
+                view.setTextViewText(R.id.widgetCurrentValue, "")
+                view.setTextViewText(R.id.widgetDaysLeft, "")
+                view.setTextViewText(R.id.widgetProgress, "")
+                return view
+            }
+
+            val widgetType = if (dayLight) "Day Light" else "Night Light"
+
             // Calculate progress
-            val startTime = calculateStartTime(context, widgetType)
-            val endTime = calculateEndTime(context, widgetType)
+            val (startTime, endTime) = sunriseSunset.getStartAndEndTime(dayLight)
             val progress = calculateProgress(context, startTime, endTime)
 
 
             // Apply styles to the text
             val widgetProgressText = progress.styleFormatted(decimalPlace)
             val widgetProgressBarValue = progress.roundToInt()
-            val widgetCurrentValue =
-                getCurrentPeriodValue(widgetType).toFormattedTimePeriod(widgetType)
+            val widgetDescription = "TODO"
             val widgetDaysLeftCounter = calculateTimeLeft(endTime).toTimePeriodLeftText()
 
             // Set text and progress bar values
-            view.setTextViewText(R.id.widgetType, widgetType.name.uppercase())
-            view.setTextViewText(R.id.widgetCurrentValue, widgetCurrentValue)
+            view.setTextViewText(R.id.widgetType, widgetType)
+            view.setTextViewText(R.id.widgetCurrentValue, widgetDescription)
             view.setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
             view.setTextViewText(R.id.widgetProgress, widgetProgressText)
             view.setProgressBar(R.id.widgetProgressBar, 100, widgetProgressBarValue, false)
@@ -100,13 +106,11 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) :
     ) {
         appWidgetManager.updateAppWidget(
             appWidgetId,
-            standaloneWidgetRemoteView(context, widgetType)
+            dayNightLightWidgetRemoteView(context, dayLight)
         )
     }
 
 }
 
-class DayWidget : StandaloneWidget(TimePeriod.DAY)
-class MonthWidget : StandaloneWidget(TimePeriod.MONTH)
-class WeekWidget : StandaloneWidget(TimePeriod.WEEK)
-class YearWidget : StandaloneWidget(TimePeriod.YEAR)
+class DayLightWidget : DayNightWidget(true)
+class NightLightWidget : DayNightWidget(false)

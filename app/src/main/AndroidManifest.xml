@@ -138,21 +138,40 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/week_widget_info" />
-        </receiver> <!-- Registration of the Widget Broadcast Receiver -->
+        </receiver>
+
+        <receiver
+            android:name=".widgets.ui.DayLightWidget"
+            android:exported="false"
+            android:label="Day Light Progress">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/day_light_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widgets.ui.NightLightWidget"
+            android:exported="false"
+            android:label="Night Light Progress">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/night_light_widget_info" />
+        </receiver>
+
+
+        <!-- Registration of the Widget Broadcast Receiver -->
         <receiver
             android:name=".widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver"
             android:enabled="true" />
 
-        <receiver android:name=".widgets.manager.updateManager.services.AutoStartService" android:exported="true" android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="com.a3.yearlyprogress.RESTART_WIDGET_UPDATE_SERVICE" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name=".widgets.manager.updateManager.services.WidgetUpdateService"
-            android:foregroundServiceType="dataSync" />
     </application>
 
 </manifest>

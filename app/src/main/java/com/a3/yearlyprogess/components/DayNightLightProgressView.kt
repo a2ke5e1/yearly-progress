@@ -128,20 +128,9 @@ class DayNightLightProgressView @JvmOverloads constructor(
     }
 
     fun loadSunriseSunset(data: SunriseSunsetResponse) {
-        if (dayLight) {
-            startTime = data.results[1].getFirstLight().time
-            endTime = data.results[1].getLastLight().time
-            return
-        }
-
-        if (System.currentTimeMillis() < data.results[1].getSunset().time) {
-            startTime = data.results[0].getSunset().time
-            endTime = data.results[1].getSunrise().time
-            return
-        }
-
-        startTime = data.results[1].getSunset().time
-        endTime = data.results[2].getSunrise().time
+        val (startTime, endTime) = data.getStartAndEndTime(dayLight)
+        this.startTime = startTime
+        this.endTime = endTime
     }
 
     fun Long.toFormattedDateText(): String {
@@ -151,3 +140,4 @@ class DayNightLightProgressView @JvmOverloads constructor(
     }
 
 }
+

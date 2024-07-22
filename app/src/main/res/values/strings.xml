@@ -12,6 +12,8 @@
     <string name="month_widget_info">Show the progress current month</string>
     <string name="week_widget_description">Show the progress current week</string>
     <string name="app_widget_description_day">Show progress of the day</string>
+    <string name="app_widget_description_day_light">Show progress of the day light</string>
+    <string name="app_widget_description_night_light">Show progress of the night light</string>
     <string name="custom_widget_desc">A widget to track upcoming events.</string>
     <string name="demo_date">19th</string>
     <string name="demo_day_per">20%</string>
