@@ -1,7 +1,14 @@
 package com.a3.yearlyprogess
 
 import android.content.Context
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
+import com.a3.yearlyprogess.components.DayNightLightProgressView
+import com.a3.yearlyprogess.data.SunriseSunsetApi
+import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
+import com.google.gson.Gson
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Calendar
 
 
@@ -174,4 +181,31 @@ fun getWeekDayName(dayOfWeek: Int): String {
         7 to "Saturday"
     )
     return names[dayOfWeek]?.substring(0, 3) ?: "Unknown"
+}
+
+
+private const val SUNRISE_SUNSET_BASE_URL = "https://api.sunrisesunset.io/"
+fun provideSunriseSunsetApi(): SunriseSunsetApi =
+    Retrofit.Builder().baseUrl(SUNRISE_SUNSET_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        // .client(okHttpClient)
+        .build().create(SunriseSunsetApi::class.java)
+
+fun storeSunriseSunset(context: Context, sunriseSunset: SunriseSunsetResponse) {
+    val key = ContextCompat.getString(context, R.string.sunrise_sunset_data)
+    val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
+    val editor = pref.edit()
+    val gson = Gson()
+    val json = gson.toJson(sunriseSunset)
+    editor.putString(key, json)
+    editor.apply()
+}
+
+fun loadSunriseSunset(context: Context): SunriseSunsetResponse? {
+    val key = ContextCompat.getString(context, R.string.sunrise_sunset_data)
+    val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
+    val gson = Gson()
+    val json = pref.getString(key, null) ?: return null
+    return gson.fromJson(json, SunriseSunsetResponse::class.java)
+
 }

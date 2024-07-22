@@ -19,7 +19,11 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.components.DayNightLightProgressView
 import com.a3.yearlyprogess.data.SunriseSunsetApi
+import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.a3.yearlyprogess.databinding.FragmentScreenProgressBinding
+import com.a3.yearlyprogess.loadSunriseSunset
+import com.a3.yearlyprogess.provideSunriseSunsetApi
+import com.a3.yearlyprogess.storeSunriseSunset
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -27,6 +31,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
@@ -44,7 +49,7 @@ class ProgressScreenFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var sunriseSunsetApi: SunriseSunsetApi
+    private val sunriseSunsetApi: SunriseSunsetApi = provideSunriseSunsetApi()
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -71,11 +76,6 @@ class ProgressScreenFragment : Fragment() {
 
         _binding = FragmentScreenProgressBinding.inflate(inflater, container, false)
 
-        sunriseSunsetApi =
-            Retrofit.Builder().baseUrl(DayNightLightProgressView.SUNRISE_SUNSET_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                // .client(okHttpClient)
-                .build().create(SunriseSunsetApi::class.java)
 
         return binding.root
 
@@ -135,6 +135,10 @@ class ProgressScreenFragment : Fragment() {
         val dayLight: DayNightLightProgressView = view.findViewById(R.id.dayLightProgressView)
         val nightLight: DayNightLightProgressView = view.findViewById(R.id.nightLightProgressView)
 
+
+        dayLight.visibility = View.GONE
+        nightLight.visibility = View.GONE
+
         val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
@@ -163,8 +167,43 @@ class ProgressScreenFragment : Fragment() {
                     location.latitude, location.longitude, startDateRange, endDateRange
                 )
                 if (response.isSuccessful && response.body() != null) {
+                    storeSunriseSunset(requireContext(), response.body()!!)
                     dayLight.loadSunriseSunset(response.body()!!)
                     nightLight.loadSunriseSunset(response.body()!!)
+                    launch(Dispatchers.Main) {
+                        dayLight.visibility = View.VISIBLE
+                        nightLight.visibility = View.VISIBLE
+                    }
+                } else {
+                    val cachedSunriseSunset = loadSunriseSunset(requireContext())
+
+                    if (cachedSunriseSunset == null) {
+                        launch(Dispatchers.Main) {
+                            dayLight.visibility = View.GONE
+                            nightLight.visibility = View.GONE
+                        }
+                        return@launch
+                    }
+
+                    // get current date
+                    cal.timeInMillis = System.currentTimeMillis()
+                    val currentDate =
+                        "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
+
+                    if (cachedSunriseSunset.results[1].date != currentDate) {
+                        launch(Dispatchers.Main) {
+                            dayLight.visibility = View.GONE
+                            nightLight.visibility = View.GONE
+                        }
+                    }
+
+                    dayLight.loadSunriseSunset(cachedSunriseSunset)
+                    nightLight.loadSunriseSunset(cachedSunriseSunset)
+                    launch(Dispatchers.Main) {
+                        dayLight.visibility = View.VISIBLE
+                        nightLight.visibility = View.VISIBLE
+                    }
+
                 }
             }
         }

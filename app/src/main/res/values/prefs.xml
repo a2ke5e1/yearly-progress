@@ -7,4 +7,5 @@
     <string name="widget_widget_time_left" translatable="false">widget_widget_time_left</string>
     <string name="widget_widget_event_replace_progress_with_days_counter" translatable="false">widget_widget_event_replace_progress_with_days_counter</string>
     <string name="widget_widget_update_frequency" translatable="false">widget_widget_update_frequency</string>
+    <string name="sunrise_sunset_data" translatable="false">sunrise_sunset_data</string>
 </resources>

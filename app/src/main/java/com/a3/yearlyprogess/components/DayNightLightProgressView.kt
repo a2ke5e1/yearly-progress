@@ -150,8 +150,4 @@ class DayNightLightProgressView @JvmOverloads constructor(
         return format.format(date)
     }
 
-    companion object {
-        const val SUNRISE_SUNSET_BASE_URL = "https://api.sunrisesunset.io/"
-    }
-
 }
