@@ -92,12 +92,12 @@ class ProgressScreenFragment : Fragment() {
         if (
             ContextCompat.checkSelfPermission(
                 requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )
             != PackageManager.PERMISSION_GRANTED
         ) {
-            requestPermissionLauncher!!.launch(
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+            requestPermissionLauncher.launch(
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )
         }
 
@@ -137,17 +137,15 @@ class ProgressScreenFragment : Fragment() {
 
         val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
         locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, 2000, 10f
+            LocationManager.GPS_PROVIDER, 43_200_000, 200_000f //  12hrs, 200 KM
         ) { location ->
-
+            Log.d("Location", location.toString())
             lifecycleScope.launch(Dispatchers.IO) {
 
                 val cal = Calendar.getInstance()
