@@ -23,9 +23,11 @@ import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
+import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
-import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
+import com.a3.yearlyprogess.loadSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
+import com.a3.yearlyprogess.widgets.ui.DayNightWidget
 import com.a3.yearlyprogess.widgets.ui.DayWidget
 import com.a3.yearlyprogess.widgets.ui.MonthWidget
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
@@ -102,7 +104,7 @@ class WidgetScreenFragment : Fragment() {
         updateWidgetInfo(1)
     }
 
-    private fun updateWidgetRemoteView(
+    private fun updateStandaloneWidgetRemoteView(
         context: Context,
         container: FrameLayout,
         widgetType: TimePeriod
@@ -116,6 +118,22 @@ class WidgetScreenFragment : Fragment() {
         container.removeAllViews()
         container.addView(widgetRemoteView)
 
+        return widgetRemoteView
+    }
+
+    private fun updateStandaloneWidgetRemoteView(
+        context: Context,
+        container: FrameLayout,
+        dayLight: Boolean,
+    ): View {
+        val widgetRemoteView =
+            DayNightWidget.dayNightLightWidgetRemoteView(context, dayLight)
+                .apply(
+                    activity, container
+                )
+        widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener { }
+        container.removeAllViews()
+        container.addView(widgetRemoteView)
         return widgetRemoteView
     }
 
@@ -145,25 +163,35 @@ class WidgetScreenFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.Main) {
 
                     context?.let {
-                        updateWidgetRemoteView(
+                        updateStandaloneWidgetRemoteView(
                             it,
                             binding.widgetYearContainer,
                             TimePeriod.YEAR
                         )
-                        updateWidgetRemoteView(
+                        updateStandaloneWidgetRemoteView(
                             it,
                             binding.widgetMonthContainer,
                             TimePeriod.MONTH
                         )
-                        updateWidgetRemoteView(
+                        updateStandaloneWidgetRemoteView(
                             it,
                             binding.widgetWeekContainer,
                             TimePeriod.WEEK
                         )
-                        updateWidgetRemoteView(
+                        updateStandaloneWidgetRemoteView(
                             it,
                             binding.widgetDayContainer,
                             TimePeriod.DAY
+                        )
+                        updateStandaloneWidgetRemoteView(
+                            it,
+                            binding.widgetDaylightContainer,
+                            true
+                        )
+                        updateStandaloneWidgetRemoteView(
+                            it,
+                            binding.widgetNightlightContainer,
+                            false
                         )
                     }
 
@@ -193,29 +221,40 @@ class WidgetScreenFragment : Fragment() {
 
     private fun startAnimationWidget() {
 
-        val yearRemoteView = updateWidgetRemoteView(
+        val yearRemoteView = updateStandaloneWidgetRemoteView(
             requireContext(),
             binding.widgetYearContainer,
             TimePeriod.YEAR
 
         )
-        val monthRemoteView = updateWidgetRemoteView(
+        val monthRemoteView = updateStandaloneWidgetRemoteView(
             requireContext(),
             binding.widgetMonthContainer,
             TimePeriod.MONTH
 
         )
-        val weekRemoteView = updateWidgetRemoteView(
+        val weekRemoteView = updateStandaloneWidgetRemoteView(
             requireContext(),
             binding.widgetWeekContainer,
             TimePeriod.WEEK
 
         )
-        val dayRemoteView = updateWidgetRemoteView(
+        val dayRemoteView = updateStandaloneWidgetRemoteView(
             requireContext(),
             binding.widgetDayContainer,
             TimePeriod.DAY
 
+        )
+        val dayLightRemoteView = updateStandaloneWidgetRemoteView(
+            requireContext(),
+            binding.widgetDaylightContainer,
+            true
+        )
+
+        val nightLightRemoteView = updateStandaloneWidgetRemoteView(
+            requireContext(),
+            binding.widgetNightlightContainer,
+            false
         )
 
         animatedUpdateProgressBarView(
@@ -252,6 +291,29 @@ class WidgetScreenFragment : Fragment() {
         animatedUpdateProgressTextView(
             dayRemoteView.findViewById(R.id.widgetProgress),
             YearlyProgressManager.DAY
+        )
+
+
+        animatedUpdateProgressTextView(
+            dayLightRemoteView.findViewById(R.id.widgetProgress),
+            YearlyProgressManager.DAY,
+            dayLight = true
+        )
+        animatedUpdateProgressBarView(
+            dayLightRemoteView.findViewById(R.id.widgetProgressBar),
+            YearlyProgressManager.DAY,
+            dayLight = true
+        )
+
+        animatedUpdateProgressTextView(
+            nightLightRemoteView.findViewById(R.id.widgetProgress),
+            YearlyProgressManager.DAY,
+            dayLight = false
+        )
+        animatedUpdateProgressBarView(
+            nightLightRemoteView.findViewById(R.id.widgetProgressBar),
+            YearlyProgressManager.DAY,
+            dayLight = false
         )
 
 
@@ -337,7 +399,7 @@ class WidgetScreenFragment : Fragment() {
                 requireContext(),
                 DayWidget::class.java,
                 StandaloneWidget.standaloneWidgetRemoteView(requireContext(), TimePeriod.DAY)
-                            )
+            )
         }
 
         // Showing menu for user to add Month widget to user Launcher's Home Screen
@@ -378,16 +440,43 @@ class WidgetScreenFragment : Fragment() {
                 AllInWidget.AllInOneWidgetRemoteView(requireContext())
             )
         }
+
+        binding.btnAddDaylightWidget.setOnClickListener {
+            requestPinAppWidget(
+                requireContext(),
+                DayNightWidget::class.java,
+                DayNightWidget.dayNightLightWidgetRemoteView(requireContext(), true)
+            )
+        }
+
+        binding.btnAddNightlightWidget.setOnClickListener {
+            requestPinAppWidget(
+                requireContext(),
+                DayNightWidget::class.java,
+                DayNightWidget.dayNightLightWidgetRemoteView(requireContext(), false)
+            )
+        }
+
+
     }
 
     private fun animatedUpdateProgressTextView(
-        textView: TextView, type: Int, isAllInOne: Boolean = false
+        textView: TextView, type: Int, isAllInOne: Boolean = false, dayLight: Boolean? = null
     ) {
-        val progressTextAnimator = if (isAllInOne) {
+        var progressTextAnimator = if (isAllInOne) {
             ValueAnimator.ofInt(0, YearlyProgressManager.getProgress(type).roundToInt())
         } else {
             ValueAnimator.ofFloat(0F, YearlyProgressManager.getProgress(type).toFloat())
         }
+
+        if (dayLight != null) {
+            val sunriseSunsetResponse = loadSunriseSunset(requireContext()) ?: return
+            val (startTime, endTime) = sunriseSunsetResponse.getStartAndEndTime(dayLight)
+            val progress = calculateProgress(requireContext(), startTime, endTime)
+            progressTextAnimator =
+                ValueAnimator.ofFloat(0F, progress.toFloat())
+        }
+
         progressTextAnimator.duration = 600
         progressTextAnimator.addUpdateListener {
             textView.text = if (isAllInOne) {
@@ -400,9 +489,22 @@ class WidgetScreenFragment : Fragment() {
         progressTextAnimator.start()
     }
 
-    private fun animatedUpdateProgressBarView(progressBarView: ProgressBar, type: Int) {
-        val progressViewAnimator =
+    private fun animatedUpdateProgressBarView(
+        progressBarView: ProgressBar,
+        type: Int,
+        dayLight: Boolean? = null
+    ) {
+        var progressViewAnimator =
             ValueAnimator.ofInt(0, YearlyProgressManager.getProgress(type).roundToInt())
+
+        if (dayLight != null) {
+            val sunriseSunsetResponse = loadSunriseSunset(requireContext()) ?: return
+            val (startTime, endTime) = sunriseSunsetResponse.getStartAndEndTime(dayLight)
+            val progress = calculateProgress(requireContext(), startTime, endTime)
+            progressViewAnimator =
+                ValueAnimator.ofInt(0, progress.roundToInt())
+        }
+
         progressViewAnimator.duration = 600
         progressViewAnimator.addUpdateListener {
             progressBarView.progress = it.animatedValue as Int
