@@ -148,8 +148,6 @@ abstract class DayNightWidget(private val dayLight: Boolean) :
 
     companion object {
         fun dayNightLightWidgetRemoteView(context: Context, dayLight: Boolean): RemoteViews {
-            val pref = PreferenceManager.getDefaultSharedPreferences(context)
-
             if (ContextCompat.checkSelfPermission(
                     context,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -194,7 +192,6 @@ abstract class DayNightWidget(private val dayLight: Boolean) :
             )
 
             return remoteView
-
         }
     }
 

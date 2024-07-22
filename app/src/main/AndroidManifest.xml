@@ -94,7 +94,7 @@
         <receiver
             android:name=".widgets.ui.DayWidget"
             android:exported="false"
-            android:label="Day Progress">
+            android:label="Day ">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -106,7 +106,7 @@
         <receiver
             android:name=".widgets.ui.MonthWidget"
             android:exported="false"
-            android:label="Month Progress">
+            android:label="Month ">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -118,7 +118,7 @@
         <receiver
             android:name=".widgets.ui.YearWidget"
             android:exported="false"
-            android:label="Year Progress">
+            android:label="Year ">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -130,7 +130,7 @@
         <receiver
             android:name=".widgets.ui.WeekWidget"
             android:exported="false"
-            android:label="Week Progress">
+            android:label="Week ">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -143,7 +143,7 @@
         <receiver
             android:name=".widgets.ui.DayLightWidget"
             android:exported="false"
-            android:label="Day Light Progress">
+            android:label="Day Light ">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -156,7 +156,7 @@
         <receiver
             android:name=".widgets.ui.NightLightWidget"
             android:exported="false"
-            android:label="Night Light Progress">
+            android:label="Night Light">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

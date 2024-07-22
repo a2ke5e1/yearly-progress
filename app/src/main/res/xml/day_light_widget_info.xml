@@ -8,7 +8,7 @@
     android:minHeight="40dp"
     android:minResizeHeight="40dp"
     android:previewImage="@drawable/day_widget_preview"
-    android:previewLayout="@layout/day_widget_preview"
+    android:previewLayout="@layout/day_light_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
     android:targetCellHeight="1"

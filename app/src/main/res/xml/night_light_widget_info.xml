@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:description="@string/app_widget_description_day_light"
+    android:description="@string/app_widget_description_night_light"
     android:initialKeyguardLayout="@layout/day_widget_preview"
     android:initialLayout="@layout/loading_widget"
     android:minWidth="110dp"
@@ -8,7 +8,7 @@
     android:minHeight="40dp"
     android:minResizeHeight="40dp"
     android:previewImage="@drawable/day_widget_preview"
-    android:previewLayout="@layout/day_widget_preview"
+    android:previewLayout="@layout/night_light_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
     android:targetCellHeight="1"

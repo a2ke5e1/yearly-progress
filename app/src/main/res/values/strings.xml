@@ -8,12 +8,12 @@
     <string name="previous">Previous</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">Shows progress of the year</string>
-    <string name="month_widget_info">Show the progress current month</string>
+    <string name="app_widget_description">Shows progress of the current year</string>
+    <string name="month_widget_info">Show progress of the current month</string>
     <string name="week_widget_description">Show the progress current week</string>
-    <string name="app_widget_description_day">Show progress of the day</string>
-    <string name="app_widget_description_day_light">Show progress of the day light</string>
-    <string name="app_widget_description_night_light">Show progress of the night light</string>
+    <string name="app_widget_description_day">Show progress of the whole day</string>
+    <string name="app_widget_description_day_light">Show progress of the day till last light of the day</string>
+    <string name="app_widget_description_night_light">Show progress of the entire night until first light of the next day</string>
     <string name="custom_widget_desc">A widget to track upcoming events.</string>
     <string name="demo_date">19th</string>
     <string name="demo_day_per">20%</string>
@@ -33,7 +33,7 @@
     <string name="demo_week">Thursday</string>
     <string name="demo_week_per">70.12%</string>
     <string name="save">Save</string>
-    <string name="app_widget_description_all_in_one">It shows progress of day, week, month and year all in one widget</string>
+    <string name="app_widget_description_all_in_one">Shows progress of day, week, month and year all in one widget</string>
     <string name="app_widget_description_event">Track the progress of any event.</string>
     <string name="start">Start</string>
     <string name="by_continuing_you_agree_our_terms_of_service_and_privacy_policy">By continuing, you agree our Terms of Service and Privacy Policy.</string>
@@ -94,5 +94,8 @@
     <string name="all">All</string>
     <string name="adjust_widget_frequency_summary">Adjust the frequency of the widget updates (in seconds).</string>
     <string name="adjust_widget_frequency">Update Frequency</string>
+    <string name="day_light">Day Light</string>
+    <string name="night_light">Night Light</string>
+    <string name="all_in_widget_day_text_preview">23<sup>rd</sup></string>
 
 </resources>

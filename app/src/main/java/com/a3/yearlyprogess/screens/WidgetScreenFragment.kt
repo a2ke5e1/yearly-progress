@@ -30,9 +30,11 @@ import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
 import com.a3.yearlyprogess.loadSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
+import com.a3.yearlyprogess.widgets.ui.DayLightWidget
 import com.a3.yearlyprogess.widgets.ui.DayNightWidget
 import com.a3.yearlyprogess.widgets.ui.DayWidget
 import com.a3.yearlyprogess.widgets.ui.MonthWidget
+import com.a3.yearlyprogess.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.widgets.ui.YearWidget
@@ -455,7 +457,7 @@ class WidgetScreenFragment : Fragment() {
         binding.btnAddDaylightWidget.setOnClickListener {
             requestPinAppWidget(
                 requireContext(),
-                DayNightWidget::class.java,
+                DayLightWidget::class.java,
                 DayNightWidget.dayNightLightWidgetRemoteView(requireContext(), true)
             )
         }
@@ -463,7 +465,7 @@ class WidgetScreenFragment : Fragment() {
         binding.btnAddNightlightWidget.setOnClickListener {
             requestPinAppWidget(
                 requireContext(),
-                DayNightWidget::class.java,
+                NightLightWidget::class.java,
                 DayNightWidget.dayNightLightWidgetRemoteView(requireContext(), false)
             )
         }
