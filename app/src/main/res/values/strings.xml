@@ -97,5 +97,9 @@
     <string name="day_light">Day Light</string>
     <string name="night_light">Night Light</string>
     <string name="all_in_widget_day_text_preview">23<sup>rd</sup></string>
+    <string name="dismiss">Dismiss</string>
+    <string name="i_understand">I Understand</string>
+    <string name="location_permission_title">Approximate Location Permission</string>
+    <string name="location_permission_message">This permission allows the app to access your approximate location, which is necessary for the Day and Night Light Widget to determine the local sunrise and sunset times.\n\nBy accessing your location, we can customize the widget to provide accurate day and night light information, enhancing your experience with the app.</string>
 
 </resources>

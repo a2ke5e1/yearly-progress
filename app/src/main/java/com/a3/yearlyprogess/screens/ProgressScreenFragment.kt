@@ -1,6 +1,7 @@
 package com.a3.yearlyprogess.screens
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -19,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.components.DayNightLightProgressView
+import com.a3.yearlyprogess.components.dialogbox.PermissionMessageDialog
 import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.a3.yearlyprogess.databinding.FragmentScreenProgressBinding
@@ -52,6 +54,7 @@ class ProgressScreenFragment : Fragment() {
     private val binding get() = _binding!!
     private val sunriseSunsetApi: SunriseSunsetApi = provideSunriseSunsetApi()
 
+
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -62,24 +65,21 @@ class ProgressScreenFragment : Fragment() {
                 setupDayNightLightProgressView(binding.root)
 
             } else {
-                // Explain to the user that the feature is unavailable because the
-                // features requires a permission that the user has denied. At the
-                // same time, respect the user's decision. Don't link to system
-                // settings in an effort to convince the user to change their
-                // decision.
+
+                locationPermissionDialog.show(parentFragmentManager, "")
+
             }
         }
+
+
+    private lateinit var locationPermissionDialog: PermissionMessageDialog
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentScreenProgressBinding.inflate(inflater, container, false)
-
-
         return binding.root
-
     }
 
     private lateinit var adLoader: AdLoader
@@ -89,20 +89,38 @@ class ProgressScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        if (
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED
+        locationPermissionDialog = PermissionMessageDialog(
+            icon = R.drawable.ic_location_on_24,
+            title = getString(R.string.location_permission_title),
+            message = getString(R.string.location_permission_message)
         ) {
             requestPermissionLauncher.launch(
                 Manifest.permission.ACCESS_COARSE_LOCATION
             )
         }
 
-        setupDayNightLightProgressView(view)
+
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                setupDayNightLightProgressView(view)
+            }
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) -> {
+                locationPermissionDialog.show(parentFragmentManager, "")
+            }
+            else -> {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                requestPermissionLauncher.launch(
+                    Manifest.permission.ACCESS_COARSE_LOCATION)
+            }
+        }
+
+
+
 
         val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
         adLoader = AdLoader.Builder(requireContext(), getString(R.string.admob_native_ad_unit))
