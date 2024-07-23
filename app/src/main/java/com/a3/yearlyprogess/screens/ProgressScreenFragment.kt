@@ -62,7 +62,7 @@ class ProgressScreenFragment : Fragment() {
             if (isGranted) {
                 // Permission is granted. Continue the action or workflow in your
                 // app.
-                setupDayNightLightProgressView(binding.root)
+                setupDayNightLightProgressView(binding.dayLightProgressView, binding.nightLightProgressView)
 
             } else {
 
@@ -89,6 +89,14 @@ class ProgressScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        val dayLight: DayNightLightProgressView = binding.dayLightProgressView
+        val nightLight: DayNightLightProgressView = binding.nightLightProgressView
+
+
+        dayLight.visibility = View.GONE
+        nightLight.visibility = View.GONE
+
         locationPermissionDialog = PermissionMessageDialog(
             icon = R.drawable.ic_location_on_24,
             title = getString(R.string.location_permission_title),
@@ -105,7 +113,7 @@ class ProgressScreenFragment : Fragment() {
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED -> {
-                setupDayNightLightProgressView(view)
+                setupDayNightLightProgressView(dayLight, nightLight)
             }
             ActivityCompat.shouldShowRequestPermissionRationale(
                 requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) -> {
@@ -150,13 +158,7 @@ class ProgressScreenFragment : Fragment() {
 
     }
 
-    private fun setupDayNightLightProgressView(view: View) {
-        val dayLight: DayNightLightProgressView = view.findViewById(R.id.dayLightProgressView)
-        val nightLight: DayNightLightProgressView = view.findViewById(R.id.nightLightProgressView)
-
-
-        dayLight.visibility = View.GONE
-        nightLight.visibility = View.GONE
+    private fun setupDayNightLightProgressView(dayLight: DayNightLightProgressView, nightLight: DayNightLightProgressView) {
 
         val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
