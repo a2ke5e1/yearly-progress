@@ -66,7 +66,7 @@ class ProgressScreenFragment : Fragment() {
 
             } else {
 
-                locationPermissionDialog.show(parentFragmentManager, "")
+                locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
 
             }
         }
