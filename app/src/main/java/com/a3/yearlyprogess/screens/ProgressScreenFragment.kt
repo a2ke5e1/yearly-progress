@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -146,8 +147,19 @@ class ProgressScreenFragment : Fragment() {
         ) {
             return
         }
+
+        // Get the list of available location providers
+        val providers = locationManager.allProviders.filter {
+            locationManager.isProviderEnabled(it)
+        }
+
+        if (providers.isEmpty()) {
+            Toast.makeText(context, "Your device does not have any location provider", Toast.LENGTH_LONG).show()
+            return
+        }
+
         locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, 43_200_000, 200_000f //  12hrs, 200 KM
+            providers.first(), 43_200_000, 200_000f //  12hrs, 200 KM
         ) { location ->
             Log.d("Location", location.toString())
             lifecycleScope.launch(Dispatchers.IO) {

@@ -90,8 +90,12 @@ class WidgetScreenFragment : Fragment() {
     private lateinit var allInOneTitleTextViewMonth: TextView
     private lateinit var allInOneTitleTextViewWeek: TextView
 
+    private var isSunriseSunsetDataAvailable = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        isSunriseSunsetDataAvailable = loadSunriseSunset(requireContext()) != null
 
         // Initialize and Load Ad
         showAds()
@@ -188,16 +192,24 @@ class WidgetScreenFragment : Fragment() {
                             binding.widgetDayContainer,
                             TimePeriod.DAY
                         )
-                        updateStandaloneWidgetRemoteView(
-                            it,
-                            binding.widgetDaylightContainer,
-                            true
-                        )
-                        updateStandaloneWidgetRemoteView(
-                            it,
-                            binding.widgetNightlightContainer,
-                            false
-                        )
+
+                        if (ContextCompat.checkSelfPermission(
+                                requireContext(),
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) ==
+                            PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable
+                        ) {
+                            updateStandaloneWidgetRemoteView(
+                                it,
+                                binding.widgetDaylightContainer,
+                                true
+                            )
+                            updateStandaloneWidgetRemoteView(
+                                it,
+                                binding.widgetNightlightContainer,
+                                false
+                            )
+                        }
                     }
 
 
@@ -321,7 +333,7 @@ class WidgetScreenFragment : Fragment() {
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) ==
-            PackageManager.PERMISSION_GRANTED
+            PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable
         ) {
             animatedUpdateProgressTextView(
                 dayLightRemoteView.findViewById(R.id.widgetProgress),
