@@ -31,7 +31,7 @@ jobs:
           java-version: '11'
 
       - name: Make folder keystore
-        run: mkdir -p /home/runner/work/yearly-progress/yearly_progress/app/keystore/
+        run: mkdir -p /home/runner/work/yearly-progress/yearly-progress/app/keystore/
 
       - name: Move file keystore.jks
         run: mv /home/runner/work/_temp/keystore.jks /home/runner/work/yearly-progress/yearly-progress/app/keystore/
