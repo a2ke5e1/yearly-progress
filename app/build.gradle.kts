@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.a3.yearlyprogess"
-        minSdk = 28
+        minSdk = 30
         targetSdk = 35
         versionCode = 73
         val localVersionCode = versionCode

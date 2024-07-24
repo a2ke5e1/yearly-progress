@@ -7,7 +7,7 @@
     android:minResizeWidth="110dp"
     android:minHeight="40dp"
     android:minResizeHeight="40dp"
-    android:previewImage="@drawable/day_widget_preview"
+    android:previewImage="@drawable/night_light_widget_preview"
     android:previewLayout="@layout/night_light_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"

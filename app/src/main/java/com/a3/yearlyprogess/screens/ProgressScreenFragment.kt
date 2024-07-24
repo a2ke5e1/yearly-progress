@@ -192,7 +192,7 @@ class ProgressScreenFragment : Fragment() {
         }
 
         locationManager.requestLocationUpdates(
-            providers.first(), 43_200_000, 200_000f //  12hrs, 200 KM
+            providers.first(), 2000, 1_000f //  12hrs, 200 KM
         ) { location ->
             Log.d("Location", location.toString())
             lifecycleScope.launch(Dispatchers.IO) {
