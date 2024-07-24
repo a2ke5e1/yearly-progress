@@ -1,4 +1,4 @@
-name: Build Release App Bundle
+name: App Bundle and APK Release
 
 on:
   push:
@@ -35,13 +35,13 @@ jobs:
           java-version: '11'
 
       - name: Make folder keystore
-        run: mkdir -p /home/runner/work/yearly_progress/yearly_progress/app/keystore/
+        run: mkdir -p /home/runner/work/yearly-progress/yearly-progress/app/keystore/
 
       - name: Move file keystore.jks
-        run: mv /home/runner/work/_temp/keystore.jks /home/runner/work/yearly_progress/yearly_progress/app/keystore/
+        run: mv /home/runner/work/_temp/keystore.jks /home/runner/work/yearly-progress/yearly-progress/app/keystore/
 
       - name: Move file api_keys
-        run: mv /home/runner/work/_temp/api_keys.xml /home/runner/work/yearly_progress/yearly_progress/app/src/main/res/values/
+        run: mv /home/runner/work/_temp/api_keys.xml /home/runner/work/yearly-progress/yearly-progress/app/src/main/res/values/
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
