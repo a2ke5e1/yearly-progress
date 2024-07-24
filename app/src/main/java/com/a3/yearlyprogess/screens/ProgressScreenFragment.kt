@@ -35,6 +35,7 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
@@ -62,7 +63,10 @@ class ProgressScreenFragment : Fragment() {
             if (isGranted) {
                 // Permission is granted. Continue the action or workflow in your
                 // app.
-                setupDayNightLightProgressView(binding.dayLightProgressView, binding.nightLightProgressView)
+                setupDayNightLightProgressView(
+                    binding.dayLightProgressView,
+                    binding.nightLightProgressView
+                )
 
             } else {
 
@@ -115,19 +119,21 @@ class ProgressScreenFragment : Fragment() {
             ) == PackageManager.PERMISSION_GRANTED -> {
                 setupDayNightLightProgressView(dayLight, nightLight)
             }
+
             ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) -> {
+                requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) -> {
                 locationPermissionDialog.show(parentFragmentManager, "")
             }
+
             else -> {
                 // You can directly ask for the permission.
                 // The registered ActivityResultCallback gets the result of this request.
                 requestPermissionLauncher.launch(
-                    Manifest.permission.ACCESS_COARSE_LOCATION)
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
             }
         }
-
-
 
 
         val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
@@ -158,7 +164,10 @@ class ProgressScreenFragment : Fragment() {
 
     }
 
-    private fun setupDayNightLightProgressView(dayLight: DayNightLightProgressView, nightLight: DayNightLightProgressView) {
+    private fun setupDayNightLightProgressView(
+        dayLight: DayNightLightProgressView,
+        nightLight: DayNightLightProgressView
+    ) {
 
         val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
@@ -174,7 +183,11 @@ class ProgressScreenFragment : Fragment() {
         }
 
         if (providers.isEmpty()) {
-            Toast.makeText(context, "Your device does not have any location provider", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                "Your device does not have any location provider",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
 
@@ -195,48 +208,71 @@ class ProgressScreenFragment : Fragment() {
                 val endDateRange =
                     "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
 
-                val response = sunriseSunsetApi.getSunriseSunset(
-                    location.latitude, location.longitude, startDateRange, endDateRange
-                )
-                if (response.isSuccessful && response.body() != null) {
-                    storeSunriseSunset(requireContext(), response.body()!!)
-                    dayLight.loadSunriseSunset(response.body()!!)
-                    nightLight.loadSunriseSunset(response.body()!!)
-                    launch(Dispatchers.Main) {
-                        dayLight.visibility = View.VISIBLE
-                        nightLight.visibility = View.VISIBLE
+
+                val result: Resource<SunriseSunsetResponse> = try {
+                    val response = sunriseSunsetApi.getSunriseSunset(
+                        location.latitude, location.longitude, startDateRange, endDateRange
+                    )
+                    val result = response.body()
+                    if (response.isSuccessful && result != null) {
+                        Resource.Success(result)
+                    } else {
+                        Resource.Error(response.message())
                     }
-                } else {
-                    val cachedSunriseSunset = loadSunriseSunset(requireContext())
-
-                    if (cachedSunriseSunset == null) {
-                        launch(Dispatchers.Main) {
-                            dayLight.visibility = View.GONE
-                            nightLight.visibility = View.GONE
-                        }
-                        return@launch
-                    }
-
-                    // get current date
-                    cal.timeInMillis = System.currentTimeMillis()
-                    val currentDate =
-                        "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
-
-                    if (cachedSunriseSunset.results[1].date != currentDate) {
-                        launch(Dispatchers.Main) {
-                            dayLight.visibility = View.GONE
-                            nightLight.visibility = View.GONE
-                        }
-                    }
-
-                    dayLight.loadSunriseSunset(cachedSunriseSunset)
-                    nightLight.loadSunriseSunset(cachedSunriseSunset)
-                    launch(Dispatchers.Main) {
-                        dayLight.visibility = View.VISIBLE
-                        nightLight.visibility = View.VISIBLE
-                    }
-
+                } catch (e: Exception) {
+                    Resource.Error(e.message ?: "Error Occurred")
                 }
+
+                when (result) {
+                    is Resource.Success -> {
+                        storeSunriseSunset(requireContext(), result.data!!)
+                        dayLight.loadSunriseSunset(result.data)
+                        nightLight.loadSunriseSunset(result.data)
+                        launch(Dispatchers.Main) {
+                            dayLight.visibility = View.VISIBLE
+                            nightLight.visibility = View.VISIBLE
+                        }
+
+
+                    }
+                    is Resource.Error -> {
+                        val cachedSunriseSunset = loadSunriseSunset(requireContext())
+
+                        if (cachedSunriseSunset == null) {
+                            launch(Dispatchers.Main) {
+                                dayLight.visibility = View.GONE
+                                nightLight.visibility = View.GONE
+                            }
+                            return@launch
+                        }
+
+                        // get current date
+                        cal.timeInMillis = System.currentTimeMillis()
+                        val currentDate =
+                            "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${
+                                cal.get(
+                                    Calendar.DATE
+                                )
+                            }"
+
+                        if (cachedSunriseSunset.results[1].date != currentDate) {
+                            launch(Dispatchers.Main) {
+                                dayLight.visibility = View.GONE
+                                nightLight.visibility = View.GONE
+                            }
+                        }
+
+                        dayLight.loadSunriseSunset(cachedSunriseSunset)
+                        nightLight.loadSunriseSunset(cachedSunriseSunset)
+                        launch(Dispatchers.Main) {
+                            dayLight.visibility = View.VISIBLE
+                            nightLight.visibility = View.VISIBLE
+                        }
+
+                    }
+                }
+
+
             }
         }
     }
@@ -251,6 +287,11 @@ class ProgressScreenFragment : Fragment() {
         _binding = null
     }
 
+
+    sealed class Resource<T>(val data: T?, val message: String?) {
+        class Success<T>(data: T) : Resource<T>(data, null)
+        class Error<T>(message: String) : Resource<T>(null, message)
+    }
 
 }
 
