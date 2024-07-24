@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/background"
+    style="@style/Widget.YearlyProgress.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.YearlyProgress.AppWidgetContainer"
+    tools:ignore="HardcodedText">
+
+
+    <ProgressBar
+        android:id="@+id/progress_bar_day"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/progress_text_day"
+        android:indeterminate="true"
+        android:max="100"
+        android:progress="23"
+        android:progressBackgroundTint="@color/widget_progress_bar_background_color"
+        android:progressTint="@color/widget_text_color" />
+
+
+</RelativeLayout>

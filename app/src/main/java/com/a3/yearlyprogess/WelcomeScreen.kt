@@ -6,6 +6,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -17,19 +18,12 @@ import com.a3.yearlyprogess.databinding.ActivityFirstScreenBinding
 class WelcomeScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityFirstScreenBinding
-    private val TOS_URL = "https://www.a3group.co.in/yearly-progress/TOS"
-    private val PP_URL = "https://www.a3group.co.in/yearly-progress/privacy-policy"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFirstScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        window.navigationBarDividerColor =
-            ContextCompat.getColor(this, android.R.color.transparent)
-        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
-        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val navigationBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
@@ -70,5 +64,10 @@ class WelcomeScreen : AppCompatActivity() {
         }
 
 
+    }
+
+    companion object {
+        private const val TOS_URL = "https://www.a3group.co.in/yearly-progress/terms-of-service"
+        private const val PP_URL = "https://www.a3group.co.in/yearly-progress/privacy-policy"
     }
 }

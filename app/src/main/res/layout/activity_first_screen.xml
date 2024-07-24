@@ -37,7 +37,6 @@
         android:gravity="center"
         android:padding="6dp"
         android:text="@string/by_continuing_you_agree_our_terms_of_service_and_privacy_policy"
-        android:textColor="?attr/colorOnPrimaryContainer"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/materialButton"
         app:layout_constraintEnd_toEndOf="parent"

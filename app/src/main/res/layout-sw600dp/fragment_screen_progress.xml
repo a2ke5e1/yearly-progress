@@ -21,7 +21,7 @@
             app:flow_maxElementsWrap="2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewWeek,progressCardViewDay,ad_frame"
+            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewWeek,progressCardViewDay,dayLightProgressView,nightLightProgressView,ad_frame"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -46,7 +46,7 @@
             android:id="@+id/progressCardViewWeek"
             android:layout_width="400dp"
             android:layout_height="135dp"
-            app:dataType="MONTH"
+            app:dataType="WEEK"
             tools:layout_editor_absoluteX="90dp"
             tools:layout_editor_absoluteY="155dp" />
 
@@ -54,9 +54,22 @@
             android:id="@+id/progressCardViewDay"
             android:layout_width="400dp"
             android:layout_height="135dp"
-            app:dataType="WEEK"
+            app:dataType="DAY"
             tools:layout_editor_absoluteX="585dp"
             tools:layout_editor_absoluteY="161dp" />
+
+        <com.a3.yearlyprogess.components.DayNightLightProgressView
+            android:id="@+id/dayLightProgressView"
+            android:layout_width="400dp"
+            app:day_light="true"
+            android:layout_height="135dp" />
+
+
+        <com.a3.yearlyprogess.components.DayNightLightProgressView
+            android:id="@+id/nightLightProgressView"
+            android:layout_width="400dp"
+            app:day_light="false"
+            android:layout_height="135dp" />
 
         <LinearLayout
             android:id="@+id/ad_frame"

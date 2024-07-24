@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.components.CustomEventCardView
+import com.a3.yearlyprogess.components.dialogbox.PermissionMessageDialog
 import com.a3.yearlyprogess.databinding.ActivityImportEventCalendarBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventAdapter
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventItemDetailsLookup
@@ -42,12 +43,24 @@ class ImportEventCalendarActivity : AppCompatActivity() {
     private var tracker: SelectionTracker<Long>? = null
     private val adapter = ImportEventAdapter(mutableListOf())
     private var selectedDateRange: Pair<Long, Long>? = null
+    private lateinit var calendarPermissionDialog: PermissionMessageDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImportEventCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toolbar.title = getString(R.string.events_imports)
+        calendarPermissionDialog = PermissionMessageDialog(
+            icon = R.drawable.ic_outline_edit_calendar_24,
+            title = getString(R.string.calendar_permission_title),
+            message = getString(R.string.calendar_permission_message)
+        ) {
+            requestPermissionLauncher.launch(
+                Manifest.permission.READ_CALENDAR
+            )
+        }
+
+            binding.toolbar.title = getString(R.string.events_imports)
         setSupportActionBar(binding.toolbar)
         when {
             ContextCompat.checkSelfPermission(
@@ -61,12 +74,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
             ActivityCompat.shouldShowRequestPermissionRationale(
                 this, Manifest.permission.READ_CALENDAR
             ) -> {
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected, and what
-                // features are disabled if it's declined. In this UI, include a
-                // "cancel" or "no thanks" button that lets the user continue
-                // using your app without granting the permission.
-                // showInContextUI(...)
+                calendarPermissionDialog.show(supportFragmentManager, "calendar_permission_dialog")
             }
 
             else -> {
@@ -88,10 +96,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
             // Permission is granted. Continue the action or workflow in your app.
             readEventsFromCalender()
         } else {
-            // Explain to the user that the feature is unavailable because the
-            // features requires a permission that the user has denied. At the
-            // same time, respect the user's decision. Don't link to system
-            // settings in an effort to convince the user to change their decision.
+            calendarPermissionDialog.show(supportFragmentManager, "calendar_permission_dialog")
         }
     }
 

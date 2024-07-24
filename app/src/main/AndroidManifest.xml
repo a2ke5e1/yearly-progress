@@ -6,6 +6,9 @@
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
 
+    <!-- Location Permissions for Day and Night Light Widget -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -16,8 +19,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/App.SplashScreen"
-        tools:targetApi="31">
+        android:theme="@style/Theme.YearlyProgress"
+        tools:targetApi="tiramisu">
         <activity
             android:name=".widgets.manager.eventManager.ImportEventCalendarActivity"
             android:exported="false"
@@ -44,14 +47,16 @@
             android:name=".widgets.manager.eventManager.EventManagerActivity"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress"
-            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="stateVisible|adjustResize|stateHidden" />
         <activity
             android:name=".WelcomeScreen"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/App.SplashScreen"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -89,7 +94,7 @@
         <receiver
             android:name=".widgets.ui.DayWidget"
             android:exported="false"
-            android:label="Day Progress">
+            android:label="Day ">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -101,7 +106,7 @@
         <receiver
             android:name=".widgets.ui.MonthWidget"
             android:exported="false"
-            android:label="Month Progress">
+            android:label="Month ">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -113,7 +118,7 @@
         <receiver
             android:name=".widgets.ui.YearWidget"
             android:exported="false"
-            android:label="Year Progress">
+            android:label="Year ">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -125,7 +130,7 @@
         <receiver
             android:name=".widgets.ui.WeekWidget"
             android:exported="false"
-            android:label="Week Progress">
+            android:label="Week ">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -133,25 +138,40 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/week_widget_info" />
-        </receiver> <!-- Registration of the Widget Broadcast Receiver -->
+        </receiver>
+
         <receiver
-            android:name=".widgets.manager.updateManager.services.DayWidgetService"
-            android:enabled="true" />
+            android:name=".widgets.ui.DayLightWidget"
+            android:exported="false"
+            android:label="Day Light ">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/day_light_widget_info" />
+        </receiver>
+
         <receiver
-            android:name=".widgets.manager.updateManager.services.MonthWidgetService"
-            android:enabled="true" />
+            android:name=".widgets.ui.NightLightWidget"
+            android:exported="false"
+            android:label="Night Light">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/night_light_widget_info" />
+        </receiver>
+
+
+        <!-- Registration of the Widget Broadcast Receiver -->
         <receiver
-            android:name=".widgets.manager.updateManager.services.WeekWidgetService"
+            android:name=".widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver"
             android:enabled="true" />
-        <receiver
-            android:name=".widgets.manager.updateManager.services.YearWidgetService"
-            android:enabled="true" />
-        <receiver
-            android:name=".widgets.manager.updateManager.services.EventWidgetService"
-            android:enabled="true" />
-        <receiver
-            android:name=".widgets.manager.updateManager.services.AllInWidgetService"
-            android:enabled="true" />
+
     </application>
 
 </manifest>

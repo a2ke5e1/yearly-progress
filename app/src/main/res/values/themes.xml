@@ -45,6 +45,7 @@
 
     <style name="Theme.YearlyProgress.Settings" parent="Theme.YearlyProgress">
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="switchPreferenceCompatStyle">@style/PreferenceMaterialSwitch</item>
     </style>
 
     <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
@@ -119,6 +120,11 @@
     <style name="App.SplashScreen.AppWidgetContainer" parent="App.SplashScreen.AppWidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
         <item name="appWidgetPadding">16dp</item>
+    </style>
+
+
+    <style name="PreferenceMaterialSwitch" parent="@style/Preference.SwitchPreferenceCompat.Material">
+        <item name="widgetLayout">@layout/preference_switch</item>
     </style>
 
 

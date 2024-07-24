@@ -3,28 +3,32 @@ package com.a3.yearlyprogess.components
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.text.SpannableString
+import android.icu.text.SimpleDateFormat
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
-import com.a3.yearlyprogess.YearlyProgressManager
-import com.a3.yearlyprogess.calculateEndTime
 import com.a3.yearlyprogess.calculateProgress
-import com.a3.yearlyprogess.calculateStartTime
-import com.a3.yearlyprogess.getCurrentPeriodValue
+import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
-import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.Date
+import java.util.Locale
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
-class ProgressCardView @JvmOverloads constructor(
+class DayNightLightProgressView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0,
@@ -41,9 +45,12 @@ class ProgressCardView @JvmOverloads constructor(
     private var titleTextView: TextView
     private var widgetParentCard: MaterialCardView
     private var widgetProgressCard: MaterialCardView
-
     private var job: Job
-    private var field: TimePeriod = TimePeriod.DAY
+    private var dayLight = true
+
+
+    private var startTime = 0L
+    private var endTime = 0L
 
 
     init {
@@ -62,46 +69,36 @@ class ProgressCardView @JvmOverloads constructor(
 
         if (attrs != null) {
             val obtainAttributeSet =
-                context.obtainStyledAttributes(attrs, R.styleable.ProgressCardView)
-            if (obtainAttributeSet.hasValue(R.styleable.ProgressCardView_dataType)) {
-                field = TimePeriod.entries[obtainAttributeSet.getInt(
-                    R.styleable.ProgressCardView_dataType,
-                    0
-                )]
+                context.obtainStyledAttributes(attrs, R.styleable.DayNightLightProgressView)
+            if (obtainAttributeSet.hasValue(R.styleable.DayNightLightProgressView_day_light)) {
+                dayLight = obtainAttributeSet.getBoolean(
+                    R.styleable.DayNightLightProgressView_day_light, true
+                )
             }
             obtainAttributeSet.recycle()
         }
 
+
         // data that doesn't change
-        titleTextView.text = field.name
+        titleTextView.text = if (dayLight) "Day Light" else "Night Light"
 
-        // Calculate frequency to update constant values
-        val freq =
-            calculateEndTime(context, field) -
-                    calculateStartTime(context, field) // in milliseconds
-
-        // update constant values
-        launch(Dispatchers.IO) {
-            while (true) {
-                val currentPeriodValue = getCurrentPeriodValue(field).toFormattedTimePeriod(field)
-                widgetDataTextView.text = currentPeriodValue
-                widgetDataInfoTextView.text = "of ${
-                    (calculateEndTime(context, field)
-                            - calculateStartTime(context, field)) / 1000
-                }s"
-                delay(freq)
-            }
-        }
 
         // update the progress every seconds
         launch(Dispatchers.IO) {
             while (true) {
-
-                val startTime = calculateStartTime(context, field)
-                val endTime = calculateEndTime(context, field)
                 val progress: Double = calculateProgress(context, startTime, endTime)
-
                 launch(Dispatchers.Main) {
+                    val currentPeriodValue = if (dayLight) {
+                        "Today sunrise at ${
+                            startTime.toFormattedDateText()
+                        } and sunset at ${endTime.toFormattedDateText()}."
+                    } else {
+                        "Last night's sunset was at ${startTime.toFormattedDateText()} and next sunrise will be at ${endTime.toFormattedDateText()}."
+                    }
+                    widgetDataTextView.text = currentPeriodValue
+                    widgetDataTextView.textSize = 12f
+                    widgetDataTextView.setTextColor(ContextCompat.getColor(context,R.color.widget_text_color_tertiary))
+                    widgetDataInfoTextView.text = "of ${(endTime - startTime) / 1000}s"
                     updateView(progress)
                 }
                 delay(1000)
@@ -128,8 +125,19 @@ class ProgressCardView @JvmOverloads constructor(
             widgetProgressCard.requestLayout()
         }
         valueAnimator.start()
+    }
 
+    fun loadSunriseSunset(data: SunriseSunsetResponse) {
+        val (startTime, endTime) = data.getStartAndEndTime(dayLight)
+        this.startTime = startTime
+        this.endTime = endTime
+    }
 
+    fun Long.toFormattedDateText(): String {
+        val date = Date(this)
+        val format = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
+        return format.format(date)
     }
 
 }
+

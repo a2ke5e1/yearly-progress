@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -53,13 +54,8 @@ class EventManagerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityEventManagerActivityBinding.inflate(layoutInflater)
+        enableEdgeToEdge()
         setContentView(binding.root)
-
-        window.navigationBarDividerColor =
-            ContextCompat.getColor(this, android.R.color.transparent)
-        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
-        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())

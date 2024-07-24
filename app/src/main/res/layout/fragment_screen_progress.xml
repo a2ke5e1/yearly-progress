@@ -13,38 +13,47 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow"
-            app:flow_wrapMode="aligned"
-            app:flow_horizontalAlign="center"
-            app:flow_horizontalStyle="packed"
-            app:flow_horizontalGap="30dp"
-            app:flow_maxElementsWrap="2"
-            app:flow_verticalGap="10dp"
-            app:flow_lastHorizontalStyle="spread"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewDay,ad_frame"
-             />
+            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewDay,ad_frame,dayLightProgressView,nightLightProgressView"
+            app:flow_horizontalAlign="center"
+            app:flow_horizontalGap="30dp"
+            app:flow_horizontalStyle="packed"
+            app:flow_lastHorizontalStyle="spread"
+            app:flow_maxElementsWrap="2"
+            app:flow_verticalGap="10dp"
+            app:flow_wrapMode="aligned" />
 
         <com.a3.yearlyprogess.components.ProgressCardView
             android:id="@+id/progressCardViewYear"
             android:layout_width="match_parent"
-            android:layout_height="135dp"
-            app:dataType="YEAR"
-           />
+            android:layout_height="145dp"
+            app:dataType="YEAR" />
 
         <com.a3.yearlyprogess.components.ProgressCardView
             android:id="@+id/progressCardViewMonth"
             android:layout_width="match_parent"
-            android:layout_height="135dp"
-            app:dataType="MONTH"
-             />
+            android:layout_height="145dp"
+            app:dataType="MONTH" />
 
         <com.a3.yearlyprogess.components.ProgressCardView
             android:id="@+id/progressCardViewDay"
             android:layout_width="match_parent"
-            android:layout_height="135dp"
-            app:dataType="DAY"
-             />
+            android:layout_height="145dp"
+            app:dataType="DAY" />
+
+        <com.a3.yearlyprogess.components.DayNightLightProgressView
+            android:id="@+id/dayLightProgressView"
+            android:layout_width="match_parent"
+            app:day_light="true"
+            android:layout_height="145dp" />
+
+
+        <com.a3.yearlyprogess.components.DayNightLightProgressView
+            android:id="@+id/nightLightProgressView"
+            android:layout_width="match_parent"
+            app:day_light="false"
+            android:layout_height="145dp" />
 
         <LinearLayout
             android:id="@+id/ad_frame"

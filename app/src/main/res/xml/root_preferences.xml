@@ -42,6 +42,19 @@
         app:iconSpaceReserved="false"
         app:title="Widget Customization">
         >
+
+        <SeekBarPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/widget_widget_update_frequency"
+            app:summary="@string/adjust_widget_frequency_summary"
+            app:min="5"
+            android:max="900"
+            android:defaultValue="5"
+            app:showSeekBarValue="false"
+            app:title="@string/adjust_widget_frequency" />
+
+
         <SeekBarPreference
             android:max="100"
             app:defaultValue="100"
@@ -52,7 +65,7 @@
             app:summary="@string/adjust_opacity_of_the_standalone_and_event_widget"
             app:title="@string/widget_transparency" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             app:defaultValue="false"
             app:iconSpaceReserved="false"
             app:key="@string/widget_widget_time_left"
@@ -60,7 +73,7 @@
             app:title="@string/time_left_counter" />
 
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             app:defaultValue="false"
             app:dependency="@string/widget_widget_time_left"
             app:iconSpaceReserved="false"
