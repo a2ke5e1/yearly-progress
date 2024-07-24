@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
+import com.a3.yearlyprogess.cacheLocation
 import com.a3.yearlyprogess.components.DayNightLightProgressView
 import com.a3.yearlyprogess.components.dialogbox.PermissionMessageDialog
 import com.a3.yearlyprogess.data.SunriseSunsetApi
@@ -194,7 +195,7 @@ class ProgressScreenFragment : Fragment() {
         locationManager.requestLocationUpdates(
             providers.first(), 2000, 1_000f //  12hrs, 200 KM
         ) { location ->
-            Log.d("Location", location.toString())
+            cacheLocation(requireContext(), location)
             lifecycleScope.launch(Dispatchers.IO) {
 
                 val cal = Calendar.getInstance()

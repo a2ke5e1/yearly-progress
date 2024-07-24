@@ -5,6 +5,11 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import com.a3.yearlyprogess.data.SunriseSunsetApi
+import com.a3.yearlyprogess.loadCachedLocation
+import com.a3.yearlyprogess.loadSunriseSunset
+import com.a3.yearlyprogess.provideSunriseSunsetApi
+import com.a3.yearlyprogess.storeSunriseSunset
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayLightWidget
@@ -14,8 +19,13 @@ import com.a3.yearlyprogess.widgets.ui.MonthWidget
 import com.a3.yearlyprogess.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.widgets.ui.YearWidget
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import java.util.Calendar
 
- class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
+class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
 
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -44,6 +54,44 @@ import com.a3.yearlyprogess.widgets.ui.YearWidget
                 .getAppWidgetIds(ComponentName(context, it))
             widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
             context.sendBroadcast(widgetIntent)
+
+            if (it == DayLightWidget::class.java || it == NightLightWidget::class.java) {
+                val cal = Calendar.getInstance()
+                cal.timeInMillis = System.currentTimeMillis()
+                val currentDate =
+                    "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
+
+
+                val sunriseSunset = loadSunriseSunset(context)
+                if (sunriseSunset == null || sunriseSunset.results[1].date != currentDate) {
+                    val sunriseSunsetApi: SunriseSunsetApi = provideSunriseSunsetApi()
+                    val location = loadCachedLocation(context) ?: return
+
+                    cal.add(Calendar.DATE, -1)
+                    val startDateRange =
+                        "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
+                    cal.add(Calendar.DATE, 2)
+                    val endDateRange =
+                        "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
+
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        try {
+                            val response = sunriseSunsetApi.getSunriseSunset(
+                                location.latitude, location.longitude, startDateRange, endDateRange
+                            )
+                            val result = response.body()
+                            if (response.isSuccessful && result != null) {
+                                storeSunriseSunset(context, result)
+                            }
+                        } finally {
+                            cancel()
+                        }
+                    }
+                }
+
+            }
+
 
             totalWidgetCount += ids.size
         }
