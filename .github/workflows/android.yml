@@ -33,6 +33,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: gradle
 
       - name: Make folder keystore
         run: mkdir -p /home/runner/work/yearly-progress/yearly-progress/app/keystore/
