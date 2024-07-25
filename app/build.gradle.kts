@@ -13,7 +13,7 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 74
+        versionCode = 75
         val localVersionCode = versionCode
         versionName = "2.${localVersionCode!! - 64}-alpha"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
