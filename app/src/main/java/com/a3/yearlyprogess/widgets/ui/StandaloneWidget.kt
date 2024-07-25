@@ -69,7 +69,7 @@ object WidgetUtils {
         // Apply styles to the text
         val widgetProgressText = progress.styleFormatted(decimalPlace)
         val widgetProgressBarValue = progress.roundToInt()
-        val widgetDaysLeftCounter = calculateTimeLeft(endTime).toTimePeriodLeftText()
+        val widgetDaysLeftCounter = calculateTimeLeft(endTime).toTimePeriodLeftText(context)
 
         // Set text and progress bar values
         view.setTextViewText(R.id.widgetType, widgetType)

@@ -1,10 +1,14 @@
 package com.a3.yearlyprogess.widgets.ui.util
 
 
+import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
+import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.getMonthName
 import com.a3.yearlyprogess.getOrdinalSuffix
@@ -81,7 +85,29 @@ fun Int.toFormattedTimePeriod(
     }
 }
 
-fun Long.toTimePeriodLeftText(): String {
+fun Long.toTimePeriodLeftText(context: Context): String {
+    val pref = PreferenceManager.getDefaultSharedPreferences(context)
+    val dynamicTimeLeft = pref.getBoolean(ContextCompat.getString(context, R.string.widget_widget_use_dynamic_time_left), false)
+
+    if (dynamicTimeLeft) {
+        val decimalPlaces = 0
+        this.toDuration(DurationUnit.MILLISECONDS)
+            .toComponents { days, hours, minutes, seconds, nanoseconds ->
+                if (days > 0) {
+                   return this.toDuration(DurationUnit.MILLISECONDS).toString(DurationUnit.DAYS, decimals = decimalPlaces)
+                }
+                if (hours > 0) {
+                    return this.toDuration(DurationUnit.MILLISECONDS).toString(DurationUnit.HOURS, decimals = decimalPlaces)
+                }
+                if (minutes > 0) {
+                    return this.toDuration(DurationUnit.MILLISECONDS).toString(DurationUnit.MINUTES, decimals = decimalPlaces)
+                }
+
+                if (seconds >= 0) {
+                    return this.toDuration(DurationUnit.MILLISECONDS).toString(DurationUnit.SECONDS, decimals = decimalPlaces)
+                }
+            }
+    }
 
     val stringBuilder = StringBuilder()
     this.toDuration(DurationUnit.MILLISECONDS)
