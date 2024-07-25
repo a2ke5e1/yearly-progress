@@ -193,7 +193,7 @@ class ProgressScreenFragment : Fragment() {
         }
 
         locationManager.requestLocationUpdates(
-            providers.first(), 2000, 1_000f //  12hrs, 200 KM
+            providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(), 2000, 1_000f //  12hrs, 200 KM
         ) { location ->
             cacheLocation(requireContext(), location)
             lifecycleScope.launch(Dispatchers.IO) {
@@ -216,6 +216,7 @@ class ProgressScreenFragment : Fragment() {
                     )
                     val result = response.body()
                     if (response.isSuccessful && result != null) {
+                        storeSunriseSunset(requireContext(), result)
                         Resource.Success(result)
                     } else {
                         Resource.Error(response.message())
@@ -226,8 +227,7 @@ class ProgressScreenFragment : Fragment() {
 
                 when (result) {
                     is Resource.Success -> {
-                        storeSunriseSunset(requireContext(), result.data!!)
-                        dayLight.loadSunriseSunset(result.data)
+                        dayLight.loadSunriseSunset(result.data!!)
                         nightLight.loadSunriseSunset(result.data)
                         launch(Dispatchers.Main) {
                             dayLight.visibility = View.VISIBLE
