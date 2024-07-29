@@ -77,6 +77,14 @@
             app:defaultValue="false"
             app:dependency="@string/widget_widget_time_left"
             app:iconSpaceReserved="false"
+            app:key="@string/widget_widget_use_dynamic_time_left"
+            app:summary="@string/dynamic_time_left_counter_will_automatically_switch_between_days_hours_minutes_based_on_the_time_left"
+            app:title="@string/dynamic_time_left_counter" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:dependency="@string/widget_widget_time_left"
+            app:iconSpaceReserved="false"
             app:key="@string/widget_widget_event_replace_progress_with_days_counter"
             app:summary="@string/this_will_only_work_if_the_time_left_counter_is_enabled"
             app:title="@string/replace_progress_with_days_left_counter" />

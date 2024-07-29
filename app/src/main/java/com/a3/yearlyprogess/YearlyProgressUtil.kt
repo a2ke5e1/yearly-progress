@@ -1,6 +1,8 @@
 package com.a3.yearlyprogess
 
 import android.content.Context
+import android.location.Location
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.components.DayNightLightProgressView
@@ -208,4 +210,32 @@ fun loadSunriseSunset(context: Context): SunriseSunsetResponse? {
     val json = pref.getString(key, null) ?: return null
     return gson.fromJson(json, SunriseSunsetResponse::class.java)
 
+}
+
+fun cacheLocation(context: Context, location: Location) {
+    val key = ContextCompat.getString(context, R.string.location_data_pref)
+    val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
+    val editor = pref.edit()
+
+    editor.putString("lat", location.latitude.toString())
+    editor.putString("lon", location.longitude.toString())
+
+    editor.apply()
+}
+
+fun loadCachedLocation(context: Context): Location? {
+    val key = ContextCompat.getString(context, R.string.location_data_pref)
+    val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
+
+    val lat = pref.getString("lat", null)
+    val lon = pref.getString("lon", null)
+
+    if (lat == null || lon == null) {
+        return null
+    }
+
+    return Location("").apply {
+        latitude = lat.toDouble()
+        longitude = lon.toDouble()
+    }
 }

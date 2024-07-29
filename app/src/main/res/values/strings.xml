@@ -103,5 +103,7 @@
     <string name="location_permission_message">This permission allows the app to access your approximate location, which is necessary for the Day and Night Light Widget to determine the local sunrise and sunset times.\n\nBy accessing your location, we can customize the widget to provide accurate day and night light information, enhancing your experience with the app.</string>
     <string name="calendar_permission_title">Read your Calendar</string>
     <string name="calendar_permission_message">This permission allows the app to read your calendar events. It enables us to integrate your calendar with our app\'s features, providing you with ability to import events.\n\nThis integration ensures that you stay organized and never miss important events and appointments.</string>
+    <string name="dynamic_time_left_counter_will_automatically_switch_between_days_hours_minutes_based_on_the_time_left">Dynamic Time left counter will automatically switch between days, hours, minutes based on the time left.</string>
+    <string name="dynamic_time_left_counter">Dynamic Time Left Counter</string>
 
 </resources>
