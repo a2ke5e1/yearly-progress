@@ -89,6 +89,10 @@ fun Int.toFormattedTimePeriod(
         else -> {
             val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
             numberFormat.maximumFractionDigits = 0
+
+            // Don't add commas to the number
+            numberFormat.isGroupingUsed = false
+
             val formattedNumber = numberFormat.format(this)
             SpannableString(formattedNumber)
         }

@@ -1,0 +1,27 @@
+<resources>
+    <!-- Week Preference -->
+    <string-array name="week_start_entries">
+        <item>डिफ़ॉल्ट (क्षेत्र के आधार पर)</item>
+        <item>शनिवार</item>
+        <item>रविवार</item>
+        <item>सोमवार</item>
+    </string-array>
+
+    <string-array name="week_start_values" translatable="false">
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!-- Calculation Preference -->
+    <string-array name="calc_entries">
+        <item>डिफ़ॉल्ट (पूरा हुआ)</item>
+        <item>बाएं</item>
+    </string-array>
+
+    <string-array name="calc_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+</resources>
