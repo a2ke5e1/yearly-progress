@@ -116,9 +116,16 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) :
             val endTime = calculateEndTime(context, widgetType)
             val currentValue = getCurrentPeriodValue(widgetType).toFormattedTimePeriod(widgetType)
 
+            val widgetTitleText = when (widgetType) {
+                TimePeriod.DAY -> context.getString(R.string.day)
+                TimePeriod.WEEK -> context.getString(R.string.week)
+                TimePeriod.MONTH -> context.getString(R.string.month)
+                TimePeriod.YEAR -> context.getString(R.string.year)
+            }
+
             val remoteView = WidgetUtils.createRemoteView(
                 context,
-                widgetType.name.uppercase(),
+                widgetTitleText,
                 startTime,
                 endTime,
                 currentValue
@@ -161,7 +168,7 @@ abstract class DayNightWidget(private val dayLight: Boolean) :
                     ,0,
                     0,
                     SpannableString(""),
-                    "No location permission"
+                    ContextCompat.getString(context, R.string.no_location_permission)
                 )
                 return errorView
             }

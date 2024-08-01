@@ -1,10 +1,10 @@
 <resources>
     <!-- Week Preference -->
     <string-array name="week_start_entries">
-        <item>Default (Based on Region)</item>
-        <item>Saturday</item>
-        <item>Sunday</item>
-        <item>Monday</item>
+        <item>پیش فرض (بر اساس منطقه)</item>
+        <item>شنبه</item>
+        <item>یکشنبه</item>
+        <item>دوشنبه</item>
     </string-array>
 
     <string-array name="week_start_values" translatable="false">
@@ -16,8 +16,8 @@
 
     <!-- Calculation Preference -->
     <string-array name="calc_entries">
-        <item>Default ( Completed )</item>
-        <item>Left</item>
+        <item>پیش فرض (تکمیل شده)</item>
+        <item>باقیمانده</item>
     </string-array>
 
     <string-array name="calc_values" translatable="false">

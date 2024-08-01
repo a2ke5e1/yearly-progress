@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.a3.yearlyprogess.BuildConfig
 import com.a3.yearlyprogess.R
@@ -20,7 +21,7 @@ class AboutDialog : DialogFragment() {
             val inflater = requireActivity().layoutInflater
             val binding = DialogAboutBinding.inflate(inflater)
 
-            binding.buildVersion.text = "Version: ${BuildConfig.VERSION_NAME}"
+            binding.buildVersion.text = ContextCompat.getString(requireContext(), R.string.version) + " ${BuildConfig.VERSION_NAME}"
             binding.telegramLink.setOnClickListener {
                 val url = "https://t.me/phycalc"
                 val i = Intent(Intent.ACTION_VIEW)

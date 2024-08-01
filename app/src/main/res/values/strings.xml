@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yearly Progess</string>
+    <string name="app_name">Yearly Progress</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Progress</string>
@@ -68,8 +68,6 @@
     <string name="pref_summary_widget_decimal_places">Number of digits after a decimal in widgets</string>
     <string name="unsupported_launcher">Your Launcher does not support this feature. Please add Widget manually</string>
     <string name="pref_title_widget_event_decimal_place">Decimal places for Event Widget</string>
-    <string name="widget_event_widget_decimal_point">widget_event_widget_decimal_point</string>
-    <string name="app_calculation_type">app_calculation_type</string>
     <string name="calculation_mode">Calculation Mode</string>
     <string name="no_events">No Events</string>
     <string name="add_event">Add Event</string>
@@ -119,5 +117,10 @@
     <string name="delete_all">Delete All</string>
     <string name="today_sunrise_at_and_sunset_at">Today sunrise at %1$s and sunset at %2$s.</string>
     <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">Last night\'s sunset was at %1$s and next sunrise will be at %2$s.</string>
+    <string name="widget_customization">Widget Customization</string>
+    <string name="standalone_widget">Standalone Widget</string>
+    <string name="version">Version</string>
+    <string name="no_location_permission">No location permission</string>
+    <string name="of_seconds">of %1$ss</string>
 
 </resources>

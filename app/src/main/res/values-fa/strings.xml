@@ -1,0 +1,128 @@
+<resources>
+    <string name="app_name">پیشرفت سالانه</string>
+    <string name="action_settings">تنظیمات</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">پیشرفت</string>
+    <string name="second_fragment_label">ابزارکها</string>
+    <string name="next">بعدی</string>
+    <string name="previous">قبلی</string>
+    <string name="appwidget_text">نمونه</string>
+    <string name="add_widget">افزودن ابزارک</string>
+    <string name="app_widget_description">نمایش پیشرفت سال جاری</string>
+    <string name="month_widget_info">نمایش پیشرفت ماه جاری</string>
+    <string name="week_widget_description">نمایش پیشرفت هفته جاری</string>
+    <string name="app_widget_description_day">نمایش پیشرفت کل روز</string>
+    <string name="app_widget_description_day_light">پیشرفت روز را تا آخرین روشنایی روز نشان می دهد</string>
+    <string name="app_widget_description_night_light">پیشرفت کل شب را تا اولین روشنایی روز بعد نشان می دهد.</string>
+    <string name="custom_widget_desc">ابزارکی برای ردیابی رویدادهای آینده</string>
+    <string name="demo_date">19 ام</string>
+    <string name="demo_day_per">20%</string>
+    <string name="day">روز</string>
+    <string name="demp_month">ژانویه</string>
+    <string name="demo_month_per">50%</string>
+    <string name="month">ماه</string>
+    <string name="year">سال</string>
+    <string name="demo_year_per">4.3%</string>
+    <string name="demo_year">2022</string>
+    <string name="button_text">"افزودن ابزارک "</string>
+    <string name="progress">پیشرفت</string>
+    <string name="widget">ابزارک</string>
+    <string name="share">اشتراک گذاری</string>
+    <string name="about">درباره</string>
+    <string name="week">هفته</string>
+    <string name="demo_week">پنج شنبه</string>
+    <string name="demo_week_per">70.12%</string>
+    <string name="save">ذخیره</string>
+    <string name="app_widget_description_all_in_one">پیشرفت روز، هفته، ماه و سال را در یک ابزارک نشان می دهد</string>
+    <string name="app_widget_description_event">ردیابی پیشرفت هر رویداد</string>
+    <string name="start">آغاز</string>
+    <string name="by_continuing_you_agree_our_terms_of_service_and_privacy_policy">با ادامه، با شرایط خدمات و خط مشی رازداری ما موافقت می کنید.</string>
+    <string name="title">عنوان</string>
+    <string name="description">توضیحات</string>
+    <string name="event_settings">مدت زمان رویداد</string>
+    <string name="start_of_the_event">از</string>
+    <string name="end_of_the_event">تا</string>
+    <string name="date">تاریخ</string>
+    <string name="time">زمان</string>
+    <string name="title_activity_settings">تنظیمات</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">پیامها</string>
+    <string name="sync_header">همگام سازی</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">امضای شما</string>
+    <string name="reply_title">عملکرد پاسخ پیش فرض</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">همگام سازی دوره ای رایانامه</string>
+    <string name="attachment_title">دانلود پیوست های دریافتی</string>
+    <string name="attachment_summary_on">دانلود خودکار پیوست ها برای رایانامه های دریافتی
+    </string>
+    <string name="attachment_summary_off">فقط در صورت درخواست دستی پیوست ها را دانلود کنید</string>
+    <string name="settings">تنظیمات</string>
+    <string name="pref_title_week_day">اولین روز هفته را انتخاب کنید</string>
+    <string name="pref_title_widget_decimal_places">مکان اعشاری ابزارک ها</string>
+    <string name="pref_title_app_decimal_places">مکان اعشار در صفحه پیشرفت</string>
+    <string name="pref_summary_app_decimal_places">تعداد ارقام بعد از اعشار در صفحه پیشرفت برنامه</string>
+    <string name="pref_summary_widget_decimal_places">تعداد ارقام بعد از اعشار در ابزارک ها</string>
+    <string name="unsupported_launcher">راه‌انداز شما از این ویژگی پشتیبانی نمی‌کند. لطفا ابزارک را به صورت دستی اضافه کنید</string>
+    <string name="pref_title_widget_event_decimal_place">مکان اعشار برای ابزارک رویداد</string>
+    <string name="calculation_mode">حالت محاسبه</string>
+    <string name="no_events">هیچ رویدادی وجود ندارد</string>
+    <string name="add_event">افزودن رویداد</string>
+    <string name="backup">پشتیبان گیری</string>
+    <string name="restore">بازگرداندن</string>
+    <string name="backup_restore"><![CDATA[Backup & Restore]]></string>
+    <string name="backup_restore_message">وقت آن است که دوباره با داده های خود متحد شوید - بیش از آنچه می دانید دلتنگ شما شده است!</string>
+    <string name="widget_transparency">شفافیت ابزارک</string>
+    <string name="adjust_opacity_of_the_standalone_and_event_widget">شفافیت ابزارک مستقل و رویداد را تنظیم کنید.</string>
+    <string name="time_left_counter">شمارنده زمان باقیمانده</string>
+    <string name="shows_how_much_time_left_in_the_widget">مدت زمان باقیمانده در ابزارک را نشان بده.</string>
+    <string name="events_imports">واردکردن رویدادها</string>
+    <string name="select_all">انتخاب همه</string>
+    <string name="import_from_calender">واردکردن از تقویم</string>
+    <string name="replace_progress_with_days_left_counter">پیشرفت را با روزهای مانده جایگزین کنید.</string>
+    <string name="this_will_only_work_if_the_time_left_counter_is_enabled">این تنها در صورتی کار می کند که شمارنده زمان باقیمانده فعال باشد.</string>
+    <string name="delete_the_selected_events_message">آیا مطمئن هستید که می خواهید رویدادهای انتخاب شده را حذف کنید؟</string>
+    <string name="delete_selected_events">%1$d رویداد انتخابی حذف شود؟</string>
+    <string name="delete_all_events">همه رویدادها حذف شود؟</string>
+    <string name="delete_all_events_message">آیا مطمئن هستید که می خواهید همه رویدادها را حذف کنید؟</string>
+    <string name="search">جستجو</string>
+    <string name="all">همه</string>
+    <string name="adjust_widget_frequency_summary">بسامد بروزرسانی ابزارک را (در ثانیه) تنظیم کنید.</string>
+    <string name="adjust_widget_frequency">بسامد بروزرسانی</string>
+    <string name="day_light">روشنایی روز</string>
+    <string name="night_light">روشنایی روز</string>
+    <string name="all_in_widget_day_text_preview">23<sup>ام</sup></string>
+    <string name="dismiss">ردکردن</string>
+    <string name="i_understand">فهمیدم</string>
+    <string name="location_permission_title">مجوز مکان تقریبی</string>
+    <string name="location_permission_message">این مجوز به برنامه اجازه می‌دهد به مکان تقریبی شما دسترسی داشته باشد، که برای ابزارک نور روز و شب برای تعیین زمان‌های محلی طلوع و غروب خورشید ضروری است.\n\nبا دسترسی به موقعیت مکانی شما، می‌توانیم ابزارک را برای ارائه اطلاعات دقیق روشنایی روز و شب سفارشی کنیم و تجربه شما را با برنامه افزایش دهیم.</string>
+    <string name="calendar_permission_title">خواندن تقویم شما</string>
+    <string name="calendar_permission_message">این مجوز به برنامه امکان می‌دهد رویدادهای تقویم شما را بخواند. این به ما امکان می‌دهد تقویم شما را با ویژگی‌های برنامه‌مان ادغام کنیم و به شما امکان وارد کردن رویدادها را می‌دهد.\n\nاین ادغام تضمین می‌کند که منظم بمانید و هرگز رویدادها و قرارهای مهم را از دست ندهید.</string>
+    <string name="dynamic_time_left_counter_will_automatically_switch_between_days_hours_minutes_based_on_the_time_left">شمارنده زمان باقیمانده پویا به طور خودکار بر اساس زمان باقیمانده، بین روزها، ساعت ها، دقیقه ها جابه جا می شود.</string>
+    <string name="dynamic_time_left_counter">شمارنده زمان باقیمانده پویا</string>
+    <string name="repeat_events">تکرار رویدادها</string>
+    <string name="all_day">کل روز</string>
+    <string name="every_year">هر سال</string>
+    <string name="every_month">هر ماه</string>
+    <string name="repeat_weekdays">تکرار روزهای هفته</string>
+    <string name="events">رویدادها</string>
+    <string name="edit">ویرایش</string>
+    <string name="join_our_telegram_group">به گروه تلگرام ما بپیوندید</string>
+    <string name="classic_widgets">ابزارک های کلاسیک</string>
+    <string name="all_in_one_widget">همه در یک ابزارک</string>
+    <string name="delete_selected">حذف انتخابها</string>
+    <string name="delete_all">حذف همه</string>
+    <string name="today_sunrise_at_and_sunset_at">طلوع آفتاب امروز در %1$s و غروب آفتاب در %2$s</string>
+    <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">غروب آفتاب دیشب %1$s بود و طلوع بعدی آفتاب %2$s خواهد بود</string>
+    <string name="widget_customization">سفارشی سازی ابزارک</string>
+    <string name="standalone_widget">ابزارک مستقل</string>
+    <string name="version">نسخه</string>
+    <string name="no_location_permission">نداشتن مجوز دسترسی مکان</string>
+    <string name="of_seconds">of %1$ss</string>
+
+
+
+</resources>

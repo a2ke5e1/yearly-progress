@@ -21,6 +21,9 @@ import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.*
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.Locale
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
@@ -73,22 +76,34 @@ class ProgressCardView @JvmOverloads constructor(
         }
 
         // data that doesn't change
-        titleTextView.text = field.name
+        titleTextView.text = when (field) {
+            TimePeriod.DAY -> context.getString(R.string.day)
+            TimePeriod.WEEK -> context.getString(R.string.week)
+            TimePeriod.MONTH -> context.getString(R.string.month)
+            TimePeriod.YEAR -> context.getString(R.string.year)
+        }
 
         launch(Dispatchers.IO) {
             while (true) {
                 val currentPeriodValue = getCurrentPeriodValue(field).toFormattedTimePeriod(field)
-                widgetDataTextView.text = currentPeriodValue
-                widgetDataInfoTextView.text = "of ${
-                    (calculateEndTime(context, field)
-                            - calculateStartTime(context, field)) / 1000
-                }s"
+
 
                 val startTime = calculateStartTime(context, field)
                 val endTime = calculateEndTime(context, field)
                 val progress: Double = calculateProgress(context, startTime, endTime)
 
+                val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
+                numberFormat.maximumFractionDigits = 0
+
+
+                val totalSeconds = (endTime - startTime) / 1000
+                val formattedTotalSeconds = numberFormat.format(totalSeconds)
+
                 launch(Dispatchers.Main) {
+                    widgetDataTextView.text = currentPeriodValue
+                    widgetDataInfoTextView.text = context.getString(
+                        R.string.of_seconds, formattedTotalSeconds
+                    )
                     updateView(progress)
                 }
                 delay(1000)
