@@ -11,6 +11,7 @@ interface SunriseSunsetApi {
         @Query("lat") lat: Double,
         @Query("lng") lon: Double,
         @Query("date_start") startDate: String,
-        @Query("date_end") endDate: String
+        @Query("date_end") endDate: String,
+        @Query("time_format") timeFormat: String = "24"
     ): Response<SunriseSunsetResponse>
 }
