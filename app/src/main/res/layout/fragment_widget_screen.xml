@@ -19,7 +19,7 @@
             android:layout_marginStart="45dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="45dp"
-            android:text="Classic Widgets"
+            android:text="@string/classic_widgets"
             android:textAllCaps="true"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,7 +43,7 @@
             android:layout_marginStart="45dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="45dp"
-            android:text="All in One Widget"
+            android:text="@string/all_in_one_widget"
             android:textAllCaps="true"
             app:layout_constraintTop_toBottomOf="@id/ad_frame" />
 

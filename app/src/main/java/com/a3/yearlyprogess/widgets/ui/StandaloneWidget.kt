@@ -156,8 +156,9 @@ abstract class DayNightWidget(private val dayLight: Boolean) :
 
                 val errorView = WidgetUtils.createRemoteView(
                     context,
-                    if (dayLight) "Day Light" else "Night Light",
-                    0,
+                    if (dayLight) ContextCompat.getString(context, R.string.day_light)
+                    else ContextCompat.getString(context, R.string.night_light)
+                    ,0,
                     0,
                     SpannableString(""),
                     "No location permission"
@@ -170,7 +171,8 @@ abstract class DayNightWidget(private val dayLight: Boolean) :
             if (sunriseSunset == null) {
                 val errorView = WidgetUtils.createRemoteView(
                     context,
-                    if (dayLight) "Day Light" else "Night Light",
+                    if (dayLight) ContextCompat.getString(context, R.string.day_light)
+                    else ContextCompat.getString(context, R.string.night_light),
                     0,
                     0,
                     SpannableString(""),
@@ -185,8 +187,8 @@ abstract class DayNightWidget(private val dayLight: Boolean) :
 
             val remoteView = WidgetUtils.createRemoteView(
                 context,
-                if (dayLight) "Day Light" else "Night Light",
-                startTime,
+                if (dayLight) ContextCompat.getString(context, R.string.day_light)
+                else ContextCompat.getString(context, R.string.night_light), startTime,
                 endTime,
                 SpannableString(currentValue)
             )

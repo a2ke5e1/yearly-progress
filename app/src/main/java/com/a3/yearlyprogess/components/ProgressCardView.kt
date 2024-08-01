@@ -75,12 +75,6 @@ class ProgressCardView @JvmOverloads constructor(
         // data that doesn't change
         titleTextView.text = field.name
 
-        // Calculate frequency to update constant values
-        val freq =
-            calculateEndTime(context, field) -
-                    calculateStartTime(context, field) // in milliseconds
-
-        // update constant values
         launch(Dispatchers.IO) {
             while (true) {
                 val currentPeriodValue = getCurrentPeriodValue(field).toFormattedTimePeriod(field)
@@ -89,13 +83,6 @@ class ProgressCardView @JvmOverloads constructor(
                     (calculateEndTime(context, field)
                             - calculateStartTime(context, field)) / 1000
                 }s"
-                delay(freq)
-            }
-        }
-
-        // update the progress every seconds
-        launch(Dispatchers.IO) {
-            while (true) {
 
                 val startTime = calculateStartTime(context, field)
                 val endTime = calculateEndTime(context, field)

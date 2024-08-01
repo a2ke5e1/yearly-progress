@@ -88,7 +88,7 @@ dependencies {
     implementation("de.raphaelebner:roomdatabasebackup:1.0.0-beta14")
 
     // Lifecycle Components
-    val lifecycle_version = "2.8.3"
+    val lifecycle_version = "2.8.4"
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")

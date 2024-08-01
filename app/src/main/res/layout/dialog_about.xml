@@ -77,7 +77,7 @@
                         style="@style/TextAppearance.Material3.LabelMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Join our telegram group" />
+                        android:text="@string/join_our_telegram_group" />
 
                     <Space
                         android:layout_width="0dp"

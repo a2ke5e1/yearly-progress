@@ -80,7 +80,8 @@ class DayNightLightProgressView @JvmOverloads constructor(
 
 
         // data that doesn't change
-        titleTextView.text = if (dayLight) "Day Light" else "Night Light"
+        titleTextView.text = if (dayLight) ContextCompat.getString(context, R.string.day_light)
+        else ContextCompat.getString(context, R.string.night_light)
 
 
         // update the progress every seconds
@@ -89,15 +90,26 @@ class DayNightLightProgressView @JvmOverloads constructor(
                 val progress: Double = calculateProgress(context, startTime, endTime)
                 launch(Dispatchers.Main) {
                     val currentPeriodValue = if (dayLight) {
-                        "Today sunrise at ${
-                            startTime.toFormattedDateText()
-                        } and sunset at ${endTime.toFormattedDateText()}."
+                        context.getString(
+                            R.string.today_sunrise_at_and_sunset_at,
+                            startTime.toFormattedDateText(),
+                            endTime.toFormattedDateText()
+                        )
                     } else {
-                        "Last night's sunset was at ${startTime.toFormattedDateText()} and next sunrise will be at ${endTime.toFormattedDateText()}."
+                        context.getString(
+                            R.string.last_night_s_sunset_was_at_and_next_sunrise_will_be_at,
+                            startTime.toFormattedDateText(),
+                            endTime.toFormattedDateText()
+                        )
                     }
                     widgetDataTextView.text = currentPeriodValue
                     widgetDataTextView.textSize = 12f
-                    widgetDataTextView.setTextColor(ContextCompat.getColor(context,R.color.widget_text_color_tertiary))
+                    widgetDataTextView.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.widget_text_color_tertiary
+                        )
+                    )
                     widgetDataInfoTextView.text = "of ${(endTime - startTime) / 1000}s"
                     updateView(progress)
                 }

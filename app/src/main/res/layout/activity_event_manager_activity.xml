@@ -102,7 +102,7 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="4dp"
-                android:text="Repeat Events"
+                android:text="@string/repeat_events"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayout2" />
@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="All Day"
+                android:text="@string/all_day"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageView2"
                 app:layout_constraintTop_toBottomOf="@id/eventSettingsLabel" />
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="Every Year"
+                android:text="@string/every_year"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageView3"
                 app:layout_constraintTop_toBottomOf="@id/allDaySwitch" />
@@ -167,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="Every Month"
+                android:text="@string/every_month"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageView4"
                 app:layout_constraintTop_toBottomOf="@id/everyYearSwitch" />
@@ -189,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="Repeat Weekdays"
+                android:text="@string/repeat_weekdays"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageView5"
                 app:layout_constraintTop_toBottomOf="@id/everyMonthSwitch" />

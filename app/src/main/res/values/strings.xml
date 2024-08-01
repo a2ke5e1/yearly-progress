@@ -105,5 +105,19 @@
     <string name="calendar_permission_message">This permission allows the app to read your calendar events. It enables us to integrate your calendar with our app\'s features, providing you with ability to import events.\n\nThis integration ensures that you stay organized and never miss important events and appointments.</string>
     <string name="dynamic_time_left_counter_will_automatically_switch_between_days_hours_minutes_based_on_the_time_left">Dynamic Time left counter will automatically switch between days, hours, minutes based on the time left.</string>
     <string name="dynamic_time_left_counter">Dynamic Time Left Counter</string>
+    <string name="repeat_events">Repeat Events</string>
+    <string name="all_day">All Day</string>
+    <string name="every_year">Every Year</string>
+    <string name="every_month">Every Month</string>
+    <string name="repeat_weekdays">Repeat Weekdays</string>
+    <string name="events">Events</string>
+    <string name="edit">Edit</string>
+    <string name="join_our_telegram_group">Join our telegram group</string>
+    <string name="classic_widgets">Classic Widgets</string>
+    <string name="all_in_one_widget">All in One Widget</string>
+    <string name="delete_selected">Delete Selected</string>
+    <string name="delete_all">Delete All</string>
+    <string name="today_sunrise_at_and_sunset_at">Today sunrise at %1$s and sunset at %2$s.</string>
+    <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">Last night\'s sunset was at %1$s and next sunrise will be at %2$s.</string>
 
 </resources>
