@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Calendar
+import java.util.Locale
 
 
 enum class TimePeriod {
@@ -154,35 +155,17 @@ fun calculateEndTime(context: Context, timePeriod: TimePeriod): Long {
 
 
 fun getMonthName(monthNumber: Int): String {
-    val names = mapOf(
-        1 to "January",
-        2 to "February",
-        3 to "March",
-        4 to "April",
-        5 to "May",
-        6 to "June",
-        7 to "July",
-        8 to "August",
-        9 to "September",
-        10 to "October",
-        11 to "November",
-        12 to "December"
-    )
-
-    return names[monthNumber]?.substring(0, 3) ?: "Unknown"
+    val cal = Calendar.getInstance()
+    cal.set(Calendar.MONTH, monthNumber - 1)
+    val monthName = cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
+    return monthName ?: "Unknown"
 }
 
 fun getWeekDayName(dayOfWeek: Int): String {
-    val names = mapOf(
-        1 to "Sunday",
-        2 to "Monday",
-        3 to "Tuesday",
-        4 to "Wednesday",
-        5 to "Thursday",
-        6 to "Friday",
-        7 to "Saturday"
-    )
-    return names[dayOfWeek]?.substring(0, 3) ?: "Unknown"
+    val cal = Calendar.getInstance()
+    cal.set(Calendar.DAY_OF_WEEK, dayOfWeek)
+    val dayName = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+    return dayName ?: "Unknown"
 }
 
 

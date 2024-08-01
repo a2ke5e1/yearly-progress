@@ -14,7 +14,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Settings"
+            app:title="@string/settings"
             app:navigationIcon="@drawable/ic_round_arrow_back_24"
             app:titleCentered="true" />
 

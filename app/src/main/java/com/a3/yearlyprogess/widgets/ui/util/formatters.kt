@@ -49,8 +49,13 @@ fun Double.styleFormatted(digits: Int = 2): SpannableString {
 fun Int.formattedDay(): SpannableString {
     val ordinalSuffix = getOrdinalSuffix(this)
 
+    val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
+    numberFormat.maximumFractionDigits = 0
+    val formattedNumber = numberFormat.format(this)
+
+
     val stringBuilder = StringBuilder()
-    stringBuilder.append(this)
+    stringBuilder.append(formattedNumber)
     stringBuilder.append(ordinalSuffix)
 
 
@@ -81,7 +86,12 @@ fun Int.toFormattedTimePeriod(
         TimePeriod.DAY -> this.formattedDay()
         TimePeriod.MONTH -> SpannableString(getMonthName(this))
         TimePeriod.WEEK -> SpannableString(getWeekDayName(this))
-        else -> SpannableString(this.toString())
+        else -> {
+            val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
+            numberFormat.maximumFractionDigits = 0
+            val formattedNumber = numberFormat.format(this)
+            SpannableString(formattedNumber)
+        }
     }
 }
 
