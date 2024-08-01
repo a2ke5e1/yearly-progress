@@ -108,6 +108,9 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
                             if (response.isSuccessful && result != null) {
                                 storeSunriseSunset(context, result)
                             }
+                        }
+                        catch (ex: Exception) {
+                            Log.d("WUBR", ex.message.toString())
                         } finally {
                             cancel()
                         }
