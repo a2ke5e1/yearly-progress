@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.SubscriptionStatus
 import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
@@ -108,8 +109,11 @@ class WidgetScreenFragment : Fragment() {
         // Initialize and Load Ad
 
         billingManager.shouldShowAds { shouldShowAds ->
-            if (shouldShowAds) {
-                showAds()
+            shouldShowAds.observe(viewLifecycleOwner) {
+                when (it) {
+                    SubscriptionStatus.Subscribed -> showAds()
+                    else -> {}
+                }
             }
         }
 

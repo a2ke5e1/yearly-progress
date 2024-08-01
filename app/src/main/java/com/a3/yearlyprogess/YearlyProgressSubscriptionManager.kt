@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
@@ -18,6 +20,15 @@ import com.android.billingclient.api.queryProductDetails
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+
+sealed class SubscriptionStatus {
+    object NotSubscribed : SubscriptionStatus()
+    object Subscribed : SubscriptionStatus()
+    object Error : SubscriptionStatus()
+    object Loading : SubscriptionStatus()
+}
+
+
 class YearlyProgressSubscriptionManager(private val context: Context) {
 
     private var billingClient: BillingClient
@@ -28,6 +39,8 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
             }
         }
     }
+
+    private val shouldShowAds = MutableLiveData<SubscriptionStatus>(SubscriptionStatus.Loading)
 
 
     init {
@@ -41,6 +54,7 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     Log.d(TAG, "Billing setup finished successfully")
+
                 }
             }
 
@@ -71,8 +85,7 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
         val selectedOfferToken = productDetailsList[0].subscriptionOfferDetails!![0].offerToken
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()
-                .setProductDetails(productDetailsList[0])
-                .setOfferToken(selectedOfferToken).build()
+                .setProductDetails(productDetailsList[0]).setOfferToken(selectedOfferToken).build()
         )
 
         val billingFlowParams =
@@ -100,7 +113,7 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
         }
     }
 
-    fun shouldShowAds(callback: (Boolean) -> Unit) {
+    fun shouldShowAds(callback: (LiveData<SubscriptionStatus>) -> Unit) {
         billingClient.queryPurchasesAsync(
             QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()
         ) { billingResult, purchases ->
@@ -108,9 +121,15 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
             Log.d(TAG, "shouldShowAds Purchases: $purchases")
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 val isSubscribed = purchases.any { it.products.contains("ad_free_perks") }
-                callback(!isSubscribed)
+                shouldShowAds.postValue(
+                    if (isSubscribed) SubscriptionStatus.Subscribed
+                    else SubscriptionStatus.NotSubscribed
+                )
+
+                callback(shouldShowAds)
             } else {
-                callback(true) // Assume ads should be shown if there's an error
+                shouldShowAds.postValue(SubscriptionStatus.Error)
+                callback(shouldShowAds) // Assume ads should be shown if there's an error
             }
         }
     }

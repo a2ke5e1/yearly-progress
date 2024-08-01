@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.SubscriptionStatus
 import com.a3.yearlyprogess.YearlyProgressSubscriptionManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.cacheLocation
@@ -146,33 +147,42 @@ class ProgressScreenFragment : Fragment() {
 
 
         billingManager.shouldShowAds { shouldShowAds ->
-            if (shouldShowAds) {
-                // Show ads
-                val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
-                adLoader = AdLoader.Builder(requireContext(), getString(R.string.admob_native_ad_unit))
-                    .forNativeAd { ad: NativeAd ->
-                        // Show the ad.
+            shouldShowAds.observe(viewLifecycleOwner) {
+                when (it) {
+                    SubscriptionStatus.Subscribed -> {
+                        // Show ads
+                        val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
+                        adLoader = AdLoader.Builder(
+                            requireContext(),
+                            getString(R.string.admob_native_ad_unit)
+                        )
+                            .forNativeAd { ad: NativeAd ->
+                                // Show the ad.
 
-                        if (!adLoader.isLoading) {
-                            nativeAdView = updateViewWithNativeAdview(adFrame, ad)
-                        }
-                        if (isDetached) {
-                            ad.destroy()
-                            return@forNativeAd
-                        }
-                    }.withAdListener(object : AdListener() {
-                        override fun onAdFailedToLoad(adError: LoadAdError) {
-                            // Handle the failure by logging, altering the UI, and so on.
-                            adFrame.removeAllViews()
-                        }
-                    }).withNativeAdOptions(
-                        NativeAdOptions.Builder()
-                            .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
-                            // Methods in the NativeAdOptions.Builder class can be
-                            // used here to specify individual options settings.
-                            .build()
-                    ).build()
-                adLoader.loadAd(AdRequest.Builder().build())
+                                if (!adLoader.isLoading) {
+                                    nativeAdView = updateViewWithNativeAdview(adFrame, ad)
+                                }
+                                if (isDetached) {
+                                    ad.destroy()
+                                    return@forNativeAd
+                                }
+                            }.withAdListener(object : AdListener() {
+                                override fun onAdFailedToLoad(adError: LoadAdError) {
+                                    // Handle the failure by logging, altering the UI, and so on.
+                                    adFrame.removeAllViews()
+                                }
+                            }).withNativeAdOptions(
+                                NativeAdOptions.Builder()
+                                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
+                                    // Methods in the NativeAdOptions.Builder class can be
+                                    // used here to specify individual options settings.
+                                    .build()
+                            ).build()
+                        adLoader.loadAd(AdRequest.Builder().build())
+                    }
+
+                    else -> {}
+                }
             }
         }
     }
@@ -205,7 +215,9 @@ class ProgressScreenFragment : Fragment() {
         }
 
         locationManager.requestLocationUpdates(
-            providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(), 2000, 1_000f //  12hrs, 200 KM
+            providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
+            2000,
+            1_000f //  12hrs, 200 KM
         ) { location ->
             cacheLocation(requireContext(), location)
             lifecycleScope.launch(Dispatchers.IO) {
@@ -248,6 +260,7 @@ class ProgressScreenFragment : Fragment() {
 
 
                     }
+
                     is Resource.Error -> {
                         val cachedSunriseSunset = loadSunriseSunset(requireContext())
 
