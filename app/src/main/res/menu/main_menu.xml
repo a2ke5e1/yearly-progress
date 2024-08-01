@@ -23,6 +23,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/removeAds"
+        android:icon="@drawable/ic_outline_info_24"
+        android:title="@string/remove_ads"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/infoMenu"
         android:icon="@drawable/ic_outline_info_24"
         android:title="@string/about"

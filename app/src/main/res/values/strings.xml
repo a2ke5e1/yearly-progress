@@ -124,5 +124,6 @@
     <string name="of_seconds">of %1$ss</string>
     <string name="app">App</string>
     <string name="event_widget">Event Widget</string>
+    <string name="remove_ads">Remove Ads</string>
 
 </resources>

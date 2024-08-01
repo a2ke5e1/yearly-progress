@@ -20,11 +20,13 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgress
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.YearlyProgressSubscriptionManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
@@ -61,6 +63,12 @@ class WidgetScreenFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var billingManager: YearlyProgressSubscriptionManager
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        billingManager = (context as MainActivity).billingManager
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -98,7 +106,12 @@ class WidgetScreenFragment : Fragment() {
         isSunriseSunsetDataAvailable = loadSunriseSunset(requireContext()) != null
 
         // Initialize and Load Ad
-        showAds()
+
+        billingManager.shouldShowAds { shouldShowAds ->
+            if (shouldShowAds) {
+                showAds()
+            }
+        }
 
         // Show Widget Menu
         showWidgetMenu()

@@ -2,8 +2,10 @@ package com.a3.yearlyprogess
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -12,12 +14,25 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.a3.yearlyprogess.databinding.ActivityMainBinding
 import com.a3.yearlyprogess.components.dialogbox.AboutDialog
 import com.a3.yearlyprogess.components.dialogbox.BackupRestoreDialog
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.PendingPurchasesParams
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryPurchasesParams
+import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.queryProductDetails
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
@@ -26,6 +41,9 @@ import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import de.raphaelebner.roomdatabasebackup.core.RoomBackup
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.concurrent.thread
 
 
@@ -35,6 +53,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var consentInformation: ConsentInformation
     private var consentForm: ConsentForm? = null
+
+    lateinit var billingManager: YearlyProgressSubscriptionManager
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -61,6 +83,9 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
+        billingManager = YearlyProgressSubscriptionManager(this)
+
+
         /*
         *   Loads Consent Form to EU
         * */
@@ -78,9 +103,6 @@ class MainActivity : AppCompatActivity() {
 
         MobileAds.initialize(this) {}
         roomBackup = RoomBackup(this)
-
-
-
 
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -115,7 +137,15 @@ class MainActivity : AppCompatActivity() {
                 )
                 true
             }
+
             R.id.backupRestoreMenu -> showBackupRestoreDialogBox()
+            R.id.removeAds -> {
+                lifecycleScope.launch {
+                    billingManager.processPurchases()
+                }
+                return true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -137,8 +167,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-        val shareMessage =
-            """
+        val shareMessage = """
             Check out ${getString(R.string.app_name)} (https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID} )
             You can have awesome widgets to see progress of day, month and year with material you support.
             """.trimIndent()
@@ -154,47 +183,36 @@ class MainActivity : AppCompatActivity() {
             .addTestDeviceHashedId("D8E90FB07673BFE0C11C8F378F64B61F")
             .build()*/
 
-        val params = ConsentRequestParameters.Builder()
-            .setTagForUnderAgeOfConsent(false)
+        val params = ConsentRequestParameters.Builder().setTagForUnderAgeOfConsent(false)
             //.setConsentDebugSettings(debugSettings)
             .build()
         consentInformation = UserMessagingPlatform.getConsentInformation(this)
-        consentInformation.requestConsentInfoUpdate(
-            this, params,
-            {
-                if (consentInformation.isConsentFormAvailable) {
-                    loadForm();
-                }
-            },
-            {
+        consentInformation.requestConsentInfoUpdate(this, params, {
+            if (consentInformation.isConsentFormAvailable) {
+                loadForm();
             }
-        )
+        }, {})
     }
 
     private fun loadForm() {
-        UserMessagingPlatform.loadConsentForm(
-            this,
-            { consentForm ->
-                this.consentForm = consentForm
-                if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.REQUIRED) {
-                    consentForm.show(
-                        this
-                    ) { // Handle dismissal by reloading form.
-                        loadForm()
-                    }
+        UserMessagingPlatform.loadConsentForm(this, { consentForm ->
+            this.consentForm = consentForm
+            if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.REQUIRED) {
+                consentForm.show(
+                    this
+                ) { // Handle dismissal by reloading form.
+                    loadForm()
                 }
             }
-        ) {
-        }
+        }) {}
     }
-
 
 
     companion object {
 
         const val FIRST_LAUNCH = "first_launch"
         const val YEARLY_PROGRESS_PREF = "yearly_progress_pref"
-        const val TAG = "yearly_progress"
+        const val TAG = "MainActivity"
 
     }
 

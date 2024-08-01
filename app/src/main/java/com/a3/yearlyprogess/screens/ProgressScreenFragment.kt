@@ -17,7 +17,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.YearlyProgressSubscriptionManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.cacheLocation
 import com.a3.yearlyprogess.components.DayNightLightProgressView
@@ -89,6 +91,12 @@ class ProgressScreenFragment : Fragment() {
 
     private lateinit var adLoader: AdLoader
     private lateinit var nativeAdView: NativeAdView
+    private lateinit var billingManager: YearlyProgressSubscriptionManager
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        billingManager = (context as MainActivity).billingManager
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -137,32 +145,36 @@ class ProgressScreenFragment : Fragment() {
         }
 
 
-        val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
-        adLoader = AdLoader.Builder(requireContext(), getString(R.string.admob_native_ad_unit))
-            .forNativeAd { ad: NativeAd ->
-                // Show the ad.
+        billingManager.shouldShowAds { shouldShowAds ->
+            if (shouldShowAds) {
+                // Show ads
+                val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
+                adLoader = AdLoader.Builder(requireContext(), getString(R.string.admob_native_ad_unit))
+                    .forNativeAd { ad: NativeAd ->
+                        // Show the ad.
 
-                if (!adLoader.isLoading) {
-                    nativeAdView = updateViewWithNativeAdview(adFrame, ad)
-                }
-                if (isDetached) {
-                    ad.destroy()
-                    return@forNativeAd
-                }
-            }.withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    // Handle the failure by logging, altering the UI, and so on.
-                    adFrame.removeAllViews()
-                }
-            }).withNativeAdOptions(
-                NativeAdOptions.Builder()
-                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
-                    // Methods in the NativeAdOptions.Builder class can be
-                    // used here to specify individual options settings.
-                    .build()
-            ).build()
-        adLoader.loadAd(AdRequest.Builder().build())
-
+                        if (!adLoader.isLoading) {
+                            nativeAdView = updateViewWithNativeAdview(adFrame, ad)
+                        }
+                        if (isDetached) {
+                            ad.destroy()
+                            return@forNativeAd
+                        }
+                    }.withAdListener(object : AdListener() {
+                        override fun onAdFailedToLoad(adError: LoadAdError) {
+                            // Handle the failure by logging, altering the UI, and so on.
+                            adFrame.removeAllViews()
+                        }
+                    }).withNativeAdOptions(
+                        NativeAdOptions.Builder()
+                            .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
+                            // Methods in the NativeAdOptions.Builder class can be
+                            // used here to specify individual options settings.
+                            .build()
+                    ).build()
+                adLoader.loadAd(AdRequest.Builder().build())
+            }
+        }
     }
 
     private fun setupDayNightLightProgressView(
