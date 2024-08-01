@@ -108,14 +108,20 @@ class WidgetScreenFragment : Fragment() {
 
         // Initialize and Load Ad
 
-        billingManager.shouldShowAds { shouldShowAds ->
-            shouldShowAds.observe(viewLifecycleOwner) {
-                when (it) {
-                    SubscriptionStatus.Subscribed -> showAds()
-                    else -> {}
+        billingManager.shouldShowAds.observe(viewLifecycleOwner) {
+            when (it) {
+                SubscriptionStatus.Subscribed -> {
+                    try {
+                        nativeAdView.destroy()
+                    } catch (ex: UninitializedPropertyAccessException) {
+                        Log.d("Initialization Error", ex.message.toString())
+                    }
                 }
+                SubscriptionStatus.Loading -> {}
+                else -> showAds()
             }
         }
+
 
         // Show Widget Menu
         showWidgetMenu()

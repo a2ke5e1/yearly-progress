@@ -40,8 +40,8 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
         }
     }
 
-    private val shouldShowAds = MutableLiveData<SubscriptionStatus>(SubscriptionStatus.Loading)
-
+    private val _shouldShowAds = MutableLiveData<SubscriptionStatus>(SubscriptionStatus.Loading)
+    val shouldShowAds: LiveData<SubscriptionStatus> get() = _shouldShowAds
 
     init {
         val pendingPurchasesParams =
@@ -54,7 +54,8 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     Log.d(TAG, "Billing setup finished successfully")
-
+                    Log.d(TAG, "Querying purchases")
+                    shouldShowAds()
                 }
             }
 
@@ -106,6 +107,7 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
                         .build()
                 billingClient.acknowledgePurchase(acknowledgePurchaseParams) { billingResult ->
                     if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                        _shouldShowAds.postValue(SubscriptionStatus.Subscribed)
                         Log.d(TAG, "handlePurchase: Purchase acknowledged")
                     }
                 }
@@ -113,7 +115,7 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
         }
     }
 
-    fun shouldShowAds(callback: (LiveData<SubscriptionStatus>) -> Unit) {
+    fun shouldShowAds() {
         billingClient.queryPurchasesAsync(
             QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()
         ) { billingResult, purchases ->
@@ -121,15 +123,12 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
             Log.d(TAG, "shouldShowAds Purchases: $purchases")
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 val isSubscribed = purchases.any { it.products.contains("ad_free_perks") }
-                shouldShowAds.postValue(
+                _shouldShowAds.postValue(
                     if (isSubscribed) SubscriptionStatus.Subscribed
                     else SubscriptionStatus.NotSubscribed
                 )
-
-                callback(shouldShowAds)
             } else {
-                shouldShowAds.postValue(SubscriptionStatus.Error)
-                callback(shouldShowAds) // Assume ads should be shown if there's an error
+                _shouldShowAds.postValue(SubscriptionStatus.Error)
             }
         }
     }

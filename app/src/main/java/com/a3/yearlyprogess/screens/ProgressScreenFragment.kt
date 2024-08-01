@@ -145,43 +145,47 @@ class ProgressScreenFragment : Fragment() {
             }
         }
 
-
-        billingManager.shouldShowAds { shouldShowAds ->
-            shouldShowAds.observe(viewLifecycleOwner) {
-                when (it) {
-                    SubscriptionStatus.Subscribed -> {
-                        // Show ads
-                        val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
-                        adLoader = AdLoader.Builder(
-                            requireContext(),
-                            getString(R.string.admob_native_ad_unit)
-                        )
-                            .forNativeAd { ad: NativeAd ->
-                                // Show the ad.
-
-                                if (!adLoader.isLoading) {
-                                    nativeAdView = updateViewWithNativeAdview(adFrame, ad)
-                                }
-                                if (isDetached) {
-                                    ad.destroy()
-                                    return@forNativeAd
-                                }
-                            }.withAdListener(object : AdListener() {
-                                override fun onAdFailedToLoad(adError: LoadAdError) {
-                                    // Handle the failure by logging, altering the UI, and so on.
-                                    adFrame.removeAllViews()
-                                }
-                            }).withNativeAdOptions(
-                                NativeAdOptions.Builder()
-                                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
-                                    // Methods in the NativeAdOptions.Builder class can be
-                                    // used here to specify individual options settings.
-                                    .build()
-                            ).build()
-                        adLoader.loadAd(AdRequest.Builder().build())
+        val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
+        billingManager.shouldShowAds.observe(viewLifecycleOwner) {
+            Log.d("Subscription Status", it.toString())
+            when (it) {
+                SubscriptionStatus.Subscribed -> {
+                    try {
+                        nativeAdView.destroy()
+                    } catch (ex: UninitializedPropertyAccessException) {
+                        Log.d("Initialization Error", ex.message.toString())
                     }
+                }
+                SubscriptionStatus.Loading -> {}
+                else -> {
+                    // Show ads
+                    adLoader = AdLoader.Builder(
+                        requireContext(),
+                        getString(R.string.admob_native_ad_unit)
+                    )
+                        .forNativeAd { ad: NativeAd ->
+                            // Show the ad.
 
-                    else -> {}
+                            if (!adLoader.isLoading) {
+                                nativeAdView = updateViewWithNativeAdview(adFrame, ad)
+                            }
+                            if (isDetached) {
+                                ad.destroy()
+                                return@forNativeAd
+                            }
+                        }.withAdListener(object : AdListener() {
+                            override fun onAdFailedToLoad(adError: LoadAdError) {
+                                // Handle the failure by logging, altering the UI, and so on.
+                                adFrame.removeAllViews()
+                            }
+                        }).withNativeAdOptions(
+                            NativeAdOptions.Builder()
+                                .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
+                                // Methods in the NativeAdOptions.Builder class can be
+                                // used here to specify individual options settings.
+                                .build()
+                        ).build()
+                    adLoader.loadAd(AdRequest.Builder().build())
                 }
             }
         }
