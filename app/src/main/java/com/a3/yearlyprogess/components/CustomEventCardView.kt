@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
@@ -225,7 +226,7 @@ class CustomEventCardView @JvmOverloads constructor(
             // long dash unicode is \u2014
 
             return if (allDayEvent) {
-                "${DateFormat.format("MMM dd, yyyy", startTime)} \u2014 ${DateFormat.format("MMM dd, yyyy", endTime)} \u00B7 All Day"
+                "${DateFormat.format("MMM dd, yyyy", startTime)} \u2014 ${DateFormat.format("MMM dd, yyyy", endTime)} \u00B7 ${ContextCompat.getString(context, R.string.all_day)}"
             } else {
                 if (startDay == endDay) {
                     "${DateFormat.format("MMM dd, yyyy", startTime)} \u00B7 $startTimeString \u2014 $endTimeString"

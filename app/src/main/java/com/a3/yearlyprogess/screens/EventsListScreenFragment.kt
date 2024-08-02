@@ -86,7 +86,7 @@ class EventsListScreenFragment : Fragment() {
 
                         val mt =
                             (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
-                        mt.title = "$lengthItems selected"
+                        mt.title = getString(R.string.no_events_selected, lengthItems)
                         mt.menu.clear()
 
                         mt.setNavigationIcon(R.drawable.ic_baseline_close_24)
@@ -123,7 +123,7 @@ class EventsListScreenFragment : Fragment() {
                     } else {
                         val mt =
                             (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
-                        mt.title = "Events"
+                        mt.title = resources.getString(R.string.events)
                         mt.navigationIcon = null
                         mt.isTitleCentered = true
                         (activity as AppCompatActivity).setSupportActionBar(mt)
@@ -210,7 +210,7 @@ class EventsListScreenFragment : Fragment() {
             .setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.outline_delete_24))
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Yes") { _, _ ->
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 if (count == 0) {
                     mEventViewModel.deleteAllEvent()
                 } else {
@@ -220,7 +220,7 @@ class EventsListScreenFragment : Fragment() {
                 }
                 tracker?.clearSelection()
             }
-            .setNegativeButton("No") { _, _ -> }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .create()
         dialog.show()
     }

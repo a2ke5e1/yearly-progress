@@ -123,4 +123,11 @@
     <string name="of_seconds">का %1$ss</string>
     <string name="app">ऐप</string>
     <string name="event_widget">इवेंट विजेट</string>
+    <string name="remove_ads">विज्ञापन हटाएं</string>
+    <string name="current_value_settings">वर्तमान मान: %1$s</string>
+    <string name="no_events_selected">%1$d चयनित</string>
+    <string name="yes">हाँ</string>
+    <string name="no">नहीं</string>
+    <string name="special_thanks_for_translating">अनुवाद करने के लिए विशेष धन्यवाद</string>
+
 </resources>

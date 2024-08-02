@@ -125,5 +125,10 @@
     <string name="app">App</string>
     <string name="event_widget">Event Widget</string>
     <string name="remove_ads">Remove Ads</string>
+    <string name="current_value_settings">Current value: %1$s</string>
+    <string name="no_events_selected">%1$d selected</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="special_thanks_for_translating">Special thanks for translating</string>
 
 </resources>

@@ -41,6 +41,7 @@ import com.a3.yearlyprogess.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.widgets.ui.YearWidget
+import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -237,10 +238,10 @@ class WidgetScreenFragment : Fragment() {
 
 
                     // All In One Widget
-                    allInOneProgressTextViewYear.text = formatProgress(progressYear)
-                    allInOneProgressTextViewMonth.text = formatProgress(progressMonth)
-                    allInOneProgressTextViewDay.text = formatProgress(progressDay)
-                    allInOneProgressTextViewWeek.text = formatProgress(progressWeek)
+                    allInOneProgressTextViewYear.text = (progressYear.toDouble().styleFormatted(0))
+                    allInOneProgressTextViewMonth.text = (progressMonth).toDouble().styleFormatted(0)
+                    allInOneProgressTextViewDay.text = (progressDay).toDouble().styleFormatted(0)
+                    allInOneProgressTextViewWeek.text = (progressWeek).toDouble().styleFormatted(0)
 
                     allInOneProgressBarYear.progress = progressYear
                     allInOneProgressBarMonth.progress = progressMonth
@@ -528,7 +529,7 @@ class WidgetScreenFragment : Fragment() {
         progressTextAnimator.duration = 600
         progressTextAnimator.addUpdateListener {
             textView.text = if (isAllInOne) {
-                formatProgress(it.animatedValue as Int)
+                (it.animatedValue as Int).toDouble().styleFormatted(0)
             } else {
                 formatProgressStyle((it.animatedValue as Float).toDouble())
             }

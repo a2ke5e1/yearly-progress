@@ -77,6 +77,35 @@
                         style="@style/TextAppearance.Material3.LabelMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="@string/special_thanks_for_translating" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="4dp" />
+
+                    <TextView
+                        android:id="@+id/translation_credit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.Material3.BodySmall"
+                        android:textSize="11sp"
+                        android:text="@FCatilizer - Hindi" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextAppearance.Material3.LabelMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/join_our_telegram_group" />
 
                     <Space
@@ -128,7 +157,6 @@
 
 
                     </LinearLayout>
-
 
                 </LinearLayout>
 

@@ -72,7 +72,7 @@
     <string name="no_events">هیچ رویدادی وجود ندارد</string>
     <string name="add_event">افزودن رویداد</string>
     <string name="backup">پشتیبان گیری</string>
-    <string name="restore">بازگرداندن</string>
+    <string name="restore">بازیابی</string>
     <string name="backup_restore">پشتیبان گیری و بازیابی</string>
     <string name="backup_restore_message">وقت آن است که دوباره با داده های خود متحد شوید - بیش از آنچه می دانید دلتنگ شما شده است!</string>
     <string name="widget_transparency">شفافیت ابزارک</string>
@@ -121,9 +121,14 @@
     <string name="standalone_widget">ابزارک مستقل</string>
     <string name="version">نسخه</string>
     <string name="no_location_permission">نداشتن مجوز دسترسی مکان</string>
-    <string name="of_seconds">of %1$ss</string>
+    <string name="of_seconds">از %1$sث</string>
     <string name="app">برنامه</string>
     <string name="event_widget">ویجت رویداد</string>
-
+    <string name="remove_ads">حذف تبلیغات</string>
+    <string name="current_value_settings">مقدار فعلی: %1$s</string>
+    <string name="no_events_selected">%1$d اتنخاب شده است.</string>
+    <string name="yes">بله</string>
+    <string name="no">خیر</string>
+    <string name="special_thanks_for_translating">تشکر ویژه برای ترجمه</string>
 
 </resources>
