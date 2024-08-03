@@ -105,7 +105,7 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
                                 location.latitude, location.longitude, startDateRange, endDateRange
                             )
                             val result = response.body()
-                            if (response.isSuccessful && result != null) {
+                            if (response.isSuccessful && result != null && result.status == "OK") {
                                 storeSunriseSunset(context, result)
                             }
                         }

@@ -1,6 +1,8 @@
 package com.a3.yearlyprogess
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -71,7 +73,7 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
     suspend fun processPurchases() {
         val productList = listOf(
             QueryProductDetailsParams.Product.newBuilder().setProductId(
-                "ad_free_perks"
+                AD_FREE_PRODUCT_ID
             ).setProductType(BillingClient.ProductType.SUBS).build()
         )
         val params = QueryProductDetailsParams.newBuilder()
@@ -121,7 +123,7 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
             Log.d(TAG, "shouldShowAds Billing Result: $billingResult")
             Log.d(TAG, "shouldShowAds Purchases: $purchases")
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                val isSubscribed = purchases.any { it.products.contains("ad_free_perks") }
+                val isSubscribed = purchases.any { it.products.contains(AD_FREE_PRODUCT_ID) }
                 _shouldShowAds.postValue(
                     if (isSubscribed) SubscriptionStatus.Subscribed
                     else SubscriptionStatus.NotSubscribed
@@ -132,7 +134,17 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
         }
     }
 
+    fun redirectToSubscriptionPage() {
+        val packageName = context.packageName
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://play.google.com/store/account/subscriptions?sku=${AD_FREE_PRODUCT_ID}&package=${packageName}")
+        )
+        context.startActivity(intent)
+    }
+
     companion object {
         private const val TAG = "YearlyProgressSubscriptionManager"
+        private const val AD_FREE_PRODUCT_ID = "ad_free_perks"
     }
 }

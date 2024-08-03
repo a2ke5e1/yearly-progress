@@ -130,5 +130,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="special_thanks_for_translating">Special thanks for translating</string>
+    <string name="manage_subscription">Manage Subscription</string>
 
 </resources>

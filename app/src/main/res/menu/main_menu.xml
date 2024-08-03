@@ -10,22 +10,25 @@
         android:title="@string/backup_restore"
         app:showAsAction="never" />
 
+
     <item
         android:id="@+id/shareMenu"
         android:icon="@drawable/ic_outline_share_24"
         android:title="@string/share"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/settings"
-        android:icon="@drawable/ic_round_settings_24"
-        android:title="@string/settings"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/removeAds"
         android:icon="@drawable/ic_outline_info_24"
         android:title="@string/remove_ads"
+        app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_round_settings_24"
+        android:title="@string/settings"
         app:showAsAction="never" />
 
     <item

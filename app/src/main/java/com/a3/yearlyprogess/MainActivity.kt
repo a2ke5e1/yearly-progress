@@ -2,18 +2,12 @@ package com.a3.yearlyprogess
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -21,18 +15,6 @@ import com.a3.yearlyprogess.databinding.ActivityMainBinding
 import com.a3.yearlyprogess.components.dialogbox.AboutDialog
 import com.a3.yearlyprogess.components.dialogbox.BackupRestoreDialog
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
-import com.android.billingclient.api.AcknowledgePurchaseParams
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.PendingPurchasesParams
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.QueryProductDetailsParams
-import com.android.billingclient.api.QueryPurchasesParams
-import com.android.billingclient.api.SkuDetailsParams
-import com.android.billingclient.api.queryProductDetails
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
@@ -43,7 +25,6 @@ import com.google.android.ump.UserMessagingPlatform
 import de.raphaelebner.roomdatabasebackup.core.RoomBackup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.concurrent.thread
 
 
@@ -55,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     private var consentForm: ConsentForm? = null
 
     lateinit var billingManager: YearlyProgressSubscriptionManager
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,8 +100,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean { // Inflate the menu; this adds items to the action bar if it is present.
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main_menu, menu)
+
+        billingManager.shouldShowAds.observe(this) {
+            when (it) {
+                SubscriptionStatus.Subscribed -> {
+                    menu.findItem(R.id.removeAds).title = resources.getString(R.string.manage_subscription)
+                }
+                else -> menu.findItem(R.id.removeAds).isVisible = true
+            }
+        }
+
+
         return true
     }
 
@@ -140,8 +132,19 @@ class MainActivity : AppCompatActivity() {
 
             R.id.backupRestoreMenu -> showBackupRestoreDialogBox()
             R.id.removeAds -> {
-                lifecycleScope.launch {
-                    billingManager.processPurchases()
+                billingManager.shouldShowAds.observe(this) {
+                    when (it) {
+                        SubscriptionStatus.Subscribed -> {
+                            billingManager.redirectToSubscriptionPage()
+                        }
+
+                        else -> {
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                billingManager.processPurchases()
+                            }
+                        }
+
+                    }
                 }
                 return true
             }
