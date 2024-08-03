@@ -22,10 +22,10 @@ import kotlinx.coroutines.withContext
 
 
 sealed class SubscriptionStatus {
-    object NotSubscribed : SubscriptionStatus()
-    object Subscribed : SubscriptionStatus()
-    object Error : SubscriptionStatus()
-    object Loading : SubscriptionStatus()
+    data object NotSubscribed : SubscriptionStatus()
+    data object Subscribed : SubscriptionStatus()
+    data object Error : SubscriptionStatus()
+    data object Loading : SubscriptionStatus()
 }
 
 
@@ -96,7 +96,6 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
         val billingResult =
             billingClient.launchBillingFlow(context as AppCompatActivity, billingFlowParams)
 
-        Toast.makeText(context, "billingResult: $billingResult", Toast.LENGTH_LONG).show()
     }
 
     private fun handlePurchase(purchase: Purchase) {

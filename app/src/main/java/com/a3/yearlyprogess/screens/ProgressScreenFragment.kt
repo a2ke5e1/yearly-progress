@@ -167,15 +167,18 @@ class ProgressScreenFragment : Fragment() {
                             // Show the ad.
 
                             if (!adLoader.isLoading) {
+                                adFrame.visibility = View.VISIBLE
                                 nativeAdView = updateViewWithNativeAdview(adFrame, ad)
                             }
                             if (isDetached) {
+                                adFrame.visibility = View.GONE
                                 ad.destroy()
                                 return@forNativeAd
                             }
                         }.withAdListener(object : AdListener() {
                             override fun onAdFailedToLoad(adError: LoadAdError) {
                                 // Handle the failure by logging, altering the UI, and so on.
+                                adFrame.visibility = View.GONE
                                 adFrame.removeAllViews()
                             }
                         }).withNativeAdOptions(
