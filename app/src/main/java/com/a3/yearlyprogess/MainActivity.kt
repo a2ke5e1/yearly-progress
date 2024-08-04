@@ -108,6 +108,10 @@ class MainActivity : AppCompatActivity() {
             when (it) {
                 SubscriptionStatus.Subscribed -> {
                     menu.findItem(R.id.removeAds).title = resources.getString(R.string.manage_subscription)
+                    menu.findItem(R.id.removeAds).isVisible = true
+                }
+                SubscriptionStatus.Error -> {
+                    menu.findItem(R.id.removeAds).isVisible = false
                 }
                 else -> menu.findItem(R.id.removeAds).isVisible = true
             }
@@ -137,7 +141,7 @@ class MainActivity : AppCompatActivity() {
                         SubscriptionStatus.Subscribed -> {
                             billingManager.redirectToSubscriptionPage()
                         }
-
+                        SubscriptionStatus.Error -> {}
                         else -> {
                             lifecycleScope.launch(Dispatchers.IO) {
                                 billingManager.processPurchases()

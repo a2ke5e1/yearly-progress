@@ -83,9 +83,24 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
             billingClient.queryProductDetails(params.build())
         }
 
-        val productDetailsList = productDetailsResult.productDetailsList!!
+        val productDetailsList = productDetailsResult.productDetailsList
 
-        val selectedOfferToken = productDetailsList[0].subscriptionOfferDetails!![0].offerToken
+        if (productDetailsList.isNullOrEmpty()) {
+            Toast.makeText(context, "No subscription found", Toast.LENGTH_LONG).show()
+            _shouldShowAds.postValue(SubscriptionStatus.Error)
+            return
+        }
+
+        val selectedOfferToken = productDetailsList[0].subscriptionOfferDetails?.first()?.offerToken
+
+        if (selectedOfferToken == null) {
+            Toast.makeText(context, "No subscription found", Toast.LENGTH_LONG).show()
+            _shouldShowAds.postValue(SubscriptionStatus.Error)
+            return
+        }
+
+
+
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()
                 .setProductDetails(productDetailsList[0]).setOfferToken(selectedOfferToken).build()

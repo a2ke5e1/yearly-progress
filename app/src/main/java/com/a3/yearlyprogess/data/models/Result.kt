@@ -85,10 +85,9 @@ data class Result(
         cal.set(Calendar.DAY_OF_MONTH, day)
 
 
-        val onlyTime = time.split(" ")[0]
-        val hour = onlyTime.split(":")[0].toInt()
-        val minute = onlyTime.split(":")[1].toInt()
-        val second = onlyTime.split(":")[2].toInt()
+        val hour = time.split(":")[0].toInt()
+        val minute = time.split(":")[1].toInt()
+        val second = time.split(":")[2].toInt()
         cal.set(Calendar.HOUR_OF_DAY, hour)
         cal.set(Calendar.MINUTE, minute)
         cal.set(Calendar.SECOND, second)
