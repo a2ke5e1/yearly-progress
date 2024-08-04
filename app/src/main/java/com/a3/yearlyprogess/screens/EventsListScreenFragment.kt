@@ -35,194 +35,166 @@ import kotlinx.coroutines.launch
 // TODO: Implement a search feature
 class EventsListScreenFragment : Fragment() {
 
+  private var _binding: FragmentScreenListEventsBinding? = null
+  private val mEventViewModel: EventViewModel by viewModels()
 
-    private var _binding: FragmentScreenListEventsBinding? = null
-    private val mEventViewModel: EventViewModel by viewModels()
+  // This property is only valid between onCreateView and
+  // onDestroyView.
+  private val binding
+    get() = _binding!!
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+  override fun onCreateView(
+      inflater: LayoutInflater,
+      container: ViewGroup?,
+      savedInstanceState: Bundle?
+  ): View {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
+    _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
 
-        _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
+    manageEventAddButton()
 
-        manageEventAddButton()
+    val eventAdapter = EventsListViewAdapter(AppWidgetManager.INVALID_APPWIDGET_ID) {}
 
+    binding.eventsRecyclerViewer.apply {
+      adapter = eventAdapter
+      layoutManager = LinearLayoutManager(requireContext())
+    }
 
-        val eventAdapter = EventsListViewAdapter(
-            AppWidgetManager.INVALID_APPWIDGET_ID
-        ) {
+    tracker =
+        SelectionTracker.Builder<Long>(
+                "mySelection",
+                binding.eventsRecyclerViewer,
+                ImportEventItemKeyProvider(binding.eventsRecyclerViewer),
+                MyItemDetailsLookup(binding.eventsRecyclerViewer),
+                StorageStrategy.createLongStorage())
+            .withSelectionPredicate(SelectionPredicates.createSelectAnything())
+            .build()
 
-        }
-        binding.eventsRecyclerViewer.apply {
-            adapter = eventAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
+    eventAdapter.setTracker(tracker!!)
 
-        tracker = SelectionTracker.Builder<Long>(
-            "mySelection",
-            binding.eventsRecyclerViewer,
-            ImportEventItemKeyProvider(binding.eventsRecyclerViewer),
-            MyItemDetailsLookup(binding.eventsRecyclerViewer),
-            StorageStrategy.createLongStorage()
-        ).withSelectionPredicate(
-            SelectionPredicates.createSelectAnything()
-        ).build()
+    tracker?.addObserver(
+        object : SelectionTracker.SelectionObserver<Long>() {
+          override fun onSelectionChanged() {
+            super.onSelectionChanged()
+            val lengthItems = tracker!!.selection.size()
+            // Log.d("TAG", "onCreateView: ${tracker!!.selection}")
 
-        eventAdapter.setTracker(tracker!!)
+            if (lengthItems != 0) {
 
-        tracker?.addObserver(
-            object : SelectionTracker.SelectionObserver<Long>() {
-                override fun onSelectionChanged() {
-                    super.onSelectionChanged()
-                    val lengthItems = tracker!!.selection.size()
-                    // Log.d("TAG", "onCreateView: ${tracker!!.selection}")
+              val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+              mt.title = getString(R.string.no_events_selected, lengthItems)
+              mt.menu.clear()
 
-                    if (lengthItems != 0) {
+              mt.setNavigationIcon(R.drawable.ic_baseline_close_24)
+              mt.setNavigationOnClickListener { tracker!!.clearSelection() }
+              mt.isTitleCentered = false
+              mt.inflateMenu(R.menu.selected_menu)
+              mt.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                  R.id.action_delete -> {
+                    val events = eventAdapter.getSelectedEvents()
+                    showDeleteConfirmationDialog(events)
+                    true
+                  }
 
+                  R.id.action_select_all -> {
+                    eventAdapter.selectAll()
+                    true
+                  }
 
-                        val mt =
-                            (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
-                        mt.title = getString(R.string.no_events_selected, lengthItems)
-                        mt.menu.clear()
+                  R.id.action_delete_all -> {
+                    showDeleteConfirmationDialog()
+                    true
+                  }
 
-                        mt.setNavigationIcon(R.drawable.ic_baseline_close_24)
-                        mt.setNavigationOnClickListener {
-                            tracker!!.clearSelection()
-                        }
-                        mt.isTitleCentered = false
-                        mt.inflateMenu(R.menu.selected_menu)
-                        mt.setOnMenuItemClickListener { menuItem ->
-
-                            when (menuItem.itemId) {
-
-                                R.id.action_delete -> {
-                                    val events = eventAdapter.getSelectedEvents()
-                                    showDeleteConfirmationDialog(events)
-                                    true
-                                }
-
-                                R.id.action_select_all -> {
-                                    eventAdapter.selectAll()
-                                    true
-                                }
-
-                                R.id.action_delete_all -> {
-                                    showDeleteConfirmationDialog()
-                                    true
-                                }
-
-                                else -> true
-
-                            }
-                        }
-
-                    } else {
-                        val mt =
-                            (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
-                        mt.title = resources.getString(R.string.events)
-                        mt.navigationIcon = null
-                        mt.isTitleCentered = true
-                        (activity as AppCompatActivity).setSupportActionBar(mt)
-
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            eventAdapter.notifyDataSetChanged()
-                        }
-                    }
-
+                  else -> true
                 }
-            }
-        )
-
-
-        mEventViewModel.readAllData.observe(viewLifecycleOwner) { events ->
-
-            if (events.isEmpty()) {
-                binding.noEvents.visibility = View.VISIBLE
-                binding.eventsRecyclerViewer.visibility = View.GONE
+              }
             } else {
-                binding.noEvents.visibility = View.GONE
-                binding.eventsRecyclerViewer.visibility = View.VISIBLE
+              val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+              mt.title = resources.getString(R.string.events)
+              mt.navigationIcon = null
+              mt.isTitleCentered = true
+              (activity as AppCompatActivity).setSupportActionBar(mt)
+
+              lifecycleScope.launch(Dispatchers.Main) { eventAdapter.notifyDataSetChanged() }
             }
-
-            eventAdapter.setData(events)
-        }
-
-        return binding.root
-
-    }
-
-    // Adds the floating action button to add events
-    // and hides it while scrolling
-    private fun manageEventAddButton() {
-
-        binding.addEventFab.setOnClickListener {
-            val intent = Intent(it.context, EventManagerActivity::class.java)
-            intent.putExtra("addMode", true)
-            startActivity(intent)
-        }
-
-        binding.eventsRecyclerViewer.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
-            override fun onScrolled(
-                recyclerView: RecyclerView,
-                dx: Int,
-                dy: Int
-            ) {
-                if (dy > 0 && binding.addEventFab.visibility == View.VISIBLE) {
-                    binding.addEventFab.hide()
-                } else if (dy < 0 && binding.addEventFab.visibility != View.VISIBLE) {
-                    binding.addEventFab.show()
-                }
-            }
+          }
         })
+
+    mEventViewModel.readAllData.observe(viewLifecycleOwner) { events ->
+      if (events.isEmpty()) {
+        binding.noEvents.visibility = View.VISIBLE
+        binding.eventsRecyclerViewer.visibility = View.GONE
+      } else {
+        binding.noEvents.visibility = View.GONE
+        binding.eventsRecyclerViewer.visibility = View.VISIBLE
+      }
+
+      eventAdapter.setData(events)
     }
 
-    private var tracker: SelectionTracker<Long>? = null
+    return binding.root
+  }
 
+  // Adds the floating action button to add events
+  // and hides it while scrolling
+  private fun manageEventAddButton() {
 
-    override fun onDestroy() {
-        val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
-        mt.navigationIcon = null
-        mt.isTitleCentered = true
-        (activity as AppCompatActivity).setSupportActionBar(mt)
-        super.onDestroy()
-        _binding = null
+    binding.addEventFab.setOnClickListener {
+      val intent = Intent(it.context, EventManagerActivity::class.java)
+      intent.putExtra("addMode", true)
+      startActivity(intent)
     }
 
-    private fun showDeleteConfirmationDialog(
-        events: List<Event> = emptyList()
-    ) {
-        val count = events.size
-        var title = getString(R.string.delete_selected_events, count)
-        var message = getString(R.string.delete_the_selected_events_message)
+    binding.eventsRecyclerViewer.addOnScrollListener(
+        object : RecyclerView.OnScrollListener() {
+          override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            if (dy > 0 && binding.addEventFab.visibility == View.VISIBLE) {
+              binding.addEventFab.hide()
+            } else if (dy < 0 && binding.addEventFab.visibility != View.VISIBLE) {
+              binding.addEventFab.show()
+            }
+          }
+        })
+  }
 
-        if (count == 0) {
-            title = getString(R.string.delete_all_events)
-            message = getString(R.string.delete_all_events_message)
-        }
+  private var tracker: SelectionTracker<Long>? = null
 
+  override fun onDestroy() {
+    val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
+    mt.navigationIcon = null
+    mt.isTitleCentered = true
+    (activity as AppCompatActivity).setSupportActionBar(mt)
+    super.onDestroy()
+    _binding = null
+  }
 
-        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.CentralCard)
+  private fun showDeleteConfirmationDialog(events: List<Event> = emptyList()) {
+    val count = events.size
+    var title = getString(R.string.delete_selected_events, count)
+    var message = getString(R.string.delete_the_selected_events_message)
+
+    if (count == 0) {
+      title = getString(R.string.delete_all_events)
+      message = getString(R.string.delete_all_events_message)
+    }
+
+    val dialog =
+        MaterialAlertDialogBuilder(requireContext(), R.style.CentralCard)
             .setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.outline_delete_24))
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                if (count == 0) {
-                    mEventViewModel.deleteAllEvent()
-                } else {
-                    events.forEach { event ->
-                        mEventViewModel.deleteEvent(event)
-                    }
-                }
-                tracker?.clearSelection()
+              if (count == 0) {
+                mEventViewModel.deleteAllEvent()
+              } else {
+                events.forEach { event -> mEventViewModel.deleteEvent(event) }
+              }
+              tracker?.clearSelection()
             }
             .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .create()
-        dialog.show()
-    }
-
+    dialog.show()
+  }
 }

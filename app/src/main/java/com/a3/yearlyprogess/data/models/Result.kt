@@ -2,7 +2,8 @@ package com.a3.yearlyprogess.data.models
 
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
-import java.util.Calendar
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import java.util.Date
 import java.util.Locale
 
@@ -21,77 +22,53 @@ data class Result(
     val utc_offset: Int
 ) {
 
-    fun getFirstLight(): Date {
-        return convertToDateTime(first_light)
-    }
+  fun getFirstLight(): Date {
+    return convertToDateTime(first_light)
+  }
 
-    fun getSunrise(): Date {
-        return convertToDateTime(sunrise)
-    }
+  fun getSunrise(): Date {
+    return convertToDateTime(sunrise)
+  }
 
-    fun getSunset(): Date {
-        return convertToDateTime(sunset)
-    }
+  fun getSunset(): Date {
+    return convertToDateTime(sunset)
+  }
 
-    fun getGoldenHour(): Date {
-        return convertToDateTime(golden_hour)
-    }
+  fun getGoldenHour(): Date {
+    return convertToDateTime(golden_hour)
+  }
 
-    fun getDawn(): Date {
-        return convertToDateTime(dawn)
-    }
+  fun getDawn(): Date {
+    return convertToDateTime(dawn)
+  }
 
-    fun getDusk(): Date {
-        return convertToDateTime(dusk)
-    }
+  fun getDusk(): Date {
+    return convertToDateTime(dusk)
+  }
 
-    fun getSolarNoon(): Date {
-        return convertToDateTime(solar_noon)
-    }
+  fun getSolarNoon(): Date {
+    return convertToDateTime(solar_noon)
+  }
 
-    fun getDayLength(): Date {
-        return convertToDateTime(day_length)
-    }
+  fun getDayLength(): Date {
+    return convertToDateTime(day_length)
+  }
 
+  fun getLastLight(): Date {
+    return convertToDateTime(last_light)
+  }
 
-    fun getLastLight(): Date {
-        return convertToDateTime(last_light)
-    }
+  private fun convertToDateTime(time: String): Date {
 
-    private fun convertToDateTime(time: String): Date {
-        try {
-            val dateTime = "$date $time"
-            val formatter = SimpleDateFormat(
-                "yyyy-MM-dd hh:mm:ss", Locale.getDefault()
-            )
-            val timeZone = TimeZone.getTimeZone(timezone) // Adjust as needed
-            formatter.timeZone = timeZone
+    val debug = Firebase.crashlytics
+    debug.log("convertToDateTime: $date $time")
 
-            val newDate = formatter.parse(dateTime)
-            return newDate
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
+    val dateTime = "$date $time"
+    val formatter = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
+    val timeZone = TimeZone.getTimeZone(timezone) // Adjust as needed
+    formatter.timeZone = timeZone
 
-        val cal = Calendar.getInstance()
-        cal.timeInMillis = System.currentTimeMillis()
-
-        val year = date.split("-")[0].toInt()
-        val month = date.split("-")[1].toInt()
-        val day = date.split("-")[2].toInt()
-
-        cal.set(Calendar.YEAR, year)
-        cal.set(Calendar.MONTH, month - 1)
-        cal.set(Calendar.DAY_OF_MONTH, day)
-
-
-        val hour = time.split(":")[0].toInt()
-        val minute = time.split(":")[1].toInt()
-        val second = time.split(":")[2].toInt()
-        cal.set(Calendar.HOUR_OF_DAY, hour)
-        cal.set(Calendar.MINUTE, minute)
-        cal.set(Calendar.SECOND, second)
-
-        return cal.time
-    }
+    val newDate = formatter.parse(dateTime)
+    return newDate
+  }
 }
