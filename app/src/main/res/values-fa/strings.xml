@@ -131,5 +131,6 @@
     <string name="no">خیر</string>
     <string name="special_thanks_for_translating">تشکر ویژه برای ترجمه</string>
     <string name="manage_subscription">مدیریت اشتراک</string>
+    <string name="not_available_in_your_region">در منطقه شما در دسترس نیست</string>
 
 </resources>

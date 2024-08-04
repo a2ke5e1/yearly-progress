@@ -130,5 +130,6 @@
     <string name="no">नहीं</string>
     <string name="special_thanks_for_translating">अनुवाद करने के लिए विशेष धन्यवाद</string>
     <string name="manage_subscription">सदस्यता प्रबंधित करें</string>
+    <string name="not_available_in_your_region">आपके क्षेत्र में उपलब्ध नहीं है</string>
 
 </resources>

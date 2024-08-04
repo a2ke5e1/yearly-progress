@@ -86,7 +86,10 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
         val productDetailsList = productDetailsResult.productDetailsList
 
         if (productDetailsList.isNullOrEmpty()) {
-            Toast.makeText(context, "No subscription found", Toast.LENGTH_LONG).show()
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context,
+                    context.getString(R.string.not_available_in_your_region), Toast.LENGTH_LONG).show()
+            }
             _shouldShowAds.postValue(SubscriptionStatus.Error)
             return
         }
@@ -94,7 +97,9 @@ class YearlyProgressSubscriptionManager(private val context: Context) {
         val selectedOfferToken = productDetailsList[0].subscriptionOfferDetails?.first()?.offerToken
 
         if (selectedOfferToken == null) {
-            Toast.makeText(context, "No subscription found", Toast.LENGTH_LONG).show()
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, context.getString(R.string.not_available_in_your_region), Toast.LENGTH_LONG).show()
+            }
             _shouldShowAds.postValue(SubscriptionStatus.Error)
             return
         }
