@@ -6,8 +6,8 @@ data class SunriseSunsetResponse(val results: List<Result>, val status: String) 
     var endTime = 0L
 
     if (dayLight) {
-      startTime = this.results[1].getFirstLight().time
-      endTime = this.results[1].getLastLight().time
+      startTime = this.results[1].getSunrise().time
+      endTime = this.results[1].getSunset().time
       return Pair(startTime, endTime)
     }
 
