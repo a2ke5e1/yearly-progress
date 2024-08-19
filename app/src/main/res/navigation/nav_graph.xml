@@ -23,12 +23,12 @@
     <fragment
         android:id="@+id/events_list"
         android:name="com.a3.yearlyprogess.screens.EventsListScreenFragment"
-        android:label="Events"
+        android:label="@string/events"
         tools:layout="@layout/fragment_screen_list_events">
 
     </fragment>
     <activity
         android:id="@+id/settingsActivity"
         android:name="com.a3.yearlyprogess.SettingsActivity"
-        android:label="SettingsActivity" />
+        android:label="@string/settings" />
 </navigation>

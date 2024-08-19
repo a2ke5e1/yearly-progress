@@ -28,60 +28,66 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/widget_title"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/year"
-                android:textSize="12sp"
-                android:textAllCaps="true"
-                android:textFontWeight="500"
-                android:textColor="@color/widget_text_color" />
-
-            <TextView
-                android:id="@+id/widget_data"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/widget_title"
+                android:layout_gravity="top"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="0dp"
-                android:text="@string/demo_year"
-                android:textColor="@color/widget_text_color"
-                android:textSize="20sp" />
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/widget_per"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/widget_data_info"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="-5dp"
-                android:text="@string/demo_year_per"
-                android:textColor="@color/widget_text_color"
-                android:textSize="32sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/widget_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/year"
+                    android:gravity="start"
+                    android:textSize="12sp"
+                    android:textAllCaps="true"
+                    android:textFontWeight="500"
+                    android:textColor="@color/widget_text_color" />
 
-            <TextView
-                android:id="@+id/widget_data_info"
+                <TextView
+                    android:id="@+id/widget_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:text="@string/demo_year"
+                    android:textColor="@color/widget_text_color"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="22dp"
-                android:textColor="@color/widget_text_color"
-                android:textSize="15sp" />
+                android:orientation="vertical"
+                android:layout_margin="20dp"
+                android:layout_gravity="bottom"
+                >
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/widget_per"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-5dp"
+                    android:text="@string/demo_year_per"
+                    android:textColor="@color/widget_text_color"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/widget_data_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="22dp"
+                    android:textColor="@color/widget_text_color"
+                    android:textSize="15sp" />
+
+
+            </LinearLayout>
 
 
     </com.google.android.material.card.MaterialCardView>

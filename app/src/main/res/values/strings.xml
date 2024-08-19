@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yearly Progess</string>
+    <string name="app_name">Yearly Progress</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Progress</string>
@@ -68,8 +68,6 @@
     <string name="pref_summary_widget_decimal_places">Number of digits after a decimal in widgets</string>
     <string name="unsupported_launcher">Your Launcher does not support this feature. Please add Widget manually</string>
     <string name="pref_title_widget_event_decimal_place">Decimal places for Event Widget</string>
-    <string name="widget_event_widget_decimal_point">widget_event_widget_decimal_point</string>
-    <string name="app_calculation_type">app_calculation_type</string>
     <string name="calculation_mode">Calculation Mode</string>
     <string name="no_events">No Events</string>
     <string name="add_event">Add Event</string>
@@ -105,5 +103,34 @@
     <string name="calendar_permission_message">This permission allows the app to read your calendar events. It enables us to integrate your calendar with our app\'s features, providing you with ability to import events.\n\nThis integration ensures that you stay organized and never miss important events and appointments.</string>
     <string name="dynamic_time_left_counter_will_automatically_switch_between_days_hours_minutes_based_on_the_time_left">Dynamic Time left counter will automatically switch between days, hours, minutes based on the time left.</string>
     <string name="dynamic_time_left_counter">Dynamic Time Left Counter</string>
+    <string name="repeat_events">Repeat Events</string>
+    <string name="all_day">All Day</string>
+    <string name="every_year">Every Year</string>
+    <string name="every_month">Every Month</string>
+    <string name="repeat_weekdays">Repeat Weekdays</string>
+    <string name="events">Events</string>
+    <string name="edit">Edit</string>
+    <string name="join_our_telegram_group">Join our telegram group</string>
+    <string name="classic_widgets">Classic Widgets</string>
+    <string name="all_in_one_widget">All in One Widget</string>
+    <string name="delete_selected">Delete Selected</string>
+    <string name="delete_all">Delete All</string>
+    <string name="today_sunrise_at_and_sunset_at">Today sunrise at %1$s and sunset at %2$s.</string>
+    <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">Last night\'s sunset was at %1$s and next sunrise will be at %2$s.</string>
+    <string name="widget_customization">Widget Customization</string>
+    <string name="standalone_widget">Standalone Widget</string>
+    <string name="version">Version</string>
+    <string name="no_location_permission">No location permission</string>
+    <string name="of_seconds">of %1$ss</string>
+    <string name="app">App</string>
+    <string name="event_widget">Event Widget</string>
+    <string name="remove_ads">Remove Ads</string>
+    <string name="current_value_settings">Current value: %1$s</string>
+    <string name="no_events_selected">%1$d selected</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="special_thanks_for_translating">Special thanks for translating</string>
+    <string name="manage_subscription">Manage Subscription</string>
+    <string name="not_available_in_your_region">Not available in your region</string>
 
 </resources>

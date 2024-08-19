@@ -17,9 +17,15 @@ data class Event(
     val repeatEventDays: List<RepeatDays> = emptyList(),
 ) : Parcelable
 
-
 // Enum class for days event will be repeated
 enum class RepeatDays {
-    SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, EVERY_MONTH, EVERY_YEAR
+  SUNDAY,
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
+  EVERY_MONTH,
+  EVERY_YEAR
 }
-

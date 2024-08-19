@@ -4,6 +4,8 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -13,9 +15,9 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 77
+        versionCode = 86
         val localVersionCode = versionCode
-        versionName = "2.${localVersionCode!! - 64}-beta"
+        versionName = "2.13.${localVersionCode!! - 78}-alpha"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -52,6 +54,8 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
+    implementation("com.google.firebase:firebase-crashlytics:19.0.3")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -88,7 +92,7 @@ dependencies {
     implementation("de.raphaelebner:roomdatabasebackup:1.0.0-beta14")
 
     // Lifecycle Components
-    val lifecycle_version = "2.8.3"
+    val lifecycle_version = "2.8.4"
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
@@ -102,5 +106,9 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Billing
+    val billing_version = "7.0.0"
+    implementation("com.android.billingclient:billing-ktx:$billing_version")
 
 }

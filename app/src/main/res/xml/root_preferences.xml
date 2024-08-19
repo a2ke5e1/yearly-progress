@@ -3,7 +3,7 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="App">
+        app:title="@string/app">
 
         <ListPreference
             app:defaultValue="0"
@@ -40,7 +40,7 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="Widget Customization">
+        app:title="@string/widget_customization">
         >
 
         <SeekBarPreference
@@ -94,7 +94,7 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="Standalone Widget">
+        app:title="@string/standalone_widget">
 
         <SeekBarPreference
             android:max="5"
@@ -110,7 +110,7 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="Event Widget">
+        app:title="@string/event_widget">
 
         <SeekBarPreference
             android:max="5"
