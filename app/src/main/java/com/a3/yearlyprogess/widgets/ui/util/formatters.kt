@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.text.style.SuperscriptSpan
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -18,7 +19,7 @@ import java.util.Locale
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-fun Double.styleFormatted(digits: Int = 2): SpannableString {
+fun Double.styleFormatted(digits: Int = 2, cloverMode: Boolean = false): SpannableString {
   val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
   numberFormat.maximumFractionDigits = digits
   val formattedNumber = numberFormat.format(this) + "%"
@@ -28,8 +29,16 @@ fun Double.styleFormatted(digits: Int = 2): SpannableString {
   val spannable = SpannableString(formattedNumber)
   if (dotPos != -1) {
     spannable.setSpan(
+        StyleSpan(android.graphics.Typeface.BOLD), 0, dotPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    spannable.setSpan(
         RelativeSizeSpan(0.7f), dotPos, formattedNumber.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
   } else {
+    spannable.setSpan(
+        StyleSpan(android.graphics.Typeface.BOLD),
+        0,
+        formattedNumber.length - 1,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
     spannable.setSpan(
         RelativeSizeSpan(0.7f),
         formattedNumber.length - 1,
