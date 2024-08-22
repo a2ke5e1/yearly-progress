@@ -132,5 +132,6 @@
     <string name="special_thanks_for_translating">Special thanks for translating</string>
     <string name="manage_subscription">Manage Subscription</string>
     <string name="not_available_in_your_region">Not available in your region</string>
+    <string name="time_left">%1$s left</string>
 
 </resources>
