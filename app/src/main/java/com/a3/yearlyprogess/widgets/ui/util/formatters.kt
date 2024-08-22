@@ -92,12 +92,7 @@ fun Int.toFormattedTimePeriod(
   }
 }
 
-fun Long.toTimePeriodLeftText(context: Context): String {
-  val pref = PreferenceManager.getDefaultSharedPreferences(context)
-  val dynamicTimeLeft =
-      pref.getBoolean(
-          ContextCompat.getString(context, R.string.widget_widget_use_dynamic_time_left), false)
-
+fun Long.toTimePeriodLeftText(dynamicTimeLeft: Boolean = false): String {
   if (dynamicTimeLeft) {
     val decimalPlaces = 0
     this.toDuration(DurationUnit.MILLISECONDS).toComponents {

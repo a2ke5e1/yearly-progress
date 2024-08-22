@@ -7,26 +7,78 @@
     android:layout_height="match_parent"
     tools:context=".widgets.manager.StandaloneWidgetStyle">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/rectBtn"
-        app:layout_constraintBottom_toTopOf="@id/cloverBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rectangular"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-       />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/cloverBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clover"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/leftCounter"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/dynamicLeftCounter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/leftCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/replaceCounter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dynamicLeftCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/decimalSlider"
+        android:valueFrom="0.0"
+        android:valueTo="5.0"
+        android:stepSize="1.0"
+        app:layout_constraintTop_toBottomOf="@id/replaceCounter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/backgroundSlider"
+        android:valueFrom="0.0"
+        android:valueTo="100.0"
+        app:layout_constraintTop_toBottomOf="@id/decimalSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/rectBtn"
+        app:layout_constraintTop_toBottomOf="@id/backgroundSlider"
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <FrameLayout
+            android:id="@+id/rect_container"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cloverBtn"
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/rectBtn">
+
+        <FrameLayout
+            android:id="@+id/clover_container"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

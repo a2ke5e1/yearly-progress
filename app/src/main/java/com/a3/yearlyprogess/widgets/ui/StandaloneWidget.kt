@@ -69,7 +69,7 @@ object WidgetUtils {
     val progress = calculateProgress(context, startTime, endTime)
     val widgetDaysLeftCounter =
         context.getString(
-            R.string.time_left, calculateTimeLeft(endTime).toTimePeriodLeftText(context))
+            R.string.time_left, calculateTimeLeft(endTime).toTimePeriodLeftText(options?.dynamicLeftCounter == true))
 
     /**
      * Creates a rectangular RemoteViews object.
@@ -159,39 +159,45 @@ object WidgetUtils {
       WidgetShape.CLOVER -> {
         val large =
             cloverRemoteView().apply {
-              setViewLayoutMargin(
-                  R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
-              setViewLayoutHeight(R.id.widget_spacer, 8f, TypedValue.COMPLEX_UNIT_DIP)
               setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 13f)
               setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 24f)
               setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 38f)
               setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 11f)
             }
-        val square =
-            cloverRemoteView().apply {
-              setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
-              setViewLayoutMargin(
-                  R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
-              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
-              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
-              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
-              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
-            }
-        val small =
-            cloverRemoteView().apply {
-              setViewLayoutHeight(R.id.widget_spacer, 2f, TypedValue.COMPLEX_UNIT_DIP)
-              setViewLayoutMargin(
-                  R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -4f, TypedValue.COMPLEX_UNIT_DIP)
-              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 6f)
-              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 8f)
-              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 16f)
-              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 4f)
-            }
-        RemoteViews(
-            mapOf(
-                SizeF(220f, 220f) to large,
-                SizeF(160f, 160f) to square,
-                SizeF(100f, 100f) to small))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          large.apply {
+            setViewLayoutMargin(
+                R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
+            setViewLayoutHeight(R.id.widget_spacer, 8f, TypedValue.COMPLEX_UNIT_DIP)
+          }
+          val square =
+              cloverRemoteView().apply {
+                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
+                setViewLayoutMargin(
+                    R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
+                setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
+                setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
+                setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
+                setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
+              }
+          val small =
+              cloverRemoteView().apply {
+                setViewLayoutHeight(R.id.widget_spacer, 2f, TypedValue.COMPLEX_UNIT_DIP)
+                setViewLayoutMargin(
+                    R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -4f, TypedValue.COMPLEX_UNIT_DIP)
+                setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 6f)
+                setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 8f)
+                setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 16f)
+                setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 4f)
+              }
+          RemoteViews(
+              mapOf(
+                  SizeF(220f, 220f) to large,
+                  SizeF(160f, 160f) to square,
+                  SizeF(100f, 100f) to small))
+        } else {
+          large
+        }
       }
       else -> rectangularRemoteView()
     }
@@ -233,19 +239,33 @@ data class StandaloneWidgetOptions(
      */
     fun load(context: Context, widgetId: Int): StandaloneWidgetOptions {
       val pref = PreferenceManager.getDefaultSharedPreferences(context)
+
+      val globalDecimalPointKey = context.getString(R.string.widget_widget_decimal_point)
+      val globalTimeLeftKey = context.getString(R.string.widget_widget_time_left)
+      val globalDynamicTimeLeftKey = context.getString(R.string.widget_widget_use_dynamic_time_left)
+      val globalReplaceWithCounterKey =
+          context.getString(R.string.widget_widget_event_replace_progress_with_days_counter)
+      val globalBackgroundTransparencyKey =
+          context.getString(R.string.widget_widget_background_transparency)
+
+      val widgetTypeKey = "$WIDGET_TYPE$widgetId"
+      val widgetShapeKey = "$WIDGET_SHAPE$widgetId"
+
+      val globalDecimalPoint = pref.getInt(globalDecimalPointKey, 2)
+      val globalTimeLeft = pref.getBoolean(globalTimeLeftKey, false)
+      val globalDynamicTimeLeft = pref.getBoolean(globalDynamicTimeLeftKey, false)
+      val globalReplaceWithCounter = pref.getBoolean(globalReplaceWithCounterKey, false)
+      val globalBackgroundTransparency = pref.getInt(globalBackgroundTransparencyKey, 100)
+
       return StandaloneWidgetOptions(
           widgetId,
-          pref.getInt(context.getString(R.string.widget_widget_decimal_point), 2),
-          pref.getBoolean(context.getString(R.string.widget_widget_time_left), false),
-          pref.getBoolean(context.getString(R.string.widget_widget_use_dynamic_time_left), false),
-          pref.getBoolean(
-              context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
-              false),
-          pref.getInt(context.getString(R.string.widget_widget_background_transparency), 100),
-          pref.getString("$WIDGET_TYPE$widgetId", TimePeriod.DAY.name)?.let {
-            TimePeriod.valueOf(it)
-          },
-          pref.getString("$WIDGET_SHAPE$widgetId", WidgetShape.RECTANGLE.name)?.let {
+          pref.getInt("$globalDecimalPointKey$widgetId", globalDecimalPoint),
+          pref.getBoolean("$globalTimeLeftKey$widgetId", globalTimeLeft),
+          pref.getBoolean("$globalDynamicTimeLeftKey$widgetId", globalDynamicTimeLeft),
+          pref.getBoolean("$globalReplaceWithCounterKey$widgetId", globalReplaceWithCounter),
+          pref.getInt("$globalBackgroundTransparencyKey$widgetId", globalBackgroundTransparency),
+          pref.getString(widgetTypeKey, TimePeriod.DAY.name)?.let { TimePeriod.valueOf(it) },
+          pref.getString(widgetShapeKey, WidgetShape.RECTANGLE.name)?.let {
             WidgetShape.valueOf(it)
           } ?: WidgetShape.RECTANGLE)
     }
@@ -265,15 +285,18 @@ data class StandaloneWidgetOptions(
    */
   fun save(context: Context) {
     PreferenceManager.getDefaultSharedPreferences(context).edit().apply {
-      putInt(context.getString(R.string.widget_widget_decimal_point), decimalPlaces)
-      putBoolean(context.getString(R.string.widget_widget_time_left), timeLeftCounter)
+      putInt("${context.getString(R.string.widget_widget_decimal_point)}${widgetId}", decimalPlaces)
       putBoolean(
-          context.getString(R.string.widget_widget_use_dynamic_time_left), dynamicLeftCounter)
+          "${context.getString(R.string.widget_widget_time_left)}${widgetId}", timeLeftCounter)
       putBoolean(
-          context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
+          "${context.getString(R.string.widget_widget_use_dynamic_time_left)}${widgetId}",
+          dynamicLeftCounter)
+      putBoolean(
+          "${context.getString(R.string.widget_widget_event_replace_progress_with_days_counter)}${widgetId}",
           replaceProgressWithDaysLeft)
       putInt(
-          context.getString(R.string.widget_widget_background_transparency), backgroundTransparency)
+          "${context.getString(R.string.widget_widget_background_transparency)}${widgetId}",
+          backgroundTransparency)
       putString("$WIDGET_TYPE$widgetId", widgetType?.name)
       putString("$WIDGET_SHAPE$widgetId", shape.name)
       apply()
@@ -334,6 +357,7 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
       appWidgetId: Int
   ) {
     val options = StandaloneWidgetOptions.load(context, appWidgetId).copy(widgetType = widgetType)
+    options.save(context) // This ensures that the widget type is saved, when freshly added.
     appWidgetManager.updateAppWidget(appWidgetId, standaloneWidgetRemoteView(context, options))
   }
 }
