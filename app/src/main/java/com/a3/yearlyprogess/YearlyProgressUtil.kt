@@ -44,6 +44,12 @@ fun calculateProgress(context: Context, startTime: Long, endTime: Long): Double 
   }
 }
 
+fun calculateProgress(context: Context, timePeriod: TimePeriod): Double {
+  val startTime = calculateStartTime(context, timePeriod)
+  val endTime = calculateEndTime(context, timePeriod)
+  return calculateProgress(context, startTime, endTime)
+}
+
 fun calculateTimeLeft(endTime: Long): Long {
   return endTime - System.currentTimeMillis()
 }

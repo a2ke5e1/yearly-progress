@@ -20,16 +20,16 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.SubscriptionStatus
 import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.YearlyProgressManager
-import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.YearlyProgressSubscriptionManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
+import com.a3.yearlyprogess.getCurrentPeriodValue
 import com.a3.yearlyprogess.loadSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayLightWidget
@@ -41,6 +41,7 @@ import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.widgets.ui.YearWidget
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
+import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -48,10 +49,10 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
+import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 /** A simple [Fragment] subclass as the second destination in the navigation. */
 class WidgetScreenFragment : Fragment() {
@@ -140,10 +141,11 @@ class WidgetScreenFragment : Fragment() {
       widgetType: TimePeriod
   ): View {
 
-      val appContext = requireActivity().applicationContext
+    val appContext = requireActivity().applicationContext
 
     val widgetRemoteView =
-        StandaloneWidget.standaloneWidgetRemoteView(appContext, widgetType).apply(appContext, container)
+        StandaloneWidget.standaloneWidgetRemoteView(appContext, widgetType)
+            .apply(appContext, container)
     widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener {}
     container.removeAllViews()
     container.addView(widgetRemoteView)
@@ -157,10 +159,11 @@ class WidgetScreenFragment : Fragment() {
       dayLight: Boolean,
   ): View {
 
-      val appContext = requireActivity().applicationContext
+    val appContext = requireActivity().applicationContext
 
-      val widgetRemoteView =
-        DayNightWidget.dayNightLightWidgetRemoteView(appContext, dayLight).apply(appContext, container)
+    val widgetRemoteView =
+        DayNightWidget.dayNightLightWidgetRemoteView(appContext, dayLight)
+            .apply(appContext, container)
     widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener {}
     container.removeAllViews()
     container.addView(widgetRemoteView)
@@ -173,13 +176,11 @@ class WidgetScreenFragment : Fragment() {
       while (true) {
 
         // Loads user preferences and set default values if not set
-        YearlyProgressManager(requireContext()).setDefaultWeek()
-        YearlyProgressManager(requireContext()).setDefaultCalculationMode()
 
-        val progressTextYear = YearlyProgressManager.getProgress(YearlyProgressManager.YEAR)
-        val progressTextMonth = YearlyProgressManager.getProgress(YearlyProgressManager.MONTH)
-        val progressTextDay = YearlyProgressManager.getProgress(YearlyProgressManager.DAY)
-        val progressTextWeek = YearlyProgressManager.getProgress(YearlyProgressManager.WEEK)
+        val progressTextYear = calculateProgress(requireContext(), TimePeriod.YEAR)
+        val progressTextMonth = calculateProgress(requireContext(), TimePeriod.MONTH)
+        val progressTextDay = calculateProgress(requireContext(), TimePeriod.DAY)
+        val progressTextWeek = calculateProgress(requireContext(), TimePeriod.WEEK)
 
         val progressYear = progressTextYear.roundToInt()
         val progressMonth = progressTextMonth.roundToInt()
@@ -212,10 +213,19 @@ class WidgetScreenFragment : Fragment() {
           allInOneProgressBarDay.progress = progressDay
           allInOneProgressBarWeek.progress = progressWeek
 
-          allInOneTitleTextViewYear.text = YearlyProgressManager.getYear().toString()
-          allInOneTitleTextViewMonth.text = YearlyProgressManager.getMonth(isLong = false)
-          allInOneTitleTextViewDay.text = YearlyProgressManager.getDay(formatted = true)
-          allInOneTitleTextViewWeek.text = YearlyProgressManager.getWeek(isLong = false)
+          val dayCurrentValue =
+              getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY)
+          val weekCurrentValue =
+              getCurrentPeriodValue(TimePeriod.WEEK).toFormattedTimePeriod(TimePeriod.WEEK)
+          val monthCurrentValue =
+              getCurrentPeriodValue(TimePeriod.MONTH).toFormattedTimePeriod(TimePeriod.MONTH)
+          val yearCurrentValue =
+              getCurrentPeriodValue(TimePeriod.YEAR).toFormattedTimePeriod(TimePeriod.YEAR)
+
+          allInOneTitleTextViewYear.text = yearCurrentValue
+          allInOneTitleTextViewMonth.text = monthCurrentValue
+          allInOneTitleTextViewDay.text = weekCurrentValue
+          allInOneTitleTextViewWeek.text = dayCurrentValue
         }
         delay(i * 1000)
       }
@@ -247,62 +257,52 @@ class WidgetScreenFragment : Fragment() {
         updateStandaloneWidgetRemoteView(requireContext(), binding.widgetNightlightContainer, false)
 
     animatedUpdateProgressBarView(
-        yearRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.YEAR)
+        yearRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.YEAR)
     animatedUpdateProgressTextView(
-        yearRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.YEAR)
+        yearRemoteView.findViewById(R.id.widgetProgress), TimePeriod.YEAR)
 
     animatedUpdateProgressBarView(
-        monthRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.MONTH)
+        monthRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.MONTH)
     animatedUpdateProgressTextView(
-        monthRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.MONTH)
+        monthRemoteView.findViewById(R.id.widgetProgress), TimePeriod.MONTH)
 
     animatedUpdateProgressBarView(
-        weekRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.WEEK)
+        weekRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.WEEK)
     animatedUpdateProgressTextView(
-        weekRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.WEEK)
+        weekRemoteView.findViewById(R.id.widgetProgress), TimePeriod.WEEK)
 
     animatedUpdateProgressBarView(
-        dayRemoteView.findViewById(R.id.widgetProgressBar), YearlyProgressManager.DAY)
-    animatedUpdateProgressTextView(
-        dayRemoteView.findViewById(R.id.widgetProgress), YearlyProgressManager.DAY)
+        dayRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.DAY)
+    animatedUpdateProgressTextView(dayRemoteView.findViewById(R.id.widgetProgress), TimePeriod.DAY)
 
-    animatedUpdateProgressTextView(allInOneProgressTextViewYear, YearlyProgressManager.YEAR, true)
-    animatedUpdateProgressTextView(allInOneProgressTextViewMonth, YearlyProgressManager.MONTH, true)
-    animatedUpdateProgressTextView(allInOneProgressTextViewDay, YearlyProgressManager.DAY, true)
-    animatedUpdateProgressTextView(allInOneProgressTextViewWeek, YearlyProgressManager.WEEK, true)
+    animatedUpdateProgressTextView(allInOneProgressTextViewYear, TimePeriod.YEAR, true)
+    animatedUpdateProgressTextView(allInOneProgressTextViewMonth, TimePeriod.MONTH, true)
+    animatedUpdateProgressTextView(allInOneProgressTextViewDay, TimePeriod.DAY, true)
+    animatedUpdateProgressTextView(allInOneProgressTextViewWeek, TimePeriod.WEEK, true)
 
-    animatedUpdateProgressBarView(allInOneProgressBarYear, YearlyProgressManager.YEAR)
-    animatedUpdateProgressBarView(allInOneProgressBarMonth, YearlyProgressManager.MONTH)
-    animatedUpdateProgressBarView(allInOneProgressBarDay, YearlyProgressManager.DAY)
-    animatedUpdateProgressBarView(allInOneProgressBarWeek, YearlyProgressManager.WEEK)
+    animatedUpdateProgressBarView(allInOneProgressBarYear, TimePeriod.YEAR)
+    animatedUpdateProgressBarView(allInOneProgressBarMonth, TimePeriod.MONTH)
+    animatedUpdateProgressBarView(allInOneProgressBarDay, TimePeriod.DAY)
+    animatedUpdateProgressBarView(allInOneProgressBarWeek, TimePeriod.WEEK)
 
     if (ContextCompat.checkSelfPermission(
         requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) ==
         PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable) {
       animatedUpdateProgressTextView(
-          dayLightRemoteView.findViewById(R.id.widgetProgress),
-          YearlyProgressManager.DAY,
-          dayLight = true)
+          dayLightRemoteView.findViewById(R.id.widgetProgress), TimePeriod.DAY, dayLight = true)
       animatedUpdateProgressBarView(
-          dayLightRemoteView.findViewById(R.id.widgetProgressBar),
-          YearlyProgressManager.DAY,
-          dayLight = true)
+          dayLightRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.DAY, dayLight = true)
 
       animatedUpdateProgressTextView(
-          nightLightRemoteView.findViewById(R.id.widgetProgress),
-          YearlyProgressManager.DAY,
-          dayLight = false)
+          nightLightRemoteView.findViewById(R.id.widgetProgress), TimePeriod.DAY, dayLight = false)
       animatedUpdateProgressBarView(
           nightLightRemoteView.findViewById(R.id.widgetProgressBar),
-          YearlyProgressManager.DAY,
+          TimePeriod.DAY,
           dayLight = false)
     }
   }
 
   private fun initProgressBarsTextViews(view: View) {
-    YearlyProgressManager(requireContext()).setDefaultWeek()
-    YearlyProgressManager(requireContext()).setDefaultCalculationMode()
-
     allInOneProgressTextViewYear = view.findViewById<TextView>(R.id.progressTextYear)
     allInOneProgressTextViewMonth = view.findViewById<TextView>(R.id.progressTextMonth)
     allInOneProgressTextViewDay = view.findViewById<TextView>(R.id.progressTextDay)
@@ -414,15 +414,20 @@ class WidgetScreenFragment : Fragment() {
 
   private fun animatedUpdateProgressTextView(
       textView: TextView,
-      type: Int,
+      type: TimePeriod,
       isAllInOne: Boolean = false,
       dayLight: Boolean? = null
   ) {
+    val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
+
+    val decimalPlace: Int =
+        pref.getInt(requireContext().getString(R.string.widget_widget_decimal_point), 2)
+
     var progressTextAnimator =
         if (isAllInOne) {
-          ValueAnimator.ofInt(0, YearlyProgressManager.getProgress(type).roundToInt())
+          ValueAnimator.ofInt(0, calculateProgress(requireContext(), type).roundToInt())
         } else {
-          ValueAnimator.ofFloat(0F, YearlyProgressManager.getProgress(type).toFloat())
+          ValueAnimator.ofFloat(0F, calculateProgress(requireContext(), type).toFloat())
         }
 
     if (dayLight != null) {
@@ -438,7 +443,7 @@ class WidgetScreenFragment : Fragment() {
           if (isAllInOne) {
             (it.animatedValue as Int).toDouble().styleFormatted(0)
           } else {
-            formatProgressStyle((it.animatedValue as Float).toDouble())
+            ((it.animatedValue as Float).toDouble().styleFormatted(decimalPlace))
           }
       textView.requestLayout()
     }
@@ -447,11 +452,11 @@ class WidgetScreenFragment : Fragment() {
 
   private fun animatedUpdateProgressBarView(
       progressBarView: ProgressBar,
-      type: Int,
+      type: TimePeriod,
       dayLight: Boolean? = null
   ) {
     var progressViewAnimator =
-        ValueAnimator.ofInt(0, YearlyProgressManager.getProgress(type).roundToInt())
+        ValueAnimator.ofInt(0, calculateProgress(requireContext(), type).roundToInt())
 
     if (dayLight != null) {
       val sunriseSunsetResponse = loadSunriseSunset(requireContext()) ?: return
