@@ -11,7 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions
-import com.a3.yearlyprogess.widgets.ui.WidgetShape
+import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.google.android.material.button.MaterialButton
 
 class StandaloneWidgetStyle : AppCompatActivity() {

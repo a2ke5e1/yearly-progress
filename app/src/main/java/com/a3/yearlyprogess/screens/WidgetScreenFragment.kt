@@ -39,8 +39,8 @@ import com.a3.yearlyprogess.widgets.ui.MonthWidget
 import com.a3.yearlyprogess.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions
+import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
-import com.a3.yearlyprogess.widgets.ui.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.YearWidget
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod

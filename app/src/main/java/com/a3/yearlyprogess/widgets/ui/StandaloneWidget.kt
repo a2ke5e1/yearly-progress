@@ -26,6 +26,7 @@ import com.a3.yearlyprogess.calculateStartTime
 import com.a3.yearlyprogess.calculateTimeLeft
 import com.a3.yearlyprogess.getCurrentPeriodValue
 import com.a3.yearlyprogess.loadSunriseSunset
+import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
@@ -212,12 +213,6 @@ object WidgetUtils {
   }
 }
 
-enum class WidgetShape {
-  RECTANGLE,
-  CLOVER,
-  PILL
-}
-
 data class StandaloneWidgetOptions(
     val widgetId: Int,
     val decimalPlaces: Int,
@@ -262,6 +257,12 @@ data class StandaloneWidgetOptions(
           backgroundTransparency,
           widgetType,
           shape)
+    }
+
+    enum class WidgetShape {
+      RECTANGLE,
+      CLOVER,
+      PILL
     }
   }
 
