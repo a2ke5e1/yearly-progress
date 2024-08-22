@@ -139,8 +139,11 @@ class WidgetScreenFragment : Fragment() {
       container: FrameLayout,
       widgetType: TimePeriod
   ): View {
+
+      val appContext = requireActivity().applicationContext
+
     val widgetRemoteView =
-        StandaloneWidget.standaloneWidgetRemoteView(context, widgetType).apply(activity, container)
+        StandaloneWidget.standaloneWidgetRemoteView(appContext, widgetType).apply(appContext, container)
     widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener {}
     container.removeAllViews()
     container.addView(widgetRemoteView)
@@ -153,8 +156,11 @@ class WidgetScreenFragment : Fragment() {
       container: FrameLayout,
       dayLight: Boolean,
   ): View {
-    val widgetRemoteView =
-        DayNightWidget.dayNightLightWidgetRemoteView(context, dayLight).apply(activity, container)
+
+      val appContext = requireActivity().applicationContext
+
+      val widgetRemoteView =
+        DayNightWidget.dayNightLightWidgetRemoteView(appContext, dayLight).apply(appContext, container)
     widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener {}
     container.removeAllViews()
     container.addView(widgetRemoteView)

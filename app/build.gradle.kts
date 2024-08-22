@@ -19,6 +19,8 @@ android {
         val localVersionCode = versionCode
         versionName = "2.13.${localVersionCode!! - 78}-alpha"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
     }
 
     signingConfigs {
