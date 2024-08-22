@@ -39,10 +39,10 @@ object WidgetUtils {
       startTime: Long,
       endTime: Long,
       currentValue: SpannableString,
-      errorMessage: String? = null
+      errorMessage: String? = null,
+      options: StandaloneWidgetOptions? = null
   ): RemoteViews {
     val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
-    val pref = PreferenceManager.getDefaultSharedPreferences(context)
 
     if (errorMessage != null) {
       val errorView = RemoteViews(context.packageName, R.layout.error_widget)
@@ -55,13 +55,9 @@ object WidgetUtils {
     }
 
     // Load user preferences
-    val decimalPlace: Int = pref.getInt(context.getString(R.string.widget_widget_decimal_point), 2)
-    val timeLeftCounter =
-        pref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
-    val replaceProgressWithDaysLeft =
-        pref.getBoolean(
-            context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
-            false)
+    val decimalPlace: Int = options?.decimalPlaces ?: 2
+    val timeLeftCounter = options?.timeLeftCounter == true
+    val replaceProgressWithDaysLeft = options?.replaceProgressWithDaysLeft == true
 
     // Calculate progress
     val progress = calculateProgress(context, startTime, endTime)
@@ -84,8 +80,7 @@ object WidgetUtils {
         PendingIntent.getActivity(
             context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE))
 
-    var widgetBackgroundAlpha =
-        pref.getInt(context.getString(R.string.widget_widget_background_transparency), 100)
+    var widgetBackgroundAlpha = options?.backgroundTransparency ?: 100
     widgetBackgroundAlpha = ((widgetBackgroundAlpha / 100.0) * 255).toInt()
     view.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
     view.setViewVisibility(
@@ -105,6 +100,7 @@ object WidgetUtils {
       endTime: Long,
       currentValue: SpannableString,
       errorMessage: String? = null,
+      options: StandaloneWidgetOptions
   ): RemoteViews {
 
     fun cloverRemoteView(): RemoteViews {
@@ -125,14 +121,9 @@ object WidgetUtils {
       }
 
       // Load user preferences
-      val decimalPlace: Int =
-          pref.getInt(context.getString(R.string.widget_widget_decimal_point), 2)
-      val timeLeftCounter =
-          pref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
-      val replaceProgressWithDaysLeft =
-          pref.getBoolean(
-              context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
-              false)
+      val decimalPlace: Int = options.decimalPlaces
+      val timeLeftCounter = options.timeLeftCounter
+      val replaceProgressWithDaysLeft = options.replaceProgressWithDaysLeft
 
       // Calculate progress
       val progress = calculateProgress(context, startTime, endTime)
@@ -350,13 +341,28 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
           when (options.shape) {
             WidgetShape.RECTANGLE ->
                 WidgetUtils.createRemoteView(
-                    context, widgetTitleText, startTime, endTime, SpannableString(currentValue))
+                    context,
+                    widgetTitleText,
+                    startTime,
+                    endTime,
+                    SpannableString(currentValue),
+                    options = options)
             WidgetShape.CLOVER ->
                 WidgetUtils.cloverDesignedRemoteView(
-                    context, widgetTitleText, startTime, endTime, SpannableString(currentValue))
+                    context,
+                    widgetTitleText,
+                    startTime,
+                    endTime,
+                    SpannableString(currentValue),
+                    options = options)
             else ->
                 WidgetUtils.createRemoteView(
-                    context, widgetTitleText, startTime, endTime, SpannableString(currentValue))
+                    context,
+                    widgetTitleText,
+                    startTime,
+                    endTime,
+                    SpannableString(currentValue),
+                    options = options)
           }
 
       return remoteView
