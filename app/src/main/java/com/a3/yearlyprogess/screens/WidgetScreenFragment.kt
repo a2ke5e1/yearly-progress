@@ -49,10 +49,10 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
-import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 /** A simple [Fragment] subclass as the second destination in the navigation. */
 class WidgetScreenFragment : Fragment() {
@@ -136,7 +136,6 @@ class WidgetScreenFragment : Fragment() {
   }
 
   private fun updateStandaloneWidgetRemoteView(
-      context: Context,
       container: FrameLayout,
       widgetType: TimePeriod
   ): View {
@@ -154,7 +153,6 @@ class WidgetScreenFragment : Fragment() {
   }
 
   private fun updateStandaloneWidgetRemoteView(
-      context: Context,
       container: FrameLayout,
       dayLight: Boolean,
   ): View {
@@ -189,16 +187,16 @@ class WidgetScreenFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.Main) {
           context?.let {
-            updateStandaloneWidgetRemoteView(it, binding.widgetYearContainer, TimePeriod.YEAR)
-            updateStandaloneWidgetRemoteView(it, binding.widgetMonthContainer, TimePeriod.MONTH)
-            updateStandaloneWidgetRemoteView(it, binding.widgetWeekContainer, TimePeriod.WEEK)
-            updateStandaloneWidgetRemoteView(it, binding.widgetDayContainer, TimePeriod.DAY)
+            updateStandaloneWidgetRemoteView(binding.widgetYearContainer, TimePeriod.YEAR)
+            updateStandaloneWidgetRemoteView(binding.widgetMonthContainer, TimePeriod.MONTH)
+            updateStandaloneWidgetRemoteView(binding.widgetWeekContainer, TimePeriod.WEEK)
+            updateStandaloneWidgetRemoteView(binding.widgetDayContainer, TimePeriod.DAY)
 
             if (ContextCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable) {
-              updateStandaloneWidgetRemoteView(it, binding.widgetDaylightContainer, true)
-              updateStandaloneWidgetRemoteView(it, binding.widgetNightlightContainer, false)
+              updateStandaloneWidgetRemoteView(binding.widgetDaylightContainer, true)
+              updateStandaloneWidgetRemoteView(binding.widgetNightlightContainer, false)
             }
           }
 
@@ -235,26 +233,21 @@ class WidgetScreenFragment : Fragment() {
   private fun startAnimationWidget() {
 
     val yearRemoteView =
-        updateStandaloneWidgetRemoteView(
-            requireContext(), binding.widgetYearContainer, TimePeriod.YEAR)
+        updateStandaloneWidgetRemoteView(binding.widgetYearContainer, TimePeriod.YEAR)
 
     val monthRemoteView =
-        updateStandaloneWidgetRemoteView(
-            requireContext(), binding.widgetMonthContainer, TimePeriod.MONTH)
+        updateStandaloneWidgetRemoteView(binding.widgetMonthContainer, TimePeriod.MONTH)
 
     val weekRemoteView =
-        updateStandaloneWidgetRemoteView(
-            requireContext(), binding.widgetWeekContainer, TimePeriod.WEEK)
+        updateStandaloneWidgetRemoteView(binding.widgetWeekContainer, TimePeriod.WEEK)
 
-    val dayRemoteView =
-        updateStandaloneWidgetRemoteView(
-            requireContext(), binding.widgetDayContainer, TimePeriod.DAY)
+    val dayRemoteView = updateStandaloneWidgetRemoteView(binding.widgetDayContainer, TimePeriod.DAY)
 
     val dayLightRemoteView =
-        updateStandaloneWidgetRemoteView(requireContext(), binding.widgetDaylightContainer, true)
+        updateStandaloneWidgetRemoteView(binding.widgetDaylightContainer, true)
 
     val nightLightRemoteView =
-        updateStandaloneWidgetRemoteView(requireContext(), binding.widgetNightlightContainer, false)
+        updateStandaloneWidgetRemoteView(binding.widgetNightlightContainer, false)
 
     animatedUpdateProgressBarView(
         yearRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.YEAR)
