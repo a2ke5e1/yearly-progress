@@ -143,10 +143,9 @@ class WidgetScreenFragment : Fragment() {
   ): View {
 
     val appContext = requireActivity().applicationContext
-    val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
-        widgetType = widgetType,
-        shape = WidgetShape.RECTANGLE
-    )
+    val options =
+        StandaloneWidgetOptions.load(requireContext(), -1)
+            .copy(widgetType = widgetType, shape = WidgetShape.RECTANGLE)
     val widgetRemoteView =
         StandaloneWidget.standaloneWidgetRemoteView(appContext, options)
             .apply(appContext, container)
@@ -163,9 +162,11 @@ class WidgetScreenFragment : Fragment() {
   ): View {
 
     val appContext = requireActivity().applicationContext
-
+    val options =
+        StandaloneWidgetOptions.load(requireContext(), -1)
+            .copy(widgetType = null, shape = WidgetShape.RECTANGLE)
     val widgetRemoteView =
-        DayNightWidget.dayNightLightWidgetRemoteView(appContext, dayLight)
+        DayNightWidget.dayNightLightWidgetRemoteView(appContext, dayLight, options)
             .apply(appContext, container)
     widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener {}
     container.removeAllViews()
@@ -248,8 +249,7 @@ class WidgetScreenFragment : Fragment() {
 
     val dayRemoteView = updateStandaloneWidgetRemoteView(binding.widgetDayContainer, TimePeriod.DAY)
 
-    val dayLightRemoteView =
-        updateStandaloneWidgetRemoteView(binding.widgetDaylightContainer, true)
+    val dayLightRemoteView = updateStandaloneWidgetRemoteView(binding.widgetDaylightContainer, true)
 
     val nightLightRemoteView =
         updateStandaloneWidgetRemoteView(binding.widgetNightlightContainer, false)
@@ -357,10 +357,9 @@ class WidgetScreenFragment : Fragment() {
   private fun showWidgetMenu() {
     // Showing menu for user to add Day widget to user Launcher's Home Screen
     binding.btnAddDayWidget.setOnClickListener {
-        val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
-            widgetType = TimePeriod.DAY,
-            shape = WidgetShape.RECTANGLE
-        )
+      val options =
+          StandaloneWidgetOptions.load(requireContext(), -1)
+              .copy(widgetType = TimePeriod.DAY, shape = WidgetShape.RECTANGLE)
       requestPinAppWidget(
           requireContext(),
           DayWidget::class.java,
@@ -369,10 +368,9 @@ class WidgetScreenFragment : Fragment() {
 
     // Showing menu for user to add Month widget to user Launcher's Home Screen
     binding.btnAddMonthWidget.setOnClickListener {
-        val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
-            widgetType = TimePeriod.MONTH,
-            shape = WidgetShape.RECTANGLE
-        )
+      val options =
+          StandaloneWidgetOptions.load(requireContext(), -1)
+              .copy(widgetType = TimePeriod.MONTH, shape = WidgetShape.RECTANGLE)
       requestPinAppWidget(
           requireContext(),
           MonthWidget::class.java,
@@ -381,10 +379,9 @@ class WidgetScreenFragment : Fragment() {
 
     // Showing menu for user to add Year widget to user Launcher's Home Screen
     binding.btnAddYearWidget.setOnClickListener {
-        val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
-            widgetType = TimePeriod.YEAR,
-            shape = WidgetShape.RECTANGLE
-        )
+      val options =
+          StandaloneWidgetOptions.load(requireContext(), -1)
+              .copy(widgetType = TimePeriod.YEAR, shape = WidgetShape.RECTANGLE)
       requestPinAppWidget(
           requireContext(),
           YearWidget::class.java,
@@ -393,10 +390,9 @@ class WidgetScreenFragment : Fragment() {
 
     // Showing menu for user to add Week widget to user Launcher's Home Screen
     binding.btnAddWeekWidget.setOnClickListener {
-        val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
-            widgetType = TimePeriod.WEEK,
-            shape = WidgetShape.RECTANGLE
-        )
+      val options =
+          StandaloneWidgetOptions.load(requireContext(), -1)
+              .copy(widgetType = TimePeriod.WEEK, shape = WidgetShape.RECTANGLE)
       requestPinAppWidget(
           requireContext(),
           WeekWidget::class.java,
@@ -410,19 +406,23 @@ class WidgetScreenFragment : Fragment() {
           AllInWidget::class.java,
           AllInWidget.AllInOneWidgetRemoteView(requireContext()))
     }
-
+    val dayNightWidgetOptions =
+        StandaloneWidgetOptions.load(requireContext(), -1)
+            .copy(widgetType = null, shape = WidgetShape.RECTANGLE)
     binding.btnAddDaylightWidget.setOnClickListener {
       requestPinAppWidget(
           requireContext(),
           DayLightWidget::class.java,
-          DayNightWidget.dayNightLightWidgetRemoteView(requireContext(), true))
+          DayNightWidget.dayNightLightWidgetRemoteView(
+              requireContext(), true, dayNightWidgetOptions))
     }
 
     binding.btnAddNightlightWidget.setOnClickListener {
       requestPinAppWidget(
           requireContext(),
           NightLightWidget::class.java,
-          DayNightWidget.dayNightLightWidgetRemoteView(requireContext(), false))
+          DayNightWidget.dayNightLightWidgetRemoteView(
+              requireContext(), false, dayNightWidgetOptions))
     }
   }
 

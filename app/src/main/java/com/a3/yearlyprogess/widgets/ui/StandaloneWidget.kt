@@ -42,7 +42,6 @@ object WidgetUtils {
       errorMessage: String? = null,
       options: StandaloneWidgetOptions? = null
   ): RemoteViews {
-    val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
 
     if (errorMessage != null) {
       val errorView = RemoteViews(context.packageName, R.layout.error_widget)
@@ -54,85 +53,51 @@ object WidgetUtils {
       return errorView
     }
 
-    // Load user preferences
     val decimalPlace: Int = options?.decimalPlaces ?: 2
     val timeLeftCounter = options?.timeLeftCounter == true
     val replaceProgressWithDaysLeft = options?.replaceProgressWithDaysLeft == true
-
-    // Calculate progress
-    val progress = calculateProgress(context, startTime, endTime)
-
-    // Apply styles to the text
-    val widgetProgressText = progress.styleFormatted(decimalPlace)
-    val widgetProgressBarValue = progress.roundToInt()
-    val widgetDaysLeftCounter = calculateTimeLeft(endTime).toTimePeriodLeftText(context)
-
-    // Set text and progress bar values
-    view.setTextViewText(R.id.widgetType, widgetType)
-    view.setTextViewText(R.id.widgetCurrentValue, currentValue)
-    view.setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
-    view.setTextViewText(R.id.widgetProgress, widgetProgressText)
-    view.setProgressBar(R.id.widgetProgressBar, 100, widgetProgressBarValue, false)
-    view.setFloat(R.id.widgetCurrentValue, "setTextSize", 8f)
-
-    view.setOnClickPendingIntent(
-        R.id.background,
-        PendingIntent.getActivity(
-            context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE))
-
     var widgetBackgroundAlpha = options?.backgroundTransparency ?: 100
     widgetBackgroundAlpha = ((widgetBackgroundAlpha / 100.0) * 255).toInt()
-    view.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
-    view.setViewVisibility(
-        R.id.widgetDaysLeft,
-        if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE)
-    if (timeLeftCounter && replaceProgressWithDaysLeft) {
-      view.setTextViewText(R.id.widgetProgress, widgetDaysLeftCounter)
-      view.setTextViewTextSize(R.id.widgetProgress, 0, 35f)
-    }
-    return view
-  }
 
-  fun cloverDesignedRemoteView(
-      context: Context,
-      widgetType: String,
-      startTime: Long,
-      endTime: Long,
-      currentValue: SpannableString,
-      errorMessage: String? = null,
-      options: StandaloneWidgetOptions
-  ): RemoteViews {
+    val progress = calculateProgress(context, startTime, endTime)
+    val widgetDaysLeftCounter = calculateTimeLeft(endTime).toTimePeriodLeftText(context) + " left"
+
+    fun rectangularRemoteView(): RemoteViews {
+      val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
+      val widgetProgressText = progress.styleFormatted(decimalPlace)
+      val widgetProgressBarValue = progress.roundToInt()
+
+      // Set text and progress bar values
+      view.setTextViewText(R.id.widgetType, widgetType)
+      view.setTextViewText(R.id.widgetCurrentValue, currentValue)
+      view.setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
+      view.setTextViewText(R.id.widgetProgress, widgetProgressText)
+      view.setProgressBar(R.id.widgetProgressBar, 100, widgetProgressBarValue, false)
+      view.setFloat(R.id.widgetCurrentValue, "setTextSize", 8f)
+
+      view.setOnClickPendingIntent(
+          R.id.background,
+          PendingIntent.getActivity(
+              context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE))
+
+      view.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+      view.setViewVisibility(
+          R.id.widgetDaysLeft,
+          if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE)
+      if (timeLeftCounter && replaceProgressWithDaysLeft) {
+        view.setTextViewText(R.id.widgetProgress, widgetDaysLeftCounter)
+        view.setTextViewTextSize(R.id.widgetProgress, 0, 35f)
+      }
+      return view
+    }
 
     fun cloverRemoteView(): RemoteViews {
       val view = RemoteViews(context.packageName, R.layout.standalone_widget_layout_clover)
-      val pref = PreferenceManager.getDefaultSharedPreferences(context)
-
-      if (errorMessage != null) {
-        val errorView = RemoteViews(context.packageName, R.layout.error_widget)
-        errorView.setTextViewText(R.id.error_text, errorMessage)
-        errorView.setOnClickPendingIntent(
-            R.id.background,
-            PendingIntent.getActivity(
-                context,
-                0,
-                Intent(context, MainActivity::class.java),
-                PendingIntent.FLAG_IMMUTABLE))
-        return errorView
-      }
-
-      // Load user preferences
-      val decimalPlace: Int = options.decimalPlaces
-      val timeLeftCounter = options.timeLeftCounter
-      val replaceProgressWithDaysLeft = options.replaceProgressWithDaysLeft
 
       // Calculate progress
-      val progress = calculateProgress(context, startTime, endTime)
-
       // Apply styles to the text
       val widgetProgressText =
           progress.styleFormatted(decimalPlace.coerceIn(0, 2), cloverMode = true)
-      progress.roundToInt()
-      val widgetDaysLeftCounter = calculateTimeLeft(endTime).toTimePeriodLeftText(context) + " left"
 
       // Set text and progress bar values
       view.setTextViewText(R.id.widgetType, widgetType)
@@ -161,9 +126,6 @@ object WidgetUtils {
 
       view.setImageViewResource(R.id.widgetContainer, progressDrawable)
 
-      // view.setProgressBar(R.id.widgetProgressBar, 100, widgetProgressBarValue, false)
-      // view.setFloat(R.id.widgetCurrentValue, "setTextSize", 8f)
-
       view.setOnClickPendingIntent(
           R.id.background,
           PendingIntent.getActivity(
@@ -185,61 +147,68 @@ object WidgetUtils {
       return view
     }
 
-    val large = cloverRemoteView()
-    val square = cloverRemoteView()
-    val small = cloverRemoteView()
-    large.apply {
-      // adjust the space between the topContainer and bottomContainer
-      // such that content stays inside the shape.
-      //
-      // Also adjust the margin between the progress text and days left
-      setViewLayoutMargin(R.id.widgetDaysLeft, MARGIN_TOP, -8f, COMPLEX_UNIT_DIP)
-      setViewLayoutHeight(R.id.widget_spacer, 8f, COMPLEX_UNIT_DIP)
+    return when (options?.shape) {
+      WidgetShape.RECTANGLE -> rectangularRemoteView()
+      WidgetShape.CLOVER -> {
+        val large = cloverRemoteView()
+        val square = cloverRemoteView()
+        val small = cloverRemoteView()
+        large.apply {
+          // adjust the space between the topContainer and bottomContainer
+          // such that content stays inside the shape.
+          //
+          // Also adjust the margin between the progress text and days left
+          setViewLayoutMargin(R.id.widgetDaysLeft, MARGIN_TOP, -8f, COMPLEX_UNIT_DIP)
+          setViewLayoutHeight(R.id.widget_spacer, 8f, COMPLEX_UNIT_DIP)
 
-      // adjust text size
-      setTextViewTextSize(R.id.widgetType, COMPLEX_UNIT_SP, 13f)
-      setTextViewTextSize(R.id.widgetCurrentValue, COMPLEX_UNIT_SP, 24f)
-      setTextViewTextSize(R.id.widgetProgress, COMPLEX_UNIT_SP, 38f)
-      setTextViewTextSize(R.id.widgetDaysLeft, COMPLEX_UNIT_SP, 11f)
+          // adjust text size
+          setTextViewTextSize(R.id.widgetType, COMPLEX_UNIT_SP, 13f)
+          setTextViewTextSize(R.id.widgetCurrentValue, COMPLEX_UNIT_SP, 24f)
+          setTextViewTextSize(R.id.widgetProgress, COMPLEX_UNIT_SP, 38f)
+          setTextViewTextSize(R.id.widgetDaysLeft, COMPLEX_UNIT_SP, 11f)
+        }
+        square.apply {
+
+          // adjust the space between the topContainer and bottomContainer
+          // such that content stays inside the shape.
+          //
+          // Also adjust the margin between the progress text and days left
+          setViewLayoutHeight(R.id.widget_spacer, 16f, COMPLEX_UNIT_DIP)
+          setViewLayoutMargin(R.id.widgetDaysLeft, MARGIN_TOP, -8f, COMPLEX_UNIT_DIP)
+
+          // adjust text size
+          setTextViewTextSize(R.id.widgetType, COMPLEX_UNIT_SP, 10f)
+          setTextViewTextSize(R.id.widgetCurrentValue, COMPLEX_UNIT_SP, 20f)
+          setTextViewTextSize(R.id.widgetProgress, COMPLEX_UNIT_SP, 28f)
+          setTextViewTextSize(R.id.widgetDaysLeft, COMPLEX_UNIT_SP, 8f)
+        }
+        small.apply {
+
+          // adjust the space between the topContainer and bottomContainer
+          // such that content stays inside the shape.
+          //
+          // Also adjust the margin between the progress text and days left
+          setViewLayoutHeight(R.id.widget_spacer, 2f, COMPLEX_UNIT_DIP)
+          setViewLayoutMargin(R.id.widgetDaysLeft, MARGIN_TOP, -4f, COMPLEX_UNIT_DIP)
+
+          // adjust text size
+          setTextViewTextSize(R.id.widgetType, COMPLEX_UNIT_SP, 6f)
+          setTextViewTextSize(R.id.widgetCurrentValue, COMPLEX_UNIT_SP, 8f)
+          setTextViewTextSize(R.id.widgetProgress, COMPLEX_UNIT_SP, 16f)
+          setTextViewTextSize(R.id.widgetDaysLeft, COMPLEX_UNIT_SP, 4f)
+        }
+
+        val viewMapping: Map<SizeF, RemoteViews> =
+            mapOf(
+                SizeF(220f, 220f) to large,
+                SizeF(160f, 160f) to square,
+                SizeF(100f, 100f) to small,
+            )
+        RemoteViews(viewMapping)
+      }
+      WidgetShape.PILL -> rectangularRemoteView()
+      else -> rectangularRemoteView()
     }
-    square.apply {
-
-      // adjust the space between the topContainer and bottomContainer
-      // such that content stays inside the shape.
-      //
-      // Also adjust the margin between the progress text and days left
-      setViewLayoutHeight(R.id.widget_spacer, 16f, COMPLEX_UNIT_DIP)
-      setViewLayoutMargin(R.id.widgetDaysLeft, MARGIN_TOP, -8f, COMPLEX_UNIT_DIP)
-
-      // adjust text size
-      setTextViewTextSize(R.id.widgetType, COMPLEX_UNIT_SP, 10f)
-      setTextViewTextSize(R.id.widgetCurrentValue, COMPLEX_UNIT_SP, 20f)
-      setTextViewTextSize(R.id.widgetProgress, COMPLEX_UNIT_SP, 28f)
-      setTextViewTextSize(R.id.widgetDaysLeft, COMPLEX_UNIT_SP, 8f)
-    }
-    small.apply {
-
-      // adjust the space between the topContainer and bottomContainer
-      // such that content stays inside the shape.
-      //
-      // Also adjust the margin between the progress text and days left
-      setViewLayoutHeight(R.id.widget_spacer, 2f, COMPLEX_UNIT_DIP)
-      setViewLayoutMargin(R.id.widgetDaysLeft, MARGIN_TOP, -4f, COMPLEX_UNIT_DIP)
-
-      // adjust text size
-      setTextViewTextSize(R.id.widgetType, COMPLEX_UNIT_SP, 6f)
-      setTextViewTextSize(R.id.widgetCurrentValue, COMPLEX_UNIT_SP, 8f)
-      setTextViewTextSize(R.id.widgetProgress, COMPLEX_UNIT_SP, 16f)
-      setTextViewTextSize(R.id.widgetDaysLeft, COMPLEX_UNIT_SP, 4f)
-    }
-
-    val viewMapping: Map<SizeF, RemoteViews> =
-        mapOf(
-            SizeF(220f, 220f) to large,
-            SizeF(160f, 160f) to square,
-            SizeF(100f, 100f) to small,
-        )
-    return RemoteViews(viewMapping)
   }
 }
 
@@ -338,32 +307,13 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
           }
 
       val remoteView =
-          when (options.shape) {
-            WidgetShape.RECTANGLE ->
-                WidgetUtils.createRemoteView(
-                    context,
-                    widgetTitleText,
-                    startTime,
-                    endTime,
-                    SpannableString(currentValue),
-                    options = options)
-            WidgetShape.CLOVER ->
-                WidgetUtils.cloverDesignedRemoteView(
-                    context,
-                    widgetTitleText,
-                    startTime,
-                    endTime,
-                    SpannableString(currentValue),
-                    options = options)
-            else ->
-                WidgetUtils.createRemoteView(
-                    context,
-                    widgetTitleText,
-                    startTime,
-                    endTime,
-                    SpannableString(currentValue),
-                    options = options)
-          }
+          WidgetUtils.createRemoteView(
+              context,
+              widgetTitleText,
+              startTime,
+              endTime,
+              SpannableString(currentValue),
+              options = options)
 
       return remoteView
     }
@@ -386,7 +336,11 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
 abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
 
   companion object {
-    fun dayNightLightWidgetRemoteView(context: Context, dayLight: Boolean): RemoteViews {
+    fun dayNightLightWidgetRemoteView(
+        context: Context,
+        dayLight: Boolean,
+        options: StandaloneWidgetOptions
+    ): RemoteViews {
       if (ContextCompat.checkSelfPermission(
           context, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
           PackageManager.PERMISSION_GRANTED) {
@@ -430,7 +384,8 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
               else ContextCompat.getString(context, R.string.night_light),
               startTime,
               endTime,
-              SpannableString(currentValue))
+              SpannableString(currentValue),
+              options = options)
 
       return remoteView
     }
@@ -441,7 +396,13 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
       appWidgetManager: AppWidgetManager,
       appWidgetId: Int
   ) {
-    appWidgetManager.updateAppWidget(appWidgetId, dayNightLightWidgetRemoteView(context, dayLight))
+    val options =
+        StandaloneWidgetOptions.load(context, appWidgetId)
+            .copy(
+                widgetType = null,
+            )
+    appWidgetManager.updateAppWidget(
+        appWidgetId, dayNightLightWidgetRemoteView(context, dayLight, options))
   }
 }
 
