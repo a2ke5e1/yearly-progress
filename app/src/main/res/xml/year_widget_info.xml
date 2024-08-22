@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.a3.yearlyprogess.widgets.manager.StandaloneWidgetStyle"
     android:description="@string/app_widget_description"
     android:initialKeyguardLayout="@layout/year_widget_preview"
     android:initialLayout="@layout/loading_widget"
@@ -14,4 +15,5 @@
     android:targetCellWidth="2"
     android:targetCellHeight="1"
     android:updatePeriodMillis="3600000"
-    android:widgetCategory="home_screen" />
+    android:widgetCategory="home_screen"
+    android:widgetFeatures="reconfigurable|configuration_optional" />

@@ -38,7 +38,9 @@ import com.a3.yearlyprogess.widgets.ui.DayWidget
 import com.a3.yearlyprogess.widgets.ui.MonthWidget
 import com.a3.yearlyprogess.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
+import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
+import com.a3.yearlyprogess.widgets.ui.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.YearWidget
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
@@ -141,9 +143,12 @@ class WidgetScreenFragment : Fragment() {
   ): View {
 
     val appContext = requireActivity().applicationContext
-
+    val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
+        widgetType = widgetType,
+        shape = WidgetShape.RECTANGLE
+    )
     val widgetRemoteView =
-        StandaloneWidget.standaloneWidgetRemoteView(appContext, widgetType)
+        StandaloneWidget.standaloneWidgetRemoteView(appContext, options)
             .apply(appContext, container)
     widgetRemoteView.findViewById<FrameLayout>(R.id.background).setOnClickListener {}
     container.removeAllViews()
@@ -352,34 +357,50 @@ class WidgetScreenFragment : Fragment() {
   private fun showWidgetMenu() {
     // Showing menu for user to add Day widget to user Launcher's Home Screen
     binding.btnAddDayWidget.setOnClickListener {
+        val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
+            widgetType = TimePeriod.DAY,
+            shape = WidgetShape.RECTANGLE
+        )
       requestPinAppWidget(
           requireContext(),
           DayWidget::class.java,
-          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), TimePeriod.DAY))
+          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options))
     }
 
     // Showing menu for user to add Month widget to user Launcher's Home Screen
     binding.btnAddMonthWidget.setOnClickListener {
+        val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
+            widgetType = TimePeriod.MONTH,
+            shape = WidgetShape.RECTANGLE
+        )
       requestPinAppWidget(
           requireContext(),
           MonthWidget::class.java,
-          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), TimePeriod.MONTH))
+          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options))
     }
 
     // Showing menu for user to add Year widget to user Launcher's Home Screen
     binding.btnAddYearWidget.setOnClickListener {
+        val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
+            widgetType = TimePeriod.YEAR,
+            shape = WidgetShape.RECTANGLE
+        )
       requestPinAppWidget(
           requireContext(),
           YearWidget::class.java,
-          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), TimePeriod.YEAR))
+          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options))
     }
 
     // Showing menu for user to add Week widget to user Launcher's Home Screen
     binding.btnAddWeekWidget.setOnClickListener {
+        val options = StandaloneWidgetOptions.load(requireContext(), -1).copy(
+            widgetType = TimePeriod.WEEK,
+            shape = WidgetShape.RECTANGLE
+        )
       requestPinAppWidget(
           requireContext(),
           WeekWidget::class.java,
-          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), TimePeriod.WEEK))
+          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options))
     }
 
     // Showing menu for user to add All In One widget to user Launcher's Home Screen

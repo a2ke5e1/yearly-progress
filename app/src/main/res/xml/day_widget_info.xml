@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.a3.yearlyprogess.widgets.manager.StandaloneWidgetStyle"
     android:description="@string/app_widget_description_day"
+    android:widgetFeatures="reconfigurable|configuration_optional"
     android:initialKeyguardLayout="@layout/day_widget_preview"
     android:initialLayout="@layout/loading_widget"
     android:maxResizeHeight="220dp"

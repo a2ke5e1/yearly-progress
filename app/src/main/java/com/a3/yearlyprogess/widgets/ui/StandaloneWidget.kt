@@ -14,6 +14,7 @@ import android.util.TypedValue.COMPLEX_UNIT_SP
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViews.MARGIN_TOP
+import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
@@ -251,10 +252,88 @@ object WidgetUtils {
   }
 }
 
+enum class WidgetShape {
+  RECTANGLE,
+  CLOVER,
+  PILL
+}
+
+data class StandaloneWidgetOptions(
+    val widgetId: Int,
+    val decimalPlaces: Int,
+    val timeLeftCounter: Boolean,
+    val dynamicLeftCounter: Boolean,
+    val replaceProgressWithDaysLeft: Boolean,
+    @IntRange(from = 0, to = 100) val backgroundTransparency: Int,
+    val widgetType: TimePeriod?,
+    val shape: WidgetShape
+) {
+  companion object {
+    private const val WIDGET_TYPE = "widget_type_"
+    private const val WIDGET_SHAPE = "widget_shape_"
+
+    fun load(context: Context, widgetId: Int): StandaloneWidgetOptions {
+      val pref = PreferenceManager.getDefaultSharedPreferences(context)
+      val decimalPlaces = pref.getInt(context.getString(R.string.widget_widget_decimal_point), 2)
+      val timeLeftCounter =
+          pref.getBoolean(context.getString(R.string.widget_widget_time_left), false)
+      val dynamicLeftCounter =
+          pref.getBoolean(context.getString(R.string.widget_widget_use_dynamic_time_left), false)
+      val replaceProgressWithDaysLeft =
+          pref.getBoolean(
+              context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
+              false)
+      val backgroundTransparency =
+          pref.getInt(context.getString(R.string.widget_widget_background_transparency), 100)
+      val widgetType =
+          pref.getString("$WIDGET_TYPE$widgetId", TimePeriod.DAY.name)?.let {
+            TimePeriod.valueOf(it)
+          }
+      val shape =
+          pref.getString("$WIDGET_SHAPE$widgetId", WidgetShape.RECTANGLE.name)?.let {
+            WidgetShape.valueOf(it)
+          } ?: WidgetShape.RECTANGLE
+      return StandaloneWidgetOptions(
+          widgetId,
+          decimalPlaces,
+          timeLeftCounter,
+          dynamicLeftCounter,
+          replaceProgressWithDaysLeft,
+          backgroundTransparency,
+          widgetType,
+          shape)
+    }
+  }
+
+  fun save(context: Context) {
+    val pref = PreferenceManager.getDefaultSharedPreferences(context)
+    pref
+        .edit()
+        .putInt(context.getString(R.string.widget_widget_decimal_point), decimalPlaces)
+        .putBoolean(context.getString(R.string.widget_widget_time_left), timeLeftCounter)
+        .putBoolean(
+            context.getString(R.string.widget_widget_use_dynamic_time_left), dynamicLeftCounter)
+        .putBoolean(
+            context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
+            replaceProgressWithDaysLeft)
+        .putInt(
+            context.getString(R.string.widget_widget_background_transparency),
+            backgroundTransparency)
+        .putString("$WIDGET_TYPE$widgetId", widgetType?.name)
+        .putString("$WIDGET_SHAPE$widgetId", shape.name)
+        .apply()
+  }
+}
+
 abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget() {
 
   companion object {
-    fun standaloneWidgetRemoteView(context: Context, widgetType: TimePeriod): RemoteViews {
+
+    fun standaloneWidgetRemoteView(
+        context: Context,
+        options: StandaloneWidgetOptions
+    ): RemoteViews {
+      val widgetType = options.widgetType ?: TimePeriod.DAY
       val startTime = calculateStartTime(context, widgetType)
       val endTime = calculateEndTime(context, widgetType)
       val currentValue = getCurrentPeriodValue(widgetType).toFormattedTimePeriod(widgetType)
@@ -268,8 +347,17 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
           }
 
       val remoteView =
-          WidgetUtils.cloverDesignedRemoteView(
-              context, widgetTitleText, startTime, endTime, currentValue)
+          when (options.shape) {
+            WidgetShape.RECTANGLE ->
+                WidgetUtils.createRemoteView(
+                    context, widgetTitleText, startTime, endTime, SpannableString(currentValue))
+            WidgetShape.CLOVER ->
+                WidgetUtils.cloverDesignedRemoteView(
+                    context, widgetTitleText, startTime, endTime, SpannableString(currentValue))
+            else ->
+                WidgetUtils.createRemoteView(
+                    context, widgetTitleText, startTime, endTime, SpannableString(currentValue))
+          }
 
       return remoteView
     }
@@ -280,7 +368,12 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
       appWidgetManager: AppWidgetManager,
       appWidgetId: Int
   ) {
-    appWidgetManager.updateAppWidget(appWidgetId, standaloneWidgetRemoteView(context, widgetType))
+    val options =
+        StandaloneWidgetOptions.load(context, appWidgetId)
+            .copy(
+                widgetType = widgetType,
+            )
+    appWidgetManager.updateAppWidget(appWidgetId, standaloneWidgetRemoteView(context, options))
   }
 }
 
