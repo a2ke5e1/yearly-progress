@@ -62,6 +62,8 @@ class StandaloneWidgetStyle : AppCompatActivity() {
         binding.rectBtn, binding.rectContainer, options.copy(shape = WidgetShape.RECTANGLE))
     inflateRemoteViewPreview(
         binding.cloverBtn, binding.cloverContainer, options.copy(shape = WidgetShape.CLOVER))
+    inflateRemoteViewPreview(
+        binding.pillBtn, binding.pillContainer, options.copy(shape = WidgetShape.PILL))
 
     binding.replaceCounter.setOnCheckedChangeListener { _, isChecked ->
       options = options.copy(replaceProgressWithDaysLeft = isChecked)
@@ -73,6 +75,10 @@ class StandaloneWidgetStyle : AppCompatActivity() {
           binding.cloverBtn,
           binding.cloverContainer,
           options.copy(shape = WidgetShape.CLOVER, replaceProgressWithDaysLeft = isChecked))
+      inflateRemoteViewPreview(
+          binding.pillBtn,
+          binding.pillContainer,
+          options.copy(shape = WidgetShape.PILL, replaceProgressWithDaysLeft = isChecked))
     }
 
     binding.decimalSlider.addOnChangeListener { _, value, _ ->
@@ -85,6 +91,10 @@ class StandaloneWidgetStyle : AppCompatActivity() {
           binding.cloverBtn,
           binding.cloverContainer,
           options.copy(shape = WidgetShape.CLOVER, decimalPlaces = value.toInt()))
+      inflateRemoteViewPreview(
+          binding.pillBtn,
+          binding.pillContainer,
+          options.copy(shape = WidgetShape.PILL, decimalPlaces = value.toInt()))
     }
 
     binding.leftCounter.setOnCheckedChangeListener { _, isChecked ->
@@ -97,6 +107,10 @@ class StandaloneWidgetStyle : AppCompatActivity() {
           binding.cloverBtn,
           binding.cloverContainer,
           options.copy(shape = WidgetShape.CLOVER, timeLeftCounter = isChecked))
+      inflateRemoteViewPreview(
+          binding.pillBtn,
+          binding.pillContainer,
+          options.copy(shape = WidgetShape.PILL, timeLeftCounter = isChecked))
     }
 
     binding.dynamicLeftCounter.setOnCheckedChangeListener { _, isChecked ->
@@ -109,6 +123,10 @@ class StandaloneWidgetStyle : AppCompatActivity() {
           binding.cloverBtn,
           binding.cloverContainer,
           options.copy(shape = WidgetShape.CLOVER, dynamicLeftCounter = isChecked))
+      inflateRemoteViewPreview(
+          binding.pillBtn,
+          binding.pillContainer,
+          options.copy(shape = WidgetShape.PILL, dynamicLeftCounter = isChecked))
     }
 
     binding.backgroundSlider.addOnChangeListener { _, value, _ ->
@@ -122,6 +140,10 @@ class StandaloneWidgetStyle : AppCompatActivity() {
           binding.cloverBtn,
           binding.cloverContainer,
           options.copy(shape = WidgetShape.CLOVER, backgroundTransparency = (value * 100).toInt()))
+      inflateRemoteViewPreview(
+          binding.pillBtn,
+          binding.pillContainer,
+          options.copy(shape = WidgetShape.PILL, backgroundTransparency = (value * 100).toInt()))
     }
   }
 

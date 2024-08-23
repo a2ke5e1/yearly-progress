@@ -69,7 +69,8 @@ object WidgetUtils {
     val progress = calculateProgress(context, startTime, endTime)
     val widgetDaysLeftCounter =
         context.getString(
-            R.string.time_left, calculateTimeLeft(endTime).toTimePeriodLeftText(options?.dynamicLeftCounter == true))
+            R.string.time_left,
+            calculateTimeLeft(endTime).toTimePeriodLeftText(options?.dynamicLeftCounter == true))
 
     /**
      * Creates a rectangular RemoteViews object.
@@ -152,10 +153,106 @@ object WidgetUtils {
       }
     }
 
+    /**
+     * Creates a pill-shaped RemoteViews object.
+     *
+     * @return A RemoteViews object for a pill-shaped widget.
+     */
+    fun pillRemoteView(): RemoteViews {
+      return RemoteViews(context.packageName, R.layout.standalone_widget_layout_pill).apply {
+        setTextViewText(R.id.widgetType, widgetType)
+        setTextViewText(R.id.widgetCurrentValue, currentValue)
+        setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
+        setTextViewText(R.id.widgetProgress, progress.styleFormatted(decimalPlace.coerceIn(0, 0)))
+        setImageViewResource(
+            R.id.widgetContainer,
+            when (progress) {
+              in 0.0..5.0 -> R.drawable.background_pill_00
+              in 5.0..10.0 -> R.drawable.background_pill_05
+              in 10.0..20.0 -> R.drawable.background_pill_10
+              in 20.0..30.0 -> R.drawable.background_pill_20
+              in 30.0..40.0 -> R.drawable.background_pill_30
+              in 40.0..50.0 -> R.drawable.background_pill_40
+              in 50.0..60.0 -> R.drawable.background_pill_50
+              in 60.0..70.0 -> R.drawable.background_pill_60
+              in 70.0..80.0 -> R.drawable.background_pill_70
+              in 80.0..90.0 -> R.drawable.background_pill_80
+              in 90.0..95.0 -> R.drawable.background_pill_90
+              in 95.0..100.0 -> R.drawable.background_pill_95
+              else -> R.drawable.background_pill_100
+            })
+        setOnClickPendingIntent(
+            R.id.background,
+            PendingIntent.getActivity(
+                context,
+                0,
+                Intent(context, MainActivity::class.java),
+                PendingIntent.FLAG_IMMUTABLE))
+        setViewVisibility(
+            R.id.widgetDaysLeft,
+            if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE)
+        if (timeLeftCounter && replaceProgressWithDaysLeft) {
+          setTextViewText(R.id.widgetProgress, widgetDaysLeftCounter)
+          setTextViewTextSize(R.id.widgetProgress, 0, 35f)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          setInt(R.id.widgetContainer, "setBackgroundColor", Color.TRANSPARENT)
+        }
+      }
+    }
+
     // Return the appropriate RemoteViews based on the widget shape.
     return when (options?.shape) {
-      WidgetShape.RECTANGLE,
-      WidgetShape.PILL -> rectangularRemoteView()
+      WidgetShape.RECTANGLE -> rectangularRemoteView()
+      WidgetShape.PILL -> {
+        val large =
+            pillRemoteView().apply {
+              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 13f)
+              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 24f)
+              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 40f)
+              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 12f)
+            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          pillRemoteView().apply {
+            setViewLayoutMargin(
+                R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
+            setViewPadding(R.id.topContainer, 86, 18, 0, 0)
+            setViewLayoutHeight(R.id.widget_spacer, 8f, TypedValue.COMPLEX_UNIT_DIP)
+          }
+          val square =
+              pillRemoteView().apply {
+                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
+                setViewLayoutMargin(
+                    R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
+                setViewPadding(R.id.topContainer, 86, 18, 0, 0)
+                setViewPadding(R.id.bottomContainer, 0, 0, 60, 30)
+                setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
+                setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
+                setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 32f)
+                setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 10f)
+              }
+          val small =
+              pillRemoteView().apply {
+                setViewLayoutHeight(R.id.widget_spacer, 2f, TypedValue.COMPLEX_UNIT_DIP)
+                setViewLayoutMargin(
+                    R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -4f, TypedValue.COMPLEX_UNIT_DIP)
+                setViewPadding(R.id.topContainer, 60, 10, 0, 0)
+                setViewPadding(R.id.bottomContainer, 0, 0, 30, 10)
+
+                setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 8f)
+                setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 12f)
+                setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 16f)
+                setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 4f)
+              }
+          RemoteViews(
+              mapOf(
+                  SizeF(220f, 220f) to large,
+                  SizeF(160f, 160f) to square,
+                  SizeF(100f, 100f) to small))
+        } else {
+          large
+        }
+      }
       WidgetShape.CLOVER -> {
         val large =
             cloverRemoteView().apply {
