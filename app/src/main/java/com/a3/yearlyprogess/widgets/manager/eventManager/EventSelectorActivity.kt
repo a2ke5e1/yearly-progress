@@ -1,6 +1,5 @@
 package com.a3.yearlyprogess.widgets.manager.eventManager
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle

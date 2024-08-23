@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.ActivityStandaloneWidgetStyleBinding
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
@@ -28,11 +29,13 @@ class StandaloneWidgetStyle : AppCompatActivity() {
     enableEdgeToEdge()
     _binding = ActivityStandaloneWidgetStyleBinding.inflate(layoutInflater)
     setContentView(binding.root)
-    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-      val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-      v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-      insets
+    ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
+      val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+      view.updatePadding(top = insets.top, left = insets.left, right = insets.right)
+      WindowInsetsCompat.CONSUMED
     }
+
+    setSupportActionBar(binding.toolbar)
     val appWidgetId =
         intent
             ?.extras
@@ -45,6 +48,10 @@ class StandaloneWidgetStyle : AppCompatActivity() {
 
     var options = StandaloneWidgetOptions.load(this, appWidgetId)
 
+    binding.toolbar.title =
+        getString(
+            R.string.standalone_widget_style_chooser_title_lable,
+            options.widgetType?.name?.lowercase()?.replaceFirstChar { it.uppercase() })
     binding.leftCounter.isChecked = options.timeLeftCounter
     binding.dynamicLeftCounter.isChecked = options.dynamicLeftCounter
     binding.backgroundSlider.value = options.backgroundTransparency.toFloat()
