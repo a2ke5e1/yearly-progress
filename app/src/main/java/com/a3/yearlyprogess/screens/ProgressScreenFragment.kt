@@ -37,9 +37,9 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
-import java.util.Calendar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 /** A simple [Fragment] subclass as the default destination in the navigation. */
 class ProgressScreenFragment : Fragment() {
@@ -236,6 +236,7 @@ class ProgressScreenFragment : Fragment() {
                   launch(Dispatchers.Main) {
                     dayLight.visibility = View.VISIBLE
                     nightLight.visibility = View.VISIBLE
+                    binding.loadingIndicator?.visibility = View.GONE
                   }
                 }
               }
@@ -245,8 +246,12 @@ class ProgressScreenFragment : Fragment() {
 
                 if (cachedSunriseSunset == null) {
                   launch(Dispatchers.Main) {
+                      Toast.makeText(
+                          context,
+                          getString(R.string.failed_to_load_sunset_sunrise_time), Toast.LENGTH_LONG).show()
                     dayLight.visibility = View.GONE
                     nightLight.visibility = View.GONE
+                    binding.loadingIndicator?.visibility = View.GONE
                   }
                   return@launch
                 }
@@ -264,6 +269,7 @@ class ProgressScreenFragment : Fragment() {
                   launch(Dispatchers.Main) {
                     dayLight.visibility = View.GONE
                     nightLight.visibility = View.GONE
+                    binding.loadingIndicator?.visibility = View.GONE
                   }
                 }
 
@@ -273,6 +279,7 @@ class ProgressScreenFragment : Fragment() {
                   launch(Dispatchers.Main) {
                     dayLight.visibility = View.VISIBLE
                     nightLight.visibility = View.VISIBLE
+                    binding.loadingIndicator?.visibility = View.GONE
                   }
                 }
               }

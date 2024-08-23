@@ -15,7 +15,7 @@
             android:id="@+id/flow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewDay,ad_frame,dayLightProgressView,nightLightProgressView"
+            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewDay,ad_frame,loadingIndicator,dayLightProgressView,nightLightProgressView"
             app:flow_horizontalAlign="center"
             app:flow_horizontalGap="30dp"
             app:flow_horizontalStyle="packed"
@@ -41,6 +41,12 @@
             android:layout_width="match_parent"
             android:layout_height="145dp"
             app:dataType="DAY" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
 
         <com.a3.yearlyprogess.components.DayNightLightProgressView
             android:id="@+id/dayLightProgressView"

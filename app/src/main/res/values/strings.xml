@@ -137,5 +137,6 @@
     <string name="widget_settings">Widget Settings</string>
     <string name="choose_an_event">Choose an event</string>
     <string name="standalone_widget_style_chooser_title_lable">%1$s Widget</string>
+    <string name="failed_to_load_sunset_sunrise_time"><![CDATA[Failed to load sunset & sunrise time.]]></string>
 
 </resources>
