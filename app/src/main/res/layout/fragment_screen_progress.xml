@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     tools:context=".screens.ProgressScreenFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +22,7 @@
             app:flow_horizontalStyle="packed"
             app:flow_lastHorizontalStyle="spread"
             app:flow_maxElementsWrap="2"
-            app:flow_verticalGap="10dp"
+            app:flow_verticalGap="8dp"
             app:flow_wrapMode="aligned" />
 
         <com.a3.yearlyprogess.components.ProgressCardView

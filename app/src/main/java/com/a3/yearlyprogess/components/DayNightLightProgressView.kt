@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.components
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Typeface
 import android.icu.text.SimpleDateFormat
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -20,6 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.coroutines.CoroutineContext
@@ -81,6 +84,13 @@ constructor(
     launch(Dispatchers.IO) {
       while (true) {
         val progress: Double = calculateProgress(context, startTime, endTime)
+
+          val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
+          numberFormat.maximumFractionDigits = 0
+
+          val totalSeconds = (endTime - startTime) / 1000
+          val formattedTotalSeconds = numberFormat.format(totalSeconds)
+
         launch(Dispatchers.Main) {
           val currentPeriodValue =
               if (dayLight) {
@@ -96,9 +106,10 @@ constructor(
               }
           widgetDataTextView.text = currentPeriodValue
           widgetDataTextView.textSize = 12f
+          widgetDataTextView.setTypeface(null, Typeface.NORMAL)
           widgetDataTextView.setTextColor(
               ContextCompat.getColor(context, R.color.widget_text_color_tertiary))
-          widgetDataInfoTextView.text = "of ${(endTime - startTime) / 1000}s"
+          widgetDataInfoTextView.text = context.getString(R.string.of_seconds, formattedTotalSeconds)
           updateView(progress)
         }
         delay(1000)

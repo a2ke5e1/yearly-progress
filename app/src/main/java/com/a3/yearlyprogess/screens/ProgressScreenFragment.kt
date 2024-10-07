@@ -192,7 +192,8 @@ class ProgressScreenFragment : Fragment() {
           .show()
       return
     }
-
+      Toast.makeText(context, "Trying to load location ...", Toast.LENGTH_LONG)
+          .show()
     locationManager.requestLocationUpdates(
         providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
         2000,
@@ -242,6 +243,10 @@ class ProgressScreenFragment : Fragment() {
               }
 
               is Resource.Error -> {
+                  Toast.makeText(
+                      context,
+                      "${result.message}", Toast.LENGTH_LONG).show()
+
                 val cachedSunriseSunset = loadSunriseSunset(requireContext())
 
                 if (cachedSunriseSunset == null) {
@@ -286,6 +291,7 @@ class ProgressScreenFragment : Fragment() {
             }
           }
         }
+
   }
 
   override fun onDestroyView() {

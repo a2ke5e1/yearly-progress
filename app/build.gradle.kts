@@ -15,9 +15,9 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 86
+        versionCode = 88
         val localVersionCode = versionCode
-        versionName = "2.13.${localVersionCode!! - 78}-alpha"
+        versionName = "2.14.${localVersionCode!! - 87}-alpha"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 
@@ -56,9 +56,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
-    implementation("com.google.firebase:firebase-crashlytics:19.0.3")
-    implementation("androidx.activity:activity:1.9.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
+    implementation("com.google.firebase:firebase-crashlytics:19.1.0")
+    implementation("androidx.activity:activity-ktx:1.9.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -73,29 +73,29 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Ads
-    implementation("com.google.android.gms:play-services-ads:23.2.0")
+    implementation("com.google.android.gms:play-services-ads:23.3.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.1")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Room
-    val room_version = "2.6.1"
+    val roomVersion = "2.6.1"
 
-    implementation("androidx.room:room-runtime:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    androidTestImplementation("androidx.room:room-testing:$room_version")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    androidTestImplementation("androidx.room:room-testing:$roomVersion")
 
     // Room backup and restore
     implementation("de.raphaelebner:roomdatabasebackup:1.0.0-beta14")
 
     // Lifecycle Components
-    val lifecycle_version = "2.8.4"
+    val lifecycle_version = "2.8.6"
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
@@ -111,7 +111,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Billing
-    val billing_version = "7.0.0"
-    implementation("com.android.billingclient:billing-ktx:$billing_version")
+    val billingVersion = "7.1.0"
+    implementation("com.android.billingclient:billing-ktx:$billingVersion")
 
 }

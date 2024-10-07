@@ -28,10 +28,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.a3.yearlyprogess" />
+                  <option name="mobileSdkAppId" value="1:247159044968:android:00a9031cabbae07818f4dd" />
+                  <option name="projectId" value="yearly-progress-68f2d" />
+                  <option name="projectNumber" value="247159044968" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
