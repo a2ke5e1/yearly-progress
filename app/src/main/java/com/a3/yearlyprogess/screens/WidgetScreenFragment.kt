@@ -30,7 +30,7 @@ import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
 import com.a3.yearlyprogess.getCurrentPeriodValue
-import com.a3.yearlyprogess.loadSunriseSunset
+import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayLightWidget
 import com.a3.yearlyprogess.widgets.ui.DayNightWidget
@@ -106,7 +106,7 @@ class WidgetScreenFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    isSunriseSunsetDataAvailable = loadSunriseSunset(requireContext()) != null
+    isSunriseSunsetDataAvailable = loadCachedSunriseSunset(requireContext()) != null
 
     // Initialize and Load Ad
 
@@ -445,7 +445,7 @@ class WidgetScreenFragment : Fragment() {
         }
 
     if (dayLight != null) {
-      val sunriseSunsetResponse = loadSunriseSunset(requireContext()) ?: return
+      val sunriseSunsetResponse = loadCachedSunriseSunset(requireContext()) ?: return
       val (startTime, endTime) = sunriseSunsetResponse.getStartAndEndTime(dayLight)
       val progress = calculateProgress(requireContext(), startTime, endTime)
       progressTextAnimator = ValueAnimator.ofFloat(0F, progress.toFloat())
@@ -473,7 +473,7 @@ class WidgetScreenFragment : Fragment() {
         ValueAnimator.ofInt(0, calculateProgress(requireContext(), type).roundToInt())
 
     if (dayLight != null) {
-      val sunriseSunsetResponse = loadSunriseSunset(requireContext()) ?: return
+      val sunriseSunsetResponse = loadCachedSunriseSunset(requireContext()) ?: return
       val (startTime, endTime) = sunriseSunsetResponse.getStartAndEndTime(dayLight)
       val progress = calculateProgress(requireContext(), startTime, endTime)
       progressViewAnimator = ValueAnimator.ofInt(0, progress.roundToInt())

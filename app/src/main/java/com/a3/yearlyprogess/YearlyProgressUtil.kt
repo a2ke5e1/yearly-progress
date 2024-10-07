@@ -174,7 +174,7 @@ fun provideSunriseSunsetApi(): SunriseSunsetApi =
         .build()
         .create(SunriseSunsetApi::class.java)
 
-fun storeSunriseSunset(context: Context, sunriseSunset: SunriseSunsetResponse) {
+fun cacheSunriseSunset(context: Context, sunriseSunset: SunriseSunsetResponse) {
   val key = ContextCompat.getString(context, R.string.sunrise_sunset_data)
   val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
   val editor = pref.edit()
@@ -188,7 +188,7 @@ fun storeSunriseSunset(context: Context, sunriseSunset: SunriseSunsetResponse) {
   editor.apply()
 }
 
-fun loadSunriseSunset(context: Context): SunriseSunsetResponse? {
+fun loadCachedSunriseSunset(context: Context): SunriseSunsetResponse? {
   val key = ContextCompat.getString(context, R.string.sunrise_sunset_data)
   val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
   val gson = Gson()
@@ -227,3 +227,28 @@ fun loadCachedLocation(context: Context): Location? {
     longitude = lon.toDouble()
   }
 }
+
+
+fun getCurrentDate(): String {
+  val cal = Calendar.getInstance()
+  cal.timeInMillis = System.currentTimeMillis()
+
+  return StringBuilder("")
+    .append(cal.get(Calendar.YEAR))
+    .append("-")
+    .append(if (cal.get(Calendar.MONTH) + 1 < 10) "0" else "")
+    .append(cal.get(Calendar.MONTH) + 1)
+    .append("-")
+    .append(cal.get(Calendar.DATE))
+    .toString()
+}
+
+
+fun getDateRange(daysToAdd: Int): String {
+  val cal = Calendar.getInstance()
+  cal.timeInMillis = System.currentTimeMillis()
+  cal.add(Calendar.DATE, daysToAdd)
+
+  return "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
+}
+

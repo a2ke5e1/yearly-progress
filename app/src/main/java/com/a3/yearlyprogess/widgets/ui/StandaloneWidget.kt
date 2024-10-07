@@ -494,7 +494,7 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
       }
 
       val sunriseSunset =
-          loadSunriseSunset(context)
+          loadCachedSunriseSunset(context)
               ?: return WidgetUtils.createRemoteView(
                   context,
                   if (dayLight) context.getString(R.string.day_light)
