@@ -132,5 +132,13 @@
     <string name="special_thanks_for_translating">Special thanks for translating</string>
     <string name="manage_subscription">Manage Subscription</string>
     <string name="not_available_in_your_region">Not available in your region</string>
+    <string name="time_left">%1$s left</string>
+    <string name="choose_your_widget_style">Choose your widget style</string>
+    <string name="widget_settings">Widget Settings</string>
+    <string name="choose_an_event">Choose an event</string>
+    <string name="standalone_widget_style_chooser_title_lable">%1$s Widget</string>
+    <string name="failed_to_load_sunset_sunrise_time"><![CDATA[Failed to load sunset & sunrise time.]]></string>
+    <string name="progress_notification">Progress Notification</string>
+    <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
 
 </resources>

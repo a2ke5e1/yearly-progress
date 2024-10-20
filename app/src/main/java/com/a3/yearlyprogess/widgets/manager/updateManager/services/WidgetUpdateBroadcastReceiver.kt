@@ -6,11 +6,13 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.a3.yearlyprogess.YearlyProgressNotification
+import com.a3.yearlyprogess.cacheSunriseSunset
 import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.loadCachedLocation
-import com.a3.yearlyprogess.loadSunriseSunset
+import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.provideSunriseSunsetApi
-import com.a3.yearlyprogess.storeSunriseSunset
+import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayLightWidget
@@ -75,7 +77,7 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
                   .append(cal.get(Calendar.DATE))
                   .toString()
 
-          val sunriseSunset = loadSunriseSunset(context)
+          val sunriseSunset = loadCachedSunriseSunset(context)
           if (sunriseSunset == null || sunriseSunset.results[1].date != currentDate) {
             val sunriseSunsetApi: SunriseSunsetApi = provideSunriseSunsetApi()
 
@@ -100,7 +102,7 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
                       location.latitude, location.longitude, startDateRange, endDateRange)
               val result = response.body()
               if (response.isSuccessful && result != null && result.status == "OK") {
-                storeSunriseSunset(context, result)
+                cacheSunriseSunset(context, result)
               }
             } catch (ex: Exception) {
               Log.d("WUBR", ex.message.toString())
@@ -119,6 +121,16 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
     if (totalWidgetCount == 0) {
       WidgetUpdateAlarmHandler(context).cancelAlarmManager()
     }
+
+      val yearlyProgressNotification = YearlyProgressNotification(context)
+      yearlyProgressNotification.showProgressNotification()
+
+      if (yearlyProgressNotification.hasNotificationPermission()) {
+          val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
+          WakeLocker.acquire(context)
+          widgetUpdateAlarmHandler.cancelAlarmManager()
+          widgetUpdateAlarmHandler.setAlarmManager()
+      }
 
     // go back to sleep
     // WakeLocker.release()

@@ -2,11 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-
-    <!-- Location Permissions for Day and Night Light Widget -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" /> <!-- Location Permissions for Day and Night Light Widget -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
@@ -22,6 +21,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YearlyProgress"
         tools:targetApi="tiramisu">
+        <activity
+            android:name=".widgets.manager.StandaloneWidgetStyle"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".widgets.manager.eventManager.ImportEventCalendarActivity"
             android:exported="false"
@@ -56,8 +62,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/App.SplashScreen"
-            >
+            android:theme="@style/App.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -140,7 +145,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/week_widget_info" />
         </receiver>
-
         <receiver
             android:name=".widgets.ui.DayLightWidget"
             android:exported="false"
@@ -153,7 +157,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/day_light_widget_info" />
         </receiver>
-
         <receiver
             android:name=".widgets.ui.NightLightWidget"
             android:exported="false"
@@ -165,14 +168,10 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/night_light_widget_info" />
-        </receiver>
-
-
-        <!-- Registration of the Widget Broadcast Receiver -->
+        </receiver> <!-- Registration of the Widget Broadcast Receiver -->
         <receiver
             android:name=".widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver"
             android:enabled="true" />
-
     </application>
 
 </manifest>

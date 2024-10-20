@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Choose an event"
+            app:title="@string/choose_an_event"
             app:titleCentered="true" />
 
     </com.google.android.material.appbar.AppBarLayout>

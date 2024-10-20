@@ -1,6 +1,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <SwitchPreferenceCompat
+        app:defaultValue="false"
+        app:icon="@drawable/ic_notifications_24"
+        app:iconSpaceReserved="true"
+        app:key="@string/progress_show_notification"
+        app:summary="@string/shows_progress_in_the_notification"
+        app:title="@string/progress_notification" />
+
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/app">

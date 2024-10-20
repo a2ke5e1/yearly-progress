@@ -12,5 +12,6 @@
     <string name="widget_widget_use_dynamic_time_left" translatable="false">widget_widget_use_dynamic_time_left</string>
     <string name="widget_event_widget_decimal_point" translatable="false">widget_event_widget_decimal_point</string>
     <string name="app_calculation_type" translatable="false">app_calculation_type</string>
+    <string name="progress_show_notification" translatable="false">progress_show_notification</string>
 
 </resources>

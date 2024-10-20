@@ -22,14 +22,17 @@ import com.a3.yearlyprogess.SubscriptionStatus
 import com.a3.yearlyprogess.YearlyProgressSubscriptionManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.cacheLocation
+import com.a3.yearlyprogess.cacheSunriseSunset
 import com.a3.yearlyprogess.components.DayNightLightProgressView
 import com.a3.yearlyprogess.components.dialogbox.PermissionMessageDialog
 import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.a3.yearlyprogess.databinding.FragmentScreenProgressBinding
-import com.a3.yearlyprogess.loadSunriseSunset
+import com.a3.yearlyprogess.getCurrentDate
+import com.a3.yearlyprogess.getDateRange
+import com.a3.yearlyprogess.loadCachedLocation
+import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.provideSunriseSunsetApi
-import com.a3.yearlyprogess.storeSunriseSunset
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -37,7 +40,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
-import java.util.Calendar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -192,33 +194,56 @@ class ProgressScreenFragment : Fragment() {
           .show()
       return
     }
+      // Load cached location instead of waiting
+      // for location update
+      lifecycleScope.launch(Dispatchers.IO) {
+          val cachedLocation = context?.let { loadCachedLocation(it) }
+          if (cachedLocation == null) {
+              return@launch
+          }
+          val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
+          if (cachedSunriseSunset != null &&
+              cachedSunriseSunset.results[1].date == getCurrentDate()
+          ) {
+              dayLight.loadSunriseSunset(cachedSunriseSunset)
+              nightLight.loadSunriseSunset(cachedSunriseSunset)
+              launch(Dispatchers.Main) {
+                  dayLight.visibility = View.VISIBLE
+                  nightLight.visibility = View.VISIBLE
+                  binding.loadingIndicator?.visibility = View.GONE
+              }
+              return@launch
+          }
+      }
 
-    locationManager.requestLocationUpdates(
+      locationManager.requestLocationUpdates(
         providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
         2000,
         1_000f //  12hrs, 200 KM
         ) { location ->
           context?.let { cacheLocation(it, location) }
           lifecycleScope.launch(Dispatchers.IO) {
-            val cal = Calendar.getInstance()
-            cal.timeInMillis = System.currentTimeMillis()
-
-            cal.add(Calendar.DATE, -1)
-
-            val startDateRange =
-                "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
-            cal.add(Calendar.DATE, 2)
-            val endDateRange =
-                "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
+            val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
+            if (cachedSunriseSunset != null &&
+                cachedSunriseSunset.results[1].date == getCurrentDate()) {
+              dayLight.loadSunriseSunset(cachedSunriseSunset)
+              nightLight.loadSunriseSunset(cachedSunriseSunset)
+              launch(Dispatchers.Main) {
+                dayLight.visibility = View.VISIBLE
+                nightLight.visibility = View.VISIBLE
+                binding.loadingIndicator?.visibility = View.GONE
+              }
+              return@launch
+            }
 
             val result: Resource<SunriseSunsetResponse> =
                 try {
                   val response =
                       sunriseSunsetApi.getSunriseSunset(
-                          location.latitude, location.longitude, startDateRange, endDateRange)
+                          location.latitude, location.longitude, getDateRange(-1), getDateRange(+1))
                   val result = response.body()
                   if (response.isSuccessful && result != null && result.status == "OK") {
-                    storeSunriseSunset(requireContext(), result)
+                    cacheSunriseSunset(requireContext(), result)
                     Resource.Success(result)
                   } else {
                     Resource.Error(response.message())
@@ -232,49 +257,28 @@ class ProgressScreenFragment : Fragment() {
                 result.data?.let {
                   dayLight.loadSunriseSunset(it)
                   nightLight.loadSunriseSunset(it)
-
                   launch(Dispatchers.Main) {
                     dayLight.visibility = View.VISIBLE
                     nightLight.visibility = View.VISIBLE
+                    binding.loadingIndicator?.visibility = View.GONE
                   }
                 }
               }
 
               is Resource.Error -> {
-                val cachedSunriseSunset = loadSunriseSunset(requireContext())
+                Toast.makeText(context, "${result.message}", Toast.LENGTH_LONG).show()
 
-                if (cachedSunriseSunset == null) {
-                  launch(Dispatchers.Main) {
-                    dayLight.visibility = View.GONE
-                    nightLight.visibility = View.GONE
-                  }
-                  return@launch
+                launch(Dispatchers.Main) {
+                  Toast.makeText(
+                          context,
+                          getString(R.string.failed_to_load_sunset_sunrise_time),
+                          Toast.LENGTH_LONG)
+                      .show()
+                  dayLight.visibility = View.GONE
+                  nightLight.visibility = View.GONE
+                  binding.loadingIndicator?.visibility = View.GONE
                 }
-
-                // get current date
-                cal.timeInMillis = System.currentTimeMillis()
-                val currentDate =
-                    "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${
-                                cal.get(
-                                    Calendar.DATE
-                                )
-                            }"
-
-                if (cachedSunriseSunset.results[1].date != currentDate) {
-                  launch(Dispatchers.Main) {
-                    dayLight.visibility = View.GONE
-                    nightLight.visibility = View.GONE
-                  }
-                }
-
-                cachedSunriseSunset.let {
-                  dayLight.loadSunriseSunset(it)
-                  nightLight.loadSunriseSunset(it)
-                  launch(Dispatchers.Main) {
-                    dayLight.visibility = View.VISIBLE
-                    nightLight.visibility = View.VISIBLE
-                  }
-                }
+                return@launch
               }
             }
           }

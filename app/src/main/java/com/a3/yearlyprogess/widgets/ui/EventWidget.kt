@@ -121,7 +121,11 @@ class EventWidget : BaseWidget() {
               context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
               false)
 
-      val eventTimeLeft = calculateTimeLeft(eventEndDateTimeInMillis).toTimePeriodLeftText(context)
+        val dynamicTimeLeft =
+          settingsPref.getBoolean(
+              context.getString(R.string.widget_widget_use_dynamic_time_left), false)
+
+      val eventTimeLeft = calculateTimeLeft(eventEndDateTimeInMillis).toTimePeriodLeftText(dynamicTimeLeft)
 
       if (timeLeftCounter && replaceProgressWithDaysLeft) {
         smallView.setTextViewText(R.id.eventProgressText, eventTimeLeft)

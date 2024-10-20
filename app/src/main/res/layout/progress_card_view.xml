@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:minHeight="130dp"
-        app:cardBackgroundColor="@color/widget_background_color"
+        app:cardBackgroundColor="?attr/colorSurfaceContainer"
         app:cardCornerRadius="30dp"
+        app:cardElevation="0dp"
         app:strokeWidth="0dp">
 
 
@@ -20,10 +21,9 @@
             android:id="@+id/material_card_progress"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:backgroundTint="#12ACABAB"
-            android:backgroundTintMode="multiply"
-            app:cardBackgroundColor="?attr/colorPrimary"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer"
             app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
             app:strokeWidth="0dp">
 
         </com.google.android.material.card.MaterialCardView>
@@ -44,9 +44,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/year"
                     android:gravity="start"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textAllCaps="true"
-                    android:textFontWeight="500"
                     android:textColor="@color/widget_text_color" />
 
                 <TextView
@@ -54,8 +53,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
+                    android:textStyle="bold"
                     android:text="@string/demo_year"
-                    android:textColor="@color/widget_text_color"
+                    android:textColor="?attr/colorTertiary"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -64,7 +64,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_margin="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_gravity="bottom"
                 >
 
@@ -74,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="-5dp"
                     android:text="@string/demo_year_per"
-                    android:textColor="@color/widget_text_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="32sp"
                     android:textStyle="bold" />
 

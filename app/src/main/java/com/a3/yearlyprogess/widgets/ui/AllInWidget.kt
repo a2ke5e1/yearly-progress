@@ -23,13 +23,6 @@ class AllInWidget : BaseWidget() {
 
   companion object {
 
-    private fun calculateProgress(context: Context, timePeriod: TimePeriod): Double {
-      val startTime = calculateStartTime(context, timePeriod)
-      val endTime = calculateEndTime(context, timePeriod)
-      val progress = calculateProgress(context, startTime, endTime)
-      return progress
-    }
-
     private fun initiateView(context: Context, views: RemoteViews) {
 
       val dayProgress = calculateProgress(context, TimePeriod.DAY)
