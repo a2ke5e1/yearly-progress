@@ -67,7 +67,9 @@ class StandaloneWidgetStyle : AppCompatActivity() {
 
     binding.replaceCounter.setOnCheckedChangeListener { _, isChecked ->
       options = options.copy(replaceProgressWithDaysLeft = isChecked)
-      inflateRemoteViewPreview(
+        options.save(this)
+
+        inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
           options.copy(shape = WidgetShape.RECTANGLE, replaceProgressWithDaysLeft = isChecked))
@@ -83,6 +85,7 @@ class StandaloneWidgetStyle : AppCompatActivity() {
 
     binding.decimalSlider.addOnChangeListener { _, value, _ ->
       options = options.copy(decimalPlaces = value.toInt())
+        options.save(this)
       inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
@@ -99,7 +102,9 @@ class StandaloneWidgetStyle : AppCompatActivity() {
 
     binding.leftCounter.setOnCheckedChangeListener { _, isChecked ->
       options = options.copy(timeLeftCounter = isChecked)
-      inflateRemoteViewPreview(
+        options.save(this)
+
+        inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
           options.copy(shape = WidgetShape.RECTANGLE, timeLeftCounter = isChecked))
@@ -115,6 +120,7 @@ class StandaloneWidgetStyle : AppCompatActivity() {
 
     binding.dynamicLeftCounter.setOnCheckedChangeListener { _, isChecked ->
       options = options.copy(dynamicLeftCounter = isChecked)
+        options.save(this)
       inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
@@ -131,6 +137,7 @@ class StandaloneWidgetStyle : AppCompatActivity() {
 
     binding.backgroundSlider.addOnChangeListener { _, value, _ ->
       options = options.copy(backgroundTransparency = (value).toInt())
+        options.save(this)
       inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,

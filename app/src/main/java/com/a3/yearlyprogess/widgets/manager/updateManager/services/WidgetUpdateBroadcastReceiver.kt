@@ -6,11 +6,13 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.a3.yearlyprogess.YearlyProgressNotification
+import com.a3.yearlyprogess.cacheSunriseSunset
 import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.loadCachedLocation
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.provideSunriseSunsetApi
-import com.a3.yearlyprogess.cacheSunriseSunset
+import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayLightWidget
@@ -119,6 +121,16 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
     if (totalWidgetCount == 0) {
       WidgetUpdateAlarmHandler(context).cancelAlarmManager()
     }
+
+      val yearlyProgressNotification = YearlyProgressNotification(context)
+      yearlyProgressNotification.showProgressNotification()
+
+      if (yearlyProgressNotification.hasNotificationPermission()) {
+          val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
+          WakeLocker.acquire(context)
+          widgetUpdateAlarmHandler.cancelAlarmManager()
+          widgetUpdateAlarmHandler.setAlarmManager()
+      }
 
     // go back to sleep
     // WakeLocker.release()

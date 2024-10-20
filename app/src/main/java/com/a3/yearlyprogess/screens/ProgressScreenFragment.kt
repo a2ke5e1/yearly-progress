@@ -30,6 +30,7 @@ import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.a3.yearlyprogess.databinding.FragmentScreenProgressBinding
 import com.a3.yearlyprogess.getCurrentDate
 import com.a3.yearlyprogess.getDateRange
+import com.a3.yearlyprogess.loadCachedLocation
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.provideSunriseSunsetApi
 import com.google.android.gms.ads.AdListener
@@ -193,7 +194,29 @@ class ProgressScreenFragment : Fragment() {
           .show()
       return
     }
-    locationManager.requestLocationUpdates(
+      // Load cached location instead of waiting
+      // for location update
+      lifecycleScope.launch(Dispatchers.IO) {
+          val cachedLocation = context?.let { loadCachedLocation(it) }
+          if (cachedLocation == null) {
+              return@launch
+          }
+          val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
+          if (cachedSunriseSunset != null &&
+              cachedSunriseSunset.results[1].date == getCurrentDate()
+          ) {
+              dayLight.loadSunriseSunset(cachedSunriseSunset)
+              nightLight.loadSunriseSunset(cachedSunriseSunset)
+              launch(Dispatchers.Main) {
+                  dayLight.visibility = View.VISIBLE
+                  nightLight.visibility = View.VISIBLE
+                  binding.loadingIndicator?.visibility = View.GONE
+              }
+              return@launch
+          }
+      }
+
+      locationManager.requestLocationUpdates(
         providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
         2000,
         1_000f //  12hrs, 200 KM
