@@ -8,7 +8,6 @@ import android.text.SpannableString
 import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -21,7 +20,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
-class CustomEventCardView
+class EventCardView
 @JvmOverloads
 constructor(
     context: Context,
@@ -92,10 +91,8 @@ constructor(
         val decimalPlace: Int =
             settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
 
-        YearlyProgressManager(context).setDefaultWeek()
-        YearlyProgressManager(context).setDefaultCalculationMode()
 
-        if (progress > 100) {
+
           val (_, _, newProgress) =
               YearlyProgressManager.getEventProgress(
                   event.eventStartTime, event.eventEndTime, event.repeatEventDays)
@@ -103,7 +100,7 @@ constructor(
           // eventStartTimeInMills = newEventStart
           // eventEndDateTimeInMillis = newEventEnd
           progress = newProgress
-        }
+
 
         progress = if (progress > 100) 100.0 else progress
         progress = if (progress < 0) 0.0 else progress
