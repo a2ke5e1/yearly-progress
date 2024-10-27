@@ -3,6 +3,7 @@ package com.a3.yearlyprogess
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -61,19 +62,30 @@ class YearlyProgressNotification(private val context: Context) {
         val weekProgress = calculateProgress(context, TimePeriod.WEEK)
         val dayProgress = calculateProgress(context, TimePeriod.DAY)
 
+        val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+        val pendingIntent = intent?.let { PendingIntent.getActivity(context, 0, it,
+            PendingIntent.FLAG_IMMUTABLE) }
+
         val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_notification_icon)
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(
-                "Day: %.2f%%, Week: %.2f%%, Month: %.2f%%, Year: %.2f%%".format(
+                "Day: %.2f%%, Week: %.2f%%, Month: %.2f%% and Year: %.2f%%".format(
                     dayProgress, weekProgress, monthProgress, yearProgress
                 )
             )
             .setSilent(true)
+            .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW).build()
 
         with(NotificationManagerCompat.from(context)) {
             notify(notificationId, notification)
+        }
+    }
+
+    fun hideProgressNotification() {
+        with(NotificationManagerCompat.from(context)) {
+            cancel(notificationId)
         }
     }
 

@@ -10,7 +10,7 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
-import com.a3.yearlyprogess.components.EventCardView.Companion.displayRelativeDifferenceMessage
+import com.a3.yearlyprogess.components.EventDetailView.Companion.displayRelativeDifferenceMessage
 import com.a3.yearlyprogess.databinding.ImportEventCardViewBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 

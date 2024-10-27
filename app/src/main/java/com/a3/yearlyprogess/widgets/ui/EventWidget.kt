@@ -14,7 +14,7 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.calculateTimeLeft
-import com.a3.yearlyprogess.components.EventCardView.Companion.displayRelativeDifferenceMessage
+import com.a3.yearlyprogess.components.EventDetailView.Companion.displayRelativeDifferenceMessage
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText

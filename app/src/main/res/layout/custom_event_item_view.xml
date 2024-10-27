@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.a3.yearlyprogess.components.EventCardView
+    <com.a3.yearlyprogess.components.EventDetailView
         android:id="@+id/customEventCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

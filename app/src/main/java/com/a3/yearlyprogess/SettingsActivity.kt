@@ -1,6 +1,8 @@
 package com.a3.yearlyprogess
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -8,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import kotlin.time.DurationUnit
@@ -52,14 +55,8 @@ class SettingsActivity : AppCompatActivity() {
         val notificationPref =
             findPreference<Preference>(getString(R.string.progress_show_notification))
         notificationPref?.setOnPreferenceChangeListener { _, newValue ->
-            if (newValue == true) {
-                val notificationHelper = YearlyProgressNotification(requireContext())
-                if (!notificationHelper.hasAppNotificationPermission()) {
-                    notificationHelper.requestNotificationPermission(requireActivity())
-                    return@setOnPreferenceChangeListener false
-                }
-                notificationHelper.showProgressNotification()
-            }
+            val widgetUpdateServiceIntent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+            context?.sendBroadcast(widgetUpdateServiceIntent)
             true
         }
 
