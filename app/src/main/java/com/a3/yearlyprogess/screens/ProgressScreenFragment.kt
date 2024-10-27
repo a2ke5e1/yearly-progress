@@ -46,12 +46,7 @@ import kotlinx.coroutines.launch
 /** A simple [Fragment] subclass as the default destination in the navigation. */
 class ProgressScreenFragment : Fragment() {
 
-  private var _binding: FragmentScreenProgressBinding? = null
-
-  // This property is only valid between onCreateView and
-  // onDestroyView.
-  private val binding
-    get() = _binding!!
+  private lateinit var binding: FragmentScreenProgressBinding
 
   private val sunriseSunsetApi: SunriseSunsetApi = provideSunriseSunsetApi()
 
@@ -75,7 +70,7 @@ class ProgressScreenFragment : Fragment() {
       container: ViewGroup?,
       savedInstanceState: Bundle?
   ): View {
-    _binding = FragmentScreenProgressBinding.inflate(inflater, container, false)
+    binding = FragmentScreenProgressBinding.inflate(inflater, container, false)
     return binding.root
   }
 
@@ -292,7 +287,6 @@ class ProgressScreenFragment : Fragment() {
     } catch (ex: UninitializedPropertyAccessException) {
       Log.d("Initialization Error", ex.message.toString())
     }
-    _binding = null
   }
 
   sealed class Resource<T>(val data: T?, val message: String?) {

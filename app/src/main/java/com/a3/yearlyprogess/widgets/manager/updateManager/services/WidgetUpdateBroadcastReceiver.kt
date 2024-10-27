@@ -123,13 +123,14 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
     }
 
       val yearlyProgressNotification = YearlyProgressNotification(context)
-      yearlyProgressNotification.showProgressNotification()
 
       if (yearlyProgressNotification.hasNotificationPermission()) {
           val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
-          WakeLocker.acquire(context)
           widgetUpdateAlarmHandler.cancelAlarmManager()
           widgetUpdateAlarmHandler.setAlarmManager()
+          yearlyProgressNotification.showProgressNotification()
+      } else {
+          yearlyProgressNotification.hideProgressNotification()
       }
 
     // go back to sleep
