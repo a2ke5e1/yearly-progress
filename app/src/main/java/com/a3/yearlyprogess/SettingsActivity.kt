@@ -2,7 +2,6 @@ package com.a3.yearlyprogess
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -55,6 +54,13 @@ class SettingsActivity : AppCompatActivity() {
         val notificationPref =
             findPreference<Preference>(getString(R.string.progress_show_notification))
         notificationPref?.setOnPreferenceChangeListener { _, newValue ->
+          if (newValue == true) {
+            val notificationHelper = YearlyProgressNotification(requireContext())
+            if (!notificationHelper.hasAppNotificationPermission()) {
+              notificationHelper.requestNotificationPermission(requireActivity())
+              return@setOnPreferenceChangeListener false
+            }
+          }
             val widgetUpdateServiceIntent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
             context?.sendBroadcast(widgetUpdateServiceIntent)
             true
