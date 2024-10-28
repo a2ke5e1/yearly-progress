@@ -121,6 +121,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rectBtn"
                 style="@style/Widget.Material3.CardView.Filled"
+                app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="2dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
@@ -136,7 +139,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cloverBtn"
                 style="@style/Widget.Material3.CardView.Filled"
+                app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
                 android:layout_width="0dp"
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="2dp"
                 android:layout_height="wrap_content">
 
                 <FrameLayout
@@ -151,6 +157,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/pillBtn"
                 style="@style/Widget.Material3.CardView.Filled"
+                app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="2dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 

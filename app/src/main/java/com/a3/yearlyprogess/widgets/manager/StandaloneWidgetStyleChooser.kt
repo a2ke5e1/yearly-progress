@@ -65,6 +65,10 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
     inflateRemoteViewPreview(
         binding.pillBtn, binding.pillContainer, options.copy(shape = WidgetShape.PILL))
 
+      binding.rectBtn.strokeWidth = if (options.shape == WidgetShape.RECTANGLE) WIDGET_SELECTOR_STROKE_WIDTH else 0
+      binding.cloverBtn.strokeWidth = if (options.shape == WidgetShape.CLOVER) WIDGET_SELECTOR_STROKE_WIDTH else 0
+      binding.pillBtn.strokeWidth = if (options.shape == WidgetShape.PILL) WIDGET_SELECTOR_STROKE_WIDTH else 0
+
     binding.replaceCounter.setOnCheckedChangeListener { _, isChecked ->
       options = options.copy(replaceProgressWithDaysLeft = isChecked)
         options.save(this)
@@ -184,4 +188,9 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
     setResult(Activity.RESULT_OK, resultValue)
     finish()
   }
+
+    companion object {
+        private const val WIDGET_SELECTOR_STROKE_WIDTH = 4
+    }
+
 }
