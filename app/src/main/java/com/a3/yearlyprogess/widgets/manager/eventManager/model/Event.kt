@@ -66,46 +66,51 @@ data class Event(
             nextEndTime = eventCalendar.timeInMillis
         }
 
-        // Handle weekly recurrence
-        if (repeatEventDays.any {
-                it in listOf(
-                    RepeatDays.SUNDAY,
-                    RepeatDays.MONDAY,
-                    RepeatDays.TUESDAY,
-                    RepeatDays.WEDNESDAY,
-                    RepeatDays.THURSDAY,
-                    RepeatDays.FRIDAY,
-                    RepeatDays.SATURDAY
-                )
-            }) {
-            val nextDayOfWeek = repeatEventDays.map {
-                when (it) {
-                    RepeatDays.SUNDAY -> Calendar.SUNDAY
-                    RepeatDays.MONDAY -> Calendar.MONDAY
-                    RepeatDays.TUESDAY -> Calendar.TUESDAY
-                    RepeatDays.WEDNESDAY -> Calendar.WEDNESDAY
-                    RepeatDays.THURSDAY -> Calendar.THURSDAY
-                    RepeatDays.FRIDAY -> Calendar.FRIDAY
-                    RepeatDays.SATURDAY -> Calendar.SATURDAY
-                    else -> -1
-                }
-            }.filter { it != -1 }
+        val repeatWeekDays = repeatEventDays.map {
+           when (it) {
+               RepeatDays.SUNDAY -> Calendar.SUNDAY
+               RepeatDays.MONDAY -> Calendar.MONDAY
+               RepeatDays.TUESDAY -> Calendar.TUESDAY
+               RepeatDays.WEDNESDAY -> Calendar.WEDNESDAY
+               RepeatDays.THURSDAY -> Calendar.THURSDAY
+               RepeatDays.FRIDAY -> Calendar.FRIDAY
+               RepeatDays.SATURDAY -> Calendar.SATURDAY
+               else -> -1
+           }
+        }.filter { it != -1 }.toList()
 
-            var daysUntilNext = Int.MAX_VALUE
-            for (day in nextDayOfWeek) {
-                val diff = (day + 7 - currCalendar.get(Calendar.DAY_OF_WEEK)) % 7
-                if (diff > 0 && diff < daysUntilNext) daysUntilNext = diff
-            }
-
-            if (daysUntilNext != Int.MAX_VALUE) {
-                currCalendar.add(Calendar.DAY_OF_YEAR, daysUntilNext)
-                nextStartTime = currCalendar.timeInMillis
-
-                currCalendar.timeInMillis = nextEndTime
-                currCalendar.add(Calendar.DAY_OF_YEAR, daysUntilNext)
-                nextEndTime = currCalendar.timeInMillis
-            }
+        if (repeatWeekDays.isEmpty()) {
+            return Pair(nextStartTime, nextEndTime)
         }
+
+
+
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = currentTime
+
+        val (startHour, startMinute) = Calendar.getInstance().run {
+            timeInMillis = nextStartTime
+            Pair(get(Calendar.HOUR_OF_DAY), get(Calendar.MINUTE))
+        }
+        val (endHour, endMinute) = Calendar.getInstance().run {
+            timeInMillis = nextEndTime
+            Pair(get(Calendar.HOUR_OF_DAY), get(Calendar.MINUTE))
+        }
+
+        while (!repeatWeekDays.contains(cal.get(Calendar.DAY_OF_WEEK))) {
+            cal.add(Calendar.DAY_OF_MONTH, 1)
+        }
+
+
+        cal.set(Calendar.HOUR_OF_DAY, startHour)
+        cal.set(Calendar.MINUTE, startMinute)
+
+        nextStartTime = cal.timeInMillis
+
+        cal.set(Calendar.HOUR_OF_DAY, endHour)
+        cal.set(Calendar.MINUTE, endMinute)
+
+        nextEndTime = cal.timeInMillis
 
         return Pair(nextStartTime, nextEndTime)
     }
