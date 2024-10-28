@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="com.a3.yearlyprogess.widgets.manager.StandaloneWidgetStyle"
+    android:configure="com.a3.yearlyprogess.widgets.manager.StandaloneWidgetStyleChooser"
     android:description="@string/week_widget_description"
     android:widgetFeatures="reconfigurable|configuration_optional"
     android:initialKeyguardLayout="@layout/week_widget_preview"

@@ -17,7 +17,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.CustomEventSelectorItemViewBinding
-import com.a3.yearlyprogess.widgets.manager.eventManager.EventManagerActivity
+import com.a3.yearlyprogess.widgets.manager.eventManager.EventEditorActivity
 import com.a3.yearlyprogess.widgets.manager.eventManager.EventSelectorActivity
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
@@ -51,7 +51,7 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
 
     holder.binding.customEventCardView.setEvent(currentEvent)
     holder.binding.customEventCardView.setOnEditButtonClickListener {
-      val intent = Intent(it.context, EventManagerActivity::class.java)
+      val intent = Intent(it.context, EventEditorActivity::class.java)
       intent.putExtra("event", currentEvent)
       intent.putExtra("addMode", false)
       it.context.startActivity(intent)

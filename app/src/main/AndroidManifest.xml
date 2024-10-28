@@ -22,7 +22,7 @@
         android:theme="@style/Theme.YearlyProgress"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".widgets.manager.StandaloneWidgetStyle"
+            android:name=".widgets.manager.StandaloneWidgetStyleChooser"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -51,7 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".widgets.manager.eventManager.EventManagerActivity"
+            android:name=".widgets.manager.eventManager.EventEditorActivity"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress"
             android:windowSoftInputMode="stateVisible|adjustResize|stateHidden" />

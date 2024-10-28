@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentScreenListEventsBinding
-import com.a3.yearlyprogess.widgets.manager.eventManager.EventManagerActivity
+import com.a3.yearlyprogess.widgets.manager.eventManager.EventEditorActivity
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.EventsListViewAdapter
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventItemKeyProvider
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.MyItemDetailsLookup
@@ -142,7 +142,7 @@ class EventsListScreenFragment : Fragment() {
   private fun manageEventAddButton() {
 
     binding.addEventFab.setOnClickListener {
-      val intent = Intent(it.context, EventManagerActivity::class.java)
+      val intent = Intent(it.context, EventEditorActivity::class.java)
       intent.putExtra("addMode", true)
       startActivity(intent)
     }

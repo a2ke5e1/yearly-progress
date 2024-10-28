@@ -105,9 +105,9 @@
     <string name="dynamic_time_left_counter">Dynamic Time Left Counter</string>
     <string name="repeat_events">Repeat Events</string>
     <string name="all_day">All Day</string>
-    <string name="every_year">Every Year</string>
-    <string name="every_month">Every Month</string>
-    <string name="repeat_weekdays">Repeat Weekdays</string>
+    <string name="every_year">Yearly</string>
+    <string name="every_month">Monthly</string>
+    <string name="repeat_weekdays">Week Days</string>
     <string name="events">Events</string>
     <string name="edit">Edit</string>
     <string name="join_our_telegram_group">Join our telegram group</string>
@@ -140,5 +140,7 @@
     <string name="failed_to_load_sunset_sunrise_time"><![CDATA[Failed to load sunset & sunrise time.]]></string>
     <string name="progress_notification">Progress Notification</string>
     <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
+    <string name="enable_location_day_night_message">Allow location permission to see Day/Night Progress</string>
+    <string name="allow">Allow</string>
 
 </resources>

@@ -11,13 +11,15 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.YearlyProgressManager
-import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.calculateTimeLeft
 import com.a3.yearlyprogess.components.EventDetailView.Companion.displayRelativeDifferenceMessage
+import com.a3.yearlyprogess.getCurrentPeriodValue
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
+import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
+import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
 import java.util.Date
 
@@ -46,8 +48,7 @@ class EventWidget : BaseWidget() {
           settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
 
       val progressText =
-          formatProgressStyle(SpannableString("%,.${decimalPlace}f".format(progress) + "%"))
-
+          progress.styleFormatted(decimalPlace)
       val formattedEndTime =
           DateFormat.format(
               if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a", newEventEnd
@@ -64,7 +65,7 @@ class EventWidget : BaseWidget() {
 
       wideView.setTextViewText(R.id.eventProgressText, progressText)
       wideView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-      wideView.setTextViewText(R.id.currentDate, YearlyProgressManager.getDay(formatted = true))
+      wideView.setTextViewText(R.id.currentDate, getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY))
       wideView.setTextViewText(R.id.eventTitle, eventTitle)
       if (eventDesc.isEmpty()) {
         wideView.setViewVisibility(R.id.eventDesc, View.GONE)
@@ -96,12 +97,12 @@ class EventWidget : BaseWidget() {
 
       tallView.setTextViewText(R.id.eventProgressText, progressText)
       tallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-      tallView.setTextViewText(R.id.currentDate, YearlyProgressManager.getDay(formatted = true))
+      tallView.setTextViewText(R.id.currentDate, getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY))
       tallView.setTextViewText(R.id.eventTitle, eventTitle)
       tallView.setTextViewText(R.id.eventTime, formattedEndDateTime)
 
       smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-      smallView.setTextViewText(R.id.currentDate, YearlyProgressManager.getDay(formatted = true))
+      smallView.setTextViewText(R.id.currentDate, getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY))
       smallView.setTextViewText(R.id.eventProgressText, progressText)
       smallView.setTextViewText(R.id.eventTitle, eventTitle)
 

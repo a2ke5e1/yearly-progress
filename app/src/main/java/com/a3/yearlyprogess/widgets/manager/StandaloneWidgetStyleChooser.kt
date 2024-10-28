@@ -18,7 +18,7 @@ import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.google.android.material.card.MaterialCardView
 
-class StandaloneWidgetStyle : AppCompatActivity() {
+class StandaloneWidgetStyleChooser : AppCompatActivity() {
 
   private var _binding: ActivityStandaloneWidgetStyleBinding? = null
   private val binding
@@ -64,6 +64,10 @@ class StandaloneWidgetStyle : AppCompatActivity() {
         binding.cloverBtn, binding.cloverContainer, options.copy(shape = WidgetShape.CLOVER))
     inflateRemoteViewPreview(
         binding.pillBtn, binding.pillContainer, options.copy(shape = WidgetShape.PILL))
+
+      binding.rectBtn.strokeWidth = if (options.shape == WidgetShape.RECTANGLE) WIDGET_SELECTOR_STROKE_WIDTH else 0
+      binding.cloverBtn.strokeWidth = if (options.shape == WidgetShape.CLOVER) WIDGET_SELECTOR_STROKE_WIDTH else 0
+      binding.pillBtn.strokeWidth = if (options.shape == WidgetShape.PILL) WIDGET_SELECTOR_STROKE_WIDTH else 0
 
     binding.replaceCounter.setOnCheckedChangeListener { _, isChecked ->
       options = options.copy(replaceProgressWithDaysLeft = isChecked)
@@ -184,4 +188,9 @@ class StandaloneWidgetStyle : AppCompatActivity() {
     setResult(Activity.RESULT_OK, resultValue)
     finish()
   }
+
+    companion object {
+        private const val WIDGET_SELECTOR_STROKE_WIDTH = 4
+    }
+
 }
