@@ -17,6 +17,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.ui.EventWidget
+import java.util.Date
 
 class EventSelectorActivity : AppCompatActivity() {
 
@@ -62,8 +63,8 @@ class EventSelectorActivity : AppCompatActivity() {
               intent?.getStringExtra("eventTitle") ?: "",
               intent?.getStringExtra("eventDesc") ?: "",
               intent?.getBooleanExtra("allDayEvent", false) == true,
-              intent?.getLongExtra("eventStartTimeInMills", 0) ?: 0,
-              intent?.getLongExtra("eventEndDateTimeInMillis", 0) ?: 0,
+              Date(intent?.getLongExtra("eventStartTimeInMills", 0) ?: 0),
+              Date(intent?.getLongExtra("eventEndDateTimeInMillis", 0) ?: 0),
               eventDays)
         }
 
@@ -75,8 +76,8 @@ class EventSelectorActivity : AppCompatActivity() {
       edit.putString("eventTitle", event.eventTitle)
       edit.putBoolean("allDayEvent", event.allDayEvent)
       edit.putString("eventDesc", event.eventDescription)
-      edit.putLong("eventStartTimeInMills", event.eventStartTime)
-      edit.putLong("eventEndDateTimeInMillis", event.eventEndTime)
+      edit.putLong("eventStartTimeInMills", event.eventStartTime.time)
+      edit.putLong("eventEndDateTimeInMillis", event.eventEndTime.time)
       edit.putString("eventRepeatDays", conv.fromRepeatDaysList(event.repeatEventDays))
 
       edit.commit()

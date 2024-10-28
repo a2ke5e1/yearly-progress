@@ -38,7 +38,7 @@ class ImportEventAdapter(
     val context = holder.binding.root.context
     val timeDesc =
         displayRelativeDifferenceMessage(
-            context, currentEvent.eventStartTime, currentEvent.eventEndTime, false)
+            context, currentEvent.eventStartTime.time, currentEvent.eventEndTime.time, false)
 
     // Set the event details
     holder.binding.eventTitle.text = currentEvent.eventTitle
@@ -108,7 +108,7 @@ class ImportEventAdapter(
         _eventsList.filter {
           (it.eventTitle.contains(query, ignoreCase = true) ||
               it.eventDescription.contains(query, ignoreCase = true)) &&
-              (range == null || it.eventStartTime in range.first..range.second)
+              (range == null || it.eventStartTime.time in range.first..range.second)
         }
     Log.d(
         "EventAdapter",
@@ -122,7 +122,7 @@ class ImportEventAdapter(
   }
 
   fun filterByDateRange(startDate: Long, endDate: Long) {
-    val filteredEvents = _eventsList.filter { it.eventStartTime in startDate..endDate }
+    val filteredEvents = _eventsList.filter { it.eventStartTime.time in startDate..endDate }
     updateEvents(filteredEvents)
   }
 }

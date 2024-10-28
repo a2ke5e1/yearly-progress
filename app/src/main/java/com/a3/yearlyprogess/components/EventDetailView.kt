@@ -7,6 +7,7 @@ import android.icu.text.SimpleDateFormat
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
@@ -14,6 +15,7 @@ import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import kotlinx.coroutines.*
@@ -63,23 +65,19 @@ constructor(
 
     binding.eventStart.text =
         displayRelativeDifferenceMessage(
-            context, event.eventStartTime, event.eventEndTime, event.allDayEvent)
+            context, event.eventStartTime.time, event.eventEndTime.time, event.allDayEvent)
     // binding.eventEnd.visibility = View.GONE
 
     launch(Dispatchers.IO) {
-      var progress =
-          YearlyProgressManager.getProgress(
-              YearlyProgressManager.CUSTOM_EVENT, event.eventStartTime, event.eventEndTime)
 
-      if (progress > 100) {
-        val (_, _, newProgress) =
-            YearlyProgressManager.getEventProgress(
-                event.eventStartTime, event.eventEndTime, event.repeatEventDays)
+
+        val (start, end) =  event.nextStartAndEndTime()
+        val newProgress = calculateProgress(context, start, end)
 
         // eventStartTimeInMills = newEventStart
         // eventEndDateTimeInMillis = newEventEnd
-        progress = newProgress
-      }
+        var progress = newProgress
+
 
       progress = if (progress > 100) 100.0 else progress
       progress = if (progress < 0) 0.0 else progress
@@ -92,14 +90,14 @@ constructor(
             settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
 
 
-
-          val (_, _, newProgress) =
-              YearlyProgressManager.getEventProgress(
-                  event.eventStartTime, event.eventEndTime, event.repeatEventDays)
+        val (_start, _end) =  event.nextStartAndEndTime()
+        val _newProgress = calculateProgress(context, _start, _end)
+        Log.d("EventDetailView", "EventDetailView: $newProgress")
+        Log.d("EventDetailView", "EventDetailView: $_start $_end")
 
           // eventStartTimeInMills = newEventStart
           // eventEndDateTimeInMillis = newEventEnd
-          progress = newProgress
+          progress = _newProgress
 
 
         progress = if (progress > 100) 100.0 else progress
@@ -119,18 +117,19 @@ constructor(
 
           binding.eventStart.text =
               displayRelativeDifferenceMessage(
-                  context, event.eventStartTime, event.eventEndTime, event.allDayEvent)
+                  context, _start, _end, event.allDayEvent)
           // binding.eventEnd.visibility = View.GONE
 
           binding.progressText.text = progressText
           binding.progressBar.progress = progress.toInt()
+          updateView(progress, animate = false)
         }
         delay(1000)
       }
     }
   }
 
-  private fun updateView(progress: Double) {
+  private fun updateView(progress: Double, animate: Boolean = true) {
 
     val decimalPlace: Int =
         settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
@@ -141,8 +140,8 @@ constructor(
     val currentProgress = binding.progressBar.progress.toFloat()
     val progressTextValueAnimator = ValueAnimator.ofFloat(currentProgress, progress.toFloat())
 
-    progressBarValueAnimator.duration = ANIMATION_DURATION
-    progressTextValueAnimator.duration = ANIMATION_DURATION
+    progressBarValueAnimator.duration = if (animate) ANIMATION_DURATION else 0
+    progressTextValueAnimator.duration = if (animate) ANIMATION_DURATION else 0
 
     progressBarValueAnimator.addUpdateListener {
       binding.customProgressBar.layoutParams.width = it.animatedValue as Int
