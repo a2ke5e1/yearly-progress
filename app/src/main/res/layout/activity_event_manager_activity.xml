@@ -286,63 +286,83 @@
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                 tools:text="11:15 PM" />
 
-            <!-- TODO: Redesign the repeat days checkbox UI -->
-
-            <LinearLayout
+            <HorizontalScrollView
                 android:id="@+id/repeatDays"
+                android:layout_marginStart="16dp"
                 android:layout_width="match_parent"
-                android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/repeatWeekdaysSwitch">
+                app:layout_constraintTop_toBottomOf="@id/repeatWeekdaysSwitch"
+                android:scrollbars="none">
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/btnSunday"
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/select_day_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="S" />
+                    app:singleLine="true">
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/btnMonday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="M" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/btnSunday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:checkable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Su" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/btnTuesday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="T" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/btnMonday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:checkable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mo" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/btnWednesday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="W" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/btnTuesday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:checkable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tu" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/btnThursday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="T" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/btnWednesday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:checkable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="We" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/btnFriday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="F" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/btnThursday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:checkable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Th" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/btnSaturday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="S" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/btnFriday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:checkable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fr" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/btnSaturday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:checkable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sa" />
+
+                </com.google.android.material.chip.ChipGroup>
 
 
-            </LinearLayout>
+            </HorizontalScrollView>
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
