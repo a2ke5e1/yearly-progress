@@ -51,7 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".widgets.manager.eventManager.EventManagerActivity"
+            android:name=".widgets.manager.eventManager.EventEditorActivity"
             android:exported="true"
             android:theme="@style/Theme.YearlyProgress"
             android:windowSoftInputMode="stateVisible|adjustResize|stateHidden" />

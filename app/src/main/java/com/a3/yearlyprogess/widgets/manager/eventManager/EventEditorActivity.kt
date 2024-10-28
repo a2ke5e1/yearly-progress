@@ -1,9 +1,7 @@
 package com.a3.yearlyprogess.widgets.manager.eventManager
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -33,7 +31,7 @@ import com.google.android.material.timepicker.TimeFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventManagerActivity : AppCompatActivity() {
+class EventEditorActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityEventManagerActivityBinding
   private val mEventViewModel: EventViewModel by viewModels()
