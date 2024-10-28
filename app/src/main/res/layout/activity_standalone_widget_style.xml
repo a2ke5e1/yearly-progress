@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    tools:context=".widgets.manager.StandaloneWidgetStyle">
+    tools:context=".widgets.manager.StandaloneWidgetStyleChooser">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -39,6 +39,7 @@
                 app:constraint_referenced_ids="widgetStyleLabel, rectBtn, cloverBtn, pillBtn"
                 app:flow_verticalAlign="top"
                 app:flow_verticalGap="8dp"
+                app:flow_horizontalGap="8dp"
                 app:flow_verticalStyle="packed"
                 app:flow_wrapMode="chain"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -120,12 +121,12 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rectBtn"
                 style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
                 <FrameLayout
                     android:id="@+id/rect_container"
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:layout_margin="8dp" />
@@ -135,12 +136,12 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cloverBtn"
                 style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
                 <FrameLayout
                     android:id="@+id/clover_container"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:layout_margin="8dp" />
@@ -150,12 +151,12 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/pillBtn"
                 style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
                 <FrameLayout
                     android:id="@+id/pill_container"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:layout_margin="8dp" />

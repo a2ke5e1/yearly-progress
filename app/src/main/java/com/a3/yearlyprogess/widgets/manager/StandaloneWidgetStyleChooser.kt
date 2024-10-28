@@ -18,7 +18,7 @@ import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.google.android.material.card.MaterialCardView
 
-class StandaloneWidgetStyle : AppCompatActivity() {
+class StandaloneWidgetStyleChooser : AppCompatActivity() {
 
   private var _binding: ActivityStandaloneWidgetStyleBinding? = null
   private val binding

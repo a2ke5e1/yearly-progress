@@ -22,7 +22,7 @@
         android:theme="@style/Theme.YearlyProgress"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".widgets.manager.StandaloneWidgetStyle"
+            android:name=".widgets.manager.StandaloneWidgetStyleChooser"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
