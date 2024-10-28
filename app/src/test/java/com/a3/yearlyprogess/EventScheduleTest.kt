@@ -12,7 +12,7 @@ import java.util.Date
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class EventScheduleTest {
     @Test
     fun repeat_every_year_one_year() {
         val cal = Calendar.getInstance()
@@ -113,6 +113,44 @@ class ExampleUnitTest {
 
         assertEquals(Date(nextStart6), Date(nextSchedule6.first))
         assertEquals(Date(nextEnd6), Date(nextSchedule6.second))
+    }
+
+
+    @Test
+    fun repeat_monthly_test1() {
+        val cal = Calendar.getInstance()
+        cal.set(2022, 10, 1, 0, 0, 0)
+        var currentTime = cal.timeInMillis
+
+        cal.set(2022, 9, 1, 0, 0, 0)
+        val start = cal.timeInMillis
+
+        cal.set(2022, 9, 1, 1, 0, 0)
+        val end = cal.timeInMillis
+
+        cal.set(2022, 11, 1, 0, 0, 0)
+        val nextStart = cal.timeInMillis
+
+        cal.set(2022, 11, 1, 1, 0, 0)
+        val nextEnd = cal.timeInMillis
+
+        val event = Event(
+            1,
+            "Event 1",
+            "Event 1 Description",
+            false,
+            start,
+            end,
+            listOf(RepeatDays.EVERY_MONTH)
+        )
+
+        val nextSchedule = event.nextStartAndEndTime(
+            currentTime = currentTime
+        )
+
+        assertEquals(Date(nextStart), Date(nextSchedule.first))
+        assertEquals(Date(nextEnd), Date(nextSchedule.second))
+
     }
 
 
