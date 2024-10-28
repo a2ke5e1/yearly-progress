@@ -107,6 +107,17 @@ class ProgressScreenFragment : Fragment() {
         setupDayNightLightProgressView(dayLight, nightLight)
       }
 
+        ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+        ) ==
+                PackageManager.PERMISSION_DENIED -> {
+            binding.dismissibleMessageView?.visibility = View.VISIBLE
+            binding.callToAction?.setOnClickListener {
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+            }
+            binding.loadingIndicator?.visibility = View.GONE
+        }
+
       ActivityCompat.shouldShowRequestPermissionRationale(
           requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) -> {
         locationPermissionDialog.show(parentFragmentManager, "")
@@ -115,7 +126,10 @@ class ProgressScreenFragment : Fragment() {
       else -> {
         // You can directly ask for the permission.
         // The registered ActivityResultCallback gets the result of this request.
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+          binding.dismissibleMessageView?.visibility = View.VISIBLE
+          binding.callToAction?.setOnClickListener {
+              locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
+          }
       }
     }
 
@@ -180,6 +194,7 @@ class ProgressScreenFragment : Fragment() {
         PackageManager.PERMISSION_GRANTED) {
       return
     }
+      binding.dismissibleMessageView?.visibility = View.GONE
 
     // Get the list of available location providers
     val providers = locationManager.allProviders.filter { locationManager.isProviderEnabled(it) }

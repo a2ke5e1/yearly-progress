@@ -15,7 +15,7 @@
             android:id="@+id/flow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewDay,ad_frame,loadingIndicator,dayLightProgressView,nightLightProgressView"
+            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewDay,ad_frame,loadingIndicator,dismissibleMessageView,dayLightProgressView,nightLightProgressView"
             app:flow_horizontalAlign="center"
             app:flow_horizontalGap="30dp"
             app:flow_horizontalStyle="packed"
@@ -60,6 +60,42 @@
             android:layout_width="match_parent"
             app:day_light="false"
             android:layout_height="145dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/dismissibleMessageView"
+            style="@style/Widget.Material3.CardView.Filled"
+            app:cardBackgroundColor="?attr/colorTertiaryContainer"
+            android:layout_width="match_parent"
+            app:cardCornerRadius="16dp"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorOnTertiaryContainer"
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enable_location_day_night_message" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:id="@+id/callToAction"
+                android:layout_height="wrap_content"
+                android:text="@string/allow" />
+
+
+        </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:id="@+id/ad_frame"
