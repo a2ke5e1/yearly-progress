@@ -13,11 +13,10 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.YearlyProgressManager
-import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
+import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -103,8 +102,7 @@ constructor(
         progress = if (progress > 100) 100.0 else progress
         progress = if (progress < 0) 0.0 else progress
 
-        val progressText =
-            formatProgressStyle(SpannableString("%,.${decimalPlace}f".format(progress) + "%"))
+        val progressText = progress.styleFormatted(decimalPlace)
 
         launch(Dispatchers.Main) {
           binding.eventTitle.text = event.eventTitle
@@ -150,7 +148,7 @@ constructor(
 
     progressTextValueAnimator.addUpdateListener {
       binding.progressText.text =
-          formatProgressStyle(SpannableString("%,.${decimalPlace}f".format(it.animatedValue) + "%"))
+          progress.styleFormatted(decimalPlace)
     }
 
     progressBarValueAnimator.start()
