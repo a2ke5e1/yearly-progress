@@ -34,8 +34,8 @@ class EventScheduleTest {
             "Event 1",
             "Event 1 Description",
             false,
-            start,
-            end,
+            Date(start),
+            Date(end),
             listOf(RepeatDays.EVERY_YEAR)
         )
 
@@ -68,8 +68,8 @@ class EventScheduleTest {
             "Event 1",
             "Event 1 Description",
             false,
-            start,
-            end,
+            Date(start),
+            Date(end),
             listOf(RepeatDays.EVERY_YEAR)
         )
 
@@ -102,8 +102,8 @@ class EventScheduleTest {
             "Event 1",
             "Event 1 Description",
             false,
-            start,
-            end,
+            Date(start),
+            Date(end),
             listOf(RepeatDays.EVERY_YEAR)
         )
 
@@ -119,7 +119,7 @@ class EventScheduleTest {
     @Test
     fun repeat_monthly_test1() {
         val cal = Calendar.getInstance()
-        cal.set(2022, 10, 1, 0, 0, 0)
+        cal.set(2022, 10, 2, 0, 0, 0)
         var currentTime = cal.timeInMillis
 
         cal.set(2022, 9, 1, 0, 0, 0)
@@ -139,8 +139,8 @@ class EventScheduleTest {
             "Event 1",
             "Event 1 Description",
             false,
-            start,
-            end,
+            Date(start),
+            Date(end),
             listOf(RepeatDays.EVERY_MONTH)
         )
 
@@ -176,8 +176,8 @@ class EventScheduleTest {
             "Event 1",
             "Event 1 Description",
             false,
-            start,
-            end,
+            Date(start),
+            Date(end),
             listOf(RepeatDays.WEDNESDAY)
         )
 
@@ -213,8 +213,8 @@ class EventScheduleTest {
             "Event 1",
             "Event 1 Description",
             false,
-            start,
-            end,
+            Date(start),
+            Date(end),
             listOf(RepeatDays.WEDNESDAY, RepeatDays.FRIDAY)
         )
 

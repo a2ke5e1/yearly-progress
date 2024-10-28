@@ -102,11 +102,13 @@ data class Event(
 
         cal.set(Calendar.HOUR_OF_DAY, startHour)
         cal.set(Calendar.MINUTE, startMinute)
+        cal.set(Calendar.SECOND, 0)
 
         nextStartTime = cal.timeInMillis
 
         cal.set(Calendar.HOUR_OF_DAY, endHour)
         cal.set(Calendar.MINUTE, endMinute)
+        cal.set(Calendar.SECOND, 0)
 
         nextEndTime = cal.timeInMillis
 
