@@ -13,11 +13,13 @@ import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressManager
 import com.a3.yearlyprogess.YearlyProgressManager.Companion.formatProgressStyle
+import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.calculateTimeLeft
 import com.a3.yearlyprogess.components.EventDetailView.Companion.displayRelativeDifferenceMessage
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
+import java.util.Date
 
 /** Implementation of App Widget functionality. */
 class EventWidget : BaseWidget() {
@@ -31,23 +33,10 @@ class EventWidget : BaseWidget() {
 
       val eventTitle = event.eventTitle
       val eventDesc = event.eventDescription
-      val repeatDays = event.repeatEventDays
-      var eventStartTimeInMills = event.eventStartTime
-      var eventEndDateTimeInMillis = event.eventEndTime
 
-      var progress =
-          YearlyProgressManager.getProgress(
-              YearlyProgressManager.CUSTOM_EVENT, eventStartTimeInMills, eventEndDateTimeInMillis)
+        val (newEventStart, newEventEnd) = event.nextStartAndEndTime(currentTime = System.currentTimeMillis())
+        var progress = calculateProgress(context, newEventStart, newEventEnd)
 
-      if (progress > 100) {
-        val (newEventStart, newEventEnd, newProgress) =
-            YearlyProgressManager.getEventProgress(
-                eventStartTimeInMills, eventEndDateTimeInMillis, repeatDays)
-
-        eventStartTimeInMills = newEventStart
-        eventEndDateTimeInMillis = newEventEnd
-        progress = newProgress
-      }
 
       progress = if (progress > 100) 100.0 else progress
       progress = if (progress < 0) 0.0 else progress
@@ -61,15 +50,16 @@ class EventWidget : BaseWidget() {
 
       val formattedEndTime =
           DateFormat.format(
-                  if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a",
-                  eventEndDateTimeInMillis)
+              if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a", newEventEnd
+          )
               .toString()
               .uppercase()
 
       val formattedEndDateTime =
           DateFormat.format(
-                  if (DateFormat.is24HourFormat(context)) "MMM dd, yyyy" else "MMM dd, yyyy",
-                  eventEndDateTimeInMillis)
+              if (DateFormat.is24HourFormat(context)) "MMM dd, yyyy" else "MMM dd, yyyy",
+              newEventEnd
+          )
               .toString() + " · " + formattedEndTime
 
       wideView.setTextViewText(R.id.eventProgressText, progressText)
@@ -100,7 +90,9 @@ class EventWidget : BaseWidget() {
       wideView.setTextViewText(
           R.id.eventTime,
           displayRelativeDifferenceMessage(
-              context, eventStartTimeInMills, eventEndDateTimeInMillis, event.allDayEvent))
+              context, newEventStart, newEventEnd, event.allDayEvent
+          )
+      )
 
       tallView.setTextViewText(R.id.eventProgressText, progressText)
       tallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
@@ -125,7 +117,7 @@ class EventWidget : BaseWidget() {
           settingsPref.getBoolean(
               context.getString(R.string.widget_widget_use_dynamic_time_left), false)
 
-      val eventTimeLeft = calculateTimeLeft(eventEndDateTimeInMillis).toTimePeriodLeftText(dynamicTimeLeft)
+        val eventTimeLeft = calculateTimeLeft(newEventEnd).toTimePeriodLeftText(dynamicTimeLeft)
 
       if (timeLeftCounter && replaceProgressWithDaysLeft) {
         smallView.setTextViewText(R.id.eventProgressText, eventTimeLeft)
@@ -189,9 +181,7 @@ class EventWidget : BaseWidget() {
             eventId,
             eventTitle,
             eventDesc,
-            allDayEvent,
-            eventStartTimeInMills,
-            eventEndDateTimeInMillis,
+            allDayEvent, Date(eventStartTimeInMills), Date(eventEndDateTimeInMillis),
             eventRepeatDays)
 
     // Instruct the widget manager to update the widget

@@ -33,6 +33,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class ImportEventCalendarActivity : AppCompatActivity() {
 
@@ -122,8 +123,8 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                         id = 0,
                         eventTitle = title,
                         eventDescription = description,
-                        eventStartTime = dtStart,
-                        eventEndTime = dtEnd)
+                        eventStartTime = Date(dtStart),
+                        eventEndTime = Date(dtEnd))
                 eventList.add(event)
               } catch (e: Exception) {
                 Log.d("YearlyProgress.ImportFailed", "${e.printStackTrace()}")

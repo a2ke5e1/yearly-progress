@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import java.util.Calendar
+import java.util.Date
 
 @Parcelize
 @Entity(tableName = "event_table")
@@ -13,14 +14,14 @@ data class Event(
     val eventTitle: String,
     val eventDescription: String,
     val allDayEvent: Boolean = false,
-    val eventStartTime: Long,
-    val eventEndTime: Long,
+    val eventStartTime: Date,
+    val eventEndTime: Date,
     val repeatEventDays: List<RepeatDays> = emptyList(),
 ) : Parcelable {
 
-    fun nextStartAndEndTime(currentTime: Long = System.currentTimeMillis()): Pair<Long, Long> {
-        var nextStartTime = eventStartTime
-        var nextEndTime = eventEndTime
+    fun nextStartAndEndTime(currentTime: Long = System.currentTimeMillis()): Pair<Long,Long> {
+        var nextStartTime = eventStartTime.time
+        var nextEndTime = eventEndTime.time
 
         // If event has not completed, return current start and end time
         if (currentTime < nextEndTime) {
@@ -34,36 +35,33 @@ data class Event(
 
         val currCalendar = Calendar.getInstance()
         currCalendar.timeInMillis = currentTime
-        val eventCalendar = Calendar.getInstance()
+        val eventStartCalendar = Calendar.getInstance()
+        val eventEndCalendar = Calendar.getInstance()
 
         // Handle yearly recurrence
         if (repeatEventDays.contains(RepeatDays.EVERY_YEAR)) {
-            eventCalendar.timeInMillis = nextStartTime
-            var yearsAdd = 0
-            while (currCalendar.timeInMillis >= eventCalendar.timeInMillis) {
-                eventCalendar.add(Calendar.YEAR, 1)
-                yearsAdd++
-            }
-            nextStartTime = eventCalendar.timeInMillis
+            eventStartCalendar.timeInMillis = nextStartTime
+            eventEndCalendar.timeInMillis = nextEndTime
 
-            eventCalendar.timeInMillis = nextEndTime
-            eventCalendar.add(Calendar.YEAR, yearsAdd)
-            nextEndTime = eventCalendar.timeInMillis
+            while (currCalendar.timeInMillis >= eventEndCalendar.timeInMillis) {
+                eventStartCalendar.add(Calendar.YEAR, 1)
+                eventEndCalendar.add(Calendar.YEAR, 1)
+            }
+
+            nextStartTime = eventStartCalendar.timeInMillis
+            nextEndTime = eventEndCalendar.timeInMillis
         }
 
         // Handle monthly recurrence
         if (repeatEventDays.contains(RepeatDays.EVERY_MONTH)) {
-            eventCalendar.timeInMillis = nextStartTime
-            var monthsAdd = 0
-            while (currCalendar.timeInMillis >= eventCalendar.timeInMillis) {
-                eventCalendar.add(Calendar.MONTH, 1)
-                monthsAdd++
+            eventStartCalendar.timeInMillis = nextStartTime
+            eventEndCalendar.timeInMillis = nextEndTime
+            while (currCalendar.timeInMillis >= eventEndCalendar.timeInMillis) {
+                eventStartCalendar.add(Calendar.MONTH, 1)
+                eventEndCalendar.add(Calendar.MONTH, 1)
             }
-            nextStartTime = eventCalendar.timeInMillis
-
-            eventCalendar.timeInMillis = nextEndTime
-            eventCalendar.add(Calendar.MONTH, monthsAdd)
-            nextEndTime = eventCalendar.timeInMillis
+            nextStartTime = eventStartCalendar.timeInMillis
+            nextEndTime = eventEndCalendar.timeInMillis
         }
 
         val repeatWeekDays = repeatEventDays.map {

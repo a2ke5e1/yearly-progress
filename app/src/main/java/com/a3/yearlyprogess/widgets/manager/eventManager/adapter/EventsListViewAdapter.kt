@@ -90,8 +90,8 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
         edit.putString("eventTitle", currentEvent.eventTitle)
         edit.putString("eventDesc", currentEvent.eventDescription)
         edit.putBoolean("allDayEvent", currentEvent.allDayEvent)
-        edit.putLong("eventStartTimeInMills", currentEvent.eventStartTime)
-        edit.putLong("eventEndDateTimeInMillis", currentEvent.eventEndTime)
+        edit.putLong("eventStartTimeInMills", currentEvent.eventStartTime.time)
+        edit.putLong("eventEndDateTimeInMillis", currentEvent.eventEndTime.time)
         edit.putString("eventRepeatDays", eventDays)
 
         edit.commit()

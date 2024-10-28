@@ -333,8 +333,8 @@ class EventManagerActivity : AppCompatActivity() {
                     binding.eventTitle.text.toString().ifEmpty { "" },
                     binding.eventDesc.text.toString().ifEmpty { "" },
                     binding.allDaySwitch.isChecked,
-                    eventStartDateTimeInMillis,
-                    eventEndDateTimeInMillis,
+                    Date(eventStartDateTimeInMillis),
+                    Date(eventEndDateTimeInMillis),
                     repeatDays)
             mEventViewModel.updateEvent(updatedEvent)
 
@@ -353,8 +353,8 @@ class EventManagerActivity : AppCompatActivity() {
                 edit.putString("eventTitle", updatedEvent.eventTitle)
                 edit.putString("eventDesc", updatedEvent.eventDescription)
                 edit.putBoolean("allDayEvent", updatedEvent.allDayEvent)
-                edit.putLong("eventStartTimeInMills", updatedEvent.eventStartTime)
-                edit.putLong("eventEndDateTimeInMillis", updatedEvent.eventEndTime)
+                edit.putLong("eventStartTimeInMills", updatedEvent.eventStartTime.time)
+                edit.putLong("eventEndDateTimeInMillis", updatedEvent.eventEndTime.time)
                 edit.putString(
                     "eventRepeatDays", conv.fromRepeatDaysList(updatedEvent.repeatEventDays))
 
@@ -370,8 +370,8 @@ class EventManagerActivity : AppCompatActivity() {
                     binding.eventTitle.text.toString().ifEmpty { "" },
                     binding.eventDesc.text.toString().ifEmpty { "" },
                     binding.allDaySwitch.isChecked,
-                    eventStartDateTimeInMillis,
-                    eventEndDateTimeInMillis,
+                    Date(eventStartDateTimeInMillis),
+                    Date(eventEndDateTimeInMillis),
                     repeatDays))
           }
 
@@ -402,8 +402,8 @@ class EventManagerActivity : AppCompatActivity() {
     binding.allDaySwitch.isChecked = event.allDayEvent
     handleAllDayUIChanges(event.allDayEvent)
 
-    eventStartDateTimeInMillis = event.eventStartTime
-    eventEndDateTimeInMillis = event.eventEndTime
+    eventStartDateTimeInMillis = event.eventStartTime.time
+    eventEndDateTimeInMillis = event.eventEndTime.time
 
     val localCalendar = Calendar.getInstance()
 

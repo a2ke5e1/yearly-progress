@@ -261,8 +261,6 @@ class ProgressScreenFragment : Fragment() {
               }
 
               is Resource.Error -> {
-                Toast.makeText(context, "${result.message}", Toast.LENGTH_LONG).show()
-
                 launch(Dispatchers.Main) {
                   Toast.makeText(
                           context,
