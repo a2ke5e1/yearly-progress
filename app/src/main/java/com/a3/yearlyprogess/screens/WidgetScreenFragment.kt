@@ -23,9 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.SubscriptionStatus
 import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.YearlyProgressSubscriptionManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
@@ -66,11 +64,9 @@ class WidgetScreenFragment : Fragment() {
   private val binding
     get() = _binding!!
 
-  private lateinit var billingManager: YearlyProgressSubscriptionManager
 
   override fun onAttach(context: Context) {
     super.onAttach(context)
-    billingManager = (context as MainActivity).billingManager
   }
 
   override fun onCreateView(
@@ -109,20 +105,7 @@ class WidgetScreenFragment : Fragment() {
     isSunriseSunsetDataAvailable = loadCachedSunriseSunset(requireContext()) != null
 
     // Initialize and Load Ad
-
-    billingManager.shouldShowAds.observe(viewLifecycleOwner) {
-      when (it) {
-        SubscriptionStatus.Subscribed -> {
-          try {
-            nativeAdView.destroy()
-          } catch (ex: UninitializedPropertyAccessException) {
-            Log.d("Initialization Error", ex.message.toString())
-          }
-        }
-        SubscriptionStatus.Loading -> {}
-        else -> showAds()
-      }
-    }
+      showAds()
 
     // Show Widget Menu
     showWidgetMenu()
