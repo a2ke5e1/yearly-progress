@@ -16,10 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.SubscriptionStatus
-import com.a3.yearlyprogess.YearlyProgressSubscriptionManager
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.cacheLocation
 import com.a3.yearlyprogess.cacheSunriseSunset
@@ -76,11 +73,9 @@ class ProgressScreenFragment : Fragment() {
 
   private lateinit var adLoader: AdLoader
   private lateinit var nativeAdView: NativeAdView
-  private lateinit var billingManager: YearlyProgressSubscriptionManager
 
   override fun onAttach(context: Context) {
     super.onAttach(context)
-    billingManager = (context as MainActivity).billingManager
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -134,19 +129,9 @@ class ProgressScreenFragment : Fragment() {
     }
 
     val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
-    billingManager.shouldShowAds.observe(viewLifecycleOwner) {
-      Log.d("Subscription Status", it.toString())
-      when (it) {
-        SubscriptionStatus.Subscribed -> {
-          try {
-            nativeAdView.destroy()
-          } catch (ex: UninitializedPropertyAccessException) {
-            Log.d("Initialization Error", ex.message.toString())
-          }
-        }
-        SubscriptionStatus.Loading -> {}
-        else -> {
-          // Show ads
+
+
+      // Show ads
           adLoader =
               AdLoader.Builder(requireContext(), getString(R.string.admob_native_ad_unit))
                   .forNativeAd { ad: NativeAd ->
@@ -178,9 +163,8 @@ class ProgressScreenFragment : Fragment() {
                           .build())
                   .build()
           adLoader.loadAd(AdRequest.Builder().build())
-        }
-      }
-    }
+
+
   }
 
   private fun setupDayNightLightProgressView(
