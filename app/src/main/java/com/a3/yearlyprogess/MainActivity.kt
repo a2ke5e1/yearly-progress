@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
   private lateinit var consentInformation: ConsentInformation
   private var consentForm: ConsentForm? = null
 
-  lateinit var billingManager: YearlyProgressSubscriptionManager
 
   override fun onCreate(savedInstanceState: Bundle?) {
     WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -55,8 +54,6 @@ class MainActivity : AppCompatActivity() {
       startActivity(Intent(this, WelcomeScreen::class.java))
       finish()
     }
-
-    billingManager = YearlyProgressSubscriptionManager(this)
 
     /*
      *   Loads Consent Form to EU
@@ -88,20 +85,6 @@ class MainActivity : AppCompatActivity() {
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     // Inflate the menu; this adds items to the action bar if it is present.
     menuInflater.inflate(R.menu.main_menu, menu)
-
-    billingManager.shouldShowAds.observe(this) {
-      when (it) {
-        SubscriptionStatus.Subscribed -> {
-          menu.findItem(R.id.removeAds).title = resources.getString(R.string.manage_subscription)
-          menu.findItem(R.id.removeAds).isVisible = true
-        }
-        SubscriptionStatus.Error -> {
-          menu.findItem(R.id.removeAds).isVisible = false
-        }
-        else -> menu.findItem(R.id.removeAds).isVisible = true
-      }
-    }
-
     return true
   }
 
@@ -119,21 +102,6 @@ class MainActivity : AppCompatActivity() {
       }
 
       R.id.backupRestoreMenu -> showBackupRestoreDialogBox()
-      R.id.removeAds -> {
-        billingManager.shouldShowAds.observe(this) {
-          when (it) {
-            SubscriptionStatus.Subscribed -> {
-              billingManager.redirectToSubscriptionPage()
-            }
-            SubscriptionStatus.Error -> {}
-            else -> {
-              lifecycleScope.launch(Dispatchers.IO) { billingManager.processPurchases() }
-            }
-          }
-        }
-        return true
-      }
-
       else -> super.onOptionsItemSelected(item)
     }
   }
