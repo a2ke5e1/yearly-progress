@@ -15,8 +15,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 95
-        versionName = "2.14.7"
+        versionCode = 94
+        versionName = "2.14.6"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 
@@ -108,5 +108,9 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Billing
+    val billingVersion = "7.1.1"
+    implementation("com.android.billingclient:billing-ktx:$billingVersion")
 
 }

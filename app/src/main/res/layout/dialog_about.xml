@@ -93,6 +93,15 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/sourceCode"
+                    style="@style/TextAppearance.Material3.BodySmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="1dp"
+                    tools:text="Github: https://..." />
+
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="16dp" />
@@ -130,7 +139,7 @@
                                 android:layout_height="64dp"
                                 android:padding="12dp"
                                 app:srcCompat="@drawable/ic_telegram_app"
-                                app:tint="?attr/colorOnPrimaryContainer" />
+                                app:tint="?attr/colorOnSurfaceVariant" />
 
                         </com.google.android.material.card.MaterialCardView>
 
@@ -151,7 +160,7 @@
                                 android:layout_height="64dp"
                                 android:padding="18dp"
                                 app:srcCompat="@drawable/ic_outline_share_24"
-                                app:tint="?attr/colorOnPrimaryContainer" />
+                                app:tint="?attr/colorOnSurfaceVariant" />
 
                         </com.google.android.material.card.MaterialCardView>
 

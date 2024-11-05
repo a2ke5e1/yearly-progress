@@ -49,6 +49,13 @@ class AboutDialog : DialogFragment() {
       binding.translationCredit.text = creditsText
       binding.translationCredit.movementMethod = LinkMovementMethod.getInstance()
 
+    val githubLink = SpannableString("Source code available on GitHub")
+    val urlSpan = URLSpan("https://github.com/a2ke5e1/yearly-progress")
+    githubLink.setSpan(urlSpan, 0, githubLink.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+    binding.sourceCode.text = githubLink
+    binding.sourceCode.movementMethod = LinkMovementMethod.getInstance()
+
       binding.telegramLink.setOnClickListener {
         val url = "https://t.me/phycalc"
         val i = Intent(Intent.ACTION_VIEW)
