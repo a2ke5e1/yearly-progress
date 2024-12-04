@@ -479,7 +479,9 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
 
         // Create a new job for this update
         updateJob = CoroutineScope(Dispatchers.IO).launch {
-            while (isActive) { // Check if the coroutine is still active
+            var counter = 0
+            while (isActive && counter < 5) { // Check if the coroutine is still active
+                counter++
                 appWidgetManager.updateAppWidget(
                     appWidgetId, standaloneWidgetRemoteView(context, options)
                 )
