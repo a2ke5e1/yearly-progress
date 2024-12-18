@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     installSplashScreen()
     enableEdgeToEdge()
-    DynamicColors.applyToActivityIfAvailable(this)
 
     val pref = this.getSharedPreferences(YEARLY_PROGRESS_PREF, MODE_PRIVATE)
     val firstLaunch = pref.getBoolean(FIRST_LAUNCH, true)

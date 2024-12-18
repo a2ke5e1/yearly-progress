@@ -15,8 +15,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 95
-        versionName = "2.14.7"
+        versionCode = 98
+        versionName = "2.14.10"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 
@@ -56,7 +56,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-    implementation("com.google.firebase:firebase-crashlytics:19.2.1")
+    implementation("com.google.firebase:firebase-crashlytics:19.3.0")
     implementation("androidx.activity:activity-ktx:1.9.3")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
@@ -75,8 +75,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:23.6.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.4")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
