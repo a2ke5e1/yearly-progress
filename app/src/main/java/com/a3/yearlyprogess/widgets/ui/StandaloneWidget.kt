@@ -15,11 +15,25 @@ import android.widget.RemoteViews
 import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
-import com.a3.yearlyprogess.*
+import com.a3.yearlyprogess.MainActivity
+import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.TimePeriod
+import com.a3.yearlyprogess.calculateEndTime
+import com.a3.yearlyprogess.calculateProgress
+import com.a3.yearlyprogess.calculateStartTime
+import com.a3.yearlyprogess.calculateTimeLeft
+import com.a3.yearlyprogess.getCurrentPeriodValue
+import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /** Utility object for creating and managing widget RemoteViews. */
@@ -441,7 +455,11 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
     }
   }
 
-  /**
+
+    private var updateJob: Job? = null
+
+
+    /**
    * Updates the widget.
    *
    * @param context The context of the application.
@@ -455,8 +473,33 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
   ) {
     val options = StandaloneWidgetOptions.load(context, appWidgetId).copy(widgetType = widgetType)
     options.save(context) // This ensures that the widget type is saved, when freshly added.
-    appWidgetManager.updateAppWidget(appWidgetId, standaloneWidgetRemoteView(context, options))
-  }
+
+        // Cancel the previous job if it's running
+        updateJob?.cancel()
+
+        // Create a new job for this update
+        updateJob = CoroutineScope(Dispatchers.IO).launch {
+            var counter = 0
+            while (isActive && counter < 5) { // Check if the coroutine is still active
+                counter++
+                appWidgetManager.updateAppWidget(
+                    appWidgetId, standaloneWidgetRemoteView(context, options)
+                )
+                delay(900)
+            }
+        }
+    }
+
+    fun clearJob() {
+        updateJob?.cancel()
+        updateJob = null
+    }
+
+    override fun onDisabled(context: Context) {
+        clearJob()
+        super.onDisabled(context)
+
+    }
 }
 
 /**

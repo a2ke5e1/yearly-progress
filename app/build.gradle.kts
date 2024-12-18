@@ -15,8 +15,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 94
-        versionName = "2.14.6"
+        versionCode = 98
+        versionName = "2.14.10"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 
@@ -51,13 +51,13 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
-    implementation("com.google.firebase:firebase-crashlytics:19.2.0")
-    implementation("androidx.activity:activity-ktx:1.9.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+    implementation("com.google.firebase:firebase-crashlytics:19.3.0")
+    implementation("androidx.activity:activity-ktx:1.9.3")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -66,17 +66,17 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
     // Material Design 3.0
-    implementation("com.google.android.material:material:1.13.0-alpha07")
+    implementation("com.google.android.material:material:1.13.0-alpha08")
 
     // Splash Screen for android 11 and below
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Ads
-    implementation("com.google.android.gms:play-services-ads:23.4.0")
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
@@ -94,23 +94,19 @@ dependencies {
     implementation("de.raphaelebner:roomdatabasebackup:1.0.0-beta14")
 
     // Lifecycle Components
-    val lifecycle_version = "2.8.6"
+    val lifecycleVersion = "2.8.7"
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
 
     // UMP SDK
-    implementation("com.google.android.ump:user-messaging-platform:3.0.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.1.0")
 
     // Preference
     implementation("androidx.preference:preference-ktx:1.2.1")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // Billing
-    val billingVersion = "7.1.1"
-    implementation("com.android.billingclient:billing-ktx:$billingVersion")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
 }
