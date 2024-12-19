@@ -262,7 +262,7 @@ class ProgressScreenFragment : Fragment() {
               is Resource.Error -> {
                 launch(Dispatchers.Main) {
                   Toast.makeText(
-                          context,
+                          requireContext(),
                           getString(R.string.failed_to_load_sunset_sunrise_time),
                           Toast.LENGTH_LONG)
                       .show()
