@@ -148,7 +148,7 @@ object WidgetUtils {
               in 70.0..80.0 -> R.drawable.background_clover_70
               in 80.0..90.0 -> R.drawable.background_clover_80
               in 90.0..95.0 -> R.drawable.background_clover_90
-              in 95.0..100.0 -> R.drawable.background_clover_95
+              in 95.0..98.0 -> R.drawable.background_clover_95
               else -> R.drawable.background_clover_100
             })
         setOnClickPendingIntent(
@@ -176,8 +176,11 @@ object WidgetUtils {
      *
      * @return A RemoteViews object for a pill-shaped widget.
      */
-    fun pillRemoteView(): RemoteViews {
-      return RemoteViews(context.packageName, R.layout.standalone_widget_layout_pill).apply {
+    fun pillRemoteView(
+        @LayoutRes
+        layoutId: Int
+    ): RemoteViews {
+      return RemoteViews(context.packageName, layoutId).apply {
         setTextViewText(R.id.widgetType, widgetType)
         setTextViewText(R.id.widgetCurrentValue, currentValue)
         setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
@@ -196,7 +199,7 @@ object WidgetUtils {
               in 70.0..80.0 -> R.drawable.background_pill_70
               in 80.0..90.0 -> R.drawable.background_pill_80
               in 90.0..95.0 -> R.drawable.background_pill_90
-              in 95.0..100.0 -> R.drawable.background_pill_95
+              in 95.0..98.0 -> R.drawable.background_pill_95
               else -> R.drawable.background_pill_100
             })
         setOnClickPendingIntent(
@@ -219,11 +222,16 @@ object WidgetUtils {
       }
     }
 
-    // Return the appropriate RemoteViews based on the widget shape.
+      val option = AppWidgetManager.getInstance(context).getAppWidgetOptions(options!!.widgetId)
+      val height = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+      val width = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+
+
+      // Return the appropriate RemoteViews based on the widget shape.
     return when (options?.shape) {
       WidgetShape.RECTANGLE -> rectangularRemoteView()
       WidgetShape.PILL -> {
-        val large =
+        /*val large =
             pillRemoteView().apply {
               setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 13f)
               setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 24f)
@@ -269,16 +277,31 @@ object WidgetUtils {
                   SizeF(100f, 100f) to small))
         } else {
           large
-        }
+        }*/
+          // Get height and width of the widget
+
+          val large = pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
+          val square =pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
+          val small = pillRemoteView(R.layout.standalone_widget_layout_pill_small)
+
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+              RemoteViews(
+                  mapOf(
+                      SizeF(220f, 220f) to large,
+                      SizeF(160f, 160f) to square,
+                      SizeF(100f, 100f) to small
+                  )
+              )
+          } else {
+              if (height >= 100) {
+                  large
+              } else {
+                  small
+              }
+          }
+
       }
         WidgetShape.CLOVER -> {
-
-            // Get height and width of the widget
-            val option = AppWidgetManager.getInstance(context).getAppWidgetOptions(options.widgetId)
-            val height = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
-            val width = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
-
-            Log.d("WidgetUtils", "Height: $height, Width: $width")
             val large = cloverRemoteView(R.layout.standalone_widget_layout_clover_large)
             val square = cloverRemoteView(R.layout.standalone_widget_layout_clover).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

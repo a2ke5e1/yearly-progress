@@ -3,7 +3,7 @@
   <component name="deploymentTargetSelector">
     <selectionStates>
       <SelectionState runConfigName="app">
-        <option name="selectionMode" value="DROPDOWN" />
+        <option name="selectionMode" value="DIALOG" />
         <DropdownSelection timestamp="2024-12-22T13:03:26.693908500Z">
           <Target type="DEFAULT_BOOT">
             <handle>
@@ -15,7 +15,7 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\aakap\.android\avd\Pixel_6a_API_35.avd" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\aakap\.android\avd\Pixel_8a_API_30.avd" />
               </handle>
             </Target>
             <Target type="DEFAULT_BOOT">
