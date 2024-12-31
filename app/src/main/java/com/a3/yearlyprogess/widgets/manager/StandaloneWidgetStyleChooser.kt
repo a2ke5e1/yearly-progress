@@ -124,8 +124,12 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
 
     binding.dynamicLeftCounter.setOnCheckedChangeListener { _, isChecked ->
       options = options.copy(dynamicLeftCounter = isChecked)
+        if (isChecked) {
+            options = options.copy(timeLeftCounter = true)
+            binding.leftCounter.isChecked = true
+        }
         options.save(this)
-      inflateRemoteViewPreview(
+        inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
           options.copy(shape = WidgetShape.RECTANGLE, dynamicLeftCounter = isChecked))
