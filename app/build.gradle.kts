@@ -15,8 +15,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 102
-        versionName = "2.14.14"
+        versionCode = 103
+        versionName = "2.14.15"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 
@@ -66,7 +66,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
     // Material Design 3.0
-    implementation("com.google.android.material:material:1.13.0-alpha08")
+    implementation("com.google.android.material:material:1.13.0-alpha09")
 
     // Splash Screen for android 11 and below
     implementation("androidx.core:core-splashscreen:1.0.1")
