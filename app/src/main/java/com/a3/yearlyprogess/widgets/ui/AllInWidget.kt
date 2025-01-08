@@ -11,9 +11,7 @@ import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.calculateEndTime
 import com.a3.yearlyprogess.calculateProgress
-import com.a3.yearlyprogess.calculateStartTime
 import com.a3.yearlyprogess.getCurrentPeriodValue
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod

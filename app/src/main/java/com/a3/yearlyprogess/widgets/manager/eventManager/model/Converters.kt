@@ -26,5 +26,4 @@ class Converters {
   fun toDate(date: Long): Date {
     return Date(date)
   }
-
 }

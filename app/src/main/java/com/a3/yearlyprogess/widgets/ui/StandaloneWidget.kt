@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.text.SpannableString
-import android.util.Log
 import android.util.SizeF
 import android.util.TypedValue
 import android.view.View
@@ -30,13 +29,13 @@ import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetS
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
+import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 /** Utility object for creating and managing widget RemoteViews. */
 object WidgetUtils {
@@ -124,9 +123,7 @@ object WidgetUtils {
      *
      * @return A RemoteViews object for a clover-shaped widget.
      */
-    fun cloverRemoteView(
-        @LayoutRes
-        layoutId: Int): RemoteViews {
+    fun cloverRemoteView(@LayoutRes layoutId: Int): RemoteViews {
       return RemoteViews(context.packageName, layoutId).apply {
         setTextViewText(R.id.widgetType, widgetType)
         setTextViewText(R.id.widgetCurrentValue, currentValue)
@@ -176,10 +173,7 @@ object WidgetUtils {
      *
      * @return A RemoteViews object for a pill-shaped widget.
      */
-    fun pillRemoteView(
-        @LayoutRes
-        layoutId: Int
-    ): RemoteViews {
+    fun pillRemoteView(@LayoutRes layoutId: Int): RemoteViews {
       return RemoteViews(context.packageName, layoutId).apply {
         setTextViewText(R.id.widgetType, widgetType)
         setTextViewText(R.id.widgetCurrentValue, currentValue)
@@ -222,13 +216,12 @@ object WidgetUtils {
       }
     }
 
-      val option = AppWidgetManager.getInstance(context).getAppWidgetOptions(options!!.widgetId)
-      val height = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
-      val width = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+    val option = AppWidgetManager.getInstance(context).getAppWidgetOptions(options!!.widgetId)
+    val height = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+    val width = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
 
-
-      // Return the appropriate RemoteViews based on the widget shape.
-    return when (options?.shape) {
+    // Return the appropriate RemoteViews based on the widget shape.
+    return when (options.shape) {
       WidgetShape.RECTANGLE -> rectangularRemoteView()
       WidgetShape.PILL -> {
         /*val large =
@@ -278,65 +271,56 @@ object WidgetUtils {
         } else {
           large
         }*/
-          // Get height and width of the widget
+        // Get height and width of the widget
 
-          val large = pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
-          val square =pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
-          val small = pillRemoteView(R.layout.standalone_widget_layout_pill_small)
+        val large = pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
+        val square = pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
+        val small = pillRemoteView(R.layout.standalone_widget_layout_pill_small)
 
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-              RemoteViews(
-                  mapOf(
-                      SizeF(220f, 220f) to large,
-                      SizeF(160f, 160f) to square,
-                      SizeF(100f, 100f) to small
-                  )
-              )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          RemoteViews(
+              mapOf(
+                  SizeF(220f, 220f) to large,
+                  SizeF(160f, 160f) to square,
+                  SizeF(100f, 100f) to small))
+        } else {
+          if (height >= 100) {
+            large
           } else {
-              if (height >= 100) {
-                  large
-              } else {
-                  small
-              }
+            small
           }
-
-      }
-        WidgetShape.CLOVER -> {
-            val large = cloverRemoteView(R.layout.standalone_widget_layout_clover_large)
-            val square = cloverRemoteView(R.layout.standalone_widget_layout_clover).apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
-                    setViewLayoutMargin(
-                        R.id.widgetDaysLeft,
-                        RemoteViews.MARGIN_TOP,
-                        -8f,
-                        TypedValue.COMPLEX_UNIT_DIP
-                    )
-                }
-                setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
-                setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
-                setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
-                setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
-            }
-            val small = cloverRemoteView(R.layout.standalone_widget_layout_clover_small)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                RemoteViews(
-                    mapOf(
-                        SizeF(220f, 220f) to large,
-                        SizeF(160f, 160f) to square,
-                        SizeF(100f, 100f) to small
-                    )
-                )
-            } else {
-                if (width >= 214 && height >= 131) {
-                    large
-                } else {
-                    small
-                }
-            }
-
         }
+      }
+      WidgetShape.CLOVER -> {
+        val large = cloverRemoteView(R.layout.standalone_widget_layout_clover_large)
+        val square =
+            cloverRemoteView(R.layout.standalone_widget_layout_clover).apply {
+              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
+                setViewLayoutMargin(
+                    R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
+              }
+              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
+              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
+              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
+              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
+            }
+        val small = cloverRemoteView(R.layout.standalone_widget_layout_clover_small)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          RemoteViews(
+              mapOf(
+                  SizeF(220f, 220f) to large,
+                  SizeF(160f, 160f) to square,
+                  SizeF(100f, 100f) to small))
+        } else {
+          if (width >= 214 && height >= 131) {
+            large
+          } else {
+            small
+          }
+        }
+      }
       else -> rectangularRemoteView()
     }
   }
@@ -482,11 +466,9 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
     }
   }
 
+  private var updateJob: Job? = null
 
-    private var updateJob: Job? = null
-
-
-    /**
+  /**
    * Updates the widget.
    *
    * @param context The context of the application.
@@ -499,34 +481,33 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
       appWidgetId: Int
   ) {
 
-        // Cancel the previous job if it's running
-        updateJob?.cancel()
+    // Cancel the previous job if it's running
+    updateJob?.cancel()
 
-        // Create a new job for this update
-        updateJob = CoroutineScope(Dispatchers.IO).launch {
-            var counter = 0
-            while (isActive && counter < 5) { // Check if the coroutine is still active
-                counter++
-                val options =
-                    StandaloneWidgetOptions.load(context, appWidgetId).copy(widgetType = widgetType)
-                appWidgetManager.updateAppWidget(
-                    appWidgetId, standaloneWidgetRemoteView(context, options)
-                )
-                delay(900)
-            }
+    // Create a new job for this update
+    updateJob =
+        CoroutineScope(Dispatchers.IO).launch {
+          var counter = 0
+          while (isActive && counter < 5) { // Check if the coroutine is still active
+            counter++
+            val options =
+                StandaloneWidgetOptions.load(context, appWidgetId).copy(widgetType = widgetType)
+            appWidgetManager.updateAppWidget(
+                appWidgetId, standaloneWidgetRemoteView(context, options))
+            delay(900)
+          }
         }
-    }
+  }
 
-    fun clearJob() {
-        updateJob?.cancel()
-        updateJob = null
-    }
+  fun clearJob() {
+    updateJob?.cancel()
+    updateJob = null
+  }
 
-    override fun onDisabled(context: Context) {
-        clearJob()
-        super.onDisabled(context)
-
-    }
+  override fun onDisabled(context: Context) {
+    clearJob()
+    super.onDisabled(context)
+  }
 }
 
 /**

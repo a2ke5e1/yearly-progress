@@ -74,11 +74,7 @@ class ProgressScreenFragment : Fragment() {
   private lateinit var adLoader: AdLoader
   private lateinit var nativeAdView: NativeAdView
 
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-  }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     val dayLight: DayNightLightProgressView = binding.dayLightProgressView
@@ -102,16 +98,15 @@ class ProgressScreenFragment : Fragment() {
         setupDayNightLightProgressView(dayLight, nightLight)
       }
 
-        ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-        ) ==
-                PackageManager.PERMISSION_DENIED -> {
-            binding.dismissibleMessageView?.visibility = View.VISIBLE
-            binding.callToAction?.setOnClickListener {
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-            }
-            binding.loadingIndicator?.visibility = View.GONE
+      ContextCompat.checkSelfPermission(
+          requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) ==
+          PackageManager.PERMISSION_DENIED -> {
+        binding.dismissibleMessageView?.visibility = View.VISIBLE
+        binding.callToAction?.setOnClickListener {
+          requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
         }
+        binding.loadingIndicator?.visibility = View.GONE
+      }
 
       ActivityCompat.shouldShowRequestPermissionRationale(
           requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) -> {
@@ -121,50 +116,47 @@ class ProgressScreenFragment : Fragment() {
       else -> {
         // You can directly ask for the permission.
         // The registered ActivityResultCallback gets the result of this request.
-          binding.dismissibleMessageView?.visibility = View.VISIBLE
-          binding.callToAction?.setOnClickListener {
-              locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
-          }
+        binding.dismissibleMessageView?.visibility = View.VISIBLE
+        binding.callToAction?.setOnClickListener {
+          locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
+        }
       }
     }
 
     val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
 
+    // Show ads
+    adLoader =
+        AdLoader.Builder(requireContext(), getString(R.string.admob_native_ad_unit))
+            .forNativeAd { ad: NativeAd ->
+              // Show the ad.
 
-      // Show ads
-          adLoader =
-              AdLoader.Builder(requireContext(), getString(R.string.admob_native_ad_unit))
-                  .forNativeAd { ad: NativeAd ->
-                    // Show the ad.
-
-                    if (!adLoader.isLoading) {
-                      adFrame.visibility = View.VISIBLE
-                      nativeAdView = updateViewWithNativeAdview(adFrame, ad)
-                    }
-                    if (isDetached) {
-                      adFrame.visibility = View.GONE
-                      ad.destroy()
-                      return@forNativeAd
-                    }
+              if (!adLoader.isLoading) {
+                adFrame.visibility = View.VISIBLE
+                nativeAdView = updateViewWithNativeAdview(adFrame, ad)
+              }
+              if (isDetached) {
+                adFrame.visibility = View.GONE
+                ad.destroy()
+                return@forNativeAd
+              }
+            }
+            .withAdListener(
+                object : AdListener() {
+                  override fun onAdFailedToLoad(adError: LoadAdError) {
+                    // Handle the failure by logging, altering the UI, and so on.
+                    adFrame.visibility = View.GONE
+                    adFrame.removeAllViews()
                   }
-                  .withAdListener(
-                      object : AdListener() {
-                        override fun onAdFailedToLoad(adError: LoadAdError) {
-                          // Handle the failure by logging, altering the UI, and so on.
-                          adFrame.visibility = View.GONE
-                          adFrame.removeAllViews()
-                        }
-                      })
-                  .withNativeAdOptions(
-                      NativeAdOptions.Builder()
-                          .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
-                          // Methods in the NativeAdOptions.Builder class can be
-                          // used here to specify individual options settings.
-                          .build())
-                  .build()
-          adLoader.loadAd(AdRequest.Builder().build())
-
-
+                })
+            .withNativeAdOptions(
+                NativeAdOptions.Builder()
+                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
+                    // Methods in the NativeAdOptions.Builder class can be
+                    // used here to specify individual options settings.
+                    .build())
+            .build()
+    adLoader.loadAd(AdRequest.Builder().build())
   }
 
   private fun setupDayNightLightProgressView(
@@ -178,7 +170,7 @@ class ProgressScreenFragment : Fragment() {
         PackageManager.PERMISSION_GRANTED) {
       return
     }
-      binding.dismissibleMessageView?.visibility = View.GONE
+    binding.dismissibleMessageView?.visibility = View.GONE
 
     // Get the list of available location providers
     val providers = locationManager.allProviders.filter { locationManager.isProviderEnabled(it) }
@@ -188,29 +180,27 @@ class ProgressScreenFragment : Fragment() {
           .show()
       return
     }
-      // Load cached location instead of waiting
-      // for location update
-      lifecycleScope.launch(Dispatchers.IO) {
-          val cachedLocation = context?.let { loadCachedLocation(it) }
-          if (cachedLocation == null) {
-              return@launch
-          }
-          val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
-          if (cachedSunriseSunset != null &&
-              cachedSunriseSunset.results[1].date == getCurrentDate()
-          ) {
-              dayLight.loadSunriseSunset(cachedSunriseSunset)
-              nightLight.loadSunriseSunset(cachedSunriseSunset)
-              launch(Dispatchers.Main) {
-                  dayLight.visibility = View.VISIBLE
-                  nightLight.visibility = View.VISIBLE
-                  binding.loadingIndicator?.visibility = View.GONE
-              }
-              return@launch
-          }
+    // Load cached location instead of waiting
+    // for location update
+    lifecycleScope.launch(Dispatchers.IO) {
+      val cachedLocation = context?.let { loadCachedLocation(it) }
+      if (cachedLocation == null) {
+        return@launch
       }
+      val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
+      if (cachedSunriseSunset != null && cachedSunriseSunset.results[1].date == getCurrentDate()) {
+        dayLight.loadSunriseSunset(cachedSunriseSunset)
+        nightLight.loadSunriseSunset(cachedSunriseSunset)
+        launch(Dispatchers.Main) {
+          dayLight.visibility = View.VISIBLE
+          nightLight.visibility = View.VISIBLE
+          binding.loadingIndicator?.visibility = View.GONE
+        }
+        return@launch
+      }
+    }
 
-      locationManager.requestLocationUpdates(
+    locationManager.requestLocationUpdates(
         providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
         2000,
         1_000f //  12hrs, 200 KM

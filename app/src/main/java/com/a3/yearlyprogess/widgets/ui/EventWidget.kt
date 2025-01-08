@@ -3,7 +3,6 @@ package com.a3.yearlyprogess.widgets.ui
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.os.Build
-import android.text.SpannableString
 import android.text.format.DateFormat
 import android.util.Log
 import android.util.SizeF
@@ -36,9 +35,9 @@ class EventWidget : BaseWidget() {
       val eventTitle = event.eventTitle
       val eventDesc = event.eventDescription
 
-        val (newEventStart, newEventEnd) = event.nextStartAndEndTime(currentTime = System.currentTimeMillis())
-        var progress = calculateProgress(context, newEventStart, newEventEnd)
-
+      val (newEventStart, newEventEnd) =
+          event.nextStartAndEndTime(currentTime = System.currentTimeMillis())
+      var progress = calculateProgress(context, newEventStart, newEventEnd)
 
       progress = if (progress > 100) 100.0 else progress
       progress = if (progress < 0) 0.0 else progress
@@ -47,25 +46,24 @@ class EventWidget : BaseWidget() {
       val decimalPlace: Int =
           settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
 
-      val progressText =
-          progress.styleFormatted(decimalPlace)
+      val progressText = progress.styleFormatted(decimalPlace)
       val formattedEndTime =
           DateFormat.format(
-              if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a", newEventEnd
-          )
+                  if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a", newEventEnd)
               .toString()
               .uppercase()
 
       val formattedEndDateTime =
           DateFormat.format(
-              if (DateFormat.is24HourFormat(context)) "MMM dd, yyyy" else "MMM dd, yyyy",
-              newEventEnd
-          )
+                  if (DateFormat.is24HourFormat(context)) "MMM dd, yyyy" else "MMM dd, yyyy",
+                  newEventEnd)
               .toString() + " · " + formattedEndTime
 
       wideView.setTextViewText(R.id.eventProgressText, progressText)
       wideView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-      wideView.setTextViewText(R.id.currentDate, getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY))
+      wideView.setTextViewText(
+          R.id.currentDate,
+          getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY))
       wideView.setTextViewText(R.id.eventTitle, eventTitle)
       if (eventDesc.isEmpty()) {
         wideView.setViewVisibility(R.id.eventDesc, View.GONE)
@@ -90,19 +88,20 @@ class EventWidget : BaseWidget() {
 
       wideView.setTextViewText(
           R.id.eventTime,
-          displayRelativeDifferenceMessage(
-              context, newEventStart, newEventEnd, event.allDayEvent
-          )
-      )
+          displayRelativeDifferenceMessage(context, newEventStart, newEventEnd, event.allDayEvent))
 
       tallView.setTextViewText(R.id.eventProgressText, progressText)
       tallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-      tallView.setTextViewText(R.id.currentDate, getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY))
+      tallView.setTextViewText(
+          R.id.currentDate,
+          getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY))
       tallView.setTextViewText(R.id.eventTitle, eventTitle)
       tallView.setTextViewText(R.id.eventTime, formattedEndDateTime)
 
       smallView.setProgressBar(R.id.eventProgressBar, 100, progress.toInt(), false)
-      smallView.setTextViewText(R.id.currentDate, getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY))
+      smallView.setTextViewText(
+          R.id.currentDate,
+          getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY))
       smallView.setTextViewText(R.id.eventProgressText, progressText)
       smallView.setTextViewText(R.id.eventTitle, eventTitle)
 
@@ -114,11 +113,11 @@ class EventWidget : BaseWidget() {
               context.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
               false)
 
-        val dynamicTimeLeft =
+      val dynamicTimeLeft =
           settingsPref.getBoolean(
               context.getString(R.string.widget_widget_use_dynamic_time_left), false)
 
-        val eventTimeLeft = calculateTimeLeft(newEventEnd).toTimePeriodLeftText(dynamicTimeLeft)
+      val eventTimeLeft = calculateTimeLeft(newEventEnd).toTimePeriodLeftText(dynamicTimeLeft)
 
       if (timeLeftCounter && replaceProgressWithDaysLeft) {
         smallView.setTextViewText(R.id.eventProgressText, eventTimeLeft)
@@ -182,7 +181,9 @@ class EventWidget : BaseWidget() {
             eventId,
             eventTitle,
             eventDesc,
-            allDayEvent, Date(eventStartTimeInMills), Date(eventEndDateTimeInMillis),
+            allDayEvent,
+            Date(eventStartTimeInMills),
+            Date(eventEndDateTimeInMillis),
             eventRepeatDays)
 
     // Instruct the widget manager to update the widget

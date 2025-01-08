@@ -9,10 +9,10 @@ import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Calendar
 import java.util.Locale
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 enum class TimePeriod {
   DAY,
@@ -228,21 +228,19 @@ fun loadCachedLocation(context: Context): Location? {
   }
 }
 
-
 fun getCurrentDate(): String {
   val cal = Calendar.getInstance()
   cal.timeInMillis = System.currentTimeMillis()
 
   return StringBuilder("")
-    .append(cal.get(Calendar.YEAR))
-    .append("-")
-    .append(if (cal.get(Calendar.MONTH) + 1 < 10) "0" else "")
-    .append(cal.get(Calendar.MONTH) + 1)
-    .append("-")
-    .append(cal.get(Calendar.DATE))
-    .toString()
+      .append(cal.get(Calendar.YEAR))
+      .append("-")
+      .append(if (cal.get(Calendar.MONTH) + 1 < 10) "0" else "")
+      .append(cal.get(Calendar.MONTH) + 1)
+      .append("-")
+      .append(cal.get(Calendar.DATE))
+      .toString()
 }
-
 
 fun getDateRange(daysToAdd: Int): String {
   val cal = Calendar.getInstance()
@@ -251,4 +249,3 @@ fun getDateRange(daysToAdd: Int): String {
 
   return "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${cal.get(Calendar.DATE)}"
 }
-

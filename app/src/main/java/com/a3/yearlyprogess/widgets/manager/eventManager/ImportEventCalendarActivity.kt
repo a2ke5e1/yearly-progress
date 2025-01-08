@@ -31,9 +31,9 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDao
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.google.android.material.datepicker.MaterialDatePicker
+import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class ImportEventCalendarActivity : AppCompatActivity() {
 

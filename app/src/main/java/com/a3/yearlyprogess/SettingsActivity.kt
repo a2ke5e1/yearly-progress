@@ -51,25 +51,23 @@ class SettingsActivity : AppCompatActivity() {
         (value as? Int ?: 5).toDuration(DurationUnit.SECONDS).toString()
       }
 
-        val notificationPref =
-            findPreference<Preference>(getString(R.string.progress_show_notification))
-        notificationPref?.setOnPreferenceChangeListener { _, newValue ->
-          if (newValue == true) {
-            val notificationHelper = YearlyProgressNotification(requireContext())
-            if (!notificationHelper.hasAppNotificationPermission()) {
-              notificationHelper.requestNotificationPermission(requireActivity())
-              return@setOnPreferenceChangeListener false
-            }
+      val notificationPref =
+          findPreference<Preference>(getString(R.string.progress_show_notification))
+      notificationPref?.setOnPreferenceChangeListener { _, newValue ->
+        if (newValue == true) {
+          val notificationHelper = YearlyProgressNotification(requireContext())
+          if (!notificationHelper.hasAppNotificationPermission()) {
+            notificationHelper.requestNotificationPermission(requireActivity())
+            return@setOnPreferenceChangeListener false
           }
-            val widgetUpdateServiceIntent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
-            context?.sendBroadcast(widgetUpdateServiceIntent)
-            true
         }
-
+        val widgetUpdateServiceIntent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+        context?.sendBroadcast(widgetUpdateServiceIntent)
+        true
+      }
     }
 
-
-      private fun updatePreferenceSummary(
+    private fun updatePreferenceSummary(
         preference: Preference?,
         defaultSummary: String,
         formatValue: (Any?) -> String

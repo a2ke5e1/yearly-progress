@@ -12,7 +12,6 @@ import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.loadCachedLocation
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.provideSunriseSunsetApi
-import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayLightWidget
@@ -22,11 +21,11 @@ import com.a3.yearlyprogess.widgets.ui.MonthWidget
 import com.a3.yearlyprogess.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.widgets.ui.YearWidget
+import java.util.Calendar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
 
@@ -122,16 +121,16 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
       WidgetUpdateAlarmHandler(context).cancelAlarmManager()
     }
 
-      val yearlyProgressNotification = YearlyProgressNotification(context)
+    val yearlyProgressNotification = YearlyProgressNotification(context)
 
-      if (yearlyProgressNotification.hasNotificationPermission()) {
-          val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
-          widgetUpdateAlarmHandler.cancelAlarmManager()
-          widgetUpdateAlarmHandler.setAlarmManager()
-          yearlyProgressNotification.showProgressNotification()
-      } else {
-          yearlyProgressNotification.hideProgressNotification()
-      }
+    if (yearlyProgressNotification.hasNotificationPermission()) {
+      val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
+      widgetUpdateAlarmHandler.cancelAlarmManager()
+      widgetUpdateAlarmHandler.setAlarmManager()
+      yearlyProgressNotification.showProgressNotification()
+    } else {
+      yearlyProgressNotification.hideProgressNotification()
+    }
 
     // go back to sleep
     // WakeLocker.release()

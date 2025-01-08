@@ -1,14 +1,10 @@
 package com.a3.yearlyprogess.widgets.ui.util
 
-import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.SuperscriptSpan
-import androidx.core.content.ContextCompat
-import androidx.preference.PreferenceManager
-import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.getMonthName
 import com.a3.yearlyprogess.getOrdinalSuffix

@@ -16,16 +16,16 @@ import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class DayNightLightProgressView
@@ -85,11 +85,11 @@ constructor(
       while (true) {
         val progress: Double = calculateProgress(context, startTime, endTime)
 
-          val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
-          numberFormat.maximumFractionDigits = 0
+        val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
+        numberFormat.maximumFractionDigits = 0
 
-          val totalSeconds = (endTime - startTime) / 1000
-          val formattedTotalSeconds = numberFormat.format(totalSeconds)
+        val totalSeconds = (endTime - startTime) / 1000
+        val formattedTotalSeconds = numberFormat.format(totalSeconds)
 
         launch(Dispatchers.Main) {
           val currentPeriodValue =
@@ -109,7 +109,8 @@ constructor(
           widgetDataTextView.setTypeface(null, Typeface.NORMAL)
           widgetDataTextView.setTextColor(
               ContextCompat.getColor(context, R.color.widget_text_color_tertiary))
-          widgetDataInfoTextView.text = context.getString(R.string.of_seconds, formattedTotalSeconds)
+          widgetDataInfoTextView.text =
+              context.getString(R.string.of_seconds, formattedTotalSeconds)
           updateView(progress)
         }
         delay(1000)

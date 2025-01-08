@@ -13,8 +13,8 @@ import com.a3.yearlyprogess.databinding.DialogRestoreBackupBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.ImportEventCalendarActivity
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import de.raphaelebner.roomdatabasebackup.core.RoomBackup
 import de.raphaelebner.roomdatabasebackup.core.OnCompleteListener.Companion as RoomBackupCodes
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup
 
 class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment() {
 

@@ -17,11 +17,11 @@ import com.a3.yearlyprogess.getCurrentPeriodValue
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.*
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.*
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class ProgressCardView

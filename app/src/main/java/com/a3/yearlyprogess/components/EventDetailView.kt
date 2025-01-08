@@ -4,7 +4,6 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.icu.text.SimpleDateFormat
-import android.text.SpannableString
 import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.util.Log
@@ -17,8 +16,8 @@ import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
-import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.*
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class EventDetailView
@@ -68,15 +67,12 @@ constructor(
     // binding.eventEnd.visibility = View.GONE
 
     launch(Dispatchers.IO) {
+      val (start, end) = event.nextStartAndEndTime()
+      val newProgress = calculateProgress(context, start, end)
 
-
-        val (start, end) =  event.nextStartAndEndTime()
-        val newProgress = calculateProgress(context, start, end)
-
-        // eventStartTimeInMills = newEventStart
-        // eventEndDateTimeInMillis = newEventEnd
-        var progress = newProgress
-
+      // eventStartTimeInMills = newEventStart
+      // eventEndDateTimeInMillis = newEventEnd
+      var progress = newProgress
 
       progress = if (progress > 100) 100.0 else progress
       progress = if (progress < 0) 0.0 else progress
@@ -88,16 +84,14 @@ constructor(
         val decimalPlace: Int =
             settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
 
-
-        val (_start, _end) =  event.nextStartAndEndTime()
+        val (_start, _end) = event.nextStartAndEndTime()
         val _newProgress = calculateProgress(context, _start, _end)
         Log.d("EventDetailView", "EventDetailView: $newProgress")
         Log.d("EventDetailView", "EventDetailView: $_start $_end")
 
-          // eventStartTimeInMills = newEventStart
-          // eventEndDateTimeInMillis = newEventEnd
-          progress = _newProgress
-
+        // eventStartTimeInMills = newEventStart
+        // eventEndDateTimeInMillis = newEventEnd
+        progress = _newProgress
 
         progress = if (progress > 100) 100.0 else progress
         progress = if (progress < 0) 0.0 else progress
@@ -114,8 +108,7 @@ constructor(
           }
 
           binding.eventStart.text =
-              displayRelativeDifferenceMessage(
-                  context, _start, _end, event.allDayEvent)
+              displayRelativeDifferenceMessage(context, _start, _end, event.allDayEvent)
           // binding.eventEnd.visibility = View.GONE
 
           binding.progressText.text = progressText
@@ -147,8 +140,7 @@ constructor(
     }
 
     progressTextValueAnimator.addUpdateListener {
-      binding.progressText.text =
-          progress.styleFormatted(decimalPlace)
+      binding.progressText.text = progress.styleFormatted(decimalPlace)
     }
 
     progressBarValueAnimator.start()

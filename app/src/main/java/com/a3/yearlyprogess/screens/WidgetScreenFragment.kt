@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
-import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
@@ -49,10 +48,10 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
+import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 /** A simple [Fragment] subclass as the second destination in the navigation. */
 class WidgetScreenFragment : Fragment() {
@@ -64,12 +63,7 @@ class WidgetScreenFragment : Fragment() {
   private val binding
     get() = _binding!!
 
-
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-  }
-
-  override fun onCreateView(
+    override fun onCreateView(
       inflater: LayoutInflater,
       container: ViewGroup?,
       savedInstanceState: Bundle?
@@ -105,7 +99,7 @@ class WidgetScreenFragment : Fragment() {
     isSunriseSunsetDataAvailable = loadCachedSunriseSunset(requireContext()) != null
 
     // Initialize and Load Ad
-      showAds()
+    showAds()
 
     // Show Widget Menu
     showWidgetMenu()

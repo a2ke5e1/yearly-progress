@@ -65,15 +65,18 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
     inflateRemoteViewPreview(
         binding.pillBtn, binding.pillContainer, options.copy(shape = WidgetShape.PILL))
 
-      binding.rectBtn.strokeWidth = if (options.shape == WidgetShape.RECTANGLE) WIDGET_SELECTOR_STROKE_WIDTH else 0
-      binding.cloverBtn.strokeWidth = if (options.shape == WidgetShape.CLOVER) WIDGET_SELECTOR_STROKE_WIDTH else 0
-      binding.pillBtn.strokeWidth = if (options.shape == WidgetShape.PILL) WIDGET_SELECTOR_STROKE_WIDTH else 0
+    binding.rectBtn.strokeWidth =
+        if (options.shape == WidgetShape.RECTANGLE) WIDGET_SELECTOR_STROKE_WIDTH else 0
+    binding.cloverBtn.strokeWidth =
+        if (options.shape == WidgetShape.CLOVER) WIDGET_SELECTOR_STROKE_WIDTH else 0
+    binding.pillBtn.strokeWidth =
+        if (options.shape == WidgetShape.PILL) WIDGET_SELECTOR_STROKE_WIDTH else 0
 
     binding.replaceCounter.setOnCheckedChangeListener { _, isChecked ->
       options = options.copy(replaceProgressWithDaysLeft = isChecked)
-        options.save(this)
+      options.save(this)
 
-        inflateRemoteViewPreview(
+      inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
           options.copy(shape = WidgetShape.RECTANGLE, replaceProgressWithDaysLeft = isChecked))
@@ -89,7 +92,7 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
 
     binding.decimalSlider.addOnChangeListener { _, value, _ ->
       options = options.copy(decimalPlaces = value.toInt())
-        options.save(this)
+      options.save(this)
       inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
@@ -106,9 +109,9 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
 
     binding.leftCounter.setOnCheckedChangeListener { _, isChecked ->
       options = options.copy(timeLeftCounter = isChecked)
-        options.save(this)
+      options.save(this)
 
-        inflateRemoteViewPreview(
+      inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
           options.copy(shape = WidgetShape.RECTANGLE, timeLeftCounter = isChecked))
@@ -123,13 +126,13 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
     }
 
     binding.dynamicLeftCounter.setOnCheckedChangeListener { _, isChecked ->
-        options = options.copy(dynamicLeftCounter = isChecked)
-        if (isChecked) {
-            options = options.copy(timeLeftCounter = true)
-            binding.leftCounter.isChecked = true
-        }
-        options.save(this)
-        inflateRemoteViewPreview(
+      options = options.copy(dynamicLeftCounter = isChecked)
+      if (isChecked) {
+        options = options.copy(timeLeftCounter = true)
+        binding.leftCounter.isChecked = true
+      }
+      options.save(this)
+      inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
           options.copy(shape = WidgetShape.RECTANGLE, dynamicLeftCounter = isChecked))
@@ -144,13 +147,12 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
     }
 
     binding.backgroundSlider.addOnChangeListener { _, value, _ ->
-        options = options.copy(backgroundTransparency = (value).toInt())
-        options.save(this)
+      options = options.copy(backgroundTransparency = (value).toInt())
+      options.save(this)
       inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
-          options.copy(
-              shape = WidgetShape.RECTANGLE, backgroundTransparency = (value).toInt()))
+          options.copy(shape = WidgetShape.RECTANGLE, backgroundTransparency = (value).toInt()))
       inflateRemoteViewPreview(
           binding.cloverBtn,
           binding.cloverContainer,
@@ -193,8 +195,7 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
     finish()
   }
 
-    companion object {
-        private const val WIDGET_SELECTOR_STROKE_WIDTH = 4
-    }
-
+  companion object {
+    private const val WIDGET_SELECTOR_STROKE_WIDTH = 4
+  }
 }
