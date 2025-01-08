@@ -19,9 +19,8 @@ data class Result(
     val sunrise: String,
     val sunset: String,
     val timezone: String,
-    val utc_offset: Int
+    val utc_offset: Int,
 ) {
-
   fun getFirstLight(): Date {
     return convertToDateTime(first_light)
   }
@@ -59,7 +58,6 @@ data class Result(
   }
 
   private fun convertToDateTime(time: String): Date {
-
     val debug = Firebase.crashlytics
     debug.log("convertToDateTime: $date $time")
 

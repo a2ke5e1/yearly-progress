@@ -24,7 +24,6 @@ import de.raphaelebner.roomdatabasebackup.core.RoomBackup
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
-
   private var roomBackup: RoomBackup? = null
   private lateinit var binding: ActivityMainBinding
   private lateinit var consentInformation: ConsentInformation
@@ -129,7 +128,6 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun loadEUForm() {
-
     /*val debugSettings = ConsentDebugSettings.Builder(this)
     .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
     .addTestDeviceHashedId("D8E90FB07673BFE0C11C8F378F64B61F")
@@ -149,7 +147,8 @@ class MainActivity : AppCompatActivity() {
             loadForm()
           }
         },
-        {})
+        {},
+    )
   }
 
   private fun loadForm() {
@@ -162,11 +161,11 @@ class MainActivity : AppCompatActivity() {
               loadForm()
             }
           }
-        }) {}
+        },
+    ) {}
   }
 
   companion object {
-
     const val FIRST_LAUNCH = "first_launch"
     const val YEARLY_PROGRESS_PREF = "yearly_progress_pref"
     const val TAG = "MainActivity"

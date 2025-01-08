@@ -16,7 +16,6 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class SettingsActivity : AppCompatActivity() {
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.settings_activity)
@@ -38,7 +37,10 @@ class SettingsActivity : AppCompatActivity() {
   }
 
   class SettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    override fun onCreatePreferences(
+        savedInstanceState: Bundle?,
+        rootKey: String?,
+    ) {
       setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
       val updateFrequencyPreference =
@@ -70,7 +72,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun updatePreferenceSummary(
         preference: Preference?,
         defaultSummary: String,
-        formatValue: (Any?) -> String
+        formatValue: (Any?) -> String,
     ) {
       preference?.let {
         val currentValue = it.sharedPreferences?.all?.get(it.key) ?: return

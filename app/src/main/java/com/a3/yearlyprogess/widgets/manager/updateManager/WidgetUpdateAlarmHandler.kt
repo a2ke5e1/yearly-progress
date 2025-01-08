@@ -10,7 +10,6 @@ import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateB
 import java.util.Calendar
 
 class WidgetUpdateAlarmHandler(private val context: Context) {
-
   private val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
   private val intent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
   private val settingPref = PreferenceManager.getDefaultSharedPreferences(context)

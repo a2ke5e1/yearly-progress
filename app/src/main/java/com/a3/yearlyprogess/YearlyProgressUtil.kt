@@ -18,11 +18,14 @@ enum class TimePeriod {
   DAY,
   WEEK,
   MONTH,
-  YEAR
+  YEAR,
 }
 
-fun calculateProgress(context: Context, startTime: Long, endTime: Long): Double {
-
+fun calculateProgress(
+    context: Context,
+    startTime: Long,
+    endTime: Long,
+): Double {
   val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
   val calculationMode =
       settingPref.getString(context.getString(R.string.app_calculation_type), "0") ?: "0"
@@ -44,7 +47,10 @@ fun calculateProgress(context: Context, startTime: Long, endTime: Long): Double 
   }
 }
 
-fun calculateProgress(context: Context, timePeriod: TimePeriod): Double {
+fun calculateProgress(
+    context: Context,
+    timePeriod: TimePeriod,
+): Double {
   val startTime = calculateStartTime(context, timePeriod)
   val endTime = calculateEndTime(context, timePeriod)
   return calculateProgress(context, startTime, endTime)
@@ -74,17 +80,25 @@ fun getOrdinalSuffix(number: Int): String {
   }
 }
 
-fun calculateStartTime(context: Context, timePeriod: TimePeriod): Long {
+fun calculateStartTime(
+    context: Context,
+    timePeriod: TimePeriod,
+): Long {
   val cal = Calendar.getInstance()
   return when (timePeriod) {
     TimePeriod.DAY -> {
       cal.set(
-          cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0)
+          cal.get(Calendar.YEAR),
+          cal.get(Calendar.MONTH),
+          cal.get(Calendar.DAY_OF_MONTH),
+          0,
+          0,
+          0,
+      )
       cal.timeInMillis
     }
 
     TimePeriod.WEEK -> {
-
       val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
       val weekStartDay =
           settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0") ?: "0"
@@ -117,7 +131,10 @@ fun calculateStartTime(context: Context, timePeriod: TimePeriod): Long {
   }
 }
 
-fun calculateEndTime(context: Context, timePeriod: TimePeriod): Long {
+fun calculateEndTime(
+    context: Context,
+    timePeriod: TimePeriod,
+): Long {
   val cal = Calendar.getInstance()
   return when (timePeriod) {
     TimePeriod.DAY -> {
@@ -127,7 +144,8 @@ fun calculateEndTime(context: Context, timePeriod: TimePeriod): Long {
           cal.get(Calendar.DAY_OF_MONTH) + 1,
           0,
           0,
-          0)
+          0,
+      )
       cal.timeInMillis
     }
 
@@ -174,7 +192,10 @@ fun provideSunriseSunsetApi(): SunriseSunsetApi =
         .build()
         .create(SunriseSunsetApi::class.java)
 
-fun cacheSunriseSunset(context: Context, sunriseSunset: SunriseSunsetResponse) {
+fun cacheSunriseSunset(
+    context: Context,
+    sunriseSunset: SunriseSunsetResponse,
+) {
   val key = ContextCompat.getString(context, R.string.sunrise_sunset_data)
   val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
   val editor = pref.edit()
@@ -200,7 +221,10 @@ fun loadCachedSunriseSunset(context: Context): SunriseSunsetResponse? {
   return gson.fromJson(json, SunriseSunsetResponse::class.java)
 }
 
-fun cacheLocation(context: Context, location: Location) {
+fun cacheLocation(
+    context: Context,
+    location: Location,
+) {
   val key = ContextCompat.getString(context, R.string.location_data_pref)
   val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
   val editor = pref.edit()

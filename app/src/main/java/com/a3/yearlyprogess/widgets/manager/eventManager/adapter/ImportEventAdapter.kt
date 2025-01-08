@@ -17,7 +17,6 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 class ImportEventAdapter(
     private var _eventsList: List<Event>,
 ) : RecyclerView.Adapter<ImportEventsViewHolder>() {
-
   var tracker: SelectionTracker<Long>? = null
   private val eventsList = _eventsList.toMutableList()
 
@@ -27,18 +26,28 @@ class ImportEventAdapter(
 
   override fun getItemId(position: Int): Long = position.toLong()
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImportEventsViewHolder {
+  override fun onCreateViewHolder(
+      parent: ViewGroup,
+      viewType: Int,
+  ): ImportEventsViewHolder {
     val inflater = LayoutInflater.from(parent.context)
     val binding = ImportEventCardViewBinding.inflate(inflater, parent, false)
     return ImportEventsViewHolder(binding)
   }
 
-  override fun onBindViewHolder(holder: ImportEventsViewHolder, position: Int) {
+  override fun onBindViewHolder(
+      holder: ImportEventsViewHolder,
+      position: Int,
+  ) {
     val currentEvent = eventsList[position]
     val context = holder.binding.root.context
     val timeDesc =
         displayRelativeDifferenceMessage(
-            context, currentEvent.eventStartTime.time, currentEvent.eventEndTime.time, false)
+            context,
+            currentEvent.eventStartTime.time,
+            currentEvent.eventEndTime.time,
+            false,
+        )
 
     // Set the event details
     holder.binding.eventTitle.text = currentEvent.eventTitle
@@ -57,7 +66,10 @@ class ImportEventAdapter(
     holder.binding.parent.setOnClickListener { handleSelection(holder, position) }
   }
 
-  private fun handleSelection(holder: ImportEventsViewHolder, position: Int) {
+  private fun handleSelection(
+      holder: ImportEventsViewHolder,
+      position: Int,
+  ) {
     if (tracker?.isSelected(position.toLong()) == true) {
       tracker?.deselect(position.toLong())
     } else {
@@ -103,7 +115,10 @@ class ImportEventAdapter(
     notifyDataSetChanged()
   }
 
-  fun filter(query: String, range: Pair<Long, Long>? = null) {
+  fun filter(
+      query: String,
+      range: Pair<Long, Long>? = null,
+  ) {
     val filteredEvents =
         _eventsList.filter {
           (it.eventTitle.contains(query, ignoreCase = true) ||
@@ -112,7 +127,8 @@ class ImportEventAdapter(
         }
     Log.d(
         "EventAdapter",
-        "eventsList: ${eventsList.size}, org: ${_eventsList.size}, filtered: ${filteredEvents.size}")
+        "eventsList: ${eventsList.size}, org: ${_eventsList.size}, filtered: ${filteredEvents.size}",
+    )
     updateEvents(filteredEvents)
   }
 
@@ -121,7 +137,10 @@ class ImportEventAdapter(
     updateEvents(_eventsList)
   }
 
-  fun filterByDateRange(startDate: Long, endDate: Long) {
+  fun filterByDateRange(
+      startDate: Long,
+      endDate: Long,
+  ) {
     val filteredEvents = _eventsList.filter { it.eventStartTime.time in startDate..endDate }
     updateEvents(filteredEvents)
   }
@@ -150,7 +169,6 @@ class ImportEventItemDetailsLookup(private val recyclerView: RecyclerView) :
 
 class ImportEventItemKeyProvider(private val recyclerView: RecyclerView) :
     ItemKeyProvider<Long>(SCOPE_MAPPED) {
-
   override fun getKey(position: Int): Long? {
     return recyclerView.adapter?.getItemId(position)
   }

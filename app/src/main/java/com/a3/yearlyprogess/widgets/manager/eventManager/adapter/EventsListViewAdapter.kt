@@ -25,7 +25,6 @@ import com.a3.yearlyprogess.widgets.ui.EventWidget
 
 class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult: () -> Unit) :
     RecyclerView.Adapter<EventsSelectorListViewHolder>() {
-
   private var eventList = emptyList<Event>()
   val currentEventList: List<Event>
     get() = eventList
@@ -38,13 +37,19 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
 
   override fun getItemId(position: Int): Long = position.toLong()
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsSelectorListViewHolder {
+  override fun onCreateViewHolder(
+      parent: ViewGroup,
+      viewType: Int,
+  ): EventsSelectorListViewHolder {
     val inflater = LayoutInflater.from(parent.context)
     val binding = CustomEventSelectorItemViewBinding.inflate(inflater, parent, false)
     return EventsSelectorListViewHolder(binding)
   }
 
-  override fun onBindViewHolder(holder: EventsSelectorListViewHolder, position: Int) {
+  override fun onBindViewHolder(
+      holder: EventsSelectorListViewHolder,
+      position: Int,
+  ) {
     val currentEvent = eventList[position]
     holder.binding.customEventCardView.root.eventCheck.isChecked = false
     holder.binding.customEventCardView.root.eventCheck.visibility = View.GONE
@@ -63,8 +68,11 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
 
       if (tracker != null) {
         holder.binding.customEventCardView.root.eventCheck.visibility =
-            if (tracker!!.hasSelection() || tracker!!.selection.size() > 0) View.VISIBLE
-            else View.GONE
+            if (tracker!!.hasSelection() || tracker!!.selection.size() > 0) {
+              View.VISIBLE
+            } else {
+              View.GONE
+            }
         holder.binding.customEventCardView.root.eventCheck.isChecked =
             tracker!!.isSelected(position.toLong())
 
@@ -77,11 +85,9 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
         }
       }
     } else {
-
       holder.binding.customEventCardView.setOnClickListener {
         val appWidgetManager = AppWidgetManager.getInstance(it.context)
-        val pref =
-            it.context.getSharedPreferences("eventWidget_${appWidgetId}", Context.MODE_PRIVATE)
+        val pref = it.context.getSharedPreferences("eventWidget_$appWidgetId", Context.MODE_PRIVATE)
         val edit = pref.edit()
         val conv = Converters()
         val eventDays = conv.fromRepeatDaysList(currentEvent.repeatEventDays)
@@ -106,7 +112,10 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
     this.tracker = tracker
   }
 
-  private fun requestPinWidget(context: Context, currentEvent: Event) {
+  private fun requestPinWidget(
+      context: Context,
+      currentEvent: Event,
+  ) {
     val mAppWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
     if (!mAppWidgetManager.isRequestPinAppWidgetSupported) {
       Toast.makeText(context, context.getString(R.string.unsupported_launcher), Toast.LENGTH_LONG)
@@ -135,7 +144,8 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
             context,
             0,
             pinnedWidgetCallbackIntent,
-            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
 
     mAppWidgetManager.requestPinAppWidget(myProvider, bundle, pendingIntent)
   }
@@ -148,7 +158,6 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
   }
 
   fun selectAll() {
-
     if (tracker != null) {
       if (tracker!!.hasSelection() && tracker!!.selection.size() == itemCount) {
         tracker!!.clearSelection()

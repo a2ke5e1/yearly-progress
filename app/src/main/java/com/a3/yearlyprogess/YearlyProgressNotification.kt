@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
 
 class YearlyProgressNotification(private val context: Context) {
-
   private val channelId = "progress_channel"
   private val notificationId = 1
 
@@ -36,8 +35,9 @@ class YearlyProgressNotification(private val context: Context) {
   fun hasAppNotificationPermission(): Boolean {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       return ContextCompat.checkSelfPermission(
-          context, android.Manifest.permission.POST_NOTIFICATIONS) ==
-          PackageManager.PERMISSION_GRANTED
+          context,
+          android.Manifest.permission.POST_NOTIFICATIONS,
+      ) == PackageManager.PERMISSION_GRANTED
     }
     return true
   }
@@ -69,7 +69,8 @@ class YearlyProgressNotification(private val context: Context) {
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(
                 "Day: %.2f%%, Week: %.2f%%, Month: %.2f%% and Year: %.2f%%"
-                    .format(dayProgress, weekProgress, monthProgress, yearProgress))
+                    .format(dayProgress, weekProgress, monthProgress, yearProgress),
+            )
             .setSilent(true)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)

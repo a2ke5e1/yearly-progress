@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
 
 // TODO: Implement a search feature
 class EventsListScreenFragment : Fragment() {
-
   private var _binding: FragmentScreenListEventsBinding? = null
   private val mEventViewModel: EventViewModel by viewModels()
 
@@ -46,9 +45,8 @@ class EventsListScreenFragment : Fragment() {
   override fun onCreateView(
       inflater: LayoutInflater,
       container: ViewGroup?,
-      savedInstanceState: Bundle?
+      savedInstanceState: Bundle?,
   ): View {
-
     _binding = FragmentScreenListEventsBinding.inflate(inflater, container, false)
 
     manageEventAddButton()
@@ -66,7 +64,8 @@ class EventsListScreenFragment : Fragment() {
                 binding.eventsRecyclerViewer,
                 ImportEventItemKeyProvider(binding.eventsRecyclerViewer),
                 MyItemDetailsLookup(binding.eventsRecyclerViewer),
-                StorageStrategy.createLongStorage())
+                StorageStrategy.createLongStorage(),
+            )
             .withSelectionPredicate(SelectionPredicates.createSelectAnything())
             .build()
 
@@ -80,7 +79,6 @@ class EventsListScreenFragment : Fragment() {
             // Log.d("TAG", "onCreateView: ${tracker!!.selection}")
 
             if (lengthItems != 0) {
-
               val mt = (activity as AppCompatActivity).findViewById<MaterialToolbar>(R.id.toolbar)
               mt.title = getString(R.string.no_events_selected, lengthItems)
               mt.menu.clear()
@@ -120,7 +118,8 @@ class EventsListScreenFragment : Fragment() {
               lifecycleScope.launch(Dispatchers.Main) { eventAdapter.notifyDataSetChanged() }
             }
           }
-        })
+        },
+    )
 
     mEventViewModel.readAllData.observe(viewLifecycleOwner) { events ->
       if (events.isEmpty()) {
@@ -140,7 +139,6 @@ class EventsListScreenFragment : Fragment() {
   // Adds the floating action button to add events
   // and hides it while scrolling
   private fun manageEventAddButton() {
-
     binding.addEventFab.setOnClickListener {
       val intent = Intent(it.context, EventEditorActivity::class.java)
       intent.putExtra("addMode", true)
@@ -149,14 +147,19 @@ class EventsListScreenFragment : Fragment() {
 
     binding.eventsRecyclerViewer.addOnScrollListener(
         object : RecyclerView.OnScrollListener() {
-          override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+          override fun onScrolled(
+              recyclerView: RecyclerView,
+              dx: Int,
+              dy: Int,
+          ) {
             if (dy > 0 && binding.addEventFab.visibility == View.VISIBLE) {
               binding.addEventFab.hide()
             } else if (dy < 0 && binding.addEventFab.visibility != View.VISIBLE) {
               binding.addEventFab.show()
             }
           }
-        })
+        },
+    )
   }
 
   private var tracker: SelectionTracker<Long>? = null

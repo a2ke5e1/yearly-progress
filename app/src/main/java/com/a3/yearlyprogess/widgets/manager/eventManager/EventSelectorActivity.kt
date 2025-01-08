@@ -20,7 +20,6 @@ import com.a3.yearlyprogess.widgets.ui.EventWidget
 import java.util.Date
 
 class EventSelectorActivity : AppCompatActivity() {
-
   private lateinit var binding: EventSelectorScreenListEventsBinding
   private val mEventViewModel: EventViewModel by viewModels()
 
@@ -65,11 +64,12 @@ class EventSelectorActivity : AppCompatActivity() {
               intent?.getBooleanExtra("allDayEvent", false) == true,
               Date(intent?.getLongExtra("eventStartTimeInMills", 0) ?: 0),
               Date(intent?.getLongExtra("eventEndDateTimeInMillis", 0) ?: 0),
-              eventDays)
+              eventDays,
+          )
         }
 
     if (event != null && appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-      val pref = getSharedPreferences("eventWidget_${appWidgetId}", MODE_PRIVATE)
+      val pref = getSharedPreferences("eventWidget_$appWidgetId", MODE_PRIVATE)
       val edit = pref.edit()
 
       edit.putInt("eventId", event.id)

@@ -28,7 +28,6 @@ data class Credits(val username: String, val language: String) {
 }
 
 class AboutDialog : DialogFragment() {
-
   private val credits = listOf(Credits("ASG13043", "हिंदी"), Credits("mojienjoyment", "فارسی"))
 
   @SuppressLint("SetTextI18n")

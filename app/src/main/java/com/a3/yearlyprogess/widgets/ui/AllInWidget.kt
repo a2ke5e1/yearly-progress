@@ -18,11 +18,11 @@ import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 
 /** Implementation of App Widget functionality. */
 class AllInWidget : BaseWidget() {
-
   companion object {
-
-    private fun initiateView(context: Context, views: RemoteViews) {
-
+    private fun initiateView(
+        context: Context,
+        views: RemoteViews,
+    ) {
       val dayProgress = calculateProgress(context, TimePeriod.DAY)
       val weekProgress = calculateProgress(context, TimePeriod.WEEK)
       val monthProgress = calculateProgress(context, TimePeriod.MONTH)
@@ -55,7 +55,12 @@ class AllInWidget : BaseWidget() {
       views.setOnClickPendingIntent(
           R.id.gridLayout,
           PendingIntent.getActivity(
-              context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE))
+              context,
+              0,
+              Intent(context, MainActivity::class.java),
+              PendingIntent.FLAG_IMMUTABLE,
+          ),
+      )
 
       views.setViewVisibility(R.id.testDay, View.VISIBLE)
       views.setViewVisibility(R.id.testWeek, View.VISIBLE)
@@ -118,7 +123,7 @@ class AllInWidget : BaseWidget() {
   override fun updateWidget(
       context: Context,
       appWidgetManager: AppWidgetManager,
-      appWidgetId: Int
+      appWidgetId: Int,
   ) {
     appWidgetManager.updateAppWidget(appWidgetId, AllInOneWidgetRemoteView(context))
   }

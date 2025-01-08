@@ -36,7 +36,6 @@ constructor(
     defStyle: Int = 0,
     defStyleRes: Int = 0,
 ) : LinearLayout(context, attrs, defStyle, defStyleRes), CoroutineScope {
-
   override val coroutineContext: CoroutineContext
     get() = Dispatchers.IO + job
 
@@ -77,8 +76,11 @@ constructor(
 
     // data that doesn't change
     titleTextView.text =
-        if (dayLight) ContextCompat.getString(context, R.string.day_light)
-        else ContextCompat.getString(context, R.string.night_light)
+        if (dayLight) {
+          ContextCompat.getString(context, R.string.day_light)
+        } else {
+          ContextCompat.getString(context, R.string.night_light)
+        }
 
     // update the progress every seconds
     launch(Dispatchers.IO) {
@@ -97,18 +99,21 @@ constructor(
                 context.getString(
                     R.string.today_sunrise_at_and_sunset_at,
                     startTime.toFormattedDateText(),
-                    endTime.toFormattedDateText())
+                    endTime.toFormattedDateText(),
+                )
               } else {
                 context.getString(
                     R.string.last_night_s_sunset_was_at_and_next_sunrise_will_be_at,
                     startTime.toFormattedDateText(),
-                    endTime.toFormattedDateText())
+                    endTime.toFormattedDateText(),
+                )
               }
           widgetDataTextView.text = currentPeriodValue
           widgetDataTextView.textSize = 12f
           widgetDataTextView.setTypeface(null, Typeface.NORMAL)
           widgetDataTextView.setTextColor(
-              ContextCompat.getColor(context, R.color.widget_text_color_tertiary))
+              ContextCompat.getColor(context, R.color.widget_text_color_tertiary),
+          )
           widgetDataInfoTextView.text =
               context.getString(R.string.of_seconds, formattedTotalSeconds)
           updateView(progress)
@@ -120,7 +125,6 @@ constructor(
 
   @SuppressLint("SetTextI18n")
   private fun updateView(progress: Double) {
-
     val pref = PreferenceManager.getDefaultSharedPreferences(context)
     val decimalPlace: Int = pref.getInt(context.getString(R.string.app_widget_decimal_point), 13)
 

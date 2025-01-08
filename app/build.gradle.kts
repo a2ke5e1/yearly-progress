@@ -6,6 +6,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("com.ncorti.ktfmt.gradle") version "0.21.0"
 }
 
 android {
@@ -18,8 +19,6 @@ android {
         versionCode = 105
         versionName = "2.14.17"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-
     }
 
     signingConfigs {
@@ -108,5 +107,4 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-
 }

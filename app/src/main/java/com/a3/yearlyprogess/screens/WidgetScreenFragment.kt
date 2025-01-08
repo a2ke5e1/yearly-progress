@@ -55,7 +55,6 @@ import kotlinx.coroutines.launch
 
 /** A simple [Fragment] subclass as the second destination in the navigation. */
 class WidgetScreenFragment : Fragment() {
-
   private var _binding: FragmentWidgetScreenBinding? = null
 
   // This property is only valid between onCreateView and
@@ -63,12 +62,11 @@ class WidgetScreenFragment : Fragment() {
   private val binding
     get() = _binding!!
 
-    override fun onCreateView(
+  override fun onCreateView(
       inflater: LayoutInflater,
       container: ViewGroup?,
-      savedInstanceState: Bundle?
+      savedInstanceState: Bundle?,
   ): View {
-
     _binding = FragmentWidgetScreenBinding.inflate(inflater, container, false)
     return binding.root
   }
@@ -93,7 +91,10 @@ class WidgetScreenFragment : Fragment() {
 
   private var isSunriseSunsetDataAvailable = false
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewCreated(
+      view: View,
+      savedInstanceState: Bundle?,
+  ) {
     super.onViewCreated(view, savedInstanceState)
 
     isSunriseSunsetDataAvailable = loadCachedSunriseSunset(requireContext()) != null
@@ -116,9 +117,8 @@ class WidgetScreenFragment : Fragment() {
 
   private fun updateStandaloneWidgetRemoteView(
       container: FrameLayout,
-      widgetType: TimePeriod
+      widgetType: TimePeriod,
   ): View {
-
     val appContext = requireActivity().applicationContext
     val options =
         StandaloneWidgetOptions.load(requireContext(), -1)
@@ -137,7 +137,6 @@ class WidgetScreenFragment : Fragment() {
       container: FrameLayout,
       dayLight: Boolean,
   ): View {
-
     val appContext = requireActivity().applicationContext
     val options =
         StandaloneWidgetOptions.load(requireContext(), -1)
@@ -155,7 +154,6 @@ class WidgetScreenFragment : Fragment() {
     lifecycleScope.launch(Dispatchers.IO) {
       delay(700) // Wait 700 millisecond for animation to complete
       while (true) {
-
         // Loads user preferences and set default values if not set
 
         val progressTextYear = calculateProgress(requireContext(), TimePeriod.YEAR)
@@ -176,8 +174,9 @@ class WidgetScreenFragment : Fragment() {
             updateStandaloneWidgetRemoteView(binding.widgetDayContainer, TimePeriod.DAY)
 
             if (ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable) {
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable) {
               updateStandaloneWidgetRemoteView(binding.widgetDaylightContainer, true)
               updateStandaloneWidgetRemoteView(binding.widgetNightlightContainer, false)
             }
@@ -214,7 +213,6 @@ class WidgetScreenFragment : Fragment() {
   }
 
   private fun startAnimationWidget() {
-
     val yearRemoteView =
         updateStandaloneWidgetRemoteView(binding.widgetYearContainer, TimePeriod.YEAR)
 
@@ -232,22 +230,36 @@ class WidgetScreenFragment : Fragment() {
         updateStandaloneWidgetRemoteView(binding.widgetNightlightContainer, false)
 
     animatedUpdateProgressBarView(
-        yearRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.YEAR)
+        yearRemoteView.findViewById(R.id.widgetProgressBar),
+        TimePeriod.YEAR,
+    )
     animatedUpdateProgressTextView(
-        yearRemoteView.findViewById(R.id.widgetProgress), TimePeriod.YEAR)
+        yearRemoteView.findViewById(R.id.widgetProgress),
+        TimePeriod.YEAR,
+    )
 
     animatedUpdateProgressBarView(
-        monthRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.MONTH)
+        monthRemoteView.findViewById(R.id.widgetProgressBar),
+        TimePeriod.MONTH,
+    )
     animatedUpdateProgressTextView(
-        monthRemoteView.findViewById(R.id.widgetProgress), TimePeriod.MONTH)
+        monthRemoteView.findViewById(R.id.widgetProgress),
+        TimePeriod.MONTH,
+    )
 
     animatedUpdateProgressBarView(
-        weekRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.WEEK)
+        weekRemoteView.findViewById(R.id.widgetProgressBar),
+        TimePeriod.WEEK,
+    )
     animatedUpdateProgressTextView(
-        weekRemoteView.findViewById(R.id.widgetProgress), TimePeriod.WEEK)
+        weekRemoteView.findViewById(R.id.widgetProgress),
+        TimePeriod.WEEK,
+    )
 
     animatedUpdateProgressBarView(
-        dayRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.DAY)
+        dayRemoteView.findViewById(R.id.widgetProgressBar),
+        TimePeriod.DAY,
+    )
     animatedUpdateProgressTextView(dayRemoteView.findViewById(R.id.widgetProgress), TimePeriod.DAY)
 
     animatedUpdateProgressTextView(allInOneProgressTextViewYear, TimePeriod.YEAR, true)
@@ -261,19 +273,30 @@ class WidgetScreenFragment : Fragment() {
     animatedUpdateProgressBarView(allInOneProgressBarWeek, TimePeriod.WEEK)
 
     if (ContextCompat.checkSelfPermission(
-        requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) ==
-        PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable) {
+        requireContext(),
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+    ) == PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable) {
       animatedUpdateProgressTextView(
-          dayLightRemoteView.findViewById(R.id.widgetProgress), TimePeriod.DAY, dayLight = true)
+          dayLightRemoteView.findViewById(R.id.widgetProgress),
+          TimePeriod.DAY,
+          dayLight = true,
+      )
       animatedUpdateProgressBarView(
-          dayLightRemoteView.findViewById(R.id.widgetProgressBar), TimePeriod.DAY, dayLight = true)
+          dayLightRemoteView.findViewById(R.id.widgetProgressBar),
+          TimePeriod.DAY,
+          dayLight = true,
+      )
 
       animatedUpdateProgressTextView(
-          nightLightRemoteView.findViewById(R.id.widgetProgress), TimePeriod.DAY, dayLight = false)
+          nightLightRemoteView.findViewById(R.id.widgetProgress),
+          TimePeriod.DAY,
+          dayLight = false,
+      )
       animatedUpdateProgressBarView(
           nightLightRemoteView.findViewById(R.id.widgetProgressBar),
           TimePeriod.DAY,
-          dayLight = false)
+          dayLight = false,
+      )
     }
   }
 
@@ -295,7 +318,6 @@ class WidgetScreenFragment : Fragment() {
   }
 
   private fun showAds() {
-
     // Initialize Ad Loader
     val adFrame: LinearLayout = binding.adFrame
     adLoader =
@@ -325,7 +347,8 @@ class WidgetScreenFragment : Fragment() {
                     .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
                     // Methods in the NativeAdOptions.Builder class can be
                     // used here to specify individual options settings.
-                    .build())
+                    .build(),
+            )
             .build()
     // Load Ad
     adLoader.loadAd(AdRequest.Builder().build())
@@ -340,7 +363,8 @@ class WidgetScreenFragment : Fragment() {
       requestPinAppWidget(
           requireContext(),
           DayWidget::class.java,
-          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options))
+          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options),
+      )
     }
 
     // Showing menu for user to add Month widget to user Launcher's Home Screen
@@ -351,7 +375,8 @@ class WidgetScreenFragment : Fragment() {
       requestPinAppWidget(
           requireContext(),
           MonthWidget::class.java,
-          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options))
+          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options),
+      )
     }
 
     // Showing menu for user to add Year widget to user Launcher's Home Screen
@@ -362,7 +387,8 @@ class WidgetScreenFragment : Fragment() {
       requestPinAppWidget(
           requireContext(),
           YearWidget::class.java,
-          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options))
+          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options),
+      )
     }
 
     // Showing menu for user to add Week widget to user Launcher's Home Screen
@@ -373,7 +399,8 @@ class WidgetScreenFragment : Fragment() {
       requestPinAppWidget(
           requireContext(),
           WeekWidget::class.java,
-          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options))
+          StandaloneWidget.standaloneWidgetRemoteView(requireContext(), options),
+      )
     }
 
     // Showing menu for user to add All In One widget to user Launcher's Home Screen
@@ -381,7 +408,8 @@ class WidgetScreenFragment : Fragment() {
       requestPinAppWidget(
           requireContext(),
           AllInWidget::class.java,
-          AllInWidget.AllInOneWidgetRemoteView(requireContext()))
+          AllInWidget.AllInOneWidgetRemoteView(requireContext()),
+      )
     }
     val dayNightWidgetOptions =
         StandaloneWidgetOptions.load(requireContext(), -1)
@@ -391,7 +419,11 @@ class WidgetScreenFragment : Fragment() {
           requireContext(),
           DayLightWidget::class.java,
           DayNightWidget.dayNightLightWidgetRemoteView(
-              requireContext(), true, dayNightWidgetOptions))
+              requireContext(),
+              true,
+              dayNightWidgetOptions,
+          ),
+      )
     }
 
     binding.btnAddNightlightWidget.setOnClickListener {
@@ -399,7 +431,11 @@ class WidgetScreenFragment : Fragment() {
           requireContext(),
           NightLightWidget::class.java,
           DayNightWidget.dayNightLightWidgetRemoteView(
-              requireContext(), false, dayNightWidgetOptions))
+              requireContext(),
+              false,
+              dayNightWidgetOptions,
+          ),
+      )
     }
   }
 
@@ -407,7 +443,7 @@ class WidgetScreenFragment : Fragment() {
       textView: TextView,
       type: TimePeriod,
       isAllInOne: Boolean = false,
-      dayLight: Boolean? = null
+      dayLight: Boolean? = null,
   ) {
     val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
@@ -444,7 +480,7 @@ class WidgetScreenFragment : Fragment() {
   private fun animatedUpdateProgressBarView(
       progressBarView: ProgressBar,
       type: TimePeriod,
-      dayLight: Boolean? = null
+      dayLight: Boolean? = null,
   ) {
     var progressViewAnimator =
         ValueAnimator.ofInt(0, calculateProgress(requireContext(), type).roundToInt())
@@ -478,7 +514,7 @@ class WidgetScreenFragment : Fragment() {
   private fun requestPinAppWidget(
       context: Context,
       widget: Class<*>,
-      remoteViews: RemoteViews? = null
+      remoteViews: RemoteViews? = null,
   ) {
     val mAppWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
     val myProvider = ComponentName(requireContext(), widget)

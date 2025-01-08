@@ -17,17 +17,16 @@ import de.raphaelebner.roomdatabasebackup.core.OnCompleteListener.Companion as R
 import de.raphaelebner.roomdatabasebackup.core.RoomBackup
 
 class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment() {
-
   @SuppressLint("SetTextI18n")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
     roomBackup
         .database(EventDatabase.getDatabase(requireContext()))
         .enableLogDebug(true)
         .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG)
         .backupIsEncrypted(true)
         .customEncryptPassword(
-            "haha idc if you forgot") // DON'T CHANGE THIS, It's in the production version
+            "haha idc if you forgot",
+        ) // DON'T CHANGE THIS, It's in the production version
         .apply {
           onCompleteListener { success, message, exitCode ->
             when (exitCode) {
@@ -37,13 +36,16 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
                     .setIcon(R.drawable.ic_storage)
                     .setTitle("Storage Permission")
                     .setMessage(
-                        "To ensure a seamless experience with our backup & restore feature, we kindly request access to your device's storage. Granting this permission allows us to securely safeguard your data during backups and swiftly restore it when needed. Your privacy and data security are our utmost priorities. Thank you for entrusting us with the protection of your valuable information")
+                        "To ensure a seamless experience with our backup & restore feature, we kindly request access to your device's storage. Granting this permission allows us to securely safeguard your data during backups and swiftly restore it when needed. Your privacy and data security are our utmost priorities. Thank you for entrusting us with the protection of your valuable information",
+                    )
                     .setNeutralButton("Okay") { _, _ -> }
                     .show()
               }
               else ->
                   Log.d(
-                      MainActivity.TAG, "success: $success, message: $message, exitCode: $exitCode")
+                      MainActivity.TAG,
+                      "success: $success, message: $message, exitCode: $exitCode",
+                  )
             }
             if (success) {
               Toast.makeText(requireContext(), "Operation was successful.", Toast.LENGTH_LONG)

@@ -12,9 +12,11 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.imageview.ShapeableImageView
 
 class CustomAdView {
-
   companion object {
-    fun updateViewWithNativeAdview(adFrame: LinearLayout, ad: NativeAd): NativeAdView {
+    fun updateViewWithNativeAdview(
+        adFrame: LinearLayout,
+        ad: NativeAd,
+    ): NativeAdView {
       val inflater =
           adFrame.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
       val nativeAdView = inflater.inflate(R.layout.custom_adview, null) as NativeAdView

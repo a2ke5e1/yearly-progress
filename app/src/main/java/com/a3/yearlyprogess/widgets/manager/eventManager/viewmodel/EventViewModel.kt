@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class EventViewModel(application: Application) : AndroidViewModel(application) {
-
   val readAllData: LiveData<List<Event>>
   private val repository: EventRepository
 
@@ -50,21 +49,21 @@ class EventViewModel(application: Application) : AndroidViewModel(application) {
   }*/
 
   /* fun updateProgressBar(event: Event, progressTextView: TextView, progressBar: LinearProgressIndicator) {
-          viewModelScope.launch(Dispatchers.IO) {
-              while (true) {
-                  val progress = ProgressPercentage.getProgress(
-                      ProgressPercentage.CUSTOM_EVENT,
-                      event.eventStartTime,
-                      event.eventEndTime
-                  )
-                  viewModelScope.launch(Dispatchers.Main) {
-                      progressTextView.text =
-                          ProgressPercentage.formatProgressStyle(progress)
-                      progressBar.progress = progress.toInt()
-                  }
-                  delay(1000)
-              }
-          }
-      }
+         viewModelScope.launch(Dispatchers.IO) {
+             while (true) {
+                 val progress = ProgressPercentage.getProgress(
+                     ProgressPercentage.CUSTOM_EVENT,
+                     event.eventStartTime,
+                     event.eventEndTime
+                 )
+                 viewModelScope.launch(Dispatchers.Main) {
+                     progressTextView.text =
+                         ProgressPercentage.formatProgressStyle(progress)
+                     progressBar.progress = progress.toInt()
+                 }
+                 delay(1000)
+             }
+         }
+     }
   */
 }

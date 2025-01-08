@@ -14,7 +14,6 @@ import androidx.core.view.updatePadding
 import com.a3.yearlyprogess.databinding.ActivityFirstScreenBinding
 
 class WelcomeScreen : AppCompatActivity() {
-
   private lateinit var binding: ActivityFirstScreenBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +39,8 @@ class WelcomeScreen : AppCompatActivity() {
         privacyPolicySpan,
         50,
         binding.textView2.text.length - 1,
-        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+    )
     binding.textView2.apply {
       text = spannable
       movementMethod = LinkMovementMethod.getInstance()

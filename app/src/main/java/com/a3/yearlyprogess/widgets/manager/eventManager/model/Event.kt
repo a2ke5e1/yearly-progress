@@ -18,7 +18,6 @@ data class Event(
     val eventEndTime: Date,
     val repeatEventDays: List<RepeatDays> = emptyList(),
 ) : Parcelable {
-
   fun nextStartAndEndTime(currentTime: Long = System.currentTimeMillis()): Pair<Long, Long> {
     var nextStartTime = eventStartTime.time
     var nextEndTime = eventEndTime.time
@@ -137,5 +136,5 @@ enum class RepeatDays {
   FRIDAY,
   SATURDAY,
   EVERY_MONTH,
-  EVERY_YEAR
+  EVERY_YEAR,
 }

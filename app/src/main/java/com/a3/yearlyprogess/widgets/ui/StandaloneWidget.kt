@@ -39,7 +39,6 @@ import kotlinx.coroutines.launch
 
 /** Utility object for creating and managing widget RemoteViews. */
 object WidgetUtils {
-
   /**
    * Creates a RemoteViews object for the widget.
    *
@@ -59,9 +58,8 @@ object WidgetUtils {
       endTime: Long,
       currentValue: SpannableString,
       errorMessage: String? = null,
-      options: StandaloneWidgetOptions? = null
+      options: StandaloneWidgetOptions? = null,
   ): RemoteViews {
-
     // If there is an error message, create an error widget view.
     if (errorMessage != null) {
       return RemoteViews(context.packageName, R.layout.error_widget).apply {
@@ -72,7 +70,9 @@ object WidgetUtils {
                 context,
                 0,
                 Intent(context, MainActivity::class.java),
-                PendingIntent.FLAG_IMMUTABLE))
+                PendingIntent.FLAG_IMMUTABLE,
+            ),
+        )
       }
     }
 
@@ -85,7 +85,8 @@ object WidgetUtils {
     val widgetDaysLeftCounter =
         context.getString(
             R.string.time_left,
-            calculateTimeLeft(endTime).toTimePeriodLeftText(options?.dynamicLeftCounter == true))
+            calculateTimeLeft(endTime).toTimePeriodLeftText(options?.dynamicLeftCounter == true),
+        )
 
     /**
      * Creates a rectangular RemoteViews object.
@@ -106,11 +107,14 @@ object WidgetUtils {
                 context,
                 0,
                 Intent(context, MainActivity::class.java),
-                PendingIntent.FLAG_IMMUTABLE))
+                PendingIntent.FLAG_IMMUTABLE,
+            ),
+        )
         setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
         setViewVisibility(
             R.id.widgetDaysLeft,
-            if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE)
+            if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE,
+        )
         if (timeLeftCounter && replaceProgressWithDaysLeft) {
           setTextViewText(R.id.widgetProgress, widgetDaysLeftCounter)
           setTextViewTextSize(R.id.widgetProgress, 0, 35f)
@@ -123,14 +127,17 @@ object WidgetUtils {
      *
      * @return A RemoteViews object for a clover-shaped widget.
      */
-    fun cloverRemoteView(@LayoutRes layoutId: Int): RemoteViews {
+    fun cloverRemoteView(
+        @LayoutRes layoutId: Int,
+    ): RemoteViews {
       return RemoteViews(context.packageName, layoutId).apply {
         setTextViewText(R.id.widgetType, widgetType)
         setTextViewText(R.id.widgetCurrentValue, currentValue)
         setTextViewText(R.id.widgetDaysLeft, widgetDaysLeftCounter)
         setTextViewText(
             R.id.widgetProgress,
-            progress.styleFormatted(decimalPlace.coerceIn(0, 2), cloverMode = true))
+            progress.styleFormatted(decimalPlace.coerceIn(0, 2), cloverMode = true),
+        )
         setImageViewResource(
             R.id.widgetContainer,
             when (progress) {
@@ -147,17 +154,21 @@ object WidgetUtils {
               in 90.0..95.0 -> R.drawable.background_clover_90
               in 95.0..98.0 -> R.drawable.background_clover_95
               else -> R.drawable.background_clover_100
-            })
+            },
+        )
         setOnClickPendingIntent(
             R.id.background,
             PendingIntent.getActivity(
                 context,
                 0,
                 Intent(context, MainActivity::class.java),
-                PendingIntent.FLAG_IMMUTABLE))
+                PendingIntent.FLAG_IMMUTABLE,
+            ),
+        )
         setViewVisibility(
             R.id.widgetDaysLeft,
-            if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE)
+            if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE,
+        )
         if (timeLeftCounter && replaceProgressWithDaysLeft) {
           setTextViewText(R.id.widgetProgress, widgetDaysLeftCounter)
           setTextViewTextSize(R.id.widgetProgress, 0, 35f)
@@ -173,7 +184,9 @@ object WidgetUtils {
      *
      * @return A RemoteViews object for a pill-shaped widget.
      */
-    fun pillRemoteView(@LayoutRes layoutId: Int): RemoteViews {
+    fun pillRemoteView(
+        @LayoutRes layoutId: Int,
+    ): RemoteViews {
       return RemoteViews(context.packageName, layoutId).apply {
         setTextViewText(R.id.widgetType, widgetType)
         setTextViewText(R.id.widgetCurrentValue, currentValue)
@@ -195,17 +208,21 @@ object WidgetUtils {
               in 90.0..95.0 -> R.drawable.background_pill_90
               in 95.0..98.0 -> R.drawable.background_pill_95
               else -> R.drawable.background_pill_100
-            })
+            },
+        )
         setOnClickPendingIntent(
             R.id.background,
             PendingIntent.getActivity(
                 context,
                 0,
                 Intent(context, MainActivity::class.java),
-                PendingIntent.FLAG_IMMUTABLE))
+                PendingIntent.FLAG_IMMUTABLE,
+            ),
+        )
         setViewVisibility(
             R.id.widgetDaysLeft,
-            if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE)
+            if (timeLeftCounter && !replaceProgressWithDaysLeft) View.VISIBLE else View.GONE,
+        )
         if (timeLeftCounter && replaceProgressWithDaysLeft) {
           setTextViewText(R.id.widgetProgress, widgetDaysLeftCounter)
           setTextViewTextSize(R.id.widgetProgress, 0, 35f)
@@ -282,7 +299,9 @@ object WidgetUtils {
               mapOf(
                   SizeF(220f, 220f) to large,
                   SizeF(160f, 160f) to square,
-                  SizeF(100f, 100f) to small))
+                  SizeF(100f, 100f) to small,
+              ),
+          )
         } else {
           if (height >= 100) {
             large
@@ -298,7 +317,11 @@ object WidgetUtils {
               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
                 setViewLayoutMargin(
-                    R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
+                    R.id.widgetDaysLeft,
+                    RemoteViews.MARGIN_TOP,
+                    -8f,
+                    TypedValue.COMPLEX_UNIT_DIP,
+                )
               }
               setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
               setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
@@ -312,7 +335,9 @@ object WidgetUtils {
               mapOf(
                   SizeF(220f, 220f) to large,
                   SizeF(160f, 160f) to square,
-                  SizeF(100f, 100f) to small))
+                  SizeF(100f, 100f) to small,
+              ),
+          )
         } else {
           if (width >= 214 && height >= 131) {
             large
@@ -346,7 +371,7 @@ data class StandaloneWidgetOptions(
     val replaceProgressWithDaysLeft: Boolean,
     @IntRange(from = 0, to = 100) val backgroundTransparency: Int,
     val widgetType: TimePeriod?,
-    val shape: WidgetShape
+    val shape: WidgetShape,
 ) {
   companion object {
     private const val WIDGET_TYPE = "widget_type_"
@@ -359,7 +384,10 @@ data class StandaloneWidgetOptions(
      * @param widgetId The ID of the widget.
      * @return The loaded StandaloneWidgetOptions.
      */
-    fun load(context: Context, widgetId: Int): StandaloneWidgetOptions {
+    fun load(
+        context: Context,
+        widgetId: Int,
+    ): StandaloneWidgetOptions {
       val pref = PreferenceManager.getDefaultSharedPreferences(context)
 
       val globalDecimalPointKey = context.getString(R.string.widget_widget_decimal_point)
@@ -389,14 +417,15 @@ data class StandaloneWidgetOptions(
           pref.getString(widgetTypeKey, TimePeriod.DAY.name)?.let { TimePeriod.valueOf(it) },
           pref.getString(widgetShapeKey, WidgetShape.RECTANGLE.name)?.let {
             WidgetShape.valueOf(it)
-          } ?: WidgetShape.RECTANGLE)
+          } ?: WidgetShape.RECTANGLE,
+      )
     }
 
     /** Enum class representing the shape of the widget. */
     enum class WidgetShape {
       RECTANGLE,
       CLOVER,
-      PILL
+      PILL,
     }
   }
 
@@ -407,18 +436,23 @@ data class StandaloneWidgetOptions(
    */
   fun save(context: Context) {
     PreferenceManager.getDefaultSharedPreferences(context).edit().apply {
-      putInt("${context.getString(R.string.widget_widget_decimal_point)}${widgetId}", decimalPlaces)
+      putInt("${context.getString(R.string.widget_widget_decimal_point)}$widgetId", decimalPlaces)
       putBoolean(
-          "${context.getString(R.string.widget_widget_time_left)}${widgetId}", timeLeftCounter)
+          "${context.getString(R.string.widget_widget_time_left)}$widgetId",
+          timeLeftCounter,
+      )
       putBoolean(
-          "${context.getString(R.string.widget_widget_use_dynamic_time_left)}${widgetId}",
-          dynamicLeftCounter)
+          "${context.getString(R.string.widget_widget_use_dynamic_time_left)}$widgetId",
+          dynamicLeftCounter,
+      )
       putBoolean(
-          "${context.getString(R.string.widget_widget_event_replace_progress_with_days_counter)}${widgetId}",
-          replaceProgressWithDaysLeft)
+          "${context.getString(R.string.widget_widget_event_replace_progress_with_days_counter)}$widgetId",
+          replaceProgressWithDaysLeft,
+      )
       putInt(
-          "${context.getString(R.string.widget_widget_background_transparency)}${widgetId}",
-          backgroundTransparency)
+          "${context.getString(R.string.widget_widget_background_transparency)}$widgetId",
+          backgroundTransparency,
+      )
       putString("$WIDGET_TYPE$widgetId", widgetType?.name)
       putString("$WIDGET_SHAPE$widgetId", shape.name)
       apply()
@@ -432,7 +466,6 @@ data class StandaloneWidgetOptions(
  * @property widgetType The type of the widget.
  */
 abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget() {
-
   companion object {
     /**
      * Creates a RemoteViews object for a standalone widget.
@@ -443,7 +476,7 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
      */
     fun standaloneWidgetRemoteView(
         context: Context,
-        options: StandaloneWidgetOptions
+        options: StandaloneWidgetOptions,
     ): RemoteViews {
       val widgetType = options.widgetType ?: TimePeriod.DAY
       val startTime = calculateStartTime(context, widgetType)
@@ -462,7 +495,8 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
           startTime,
           endTime,
           SpannableString(currentValue),
-          options = options)
+          options = options,
+      )
     }
   }
 
@@ -478,9 +512,8 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
   override fun updateWidget(
       context: Context,
       appWidgetManager: AppWidgetManager,
-      appWidgetId: Int
+      appWidgetId: Int,
   ) {
-
     // Cancel the previous job if it's running
     updateJob?.cancel()
 
@@ -493,7 +526,9 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
             val options =
                 StandaloneWidgetOptions.load(context, appWidgetId).copy(widgetType = widgetType)
             appWidgetManager.updateAppWidget(
-                appWidgetId, standaloneWidgetRemoteView(context, options))
+                appWidgetId,
+                standaloneWidgetRemoteView(context, options),
+            )
             delay(900)
           }
         }
@@ -516,7 +551,6 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
  * @property dayLight Whether the widget is for daylight.
  */
 abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
-
   companion object {
     /**
      * Creates a RemoteViews object for a day/night widget.
@@ -529,44 +563,60 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
     fun dayNightLightWidgetRemoteView(
         context: Context,
         dayLight: Boolean,
-        options: StandaloneWidgetOptions
+        options: StandaloneWidgetOptions,
     ): RemoteViews {
       if (ContextCompat.checkSelfPermission(
-          context, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
-          PackageManager.PERMISSION_GRANTED) {
+          context,
+          android.Manifest.permission.ACCESS_COARSE_LOCATION,
+      ) != PackageManager.PERMISSION_GRANTED) {
         return WidgetUtils.createRemoteView(
             context,
-            if (dayLight) context.getString(R.string.day_light)
-            else context.getString(R.string.night_light),
+            if (dayLight) {
+              context.getString(R.string.day_light)
+            } else {
+              context.getString(R.string.night_light)
+            },
             0,
             0,
             SpannableString(""),
-            context.getString(R.string.no_location_permission))
+            context.getString(R.string.no_location_permission),
+        )
       }
 
       val sunriseSunset =
           loadCachedSunriseSunset(context)
               ?: return WidgetUtils.createRemoteView(
                   context,
-                  if (dayLight) context.getString(R.string.day_light)
-                  else context.getString(R.string.night_light),
+                  if (dayLight) {
+                    context.getString(R.string.day_light)
+                  } else {
+                    context.getString(R.string.night_light)
+                  },
                   0,
                   0,
                   SpannableString(""),
-                  "No data, Tap to retry")
+                  "No data, Tap to retry",
+              )
 
       val (startTime, endTime) = sunriseSunset.getStartAndEndTime(dayLight)
       val currentValue =
-          if (dayLight) "🌇 ${sunriseSunset.results[1].sunset}"
-          else "🌅 ${sunriseSunset.results[1].sunrise}"
+          if (dayLight) {
+            "🌇 ${sunriseSunset.results[1].sunset}"
+          } else {
+            "🌅 ${sunriseSunset.results[1].sunrise}"
+          }
       return WidgetUtils.createRemoteView(
           context,
-          if (dayLight) context.getString(R.string.day_light)
-          else context.getString(R.string.night_light),
+          if (dayLight) {
+            context.getString(R.string.day_light)
+          } else {
+            context.getString(R.string.night_light)
+          },
           startTime,
           endTime,
           SpannableString(currentValue),
-          options = options)
+          options = options,
+      )
     }
   }
 
@@ -580,11 +630,13 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
   override fun updateWidget(
       context: Context,
       appWidgetManager: AppWidgetManager,
-      appWidgetId: Int
+      appWidgetId: Int,
   ) {
     val options = StandaloneWidgetOptions.load(context, appWidgetId).copy(widgetType = null)
     appWidgetManager.updateAppWidget(
-        appWidgetId, dayNightLightWidgetRemoteView(context, dayLight, options))
+        appWidgetId,
+        dayNightLightWidgetRemoteView(context, dayLight, options),
+    )
   }
 }
 

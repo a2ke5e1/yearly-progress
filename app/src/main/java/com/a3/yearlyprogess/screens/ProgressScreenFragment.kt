@@ -42,7 +42,6 @@ import kotlinx.coroutines.launch
 
 /** A simple [Fragment] subclass as the default destination in the navigation. */
 class ProgressScreenFragment : Fragment() {
-
   private lateinit var binding: FragmentScreenProgressBinding
 
   private val sunriseSunsetApi: SunriseSunsetApi = provideSunriseSunsetApi()
@@ -53,7 +52,9 @@ class ProgressScreenFragment : Fragment() {
           // Permission is granted. Continue the action or workflow in your
           // app.
           setupDayNightLightProgressView(
-              binding.dayLightProgressView, binding.nightLightProgressView)
+              binding.dayLightProgressView,
+              binding.nightLightProgressView,
+          )
         } else {
 
           locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
@@ -65,7 +66,7 @@ class ProgressScreenFragment : Fragment() {
   override fun onCreateView(
       inflater: LayoutInflater,
       container: ViewGroup?,
-      savedInstanceState: Bundle?
+      savedInstanceState: Bundle?,
   ): View {
     binding = FragmentScreenProgressBinding.inflate(inflater, container, false)
     return binding.root
@@ -74,7 +75,10 @@ class ProgressScreenFragment : Fragment() {
   private lateinit var adLoader: AdLoader
   private lateinit var nativeAdView: NativeAdView
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewCreated(
+      view: View,
+      savedInstanceState: Bundle?,
+  ) {
     super.onViewCreated(view, savedInstanceState)
 
     val dayLight: DayNightLightProgressView = binding.dayLightProgressView
@@ -87,20 +91,23 @@ class ProgressScreenFragment : Fragment() {
         PermissionMessageDialog(
             icon = R.drawable.ic_location_on_24,
             title = getString(R.string.location_permission_title),
-            message = getString(R.string.location_permission_message)) {
-              requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-            }
+            message = getString(R.string.location_permission_message),
+        ) {
+          requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
 
     when {
       ContextCompat.checkSelfPermission(
-          requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) ==
-          PackageManager.PERMISSION_GRANTED -> {
+          requireContext(),
+          Manifest.permission.ACCESS_COARSE_LOCATION,
+      ) == PackageManager.PERMISSION_GRANTED -> {
         setupDayNightLightProgressView(dayLight, nightLight)
       }
 
       ContextCompat.checkSelfPermission(
-          requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) ==
-          PackageManager.PERMISSION_DENIED -> {
+          requireContext(),
+          Manifest.permission.ACCESS_COARSE_LOCATION,
+      ) == PackageManager.PERMISSION_DENIED -> {
         binding.dismissibleMessageView?.visibility = View.VISIBLE
         binding.callToAction?.setOnClickListener {
           requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -109,7 +116,9 @@ class ProgressScreenFragment : Fragment() {
       }
 
       ActivityCompat.shouldShowRequestPermissionRationale(
-          requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) -> {
+          requireActivity(),
+          Manifest.permission.ACCESS_COARSE_LOCATION,
+      ) -> {
         locationPermissionDialog.show(parentFragmentManager, "")
       }
 
@@ -154,20 +163,21 @@ class ProgressScreenFragment : Fragment() {
                     .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_BOTTOM_RIGHT)
                     // Methods in the NativeAdOptions.Builder class can be
                     // used here to specify individual options settings.
-                    .build())
+                    .build(),
+            )
             .build()
     adLoader.loadAd(AdRequest.Builder().build())
   }
 
   private fun setupDayNightLightProgressView(
       dayLight: DayNightLightProgressView,
-      nightLight: DayNightLightProgressView
+      nightLight: DayNightLightProgressView,
   ) {
-
     val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     if (ActivityCompat.checkSelfPermission(
-        requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
-        PackageManager.PERMISSION_GRANTED) {
+        requireContext(),
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+    ) != PackageManager.PERMISSION_GRANTED) {
       return
     }
     binding.dismissibleMessageView?.visibility = View.GONE
@@ -203,68 +213,73 @@ class ProgressScreenFragment : Fragment() {
     locationManager.requestLocationUpdates(
         providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
         2000,
-        1_000f //  12hrs, 200 KM
-        ) { location ->
-          context?.let { cacheLocation(it, location) }
-          lifecycleScope.launch(Dispatchers.IO) {
-            val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
-            if (cachedSunriseSunset != null &&
-                cachedSunriseSunset.results[1].date == getCurrentDate()) {
-              dayLight.loadSunriseSunset(cachedSunriseSunset)
-              nightLight.loadSunriseSunset(cachedSunriseSunset)
+        1_000f, //  12hrs, 200 KM
+    ) { location ->
+      context?.let { cacheLocation(it, location) }
+      lifecycleScope.launch(Dispatchers.IO) {
+        val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
+        if (cachedSunriseSunset != null &&
+            cachedSunriseSunset.results[1].date == getCurrentDate()) {
+          dayLight.loadSunriseSunset(cachedSunriseSunset)
+          nightLight.loadSunriseSunset(cachedSunriseSunset)
+          launch(Dispatchers.Main) {
+            dayLight.visibility = View.VISIBLE
+            nightLight.visibility = View.VISIBLE
+            binding.loadingIndicator?.visibility = View.GONE
+          }
+          return@launch
+        }
+
+        val result: Resource<SunriseSunsetResponse> =
+            try {
+              val response =
+                  sunriseSunsetApi.getSunriseSunset(
+                      location.latitude,
+                      location.longitude,
+                      getDateRange(-1),
+                      getDateRange(+1),
+                  )
+              val result = response.body()
+              if (response.isSuccessful && result != null && result.status == "OK") {
+                cacheSunriseSunset(requireContext(), result)
+                Resource.Success(result)
+              } else {
+                Resource.Error(response.message())
+              }
+            } catch (e: Exception) {
+              Resource.Error(e.message ?: "Error Occurred")
+            }
+
+        when (result) {
+          is Resource.Success -> {
+            result.data?.let {
+              dayLight.loadSunriseSunset(it)
+              nightLight.loadSunriseSunset(it)
               launch(Dispatchers.Main) {
                 dayLight.visibility = View.VISIBLE
                 nightLight.visibility = View.VISIBLE
                 binding.loadingIndicator?.visibility = View.GONE
               }
-              return@launch
-            }
-
-            val result: Resource<SunriseSunsetResponse> =
-                try {
-                  val response =
-                      sunriseSunsetApi.getSunriseSunset(
-                          location.latitude, location.longitude, getDateRange(-1), getDateRange(+1))
-                  val result = response.body()
-                  if (response.isSuccessful && result != null && result.status == "OK") {
-                    cacheSunriseSunset(requireContext(), result)
-                    Resource.Success(result)
-                  } else {
-                    Resource.Error(response.message())
-                  }
-                } catch (e: Exception) {
-                  Resource.Error(e.message ?: "Error Occurred")
-                }
-
-            when (result) {
-              is Resource.Success -> {
-                result.data?.let {
-                  dayLight.loadSunriseSunset(it)
-                  nightLight.loadSunriseSunset(it)
-                  launch(Dispatchers.Main) {
-                    dayLight.visibility = View.VISIBLE
-                    nightLight.visibility = View.VISIBLE
-                    binding.loadingIndicator?.visibility = View.GONE
-                  }
-                }
-              }
-
-              is Resource.Error -> {
-                launch(Dispatchers.Main) {
-                  Toast.makeText(
-                          context,
-                          getString(R.string.failed_to_load_sunset_sunrise_time),
-                          Toast.LENGTH_LONG)
-                      .show()
-                  dayLight.visibility = View.GONE
-                  nightLight.visibility = View.GONE
-                  binding.loadingIndicator?.visibility = View.GONE
-                }
-                return@launch
-              }
             }
           }
+
+          is Resource.Error -> {
+            launch(Dispatchers.Main) {
+              Toast.makeText(
+                      context,
+                      getString(R.string.failed_to_load_sunset_sunrise_time),
+                      Toast.LENGTH_LONG,
+                  )
+                  .show()
+              dayLight.visibility = View.GONE
+              nightLight.visibility = View.GONE
+              binding.loadingIndicator?.visibility = View.GONE
+            }
+            return@launch
+          }
         }
+      }
+    }
   }
 
   override fun onDestroyView() {

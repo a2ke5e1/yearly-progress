@@ -28,8 +28,10 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
-
-  override fun onReceive(context: Context, intent: Intent) {
+  override fun onReceive(
+      context: Context,
+      intent: Intent,
+  ) {
     // wake the device
     // WakeLocker.acquire(context)
     val widgetIntentsAndComponents =
@@ -41,7 +43,8 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
             AllInWidget::class.java,
             EventWidget::class.java,
             DayLightWidget::class.java,
-            NightLightWidget::class.java)
+            NightLightWidget::class.java,
+        )
 
     // force widget update
 
@@ -84,21 +87,25 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
             val startDateRange =
                 "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${
                                 cal.get(
-                                    Calendar.DATE
+                                    Calendar.DATE,
                                 )
                             }"
             cal.add(Calendar.DATE, 2)
             val endDateRange =
                 "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${
                                 cal.get(
-                                    Calendar.DATE
+                                    Calendar.DATE,
                                 )
                             }"
 
             try {
               val response =
                   sunriseSunsetApi.getSunriseSunset(
-                      location.latitude, location.longitude, startDateRange, endDateRange)
+                      location.latitude,
+                      location.longitude,
+                      startDateRange,
+                      endDateRange,
+                  )
               val result = response.body()
               if (response.isSuccessful && result != null && result.status == "OK") {
                 cacheSunriseSunset(context, result)
