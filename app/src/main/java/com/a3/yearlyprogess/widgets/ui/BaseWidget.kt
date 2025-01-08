@@ -10,8 +10,11 @@ import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 
 abstract class BaseWidget : AppWidgetProvider() {
-
-  abstract fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int)
+  abstract fun updateWidget(
+      context: Context,
+      appWidgetManager: AppWidgetManager,
+      appWidgetId: Int,
+  )
 
   override fun onEnabled(context: Context) {
     super.onEnabled(context)
@@ -23,7 +26,7 @@ abstract class BaseWidget : AppWidgetProvider() {
   override fun onUpdate(
       context: Context,
       appWidgetManager: AppWidgetManager,
-      appWidgetIds: IntArray
+      appWidgetIds: IntArray,
   ) {
     // There may be multiple widgets active, so update all of them
     for (appWidgetId in appWidgetIds) {
@@ -35,7 +38,7 @@ abstract class BaseWidget : AppWidgetProvider() {
       context: Context,
       appWidgetManager: AppWidgetManager,
       appWidgetId: Int,
-      newOptions: Bundle?
+      newOptions: Bundle?,
   ) {
     updateAppWidget(context, appWidgetManager, appWidgetId)
   }
@@ -43,7 +46,6 @@ abstract class BaseWidget : AppWidgetProvider() {
   // Checks if any other widgets are active.
   // If not, cancels the alarm.
   override fun onDisabled(context: Context) {
-
     val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
 
     val widgetIntentsAndComponents =
@@ -53,7 +55,8 @@ abstract class BaseWidget : AppWidgetProvider() {
             MonthWidget::class.java,
             YearWidget::class.java,
             AllInWidget::class.java,
-            EventWidget::class.java)
+            EventWidget::class.java,
+        )
 
     var totalWidgets = 0
     widgetIntentsAndComponents.forEach {
@@ -74,7 +77,7 @@ abstract class BaseWidget : AppWidgetProvider() {
   private fun updateAppWidget(
       context: Context,
       appWidgetManager: AppWidgetManager,
-      appWidgetId: Int
+      appWidgetId: Int,
   ) {
     // Log.d("updateAppWidget", widgetServiceType.toString())
     updateWidget(context, appWidgetManager, appWidgetId)

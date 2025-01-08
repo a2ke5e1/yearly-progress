@@ -4,7 +4,6 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.icu.text.SimpleDateFormat
-import android.text.SpannableString
 import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.util.Log
@@ -17,8 +16,8 @@ import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
-import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.*
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class EventDetailView
@@ -27,9 +26,8 @@ constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
+    defStyleRes: Int = 0,
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes), CoroutineScope {
-
   override val coroutineContext: CoroutineContext
     get() = Dispatchers.IO + job
 
@@ -48,7 +46,6 @@ constructor(
   }
 
   fun setEvent(event: Event) {
-
     // cancel the previous job
     job.cancel()
     // make a job
@@ -64,19 +61,20 @@ constructor(
 
     binding.eventStart.text =
         displayRelativeDifferenceMessage(
-            context, event.eventStartTime.time, event.eventEndTime.time, event.allDayEvent)
+            context,
+            event.eventStartTime.time,
+            event.eventEndTime.time,
+            event.allDayEvent,
+        )
     // binding.eventEnd.visibility = View.GONE
 
     launch(Dispatchers.IO) {
+      val (start, end) = event.nextStartAndEndTime()
+      val newProgress = calculateProgress(context, start, end)
 
-
-        val (start, end) =  event.nextStartAndEndTime()
-        val newProgress = calculateProgress(context, start, end)
-
-        // eventStartTimeInMills = newEventStart
-        // eventEndDateTimeInMillis = newEventEnd
-        var progress = newProgress
-
+      // eventStartTimeInMills = newEventStart
+      // eventEndDateTimeInMillis = newEventEnd
+      var progress = newProgress
 
       progress = if (progress > 100) 100.0 else progress
       progress = if (progress < 0) 0.0 else progress
@@ -84,20 +82,17 @@ constructor(
       launch(Dispatchers.Main) { updateView(progress) }
 
       while (true) {
-
         val decimalPlace: Int =
             settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
 
-
-        val (_start, _end) =  event.nextStartAndEndTime()
+        val (_start, _end) = event.nextStartAndEndTime()
         val _newProgress = calculateProgress(context, _start, _end)
         Log.d("EventDetailView", "EventDetailView: $newProgress")
         Log.d("EventDetailView", "EventDetailView: $_start $_end")
 
-          // eventStartTimeInMills = newEventStart
-          // eventEndDateTimeInMillis = newEventEnd
-          progress = _newProgress
-
+        // eventStartTimeInMills = newEventStart
+        // eventEndDateTimeInMillis = newEventEnd
+        progress = _newProgress
 
         progress = if (progress > 100) 100.0 else progress
         progress = if (progress < 0) 0.0 else progress
@@ -114,8 +109,7 @@ constructor(
           }
 
           binding.eventStart.text =
-              displayRelativeDifferenceMessage(
-                  context, _start, _end, event.allDayEvent)
+              displayRelativeDifferenceMessage(context, _start, _end, event.allDayEvent)
           // binding.eventEnd.visibility = View.GONE
 
           binding.progressText.text = progressText
@@ -127,8 +121,10 @@ constructor(
     }
   }
 
-  private fun updateView(progress: Double, animate: Boolean = true) {
-
+  private fun updateView(
+      progress: Double,
+      animate: Boolean = true,
+  ) {
     val decimalPlace: Int =
         settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
 
@@ -147,8 +143,7 @@ constructor(
     }
 
     progressTextValueAnimator.addUpdateListener {
-      binding.progressText.text =
-          progress.styleFormatted(decimalPlace)
+      binding.progressText.text = progress.styleFormatted(decimalPlace)
     }
 
     progressBarValueAnimator.start()
@@ -165,7 +160,6 @@ constructor(
   }
 
   companion object {
-
     /**
      * It will return a string that will display relative difference between two dates such as if
      * there is difference is time but not in day then it will display Aug 12, 2023 12:00 AM - 11:59
@@ -181,15 +175,16 @@ constructor(
         context: Context,
         startTime: Long,
         endTime: Long,
-        allDayEvent: Boolean
+        allDayEvent: Boolean,
     ): String {
-
       val startDay = SimpleDateFormat.getDateInstance().format(startTime)
       val endDay = SimpleDateFormat.getDateInstance().format(endTime)
 
       val startTimeString =
           DateFormat.format(
-                  if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a", startTime)
+                  if (DateFormat.is24HourFormat(context)) "HH:mm" else "hh:mm a",
+                  startTime,
+              )
               .toString()
               .uppercase()
       val endTimeString =
@@ -200,12 +195,18 @@ constructor(
       // long dash unicode is \u2014
 
       return if (allDayEvent) {
-        "${DateFormat.format("MMM dd, yyyy", startTime)} \u2014 ${DateFormat.format("MMM dd, yyyy", endTime)} \u00B7 ${ContextCompat.getString(context, R.string.all_day)}"
+        "${DateFormat.format(
+                        "MMM dd, yyyy",
+                        startTime,
+                    )} \u2014 ${DateFormat.format("MMM dd, yyyy", endTime)} \u00B7 ${ContextCompat.getString(context, R.string.all_day)}"
       } else {
         if (startDay == endDay) {
           "${DateFormat.format("MMM dd, yyyy", startTime)} \u00B7 $startTimeString \u2014 $endTimeString"
         } else {
-          "${DateFormat.format("MMM dd, yyyy ", startTime)} $startTimeString \u2014 ${DateFormat.format("MMM dd, yyyy", endTime)} $endTimeString"
+          "${DateFormat.format(
+                            "MMM dd, yyyy ",
+                            startTime,
+                        )} $startTimeString \u2014 ${DateFormat.format("MMM dd, yyyy", endTime)} $endTimeString"
         }
       }
     }

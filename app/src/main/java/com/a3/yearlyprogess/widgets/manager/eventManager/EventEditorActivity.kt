@@ -32,7 +32,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class EventEditorActivity : AppCompatActivity() {
-
   private lateinit var binding: ActivityEventManagerActivityBinding
   private val mEventViewModel: EventViewModel by viewModels()
 
@@ -77,16 +76,16 @@ class EventEditorActivity : AppCompatActivity() {
       eventStartHour = localCalendar.get(Calendar.HOUR_OF_DAY)
       eventStartMinute = localCalendar.get(Calendar.MINUTE)
 
-      binding.editTextStartDate.setText(
-          format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString())
-      binding.editTextStartTime.setText(getHourMinuteLocal(eventStartDateTimeInMillis))
+      binding.editTextStartDate.text =
+          format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
+      binding.editTextStartTime.text = getHourMinuteLocal(eventStartDateTimeInMillis)
 
       localCalendar.timeInMillis = eventEndDateTimeInMillis
       eventEndHour = localCalendar.get(Calendar.HOUR_OF_DAY)
       eventEndMinute = localCalendar.get(Calendar.MINUTE)
 
-      binding.editTextEndDate.setText(format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString())
-      binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
+      binding.editTextEndDate.text = format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
+      binding.editTextEndTime.text = getHourMinuteLocal(eventEndDateTimeInMillis)
     }
 
     val appWidgetId =
@@ -109,7 +108,8 @@ class EventEditorActivity : AppCompatActivity() {
 
     Log.d(
         "TAG",
-        "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}")
+        "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}",
+    )
   }
 
   private fun handleRepeatEventSwitch() {
@@ -160,7 +160,6 @@ class EventEditorActivity : AppCompatActivity() {
 
   private fun handleAllDayTimeOffset(isChecked: Boolean) {
     if (isChecked) {
-
       val localCalendar = Calendar.getInstance()
       localCalendar.timeInMillis = eventStartDateTimeInMillis
       localCalendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -178,7 +177,6 @@ class EventEditorActivity : AppCompatActivity() {
 
       eventEndDateTimeInMillis = localCalendar.timeInMillis
     } else {
-
       val localCalendar = Calendar.getInstance()
       localCalendar.timeInMillis = eventStartDateTimeInMillis
 
@@ -220,9 +218,12 @@ class EventEditorActivity : AppCompatActivity() {
 
               eventStartDateTimeInMillis = it.toLong()
               handleAllDayTimeOffset(binding.allDaySwitch.isChecked)
-              binding.editTextStartDate.setText(
-                  if (isEveryYearChecked) format("MMMM dd", eventStartDateTimeInMillis).toString()
-                  else format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString())
+              binding.editTextStartDate.text =
+                  if (isEveryYearChecked) {
+                    format("MMMM dd", eventStartDateTimeInMillis).toString()
+                  } else {
+                    format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
+                  }
               setUpDateTimePickers()
             }
           }
@@ -241,12 +242,15 @@ class EventEditorActivity : AppCompatActivity() {
 
               eventStartDateTimeInMillis =
                   modifiedEventDateTime(
-                      eventStartDateTimeInMillis, eventStartHour, eventStartMinute)
+                      eventStartDateTimeInMillis,
+                      eventStartHour,
+                      eventStartMinute,
+                  )
 
-              binding.editTextStartTime.setText(getHourMinuteLocal(eventStartDateTimeInMillis))
+              binding.editTextStartTime.text = getHourMinuteLocal(eventStartDateTimeInMillis)
 
-              binding.editTextStartDate.setText(
-                  format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString())
+              binding.editTextStartDate.text =
+                  format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
 
               setUpDateTimePickers()
             }
@@ -264,9 +268,12 @@ class EventEditorActivity : AppCompatActivity() {
 
               eventEndDateTimeInMillis = it.toLong()
               handleAllDayTimeOffset(binding.allDaySwitch.isChecked)
-              binding.editTextEndDate.setText(
-                  if (isEveryYearChecked) format("MMMM dd", eventEndDateTimeInMillis).toString()
-                  else format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString())
+              binding.editTextEndDate.text =
+                  if (isEveryYearChecked) {
+                    format("MMMM dd", eventEndDateTimeInMillis).toString()
+                  } else {
+                    format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
+                  }
               setUpDateTimePickers()
             }
           }
@@ -286,20 +293,21 @@ class EventEditorActivity : AppCompatActivity() {
               eventEndDateTimeInMillis =
                   modifiedEventDateTime(eventEndDateTimeInMillis, eventEndHour, eventEndMinute)
 
-              binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
-              binding.editTextEndDate.setText(
-                  format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString())
+              binding.editTextEndTime.text = getHourMinuteLocal(eventEndDateTimeInMillis)
+              binding.editTextEndDate.text =
+                  format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
               setUpDateTimePickers()
             }
           }
     }
   }
 
-  private fun setUpToolbarActions(isAddMode: Boolean, event: Event?) {
-
+  private fun setUpToolbarActions(
+      isAddMode: Boolean,
+      event: Event?,
+  ) {
     binding.eventTitle.requestFocus()
-    val inputMethodManager =
-        this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    val inputMethodManager = this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.showSoftInput(binding.eventTitle, InputMethodManager.SHOW_IMPLICIT)
 
     binding.eventTitle.setOnEditorActionListener { v, actionId, event ->
@@ -317,7 +325,6 @@ class EventEditorActivity : AppCompatActivity() {
     binding.materialToolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.save_config -> {
-
           if (binding.eventTitle.text.toString().isEmpty()) {
             binding.eventTitleContainer.error = "Event title is required"
             return@setOnMenuItemClickListener true
@@ -333,7 +340,8 @@ class EventEditorActivity : AppCompatActivity() {
                     binding.allDaySwitch.isChecked,
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
-                    repeatDays)
+                    repeatDays,
+                )
             mEventViewModel.updateEvent(updatedEvent)
 
             val appWidgetManager = AppWidgetManager.getInstance(this)
@@ -341,7 +349,7 @@ class EventEditorActivity : AppCompatActivity() {
                 appWidgetManager.getAppWidgetIds(ComponentName(this, EventWidget::class.java))
 
             appWidgetIds.forEach { appWidgetId ->
-              val pref = getSharedPreferences("eventWidget_${appWidgetId}", MODE_PRIVATE)
+              val pref = getSharedPreferences("eventWidget_$appWidgetId", MODE_PRIVATE)
               val prefEventId = pref.getInt("eventId", -1)
               if (prefEventId == updatedEvent.id) {
                 val edit = pref.edit()
@@ -354,7 +362,9 @@ class EventEditorActivity : AppCompatActivity() {
                 edit.putLong("eventStartTimeInMills", updatedEvent.eventStartTime.time)
                 edit.putLong("eventEndDateTimeInMillis", updatedEvent.eventEndTime.time)
                 edit.putString(
-                    "eventRepeatDays", conv.fromRepeatDaysList(updatedEvent.repeatEventDays))
+                    "eventRepeatDays",
+                    conv.fromRepeatDaysList(updatedEvent.repeatEventDays),
+                )
 
                 edit.commit()
                 EventWidget().updateWidget(this, appWidgetManager, appWidgetId)
@@ -370,7 +380,9 @@ class EventEditorActivity : AppCompatActivity() {
                     binding.allDaySwitch.isChecked,
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
-                    repeatDays))
+                    repeatDays,
+                ),
+            )
           }
 
           finish()
@@ -389,12 +401,14 @@ class EventEditorActivity : AppCompatActivity() {
   }
 
   private fun getHourMinuteLocal(time: Long): String {
-    return if (is24HourFormat(this)) SimpleDateFormat("HH:mm", Locale.getDefault()).format(time)
-    else SimpleDateFormat("hh:mm a", Locale.getDefault()).format(time)
+    return if (is24HourFormat(this)) {
+      SimpleDateFormat("HH:mm", Locale.getDefault()).format(time)
+    } else {
+      SimpleDateFormat("hh:mm a", Locale.getDefault()).format(time)
+    }
   }
 
   private fun loadWidgetDataFromEvent(event: Event) {
-
     binding.eventTitle.setText(event.eventTitle)
     binding.eventDesc.setText(event.eventDescription)
     binding.allDaySwitch.isChecked = event.allDayEvent
@@ -409,21 +423,24 @@ class EventEditorActivity : AppCompatActivity() {
     eventStartHour = localCalendar.get(Calendar.HOUR_OF_DAY)
     eventStartMinute = localCalendar.get(Calendar.MINUTE)
 
-    binding.editTextStartDate.setText(
-        format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString())
-    binding.editTextStartTime.setText(getHourMinuteLocal(eventStartDateTimeInMillis))
+    binding.editTextStartDate.text = format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
+    binding.editTextStartTime.text = getHourMinuteLocal(eventStartDateTimeInMillis)
 
     localCalendar.timeInMillis = eventEndDateTimeInMillis
     eventEndHour = localCalendar.get(Calendar.HOUR_OF_DAY)
     eventEndMinute = localCalendar.get(Calendar.MINUTE)
 
-    binding.editTextEndDate.setText(format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString())
-    binding.editTextEndTime.setText(getHourMinuteLocal(eventEndDateTimeInMillis))
+    binding.editTextEndDate.text = format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
+    binding.editTextEndTime.text = getHourMinuteLocal(eventEndDateTimeInMillis)
 
     setRepeatDays(event.repeatEventDays)
   }
 
-  private fun modifiedEventDateTime(date: Long, hour: Int, min: Int): Long {
+  private fun modifiedEventDateTime(
+      date: Long,
+      hour: Int,
+      min: Int,
+  ): Long {
     val localCalendar = Calendar.getInstance()
     localCalendar.timeInMillis = date
     localCalendar.set(Calendar.MINUTE, min)
@@ -498,7 +515,8 @@ class EventEditorActivity : AppCompatActivity() {
                   RepeatDays.WEDNESDAY,
                   RepeatDays.THURSDAY,
                   RepeatDays.FRIDAY,
-                  RepeatDays.SATURDAY)
+                  RepeatDays.SATURDAY,
+              )
         }
 
     binding.repeatWeekdaysSwitch.isChecked = checkRepeatWeekdays

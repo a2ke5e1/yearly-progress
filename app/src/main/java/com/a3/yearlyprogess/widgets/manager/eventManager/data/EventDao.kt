@@ -12,7 +12,6 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 
 @Dao
 interface EventDao {
-
   @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun addEvent(event: Event)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun addAllEvents(events: List<Event>)
@@ -31,6 +30,7 @@ interface EventDao {
   @Query("SELECT * FROM event_table ORDER BY id ASC") fun getAllEvent(): LiveData<List<Event>>
 
   @Query(
-      "SELECT * FROM event_table WHERE eventTitle LIKE '%'||:query||'%' OR eventDescription LIKE '%'||:query||'%' ORDER BY id ASC")
+      "SELECT * FROM event_table WHERE eventTitle LIKE '%'||:query||'%' OR eventDescription LIKE '%'||:query||'%' ORDER BY id ASC",
+  )
   suspend fun filterEvent(query: String): List<Event>
 }

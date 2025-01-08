@@ -12,7 +12,6 @@ import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.loadCachedLocation
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.provideSunriseSunsetApi
-import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayLightWidget
@@ -22,15 +21,17 @@ import com.a3.yearlyprogess.widgets.ui.MonthWidget
 import com.a3.yearlyprogess.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.widgets.ui.YearWidget
+import java.util.Calendar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
-
-  override fun onReceive(context: Context, intent: Intent) {
+  override fun onReceive(
+      context: Context,
+      intent: Intent,
+  ) {
     // wake the device
     // WakeLocker.acquire(context)
     val widgetIntentsAndComponents =
@@ -42,7 +43,8 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
             AllInWidget::class.java,
             EventWidget::class.java,
             DayLightWidget::class.java,
-            NightLightWidget::class.java)
+            NightLightWidget::class.java,
+        )
 
     // force widget update
 
@@ -85,21 +87,25 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
             val startDateRange =
                 "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${
                                 cal.get(
-                                    Calendar.DATE
+                                    Calendar.DATE,
                                 )
                             }"
             cal.add(Calendar.DATE, 2)
             val endDateRange =
                 "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH) + 1}-${
                                 cal.get(
-                                    Calendar.DATE
+                                    Calendar.DATE,
                                 )
                             }"
 
             try {
               val response =
                   sunriseSunsetApi.getSunriseSunset(
-                      location.latitude, location.longitude, startDateRange, endDateRange)
+                      location.latitude,
+                      location.longitude,
+                      startDateRange,
+                      endDateRange,
+                  )
               val result = response.body()
               if (response.isSuccessful && result != null && result.status == "OK") {
                 cacheSunriseSunset(context, result)
@@ -122,16 +128,16 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
       WidgetUpdateAlarmHandler(context).cancelAlarmManager()
     }
 
-      val yearlyProgressNotification = YearlyProgressNotification(context)
+    val yearlyProgressNotification = YearlyProgressNotification(context)
 
-      if (yearlyProgressNotification.hasNotificationPermission()) {
-          val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
-          widgetUpdateAlarmHandler.cancelAlarmManager()
-          widgetUpdateAlarmHandler.setAlarmManager()
-          yearlyProgressNotification.showProgressNotification()
-      } else {
-          yearlyProgressNotification.hideProgressNotification()
-      }
+    if (yearlyProgressNotification.hasNotificationPermission()) {
+      val widgetUpdateAlarmHandler = WidgetUpdateAlarmHandler(context)
+      widgetUpdateAlarmHandler.cancelAlarmManager()
+      widgetUpdateAlarmHandler.setAlarmManager()
+      yearlyProgressNotification.showProgressNotification()
+    } else {
+      yearlyProgressNotification.hideProgressNotification()
+    }
 
     // go back to sleep
     // WakeLocker.release()

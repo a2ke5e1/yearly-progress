@@ -17,11 +17,11 @@ import com.a3.yearlyprogess.getCurrentPeriodValue
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.*
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.*
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class ProgressCardView
@@ -32,7 +32,6 @@ constructor(
     defStyle: Int = 0,
     defStyleRes: Int = 0,
 ) : LinearLayout(context, attrs, defStyle, defStyleRes), CoroutineScope {
-
   override val coroutineContext: CoroutineContext
     get() = Dispatchers.IO + job
 
@@ -104,7 +103,6 @@ constructor(
 
   @SuppressLint("SetTextI18n")
   private fun updateView(progress: Double) {
-
     val pref = PreferenceManager.getDefaultSharedPreferences(context)
     val decimalPlace: Int = pref.getInt(context.getString(R.string.app_widget_decimal_point), 13)
 

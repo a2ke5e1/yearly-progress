@@ -16,7 +16,6 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class SettingsActivity : AppCompatActivity() {
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.settings_activity)
@@ -38,7 +37,10 @@ class SettingsActivity : AppCompatActivity() {
   }
 
   class SettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    override fun onCreatePreferences(
+        savedInstanceState: Bundle?,
+        rootKey: String?,
+    ) {
       setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
       val updateFrequencyPreference =
@@ -51,28 +53,26 @@ class SettingsActivity : AppCompatActivity() {
         (value as? Int ?: 5).toDuration(DurationUnit.SECONDS).toString()
       }
 
-        val notificationPref =
-            findPreference<Preference>(getString(R.string.progress_show_notification))
-        notificationPref?.setOnPreferenceChangeListener { _, newValue ->
-          if (newValue == true) {
-            val notificationHelper = YearlyProgressNotification(requireContext())
-            if (!notificationHelper.hasAppNotificationPermission()) {
-              notificationHelper.requestNotificationPermission(requireActivity())
-              return@setOnPreferenceChangeListener false
-            }
+      val notificationPref =
+          findPreference<Preference>(getString(R.string.progress_show_notification))
+      notificationPref?.setOnPreferenceChangeListener { _, newValue ->
+        if (newValue == true) {
+          val notificationHelper = YearlyProgressNotification(requireContext())
+          if (!notificationHelper.hasAppNotificationPermission()) {
+            notificationHelper.requestNotificationPermission(requireActivity())
+            return@setOnPreferenceChangeListener false
           }
-            val widgetUpdateServiceIntent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
-            context?.sendBroadcast(widgetUpdateServiceIntent)
-            true
         }
-
+        val widgetUpdateServiceIntent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+        context?.sendBroadcast(widgetUpdateServiceIntent)
+        true
+      }
     }
 
-
-      private fun updatePreferenceSummary(
+    private fun updatePreferenceSummary(
         preference: Preference?,
         defaultSummary: String,
-        formatValue: (Any?) -> String
+        formatValue: (Any?) -> String,
     ) {
       preference?.let {
         val currentValue = it.sharedPreferences?.all?.get(it.key) ?: return

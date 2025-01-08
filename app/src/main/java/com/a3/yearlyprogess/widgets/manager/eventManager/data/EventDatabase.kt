@@ -13,7 +13,6 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 @Database(entities = [Event::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class EventDatabase : RoomDatabase() {
-
   abstract fun eventDao(): EventDao
 
   companion object {
@@ -27,7 +26,10 @@ abstract class EventDatabase : RoomDatabase() {
       synchronized(this) {
         val instance =
             Room.databaseBuilder(
-                    context.applicationContext, EventDatabase::class.java, "event_database")
+                    context.applicationContext,
+                    EventDatabase::class.java,
+                    "event_database",
+                )
                 .addMigrations(MIGRATION_1_2)
                 .fallbackToDestructiveMigration()
                 .build()
@@ -40,7 +42,8 @@ abstract class EventDatabase : RoomDatabase() {
         object : Migration(1, 2) {
           override fun migrate(db: SupportSQLiteDatabase) {
             db.execSQL(
-                "ALTER TABLE event_table ADD COLUMN repeatEventDays TEXT NOT NULL DEFAULT ''")
+                "ALTER TABLE event_table ADD COLUMN repeatEventDays TEXT NOT NULL DEFAULT ''",
+            )
           }
         }
   }

@@ -16,16 +16,16 @@ import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class DayNightLightProgressView
@@ -36,7 +36,6 @@ constructor(
     defStyle: Int = 0,
     defStyleRes: Int = 0,
 ) : LinearLayout(context, attrs, defStyle, defStyleRes), CoroutineScope {
-
   override val coroutineContext: CoroutineContext
     get() = Dispatchers.IO + job
 
@@ -77,19 +76,22 @@ constructor(
 
     // data that doesn't change
     titleTextView.text =
-        if (dayLight) ContextCompat.getString(context, R.string.day_light)
-        else ContextCompat.getString(context, R.string.night_light)
+        if (dayLight) {
+          ContextCompat.getString(context, R.string.day_light)
+        } else {
+          ContextCompat.getString(context, R.string.night_light)
+        }
 
     // update the progress every seconds
     launch(Dispatchers.IO) {
       while (true) {
         val progress: Double = calculateProgress(context, startTime, endTime)
 
-          val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
-          numberFormat.maximumFractionDigits = 0
+        val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
+        numberFormat.maximumFractionDigits = 0
 
-          val totalSeconds = (endTime - startTime) / 1000
-          val formattedTotalSeconds = numberFormat.format(totalSeconds)
+        val totalSeconds = (endTime - startTime) / 1000
+        val formattedTotalSeconds = numberFormat.format(totalSeconds)
 
         launch(Dispatchers.Main) {
           val currentPeriodValue =
@@ -97,19 +99,23 @@ constructor(
                 context.getString(
                     R.string.today_sunrise_at_and_sunset_at,
                     startTime.toFormattedDateText(),
-                    endTime.toFormattedDateText())
+                    endTime.toFormattedDateText(),
+                )
               } else {
                 context.getString(
                     R.string.last_night_s_sunset_was_at_and_next_sunrise_will_be_at,
                     startTime.toFormattedDateText(),
-                    endTime.toFormattedDateText())
+                    endTime.toFormattedDateText(),
+                )
               }
           widgetDataTextView.text = currentPeriodValue
           widgetDataTextView.textSize = 12f
           widgetDataTextView.setTypeface(null, Typeface.NORMAL)
           widgetDataTextView.setTextColor(
-              ContextCompat.getColor(context, R.color.widget_text_color_tertiary))
-          widgetDataInfoTextView.text = context.getString(R.string.of_seconds, formattedTotalSeconds)
+              ContextCompat.getColor(context, R.color.widget_text_color_tertiary),
+          )
+          widgetDataInfoTextView.text =
+              context.getString(R.string.of_seconds, formattedTotalSeconds)
           updateView(progress)
         }
         delay(1000)
@@ -119,7 +125,6 @@ constructor(
 
   @SuppressLint("SetTextI18n")
   private fun updateView(progress: Double) {
-
     val pref = PreferenceManager.getDefaultSharedPreferences(context)
     val decimalPlace: Int = pref.getInt(context.getString(R.string.app_widget_decimal_point), 13)
 

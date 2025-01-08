@@ -15,7 +15,8 @@ object WakeLocker {
             PowerManager.PARTIAL_WAKE_LOCK or
                 PowerManager.ACQUIRE_CAUSES_WAKEUP or
                 PowerManager.ON_AFTER_RELEASE,
-            "WIDGET: Wake lock acquired!")
+            "WIDGET: Wake lock acquired!",
+        )
     wakeLock?.acquire(2000)
   }
 

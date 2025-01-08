@@ -31,12 +31,11 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDao
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.google.android.material.datepicker.MaterialDatePicker
+import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class ImportEventCalendarActivity : AppCompatActivity() {
-
   private lateinit var binding: ActivityImportEventCalendarBinding
   private var tracker: SelectionTracker<Long>? = null
   private val adapter = ImportEventAdapter(mutableListOf())
@@ -52,9 +51,10 @@ class ImportEventCalendarActivity : AppCompatActivity() {
         PermissionMessageDialog(
             icon = R.drawable.ic_outline_edit_calendar_24,
             title = getString(R.string.calendar_permission_title),
-            message = getString(R.string.calendar_permission_message)) {
-              requestPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
-            }
+            message = getString(R.string.calendar_permission_message),
+        ) {
+          requestPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+        }
 
     binding.toolbar.title = getString(R.string.events_imports)
     setSupportActionBar(binding.toolbar)
@@ -66,7 +66,9 @@ class ImportEventCalendarActivity : AppCompatActivity() {
       }
 
       ActivityCompat.shouldShowRequestPermissionRationale(
-          this, Manifest.permission.READ_CALENDAR) -> {
+          this,
+          Manifest.permission.READ_CALENDAR,
+      ) -> {
         calendarPermissionDialog.show(supportFragmentManager, "calendar_permission_dialog")
       }
 
@@ -101,10 +103,16 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                   CalendarContract.Events.TITLE,
                   CalendarContract.Events.DESCRIPTION,
                   CalendarContract.Events.DTSTART,
-                  CalendarContract.Events.DTEND)
+                  CalendarContract.Events.DTEND,
+              )
           val cursor =
               contentResolver.query(
-                  uri, projection, null, null, "${CalendarContract.Events.DTSTART} DESC")
+                  uri,
+                  projection,
+                  null,
+                  null,
+                  "${CalendarContract.Events.DTSTART} DESC",
+              )
           cursor?.use {
             val titleColumn = it.getColumnIndex(CalendarContract.Events.TITLE)
             val descriptionColumn = it.getColumnIndex(CalendarContract.Events.DESCRIPTION)
@@ -124,7 +132,8 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                         eventTitle = title,
                         eventDescription = description,
                         eventStartTime = Date(dtStart),
-                        eventEndTime = Date(dtEnd))
+                        eventEndTime = Date(dtEnd),
+                    )
                 eventList.add(event)
               } catch (e: Exception) {
                 Log.d("YearlyProgress.ImportFailed", "${e.printStackTrace()}")
@@ -136,7 +145,10 @@ class ImportEventCalendarActivity : AppCompatActivity() {
         .invokeOnCompletion { runOnUiThread { setupUI(eventList, eventDao) } }
   }
 
-  private fun setupUI(eventList: MutableList<Event>, eventDao: EventDao) {
+  private fun setupUI(
+      eventList: MutableList<Event>,
+      eventDao: EventDao,
+  ) {
     binding.progressBar.visibility = View.GONE
     adapter.setEvents(eventList)
     binding.importedEventCalendarRecyclerView.adapter = adapter
@@ -147,7 +159,8 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 binding.importedEventCalendarRecyclerView,
                 ImportEventItemKeyProvider(binding.importedEventCalendarRecyclerView),
                 ImportEventItemDetailsLookup(binding.importedEventCalendarRecyclerView),
-                StorageStrategy.createLongStorage())
+                StorageStrategy.createLongStorage(),
+            )
             .withSelectionPredicate(SelectionPredicates.createSelectAnything())
             .build()
     tracker?.let { adapter.tracker = it }
@@ -158,7 +171,8 @@ class ImportEventCalendarActivity : AppCompatActivity() {
             super.onSelectionChanged()
             Log.d("TAG", "onCreateView: ${adapter.getSelectedEvents()}")
           }
-        })
+        },
+    )
 
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
@@ -193,14 +207,19 @@ class ImportEventCalendarActivity : AppCompatActivity() {
 
     binding.importedEventCalendarRecyclerView.addOnScrollListener(
         object : RecyclerView.OnScrollListener() {
-          override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+          override fun onScrolled(
+              recyclerView: RecyclerView,
+              dx: Int,
+              dy: Int,
+          ) {
             if (dy > 0 && binding.importEventsFab.visibility == View.VISIBLE) {
               binding.importEventsFab.hide()
             } else if (dy < 0 && binding.importEventsFab.visibility != View.VISIBLE) {
               binding.importEventsFab.show()
             }
           }
-        })
+        },
+    )
 
     binding.importEventsFab.setOnClickListener {
       lifecycleScope
