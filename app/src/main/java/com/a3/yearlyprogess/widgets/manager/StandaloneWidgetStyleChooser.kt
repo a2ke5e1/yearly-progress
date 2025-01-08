@@ -123,7 +123,7 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
     }
 
     binding.dynamicLeftCounter.setOnCheckedChangeListener { _, isChecked ->
-      options = options.copy(dynamicLeftCounter = isChecked)
+        options = options.copy(dynamicLeftCounter = isChecked)
         if (isChecked) {
             options = options.copy(timeLeftCounter = true)
             binding.leftCounter.isChecked = true
@@ -144,21 +144,21 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
     }
 
     binding.backgroundSlider.addOnChangeListener { _, value, _ ->
-      options = options.copy(backgroundTransparency = (value).toInt())
+        options = options.copy(backgroundTransparency = (value).toInt())
         options.save(this)
       inflateRemoteViewPreview(
           binding.rectBtn,
           binding.rectContainer,
           options.copy(
-              shape = WidgetShape.RECTANGLE, backgroundTransparency = (value * 100).toInt()))
+              shape = WidgetShape.RECTANGLE, backgroundTransparency = (value).toInt()))
       inflateRemoteViewPreview(
           binding.cloverBtn,
           binding.cloverContainer,
-          options.copy(shape = WidgetShape.CLOVER, backgroundTransparency = (value * 100).toInt()))
+          options.copy(shape = WidgetShape.CLOVER, backgroundTransparency = (value).toInt()))
       inflateRemoteViewPreview(
           binding.pillBtn,
           binding.pillContainer,
-          options.copy(shape = WidgetShape.PILL, backgroundTransparency = (value * 100).toInt()))
+          options.copy(shape = WidgetShape.PILL, backgroundTransparency = (value).toInt()))
     }
   }
 
