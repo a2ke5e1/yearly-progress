@@ -15,8 +15,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 103
-        versionName = "2.14.15"
+        versionCode = 105
+        versionName = "2.14.17"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 
@@ -91,7 +91,7 @@ dependencies {
     androidTestImplementation("androidx.room:room-testing:$roomVersion")
 
     // Room backup and restore
-    implementation("de.raphaelebner:roomdatabasebackup:1.0.0-beta14")
+    implementation("de.raphaelebner:roomdatabasebackup:1.0.2")
 
     // Lifecycle Components
     val lifecycleVersion = "2.8.7"
