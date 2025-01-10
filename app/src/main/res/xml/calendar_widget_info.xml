@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/calendar_widget_description"
+    android:initialKeyguardLayout="@layout/calendar_widget_layout"
+    android:initialLayout="@layout/loading_widget"
+    android:maxResizeHeight="220dp"
+    android:previewLayout="@layout/calendar_widget_layout"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="2"
+    android:targetCellHeight="1"
+    android:updatePeriodMillis="3600000"
+    android:widgetCategory="home_screen" />

@@ -1,0 +1,112 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/widgetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/app_widget_background"/>
+
+    <RelativeLayout
+        style="@style/Widget.YearlyProgress.AppWidget.Container.Transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="HardcodedText"
+        android:theme="@style/App.SplashScreen.AppWidgetContainer">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/eventProgressText" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="18dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/eventTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Lorem ipsum"
+                    android:textAllCaps="false"
+                    android:textColor="@color/widget_text_color"
+                    android:textSize="12sp"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:id="@+id/eventDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu magna ut nisi laoreet tempus."
+                    android:textAllCaps="false"
+                    android:textColor="@color/widget_text_color_tertiary"
+                    android:textSize="11sp"
+                    android:ellipsize="end"
+                    android:maxLines="4"
+                    android:textStyle="normal" />
+
+
+                <TextView
+                    android:id="@+id/eventTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="08/01 · 7:37 PM"
+                    android:textAllCaps="false"
+                    android:textColor="@color/widget_text_color"
+                    android:textSize="8sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/eventProgressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/eventProgressBar"
+            android:text="40.48%"
+            android:textColor="@color/widget_text_color"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/currentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/eventProgressBar"
+            android:layout_alignParentEnd="true"
+            android:text="08/09"
+            android:layout_alignBaseline="@id/eventProgressText"
+            android:textAlignment="textEnd"
+            android:textColor="@color/widget_text_color_tertiary"
+            android:textSize="11sp" />
+
+        <ProgressBar
+            android:id="@+id/eventProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="41"
+            android:progressBackgroundTint="@color/widget_progress_bar_background_color"
+            android:progressTint="@color/widget_text_color" />
+
+    </RelativeLayout>
+</FrameLayout>
