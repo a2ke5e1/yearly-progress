@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.format
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -106,10 +105,10 @@ class EventEditorActivity : AppCompatActivity() {
     setUpToolbarActions(isAddMode, event)
     setUpDateTimePickers()
 
-    Log.d(
-        "TAG",
-        "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}",
-    )
+    // Log.d(
+    //     "TAG",
+    //    "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}",
+    // )
   }
 
   private fun handleRepeatEventSwitch() {

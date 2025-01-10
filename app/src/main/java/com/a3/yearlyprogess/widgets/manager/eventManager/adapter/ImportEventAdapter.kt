@@ -1,6 +1,5 @@
 package com.a3.yearlyprogess.widgets.manager.eventManager.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -125,15 +124,16 @@ class ImportEventAdapter(
               it.eventDescription.contains(query, ignoreCase = true)) &&
               (range == null || it.eventStartTime.time in range.first..range.second)
         }
-    Log.d(
-        "EventAdapter",
-        "eventsList: ${eventsList.size}, org: ${_eventsList.size}, filtered: ${filteredEvents.size}",
-    )
+    // Log.d(
+    //    "EventAdapter",
+    //    "eventsList: ${eventsList.size}, org: ${_eventsList.size}, filtered:
+    // ${filteredEvents.size}",
+    // )
     updateEvents(filteredEvents)
   }
 
   fun resetFilter() {
-    Log.d("EventAdapter", "eventsList: ${eventsList.size}, org: ${_eventsList.size}")
+    // Log.d("EventAdapter", "eventsList: ${eventsList.size}, org: ${_eventsList.size}")
     updateEvents(_eventsList)
   }
 

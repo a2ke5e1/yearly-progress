@@ -517,6 +517,9 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
     // Cancel the previous job if it's running
     updateJob?.cancel()
 
+    val options = StandaloneWidgetOptions.load(context, appWidgetId).copy(widgetType = widgetType)
+    options.save(context)
+
     // Create a new job for this update
     updateJob =
         CoroutineScope(Dispatchers.IO).launch {

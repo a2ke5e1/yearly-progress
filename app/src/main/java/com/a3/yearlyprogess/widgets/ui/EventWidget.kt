@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.os.Build
 import android.text.format.DateFormat
-import android.util.Log
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
@@ -188,7 +187,7 @@ class EventWidget : BaseWidget() {
     val eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
     val eventRepeatDays = conv.toRepeatDaysList(pref.getString("eventRepeatDays", "").toString())
 
-    Log.d("EventWidget", "Event: $eventRepeatDays")
+    // Log.d("EventWidget", "Event: $eventRepeatDays")
 
     val event =
         Event(

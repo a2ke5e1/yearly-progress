@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -287,7 +286,7 @@ class ProgressScreenFragment : Fragment() {
     try {
       nativeAdView.destroy()
     } catch (ex: UninitializedPropertyAccessException) {
-      Log.d("Initialization Error", ex.message.toString())
+      // Log.d("Initialization Error", ex.message.toString())
     }
   }
 
