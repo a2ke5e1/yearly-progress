@@ -9,4 +9,6 @@
     android:targetCellWidth="2"
     android:targetCellHeight="1"
     android:updatePeriodMillis="3600000"
-    android:widgetCategory="home_screen" />
+    android:configure="com.a3.yearlyprogess.widgets.manager.CalendarWidgetConfigManager"
+    android:widgetCategory="home_screen"
+    android:widgetFeatures="reconfigurable|configuration_optional" />

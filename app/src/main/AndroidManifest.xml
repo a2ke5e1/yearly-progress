@@ -22,6 +22,9 @@
         android:theme="@style/Theme.YearlyProgress"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".widgets.manager.CalendarWidgetConfigManager"
+            android:exported="true" />
+        <activity
             android:name=".widgets.manager.StandaloneWidgetStyleChooser"
             android:exported="true">
             <intent-filter>
@@ -169,7 +172,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/night_light_widget_info" />
         </receiver>
-
         <receiver
             android:name=".widgets.ui.CalendarWidget"
             android:exported="false"
@@ -181,9 +183,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/calendar_widget_info" />
-        </receiver>
-
-        <!-- Registration of the Widget Broadcast Receiver -->
+        </receiver> <!-- Registration of the Widget Broadcast Receiver -->
         <receiver
             android:name=".widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver"
             android:enabled="true" />
