@@ -3,7 +3,6 @@
     android:description="@string/calendar_widget_description"
     android:initialKeyguardLayout="@layout/calendar_widget_layout"
     android:initialLayout="@layout/loading_widget"
-    android:maxResizeHeight="220dp"
     android:previewLayout="@layout/calendar_widget_layout"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
