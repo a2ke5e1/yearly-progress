@@ -341,7 +341,6 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
 
     val calendars = getCalendarsDetails(this.contentResolver)
     val selectedCalendarIds = getSelectedCalendarIds(this)
-    println(selectedCalendarIds)
 
     val adapter = CalendarSyncListAdapter(calendars)
     binding.calendarList.apply {
@@ -371,7 +370,6 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
               val selectedCalendars = adapter.getSelectedCalendarInfos()
               saveSelectedCalendarIds(
                   this@CalendarWidgetConfigManager, selectedCalendars.map { it.id })
-              println(selectedCalendars)
             }
           })
     }
