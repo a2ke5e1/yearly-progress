@@ -1,5 +1,6 @@
 package com.a3.yearlyprogess.widgets.manager
 
+import android.appwidget.AppWidgetManager
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Rect
@@ -339,6 +340,16 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
       insets
     }
 
+    val appWidgetId =
+      intent
+        ?.extras
+        ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+        ?: AppWidgetManager.INVALID_APPWIDGET_ID
+    if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+      finish()
+      return
+    }
+
     val calendars = getCalendarsDetails(this.contentResolver)
     val selectedCalendarIds = getSelectedCalendarIds(this)
 
@@ -372,6 +383,11 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
                   this@CalendarWidgetConfigManager, selectedCalendars.map { it.id })
             }
           })
+    }
+
+    binding.saveButton.setOnClickListener {
+      setResult(RESULT_OK)
+      finish()
     }
   }
 }

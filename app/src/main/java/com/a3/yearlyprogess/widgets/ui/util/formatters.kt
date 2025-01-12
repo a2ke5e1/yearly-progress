@@ -104,7 +104,7 @@ fun Int.toFormattedTimePeriod(timePeriod: TimePeriod): SpannableString {
   }
 }
 
-fun Long.toTimePeriodLeftText(dynamicTimeLeft: Boolean = false): String {
+fun Long.toTimePeriodText(dynamicTimeLeft: Boolean = false): String {
   if (dynamicTimeLeft) {
     val decimalPlaces = 0
     this.toDuration(DurationUnit.MILLISECONDS).toComponents {

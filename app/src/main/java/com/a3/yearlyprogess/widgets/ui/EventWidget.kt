@@ -18,7 +18,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
-import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
+import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
 import java.util.Date
 
 /** Implementation of App Widget functionality. */
@@ -128,7 +128,7 @@ class EventWidget : BaseWidget() {
               false,
           )
 
-      val eventTimeLeft = calculateTimeLeft(newEventEnd).toTimePeriodLeftText(dynamicTimeLeft)
+      val eventTimeLeft = calculateTimeLeft(newEventEnd).toTimePeriodText(dynamicTimeLeft)
 
       if (timeLeftCounter && replaceProgressWithDaysLeft) {
         smallView.setTextViewText(R.id.eventProgressText, eventTimeLeft)

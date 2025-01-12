@@ -28,7 +28,7 @@ import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
-import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
+import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -85,7 +85,7 @@ object WidgetUtils {
     val widgetDaysLeftCounter =
         context.getString(
             R.string.time_left,
-            calculateTimeLeft(endTime).toTimePeriodLeftText(options?.dynamicLeftCounter == true),
+            calculateTimeLeft(endTime).toTimePeriodText(options?.dynamicLeftCounter == true),
         )
 
     /**
