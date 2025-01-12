@@ -181,7 +181,6 @@ class ProgressScreenFragment : Fragment() {
     }
     binding.dismissibleMessageView?.visibility = View.GONE
 
-    // Get the list of available location providers
     val providers = locationManager.allProviders.filter { locationManager.isProviderEnabled(it) }
 
     if (providers.isEmpty()) {
@@ -189,8 +188,7 @@ class ProgressScreenFragment : Fragment() {
           .show()
       return
     }
-    // Load cached location instead of waiting
-    // for location update
+
     lifecycleScope.launch(Dispatchers.IO) {
       val cachedLocation = context?.let { loadCachedLocation(it) }
       if (cachedLocation == null) {
@@ -198,12 +196,14 @@ class ProgressScreenFragment : Fragment() {
       }
       val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
       if (cachedSunriseSunset != null && cachedSunriseSunset.results[1].date == getCurrentDate()) {
-        dayLight.loadSunriseSunset(cachedSunriseSunset)
-        nightLight.loadSunriseSunset(cachedSunriseSunset)
-        launch(Dispatchers.Main) {
-          dayLight.visibility = View.VISIBLE
-          nightLight.visibility = View.VISIBLE
-          binding.loadingIndicator?.visibility = View.GONE
+        if (isAdded) {
+          dayLight.loadSunriseSunset(cachedSunriseSunset)
+          nightLight.loadSunriseSunset(cachedSunriseSunset)
+          launch(Dispatchers.Main) {
+            dayLight.visibility = View.VISIBLE
+            nightLight.visibility = View.VISIBLE
+            binding.loadingIndicator?.visibility = View.GONE
+          }
         }
         return@launch
       }
@@ -212,19 +212,21 @@ class ProgressScreenFragment : Fragment() {
     locationManager.requestLocationUpdates(
         providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
         2000,
-        1_000f, //  12hrs, 200 KM
+        1_000f,
     ) { location ->
       context?.let { cacheLocation(it, location) }
       lifecycleScope.launch(Dispatchers.IO) {
         val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
         if (cachedSunriseSunset != null &&
             cachedSunriseSunset.results[1].date == getCurrentDate()) {
-          dayLight.loadSunriseSunset(cachedSunriseSunset)
-          nightLight.loadSunriseSunset(cachedSunriseSunset)
-          launch(Dispatchers.Main) {
-            dayLight.visibility = View.VISIBLE
-            nightLight.visibility = View.VISIBLE
-            binding.loadingIndicator?.visibility = View.GONE
+          if (isAdded) {
+            dayLight.loadSunriseSunset(cachedSunriseSunset)
+            nightLight.loadSunriseSunset(cachedSunriseSunset)
+            launch(Dispatchers.Main) {
+              dayLight.visibility = View.VISIBLE
+              nightLight.visibility = View.VISIBLE
+              binding.loadingIndicator?.visibility = View.GONE
+            }
           }
           return@launch
         }
@@ -252,27 +254,31 @@ class ProgressScreenFragment : Fragment() {
         when (result) {
           is Resource.Success -> {
             result.data?.let {
-              dayLight.loadSunriseSunset(it)
-              nightLight.loadSunriseSunset(it)
-              launch(Dispatchers.Main) {
-                dayLight.visibility = View.VISIBLE
-                nightLight.visibility = View.VISIBLE
-                binding.loadingIndicator?.visibility = View.GONE
+              if (isAdded) {
+                dayLight.loadSunriseSunset(it)
+                nightLight.loadSunriseSunset(it)
+                launch(Dispatchers.Main) {
+                  dayLight.visibility = View.VISIBLE
+                  nightLight.visibility = View.VISIBLE
+                  binding.loadingIndicator?.visibility = View.GONE
+                }
               }
             }
           }
 
           is Resource.Error -> {
-            launch(Dispatchers.Main) {
-              Toast.makeText(
-                      context,
-                      getString(R.string.failed_to_load_sunset_sunrise_time),
-                      Toast.LENGTH_LONG,
-                  )
-                  .show()
-              dayLight.visibility = View.GONE
-              nightLight.visibility = View.GONE
-              binding.loadingIndicator?.visibility = View.GONE
+            if (isAdded) {
+              launch(Dispatchers.Main) {
+                Toast.makeText(
+                        context,
+                        getString(R.string.failed_to_load_sunset_sunrise_time),
+                        Toast.LENGTH_LONG,
+                    )
+                    .show()
+                dayLight.visibility = View.GONE
+                nightLight.visibility = View.GONE
+                binding.loadingIndicator?.visibility = View.GONE
+              }
             }
             return@launch
           }
