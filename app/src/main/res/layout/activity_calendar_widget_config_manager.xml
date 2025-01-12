@@ -7,4 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".widgets.manager.CalendarWidgetConfigManager">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calendar_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/calendar_info_item_view" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,10 +2,8 @@ package com.a3.yearlyprogess.widgets.ui
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetails
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCurrentEventOrUpcomingEvent
 import com.a3.yearlyprogess.widgets.ui.EventWidget.Companion.eventWidgetPreview
-
 
 class CalendarWidget : BaseWidget() {
   override fun updateWidget(
