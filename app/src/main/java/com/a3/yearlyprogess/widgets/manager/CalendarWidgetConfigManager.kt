@@ -1,6 +1,7 @@
 package com.a3.yearlyprogess.widgets.manager
 
 import android.content.ContentResolver
+import android.content.Context
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.databinding.ActivityCalendarWidgetConfigManagerBinding
 import com.a3.yearlyprogess.databinding.CalendarInfoItemViewBinding
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetails
+import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getSelectedCalendarIds
+import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.saveSelectedCalendarIds
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import java.util.Calendar
 import java.util.Date
@@ -159,10 +162,31 @@ object CalendarEventInfo {
         .filter { event -> event.eventEndTime.time > System.currentTimeMillis() }
         .minByOrNull { event -> event.eventStartTime }
   }
+
+  fun saveSelectedCalendarIds(context: Context, selectedCalendarIds: List<Long>) {
+    // Save selected calendar IDs to SharedPreferences
+    val sharedPreferences =
+        context.getSharedPreferences(SELECTED_CALENDAR_PREF, Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.putStringSet(
+        SELECTED_CALENDAR_IDS_KEY, selectedCalendarIds.map { it.toString() }.toSet())
+    editor.apply()
+  }
+
+  fun getSelectedCalendarIds(context: Context): List<Long>? {
+    // Get selected calendar IDs from SharedPreferences
+    val sharedPreferences =
+        context.getSharedPreferences(SELECTED_CALENDAR_PREF, Context.MODE_PRIVATE)
+    val selectedCalendarIds = sharedPreferences.getStringSet(SELECTED_CALENDAR_IDS_KEY, null)
+    return selectedCalendarIds?.map { it.toLong() }
+  }
+
+  private const val SELECTED_CALENDAR_IDS_KEY = "selected_calendar_ids"
+  private const val SELECTED_CALENDAR_PREF = "selected_calendar_prefs"
 }
 
 class CalendarSyncListAdapter(
-  private val calendarInfoList: List<CalendarEventInfo.CalendarInfo>,
+    private val calendarInfoList: List<CalendarEventInfo.CalendarInfo>,
 ) : RecyclerView.Adapter<CalendarInfoViewHolder>() {
   var tracker: SelectionTracker<Long>? = null
 
@@ -173,8 +197,8 @@ class CalendarSyncListAdapter(
   override fun getItemId(position: Int): Long = position.toLong()
 
   override fun onCreateViewHolder(
-    parent: ViewGroup,
-    viewType: Int,
+      parent: ViewGroup,
+      viewType: Int,
   ): CalendarInfoViewHolder {
     val inflater = LayoutInflater.from(parent.context)
     val binding = CalendarInfoItemViewBinding.inflate(inflater, parent, false)
@@ -182,8 +206,8 @@ class CalendarSyncListAdapter(
   }
 
   override fun onBindViewHolder(
-    holder: CalendarInfoViewHolder,
-    position: Int,
+      holder: CalendarInfoViewHolder,
+      position: Int,
   ) {
     val currentEvent = calendarInfoList[position]
     val context = holder.binding.root.context
@@ -196,8 +220,8 @@ class CalendarSyncListAdapter(
   }
 
   private fun handleSelection(
-    holder: CalendarInfoViewHolder,
-    position: Int,
+      holder: CalendarInfoViewHolder,
+      position: Int,
   ) {
     if (tracker?.isSelected(position.toLong()) == true) {
       tracker?.deselect(position.toLong())
@@ -221,6 +245,16 @@ class CalendarSyncListAdapter(
     }
   }
 
+  fun selectCalendarWithIds(selectedCalendarIds: List<Long>) {
+    tracker?.let {
+      for (i in 0 until itemCount) {
+        if (calendarInfoList[i].id in selectedCalendarIds) {
+          it.select(i.toLong())
+        }
+      }
+    }
+  }
+
   fun getSelectedCalendarInfos(): List<CalendarEventInfo.CalendarInfo> {
     val selectedEvents = mutableListOf<CalendarEventInfo.CalendarInfo>()
     tracker?.selection?.let {
@@ -233,17 +267,17 @@ class CalendarSyncListAdapter(
 }
 
 class CalendarInfoViewHolder(val binding: CalendarInfoItemViewBinding) :
-  RecyclerView.ViewHolder(binding.root) {
+    RecyclerView.ViewHolder(binding.root) {
   fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
-    object : ItemDetailsLookup.ItemDetails<Long>() {
-      override fun getPosition(): Int = adapterPosition
+      object : ItemDetailsLookup.ItemDetails<Long>() {
+        override fun getPosition(): Int = adapterPosition
 
-      override fun getSelectionKey(): Long = itemId
-    }
+        override fun getSelectionKey(): Long = itemId
+      }
 }
 
 class CalendarInfoItemDetailsLookup(private val recyclerView: RecyclerView) :
-  ItemDetailsLookup<Long>() {
+    ItemDetailsLookup<Long>() {
   override fun getItemDetails(event: MotionEvent): ItemDetails<Long>? {
     val view = recyclerView.findChildViewUnder(event.x, event.y)
     if (view != null) {
@@ -254,7 +288,7 @@ class CalendarInfoItemDetailsLookup(private val recyclerView: RecyclerView) :
 }
 
 class CalendarInfoItemKeyProvider(private val recyclerView: RecyclerView) :
-  ItemKeyProvider<Long>(SCOPE_MAPPED) {
+    ItemKeyProvider<Long>(SCOPE_MAPPED) {
   override fun getKey(position: Int): Long? {
     return recyclerView.adapter?.getItemId(position)
   }
@@ -267,10 +301,10 @@ class CalendarInfoItemKeyProvider(private val recyclerView: RecyclerView) :
 
 class ItemSpaceDecoration : RecyclerView.ItemDecoration() {
   override fun getItemOffsets(
-    outRect: Rect,
-    view: View,
-    parent: RecyclerView,
-    state: RecyclerView.State,
+      outRect: Rect,
+      view: View,
+      parent: RecyclerView,
+      state: RecyclerView.State,
   ) {
     val position = parent.getChildAdapterPosition(view)
 
@@ -306,25 +340,37 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
     }
 
     val calendars = getCalendarsDetails(this.contentResolver)
+    val selectedCalendarIds = getSelectedCalendarIds(this)
+    println(selectedCalendarIds)
+
     val adapter = CalendarSyncListAdapter(calendars)
     binding.calendarList.apply {
       this.adapter = adapter
-      this.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@CalendarWidgetConfigManager)
+      this.layoutManager =
+          androidx.recyclerview.widget.LinearLayoutManager(this@CalendarWidgetConfigManager)
       this.addItemDecoration(ItemSpaceDecoration())
 
-      val tracker = SelectionTracker.Builder<Long>(
-          "calendar-selection",
-          this,
-          CalendarInfoItemKeyProvider(this),
-          CalendarInfoItemDetailsLookup(this),
-          androidx.recyclerview.selection.StorageStrategy.createLongStorage())
-          .build()
+      val tracker =
+          SelectionTracker.Builder<Long>(
+                  "calendar-selection",
+                  this,
+                  CalendarInfoItemKeyProvider(this),
+                  CalendarInfoItemDetailsLookup(this),
+                  androidx.recyclerview.selection.StorageStrategy.createLongStorage())
+              .build()
       adapter.tracker = tracker
+      if (selectedCalendarIds != null) {
+        adapter.selectCalendarWithIds(selectedCalendarIds)
+      } else {
+        adapter.toggleSelectAll()
+      }
       tracker.addObserver(
           object : SelectionTracker.SelectionObserver<Long>() {
             override fun onSelectionChanged() {
               super.onSelectionChanged()
               val selectedCalendars = adapter.getSelectedCalendarInfos()
+              saveSelectedCalendarIds(
+                  this@CalendarWidgetConfigManager, selectedCalendars.map { it.id })
               println(selectedCalendars)
             }
           })
