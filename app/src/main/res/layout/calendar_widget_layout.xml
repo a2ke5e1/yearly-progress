@@ -40,7 +40,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="11sp"
+                android:textSize="8sp"
                 android:textStyle="normal" />
 
             <TextView
@@ -51,7 +51,7 @@
                 android:layout_marginTop="-4dp"
                 android:text="Event Title"
                 android:textColor="@color/md_theme_tertiary"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -84,7 +84,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:layout_marginBottom="18dp"
+            android:layout_marginBottom="12dp"
             android:orientation="vertical">
 
             <TextView
@@ -94,7 +94,7 @@
                 android:text="@string/demo_day_per"
                 android:textAlignment="center"
                 android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="28sp" />
+                android:textSize="36sp" />
 
             <TextView
                 android:id="@+id/widgetDays"
@@ -105,6 +105,7 @@
                 android:textColor="@color/md_theme_onSurfaceVariant"
                 android:textSize="11sp"
                 android:textStyle="normal"
+                android:layout_marginBottom="8dp"
                 tools:text="112d left" />
 
 
