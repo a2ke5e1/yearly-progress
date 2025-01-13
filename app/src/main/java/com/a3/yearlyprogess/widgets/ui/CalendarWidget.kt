@@ -34,36 +34,36 @@ class CalendarWidget : BaseWidget() {
     }
 
     /*var text = ""
-    val selectedCalendars = getSelectedCalendarIds(context)
-    if (selectedCalendars.isNullOrEmpty()) {
-      text = "No calendars selected"
-    } else {
-      text = "Selected calendars: ${selectedCalendars.joinToString(", ")}"
-    }
-
-    if (selectedCalendars != null) {
-      for (calendarId in selectedCalendars) {
-        text += "\n\n"
-        val event = getCurrentEventOrUpcomingEvent(context.contentResolver, calendarId)
-        text += "Calendar: $calendarId\n"
-        if (event != null) {
-          text += event.eventTitle
-          text += "\n"
-          text += event.eventDescription.take(20)
-          text += "\n"
-          text += event.eventStartTime
-          text += "\n"
-          text += event.eventEndTime
-          text += "\n"
-          text += calculateProgress(context, event.eventStartTime.time, event.eventEndTime.time).styleFormatted(2)
+        val selectedCalendars = getSelectedCalendarIds(context)
+        if (selectedCalendars.isNullOrEmpty()) {
+          text = "No calendars selected"
         } else {
-          text += "No upcoming events"
+          text = "Selected calendars: ${selectedCalendars.joinToString(", ")}"
         }
-      }
-    }
 
-    view.setTextViewText(R.id.text, text)
-*/
+        if (selectedCalendars != null) {
+          for (calendarId in selectedCalendars) {
+            text += "\n\n"
+            val event = getCurrentEventOrUpcomingEvent(context.contentResolver, calendarId)
+            text += "Calendar: $calendarId\n"
+            if (event != null) {
+              text += event.eventTitle
+              text += "\n"
+              text += event.eventDescription.take(20)
+              text += "\n"
+              text += event.eventStartTime
+              text += "\n"
+              text += event.eventEndTime
+              text += "\n"
+              text += calculateProgress(context, event.eventStartTime.time, event.eventEndTime.time).styleFormatted(2)
+            } else {
+              text += "No upcoming events"
+            }
+          }
+        }
+
+        view.setTextViewText(R.id.text, text)
+    */
     val selectedCalendars = getSelectedCalendarIds(context)
     if (selectedCalendars.isNullOrEmpty()) {
       emptyWidget(view)
@@ -87,38 +87,38 @@ class CalendarWidget : BaseWidget() {
       return
     }
 
-    val event = events
-      .filter { event -> event.eventEndTime.time > System.currentTimeMillis() }
-      .minBy { event -> event.eventStartTime }
+    val event =
+        events
+            .filter { event -> event.eventEndTime.time > System.currentTimeMillis() }
+            .minBy { event -> event.eventStartTime }
 
     val progress = calculateProgress(context, event.eventStartTime.time, event.eventEndTime.time)
     view.setTextViewText(
-      R.id.widgetProgress,
-      progress.styleFormatted(2, cloverMode = true),
+        R.id.widgetProgress,
+        progress.styleFormatted(2, cloverMode = true),
     )
     view.setTextViewText(R.id.event_title, event.eventTitle)
     view.setTextViewText(R.id.event_description, event.eventDescription)
-    view.setTextViewText(R.id.event_duration, "${event.eventStartTime.formattedDateTime(context)} — ${event.eventEndTime.formattedDateTime(context)}")
+    view.setTextViewText(
+        R.id.event_duration,
+        "${event.eventStartTime.formattedDateTime(context)} — ${event.eventEndTime.formattedDateTime(context)}")
     view.setProgressBar(R.id.widgetProgressBar, 100, progress.roundToInt(), false)
 
-
     val widgetDays =
-      if (System.currentTimeMillis() < event.eventStartTime.time) {
-        "in " + (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText()
-      } else {
-        calculateTimeLeft(event.eventEndTime.time).toTimePeriodText() + " left"
-      }
+        if (System.currentTimeMillis() < event.eventStartTime.time) {
+          "in " + (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText()
+        } else {
+          calculateTimeLeft(event.eventEndTime.time).toTimePeriodText() + " left"
+        }
     view.setTextViewText(R.id.widgetDays, widgetDays)
 
-    if (System.currentTimeMillis() in event.eventStartTime.time..event.eventEndTime.time) {
-      view.setViewVisibility(R.id.widgetProgressBar, android.view.View.VISIBLE)
-      view.setTextViewText(R.id.event_status, "ongoing")
-    } else {
-      view.setViewVisibility(R.id.widgetProgressBar, android.view.View.GONE)
-      view.setTextViewText(R.id.event_status, "upcoming")
-    }
-
-
+    view.setTextViewText(
+        R.id.event_status,
+        if (System.currentTimeMillis() in event.eventStartTime.time..event.eventEndTime.time) {
+          "ongoing"
+        } else {
+          "upcoming"
+        })
 
     if (event.eventDescription.isEmpty()) {
       view.setViewVisibility(R.id.event_description, android.view.View.GONE)
@@ -134,17 +134,17 @@ class CalendarWidget : BaseWidget() {
     view.setTextViewText(R.id.event_duration, "")
     view.setTextViewText(R.id.widgetProgress, "")
     view.setTextViewText(R.id.widgetDays, "")
-    view.setViewVisibility(R.id.widgetProgressBar, android.view.View.GONE)
+    view.setProgressBar(R.id.widgetProgressBar, 100, 0, false)
     view.setViewVisibility(R.id.event_description, android.view.View.VISIBLE)
   }
 
   private fun Date.formattedDateTime(context: Context): String {
-    return  android.text.format.DateFormat.format(
-      if (android.text.format.DateFormat.is24HourFormat(context)) "MMM dd, yyyy · HH:mm" else "MMM dd, yyyy · hh:mm a",
-      this,
-    )
-      .toString()
-      .uppercase()
+    return android.text.format.DateFormat.format(
+            if (android.text.format.DateFormat.is24HourFormat(context)) "MMM dd, yyyy · HH:mm"
+            else "MMM dd, yyyy · hh:mm a",
+            this,
+        )
+        .toString()
+        .uppercase()
   }
-
 }

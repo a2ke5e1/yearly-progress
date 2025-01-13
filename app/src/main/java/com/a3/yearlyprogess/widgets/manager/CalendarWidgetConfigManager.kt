@@ -341,10 +341,10 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
     }
 
     val appWidgetId =
-      intent
-        ?.extras
-        ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-        ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        intent
+            ?.extras
+            ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            ?: AppWidgetManager.INVALID_APPWIDGET_ID
     if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
       finish()
       return
