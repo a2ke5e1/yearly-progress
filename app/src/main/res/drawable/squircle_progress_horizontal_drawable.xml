@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background Layer -->
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <corners android:radius="28dp" /> <!-- Rounded corners -->
+            <solid android:color="@color/widget_background_color" />
+        </shape>
+    </item>
+
+    <!-- Progress Layer -->
+    <item android:id="@android:id/progress">
+        <clip
+            >
+            <shape
+                android:shape="rectangle">
+                <corners android:radius="28dp" /> <!-- Rounded corners -->
+                <solid android:color="@color/md_theme_surfaceVariant"  />
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>

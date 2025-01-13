@@ -24,4 +24,9 @@
         <item name="android:padding">0dp</item>
         <item name="android:progressDrawable">@drawable/squircle_progress_drawable</item>
     </style>
+
+    <style name="SquircleProgressIndicatorHorizontal" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:padding">0dp</item>
+        <item name="android:progressDrawable">@drawable/squircle_progress_horizontal_drawable</item>
+    </style>
 </resources>
