@@ -19,4 +19,9 @@
         <item name="android:progressTint">@color/light_blue_900</item>
         <item name="android:progressBackgroundTint">@color/light_blue_50</item>
     </style>
+
+    <style name="SquircleProgressIndicator" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:padding">0dp</item>
+        <item name="android:progressDrawable">@drawable/squircle_progress_drawable</item>
+    </style>
 </resources>
