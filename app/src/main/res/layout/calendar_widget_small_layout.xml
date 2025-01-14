@@ -7,14 +7,10 @@
     android:layout_height="match_parent"
     >
 
-    <ProgressBar
-        android:id="@+id/widgetProgressBar"
-        style="@style/SquircleProgressIndicatorHorizontal"
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:indeterminateOnly="false"
-        android:max="100"
-        android:progress="20" />
+        android:src="@drawable/app_widget_background" />
 
 
 
@@ -115,7 +111,7 @@
                 tools:text="112d left" />
 
 
-            <!--<ProgressBar
+            <ProgressBar
                 android:id="@+id/widgetProgressBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
@@ -126,7 +122,6 @@
                 android:progress="20"
                 android:progressBackgroundTint="@color/widget_progress_bar_background_color"
                 android:progressTint="@color/widget_text_color" />
--->
         </LinearLayout>
 
     </RelativeLayout>
