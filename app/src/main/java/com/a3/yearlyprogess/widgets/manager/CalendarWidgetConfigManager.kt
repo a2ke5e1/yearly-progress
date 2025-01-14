@@ -339,6 +339,8 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
       v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
       insets
     }
+    setSupportActionBar(binding.toolbar)
+    binding.toolbar.title = "Select Calendars"
 
     val appWidgetId =
         intent
