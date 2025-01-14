@@ -30,23 +30,29 @@ class CalendarWidget : BaseWidget() {
 
     if (context.checkSelfPermission(Manifest.permission.READ_CALENDAR) ==
         PackageManager.PERMISSION_DENIED) {
-      emptyWidget(smallView)
-      emptyWidget(largeView)
-      smallView.setTextViewText(R.id.event_title, "Calendar permission required")
-      largeView.setTextViewText(R.id.event_title, "Calendar permission required")
-      val view = mapRemoteView(context, appWidgetId, smallView, largeView)
-      appWidgetManager.updateAppWidget(appWidgetId, view)
+      updateWidgetError(
+          context,
+          appWidgetId,
+          "Error",
+          "Calendar permission required",
+          appWidgetManager,
+          smallView,
+          largeView,
+      )
       return
     }
 
     val selectedCalendars = getSelectedCalendarIds(context)
     if (selectedCalendars.isNullOrEmpty()) {
-      emptyWidget(smallView)
-      emptyWidget(largeView)
-      smallView.setTextViewText(R.id.event_title, "No calendars selected")
-      largeView.setTextViewText(R.id.event_title, "No calendars selected")
-      val view = mapRemoteView(context, appWidgetId, smallView, largeView)
-      appWidgetManager.updateAppWidget(appWidgetId, view)
+      updateWidgetError(
+          context,
+          appWidgetId,
+          "Error",
+          "No calendars available",
+          appWidgetManager,
+          smallView,
+          largeView,
+      )
       return
     }
 
@@ -59,11 +65,15 @@ class CalendarWidget : BaseWidget() {
     }
 
     if (events.isEmpty()) {
-      emptyWidget(smallView)
-      emptyWidget(largeView)
-      smallView.setTextViewText(R.id.event_title, "No upcoming events")
-      largeView.setTextViewText(R.id.event_title, "No upcoming events")
-      appWidgetManager.updateAppWidget(appWidgetId, smallView)
+      updateWidgetError(
+          context,
+          appWidgetId,
+          "Error",
+          "No upcoming events",
+          appWidgetManager,
+          smallView,
+          largeView,
+      )
       return
     }
 
@@ -131,16 +141,17 @@ class CalendarWidget : BaseWidget() {
         }
     view.setTextViewText(R.id.widgetDays, widgetDays)
 
-    view.setTextViewText(
-        R.id.event_status,
-        if (System.currentTimeMillis() in event.eventStartTime.time..event.eventEndTime.time) {
-          "ongoing"
-        } else {
-          "upcoming"
-        })
+    if (System.currentTimeMillis() in event.eventStartTime.time..event.eventEndTime.time) {
+      view.setViewVisibility(R.id.widgetProgressBar, android.view.View.VISIBLE)
+      view.setTextViewText(R.id.event_status, "ongoing")
+    } else {
+      view.setViewVisibility(R.id.widgetProgressBar, android.view.View.GONE)
+      view.setTextViewText(R.id.event_status, "upcoming")
+    }
 
-    if (event.eventDescription.isEmpty()) {
-      view.setViewVisibility(R.id.event_description, android.view.View.GONE)
+    view.setViewVisibility(R.id.event_title, android.view.View.VISIBLE)
+    if (event.eventDescription.isNotEmpty()) {
+      view.setViewVisibility(R.id.event_description, android.view.View.VISIBLE)
     }
   }
 
@@ -152,7 +163,30 @@ class CalendarWidget : BaseWidget() {
     view.setTextViewText(R.id.widgetProgress, "")
     view.setTextViewText(R.id.widgetDays, "")
     view.setProgressBar(R.id.widgetProgressBar, 100, 0, false)
-    view.setViewVisibility(R.id.event_description, android.view.View.VISIBLE)
+    view.setViewVisibility(R.id.event_description, android.view.View.GONE)
+    view.setViewVisibility(R.id.event_title, android.view.View.GONE)
+    view.setViewVisibility(R.id.widgetProgressBar, android.view.View.GONE)
+  }
+
+  private fun updateWidgetError(
+      context: Context,
+      appWidgetId: Int,
+      status: String,
+      description: String,
+      appWidgetManager: AppWidgetManager,
+      smallView: RemoteViews,
+      largeView: RemoteViews,
+  ) {
+    emptyWidget(smallView)
+    emptyWidget(largeView)
+    smallView.setTextViewText(R.id.event_status, status)
+    largeView.setTextViewText(R.id.event_status, status)
+    smallView.setViewVisibility(R.id.event_description, android.view.View.VISIBLE)
+    largeView.setViewVisibility(R.id.event_description, android.view.View.VISIBLE)
+    smallView.setTextViewText(R.id.event_description, description)
+    largeView.setTextViewText(R.id.event_description, description)
+    val view = mapRemoteView(context, appWidgetId, smallView, largeView)
+    appWidgetManager.updateAppWidget(appWidgetId, view)
   }
 
   private fun Date.formattedDateTime(context: Context): String {
