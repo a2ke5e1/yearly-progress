@@ -83,6 +83,7 @@ class CalendarWidget : BaseWidget() {
             .minBy { event -> event.eventStartTime }
 
     setupCalendarWidgetView(context, smallView, event)
+    smallView.setViewVisibility(R.id.event_description, android.view.View.GONE)
     setupCalendarWidgetView(context, largeView, event)
 
     val view = mapRemoteView(context, appWidgetId, smallView, largeView)

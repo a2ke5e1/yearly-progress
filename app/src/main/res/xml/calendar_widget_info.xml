@@ -7,7 +7,7 @@
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
     android:maxResizeHeight="220dp"
-    android:minWidth="130dp"
+    android:minWidth="180dp"
     android:targetCellHeight="2"
     android:updatePeriodMillis="3600000"
     android:configure="com.a3.yearlyprogess.widgets.manager.CalendarWidgetConfigManager"
