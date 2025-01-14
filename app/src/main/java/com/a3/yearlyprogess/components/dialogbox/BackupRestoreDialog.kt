@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.a3.yearlyprogess.MainActivity
@@ -41,11 +40,9 @@ class BackupRestoreDialog(private val roomBackup: RoomBackup) : DialogFragment()
                     .setNeutralButton("Okay") { _, _ -> }
                     .show()
               }
-              else ->
-                  Log.d(
-                      MainActivity.TAG,
-                      "success: $success, message: $message, exitCode: $exitCode",
-                  )
+              else -> {}
+            // Log.d( MainActivity.TAG, "success: $success, message: $message, exitCode:
+            // $exitCode",)
             }
             if (success) {
               Toast.makeText(requireContext(), "Operation was successful.", Toast.LENGTH_LONG)

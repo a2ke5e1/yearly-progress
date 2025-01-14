@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.a3.yearlyprogess.YearlyProgressNotification
 import com.a3.yearlyprogess.cacheSunriseSunset
 import com.a3.yearlyprogess.data.SunriseSunsetApi
@@ -14,6 +13,7 @@ import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.provideSunriseSunsetApi
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
+import com.a3.yearlyprogess.widgets.ui.CalendarWidget
 import com.a3.yearlyprogess.widgets.ui.DayLightWidget
 import com.a3.yearlyprogess.widgets.ui.DayWidget
 import com.a3.yearlyprogess.widgets.ui.EventWidget
@@ -44,7 +44,7 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
             EventWidget::class.java,
             DayLightWidget::class.java,
             NightLightWidget::class.java,
-        )
+            CalendarWidget::class.java)
 
     // force widget update
 
@@ -60,7 +60,7 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
       if (it == DayLightWidget::class.java || it == NightLightWidget::class.java) {
         CoroutineScope(Dispatchers.IO).launch {
           val location = loadCachedLocation(context)
-          Log.d("WUBR", location.toString())
+          // Log.d("WUBR", location.toString())
           if (location == null) {
             cancel()
             return@launch
@@ -111,7 +111,7 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
                 cacheSunriseSunset(context, result)
               }
             } catch (ex: Exception) {
-              Log.d("WUBR", ex.message.toString())
+              // Log.d("WUBR", ex.message.toString())
             } finally {
               cancel()
             }

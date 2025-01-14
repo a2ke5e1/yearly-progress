@@ -6,7 +6,6 @@ import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.text.format.DateFormat
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
@@ -87,8 +86,8 @@ constructor(
 
         val (_start, _end) = event.nextStartAndEndTime()
         val _newProgress = calculateProgress(context, _start, _end)
-        Log.d("EventDetailView", "EventDetailView: $newProgress")
-        Log.d("EventDetailView", "EventDetailView: $_start $_end")
+        // Log.d("EventDetailView", "EventDetailView: $newProgress")
+        // Log.d("EventDetailView", "EventDetailView: $_start $_end")
 
         // eventStartTimeInMills = newEventStart
         // eventEndDateTimeInMillis = newEventEnd

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -198,12 +197,12 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
             .apply(applicationContext, container)
     parent.setOnClickListener {
       options.save(this)
-      Log.d("StandaloneWidgetStyle", "onCreate: $options")
+      // Log.d("StandaloneWidgetStyle", "onCreate: $options")
       applyOptions(options)
     }
     views.findViewById<FrameLayout>(R.id.background).setOnClickListener {
       options.save(this)
-      Log.d("StandaloneWidgetStyle", "onCreate: $options")
+      // Log.d("StandaloneWidgetStyle", "onCreate: $options")
       applyOptions(options)
     }
     container.removeAllViews()

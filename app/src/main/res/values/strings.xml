@@ -142,5 +142,6 @@
     <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
     <string name="enable_location_day_night_message">Allow location permission to see Day/Night Progress</string>
     <string name="allow">Allow</string>
+    <string name="calendar_widget_description">Shows progress of upcoming events in your calendar</string>
 
 </resources>

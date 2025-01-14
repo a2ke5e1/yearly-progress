@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -136,7 +135,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                     )
                 eventList.add(event)
               } catch (e: Exception) {
-                Log.d("YearlyProgress.ImportFailed", "${e.printStackTrace()}")
+                // Log.d("YearlyProgress.ImportFailed", "${e.printStackTrace()}")
               }
             }
           }
@@ -169,7 +168,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
         object : SelectionTracker.SelectionObserver<Long>() {
           override fun onSelectionChanged() {
             super.onSelectionChanged()
-            Log.d("TAG", "onCreateView: ${adapter.getSelectedEvents()}")
+            // Log.d("TAG", "onCreateView: ${adapter.getSelectedEvents()}")
           }
         },
     )
@@ -197,7 +196,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
                 }
                 .setDuration(150)
           }
-          Log.d("TAG", "onOptionsItemSelected: Search")
+          // Log.d("TAG", "onOptionsItemSelected: Search")
           true
         }
 

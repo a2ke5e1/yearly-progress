@@ -1,0 +1,128 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:theme="@style/Theme.YearlyProgress.AppWidgetContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/app_widget_background" />
+
+
+
+
+    <RelativeLayout
+        style="@style/Widget.YearlyProgress.AppWidget.Container.Transparent"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/topContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="4dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/event_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="NOW"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/md_theme_onPrimaryContainer"
+                android:textSize="6sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/event_title"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:text="Event Title"
+                android:textColor="@color/md_theme_tertiary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/event_description"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:layout_height="wrap_content"
+                android:text="Event Description"
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:visibility="gone"
+                android:textSize="11sp" />
+
+
+            <TextView
+                android:id="@+id/event_duration"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:layout_height="wrap_content"
+                android:text="Event Duration"
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:textSize="6sp" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/bottomContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginBottom="0dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/widgetProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/demo_day_per"
+                android:textAlignment="center"
+                android:textColor="@color/md_theme_onPrimaryContainer"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/widgetDays"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:textSize="8sp"
+                android:textStyle="normal"
+                tools:text="112d left" />
+
+
+            <ProgressBar
+                android:id="@+id/widgetProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/widgetProgress"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="20"
+                android:progressBackgroundTint="@color/widget_progress_bar_background_color"
+                android:progressTint="@color/widget_text_color" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>

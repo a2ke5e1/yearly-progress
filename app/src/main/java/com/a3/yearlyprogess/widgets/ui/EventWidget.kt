@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.os.Build
 import android.text.format.DateFormat
-import android.util.Log
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
@@ -19,7 +18,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
-import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodLeftText
+import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
 import java.util.Date
 
 /** Implementation of App Widget functionality. */
@@ -129,7 +128,7 @@ class EventWidget : BaseWidget() {
               false,
           )
 
-      val eventTimeLeft = calculateTimeLeft(newEventEnd).toTimePeriodLeftText(dynamicTimeLeft)
+      val eventTimeLeft = calculateTimeLeft(newEventEnd).toTimePeriodText(dynamicTimeLeft)
 
       if (timeLeftCounter && replaceProgressWithDaysLeft) {
         smallView.setTextViewText(R.id.eventProgressText, eventTimeLeft)
@@ -188,7 +187,7 @@ class EventWidget : BaseWidget() {
     val eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
     val eventRepeatDays = conv.toRepeatDaysList(pref.getString("eventRepeatDays", "").toString())
 
-    Log.d("EventWidget", "Event: $eventRepeatDays")
+    // Log.d("EventWidget", "Event: $eventRepeatDays")
 
     val event =
         Event(

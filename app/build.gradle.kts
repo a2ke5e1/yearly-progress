@@ -16,8 +16,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 105
-        versionName = "2.14.17"
+        versionCode = 106
+        versionName = "2.15.0-beta01"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -57,7 +57,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
     implementation("com.google.firebase:firebase-crashlytics:19.3.0")
     implementation("androidx.activity:activity-ktx:1.9.3")
-    testImplementation("junit:junit:4.13.2")
+  implementation("androidx.work:work-runtime-ktx:2.10.0")
+  testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 

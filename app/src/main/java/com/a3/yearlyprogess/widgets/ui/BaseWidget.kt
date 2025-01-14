@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import com.a3.yearlyprogess.widgets.manager.updateManager.WakeLocker
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 
@@ -56,7 +55,7 @@ abstract class BaseWidget : AppWidgetProvider() {
             YearWidget::class.java,
             AllInWidget::class.java,
             EventWidget::class.java,
-        )
+            CalendarWidget::class.java)
 
     var totalWidgets = 0
     widgetIntentsAndComponents.forEach {
@@ -65,7 +64,7 @@ abstract class BaseWidget : AppWidgetProvider() {
     }
 
     if (totalWidgets > 0) {
-      Log.d(TAG, "canceling alarm shutdown, $totalWidgets still active")
+      // Log.d(TAG, "canceling alarm shutdown, $totalWidgets still active")
       WakeLocker.release()
       return
     }
