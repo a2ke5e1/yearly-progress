@@ -10,6 +10,7 @@ import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.calculateTimeLeft
+import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetails
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCurrentEventOrUpcomingEvent
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getSelectedCalendarIds
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
@@ -42,8 +43,10 @@ class CalendarWidget : BaseWidget() {
       return
     }
 
-    val selectedCalendars = getSelectedCalendarIds(context)
-    if (selectedCalendars.isNullOrEmpty()) {
+    val selectedCalendars =
+        getSelectedCalendarIds(context)
+            ?: getCalendarsDetails(context.contentResolver).map { it.id }
+    if (selectedCalendars.isEmpty()) {
       updateWidgetError(
           context,
           appWidgetId,

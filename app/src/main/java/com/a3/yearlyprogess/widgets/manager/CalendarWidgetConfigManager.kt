@@ -1,8 +1,10 @@
 package com.a3.yearlyprogess.widgets.manager
 
+import android.Manifest
 import android.appwidget.AppWidgetManager
 import android.content.ContentResolver
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
@@ -12,14 +14,20 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
+import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.components.dialogbox.PermissionMessageDialog
 import com.a3.yearlyprogess.databinding.ActivityCalendarWidgetConfigManagerBinding
 import com.a3.yearlyprogess.databinding.CalendarInfoItemViewBinding
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetails
@@ -329,18 +337,67 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
   private val binding
     get() = _binding!!
 
+  private lateinit var calendarPermissionDialog: PermissionMessageDialog
+  private val requestPermissionLauncher =
+      registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (isGranted) {
+          setupCalendarList()
+        } else {
+          calendarPermissionDialog.show(supportFragmentManager, "location_permission_dialog")
+        }
+      }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     _binding = ActivityCalendarWidgetConfigManagerBinding.inflate(layoutInflater)
     setContentView(binding.root)
-    ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+    ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { v, insets ->
       val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-      v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+      v.updatePadding(systemBars.left, systemBars.top, systemBars.right, 0)
       insets
     }
     setSupportActionBar(binding.toolbar)
     binding.toolbar.title = "Select Calendars"
+    calendarPermissionDialog =
+        PermissionMessageDialog(
+            icon = R.drawable.ic_outline_edit_calendar_24,
+            title = getString(R.string.calendar_permission_title),
+            message = getString(R.string.calendar_permission_message),
+        ) {
+          requestPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+        }
+
+    when {
+      ContextCompat.checkSelfPermission(
+          this,
+          Manifest.permission.READ_CALENDAR,
+      ) == PackageManager.PERMISSION_GRANTED -> {
+        setupCalendarList()
+        binding.errorLayout.visibility = View.GONE
+      }
+
+      ContextCompat.checkSelfPermission(
+          this,
+          Manifest.permission.READ_CALENDAR,
+      ) == PackageManager.PERMISSION_DENIED ->   {
+        binding.errorLayout.visibility = View.VISIBLE
+        binding.errorMessage.text = "Calendar permission required"
+        binding.calendarList.visibility = View.GONE
+        calendarPermissionDialog.show(supportFragmentManager, "")
+      }
+
+      ActivityCompat.shouldShowRequestPermissionRationale(
+          this,
+          Manifest.permission.ACCESS_COARSE_LOCATION,
+      ) -> {
+        calendarPermissionDialog.show(supportFragmentManager, "")
+      }
+
+      else -> {
+        requestPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+      }
+    }
 
     val appWidgetId =
         intent
@@ -352,7 +409,24 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
       return
     }
 
+    binding.saveButton.setOnClickListener {
+      setResult(RESULT_OK)
+      finish()
+    }
+  }
+
+  private fun setupCalendarList() {
     val calendars = getCalendarsDetails(this.contentResolver)
+
+    if (calendars.isEmpty()) {
+      binding.errorLayout.visibility = View.VISIBLE
+      binding.errorMessage.text = "No calendars available"
+      binding.calendarList.visibility = View.GONE
+      return
+    }
+    binding.calendarList.visibility = View.VISIBLE
+    binding.errorLayout.visibility = View.GONE
+
     val selectedCalendarIds = getSelectedCalendarIds(this)
 
     val adapter = CalendarSyncListAdapter(calendars)
@@ -385,11 +459,6 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
                   this@CalendarWidgetConfigManager, selectedCalendars.map { it.id })
             }
           })
-    }
-
-    binding.saveButton.setOnClickListener {
-      setResult(RESULT_OK)
-      finish()
     }
   }
 }

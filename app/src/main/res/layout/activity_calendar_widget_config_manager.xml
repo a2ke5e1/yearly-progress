@@ -26,8 +26,39 @@
         android:id="@+id/calendar_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/calendar_info_item_view" />
+
+    <LinearLayout
+        android:id="@+id/error_layout"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_outline_edit_calendar_24"
+            app:tint="?attr/colorOnSurfaceVariant"
+            android:id="@+id/error_icon" />
+
+        <TextView
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            tools:text="Required Calendar Permissions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:id="@+id/error_message" />
+
+
+
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/save_button"
