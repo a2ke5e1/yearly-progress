@@ -18,6 +18,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.database.getLongOrNull
+import androidx.core.database.getStringOrNull
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -79,22 +81,26 @@ object CalendarEventInfo {
         cursor ->
       while (cursor.moveToNext()) {
         val id = cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Events._ID))
-        val title = cursor.getString(cursor.getColumnIndexOrThrow(CalendarContract.Events.TITLE))
+        val title =
+            cursor.getStringOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.TITLE))
+                ?: ""
         val description =
-            cursor.getString(cursor.getColumnIndexOrThrow(CalendarContract.Events.DESCRIPTION))
+            cursor.getStringOrNull(
+                cursor.getColumnIndexOrThrow(CalendarContract.Events.DESCRIPTION)) ?: ""
         val startTimeUtc =
-            cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTSTART))
-        val location =
-            cursor.getString(cursor.getColumnIndexOrThrow(CalendarContract.Events.EVENT_LOCATION))
-        val endTimeUtc = cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTEND))
+            cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTSTART))
+        val endTimeUtc =
+            cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTEND))
 
-        events.add(
-            Event(
-                id = 0,
-                eventTitle = title,
-                eventDescription = description,
-                eventStartTime = Date(startTimeUtc),
-                eventEndTime = Date(endTimeUtc)))
+        if (startTimeUtc != null && endTimeUtc != null) {
+          events.add(
+              Event(
+                  id = 0,
+                  eventTitle = title,
+                  eventDescription = description,
+                  eventStartTime = Date(startTimeUtc),
+                  eventEndTime = Date(endTimeUtc)))
+        }
       }
     }
 
@@ -380,7 +386,7 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
       ContextCompat.checkSelfPermission(
           this,
           Manifest.permission.READ_CALENDAR,
-      ) == PackageManager.PERMISSION_DENIED ->   {
+      ) == PackageManager.PERMISSION_DENIED -> {
         binding.errorLayout.visibility = View.VISIBLE
         binding.errorMessage.text = "Calendar permission required"
         binding.calendarList.visibility = View.GONE

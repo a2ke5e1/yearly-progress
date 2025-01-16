@@ -58,9 +58,6 @@ data class Result(
   }
 
   private fun convertToDateTime(time: String): Date {
-    val debug = Firebase.crashlytics
-    debug.log("convertToDateTime: $date $time")
-
     val dateTime = "$date $time"
     val formatter = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
     val timeZone = TimeZone.getTimeZone(timezone) // Adjust as needed

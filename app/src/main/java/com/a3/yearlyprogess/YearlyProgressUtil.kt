@@ -203,9 +203,6 @@ fun cacheSunriseSunset(
   val json = gson.toJson(sunriseSunset)
   editor.putString(key, json)
 
-  val debug = Firebase.crashlytics
-  debug.log("storeSunriseSunset: $json")
-
   editor.apply()
 }
 
@@ -215,8 +212,6 @@ fun loadCachedSunriseSunset(context: Context): SunriseSunsetResponse? {
   val gson = Gson()
   val json = pref.getString(key, null) ?: return null
 
-  val debug = Firebase.crashlytics
-  debug.log("loadSunriseSunset: $json")
 
   return gson.fromJson(json, SunriseSunsetResponse::class.java)
 }
