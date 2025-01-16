@@ -119,24 +119,25 @@ object CalendarEventInfo {
           if (cursor.moveToFirst()) {
             val id = cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Events._ID))
             val title =
-                cursor.getString(cursor.getColumnIndexOrThrow(CalendarContract.Events.TITLE))
+                cursor.getStringOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.TITLE))
+                    ?: ""
             val description =
-                cursor.getString(cursor.getColumnIndexOrThrow(CalendarContract.Events.DESCRIPTION))
+                cursor.getStringOrNull(
+                    cursor.getColumnIndexOrThrow(CalendarContract.Events.DESCRIPTION)) ?: ""
             val startTimeUtc =
-                cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTSTART))
-            val location =
-                cursor.getString(
-                    cursor.getColumnIndexOrThrow(CalendarContract.Events.EVENT_LOCATION))
+                cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTSTART))
             val endTimeUtc =
-                cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTEND))
+                cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTEND))
 
-            events.add(
-                Event(
-                    id = 0,
-                    eventTitle = title,
-                    eventDescription = description,
-                    eventStartTime = Date(startTimeUtc),
-                    eventEndTime = Date(endTimeUtc)))
+            if (startTimeUtc != null && endTimeUtc != null) {
+              events.add(
+                  Event(
+                      id = 0,
+                      eventTitle = title,
+                      eventDescription = description,
+                      eventStartTime = Date(startTimeUtc),
+                      eventEndTime = Date(endTimeUtc)))
+            }
           }
         }
 
@@ -159,12 +160,15 @@ object CalendarEventInfo {
       while (cursor.moveToNext()) {
         val id = cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Calendars._ID))
         val displayName =
-            cursor.getString(
+            cursor.getStringOrNull(
                 cursor.getColumnIndexOrThrow(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME))
         val accountName =
-            cursor.getString(cursor.getColumnIndexOrThrow(CalendarContract.Calendars.ACCOUNT_NAME))
+            cursor.getStringOrNull(
+                cursor.getColumnIndexOrThrow(CalendarContract.Calendars.ACCOUNT_NAME))
 
-        calendars.add(CalendarInfo(id = id, displayName = displayName, accountName = accountName))
+        if (displayName != null && accountName != null) {
+          calendars.add(CalendarInfo(id = id, displayName = displayName, accountName = accountName))
+        }
       }
     }
 

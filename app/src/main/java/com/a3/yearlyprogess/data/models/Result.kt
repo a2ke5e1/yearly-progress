@@ -2,8 +2,6 @@ package com.a3.yearlyprogess.data.models
 
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
 import java.util.Date
 import java.util.Locale
 

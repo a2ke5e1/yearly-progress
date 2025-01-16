@@ -6,8 +6,6 @@ import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import java.util.Calendar
 import java.util.Locale
@@ -211,7 +209,6 @@ fun loadCachedSunriseSunset(context: Context): SunriseSunsetResponse? {
   val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
   val gson = Gson()
   val json = pref.getString(key, null) ?: return null
-
 
   return gson.fromJson(json, SunriseSunsetResponse::class.java)
 }
