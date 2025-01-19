@@ -51,7 +51,6 @@ object CalendarEventInfo {
             CalendarContract.Events.TITLE,
             CalendarContract.Events.DESCRIPTION,
             CalendarContract.Events.DTSTART,
-            CalendarContract.Events.EVENT_LOCATION,
             CalendarContract.Events.DTEND,
             CalendarContract.Events.CALENDAR_ID)
 
@@ -72,9 +71,9 @@ object CalendarEventInfo {
 
     // Check for events happening today in the selected calendar
     val selectionToday =
-        "${CalendarContract.Events.CALENDAR_ID} = ? AND ${CalendarContract.Events.DTSTART} >= ? AND ${CalendarContract.Events.DTSTART} < ?"
+        "${CalendarContract.Events.CALENDAR_ID} = ? AND ${CalendarContract.Events.DTSTART} < ? AND ${CalendarContract.Events.DTEND} >= ?"
     val selectionArgsToday =
-        arrayOf(selectedCalendarId.toString(), startOfDay.toString(), endOfDay.toString())
+        arrayOf(selectedCalendarId.toString(), endOfDay.toString(), now.toString())
     val sortOrder = "${CalendarContract.Events.DTSTART} ASC"
 
     contentResolver.query(uri, projection, selectionToday, selectionArgsToday, sortOrder)?.use {
