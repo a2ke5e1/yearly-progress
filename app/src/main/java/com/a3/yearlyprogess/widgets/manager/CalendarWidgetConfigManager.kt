@@ -44,16 +44,7 @@ object CalendarEventInfo {
       contentResolver: ContentResolver,
       selectedCalendarId: Long
   ): List<Event> {
-    val uri: Uri = CalendarContract.Events.CONTENT_URI
-    val projection =
-        arrayOf(
-            CalendarContract.Events._ID,
-            CalendarContract.Events.TITLE,
-            CalendarContract.Events.DESCRIPTION,
-            CalendarContract.Events.DTSTART,
-            CalendarContract.Events.DTEND,
-            CalendarContract.Events.CALENDAR_ID)
-
+    // Calculate start and end of the day
     val now = System.currentTimeMillis()
     val calendar =
         Calendar.getInstance().apply {
@@ -69,27 +60,41 @@ object CalendarEventInfo {
 
     val events = mutableListOf<Event>()
 
-    // Check for events happening today in the selected calendar
-    val selectionToday =
-        "${CalendarContract.Events.CALENDAR_ID} = ? AND ${CalendarContract.Events.DTSTART} < ? AND ${CalendarContract.Events.DTEND} >= ?"
-    val selectionArgsToday =
-        arrayOf(selectedCalendarId.toString(), endOfDay.toString(), now.toString())
-    val sortOrder = "${CalendarContract.Events.DTSTART} ASC"
+    // Build the URI for the Instances table with the desired time range
+    val uri =
+        CalendarContract.Instances.CONTENT_URI.buildUpon()
+            .appendPath(startOfDay.toString())
+            .appendPath(endOfDay.toString())
+            .build()
+
+    val projection =
+        arrayOf(
+            CalendarContract.Instances.EVENT_ID,
+            CalendarContract.Instances.TITLE,
+            CalendarContract.Instances.DESCRIPTION,
+            CalendarContract.Instances.BEGIN,
+            CalendarContract.Instances.END,
+            CalendarContract.Instances.CALENDAR_ID)
+
+    // Query for today's events (including recurring ones)
+    val selectionToday = "${CalendarContract.Instances.CALENDAR_ID} = ?"
+    val selectionArgsToday = arrayOf(selectedCalendarId.toString())
+    val sortOrder = "${CalendarContract.Instances.BEGIN} ASC"
 
     contentResolver.query(uri, projection, selectionToday, selectionArgsToday, sortOrder)?.use {
         cursor ->
       while (cursor.moveToNext()) {
-        val id = cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Events._ID))
+        val id = cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Instances.EVENT_ID))
         val title =
-            cursor.getStringOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.TITLE))
+            cursor.getStringOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Instances.TITLE))
                 ?: ""
         val description =
             cursor.getStringOrNull(
-                cursor.getColumnIndexOrThrow(CalendarContract.Events.DESCRIPTION)) ?: ""
+                cursor.getColumnIndexOrThrow(CalendarContract.Instances.DESCRIPTION)) ?: ""
         val startTimeUtc =
-            cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTSTART))
+            cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Instances.BEGIN))
         val endTimeUtc =
-            cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTEND))
+            cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Instances.END))
 
         if (startTimeUtc != null && endTimeUtc != null) {
           events.add(
@@ -107,26 +112,31 @@ object CalendarEventInfo {
       return events // Return events for today
     }
 
-    // If no events today, get the nearest upcoming event in the selected calendar
-    val selectionUpcoming =
-        "${CalendarContract.Events.CALENDAR_ID} = ? AND ${CalendarContract.Events.DTSTART} >= ?"
-    val selectionArgsUpcoming = arrayOf(selectedCalendarId.toString(), now.toString())
+    // If no events today, query for the nearest upcoming events
+    val upcomingUri =
+        CalendarContract.Instances.CONTENT_URI.buildUpon()
+            .appendPath(now.toString())
+            .appendPath(
+                (now + 30L * 24 * 60 * 60 * 1000)
+                    .toString()) // Search for events within the next 30 days
+            .build()
 
     contentResolver
-        .query(uri, projection, selectionUpcoming, selectionArgsUpcoming, sortOrder)
+        .query(upcomingUri, projection, selectionToday, selectionArgsToday, sortOrder)
         ?.use { cursor ->
-          if (cursor.moveToFirst()) {
-            val id = cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Events._ID))
+          while (cursor.moveToNext()) {
+            val id =
+                cursor.getLong(cursor.getColumnIndexOrThrow(CalendarContract.Instances.EVENT_ID))
             val title =
-                cursor.getStringOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.TITLE))
-                    ?: ""
+                cursor.getStringOrNull(
+                    cursor.getColumnIndexOrThrow(CalendarContract.Instances.TITLE)) ?: ""
             val description =
                 cursor.getStringOrNull(
-                    cursor.getColumnIndexOrThrow(CalendarContract.Events.DESCRIPTION)) ?: ""
+                    cursor.getColumnIndexOrThrow(CalendarContract.Instances.DESCRIPTION)) ?: ""
             val startTimeUtc =
-                cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTSTART))
+                cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Instances.BEGIN))
             val endTimeUtc =
-                cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Events.DTEND))
+                cursor.getLongOrNull(cursor.getColumnIndexOrThrow(CalendarContract.Instances.END))
 
             if (startTimeUtc != null && endTimeUtc != null) {
               events.add(
