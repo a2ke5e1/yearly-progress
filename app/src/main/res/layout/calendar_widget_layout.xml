@@ -51,8 +51,14 @@
                 android:layout_marginTop="-4dp"
                 android:text="Event Title"
                 android:textColor="@color/md_theme_tertiary"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="18sp"
+                android:autoSizeMaxTextSize="24sp"
+                android:autoSizeStepGranularity="2sp"
+                />
 
             <TextView
                 android:id="@+id/event_description"
@@ -60,6 +66,12 @@
                 android:textAlignment="center"
                 android:layout_height="wrap_content"
                 android:text="Event Description"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="11sp"
+                android:autoSizeStepGranularity="1sp"
                 android:textColor="@color/md_theme_onSurfaceVariant"
                 android:textSize="11sp" />
 
@@ -71,7 +83,14 @@
                 android:layout_height="wrap_content"
                 android:text="Event Duration"
                 android:textColor="@color/md_theme_onSurfaceVariant"
-                android:textSize="6sp" />
+                android:maxLines="1"
+                android:textSize="6sp"
+                android:ellipsize="none"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="4sp"
+                android:autoSizeMaxTextSize="6sp"
+                android:autoSizeStepGranularity="1sp"
+                />
 
 
         </LinearLayout>

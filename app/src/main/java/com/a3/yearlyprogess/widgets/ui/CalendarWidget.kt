@@ -21,6 +21,8 @@ import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getTodayOrNearestE
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import java.util.Date
 import kotlin.math.roundToInt
 
@@ -61,8 +63,8 @@ class CalendarEventsSwiper(
     return _events[_currentEventIndex]
   }
 
-  fun current(): Event {
-    return _events[_currentEventIndex]
+  fun current(): Event? {
+    return _events.getOrNull(_currentEventIndex)
   }
 
   fun indicator(): String {
@@ -163,13 +165,19 @@ class CalendarWidget : BaseWidget() {
       val event = getTodayOrNearestEvents(context.contentResolver, calendarId)
       events.addAll(event)
     }
-/*
-    Log.d("CalendarWidget", "All Events: \n${
+
+    Log.d("CalendarWidget","All Events: \n${
+      events
+        .sortedBy { it.eventStartTime }
+        .joinToString("\n") { "${it.eventTitle.padEnd(20)}\t${it.eventStartTime}\t${it.eventEndTime}\t${calculateProgress(context, it.eventStartTime.time, it.eventEndTime.time)}" }
+    }")
+
+    Log.d("CalendarWidget","Filtered Events: \n${
       events
         .filter { it.eventEndTime.time > System.currentTimeMillis() }
         .sortedBy { it.eventStartTime }
-        .joinToString("\n") { "${it.eventTitle.padEnd(20)}\t${it.eventStartTime}\t${it.eventEndTime}\t${calculateProgress(context, it.eventStartTime.time, it.eventEndTime.time)}" }
-    }")*/
+        .joinToString("\n") { "${it.eventTitle.padEnd(20)}\t${it.eventStartTime}\t${it.eventEndTime}\t${calculateProgress(context, it.eventStartTime.time, it.eventEndTime.time)}\t${it.eventDescription.length}" }
+    }")
 
     if (events.isEmpty()) {
       updateWidgetError(
@@ -186,6 +194,19 @@ class CalendarWidget : BaseWidget() {
 
     val calendarEventsSwiper = CalendarEventsSwiper(context, events)
     val event = calendarEventsSwiper.current()
+
+    if (event == null) {
+      updateWidgetError(
+        context,
+        appWidgetId,
+        "Error",
+        "No upcoming events",
+        appWidgetManager,
+        smallView,
+        largeView,
+      )
+      return
+    }
 
     setupCalendarWidgetView(context, smallView, event)
     smallView.setViewVisibility(R.id.event_description, android.view.View.GONE)
@@ -258,8 +279,10 @@ class CalendarWidget : BaseWidget() {
     }
 
     view.setViewVisibility(R.id.event_title, android.view.View.VISIBLE)
-    if (event.eventDescription.isNotEmpty() || event.eventDescription.isNotBlank()) {
+    if (event.eventDescription.isNotEmpty() && event.eventDescription.isNotBlank()) {
       view.setViewVisibility(R.id.event_description, android.view.View.VISIBLE)
+    } else {
+      view.setViewVisibility(R.id.event_description, android.view.View.GONE)
     }
 
     val nextIntent = Intent(context, CalendarWidget::class.java).apply {

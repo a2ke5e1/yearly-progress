@@ -28,7 +28,6 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="4dp"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -56,6 +55,10 @@
                 android:ellipsize="end"
                 android:textColor="@color/md_theme_tertiary"
                 android:textSize="16sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="11sp"
+                android:autoSizeMaxTextSize="16sp"
+                android:autoSizeStepGranularity="2sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -76,7 +79,14 @@
                 android:layout_height="wrap_content"
                 android:text="Event Duration"
                 android:textColor="@color/md_theme_onSurfaceVariant"
-                android:textSize="6sp" />
+                android:maxLines="1"
+                android:ellipsize="none"
+                android:textSize="6sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="4sp"
+                android:autoSizeMaxTextSize="6sp"
+                android:autoSizeStepGranularity="1sp"
+                />
 
 
         </LinearLayout>
