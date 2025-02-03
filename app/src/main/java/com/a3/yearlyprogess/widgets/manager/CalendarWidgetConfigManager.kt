@@ -191,6 +191,8 @@ object CalendarEventInfo {
         .minByOrNull { event -> event.eventStartTime }
   }
 
+
+
   fun saveSelectedCalendarIds(context: Context, selectedCalendarIds: List<Long>) {
     // Save selected calendar IDs to SharedPreferences
     val sharedPreferences =
