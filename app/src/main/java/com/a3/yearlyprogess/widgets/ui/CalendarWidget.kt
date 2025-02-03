@@ -68,7 +68,9 @@ class CalendarEventsSwiper(
   }
 
   fun indicator(): String {
-    return "${_currentEventIndex + 1}/${_events.size}"
+    return _events.indices.joinToString("") { index ->
+      if (index == _currentEventIndex) "⬤" else "◯"
+    }
   }
 
   companion object {
