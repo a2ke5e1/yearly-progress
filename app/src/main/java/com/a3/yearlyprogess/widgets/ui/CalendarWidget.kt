@@ -8,21 +8,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import android.util.SizeF
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.calculateTimeLeft
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetails
-import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCurrentEventOrUpcomingEvent
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getSelectedCalendarIds
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getTodayOrNearestEvents
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
 import java.util.Date
 import kotlin.math.roundToInt
 
@@ -168,7 +164,7 @@ class CalendarWidget : BaseWidget() {
       events.addAll(event)
     }
 
-    Log.d("CalendarWidget","All Events: \n${
+    /*Log.d("CalendarWidget","All Events: \n${
       events
         .sortedBy { it.eventStartTime }
         .joinToString("\n") { "${it.eventTitle.padEnd(20)}\t${it.eventStartTime}\t${it.eventEndTime}\t${calculateProgress(context, it.eventStartTime.time, it.eventEndTime.time)}" }
@@ -179,7 +175,7 @@ class CalendarWidget : BaseWidget() {
         .filter { it.eventEndTime.time > System.currentTimeMillis() }
         .sortedBy { it.eventStartTime }
         .joinToString("\n") { "${it.eventTitle.padEnd(20)}\t${it.eventStartTime}\t${it.eventEndTime}\t${calculateProgress(context, it.eventStartTime.time, it.eventEndTime.time)}\t${it.eventDescription.length}" }
-    }")
+    }")*/
 
     if (events.isEmpty()) {
       updateWidgetError(
