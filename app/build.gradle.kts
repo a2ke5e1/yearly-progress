@@ -16,8 +16,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 114
-        versionName = "2.15.0-beta09"
+        versionCode = 115
+        versionName = "2.15.0-beta10"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -55,10 +55,10 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-    implementation("com.google.firebase:firebase-crashlytics:19.3.0")
-    implementation("androidx.activity:activity-ktx:1.9.3")
-  implementation("androidx.work:work-runtime-ktx:2.10.0")
-  testImplementation("junit:junit:4.13.2")
+    implementation("com.google.firebase:firebase-crashlytics:19.4.0")
+    implementation("androidx.activity:activity-ktx:1.10.0")
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
+    testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
@@ -66,7 +66,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
     // Material Design 3.0
-    implementation("com.google.android.material:material:1.13.0-alpha09")
+    implementation("com.google.android.material:material:1.13.0-alpha10")
 
     // Splash Screen for android 11 and below
     implementation("androidx.core:core-splashscreen:1.0.1")
@@ -75,8 +75,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:23.6.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.7")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")

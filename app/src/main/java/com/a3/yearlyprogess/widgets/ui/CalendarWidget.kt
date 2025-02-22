@@ -114,6 +114,9 @@ class CalendarWidget : BaseWidget() {
         swiper.previous()
       }
 
+      // Clearing any existing jobs.
+      // It should help to avoid widget flickering.
+      clearJob()
       val appWidgetManager = AppWidgetManager.getInstance(context)
       val componentName = ComponentName(context, CalendarWidget::class.java)
       appWidgetManager.getAppWidgetIds(componentName).forEach { appWidgetId ->
@@ -368,7 +371,7 @@ class CalendarWidget : BaseWidget() {
         .uppercase()
   }
 
-  fun clearJob() {
+  private fun clearJob() {
     updateJob?.cancel()
     updateJob = null
   }
