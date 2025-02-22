@@ -13,9 +13,6 @@
         android:src="@drawable/app_widget_background" />
 
 
-
-
-
     <RelativeLayout
         style="@style/Widget.YearlyProgress.AppWidget.Container.Transparent"
         android:layout_width="match_parent"
@@ -54,8 +51,11 @@
                 android:layout_marginTop="-4dp"
                 android:text="Event Title"
                 android:textColor="@color/md_theme_tertiary"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="16sp"
+                />
 
             <TextView
                 android:id="@+id/event_description"
@@ -63,8 +63,11 @@
                 android:textAlignment="center"
                 android:layout_height="wrap_content"
                 android:text="Event Description"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="10sp"
                 android:textColor="@color/md_theme_onSurfaceVariant"
-                android:textSize="11sp" />
+                 />
 
 
             <TextView
@@ -74,7 +77,13 @@
                 android:layout_height="wrap_content"
                 android:text="Event Duration"
                 android:textColor="@color/md_theme_onSurfaceVariant"
-                android:textSize="6sp" />
+                android:maxLines="1"
+                android:ellipsize="none"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="4sp"
+                android:autoSizeMaxTextSize="6sp"
+                android:autoSizeStepGranularity="1sp"
+                />
 
 
         </LinearLayout>
@@ -97,18 +106,18 @@
                 android:text="@string/demo_day_per"
                 android:textAlignment="center"
                 android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="36sp" />
+                android:textSize="28sp"
+                />
 
             <TextView
                 android:id="@+id/widgetDays"
                 android:layout_width="match_parent"
                 android:textAlignment="center"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-4dp"
                 android:textColor="@color/md_theme_onSurfaceVariant"
                 android:textSize="11sp"
+                android:layout_marginTop="-8dp"
                 android:textStyle="normal"
-                android:layout_marginBottom="8dp"
                 tools:text="112d left" />
 
 
@@ -125,4 +134,43 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="3sp"
+        android:fontFamily="@font/inter_semibold"
+        android:padding="4dp"
+        android:letterSpacing="0.3"
+        android:layout_gravity="center_horizontal|bottom"
+        android:textColor="@color/widget_text_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:clipChildren="true"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/prev_btn"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/home_btn"
+            android:background="#00000000"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/next_btn"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </FrameLayout>
