@@ -135,7 +135,7 @@
         android:textSize="3sp"
         android:fontFamily="@font/inter_semibold"
         android:padding="4dp"
-        android:letterSpacing="0.3"
+        android:letterSpacing="0.5"
         android:layout_gravity="center_horizontal|bottom"
         android:textColor="@color/widget_text_color" />
 

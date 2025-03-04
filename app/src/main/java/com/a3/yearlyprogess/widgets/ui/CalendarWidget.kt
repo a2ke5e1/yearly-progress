@@ -7,9 +7,14 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.SizeF
 import android.widget.RemoteViews
+import androidx.core.graphics.toColor
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.calculateTimeLeft
@@ -54,24 +59,30 @@ class CalendarEventsSwiper(
       pref.edit().putInt(SWIPER_CURRENT_INDEX, value).apply()
     }
 
-  fun next(): Event {
+  fun next() {
+    if (_events.isEmpty()) return
     _currentEventIndex = (_currentEventIndex + 1) % _events.size
-    return _events[_currentEventIndex]
   }
 
-  fun previous(): Event {
+  fun previous() {
+    if (_events.isEmpty()) return
     _currentEventIndex = (_currentEventIndex - 1 + _events.size) % _events.size
-    return _events[_currentEventIndex]
   }
 
   fun current(): Event? {
     return _events.getOrNull(_currentEventIndex)
   }
 
-  fun indicator(): String {
-    return _events.indices.joinToString("") { index ->
-      if (index == _currentEventIndex) "⬤" else "◯"
+  fun indicator(): SpannableString {
+    val indicatorText = _events.indices.joinToString("") { _ ->
+      "⬤"
     }
+    val spannableString = SpannableString(indicatorText)
+    val indicatorColor = context.getColor(R.color.widget_text_color).toColor()
+    val colorWithOpacity = Color.argb(0.5f,indicatorColor.red(), indicatorColor.green(), indicatorColor.blue())
+    spannableString.setSpan(ForegroundColorSpan(colorWithOpacity), 0, _currentEventIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    spannableString.setSpan(ForegroundColorSpan(colorWithOpacity),  _currentEventIndex+1, indicatorText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    return spannableString
   }
 
   companion object {
