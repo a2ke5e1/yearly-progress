@@ -16,6 +16,7 @@ import com.a3.yearlyprogess.widgets.ui.StandaloneWidget
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.color.DynamicColors
 
 class StandaloneWidgetStyleChooser : AppCompatActivity() {
   private var _binding: ActivityStandaloneWidgetStyleBinding? = null
@@ -25,6 +26,7 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
+    DynamicColors.applyToActivityIfAvailable(this)
     _binding = ActivityStandaloneWidgetStyleBinding.inflate(layoutInflater)
     setContentView(binding.root)
     ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->

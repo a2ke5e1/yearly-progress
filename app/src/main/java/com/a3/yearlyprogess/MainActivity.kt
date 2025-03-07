@@ -16,6 +16,7 @@ import com.a3.yearlyprogess.databinding.ActivityMainBinding
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.color.DynamicColors
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
@@ -34,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     installSplashScreen()
     enableEdgeToEdge()
+    DynamicColors.applyToActivityIfAvailable(this)
+
+
 
     val pref = this.getSharedPreferences(YEARLY_PROGRESS_PREF, MODE_PRIVATE)
     val firstLaunch = pref.getBoolean(FIRST_LAUNCH, true)
@@ -47,6 +51,7 @@ class MainActivity : AppCompatActivity() {
       startActivity(Intent(this, WelcomeScreen::class.java))
       finish()
     }
+
 
     /*
      *   Loads Consent Form to EU

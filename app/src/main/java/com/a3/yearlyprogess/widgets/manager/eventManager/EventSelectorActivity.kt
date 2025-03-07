@@ -17,6 +17,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.ui.EventWidget
+import com.google.android.material.color.DynamicColors
 import java.util.Date
 
 class EventSelectorActivity : AppCompatActivity() {
@@ -25,9 +26,9 @@ class EventSelectorActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-    binding = EventSelectorScreenListEventsBinding.inflate(layoutInflater)
     enableEdgeToEdge()
+    DynamicColors.applyToActivityIfAvailable(this)
+    binding = EventSelectorScreenListEventsBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
     ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->

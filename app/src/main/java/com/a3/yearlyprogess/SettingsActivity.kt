@@ -12,14 +12,16 @@ import androidx.preference.PreferenceFragmentCompat
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.color.DynamicColors
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class SettingsActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.settings_activity)
     enableEdgeToEdge()
+    DynamicColors.applyToActivityIfAvailable(this)
+    setContentView(R.layout.settings_activity)
     if (savedInstanceState == null) {
       supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
     }

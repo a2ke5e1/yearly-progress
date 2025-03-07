@@ -29,6 +29,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventItem
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDao
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +44,7 @@ class ImportEventCalendarActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    DynamicColors.applyToActivityIfAvailable(this)
     binding = ActivityImportEventCalendarBinding.inflate(layoutInflater)
     setContentView(binding.root)
 

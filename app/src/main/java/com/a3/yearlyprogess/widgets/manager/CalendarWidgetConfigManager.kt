@@ -36,6 +36,7 @@ import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetail
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getSelectedCalendarIds
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.saveSelectedCalendarIds
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
+import com.google.android.material.color.DynamicColors
 import java.util.Calendar
 import java.util.Date
 
@@ -369,6 +370,7 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
+    DynamicColors.applyToActivityIfAvailable(this)
     _binding = ActivityCalendarWidgetConfigManagerBinding.inflate(layoutInflater)
     setContentView(binding.root)
     ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { v, insets ->

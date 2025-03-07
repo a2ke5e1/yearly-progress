@@ -16,8 +16,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 115
-        versionName = "2.15.0-beta10"
+        versionCode = 116
+        versionName = "2.15.0-beta11"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -52,10 +52,10 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-    implementation("com.google.firebase:firebase-crashlytics:19.4.0")
+    implementation("com.google.firebase:firebase-crashlytics:19.4.1")
     implementation("androidx.activity:activity-ktx:1.10.0")
     implementation("androidx.work:work-runtime-ktx:2.10.0")
     testImplementation("junit:junit:4.13.2")
@@ -66,17 +66,17 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
     // Material Design 3.0
-    implementation("com.google.android.material:material:1.13.0-alpha10")
+    implementation("com.google.android.material:material:1.13.0-alpha11")
 
     // Splash Screen for android 11 and below
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Ads
-    implementation("com.google.android.gms:play-services-ads:23.6.0")
+    implementation("com.google.android.gms:play-services-ads:24.0.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.7")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.8")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.8")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
