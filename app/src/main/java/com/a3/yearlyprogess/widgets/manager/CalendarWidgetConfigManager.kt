@@ -379,7 +379,7 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
       insets
     }
     setSupportActionBar(binding.toolbar)
-    binding.toolbar.title = "Select Calendars"
+    binding.toolbar.title = getString(R.string.select_calendars)
     calendarPermissionDialog =
         PermissionMessageDialog(
             icon = R.drawable.ic_outline_edit_calendar_24,
