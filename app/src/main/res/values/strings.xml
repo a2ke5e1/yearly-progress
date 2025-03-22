@@ -134,5 +134,6 @@
     <string name="no_calendars_available">No calendars available</string>
     <string name="calendar_permission_required">Calendar permission required</string>
     <string name="time_in">in %1$s</string>
+    <string name="select_calendars">Select Calendars</string>
 
 </resources>
