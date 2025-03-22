@@ -403,7 +403,7 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
           Manifest.permission.READ_CALENDAR,
       ) == PackageManager.PERMISSION_DENIED -> {
         binding.errorLayout.visibility = View.VISIBLE
-        binding.errorMessage.text = "Calendar permission required"
+        binding.errorMessage.text = getString(R.string.calendar_permission_required)
         binding.calendarList.visibility = View.GONE
         calendarPermissionDialog.show(supportFragmentManager, "")
       }
@@ -441,7 +441,7 @@ class CalendarWidgetConfigManager : AppCompatActivity() {
 
     if (calendars.isEmpty()) {
       binding.errorLayout.visibility = View.VISIBLE
-      binding.errorMessage.text = "No calendars available"
+      binding.errorMessage.text = getString(R.string.no_calendars_available)
       binding.calendarList.visibility = View.GONE
       return
     }

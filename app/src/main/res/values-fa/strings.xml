@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">پیشرفت سالانه</string>
     <string name="action_settings">تنظیمات</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">پیشرفت</string>
     <string name="second_fragment_label">ابزارکها</string>
     <string name="next">بعدی</string>
@@ -45,21 +44,6 @@
     <string name="date">تاریخ</string>
     <string name="time">زمان</string>
     <string name="title_activity_settings">تنظیمات</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">پیامها</string>
-    <string name="sync_header">همگام سازی</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">امضای شما</string>
-    <string name="reply_title">عملکرد پاسخ پیش فرض</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">همگام سازی دوره ای رایانامه</string>
-    <string name="attachment_title">دانلود پیوست های دریافتی</string>
-    <string name="attachment_summary_on">دانلود خودکار پیوست ها برای رایانامه های دریافتی
-    </string>
-    <string name="attachment_summary_off">فقط در صورت درخواست دستی پیوست ها را دانلود کنید</string>
     <string name="settings">تنظیمات</string>
     <string name="pref_title_week_day">اولین روز هفته را انتخاب کنید</string>
     <string name="pref_title_widget_decimal_places">مکان اعشاری ابزارک ها</string>

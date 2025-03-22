@@ -45,20 +45,6 @@
     <string name="date">तारीख</string>
     <string name="time">समय</string>
     <string name="title_activity_settings">सेटिंग्स</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">संदेश</string>
-    <string name="sync_header">सिंक</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">आपका हस्ताक्षर</string>
-    <string name="reply_title">डिफ़ॉल्ट उत्तर क्रिया</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">ईमेल को नियमित रूप से सिंक करें</string>
-    <string name="attachment_title">आने वाले संलग्नकों को डाउनलोड करें</string>
-    <string name="attachment_summary_on">आने वाले ईमेल के लिए स्वचालित रूप से संलग्नक डाउनलोड करें</string>
-    <string name="attachment_summary_off">केवल मैन्युअल अनुरोध पर संलग्नक डाउनलोड करें</string>
     <string name="settings">सेटिंग्स</string>
     <string name="pref_title_week_day">सप्ताह के पहले दिन का चयन करें</string>
     <string name="pref_title_widget_decimal_places">विजेट्स के दशमलव स्थान</string>

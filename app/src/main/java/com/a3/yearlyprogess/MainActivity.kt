@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
     enableEdgeToEdge()
     DynamicColors.applyToActivityIfAvailable(this)
 
-
-
     val pref = this.getSharedPreferences(YEARLY_PROGRESS_PREF, MODE_PRIVATE)
     val firstLaunch = pref.getBoolean(FIRST_LAUNCH, true)
 
@@ -51,7 +49,6 @@ class MainActivity : AppCompatActivity() {
       startActivity(Intent(this, WelcomeScreen::class.java))
       finish()
     }
-
 
     /*
      *   Loads Consent Form to EU
