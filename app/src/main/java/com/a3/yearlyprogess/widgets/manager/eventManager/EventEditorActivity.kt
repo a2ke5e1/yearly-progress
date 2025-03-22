@@ -24,6 +24,7 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.RepeatDays
 import com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.ui.EventWidget
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -44,9 +45,9 @@ class EventEditorActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-    binding = ActivityEventManagerActivityBinding.inflate(layoutInflater)
     enableEdgeToEdge()
+    DynamicColors.applyToActivityIfAvailable(this)
+    binding = ActivityEventManagerActivityBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
     ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->

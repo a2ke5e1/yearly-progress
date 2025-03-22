@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Yearly Progress</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Progress</string>
     <string name="second_fragment_label">Widgets</string>
     <string name="next">Next</string>
@@ -45,21 +44,6 @@
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="title_activity_settings">Settings</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="settings">Settings</string>
     <string name="pref_title_week_day">Select first day of week</string>
     <string name="pref_title_widget_decimal_places">Decimal places of widgets</string>
@@ -143,5 +127,12 @@
     <string name="enable_location_day_night_message">Allow location permission to see Day/Night Progress</string>
     <string name="allow">Allow</string>
     <string name="calendar_widget_description">Shows progress of upcoming events in your calendar</string>
+    <string name="ongoing">ongoing</string>
+    <string name="upcoming">upcoming</string>
+    <string name="no_upcoming_events">No upcoming events</string>
+    <string name="error">Error</string>
+    <string name="no_calendars_available">No calendars available</string>
+    <string name="calendar_permission_required">Calendar permission required</string>
+    <string name="time_in">in %1$s</string>
 
 </resources>

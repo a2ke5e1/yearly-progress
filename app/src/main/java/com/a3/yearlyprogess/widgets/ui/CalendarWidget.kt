@@ -7,9 +7,14 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.SizeF
 import android.widget.RemoteViews
+import androidx.core.graphics.toColor
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.calculateTimeLeft
@@ -28,11 +33,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class CalendarEventsSwiper(
-    val context: Context,
-    private val events: List<Event>,
-    val limits: Int = 5
-) {
+class CalendarEventsSwiper(val context: Context, events: List<Event>, limits: Int = 5) {
 
   private val pref = context.getSharedPreferences(SWIPER_KEY, Context.MODE_PRIVATE)
 
@@ -54,31 +55,44 @@ class CalendarEventsSwiper(
       pref.edit().putInt(SWIPER_CURRENT_INDEX, value).apply()
     }
 
-  fun next(): Event {
+  fun next() {
+    if (_events.isEmpty()) return
     _currentEventIndex = (_currentEventIndex + 1) % _events.size
-    return _events[_currentEventIndex]
   }
 
-  fun previous(): Event {
+  fun previous() {
+    if (_events.isEmpty()) return
     _currentEventIndex = (_currentEventIndex - 1 + _events.size) % _events.size
-    return _events[_currentEventIndex]
   }
 
   fun current(): Event? {
     return _events.getOrNull(_currentEventIndex)
   }
 
-  fun indicator(): String {
-    return _events.indices.joinToString("") { index ->
-      if (index == _currentEventIndex) "⬤" else "◯"
-    }
+  fun indicator(): SpannableString {
+    val indicatorText = _events.indices.joinToString("") { _ -> "⬤" }
+    val spannableString = SpannableString(indicatorText)
+    val indicatorColor = context.getColor(R.color.widget_text_color).toColor()
+    val colorWithOpacity =
+        Color.argb(0.5f, indicatorColor.red(), indicatorColor.green(), indicatorColor.blue())
+    spannableString.setSpan(
+        ForegroundColorSpan(colorWithOpacity),
+        0,
+        _currentEventIndex,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    spannableString.setSpan(
+        ForegroundColorSpan(colorWithOpacity),
+        _currentEventIndex + 1,
+        indicatorText.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    return spannableString
   }
 
   companion object {
-    private val SWIPER_KEY = "CalendarEventsSwiper"
-    private val SWIPER_CURRENT_INDEX = "CalendarEventsSwiperIndex"
-    val ACTION_NEXT = "com.a3.yearlyprogress.widgets.ui.CalendarWidget.ACTION_NEXT"
-    val ACTION_PREV = "com.a3.yearlyprogress.widgets.ui.CalendarWidget.ACTION_PREV"
+    private const val SWIPER_KEY = "CalendarEventsSwiper"
+    private const val SWIPER_CURRENT_INDEX = "CalendarEventsSwiperIndex"
+    const val ACTION_NEXT = "com.a3.yearlyprogress.widgets.ui.CalendarWidget.ACTION_NEXT"
+    const val ACTION_PREV = "com.a3.yearlyprogress.widgets.ui.CalendarWidget.ACTION_PREV"
   }
 }
 
@@ -141,8 +155,8 @@ class CalendarWidget : BaseWidget() {
       updateWidgetError(
           context,
           appWidgetId,
-          "Error",
-          "Calendar permission required",
+          context.getString(R.string.error),
+          context.getString(R.string.calendar_permission_required),
           appWidgetManager,
           smallView,
           largeView,
@@ -163,8 +177,8 @@ class CalendarWidget : BaseWidget() {
               updateWidgetError(
                   context,
                   appWidgetId,
-                  "Error",
-                  "No calendars available",
+                  context.getString(R.string.error),
+                  context.getString(R.string.no_calendars_available),
                   appWidgetManager,
                   smallView,
                   largeView,
@@ -195,8 +209,8 @@ class CalendarWidget : BaseWidget() {
               updateWidgetError(
                   context,
                   appWidgetId,
-                  "Error",
-                  "No upcoming events",
+                  context.getString(R.string.error),
+                  context.getString(R.string.no_upcoming_events),
                   appWidgetManager,
                   smallView,
                   largeView,
@@ -211,8 +225,8 @@ class CalendarWidget : BaseWidget() {
               updateWidgetError(
                   context,
                   appWidgetId,
-                  "Error",
-                  "No upcoming events",
+                  context.getString(R.string.error),
+                  context.getString(R.string.no_upcoming_events),
                   appWidgetManager,
                   smallView,
                   largeView,
@@ -279,18 +293,21 @@ class CalendarWidget : BaseWidget() {
 
     val widgetDays =
         if (System.currentTimeMillis() < event.eventStartTime.time) {
-          "in " + (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText()
+          context.getString(
+              R.string.time_in,
+              (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText())
         } else {
-          calculateTimeLeft(event.eventEndTime.time).toTimePeriodText() + " left"
+          context.getString(
+              R.string.time_left, calculateTimeLeft(event.eventEndTime.time).toTimePeriodText())
         }
     view.setTextViewText(R.id.widgetDays, widgetDays)
 
     if (System.currentTimeMillis() in event.eventStartTime.time..event.eventEndTime.time) {
       view.setViewVisibility(R.id.widgetProgressBar, android.view.View.VISIBLE)
-      view.setTextViewText(R.id.event_status, "ongoing")
+      view.setTextViewText(R.id.event_status, context.getString(R.string.ongoing))
     } else {
       view.setViewVisibility(R.id.widgetProgressBar, android.view.View.GONE)
-      view.setTextViewText(R.id.event_status, "upcoming")
+      view.setTextViewText(R.id.event_status, context.getString(R.string.upcoming))
     }
 
     view.setViewVisibility(R.id.event_title, android.view.View.VISIBLE)

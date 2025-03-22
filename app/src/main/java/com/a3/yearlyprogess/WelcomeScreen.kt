@@ -12,15 +12,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.a3.yearlyprogess.databinding.ActivityFirstScreenBinding
+import com.google.android.material.color.DynamicColors
 
 class WelcomeScreen : AppCompatActivity() {
   private lateinit var binding: ActivityFirstScreenBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
+    DynamicColors.applyToActivityIfAvailable(this)
     binding = ActivityFirstScreenBinding.inflate(layoutInflater)
     setContentView(binding.root)
-    enableEdgeToEdge()
 
     ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
       val navigationBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
