@@ -14,9 +14,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-private fun getULocale(): ULocale {
+fun getULocale(): ULocale {
   val defaultULocale = ULocale.getDefault()
-  return ULocale(defaultULocale.toString() + "@calendar=persian")
+  return ULocale(defaultULocale.toString() + "@calendar=indian")
 }
 
 enum class TimePeriod {
@@ -62,7 +62,8 @@ fun calculateProgress(
 }
 
 fun calculateTimeLeft(endTime: Long): Long {
-  return endTime - System.currentTimeMillis()
+  val cal = Calendar.getInstance(getULocale())
+  return endTime - cal.timeInMillis
 }
 
 fun getCurrentPeriodValue(timePeriod: TimePeriod): Int {

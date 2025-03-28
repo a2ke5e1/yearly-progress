@@ -6,8 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.text.SpannableString
+import android.text.format.DateFormat.is24HourFormat
 import android.util.SizeF
 import android.util.TypedValue
 import android.view.View
@@ -24,18 +26,19 @@ import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.calculateStartTime
 import com.a3.yearlyprogess.calculateTimeLeft
 import com.a3.yearlyprogess.getCurrentPeriodValue
+import com.a3.yearlyprogess.getULocale
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 /** Utility object for creating and managing widget RemoteViews. */
 object WidgetUtils {
@@ -602,11 +605,17 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
               )
 
       val (startTime, endTime) = sunriseSunset.getStartAndEndTime(dayLight)
+      val isSystem24Hour = is24HourFormat(context)
+      val format = if (isSystem24Hour) SimpleDateFormat(
+        "HH:mm",
+        getULocale()
+      ) else SimpleDateFormat("hh:mm a", getULocale())
+
       val currentValue =
           if (dayLight) {
-            "🌇 ${sunriseSunset.results[1].sunset}"
+            "🌇 ${format.format(endTime)}"
           } else {
-            "🌅 ${sunriseSunset.results[1].sunrise}"
+            "🌅 ${format.format(endTime)}"
           }
       return WidgetUtils.createRemoteView(
           context,
