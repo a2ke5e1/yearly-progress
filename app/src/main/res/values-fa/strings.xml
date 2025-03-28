@@ -116,5 +116,24 @@
     <string name="special_thanks_for_translating">تشکر ویژه برای ترجمه</string>
     <string name="manage_subscription">مدیریت اشتراک</string>
     <string name="not_available_in_your_region">در منطقه شما در دسترس نیست</string>
+    <string name="time_left">%1$s باقیمانده</string>
+    <string name="choose_your_widget_style">استایل ویجت خود را انتخاب کنید</string>
+    <string name="widget_settings">تنظیمات ویجت</string>
+    <string name="choose_an_event">رویدادی را انتخاب کنید</string>
+    <string name="standalone_widget_style_chooser_title_lable">%1$s ویجت</string>
+    <string name="failed_to_load_sunset_sunrise_time"><![CDATA[Failed to load sunset & sunrise time.]]></string>
+    <string name="progress_notification">اعلانات پیشرفت</string>
+    <string name="shows_progress_in_the_notification">نمایش پیشرفت در اعلانات</string>
+    <string name="enable_location_day_night_message">برای دیدن پیشرفت روز/شب، مجوز دسترسی مکان بدهید</string>
+    <string name="allow">پذیرفتن</string>
+    <string name="calendar_widget_description">نمایش پیشرفت رویدادهای پیش رو در تقویم شما</string>
+    <string name="ongoing">در حال انجام</string>
+    <string name="upcoming">پیش رو</string>
+    <string name="no_upcoming_events">رویداد پیش رویی نیست</string>
+    <string name="error">خطا</string>
+    <string name="no_calendars_available">تقویمی در دسترس نیست</string>
+    <string name="calendar_permission_required">مجوز دسترسی تقویم لازم است</string>
+    <string name="time_in">در %1$s</string>
+    <string name="select_calendars">انتخاب تقویمها</string>
 
 </resources>
