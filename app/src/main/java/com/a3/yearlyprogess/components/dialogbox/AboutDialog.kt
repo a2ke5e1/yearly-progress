@@ -19,7 +19,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 data class Credits(val name: String, val username: String, val language: String) {
   fun getClickableCredit(): SpannableString {
-    val credit = SpannableString("@$name - $language")
+    val credit = SpannableString("$name - $language")
     val link = "https://t.me/$username"
     val urlSpan = URLSpan(link)
     credit.setSpan(urlSpan, 0, credit.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
