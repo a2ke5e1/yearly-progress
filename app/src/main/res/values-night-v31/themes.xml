@@ -1,5 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+    <style name="Base.Theme.YearlyProgress" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar" />
     <!--
     Having themes.xml for night-v31 because of the priority order of the resource qualifiers.
     -->
