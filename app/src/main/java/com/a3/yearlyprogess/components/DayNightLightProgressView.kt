@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.icu.text.SimpleDateFormat
+import android.text.format.DateFormat.is24HourFormat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -14,6 +15,7 @@ import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
+import com.a3.yearlyprogess.getULocale
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.google.android.material.card.MaterialCardView
 import java.text.DecimalFormat
@@ -149,7 +151,10 @@ constructor(
 
   fun Long.toFormattedDateText(): String {
     val date = Date(this)
-    val format = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
+    val isSystem24Hour = is24HourFormat(context)
+    val format =
+        if (isSystem24Hour) SimpleDateFormat("yyyy-MM-dd HH:mm", getULocale())
+        else SimpleDateFormat("yyyy-MM-dd hh:mm a", getULocale())
     return format.format(date)
   }
 }

@@ -45,34 +45,41 @@
             android:layout_marginEnd="45dp"
             android:text="@string/all_in_one_widget"
             android:textAllCaps="true"
-            app:layout_constraintTop_toBottomOf="@id/ad_frame" />
+            app:layout_constraintTop_toBottomOf="@id/test2" />
 
         <include
             android:id="@+id/test"
             layout="@layout/all_in_widget"
-            android:layout_width="match_parent"
+
+            android:layout_width="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="120dp"
             app:layout_constraintTop_toBottomOf="@id/label_all_one_widgets" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_all_in_one_widget"
             style="@style/Widget.Material3.Button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
             android:layout_marginEnd="35dp"
             android:text="@string/button_text"
+            app:layout_constraintStart_toStartOf="@id/test"
+            app:layout_constraintEnd_toEndOf="@id/test"
             app:layout_constraintTop_toBottomOf="@id/test" />
 
         <LinearLayout
             android:id="@+id/ad_frame"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="35dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/test2" />
+            app:layout_constraintTop_toBottomOf="@id/btn_add_all_in_one_widget" />
 
 
         <LinearLayout

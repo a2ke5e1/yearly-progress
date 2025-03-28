@@ -17,9 +17,9 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.DialogAboutBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-data class Credits(val name:String, val username: String, val language: String) {
+data class Credits(val name: String, val username: String, val language: String) {
   fun getClickableCredit(): SpannableString {
-    val credit = SpannableString("@$name - $language")
+    val credit = SpannableString("$name - $language")
     val link = "https://t.me/$username"
     val urlSpan = URLSpan(link)
     credit.setSpan(urlSpan, 0, credit.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -28,7 +28,11 @@ data class Credits(val name:String, val username: String, val language: String) 
 }
 
 class AboutDialog : DialogFragment() {
-  private val credits = listOf(Credits("ASG13043", "ASG13043", "हिंदी"), Credits("mojienjoyment", "mojienjoyment", "فارسی"), Credits("Matteo", "Sgattocuki", "Italian"))
+  private val credits =
+      listOf(
+          Credits("ASG13043", "ASG13043", "हिंदी"),
+          Credits("mojienjoyment", "mojienjoyment", "فارسی"),
+          Credits("Matteo", "Sgattocuki", "Italian"))
 
   @SuppressLint("SetTextI18n")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

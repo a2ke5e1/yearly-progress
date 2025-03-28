@@ -74,7 +74,7 @@
             app:title="@string/widget_transparency" />
 
         <SwitchPreferenceCompat
-            app:defaultValue="false"
+            app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/widget_widget_time_left"
             app:summary="@string/shows_how_much_time_left_in_the_widget"

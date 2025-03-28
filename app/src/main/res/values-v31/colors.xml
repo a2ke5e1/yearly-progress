@@ -6,4 +6,9 @@
     <color name="widget_progress_bar_background_color">@android:color/system_neutral2_200</color>
 <!--    <color name="widget_progress_bar_background_color">@android:color/system_neutral2_200</color>-->
 
+    <color name="md_theme_onPrimaryContainer">@android:color/system_accent1_900</color>
+    <color name="md_theme_tertiary">@android:color/system_accent3_600</color>
+    <color name="md_theme_onSurfaceVariant">@android:color/system_accent3_600</color>
+    <color name="md_theme_surfaceVariant">@android:color/system_neutral2_100</color>
+
 </resources>

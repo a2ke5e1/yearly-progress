@@ -1,16 +1,23 @@
 package com.a3.yearlyprogess
 
 import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
+import android.icu.util.ULocale
 import android.location.Location
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.google.gson.Gson
-import java.util.Calendar
-import java.util.Locale
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+fun getULocale(): ULocale {
+  val defaultULocale = ULocale.getDefault()
+//  return ULocale(defaultULocale.toString() + "@calendar=indian")
+  return defaultULocale
+}
 
 enum class TimePeriod {
   DAY,
@@ -55,11 +62,12 @@ fun calculateProgress(
 }
 
 fun calculateTimeLeft(endTime: Long): Long {
-  return endTime - System.currentTimeMillis()
+  val cal = Calendar.getInstance(getULocale())
+  return endTime - cal.timeInMillis
 }
 
 fun getCurrentPeriodValue(timePeriod: TimePeriod): Int {
-  val cal = Calendar.getInstance()
+  val cal = Calendar.getInstance(getULocale())
   return when (timePeriod) {
     TimePeriod.DAY -> cal.get(Calendar.DAY_OF_MONTH)
     TimePeriod.WEEK -> cal.get(Calendar.DAY_OF_WEEK)
@@ -82,7 +90,7 @@ fun calculateStartTime(
     context: Context,
     timePeriod: TimePeriod,
 ): Long {
-  val cal = Calendar.getInstance()
+  val cal = Calendar.getInstance(getULocale())
   return when (timePeriod) {
     TimePeriod.DAY -> {
       cal.set(
@@ -133,7 +141,7 @@ fun calculateEndTime(
     context: Context,
     timePeriod: TimePeriod,
 ): Long {
-  val cal = Calendar.getInstance()
+  val cal = Calendar.getInstance(getULocale())
   return when (timePeriod) {
     TimePeriod.DAY -> {
       cal.set(
@@ -167,16 +175,46 @@ fun calculateEndTime(
 }
 
 fun getMonthName(monthNumber: Int): String {
-  val cal = Calendar.getInstance()
+  val uLocale = getULocale()
+  val cal = Calendar.getInstance(getULocale())
   cal.set(Calendar.MONTH, monthNumber - 1)
-  val monthName = cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
+
+  val formatter = SimpleDateFormat("MMMM", uLocale) // "MMMM" gives full month name
+  val monthName = formatter.format(cal.time)
+
   return monthName ?: "Unknown"
 }
 
+fun getYearName(yearNumber: Int): String {
+  val uLocale = getULocale()
+  val cal = Calendar.getInstance(getULocale())
+  cal.set(Calendar.YEAR, yearNumber)
+
+  val formatter = SimpleDateFormat("yyyy", uLocale)
+  val yearName = formatter.format(cal.time)
+
+  return yearName ?: "Unknown"
+}
+
+fun getDayName(dayNumber: Int): String {
+  val uLocale = getULocale()
+  val cal = Calendar.getInstance(getULocale())
+  cal.set(Calendar.DAY_OF_MONTH, dayNumber)
+
+  val formatter = SimpleDateFormat("dd", uLocale)
+  val dayName = formatter.format(cal.time)
+
+  return dayName ?: "Unknown"
+}
+
 fun getWeekDayName(dayOfWeek: Int): String {
-  val cal = Calendar.getInstance()
+  val uLocale = getULocale()
+  val cal = Calendar.getInstance(uLocale)
   cal.set(Calendar.DAY_OF_WEEK, dayOfWeek)
-  val dayName = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+
+  val formatter = SimpleDateFormat("EEEE", uLocale) // "EEEE" gives full WEEK name
+  val dayName = formatter.format(cal.time)
+
   return dayName ?: "Unknown"
 }
 
@@ -245,7 +283,7 @@ fun loadCachedLocation(context: Context): Location? {
 }
 
 fun getCurrentDate(): String {
-  val cal = Calendar.getInstance()
+  val cal = java.util.Calendar.getInstance()
   cal.timeInMillis = System.currentTimeMillis()
 
   return StringBuilder("")
@@ -259,7 +297,7 @@ fun getCurrentDate(): String {
 }
 
 fun getDateRange(daysToAdd: Int): String {
-  val cal = Calendar.getInstance()
+  val cal = java.util.Calendar.getInstance()
   cal.timeInMillis = System.currentTimeMillis()
   cal.add(Calendar.DATE, daysToAdd)
 

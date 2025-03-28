@@ -27,6 +27,7 @@
         style="@style/Widget.YearlyProgress.AppWidget.Container.Transparent"
         android:layout_width="214dp"
         android:layout_gravity="center"
+        android:padding="24dp"
         android:layout_height="214dp">
 
 
@@ -37,7 +38,6 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -73,7 +73,6 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:layout_marginBottom="36dp"
             android:orientation="vertical">
 
             <TextView
@@ -82,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/demo_day_per"
                 android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="24sp" />
+                android:textSize="32sp" />
 
             <TextView
                 android:id="@+id/widgetDaysLeft"
