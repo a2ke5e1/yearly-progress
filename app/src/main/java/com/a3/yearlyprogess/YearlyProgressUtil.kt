@@ -15,7 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 fun getULocale(): ULocale {
   val defaultULocale = ULocale.getDefault()
-  return ULocale(defaultULocale.toString() + "@calendar=indian")
+//  return ULocale(defaultULocale.toString() + "@calendar=indian")
+  return defaultULocale
 }
 
 enum class TimePeriod {

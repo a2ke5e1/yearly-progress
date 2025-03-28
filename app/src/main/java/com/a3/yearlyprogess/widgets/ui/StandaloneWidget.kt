@@ -10,6 +10,7 @@ import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.text.SpannableString
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.util.SizeF
 import android.util.TypedValue
 import android.view.View
@@ -240,6 +241,8 @@ object WidgetUtils {
     val height = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
     val width = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
 
+    Log.d("WidgetSize", "height=${height} width=$width")
+
     // Return the appropriate RemoteViews based on the widget shape.
     return when (options.shape) {
       WidgetShape.RECTANGLE -> rectangularRemoteView()
@@ -316,29 +319,34 @@ object WidgetUtils {
       WidgetShape.CLOVER -> {
         val large = cloverRemoteView(R.layout.standalone_widget_layout_clover_large)
         val square =
-            cloverRemoteView(R.layout.standalone_widget_layout_clover).apply {
-              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
-                setViewLayoutMargin(
-                    R.id.widgetDaysLeft,
-                    RemoteViews.MARGIN_TOP,
-                    -8f,
-                    TypedValue.COMPLEX_UNIT_DIP,
-                )
-              }
-              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
-              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
-              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
-              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
-            }
+            cloverRemoteView(R.layout.standalone_widget_layout_clover)
+//              .apply {
+//              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
+//                setViewLayoutMargin(
+//                    R.id.widgetDaysLeft,
+//                    RemoteViews.MARGIN_TOP,
+//                    -8f,
+//                    TypedValue.COMPLEX_UNIT_DIP,
+//                )
+//              }
+//              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
+//              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
+//              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
+//              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
+//            }
         val small = cloverRemoteView(R.layout.standalone_widget_layout_clover_small)
+        val xSmall = cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small).apply {
+          setViewVisibility(R.id.widgetDaysLeft, View.GONE)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
           RemoteViews(
               mapOf(
-                  SizeF(220f, 220f) to large,
-                  SizeF(160f, 160f) to square,
-                  SizeF(100f, 100f) to small,
+                SizeF(57f, 102f) to xSmall,
+                SizeF(130f,102f) to small,
+                SizeF(130f, 220f) to square,
+                SizeF(203f, 220f) to large
               ),
           )
         } else {
