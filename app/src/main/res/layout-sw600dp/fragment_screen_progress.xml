@@ -21,7 +21,7 @@
             app:flow_maxElementsWrap="2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewWeek,progressCardViewDay,dayLightProgressView,nightLightProgressView,ad_frame"
+            app:constraint_referenced_ids="progressCardViewYear,progressCardViewMonth,progressCardViewWeek,progressCardViewDay,loadingIndicator,dismissibleMessageView,dayLightProgressView,nightLightProgressView,ad_frame"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -58,18 +58,61 @@
             tools:layout_editor_absoluteX="585dp"
             tools:layout_editor_absoluteY="161dp" />
 
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
         <com.a3.yearlyprogess.components.DayNightLightProgressView
             android:id="@+id/dayLightProgressView"
             android:layout_width="400dp"
             app:day_light="true"
-            android:layout_height="135dp" />
+            android:layout_height="145dp" />
 
 
         <com.a3.yearlyprogess.components.DayNightLightProgressView
             android:id="@+id/nightLightProgressView"
             android:layout_width="400dp"
             app:day_light="false"
-            android:layout_height="135dp" />
+            android:layout_height="145dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/dismissibleMessageView"
+            style="@style/Widget.Material3.CardView.Filled"
+            app:cardBackgroundColor="?attr/colorTertiaryContainer"
+            android:layout_width="400dp"
+            android:layout_height="135dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_margin="16dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    style="?attr/textAppearanceBodyLarge"
+                    android:textColor="?attr/colorOnTertiaryContainer"
+                    android:id="@+id/message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enable_location_day_night_message" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:id="@+id/callToAction"
+                    android:layout_height="wrap_content"
+                    android:text="@string/allow" />
+
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:id="@+id/ad_frame"
