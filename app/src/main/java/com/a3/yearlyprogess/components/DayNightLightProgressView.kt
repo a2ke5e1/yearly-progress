@@ -18,16 +18,16 @@ import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
 import com.a3.yearlyprogess.getULocale
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class DayNightLightProgressView
@@ -152,10 +152,9 @@ constructor(
   fun Long.toFormattedDateText(): String {
     val date = Date(this)
     val isSystem24Hour = is24HourFormat(context)
-    val format = if (isSystem24Hour) SimpleDateFormat(
-      "yyyy-MM-dd HH:mm",
-      getULocale()
-    ) else SimpleDateFormat("yyyy-MM-dd hh:mm a", getULocale())
+    val format =
+        if (isSystem24Hour) SimpleDateFormat("yyyy-MM-dd HH:mm", getULocale())
+        else SimpleDateFormat("yyyy-MM-dd hh:mm a", getULocale())
     return format.format(date)
   }
 }

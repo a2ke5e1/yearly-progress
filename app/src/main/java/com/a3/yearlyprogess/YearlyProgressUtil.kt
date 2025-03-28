@@ -13,7 +13,6 @@ import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 fun getULocale(): ULocale {
   val defaultULocale = ULocale.getDefault()
   return ULocale(defaultULocale.toString() + "@calendar=indian")
