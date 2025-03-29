@@ -11,21 +11,29 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,8 +67,7 @@ class WelcomeScreenV2 : ComponentActivity() {
 
     setContent {
       YearlyProgressTheme {
-        WelcomeScreen(
-         )
+        WelcomeScreen()
       }
     }
   }
@@ -69,6 +76,7 @@ class WelcomeScreenV2 : ComponentActivity() {
 private const val TOS_URL = "https://www.a3group.co.in/yearly-progress/terms-of-service"
 private const val PP_URL = "https://www.a3group.co.in/yearly-progress/privacy-policy"
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeScreen() {
   val context = LocalContext.current
@@ -77,9 +85,28 @@ fun WelcomeScreen() {
   val edit = pref.edit()
   val editSettingsPref = settingPref.edit()
 
-  Scaffold(contentWindowInsets = WindowInsets.safeContent) { innerPadding ->
-    var showDialog by remember { mutableStateOf(false) }
-    var selectedType by remember { mutableStateOf(calendarTypes.first()) }
+  var showDialog by remember { mutableStateOf(false) }
+  var selectedType by remember { mutableStateOf(calendarTypes.first()) }
+
+
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = {
+          Text("")
+        },
+        actions = {
+          TextButton(
+            onClick = { showDialog = true }) {
+            Text(text = "${selectedType.name}")
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(painterResource(R.drawable.ic_outline_edit_calendar_24), contentDescription = null)
+          }
+        }
+      )
+    },
+    contentWindowInsets = WindowInsets.safeContent,
+  ) { innerPadding ->
 
 
 
@@ -112,14 +139,9 @@ fun WelcomeScreen() {
       }
 
 
-      Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(onClick = { showDialog = true }) {
-          Text(text = "Select Calendar Type")
-        }
 
-        selectedType?.let {
-          Text(text = "Selected: $it", modifier = Modifier.padding(top = 16.dp))
-        }
+
+
 
         if (showDialog) {
           CalendarTypeDialog(
@@ -132,7 +154,7 @@ fun WelcomeScreen() {
             onDismiss = { showDialog = false }
           )
         }
-      }
+
 
     }
   }
@@ -142,7 +164,7 @@ fun WelcomeScreen() {
 fun TermsAndPrivacyText(
   initialMessage: String = "By clicking on start you agree to our ",
   textAlignment: TextAlign = TextAlign.Start,
-  style: TextStyle = MaterialTheme.typography.bodySmall
+  style: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
   val linkColor = MaterialTheme.colorScheme.primary
   Text(
