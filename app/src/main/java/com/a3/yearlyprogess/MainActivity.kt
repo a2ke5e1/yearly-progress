@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
      *
      * */
     if (firstLaunch) {
-      startActivity(Intent(this, WelcomeScreen::class.java))
+      startActivity(Intent(this, WelcomeScreenV2::class.java))
       finish()
     }
 

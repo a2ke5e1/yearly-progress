@@ -16,8 +16,7 @@
         style="@style/Widget.YearlyProgress.AppWidget.Container.Transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="HardcodedText"
-        android:theme="@style/App.SplashScreen.AppWidgetContainer">
+        android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
 
 
         <RelativeLayout

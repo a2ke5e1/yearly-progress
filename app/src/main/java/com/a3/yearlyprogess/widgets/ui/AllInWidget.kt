@@ -33,7 +33,8 @@ class AllInWidget : BaseWidget() {
       val weekCurrentValue =
           yp.getCurrentPeriodValue(TimePeriod.WEEK).toFormattedTimePeriod(context, TimePeriod.WEEK)
       val monthCurrentValue =
-          yp.getCurrentPeriodValue(TimePeriod.MONTH).toFormattedTimePeriod(context, TimePeriod.MONTH)
+          yp.getCurrentPeriodValue(TimePeriod.MONTH)
+              .toFormattedTimePeriod(context, TimePeriod.MONTH)
       val yearCurrentValue =
           yp.getCurrentPeriodValue(TimePeriod.YEAR).toFormattedTimePeriod(context, TimePeriod.YEAR)
 

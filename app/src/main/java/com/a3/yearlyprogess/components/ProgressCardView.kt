@@ -14,15 +14,15 @@ import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.google.android.material.card.MaterialCardView
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.Locale
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
-import java.text.NumberFormat
-import java.util.Locale
-import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class ProgressCardView
@@ -80,7 +80,8 @@ constructor(
     launch(Dispatchers.IO) {
       while (true) {
         val yp = YearlyProgressUtil(context)
-        val currentPeriodValue = yp.getCurrentPeriodValue(field).toFormattedTimePeriod(context, field)
+        val currentPeriodValue =
+            yp.getCurrentPeriodValue(field).toFormattedTimePeriod(context, field)
 
         val startTime = yp.calculateStartTime(field)
         val endTime = yp.calculateEndTime(field)

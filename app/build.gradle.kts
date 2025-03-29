@@ -7,6 +7,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("com.ncorti.ktfmt.gradle") version "0.21.0"
+  id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -45,8 +46,12 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+      compose = true
     }
     namespace = "com.a3.yearlyprogess"
+  kotlinOptions {
+    jvmTarget = "21"
+  }
 }
 
 dependencies {
@@ -59,7 +64,14 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics:19.4.1")
     implementation("androidx.activity:activity-ktx:1.10.0")
     implementation("androidx.work:work-runtime-ktx:2.10.0")
-    testImplementation("junit:junit:4.13.2")
+  implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+  implementation("androidx.activity:activity-compose:1.10.1")
+  implementation(platform("androidx.compose:compose-bom:2024.04.01"))
+  implementation("androidx.compose.ui:ui")
+  implementation("androidx.compose.ui:ui-graphics")
+  implementation("androidx.compose.ui:ui-tooling-preview")
+  implementation("androidx.compose.material3:material3")
+  testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
@@ -82,8 +94,12 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+  androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
+  androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+  debugImplementation("androidx.compose.ui:ui-tooling")
+  debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    // Room
+  // Room
     val roomVersion = "2.6.1"
 
     implementation("androidx.room:room-runtime:$roomVersion")

@@ -46,10 +46,10 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
+import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 /** A simple [Fragment] subclass as the second destination in the navigation. */
 class WidgetScreenFragment : Fragment() {
@@ -192,13 +192,17 @@ class WidgetScreenFragment : Fragment() {
           allInOneProgressBarWeek.progress = progressWeek
 
           val dayCurrentValue =
-              yp.getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod( requireContext(), TimePeriod.DAY)
+              yp.getCurrentPeriodValue(TimePeriod.DAY)
+                  .toFormattedTimePeriod(requireContext(), TimePeriod.DAY)
           val weekCurrentValue =
-              yp.getCurrentPeriodValue(TimePeriod.WEEK).toFormattedTimePeriod( requireContext(), TimePeriod.WEEK)
+              yp.getCurrentPeriodValue(TimePeriod.WEEK)
+                  .toFormattedTimePeriod(requireContext(), TimePeriod.WEEK)
           val monthCurrentValue =
-              yp.getCurrentPeriodValue(TimePeriod.MONTH).toFormattedTimePeriod( requireContext(), TimePeriod.MONTH)
+              yp.getCurrentPeriodValue(TimePeriod.MONTH)
+                  .toFormattedTimePeriod(requireContext(), TimePeriod.MONTH)
           val yearCurrentValue =
-              yp.getCurrentPeriodValue(TimePeriod.YEAR).toFormattedTimePeriod( requireContext(), TimePeriod.YEAR)
+              yp.getCurrentPeriodValue(TimePeriod.YEAR)
+                  .toFormattedTimePeriod(requireContext(), TimePeriod.YEAR)
 
           allInOneTitleTextViewYear.text = yearCurrentValue
           allInOneTitleTextViewMonth.text = monthCurrentValue
@@ -482,8 +486,7 @@ class WidgetScreenFragment : Fragment() {
       dayLight: Boolean? = null,
   ) {
     val yp = YearlyProgressUtil(requireContext())
-    var progressViewAnimator =
-        ValueAnimator.ofInt(0, yp.calculateProgress(type).roundToInt())
+    var progressViewAnimator = ValueAnimator.ofInt(0, yp.calculateProgress(type).roundToInt())
 
     if (dayLight != null) {
       val sunriseSunsetResponse = loadCachedSunriseSunset(requireContext()) ?: return

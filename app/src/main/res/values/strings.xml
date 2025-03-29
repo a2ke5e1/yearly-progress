@@ -135,5 +135,6 @@
     <string name="calendar_permission_required">Calendar permission required</string>
     <string name="time_in">in %1$s</string>
     <string name="select_calendars">Select Calendars</string>
+    <string name="title_activity_welcome_screen_v2">WelcomeScreenV2</string>
 
 </resources>

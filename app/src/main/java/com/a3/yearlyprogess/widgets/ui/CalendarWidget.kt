@@ -23,14 +23,14 @@ import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getTodayOrNearestE
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
+import java.util.Date
+import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.util.Date
-import kotlin.math.roundToInt
 
 class CalendarEventsSwiper(val context: Context, events: List<Event>, limits: Int = 5) {
 

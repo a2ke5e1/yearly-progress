@@ -27,13 +27,13 @@ import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetS
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
+import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 /** Utility object for creating and managing widget RemoteViews. */
 object WidgetUtils {
@@ -85,7 +85,7 @@ object WidgetUtils {
     val widgetDaysLeftCounter =
         context.getString(
             R.string.time_left,
-          yp.calculateTimeLeft(endTime).toTimePeriodText(options?.dynamicLeftCounter == true),
+            yp.calculateTimeLeft(endTime).toTimePeriodText(options?.dynamicLeftCounter == true),
         )
 
     /**
@@ -314,36 +314,36 @@ object WidgetUtils {
       }
       WidgetShape.CLOVER -> {
         val large = cloverRemoteView(R.layout.standalone_widget_layout_clover_large)
-        val square =
-            cloverRemoteView(R.layout.standalone_widget_layout_clover)
-//              .apply {
-//              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
-//                setViewLayoutMargin(
-//                    R.id.widgetDaysLeft,
-//                    RemoteViews.MARGIN_TOP,
-//                    -8f,
-//                    TypedValue.COMPLEX_UNIT_DIP,
-//                )
-//              }
-//              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
-//              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
-//              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
-//              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
-//            }
+        val square = cloverRemoteView(R.layout.standalone_widget_layout_clover)
+        //              .apply {
+        //              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        //                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
+        //                setViewLayoutMargin(
+        //                    R.id.widgetDaysLeft,
+        //                    RemoteViews.MARGIN_TOP,
+        //                    -8f,
+        //                    TypedValue.COMPLEX_UNIT_DIP,
+        //                )
+        //              }
+        //              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
+        //              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP,
+        // 20f)
+        //              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
+        //              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
+        //            }
         val small = cloverRemoteView(R.layout.standalone_widget_layout_clover_small)
-        val xSmall = cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small).apply {
-          setViewVisibility(R.id.widgetDaysLeft, View.GONE)
-        }
+        val xSmall =
+            cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small).apply {
+              setViewVisibility(R.id.widgetDaysLeft, View.GONE)
+            }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
           RemoteViews(
               mapOf(
-                SizeF(57f, 102f) to xSmall,
-                SizeF(130f,102f) to small,
-                SizeF(130f, 220f) to square,
-                SizeF(203f, 220f) to large
-              ),
+                  SizeF(57f, 102f) to xSmall,
+                  SizeF(130f, 102f) to small,
+                  SizeF(130f, 220f) to square,
+                  SizeF(203f, 220f) to large),
           )
         } else {
           if (width >= 214 && height >= 131) {
@@ -489,7 +489,8 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
       val widgetType = options.widgetType ?: TimePeriod.DAY
       val startTime = yp.calculateStartTime(widgetType)
       val endTime = yp.calculateEndTime(widgetType)
-      val currentValue = yp.getCurrentPeriodValue(widgetType).toFormattedTimePeriod(context, widgetType)
+      val currentValue =
+          yp.getCurrentPeriodValue(widgetType).toFormattedTimePeriod(context, widgetType)
       val widgetTitleText =
           when (widgetType) {
             TimePeriod.DAY -> context.getString(R.string.day)
@@ -613,8 +614,8 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
       val isSystem24Hour = is24HourFormat(context)
       val yp = YearlyProgressUtil(context)
       val format =
-        if (isSystem24Hour) SimpleDateFormat("HH:mm", yp.getULocale())
-        else SimpleDateFormat("hh:mm a", yp.getULocale())
+          if (isSystem24Hour) SimpleDateFormat("HH:mm", yp.getULocale())
+          else SimpleDateFormat("hh:mm a", yp.getULocale())
 
       val currentValue =
           if (dayLight) {

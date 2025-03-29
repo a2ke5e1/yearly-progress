@@ -15,12 +15,12 @@ import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class EventDetailView
