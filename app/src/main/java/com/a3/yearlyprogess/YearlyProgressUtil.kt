@@ -25,7 +25,11 @@ class YearlyProgressUtil(val context: Context) {
 
   fun getULocale(): ULocale {
     val defaultULocale = ULocale.getDefault()
-    //  return ULocale(defaultULocale.toString() + "@calendar=indian")
+    val userCalendarType =
+      settingPref.getString(context.getString(R.string.app_calendar_type), null)
+    if (userCalendarType != null) {
+      return ULocale(defaultULocale.toString() + "@calendar=${userCalendarType}")
+    }
     return defaultULocale
   }
 

@@ -237,7 +237,7 @@ object WidgetUtils {
     val height = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
     val width = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
 
-    Log.d("WidgetSize", "height=${height} width=$width")
+    // Log.d("WidgetSize", "height=${height} width=$width")
 
     // Return the appropriate RemoteViews based on the widget shape.
     return when (options.shape) {
