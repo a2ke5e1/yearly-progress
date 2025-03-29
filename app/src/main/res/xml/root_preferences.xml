@@ -15,12 +15,22 @@
 
         <ListPreference
             app:defaultValue="0"
+            app:entries="@array/app_calendar_type_entries"
+            app:entryValues="@array/app_calendar_type_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/app_calendar_type"
+            app:summary="%s"
+            app:title="@string/select_your_calendar_system" />
+
+        <ListPreference
+            app:defaultValue="0"
             app:entries="@array/week_start_entries"
             app:entryValues="@array/week_start_values"
             app:iconSpaceReserved="false"
             app:key="@string/app_week_widget_start_day"
             app:summary="%s"
             app:title="@string/pref_title_week_day" />
+
 
 
         <ListPreference

@@ -118,4 +118,19 @@
     <string name="manage_subscription">सदस्यता प्रबंधित करें</string>
     <string name="not_available_in_your_region">आपके क्षेत्र में उपलब्ध नहीं है</string>
 
+
+    <!-- Week Preference -->
+    <string-array name="week_start_entries">
+        <item>डिफ़ॉल्ट (क्षेत्र के आधार पर)</item>
+        <item>शनिवार</item>
+        <item>रविवार</item>
+        <item>सोमवार</item>
+    </string-array>
+
+    <!-- Calculation Preference -->
+    <string-array name="calc_entries">
+        <item>डिफ़ॉल्ट (पूरा हुआ)</item>
+        <item>बाएं</item>
+    </string-array>
+
 </resources>

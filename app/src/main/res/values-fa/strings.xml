@@ -136,4 +136,18 @@
     <string name="time_in">در %1$s</string>
     <string name="select_calendars">انتخاب تقویمها</string>
 
+    <!-- Week Preference -->
+    <string-array name="week_start_entries">
+        <item>پیش فرض (بر اساس منطقه)</item>
+        <item>شنبه</item>
+        <item>یکشنبه</item>
+        <item>دوشنبه</item>
+    </string-array>
+
+    <!-- Calculation Preference -->
+    <string-array name="calc_entries">
+        <item>پیش فرض (تکمیل شده)</item>
+        <item>باقیمانده</item>
+    </string-array>
+
 </resources>

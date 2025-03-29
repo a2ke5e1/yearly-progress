@@ -137,5 +137,45 @@
     <string name="select_calendars">Select Calendars</string>
     <string name="title_activity_welcome_screen_v2">WelcomeScreenV2</string>
     <string name="close">Close</string>
+    <string name="select_your_calendar_system">Select your calendar system</string>
+
+
+    <!-- Week Preference -->
+    <string-array name="week_start_entries">
+        <item>Default (Based on Region)</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+    </string-array>
+
+    <!-- Calculation Preference -->
+    <string-array name="calc_entries">
+        <item>Default ( Completed )</item>
+        <item>Left</item>
+    </string-array>
+
+    <!-- Calendar Type Preference -->
+
+    <string-array name="app_calendar_type_entries">
+        <item>Default (Based on Region)</item>
+        <item>Gregorian</item>
+        <item>Buddhist</item>
+        <item>Chinese</item>
+        <item>Coptic</item>
+        <item>Dangi</item>
+        <item>Ethiopic</item>
+        <item>Ethiopic Amete Alem</item>
+        <item>Hebrew</item>
+        <item>Indian</item>
+        <item>Islamic</item>
+        <item>Islamic Civil</item>
+        <item>Islamic TBLA</item>
+        <item>Islamic Umm al-Qura</item>
+        <item>Islamic RGSA</item>
+        <item>ISO 8601</item>
+        <item>Japanese</item>
+        <item>Persian</item>
+        <item>Republic of China (ROC)</item>
+    </string-array>
 
 </resources>

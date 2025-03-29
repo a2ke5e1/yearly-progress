@@ -27,6 +27,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -80,10 +82,19 @@ private const val PP_URL = "https://www.a3group.co.in/yearly-progress/privacy-po
 @Composable
 fun WelcomeScreen() {
   val context = LocalContext.current
+
   val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
   val pref = context.getSharedPreferences(MainActivity.YEARLY_PROGRESS_PREF, MODE_PRIVATE)
+
   val edit = pref.edit()
   val editSettingsPref = settingPref.edit()
+
+  val calendarEntries = context.resources.getStringArray(R.array.app_calendar_type_entries)
+  val calendarValues = context.resources.getStringArray(R.array.app_calendar_type_values)
+
+  val calendarTypes = calendarEntries.zip(calendarValues) { name, value ->
+    CalendarType(name, value)
+  }
 
   var showDialog by remember { mutableStateOf(false) }
   var selectedType by remember { mutableStateOf(calendarTypes.first()) }
@@ -206,26 +217,6 @@ data class CalendarType(
   val code: String
 )
 
-val calendarTypes = listOf(
-  CalendarType("Gregorian", "gregorian"),
-  CalendarType("Buddhist", "buddhist"),
-  CalendarType("Chinese", "chinese"),
-  CalendarType("Coptic", "coptic"),
-  CalendarType("Dangi", "dangi"),
-  CalendarType("Ethiopic", "ethiopic"),
-  CalendarType("Ethiopic Amete Alem", "ethiopic-amete-alem"),
-  CalendarType("Hebrew", "hebrew"),
-  CalendarType("Indian", "indian"),
-  CalendarType("Islamic", "islamic"),
-  CalendarType("Islamic Civil", "islamic-civil"),
-  CalendarType("Islamic TBLA", "islamic-tbla"),
-  CalendarType("Islamic Umm al-Qura", "islamic-umalqura"),
-  CalendarType("Islamic RGSA", "islamic-rgsa"),
-  CalendarType("ISO 8601", "iso8601"),
-  CalendarType("Japanese", "japanese"),
-  CalendarType("Persian", "persian"),
-  CalendarType("Republic of China (ROC)", "roc")
-)
 
 
 @Composable
@@ -237,8 +228,7 @@ fun CalendarTypeDialog(
 ) {
   AlertDialog(
     onDismissRequest = onDismiss,
-    modifier = Modifier.heightIn(max = 600.dp),
-    title = { Text(text = "Choose Calendar Type") },
+    title = { Text(text = stringResource(R.string.select_your_calendar_system), style = MaterialTheme.typography.bodyLarge) },
     text = {
       LazyColumn {
         itemsIndexed(calendarTypes) { index, type ->
@@ -259,7 +249,7 @@ fun CalendarTypeDialog(
       }
     },
     confirmButton = {
-      TextButton(onClick = onDismiss) {
+      FilledTonalButton(onClick = onDismiss) {
         Text(stringResource(R.string.close))
       }
     }
