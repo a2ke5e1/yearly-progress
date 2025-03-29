@@ -16,22 +16,21 @@ import android.util.SizeF
 import android.widget.RemoteViews
 import androidx.core.graphics.toColor
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.calculateProgress
-import com.a3.yearlyprogess.calculateTimeLeft
+import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetails
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getSelectedCalendarIds
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getTodayOrNearestEvents
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
-import java.util.Date
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.util.Date
+import kotlin.math.roundToInt
 
 class CalendarEventsSwiper(val context: Context, events: List<Event>, limits: Int = 5) {
 
@@ -274,8 +273,8 @@ class CalendarWidget : BaseWidget() {
   }
 
   fun setupCalendarWidgetView(context: Context, view: RemoteViews, event: Event) {
-
-    val progress = calculateProgress(context, event.eventStartTime.time, event.eventEndTime.time)
+    val yp = YearlyProgressUtil(context)
+    val progress = yp.calculateProgress(event.eventStartTime.time, event.eventEndTime.time)
     view.setTextViewText(
         R.id.widgetProgress,
         progress.styleFormatted(2, cloverMode = true),
@@ -298,7 +297,7 @@ class CalendarWidget : BaseWidget() {
               (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText())
         } else {
           context.getString(
-              R.string.time_left, calculateTimeLeft(event.eventEndTime.time).toTimePeriodText())
+              R.string.time_left, yp.calculateTimeLeft(event.eventEndTime.time).toTimePeriodText())
         }
     view.setTextViewText(R.id.widgetDays, widgetDays)
 

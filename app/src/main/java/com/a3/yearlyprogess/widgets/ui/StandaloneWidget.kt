@@ -12,7 +12,6 @@ import android.text.SpannableString
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.util.SizeF
-import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.IntRange
@@ -22,24 +21,19 @@ import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.calculateEndTime
-import com.a3.yearlyprogess.calculateProgress
-import com.a3.yearlyprogess.calculateStartTime
-import com.a3.yearlyprogess.calculateTimeLeft
-import com.a3.yearlyprogess.getCurrentPeriodValue
-import com.a3.yearlyprogess.getULocale
+import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 /** Utility object for creating and managing widget RemoteViews. */
 object WidgetUtils {
@@ -85,11 +79,13 @@ object WidgetUtils {
     val timeLeftCounter = options?.timeLeftCounter == true
     val replaceProgressWithDaysLeft = options?.replaceProgressWithDaysLeft == true
     val widgetBackgroundAlpha = ((options?.backgroundTransparency ?: 100) / 100.0 * 255).toInt()
-    val progress = calculateProgress(context, startTime, endTime)
+
+    val yp = YearlyProgressUtil(context)
+    val progress = yp.calculateProgress(startTime, endTime)
     val widgetDaysLeftCounter =
         context.getString(
             R.string.time_left,
-            calculateTimeLeft(endTime).toTimePeriodText(options?.dynamicLeftCounter == true),
+          yp.calculateTimeLeft(endTime).toTimePeriodText(options?.dynamicLeftCounter == true),
         )
 
     /**
@@ -489,10 +485,11 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
         context: Context,
         options: StandaloneWidgetOptions,
     ): RemoteViews {
+      val yp = YearlyProgressUtil(context)
       val widgetType = options.widgetType ?: TimePeriod.DAY
-      val startTime = calculateStartTime(context, widgetType)
-      val endTime = calculateEndTime(context, widgetType)
-      val currentValue = getCurrentPeriodValue(widgetType).toFormattedTimePeriod(widgetType)
+      val startTime = yp.calculateStartTime(widgetType)
+      val endTime = yp.calculateEndTime(widgetType)
+      val currentValue = yp.getCurrentPeriodValue(widgetType).toFormattedTimePeriod(context, widgetType)
       val widgetTitleText =
           when (widgetType) {
             TimePeriod.DAY -> context.getString(R.string.day)
@@ -614,9 +611,10 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
 
       val (startTime, endTime) = sunriseSunset.getStartAndEndTime(dayLight)
       val isSystem24Hour = is24HourFormat(context)
+      val yp = YearlyProgressUtil(context)
       val format =
-          if (isSystem24Hour) SimpleDateFormat("HH:mm", getULocale())
-          else SimpleDateFormat("hh:mm a", getULocale())
+        if (isSystem24Hour) SimpleDateFormat("HH:mm", yp.getULocale())
+        else SimpleDateFormat("hh:mm a", yp.getULocale())
 
       val currentValue =
           if (dayLight) {
