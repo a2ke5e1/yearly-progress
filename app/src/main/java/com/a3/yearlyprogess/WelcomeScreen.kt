@@ -15,20 +15,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -65,13 +60,7 @@ class WelcomeScreenV2 : ComponentActivity() {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
 
-
-
-    setContent {
-      YearlyProgressTheme {
-        WelcomeScreen()
-      }
-    }
+    setContent { YearlyProgressTheme { WelcomeScreen() } }
   }
 }
 
@@ -92,168 +81,138 @@ fun WelcomeScreen() {
   val calendarEntries = context.resources.getStringArray(R.array.app_calendar_type_entries)
   val calendarValues = context.resources.getStringArray(R.array.app_calendar_type_values)
 
-  val calendarTypes = calendarEntries.zip(calendarValues) { name, value ->
-    CalendarType(name, value)
-  }
+  val calendarTypes =
+      calendarEntries.zip(calendarValues) { name, value -> CalendarType(name, value) }
 
   var showDialog by remember { mutableStateOf(false) }
   var selectedType by remember { mutableStateOf(calendarTypes.first()) }
 
-
   Scaffold(
-    topBar = {
-      TopAppBar(
-        title = {
-          Text("")
-        },
-        actions = {
-          TextButton(
-            onClick = { showDialog = true }) {
-            Text(text = "${selectedType.name}")
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(painterResource(R.drawable.ic_outline_edit_calendar_24), contentDescription = null)
+      topBar = {
+        TopAppBar(
+            title = { Text("") },
+            actions = {
+              TextButton(onClick = { showDialog = true }) {
+                Text(text = "${selectedType.name}")
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    painterResource(R.drawable.ic_outline_edit_calendar_24),
+                    contentDescription = null)
+              }
+            })
+      },
+      contentWindowInsets = WindowInsets.safeContent,
+  ) { innerPadding ->
+    Column(
+        modifier = Modifier.padding(innerPadding).fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally) {
+          Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineLarge)
+          }
+
+          Image(
+              painterResource(R.drawable.demoscreen),
+              contentDescription = null,
+              modifier = Modifier.padding(vertical = 32.dp).weight(1f))
+
+          Column(
+              horizontalAlignment = Alignment.CenterHorizontally,
+              verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                TermsAndPrivacyText(textAlignment = TextAlign.Center)
+                Button(
+                    onClick = {
+                      edit.putBoolean(MainActivity.FIRST_LAUNCH, false).apply()
+                      editSettingsPref
+                          .putString(
+                              context.getString(R.string.app_calendar_type), selectedType.code)
+                          .apply()
+                      context.startActivity(Intent(context, MainActivity::class.java))
+                      (context as ComponentActivity).finish()
+                    }) {
+                      Text("Start")
+                    }
+              }
+
+          if (showDialog) {
+            CalendarTypeDialog(
+                calendarTypes = calendarTypes,
+                selectedType = selectedType,
+                onTypeSelected = {
+                  selectedType = it
+                  showDialog = false
+                },
+                onDismiss = { showDialog = false })
           }
         }
-      )
-    },
-    contentWindowInsets = WindowInsets.safeContent,
-  ) { innerPadding ->
-
-
-
-    Column(
-      modifier = Modifier
-        .padding(innerPadding)
-        .fillMaxSize(),
-      verticalArrangement = Arrangement.SpaceBetween,
-      horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-      Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineLarge)
-      }
-
-      Image(painterResource(R.drawable.demoscreen), contentDescription = null, modifier = Modifier
-        .padding(vertical = 32.dp)
-        .weight(1f))
-
-      Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-      ) {
-        TermsAndPrivacyText(textAlignment = TextAlign.Center)
-        Button(onClick = {
-          edit.putBoolean(MainActivity.FIRST_LAUNCH, false).apply()
-          editSettingsPref.putString(context.getString(R.string.app_calendar_type), selectedType.code).apply()
-          context.startActivity(Intent(context, MainActivity::class.java))
-          (context as ComponentActivity).finish()
-        }) { Text("Start") }
-      }
-
-
-
-
-
-
-        if (showDialog) {
-          CalendarTypeDialog(
-            calendarTypes = calendarTypes,
-            selectedType = selectedType,
-            onTypeSelected = {
-              selectedType = it
-              showDialog = false
-            },
-            onDismiss = { showDialog = false }
-          )
-        }
-
-
-    }
   }
 }
 
 @Composable
 fun TermsAndPrivacyText(
-  initialMessage: String = "By clicking on start you agree to our ",
-  textAlignment: TextAlign = TextAlign.Start,
-  style: TextStyle = MaterialTheme.typography.bodyMedium
+    initialMessage: String = "By clicking on start you agree to our ",
+    textAlignment: TextAlign = TextAlign.Start,
+    style: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
   val linkColor = MaterialTheme.colorScheme.primary
   Text(
-    buildAnnotatedString {
-      append(initialMessage)
-      withLink(
-        LinkAnnotation.Url(
-          TOS_URL,
-          TextLinkStyles(
-            style =
-            SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline)
-          )
-        )
-      ) {
-        append("terms of service")
-      }
-      append(" and ")
-      withLink(
-        LinkAnnotation.Url(
-          PP_URL,
-          TextLinkStyles(
-            style =
-            SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline)
-          )
-        )
-      ) {
-        append("privacy policy")
-      }
-      append(".")
-    },
-    textAlign = textAlignment,
-    style = style
-  )
+      buildAnnotatedString {
+        append(initialMessage)
+        withLink(
+            LinkAnnotation.Url(
+                TOS_URL,
+                TextLinkStyles(
+                    style =
+                        SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline)))) {
+              append("terms of service")
+            }
+        append(" and ")
+        withLink(
+            LinkAnnotation.Url(
+                PP_URL,
+                TextLinkStyles(
+                    style =
+                        SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline)))) {
+              append("privacy policy")
+            }
+        append(".")
+      },
+      textAlign = textAlignment,
+      style = style)
 }
 
-
-data class CalendarType(
-  val name: String,
-  val code: String
-)
-
-
+data class CalendarType(val name: String, val code: String)
 
 @Composable
 fun CalendarTypeDialog(
-  calendarTypes: List<CalendarType>,
-  selectedType: CalendarType?,
-  onTypeSelected: (CalendarType) -> Unit,
-  onDismiss: () -> Unit
+    calendarTypes: List<CalendarType>,
+    selectedType: CalendarType?,
+    onTypeSelected: (CalendarType) -> Unit,
+    onDismiss: () -> Unit
 ) {
   AlertDialog(
-    onDismissRequest = onDismiss,
-    title = { Text(text = stringResource(R.string.select_your_calendar_system), style = MaterialTheme.typography.bodyLarge) },
-    text = {
-      LazyColumn {
-        itemsIndexed(calendarTypes) { index, type ->
-          Row(
-            modifier = Modifier
-              .fillMaxWidth()
-              .clickable { onTypeSelected(type) },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-          ) {
-            RadioButton(
-              selected = type == selectedType,
-              onClick = { onTypeSelected(type) }
-            )
-            Text(text = type.name)
+      onDismissRequest = onDismiss,
+      title = {
+        Text(
+            text = stringResource(R.string.select_your_calendar_system),
+            style = MaterialTheme.typography.bodyLarge)
+      },
+      text = {
+        LazyColumn {
+          itemsIndexed(calendarTypes) { index, type ->
+            Row(
+                modifier = Modifier.fillMaxWidth().clickable { onTypeSelected(type) },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                  RadioButton(selected = type == selectedType, onClick = { onTypeSelected(type) })
+                  Text(text = type.name)
+                }
           }
         }
-      }
-    },
-    confirmButton = {
-      FilledTonalButton(onClick = onDismiss) {
-        Text(stringResource(R.string.close))
-      }
-    }
-  )
+      },
+      confirmButton = {
+        FilledTonalButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
+      })
 }
 
 @Preview(showBackground = true, showSystemUi = true)

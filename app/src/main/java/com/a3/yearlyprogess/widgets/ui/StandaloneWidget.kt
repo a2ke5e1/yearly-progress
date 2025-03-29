@@ -10,7 +10,6 @@ import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.text.SpannableString
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews

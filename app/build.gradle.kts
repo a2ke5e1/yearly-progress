@@ -17,8 +17,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 118
-        versionName = "2.16.0-alpha01"
+        versionCode = 119
+        versionName = "2.16.0-alpha02"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
