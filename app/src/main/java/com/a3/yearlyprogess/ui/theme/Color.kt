@@ -1,6 +1,7 @@
 package com.a3.yearlyprogess.ui.theme
 
 import androidx.compose.ui.graphics.Color
+
 val primaryLight = Color(0xFF4B5C92)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFFDBE1FF)
