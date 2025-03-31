@@ -1,44 +1,63 @@
 package com.a3.yearlyprogess.widgets.manager
 
-import android.Manifest
-import android.appwidget.AppWidgetManager
+import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
-import android.content.pm.PackageManager
-import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.activity.viewModels
+import androidx.annotation.FloatRange
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.systemGestures
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
-import androidx.recyclerview.selection.ItemDetailsLookup
-import androidx.recyclerview.selection.ItemKeyProvider
-import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.AndroidViewModel
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.components.dialogbox.PermissionMessageDialog
-import com.a3.yearlyprogess.databinding.ActivityCalendarWidgetConfigManagerBinding
-import com.a3.yearlyprogess.databinding.CalendarInfoItemViewBinding
+import com.a3.yearlyprogess.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetails
-import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getSelectedCalendarIds
-import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.saveSelectedCalendarIds
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
-import com.google.android.material.color.DynamicColors
+import com.google.gson.Gson
 import java.util.Calendar
 import java.util.Date
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 object CalendarEventInfo {
   fun getTodayOrNearestEvents(
@@ -191,295 +210,299 @@ object CalendarEventInfo {
         .filter { event -> event.eventEndTime.time > System.currentTimeMillis() }
         .minByOrNull { event -> event.eventStartTime }
   }
-
-  fun saveSelectedCalendarIds(context: Context, selectedCalendarIds: List<Long>) {
-    // Save selected calendar IDs to SharedPreferences
-    val sharedPreferences =
-        context.getSharedPreferences(SELECTED_CALENDAR_PREF, Context.MODE_PRIVATE)
-    val editor = sharedPreferences.edit()
-    editor.putStringSet(
-        SELECTED_CALENDAR_IDS_KEY, selectedCalendarIds.map { it.toString() }.toSet())
-    editor.apply()
-  }
-
-  fun getSelectedCalendarIds(context: Context): List<Long>? {
-    // Get selected calendar IDs from SharedPreferences
-    val sharedPreferences =
-        context.getSharedPreferences(SELECTED_CALENDAR_PREF, Context.MODE_PRIVATE)
-    val selectedCalendarIds = sharedPreferences.getStringSet(SELECTED_CALENDAR_IDS_KEY, null)
-    return selectedCalendarIds?.map { it.toLong() }
-  }
-
-  private const val SELECTED_CALENDAR_IDS_KEY = "selected_calendar_ids"
-  private const val SELECTED_CALENDAR_PREF = "selected_calendar_prefs"
 }
 
-class CalendarSyncListAdapter(
-    private val calendarInfoList: List<CalendarEventInfo.CalendarInfo>,
-) : RecyclerView.Adapter<CalendarInfoViewHolder>() {
-  var tracker: SelectionTracker<Long>? = null
+data class CalendarWidgetConfig(
+    val decimalPlaces: Int,
+    val timeLeftCounter: Boolean,
+    val dynamicLeftCounter: Boolean,
+    val replaceProgressWithDaysLeft: Boolean,
+    @FloatRange(from = 0.0, to = 1.0) val backgroundTransparency: Float,
+    val selectedCalendarIds: List<Long>?
+) {
 
-  init {
-    setHasStableIds(true)
+  companion object {
+
+    const val SELECTED_CALENDAR_PREF = "selected_calendar_prefs"
+    const val SELECTED_CALENDAR_CONFIG = "selected_calendar_prefs"
+
+    fun load(context: Context): CalendarWidgetConfig {
+      val sharedPreferences =
+          context.getSharedPreferences(SELECTED_CALENDAR_PREF, Context.MODE_PRIVATE)
+      val jsonString =
+          sharedPreferences.getString(SELECTED_CALENDAR_CONFIG, null)
+              ?: return CalendarWidgetConfig(
+                  decimalPlaces = 2,
+                  timeLeftCounter = true,
+                  dynamicLeftCounter = false,
+                  replaceProgressWithDaysLeft = false,
+                  backgroundTransparency = 1f,
+                  selectedCalendarIds = null)
+      return Gson().fromJson(jsonString, CalendarWidgetConfig::class.java)
+    }
+
+    fun save(context: Context, config: CalendarWidgetConfig) {
+      val sharedPreferences =
+          context.getSharedPreferences(SELECTED_CALENDAR_PREF, Context.MODE_PRIVATE)
+      val edit = sharedPreferences.edit()
+      val jsonString = Gson().toJson(config)
+      edit.putString(SELECTED_CALENDAR_CONFIG, jsonString).apply()
+    }
+  }
+}
+
+class CalendarWidgetConfigManagerViewModel(private val application: Application) :
+    AndroidViewModel(application) {
+  private val _calendars = MutableStateFlow(getCalendarsDetails(application.contentResolver))
+  val calendar
+    get() = _calendars
+
+  private val _widgetConfig = MutableStateFlow(CalendarWidgetConfig.load(application))
+  val widgetConfig
+    get() = _widgetConfig
+
+  fun updateSelectedCalendars(id: Long, isSelected: Boolean) {
+    _widgetConfig.update {
+      val selectedCalendarIds: MutableList<Long> =
+          it.selectedCalendarIds?.toMutableList() ?: calendar.value.map { it.id }.toMutableList()
+      if (isSelected) {
+        selectedCalendarIds.add(id)
+      } else {
+        selectedCalendarIds.remove(id)
+      }
+      it.copy(selectedCalendarIds = selectedCalendarIds)
+    }
   }
 
-  override fun getItemId(position: Int): Long = position.toLong()
-
-  override fun onCreateViewHolder(
-      parent: ViewGroup,
-      viewType: Int,
-  ): CalendarInfoViewHolder {
-    val inflater = LayoutInflater.from(parent.context)
-    val binding = CalendarInfoItemViewBinding.inflate(inflater, parent, false)
-    return CalendarInfoViewHolder(binding)
+  fun updateDecimalPlaces(places: Int) {
+    _widgetConfig.update { it.copy(decimalPlaces = places) }
   }
 
-  override fun onBindViewHolder(
-      holder: CalendarInfoViewHolder,
-      position: Int,
-  ) {
-    val currentEvent = calendarInfoList[position]
-    val context = holder.binding.root.context
-    holder.binding.calendarName.text = currentEvent.displayName
-    holder.binding.calendarAccount.text = currentEvent.accountName
-    holder.binding.calendarCheck.isChecked = tracker?.isSelected(position.toLong()) == true
-
-    holder.binding.calendarCheck.setOnClickListener { handleSelection(holder, position) }
-    holder.binding.parent.setOnClickListener { handleSelection(holder, position) }
+  fun saveConfig() {
+    CalendarWidgetConfig.save(application, widgetConfig.value)
   }
 
-  private fun handleSelection(
-      holder: CalendarInfoViewHolder,
-      position: Int,
-  ) {
-    if (tracker?.isSelected(position.toLong()) == true) {
-      tracker?.deselect(position.toLong())
+  fun updateBackgroundTransparency(backgroundTransparency: Float) {
+    _widgetConfig.update { it.copy(backgroundTransparency = backgroundTransparency) }
+  }
+
+  fun updateTimeLeftCounter(checked: Boolean) {
+    _widgetConfig.update { it.copy(timeLeftCounter = checked) }
+  }
+
+  fun updateDynamicTimeLeftCounter(checked: Boolean) {
+    if (checked) {
+      _widgetConfig.update { it.copy(timeLeftCounter = true, dynamicLeftCounter = true) }
     } else {
-      tracker?.select(position.toLong())
+      _widgetConfig.update { it.copy(dynamicLeftCounter = false) }
     }
-    holder.binding.calendarCheck.isChecked = tracker?.isSelected(position.toLong()) == true
   }
 
-  override fun getItemCount(): Int = calendarInfoList.size
-
-  fun toggleSelectAll() {
-    if (tracker?.hasSelection() == true) {
-      tracker?.clearSelection()
+  fun updateReplaceTimeLeftCounter(checked: Boolean) {
+    if (checked) {
+      _widgetConfig.update { it.copy(timeLeftCounter = true, replaceProgressWithDaysLeft = true) }
     } else {
-      tracker?.let {
-        for (i in 0 until itemCount) {
-          it.select(i.toLong())
-        }
-      }
-    }
-  }
-
-  fun selectCalendarWithIds(selectedCalendarIds: List<Long>) {
-    tracker?.let {
-      for (i in 0 until itemCount) {
-        if (calendarInfoList[i].id in selectedCalendarIds) {
-          it.select(i.toLong())
-        }
-      }
-    }
-  }
-
-  fun getSelectedCalendarInfos(): List<CalendarEventInfo.CalendarInfo> {
-    val selectedEvents = mutableListOf<CalendarEventInfo.CalendarInfo>()
-    tracker?.selection?.let {
-      for (i in it) {
-        selectedEvents.add(calendarInfoList[i.toInt()])
-      }
-    }
-    return selectedEvents
-  }
-}
-
-class CalendarInfoViewHolder(val binding: CalendarInfoItemViewBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-  fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
-      object : ItemDetailsLookup.ItemDetails<Long>() {
-        override fun getPosition(): Int = adapterPosition
-
-        override fun getSelectionKey(): Long = itemId
-      }
-}
-
-class CalendarInfoItemDetailsLookup(private val recyclerView: RecyclerView) :
-    ItemDetailsLookup<Long>() {
-  override fun getItemDetails(event: MotionEvent): ItemDetails<Long>? {
-    val view = recyclerView.findChildViewUnder(event.x, event.y)
-    if (view != null) {
-      return (recyclerView.getChildViewHolder(view) as CalendarInfoViewHolder).getItemDetails()
-    }
-    return null
-  }
-}
-
-class CalendarInfoItemKeyProvider(private val recyclerView: RecyclerView) :
-    ItemKeyProvider<Long>(SCOPE_MAPPED) {
-  override fun getKey(position: Int): Long? {
-    return recyclerView.adapter?.getItemId(position)
-  }
-
-  override fun getPosition(key: Long): Int {
-    val viewHolder = recyclerView.findViewHolderForItemId(key)
-    return viewHolder?.layoutPosition ?: RecyclerView.NO_POSITION
-  }
-}
-
-class ItemSpaceDecoration : RecyclerView.ItemDecoration() {
-  override fun getItemOffsets(
-      outRect: Rect,
-      view: View,
-      parent: RecyclerView,
-      state: RecyclerView.State,
-  ) {
-    val position = parent.getChildAdapterPosition(view)
-
-    // Add space between items with different view types
-    when (position) {
-      0 -> outRect.bottom = 0
-      else -> outRect.top = 16
-    }
-    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-      leftMargin = 20
-      rightMargin = 20
-    }
-    if (position == state.itemCount - 1) {
-      outRect.bottom = 64
+      _widgetConfig.update { it.copy(replaceProgressWithDaysLeft = false) }
     }
   }
 }
 
-class CalendarWidgetConfigManager : AppCompatActivity() {
-  private var _binding: ActivityCalendarWidgetConfigManagerBinding? = null
-  private val binding
-    get() = _binding!!
+class CalendarWidgetConfigManager : ComponentActivity() {
 
-  private lateinit var calendarPermissionDialog: PermissionMessageDialog
-  private val requestPermissionLauncher =
-      registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        if (isGranted) {
-          setupCalendarList()
-        } else {
-          calendarPermissionDialog.show(supportFragmentManager, "location_permission_dialog")
-        }
-      }
+  private val calendarWidgetConfigManagerViewModel: CalendarWidgetConfigManagerViewModel by
+      viewModels()
 
+  @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
-    DynamicColors.applyToActivityIfAvailable(this)
-    _binding = ActivityCalendarWidgetConfigManagerBinding.inflate(layoutInflater)
-    setContentView(binding.root)
-    ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { v, insets ->
-      val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-      v.updatePadding(systemBars.left, systemBars.top, systemBars.right, 0)
-      insets
-    }
-    setSupportActionBar(binding.toolbar)
-    binding.toolbar.title = getString(R.string.select_calendars)
-    calendarPermissionDialog =
-        PermissionMessageDialog(
-            icon = R.drawable.ic_outline_edit_calendar_24,
-            title = getString(R.string.calendar_permission_title),
-            message = getString(R.string.calendar_permission_message),
-        ) {
-          requestPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+    setContent {
+      val widgetConfig = calendarWidgetConfigManagerViewModel.widgetConfig.collectAsState()
+      val calendars = calendarWidgetConfigManagerViewModel.calendar.collectAsState().value
+
+      YearlyProgressTheme {
+        Scaffold(
+            topBar = {
+              TopAppBar(
+                  title = { Text(stringResource(R.string.calendar_widget_options)) },
+              )
+            },
+            contentWindowInsets = WindowInsets.safeContent,
+        ) { innerPadding ->
+          Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                contentPadding = innerPadding,
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(horizontal = 8.dp)) {
+                  item {
+                    Text(
+                        text = stringResource(R.string.widget_settings),
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(vertical = 8.dp))
+                  }
+
+                  item {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                      val timeLeftInteractionSource = remember { MutableInteractionSource() }
+                      val dynamicTimeLeftInteractionSource = remember { MutableInteractionSource() }
+                      val replaceTimeLeftInteractionSource = remember { MutableInteractionSource() }
+
+                      Row(
+                          modifier =
+                              Modifier.fillMaxWidth().clickable(
+                                  interactionSource = timeLeftInteractionSource,
+                                  indication = null) {
+                                    calendarWidgetConfigManagerViewModel.updateTimeLeftCounter(
+                                        !widgetConfig.value.timeLeftCounter)
+                                  },
+                          verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                stringResource(R.string.time_left_counter),
+                                modifier = Modifier.weight(1f))
+
+                            Switch(
+                                checked = widgetConfig.value.timeLeftCounter,
+                                onCheckedChange = {
+                                  calendarWidgetConfigManagerViewModel.updateTimeLeftCounter(it)
+                                },
+                                interactionSource = timeLeftInteractionSource)
+                          }
+
+                      Row(
+                          modifier =
+                              Modifier.fillMaxWidth().clickable(
+                                  interactionSource = dynamicTimeLeftInteractionSource,
+                                  indication = null) {
+                                    calendarWidgetConfigManagerViewModel
+                                        .updateDynamicTimeLeftCounter(
+                                            !widgetConfig.value.dynamicLeftCounter)
+                                  },
+                          verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                stringResource(R.string.dynamic_time_left_counter),
+                                modifier = Modifier.weight(1f))
+
+                            Switch(
+                                checked = widgetConfig.value.dynamicLeftCounter,
+                                onCheckedChange = {
+                                  calendarWidgetConfigManagerViewModel.updateDynamicTimeLeftCounter(
+                                      it)
+                                },
+                                interactionSource = dynamicTimeLeftInteractionSource)
+                          }
+
+                      Row(
+                          modifier =
+                              Modifier.fillMaxWidth().clickable(
+                                  interactionSource = replaceTimeLeftInteractionSource,
+                                  indication = null) {
+                                    calendarWidgetConfigManagerViewModel
+                                        .updateReplaceTimeLeftCounter(
+                                            !widgetConfig.value.replaceProgressWithDaysLeft)
+                                  },
+                          verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                stringResource(R.string.replace_progress_with_days_left_counter),
+                                modifier = Modifier.weight(1f))
+
+                            Switch(
+                                checked = widgetConfig.value.replaceProgressWithDaysLeft,
+                                onCheckedChange = {
+                                  calendarWidgetConfigManagerViewModel.updateReplaceTimeLeftCounter(
+                                      it)
+                                },
+                                interactionSource = replaceTimeLeftInteractionSource)
+                          }
+
+                      Column {
+                        var decimalPlaces by remember {
+                          mutableFloatStateOf(widgetConfig.value.decimalPlaces.toFloat())
+                        }
+                        Text(stringResource(R.string.pref_title_widget_decimal_places))
+                        Slider(
+                            value = decimalPlaces,
+                            onValueChange = { decimalPlaces = it },
+                            valueRange = 0f..5f,
+                            steps = 4,
+                            onValueChangeFinished = {
+                              calendarWidgetConfigManagerViewModel.updateDecimalPlaces(
+                                  decimalPlaces.toInt())
+                            },
+                        )
+                      }
+                      Column {
+                        var backgroundTransparency by remember {
+                          mutableFloatStateOf(widgetConfig.value.backgroundTransparency)
+                        }
+                        Text(stringResource(R.string.widget_transparency))
+                        Slider(
+                            value = backgroundTransparency,
+                            onValueChange = { backgroundTransparency = it },
+                            valueRange = 0f..5f,
+                            onValueChangeFinished = {
+                              calendarWidgetConfigManagerViewModel.updateBackgroundTransparency(
+                                  backgroundTransparency)
+                            },
+                        )
+                      }
+                    }
+                  }
+
+                  item {
+                    Text(
+                        text = stringResource(R.string.select_calendars),
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(vertical = 16.dp))
+                  }
+                  itemsIndexed(calendars) { _, item ->
+                    val isItemChecked =
+                        widgetConfig.value.selectedCalendarIds?.any { it == item.id } ?: true
+                    ElevatedCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                          calendarWidgetConfigManagerViewModel.updateSelectedCalendars(
+                              item.id, !isItemChecked)
+                        }) {
+                          Row(
+                              horizontalArrangement = Arrangement.SpaceBetween,
+                              modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+                                Column(modifier = Modifier.weight(2f)) {
+                                  Text(
+                                      text = item.displayName,
+                                      style =
+                                          MaterialTheme.typography.titleLarge.copy(
+                                              color = MaterialTheme.colorScheme.primary))
+                                  Text(
+                                      text = item.accountName,
+                                      style = MaterialTheme.typography.labelSmall)
+                                }
+                                Checkbox(
+                                    checked = isItemChecked,
+                                    onCheckedChange = { checked ->
+                                      calendarWidgetConfigManagerViewModel.updateSelectedCalendars(
+                                          item.id, checked)
+                                    })
+                              }
+                        }
+                  }
+                }
+            Button(
+                modifier =
+                    Modifier.align(Alignment.BottomCenter)
+                        .padding(bottom = 8.dp)
+                        .windowInsetsPadding(WindowInsets.systemGestures),
+                onClick = {
+                  calendarWidgetConfigManagerViewModel.saveConfig()
+                  setResult(RESULT_OK)
+                  finish()
+                }) {
+                  Text(stringResource(R.string.save))
+                }
+          }
         }
-
-    when {
-      ContextCompat.checkSelfPermission(
-          this,
-          Manifest.permission.READ_CALENDAR,
-      ) == PackageManager.PERMISSION_GRANTED -> {
-        setupCalendarList()
-        binding.errorLayout.visibility = View.GONE
       }
-
-      ContextCompat.checkSelfPermission(
-          this,
-          Manifest.permission.READ_CALENDAR,
-      ) == PackageManager.PERMISSION_DENIED -> {
-        binding.errorLayout.visibility = View.VISIBLE
-        binding.errorMessage.text = getString(R.string.calendar_permission_required)
-        binding.calendarList.visibility = View.GONE
-        calendarPermissionDialog.show(supportFragmentManager, "")
-      }
-
-      ActivityCompat.shouldShowRequestPermissionRationale(
-          this,
-          Manifest.permission.ACCESS_COARSE_LOCATION,
-      ) -> {
-        calendarPermissionDialog.show(supportFragmentManager, "")
-      }
-
-      else -> {
-        requestPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
-      }
-    }
-
-    val appWidgetId =
-        intent
-            ?.extras
-            ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-            ?: AppWidgetManager.INVALID_APPWIDGET_ID
-    if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-      finish()
-      return
-    }
-
-    binding.saveButton.setOnClickListener {
-      setResult(RESULT_OK)
-      finish()
-    }
-  }
-
-  private fun setupCalendarList() {
-    val calendars = getCalendarsDetails(this.contentResolver)
-
-    if (calendars.isEmpty()) {
-      binding.errorLayout.visibility = View.VISIBLE
-      binding.errorMessage.text = getString(R.string.no_calendars_available)
-      binding.calendarList.visibility = View.GONE
-      return
-    }
-    binding.calendarList.visibility = View.VISIBLE
-    binding.errorLayout.visibility = View.GONE
-
-    val selectedCalendarIds = getSelectedCalendarIds(this)
-
-    val adapter = CalendarSyncListAdapter(calendars)
-    binding.calendarList.apply {
-      this.adapter = adapter
-      this.layoutManager =
-          androidx.recyclerview.widget.LinearLayoutManager(this@CalendarWidgetConfigManager)
-      this.addItemDecoration(ItemSpaceDecoration())
-
-      val tracker =
-          SelectionTracker.Builder<Long>(
-                  "calendar-selection",
-                  this,
-                  CalendarInfoItemKeyProvider(this),
-                  CalendarInfoItemDetailsLookup(this),
-                  androidx.recyclerview.selection.StorageStrategy.createLongStorage())
-              .build()
-      adapter.tracker = tracker
-      if (selectedCalendarIds != null) {
-        adapter.selectCalendarWithIds(selectedCalendarIds)
-      } else {
-        adapter.toggleSelectAll()
-      }
-      tracker.addObserver(
-          object : SelectionTracker.SelectionObserver<Long>() {
-            override fun onSelectionChanged() {
-              super.onSelectionChanged()
-              val selectedCalendars = adapter.getSelectedCalendarInfos()
-              saveSelectedCalendarIds(
-                  this@CalendarWidgetConfigManager, selectedCalendars.map { it.id })
-            }
-          })
     }
   }
 }

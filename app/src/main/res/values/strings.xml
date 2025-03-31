@@ -138,6 +138,7 @@
     <string name="title_activity_welcome_screen_v2">WelcomeScreenV2</string>
     <string name="close">Close</string>
     <string name="select_your_calendar_system">Select your calendar system</string>
+    <string name="calendar_widget_options">Calendar Widget Options</string>
 
 
     <!-- Week Preference -->

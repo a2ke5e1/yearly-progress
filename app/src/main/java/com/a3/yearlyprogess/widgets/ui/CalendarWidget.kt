@@ -13,13 +13,14 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.SizeF
+import android.view.View
 import android.widget.RemoteViews
 import androidx.core.graphics.toColor
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetails
-import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getSelectedCalendarIds
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getTodayOrNearestEvents
+import com.a3.yearlyprogess.widgets.manager.CalendarWidgetConfig
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
@@ -103,8 +104,10 @@ class CalendarWidget : BaseWidget() {
     if (intent.action == CalendarEventsSwiper.ACTION_NEXT ||
         intent.action == CalendarEventsSwiper.ACTION_PREV) {
 
+      val widgetConfig = CalendarWidgetConfig.load(context)
+
       val selectedCalendars =
-          getSelectedCalendarIds(context)
+          widgetConfig.selectedCalendarIds
               ?: getCalendarsDetails(context.contentResolver).map { it.id }
       if (selectedCalendars.isEmpty()) {
         return
@@ -148,6 +151,9 @@ class CalendarWidget : BaseWidget() {
 
     val smallView = RemoteViews(context.packageName, R.layout.calendar_widget_small_layout)
     val largeView = RemoteViews(context.packageName, R.layout.calendar_widget_layout)
+    var widgetConfig = CalendarWidgetConfig.load(context)
+    setWidgetBackgroundTransparency(smallView, widgetConfig)
+    setWidgetBackgroundTransparency(largeView, widgetConfig)
 
     if (context.checkSelfPermission(Manifest.permission.READ_CALENDAR) ==
         PackageManager.PERMISSION_DENIED) {
@@ -169,8 +175,12 @@ class CalendarWidget : BaseWidget() {
           while (isActive && counter < 5) { // Check if the coroutine is still active
             counter++
 
+            widgetConfig = CalendarWidgetConfig.load(context)
+            setWidgetBackgroundTransparency(smallView, widgetConfig)
+            setWidgetBackgroundTransparency(largeView, widgetConfig)
+
             val selectedCalendars =
-                getSelectedCalendarIds(context)
+                widgetConfig.selectedCalendarIds
                     ?: getCalendarsDetails(context.contentResolver).map { it.id }
             if (selectedCalendars.isEmpty()) {
               updateWidgetError(
@@ -233,10 +243,10 @@ class CalendarWidget : BaseWidget() {
               continue
             }
 
-            setupCalendarWidgetView(context, smallView, event)
+            setupCalendarWidgetView(context, smallView, event, widgetConfig)
             smallView.setViewVisibility(R.id.event_description, android.view.View.GONE)
             smallView.setTextViewText(R.id.indicator, calendarEventsSwiper.indicator())
-            setupCalendarWidgetView(context, largeView, event)
+            setupCalendarWidgetView(context, largeView, event, widgetConfig)
             largeView.setTextViewText(R.id.indicator, calendarEventsSwiper.indicator())
 
             val view = mapRemoteView(context, appWidgetId, smallView, largeView)
@@ -272,13 +282,14 @@ class CalendarWidget : BaseWidget() {
     return smallView
   }
 
-  fun setupCalendarWidgetView(context: Context, view: RemoteViews, event: Event) {
+  fun setupCalendarWidgetView(
+      context: Context,
+      view: RemoteViews,
+      event: Event,
+      widgetConfig: CalendarWidgetConfig
+  ) {
     val yp = YearlyProgressUtil(context)
     val progress = yp.calculateProgress(event.eventStartTime.time, event.eventEndTime.time)
-    view.setTextViewText(
-        R.id.widgetProgress,
-        progress.styleFormatted(2, cloverMode = true),
-    )
     view.setTextViewText(R.id.event_title, event.eventTitle)
     view.setTextViewText(R.id.event_description, event.eventDescription)
     view.setTextViewText(
@@ -294,12 +305,26 @@ class CalendarWidget : BaseWidget() {
         if (System.currentTimeMillis() < event.eventStartTime.time) {
           context.getString(
               R.string.time_in,
-              (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText())
+              (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText(
+                  widgetConfig.dynamicLeftCounter))
         } else {
           context.getString(
-              R.string.time_left, yp.calculateTimeLeft(event.eventEndTime.time).toTimePeriodText())
+              R.string.time_left,
+              yp.calculateTimeLeft(event.eventEndTime.time)
+                  .toTimePeriodText(widgetConfig.dynamicLeftCounter))
         }
-    view.setTextViewText(R.id.widgetDays, widgetDays)
+    if (widgetConfig.timeLeftCounter && widgetConfig.replaceProgressWithDaysLeft) {
+      view.setTextViewText(R.id.widgetDays, "")
+      view.setViewVisibility(R.id.widgetDays, View.GONE)
+      view.setTextViewText(R.id.widgetProgress, widgetDays)
+    } else {
+      view.setTextViewText(R.id.widgetDays, widgetDays)
+      view.setViewVisibility(R.id.widgetDays, View.VISIBLE)
+      view.setTextViewText(
+          R.id.widgetProgress,
+          progress.styleFormatted(widgetConfig.decimalPlaces),
+      )
+    }
 
     if (System.currentTimeMillis() in event.eventStartTime.time..event.eventEndTime.time) {
       view.setViewVisibility(R.id.widgetProgressBar, android.view.View.VISIBLE)
@@ -375,6 +400,14 @@ class CalendarWidget : BaseWidget() {
     largeView.setTextViewText(R.id.event_description, description)
     val view = mapRemoteView(context, appWidgetId, smallView, largeView)
     appWidgetManager.updateAppWidget(appWidgetId, view)
+  }
+
+  private fun setWidgetBackgroundTransparency(
+      view: RemoteViews,
+      widgetConfig: CalendarWidgetConfig
+  ) {
+    val widgetBackgroundAlpha = ((widgetConfig.backgroundTransparency) * 255).toInt()
+    view.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
   }
 
   private fun Date.formattedDateTime(context: Context): String {

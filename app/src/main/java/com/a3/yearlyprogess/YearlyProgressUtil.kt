@@ -176,7 +176,7 @@ class YearlyProgressUtil(val context: Context) {
     val cal = Calendar.getInstance(getULocale())
     cal.set(Calendar.MONTH, monthNumber - 1)
 
-    val formatter = SimpleDateFormat("MMMM", uLocale) // "MMMM" gives full month name
+    val formatter = SimpleDateFormat("MMM", uLocale) // "MMMM" gives full month name
     val monthName = formatter.format(cal.time)
 
     return monthName ?: "Unknown"
@@ -209,7 +209,7 @@ class YearlyProgressUtil(val context: Context) {
     val cal = Calendar.getInstance(uLocale)
     cal.set(Calendar.DAY_OF_WEEK, dayOfWeek)
 
-    val formatter = SimpleDateFormat("EEEE", uLocale) // "EEEE" gives full WEEK name
+    val formatter = SimpleDateFormat("EEE", uLocale) // "EEEE" gives full WEEK name
     val dayName = formatter.format(cal.time)
 
     return dayName ?: "Unknown"
