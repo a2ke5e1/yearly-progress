@@ -1,11 +1,14 @@
 package com.a3.yearlyprogess.widgets.manager
 
+import android.Manifest
 import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,38 +29,59 @@ import androidx.compose.foundation.layout.systemGestures
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.UiMode
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import androidx.lifecycle.AndroidViewModel
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.components.dialogbox.PermissionRationalDialog
 import com.a3.yearlyprogess.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.widgets.manager.CalendarEventInfo.getCalendarsDetails
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.gson.Gson
-import java.util.Calendar
-import java.util.Date
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.Calendar
+import java.util.Date
 
 object CalendarEventInfo {
   fun getTodayOrNearestEvents(
@@ -223,8 +247,8 @@ data class CalendarWidgetConfig(
 
   companion object {
 
-    const val SELECTED_CALENDAR_PREF = "selected_calendar_prefs"
-    const val SELECTED_CALENDAR_CONFIG = "selected_calendar_prefs"
+    private const val SELECTED_CALENDAR_PREF = "selected_calendar_prefs"
+    private const val SELECTED_CALENDAR_CONFIG = "selected_calendar_prefs"
 
     fun load(context: Context): CalendarWidgetConfig {
       val sharedPreferences =
@@ -253,13 +277,17 @@ data class CalendarWidgetConfig(
 
 class CalendarWidgetConfigManagerViewModel(private val application: Application) :
     AndroidViewModel(application) {
-  private val _calendars = MutableStateFlow(getCalendarsDetails(application.contentResolver))
+  private val _calendars = MutableStateFlow(listOf<CalendarEventInfo.CalendarInfo>())
   val calendar
     get() = _calendars
 
   private val _widgetConfig = MutableStateFlow(CalendarWidgetConfig.load(application))
   val widgetConfig
     get() = _widgetConfig
+
+  fun loadCalendars() {
+    _calendars.update { getCalendarsDetails(application.contentResolver) }
+  }
 
   fun updateSelectedCalendars(id: Long, isSelected: Boolean) {
     _widgetConfig.update {
@@ -309,17 +337,26 @@ class CalendarWidgetConfigManagerViewModel(private val application: Application)
 
 class CalendarWidgetConfigManager : ComponentActivity() {
 
-  private val calendarWidgetConfigManagerViewModel: CalendarWidgetConfigManagerViewModel by
-      viewModels()
+  private val viewModel: CalendarWidgetConfigManagerViewModel by viewModels()
 
-  @OptIn(ExperimentalMaterial3Api::class)
+  @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     setContent {
-      val widgetConfig = calendarWidgetConfigManagerViewModel.widgetConfig.collectAsState()
-      val calendars = calendarWidgetConfigManagerViewModel.calendar.collectAsState().value
+      val calendarPermissionState =
+        rememberPermissionState(permission = Manifest.permission.READ_CALENDAR)
+      var showPermissionRationalMessage by rememberSaveable { mutableStateOf(false) }
+      val context = LocalContext.current
 
+      LaunchedEffect(Unit) {
+        if (!calendarPermissionState.status.isGranted) {
+          calendarPermissionState.launchPermissionRequest()
+        }
+      }
+
+      val widgetConfig = viewModel.widgetConfig.collectAsState()
+      val calendars = viewModel.calendar.collectAsState().value
       YearlyProgressTheme {
         Scaffold(
             topBar = {
@@ -351,12 +388,16 @@ class CalendarWidgetConfigManager : ComponentActivity() {
 
                       Row(
                           modifier =
-                              Modifier.fillMaxWidth().clickable(
-                                  interactionSource = timeLeftInteractionSource,
-                                  indication = null) {
-                                    calendarWidgetConfigManagerViewModel.updateTimeLeftCounter(
-                                        !widgetConfig.value.timeLeftCounter)
-                                  },
+                          Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                              interactionSource = timeLeftInteractionSource,
+                              indication = null
+                            ) {
+                              viewModel.updateTimeLeftCounter(
+                                !widgetConfig.value.timeLeftCounter
+                              )
+                            },
                           verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 stringResource(R.string.time_left_counter),
@@ -364,21 +405,22 @@ class CalendarWidgetConfigManager : ComponentActivity() {
 
                             Switch(
                                 checked = widgetConfig.value.timeLeftCounter,
-                                onCheckedChange = {
-                                  calendarWidgetConfigManagerViewModel.updateTimeLeftCounter(it)
-                                },
+                              onCheckedChange = { viewModel.updateTimeLeftCounter(it) },
                                 interactionSource = timeLeftInteractionSource)
                           }
 
                       Row(
                           modifier =
-                              Modifier.fillMaxWidth().clickable(
-                                  interactionSource = dynamicTimeLeftInteractionSource,
-                                  indication = null) {
-                                    calendarWidgetConfigManagerViewModel
-                                        .updateDynamicTimeLeftCounter(
-                                            !widgetConfig.value.dynamicLeftCounter)
-                                  },
+                          Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                              interactionSource = dynamicTimeLeftInteractionSource,
+                              indication = null
+                            ) {
+                              viewModel.updateDynamicTimeLeftCounter(
+                                !widgetConfig.value.dynamicLeftCounter
+                              )
+                            },
                           verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 stringResource(R.string.dynamic_time_left_counter),
@@ -386,22 +428,22 @@ class CalendarWidgetConfigManager : ComponentActivity() {
 
                             Switch(
                                 checked = widgetConfig.value.dynamicLeftCounter,
-                                onCheckedChange = {
-                                  calendarWidgetConfigManagerViewModel.updateDynamicTimeLeftCounter(
-                                      it)
-                                },
+                              onCheckedChange = { viewModel.updateDynamicTimeLeftCounter(it) },
                                 interactionSource = dynamicTimeLeftInteractionSource)
                           }
 
                       Row(
                           modifier =
-                              Modifier.fillMaxWidth().clickable(
-                                  interactionSource = replaceTimeLeftInteractionSource,
-                                  indication = null) {
-                                    calendarWidgetConfigManagerViewModel
-                                        .updateReplaceTimeLeftCounter(
-                                            !widgetConfig.value.replaceProgressWithDaysLeft)
-                                  },
+                          Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                              interactionSource = replaceTimeLeftInteractionSource,
+                              indication = null
+                            ) {
+                              viewModel.updateReplaceTimeLeftCounter(
+                                !widgetConfig.value.replaceProgressWithDaysLeft
+                              )
+                            },
                           verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 stringResource(R.string.replace_progress_with_days_left_counter),
@@ -409,10 +451,7 @@ class CalendarWidgetConfigManager : ComponentActivity() {
 
                             Switch(
                                 checked = widgetConfig.value.replaceProgressWithDaysLeft,
-                                onCheckedChange = {
-                                  calendarWidgetConfigManagerViewModel.updateReplaceTimeLeftCounter(
-                                      it)
-                                },
+                              onCheckedChange = { viewModel.updateReplaceTimeLeftCounter(it) },
                                 interactionSource = replaceTimeLeftInteractionSource)
                           }
 
@@ -427,8 +466,7 @@ class CalendarWidgetConfigManager : ComponentActivity() {
                             valueRange = 0f..5f,
                             steps = 4,
                             onValueChangeFinished = {
-                              calendarWidgetConfigManagerViewModel.updateDecimalPlaces(
-                                  decimalPlaces.toInt())
+                              viewModel.updateDecimalPlaces(decimalPlaces.toInt())
                             },
                         )
                       }
@@ -442,8 +480,7 @@ class CalendarWidgetConfigManager : ComponentActivity() {
                             onValueChange = { backgroundTransparency = it },
                             valueRange = 0f..5f,
                             onValueChangeFinished = {
-                              calendarWidgetConfigManagerViewModel.updateBackgroundTransparency(
-                                  backgroundTransparency)
+                              viewModel.updateBackgroundTransparency(backgroundTransparency)
                             },
                         )
                       }
@@ -456,45 +493,115 @@ class CalendarWidgetConfigManager : ComponentActivity() {
                         style = MaterialTheme.typography.labelLarge,
                         modifier = Modifier.padding(vertical = 16.dp))
                   }
-                  itemsIndexed(calendars) { _, item ->
-                    val isItemChecked =
+
+              when (val status = calendarPermissionState.status) {
+                is PermissionStatus.Granted -> {
+                  showPermissionRationalMessage = false
+                  viewModel.loadCalendars()
+                  if (calendars.isNotEmpty()) {
+                    itemsIndexed(calendars) { _, item ->
+                      val isItemChecked =
                         widgetConfig.value.selectedCalendarIds?.any { it == item.id } ?: true
-                    ElevatedCard(
+                      ElevatedCard(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                          calendarWidgetConfigManagerViewModel.updateSelectedCalendars(
-                              item.id, !isItemChecked)
+                          viewModel.updateSelectedCalendars(item.id, !isItemChecked)
                         }) {
-                          Row(
-                              horizontalArrangement = Arrangement.SpaceBetween,
-                              modifier = Modifier.padding(8.dp).fillMaxWidth()) {
-                                Column(modifier = Modifier.weight(2f)) {
-                                  Text(
-                                      text = item.displayName,
-                                      style =
-                                          MaterialTheme.typography.titleLarge.copy(
-                                              color = MaterialTheme.colorScheme.primary))
-                                  Text(
-                                      text = item.accountName,
-                                      style = MaterialTheme.typography.labelSmall)
-                                }
-                                Checkbox(
-                                    checked = isItemChecked,
-                                    onCheckedChange = { checked ->
-                                      calendarWidgetConfigManagerViewModel.updateSelectedCalendars(
-                                          item.id, checked)
-                                    })
-                              }
+                        Row(
+                          horizontalArrangement = Arrangement.SpaceBetween,
+                          modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                        ) {
+                          Column(modifier = Modifier.weight(2f)) {
+                            Text(
+                              text = item.displayName,
+                              style =
+                              MaterialTheme.typography.titleLarge.copy(
+                                color = MaterialTheme.colorScheme.primary
+                              )
+                            )
+                            Text(
+                              text = item.accountName,
+                              style = MaterialTheme.typography.labelSmall
+                            )
+                          }
+                          Checkbox(
+                            checked = isItemChecked,
+                            onCheckedChange = { checked ->
+                              viewModel.updateSelectedCalendars(item.id, checked)
+                            })
                         }
+                      }
+                    }
+                  } else {
+                    item {
+                      Text(stringResource(R.string.no_calendars_available))
+                    }
                   }
                 }
+
+                is PermissionStatus.Denied -> {
+                  showPermissionRationalMessage = true
+                  item {
+                    if (status.shouldShowRationale) {
+                      if (showPermissionRationalMessage) {
+                        PermissionRationalDialog(onDismiss = {
+                          showPermissionRationalMessage = true
+                        }, onConfirm = {
+                          calendarPermissionState.launchPermissionRequest()
+                        }, iconPainter =  painterResource(R.drawable.ic_outline_edit_calendar_24),
+                        title =  stringResource(R.string.calendar_permission_title),
+                          body =  stringResource(R.string.calendar_permission_message)
+                        )
+                      }
+                    }
+                    else {
+                      Card(
+                        colors = CardDefaults.cardColors(
+                          containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                      ) {
+                        Column(
+                          modifier = Modifier
+                            .padding(32.dp)
+                            .fillMaxWidth(),
+                          horizontalAlignment = Alignment.CenterHorizontally,
+                          verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                          Text(
+                            stringResource(R.string.calendar_permission_required), style =
+                            MaterialTheme.typography.bodyLarge.copy(
+                              color = MaterialTheme.colorScheme.onTertiaryContainer
+                            )
+                          )
+                          Button(
+                            onClick = {
+                              val intent =
+                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                  data = Uri.fromParts("package", context.packageName, null)
+                                }
+                              context.startActivity(intent)
+                            }) {
+                            Text("Open Settings")
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
             Button(
                 modifier =
-                    Modifier.align(Alignment.BottomCenter)
-                        .padding(bottom = 8.dp)
-                        .windowInsetsPadding(WindowInsets.systemGestures),
+                Modifier
+                  .align(Alignment.BottomCenter)
+                  .padding(bottom = 8.dp)
+                  .windowInsetsPadding(WindowInsets.systemGestures),
                 onClick = {
-                  calendarWidgetConfigManagerViewModel.saveConfig()
+                  viewModel.saveConfig()
                   setResult(RESULT_OK)
                   finish()
                 }) {
