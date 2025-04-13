@@ -1,14 +1,13 @@
 package com.a3.yearlyprogess.widgets.ui.util
 
+import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.SuperscriptSpan
 import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.getMonthName
-import com.a3.yearlyprogess.getOrdinalSuffix
-import com.a3.yearlyprogess.getWeekDayName
+import com.a3.yearlyprogess.YearlyProgressUtil
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
@@ -57,8 +56,9 @@ fun Double.styleFormatted(
   return spannable
 }
 
-fun Int.formattedDay(): SpannableString {
-  val ordinalSuffix = getOrdinalSuffix(this)
+fun Int.formattedDay(context: Context): SpannableString {
+  val yp = YearlyProgressUtil(context)
+  val ordinalSuffix = yp.getOrdinalSuffix(this)
 
   val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
   numberFormat.maximumFractionDigits = 0
@@ -86,11 +86,12 @@ fun Int.formattedDay(): SpannableString {
   return spannable
 }
 
-fun Int.toFormattedTimePeriod(timePeriod: TimePeriod): SpannableString {
+fun Int.toFormattedTimePeriod(context: Context, timePeriod: TimePeriod): SpannableString {
+  val yp = YearlyProgressUtil(context)
   return when (timePeriod) {
-    TimePeriod.DAY -> this.formattedDay()
-    TimePeriod.MONTH -> SpannableString(getMonthName(this))
-    TimePeriod.WEEK -> SpannableString(getWeekDayName(this))
+    TimePeriod.DAY -> this.formattedDay(context)
+    TimePeriod.MONTH -> SpannableString(yp.getMonthName(this))
+    TimePeriod.WEEK -> SpannableString(yp.getWeekDayName(this))
     else -> {
       val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
       numberFormat.maximumFractionDigits = 0

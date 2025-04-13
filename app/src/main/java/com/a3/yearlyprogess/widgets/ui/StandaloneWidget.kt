@@ -10,9 +10,7 @@ import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.text.SpannableString
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.util.SizeF
-import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.IntRange
@@ -22,12 +20,7 @@ import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.calculateEndTime
-import com.a3.yearlyprogess.calculateProgress
-import com.a3.yearlyprogess.calculateStartTime
-import com.a3.yearlyprogess.calculateTimeLeft
-import com.a3.yearlyprogess.getCurrentPeriodValue
-import com.a3.yearlyprogess.getULocale
+import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
@@ -85,11 +78,13 @@ object WidgetUtils {
     val timeLeftCounter = options?.timeLeftCounter == true
     val replaceProgressWithDaysLeft = options?.replaceProgressWithDaysLeft == true
     val widgetBackgroundAlpha = ((options?.backgroundTransparency ?: 100) / 100.0 * 255).toInt()
-    val progress = calculateProgress(context, startTime, endTime)
+
+    val yp = YearlyProgressUtil(context)
+    val progress = yp.calculateProgress(startTime, endTime)
     val widgetDaysLeftCounter =
         context.getString(
             R.string.time_left,
-            calculateTimeLeft(endTime).toTimePeriodText(options?.dynamicLeftCounter == true),
+            yp.calculateTimeLeft(endTime).toTimePeriodText(options?.dynamicLeftCounter == true),
         )
 
     /**
@@ -241,7 +236,7 @@ object WidgetUtils {
     val height = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
     val width = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
 
-    Log.d("WidgetSize", "height=${height} width=$width")
+    // Log.d("WidgetSize", "height=${height} width=$width")
 
     // Return the appropriate RemoteViews based on the widget shape.
     return when (options.shape) {
@@ -318,36 +313,36 @@ object WidgetUtils {
       }
       WidgetShape.CLOVER -> {
         val large = cloverRemoteView(R.layout.standalone_widget_layout_clover_large)
-        val square =
-            cloverRemoteView(R.layout.standalone_widget_layout_clover)
-//              .apply {
-//              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
-//                setViewLayoutMargin(
-//                    R.id.widgetDaysLeft,
-//                    RemoteViews.MARGIN_TOP,
-//                    -8f,
-//                    TypedValue.COMPLEX_UNIT_DIP,
-//                )
-//              }
-//              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
-//              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
-//              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
-//              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
-//            }
+        val square = cloverRemoteView(R.layout.standalone_widget_layout_clover)
+        //              .apply {
+        //              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        //                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
+        //                setViewLayoutMargin(
+        //                    R.id.widgetDaysLeft,
+        //                    RemoteViews.MARGIN_TOP,
+        //                    -8f,
+        //                    TypedValue.COMPLEX_UNIT_DIP,
+        //                )
+        //              }
+        //              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
+        //              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP,
+        // 20f)
+        //              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
+        //              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
+        //            }
         val small = cloverRemoteView(R.layout.standalone_widget_layout_clover_small)
-        val xSmall = cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small).apply {
-          setViewVisibility(R.id.widgetDaysLeft, View.GONE)
-        }
+        val xSmall =
+            cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small).apply {
+              setViewVisibility(R.id.widgetDaysLeft, View.GONE)
+            }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
           RemoteViews(
               mapOf(
-                SizeF(57f, 102f) to xSmall,
-                SizeF(130f,102f) to small,
-                SizeF(130f, 220f) to square,
-                SizeF(203f, 220f) to large
-              ),
+                  SizeF(57f, 102f) to xSmall,
+                  SizeF(130f, 102f) to small,
+                  SizeF(130f, 220f) to square,
+                  SizeF(203f, 220f) to large),
           )
         } else {
           if (width >= 214 && height >= 131) {
@@ -489,10 +484,12 @@ abstract class StandaloneWidget(private val widgetType: TimePeriod) : BaseWidget
         context: Context,
         options: StandaloneWidgetOptions,
     ): RemoteViews {
+      val yp = YearlyProgressUtil(context)
       val widgetType = options.widgetType ?: TimePeriod.DAY
-      val startTime = calculateStartTime(context, widgetType)
-      val endTime = calculateEndTime(context, widgetType)
-      val currentValue = getCurrentPeriodValue(widgetType).toFormattedTimePeriod(widgetType)
+      val startTime = yp.calculateStartTime(widgetType)
+      val endTime = yp.calculateEndTime(widgetType)
+      val currentValue =
+          yp.getCurrentPeriodValue(widgetType).toFormattedTimePeriod(context, widgetType)
       val widgetTitleText =
           when (widgetType) {
             TimePeriod.DAY -> context.getString(R.string.day)
@@ -614,9 +611,10 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
 
       val (startTime, endTime) = sunriseSunset.getStartAndEndTime(dayLight)
       val isSystem24Hour = is24HourFormat(context)
+      val yp = YearlyProgressUtil(context)
       val format =
-          if (isSystem24Hour) SimpleDateFormat("HH:mm", getULocale())
-          else SimpleDateFormat("hh:mm a", getULocale())
+          if (isSystem24Hour) SimpleDateFormat("HH:mm", yp.getULocale())
+          else SimpleDateFormat("hh:mm a", yp.getULocale())
 
       val currentValue =
           if (dayLight) {

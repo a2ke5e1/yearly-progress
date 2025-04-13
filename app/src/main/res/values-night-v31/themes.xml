@@ -9,11 +9,4 @@
         <item name="appWidgetInnerRadius">@android:dimen/system_app_widget_inner_radius</item>
         <item name="android:backgroundTint">@android:color/system_neutral2_800</item>
     </style>
-    <!--
-    Having themes.xml for night-v31 because of the priority order of the resource qualifiers.
-    -->
-    <style name="App.SplashScreen.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault.DayNight">
-        <item name="appWidgetRadius">@android:dimen/system_app_widget_background_radius</item>
-        <item name="appWidgetInnerRadius">@android:dimen/system_app_widget_inner_radius</item>
-    </style>
 </resources>

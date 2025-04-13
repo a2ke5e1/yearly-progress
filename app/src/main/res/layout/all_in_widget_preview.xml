@@ -3,7 +3,7 @@
     android:id="@+id/testBg"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/App.SplashScreen.AppWidgetContainer">
+    android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
 
     <GridLayout
         android:id="@+id/gridLayout"

@@ -11,8 +11,7 @@ import android.widget.RemoteViews
 import com.a3.yearlyprogess.MainActivity
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.calculateProgress
-import com.a3.yearlyprogess.getCurrentPeriodValue
+import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 
@@ -23,19 +22,21 @@ class AllInWidget : BaseWidget() {
         context: Context,
         views: RemoteViews,
     ) {
-      val dayProgress = calculateProgress(context, TimePeriod.DAY)
-      val weekProgress = calculateProgress(context, TimePeriod.WEEK)
-      val monthProgress = calculateProgress(context, TimePeriod.MONTH)
-      val yearProgress = calculateProgress(context, TimePeriod.YEAR)
+      val yp = YearlyProgressUtil(context)
+      val dayProgress = yp.calculateProgress(TimePeriod.DAY)
+      val weekProgress = yp.calculateProgress(TimePeriod.WEEK)
+      val monthProgress = yp.calculateProgress(TimePeriod.MONTH)
+      val yearProgress = yp.calculateProgress(TimePeriod.YEAR)
 
       val dayCurrentValue =
-          getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY)
+          yp.getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(context, TimePeriod.DAY)
       val weekCurrentValue =
-          getCurrentPeriodValue(TimePeriod.WEEK).toFormattedTimePeriod(TimePeriod.WEEK)
+          yp.getCurrentPeriodValue(TimePeriod.WEEK).toFormattedTimePeriod(context, TimePeriod.WEEK)
       val monthCurrentValue =
-          getCurrentPeriodValue(TimePeriod.MONTH).toFormattedTimePeriod(TimePeriod.MONTH)
+          yp.getCurrentPeriodValue(TimePeriod.MONTH)
+              .toFormattedTimePeriod(context, TimePeriod.MONTH)
       val yearCurrentValue =
-          getCurrentPeriodValue(TimePeriod.YEAR).toFormattedTimePeriod(TimePeriod.YEAR)
+          yp.getCurrentPeriodValue(TimePeriod.YEAR).toFormattedTimePeriod(context, TimePeriod.YEAR)
 
       views.setTextViewText(R.id.progressTextDay, dayProgress.styleFormatted(0))
       views.setTextViewText(R.id.progressTextWeek, weekProgress.styleFormatted(0))

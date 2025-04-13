@@ -22,10 +22,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
+import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
-import com.a3.yearlyprogess.calculateProgress
 import com.a3.yearlyprogess.databinding.FragmentWidgetScreenBinding
-import com.a3.yearlyprogess.getCurrentPeriodValue
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.DayLightWidget
@@ -154,11 +153,11 @@ class WidgetScreenFragment : Fragment() {
       delay(700) // Wait 700 millisecond for animation to complete
       while (true) {
         // Loads user preferences and set default values if not set
-
-        val progressTextYear = calculateProgress(requireContext(), TimePeriod.YEAR)
-        val progressTextMonth = calculateProgress(requireContext(), TimePeriod.MONTH)
-        val progressTextDay = calculateProgress(requireContext(), TimePeriod.DAY)
-        val progressTextWeek = calculateProgress(requireContext(), TimePeriod.WEEK)
+        val yp = YearlyProgressUtil(requireContext())
+        val progressTextYear = yp.calculateProgress(TimePeriod.YEAR)
+        val progressTextMonth = yp.calculateProgress(TimePeriod.MONTH)
+        val progressTextDay = yp.calculateProgress(TimePeriod.DAY)
+        val progressTextWeek = yp.calculateProgress(TimePeriod.WEEK)
 
         val progressYear = progressTextYear.roundToInt()
         val progressMonth = progressTextMonth.roundToInt()
@@ -193,13 +192,17 @@ class WidgetScreenFragment : Fragment() {
           allInOneProgressBarWeek.progress = progressWeek
 
           val dayCurrentValue =
-              getCurrentPeriodValue(TimePeriod.DAY).toFormattedTimePeriod(TimePeriod.DAY)
+              yp.getCurrentPeriodValue(TimePeriod.DAY)
+                  .toFormattedTimePeriod(requireContext(), TimePeriod.DAY)
           val weekCurrentValue =
-              getCurrentPeriodValue(TimePeriod.WEEK).toFormattedTimePeriod(TimePeriod.WEEK)
+              yp.getCurrentPeriodValue(TimePeriod.WEEK)
+                  .toFormattedTimePeriod(requireContext(), TimePeriod.WEEK)
           val monthCurrentValue =
-              getCurrentPeriodValue(TimePeriod.MONTH).toFormattedTimePeriod(TimePeriod.MONTH)
+              yp.getCurrentPeriodValue(TimePeriod.MONTH)
+                  .toFormattedTimePeriod(requireContext(), TimePeriod.MONTH)
           val yearCurrentValue =
-              getCurrentPeriodValue(TimePeriod.YEAR).toFormattedTimePeriod(TimePeriod.YEAR)
+              yp.getCurrentPeriodValue(TimePeriod.YEAR)
+                  .toFormattedTimePeriod(requireContext(), TimePeriod.YEAR)
 
           allInOneTitleTextViewYear.text = yearCurrentValue
           allInOneTitleTextViewMonth.text = monthCurrentValue
@@ -449,17 +452,18 @@ class WidgetScreenFragment : Fragment() {
     val decimalPlace: Int =
         pref.getInt(requireContext().getString(R.string.widget_widget_decimal_point), 2)
 
+    val yp = YearlyProgressUtil(requireContext())
     var progressTextAnimator =
         if (isAllInOne) {
-          ValueAnimator.ofInt(0, calculateProgress(requireContext(), type).roundToInt())
+          ValueAnimator.ofInt(0, yp.calculateProgress(type).roundToInt())
         } else {
-          ValueAnimator.ofFloat(0F, calculateProgress(requireContext(), type).toFloat())
+          ValueAnimator.ofFloat(0F, yp.calculateProgress(type).toFloat())
         }
 
     if (dayLight != null) {
       val sunriseSunsetResponse = loadCachedSunriseSunset(requireContext()) ?: return
       val (startTime, endTime) = sunriseSunsetResponse.getStartAndEndTime(dayLight)
-      val progress = calculateProgress(requireContext(), startTime, endTime)
+      val progress = yp.calculateProgress(startTime, endTime)
       progressTextAnimator = ValueAnimator.ofFloat(0F, progress.toFloat())
     }
 
@@ -481,13 +485,13 @@ class WidgetScreenFragment : Fragment() {
       type: TimePeriod,
       dayLight: Boolean? = null,
   ) {
-    var progressViewAnimator =
-        ValueAnimator.ofInt(0, calculateProgress(requireContext(), type).roundToInt())
+    val yp = YearlyProgressUtil(requireContext())
+    var progressViewAnimator = ValueAnimator.ofInt(0, yp.calculateProgress(type).roundToInt())
 
     if (dayLight != null) {
       val sunriseSunsetResponse = loadCachedSunriseSunset(requireContext()) ?: return
       val (startTime, endTime) = sunriseSunsetResponse.getStartAndEndTime(dayLight)
-      val progress = calculateProgress(requireContext(), startTime, endTime)
+      val progress = yp.calculateProgress(startTime, endTime)
       progressViewAnimator = ValueAnimator.ofInt(0, progress.roundToInt())
     }
 

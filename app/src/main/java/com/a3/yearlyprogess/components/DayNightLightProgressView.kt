@@ -13,9 +13,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.calculateProgress
+import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
-import com.a3.yearlyprogess.getULocale
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.google.android.material.card.MaterialCardView
 import java.text.DecimalFormat
@@ -87,7 +86,8 @@ constructor(
     // update the progress every seconds
     launch(Dispatchers.IO) {
       while (true) {
-        val progress: Double = calculateProgress(context, startTime, endTime)
+        val yp = YearlyProgressUtil(context)
+        val progress: Double = yp.calculateProgress(startTime, endTime)
 
         val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
         numberFormat.maximumFractionDigits = 0
@@ -151,10 +151,11 @@ constructor(
 
   fun Long.toFormattedDateText(): String {
     val date = Date(this)
+    val yp = YearlyProgressUtil(context)
     val isSystem24Hour = is24HourFormat(context)
     val format =
-        if (isSystem24Hour) SimpleDateFormat("yyyy-MM-dd HH:mm", getULocale())
-        else SimpleDateFormat("yyyy-MM-dd hh:mm a", getULocale())
+        if (isSystem24Hour) SimpleDateFormat("yyyy-MM-dd HH:mm", yp.getULocale())
+        else SimpleDateFormat("yyyy-MM-dd hh:mm a", yp.getULocale())
     return format.format(date)
   }
 }

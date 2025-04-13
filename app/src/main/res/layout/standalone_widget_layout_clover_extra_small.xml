@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/demo_date"
                 android:textColor="@color/md_theme_tertiary"
-                android:textSize="11sp"
+                android:textSize="8sp"
                 android:textStyle="bold" />
 
 

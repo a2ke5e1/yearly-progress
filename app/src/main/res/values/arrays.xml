@@ -1,12 +1,4 @@
 <resources>
-    <!-- Week Preference -->
-    <string-array name="week_start_entries">
-        <item>Default (Based on Region)</item>
-        <item>Saturday</item>
-        <item>Sunday</item>
-        <item>Monday</item>
-    </string-array>
-
     <string-array name="week_start_values" translatable="false">
         <item>0</item>
         <item>7</item>
@@ -14,14 +6,30 @@
         <item>2</item>
     </string-array>
 
-    <!-- Calculation Preference -->
-    <string-array name="calc_entries">
-        <item>Default ( Completed )</item>
-        <item>Left</item>
-    </string-array>
-
     <string-array name="calc_values" translatable="false">
         <item>0</item>
         <item>1</item>
+    </string-array>
+
+    <string-array name="app_calendar_type_values" translatable="false">
+        <item>default</item>
+        <item>gregorian</item>
+        <item>buddhist</item>
+        <item>chinese</item>
+        <item>coptic</item>
+        <item>dangi</item>
+        <item>ethiopic</item>
+        <item>ethiopic-amete-alem</item>
+        <item>hebrew</item>
+        <item>indian</item>
+        <item>islamic</item>
+        <item>islamic-civil</item>
+        <item>islamic-tbla</item>
+        <item>islamic-umalqura</item>
+        <item>islamic-rgsa</item>
+        <item>iso8601</item>
+        <item>japanese</item>
+        <item>persian</item>
+        <item>roc</item>
     </string-array>
 </resources>

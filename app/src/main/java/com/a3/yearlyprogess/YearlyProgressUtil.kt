@@ -13,12 +13,6 @@ import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-fun getULocale(): ULocale {
-  val defaultULocale = ULocale.getDefault()
-//  return ULocale(defaultULocale.toString() + "@calendar=indian")
-  return defaultULocale
-}
-
 enum class TimePeriod {
   DAY,
   WEEK,
@@ -26,196 +20,200 @@ enum class TimePeriod {
   YEAR,
 }
 
-fun calculateProgress(
-    context: Context,
-    startTime: Long,
-    endTime: Long,
-): Double {
-  val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
-  val calculationMode =
-      settingPref.getString(context.getString(R.string.app_calculation_type), "0") ?: "0"
+class YearlyProgressUtil(val context: Context) {
+  private val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
 
-  val currentTime = System.currentTimeMillis()
-
-  if (currentTime < startTime) {
-    return 0.0
-  }
-
-  if (currentTime > endTime) {
-    return 100.0
-  }
-
-  return if (calculationMode == "1") {
-    (endTime - currentTime).toDouble() / (endTime - startTime) * 100
-  } else {
-    (currentTime - startTime).toDouble() / (endTime - startTime) * 100
-  }
-}
-
-fun calculateProgress(
-    context: Context,
-    timePeriod: TimePeriod,
-): Double {
-  val startTime = calculateStartTime(context, timePeriod)
-  val endTime = calculateEndTime(context, timePeriod)
-  return calculateProgress(context, startTime, endTime)
-}
-
-fun calculateTimeLeft(endTime: Long): Long {
-  val cal = Calendar.getInstance(getULocale())
-  return endTime - cal.timeInMillis
-}
-
-fun getCurrentPeriodValue(timePeriod: TimePeriod): Int {
-  val cal = Calendar.getInstance(getULocale())
-  return when (timePeriod) {
-    TimePeriod.DAY -> cal.get(Calendar.DAY_OF_MONTH)
-    TimePeriod.WEEK -> cal.get(Calendar.DAY_OF_WEEK)
-    TimePeriod.MONTH -> cal.get(Calendar.MONTH) + 1 // Calendar.MONTH is zero-based
-    TimePeriod.YEAR -> cal.get(Calendar.YEAR)
-  }
-}
-
-fun getOrdinalSuffix(number: Int): String {
-  return when {
-    number % 100 in 11..13 -> "th"
-    number % 10 == 1 -> "st"
-    number % 10 == 2 -> "nd"
-    number % 10 == 3 -> "rd"
-    else -> "th"
-  }
-}
-
-fun calculateStartTime(
-    context: Context,
-    timePeriod: TimePeriod,
-): Long {
-  val cal = Calendar.getInstance(getULocale())
-  return when (timePeriod) {
-    TimePeriod.DAY -> {
-      cal.set(
-          cal.get(Calendar.YEAR),
-          cal.get(Calendar.MONTH),
-          cal.get(Calendar.DAY_OF_MONTH),
-          0,
-          0,
-          0,
-      )
-      cal.timeInMillis
+  fun getULocale(): ULocale {
+    val defaultULocale = ULocale.getDefault()
+    val userCalendarType =
+        settingPref.getString(context.getString(R.string.app_calendar_type), null)
+    if (userCalendarType != null && userCalendarType != "default") {
+      return ULocale(defaultULocale.toString() + "@calendar=${userCalendarType}")
     }
+    return defaultULocale
+  }
 
-    TimePeriod.WEEK -> {
-      val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
-      val weekStartDay =
-          settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0") ?: "0"
+  fun calculateProgress(
+      startTime: Long,
+      endTime: Long,
+  ): Double {
+    val calculationMode =
+        settingPref.getString(context.getString(R.string.app_calculation_type), "0") ?: "0"
+    val currentTime = System.currentTimeMillis()
+    if (currentTime < startTime) {
+      return 0.0
+    }
+    if (currentTime > endTime) {
+      return 100.0
+    }
+    return if (calculationMode == "1") {
+      (endTime - currentTime).toDouble() / (endTime - startTime) * 100
+    } else {
+      (currentTime - startTime).toDouble() / (endTime - startTime) * 100
+    }
+  }
 
-      cal.set(Calendar.HOUR_OF_DAY, 0)
-      cal.clear(Calendar.MINUTE)
-      cal.clear(Calendar.SECOND)
-      cal.clear(Calendar.MILLISECOND)
+  fun calculateProgress(
+      timePeriod: TimePeriod,
+  ): Double {
+    val startTime = calculateStartTime(timePeriod)
+    val endTime = calculateEndTime(timePeriod)
+    return calculateProgress(startTime, endTime)
+  }
 
-      // This make sures if week prefs is not 0
-      // then it loads the user prefs
-      // otherwise it load default
-      if (weekStartDay.toInt() > 0) {
-        cal.firstDayOfWeek = weekStartDay.toInt()
+  fun calculateTimeLeft(endTime: Long): Long {
+    val cal = Calendar.getInstance(getULocale())
+    return endTime - cal.timeInMillis
+  }
+
+  fun getCurrentPeriodValue(timePeriod: TimePeriod): Int {
+    val cal = Calendar.getInstance(getULocale())
+    return when (timePeriod) {
+      TimePeriod.DAY -> cal.get(Calendar.DAY_OF_MONTH)
+      TimePeriod.WEEK -> cal.get(Calendar.DAY_OF_WEEK)
+      TimePeriod.MONTH -> cal.get(Calendar.MONTH) + 1 // Calendar.MONTH is zero-based
+      TimePeriod.YEAR -> cal.get(Calendar.YEAR)
+    }
+  }
+
+  fun getOrdinalSuffix(number: Int): String {
+    return when {
+      number % 100 in 11..13 -> "th"
+      number % 10 == 1 -> "st"
+      number % 10 == 2 -> "nd"
+      number % 10 == 3 -> "rd"
+      else -> "th"
+    }
+  }
+
+  fun calculateStartTime(
+      timePeriod: TimePeriod,
+  ): Long {
+    val cal = Calendar.getInstance(getULocale())
+    return when (timePeriod) {
+      TimePeriod.DAY -> {
+        cal.set(
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH),
+            0,
+            0,
+            0,
+        )
+        cal.timeInMillis
       }
 
-      cal.set(Calendar.DAY_OF_WEEK, cal.firstDayOfWeek)
-      cal.timeInMillis
-    }
+      TimePeriod.WEEK -> {
+        val weekStartDay =
+            settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0") ?: "0"
 
-    TimePeriod.MONTH -> {
-      cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, 0, 0)
-      cal.timeInMillis
-    }
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.clear(Calendar.MINUTE)
+        cal.clear(Calendar.SECOND)
+        cal.clear(Calendar.MILLISECOND)
 
-    TimePeriod.YEAR -> {
-      cal.set(cal.get(Calendar.YEAR), 0, 1, 0, 0, 0)
-      cal.timeInMillis
-    }
-  }
-}
+        // This make sures if week prefs is not 0
+        // then it loads the user prefs
+        // otherwise it load default
+        if (weekStartDay.toInt() > 0) {
+          cal.firstDayOfWeek = weekStartDay.toInt()
+        }
 
-fun calculateEndTime(
-    context: Context,
-    timePeriod: TimePeriod,
-): Long {
-  val cal = Calendar.getInstance(getULocale())
-  return when (timePeriod) {
-    TimePeriod.DAY -> {
-      cal.set(
-          cal.get(Calendar.YEAR),
-          cal.get(Calendar.MONTH),
-          cal.get(Calendar.DAY_OF_MONTH) + 1,
-          0,
-          0,
-          0,
-      )
-      cal.timeInMillis
-    }
+        cal.set(Calendar.DAY_OF_WEEK, cal.firstDayOfWeek)
+        cal.timeInMillis
+      }
 
-    TimePeriod.WEEK -> {
-      val startTime = calculateStartTime(context, timePeriod)
-      cal.timeInMillis =
-          startTime + (cal.getActualMaximum(Calendar.DAY_OF_WEEK) * 24 * 60 * 60 * 1000)
-      cal.timeInMillis
-    }
+      TimePeriod.MONTH -> {
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, 0, 0)
+        cal.timeInMillis
+      }
 
-    TimePeriod.MONTH -> {
-      cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, 1, 0, 0, 0)
-      cal.timeInMillis
-    }
-
-    TimePeriod.YEAR -> {
-      cal.set(cal.get(Calendar.YEAR) + 1, 0, 1, 0, 0, 0)
-      cal.timeInMillis
+      TimePeriod.YEAR -> {
+        cal.set(cal.get(Calendar.YEAR), 0, 1, 0, 0, 0)
+        cal.timeInMillis
+      }
     }
   }
-}
 
-fun getMonthName(monthNumber: Int): String {
-  val uLocale = getULocale()
-  val cal = Calendar.getInstance(getULocale())
-  cal.set(Calendar.MONTH, monthNumber - 1)
+  fun calculateEndTime(
+      timePeriod: TimePeriod,
+  ): Long {
+    val cal = Calendar.getInstance(getULocale())
+    return when (timePeriod) {
+      TimePeriod.DAY -> {
+        cal.set(
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH) + 1,
+            0,
+            0,
+            0,
+        )
+        cal.timeInMillis
+      }
 
-  val formatter = SimpleDateFormat("MMMM", uLocale) // "MMMM" gives full month name
-  val monthName = formatter.format(cal.time)
+      TimePeriod.WEEK -> {
+        val startTime = calculateStartTime(timePeriod)
+        cal.timeInMillis =
+            startTime + (cal.getActualMaximum(Calendar.DAY_OF_WEEK) * 24 * 60 * 60 * 1000)
+        cal.timeInMillis
+      }
 
-  return monthName ?: "Unknown"
-}
+      TimePeriod.MONTH -> {
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, 1, 0, 0, 0)
+        cal.timeInMillis
+      }
 
-fun getYearName(yearNumber: Int): String {
-  val uLocale = getULocale()
-  val cal = Calendar.getInstance(getULocale())
-  cal.set(Calendar.YEAR, yearNumber)
+      TimePeriod.YEAR -> {
+        cal.set(cal.get(Calendar.YEAR) + 1, 0, 1, 0, 0, 0)
+        cal.timeInMillis
+      }
+    }
+  }
 
-  val formatter = SimpleDateFormat("yyyy", uLocale)
-  val yearName = formatter.format(cal.time)
+  fun getMonthName(monthNumber: Int): String {
+    val uLocale = getULocale()
+    val cal = Calendar.getInstance(getULocale())
+    cal.set(Calendar.MONTH, monthNumber - 1)
 
-  return yearName ?: "Unknown"
-}
+    val formatter = SimpleDateFormat("MMM", uLocale) // "MMMM" gives full month name
+    val monthName = formatter.format(cal.time)
 
-fun getDayName(dayNumber: Int): String {
-  val uLocale = getULocale()
-  val cal = Calendar.getInstance(getULocale())
-  cal.set(Calendar.DAY_OF_MONTH, dayNumber)
+    return monthName ?: "Unknown"
+  }
 
-  val formatter = SimpleDateFormat("dd", uLocale)
-  val dayName = formatter.format(cal.time)
+  fun getYearName(yearNumber: Int): String {
+    val uLocale = getULocale()
+    val cal = Calendar.getInstance(getULocale())
+    cal.set(Calendar.YEAR, yearNumber)
 
-  return dayName ?: "Unknown"
-}
+    val formatter = SimpleDateFormat("yyyy", uLocale)
+    val yearName = formatter.format(cal.time)
 
-fun getWeekDayName(dayOfWeek: Int): String {
-  val uLocale = getULocale()
-  val cal = Calendar.getInstance(uLocale)
-  cal.set(Calendar.DAY_OF_WEEK, dayOfWeek)
+    return yearName ?: "Unknown"
+  }
 
-  val formatter = SimpleDateFormat("EEEE", uLocale) // "EEEE" gives full WEEK name
-  val dayName = formatter.format(cal.time)
+  fun getDayName(dayNumber: Int): String {
+    val uLocale = getULocale()
+    val cal = Calendar.getInstance(getULocale())
+    cal.set(Calendar.DAY_OF_MONTH, dayNumber)
 
-  return dayName ?: "Unknown"
+    val formatter = SimpleDateFormat("dd", uLocale)
+    val dayName = formatter.format(cal.time)
+
+    return dayName ?: "Unknown"
+  }
+
+  fun getWeekDayName(dayOfWeek: Int): String {
+    val uLocale = getULocale()
+    val cal = Calendar.getInstance(uLocale)
+    cal.set(Calendar.DAY_OF_WEEK, dayOfWeek)
+
+    val formatter = SimpleDateFormat("EEE", uLocale) // "EEEE" gives full WEEK name
+    val dayName = formatter.format(cal.time)
+
+    return dayName ?: "Unknown"
+  }
 }
 
 private const val SUNRISE_SUNSET_BASE_URL = "https://api.sunrisesunset.io/"

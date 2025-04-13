@@ -15,6 +15,6 @@
         android:pathData="M-0,114.36C53.72,135.65 97.79,95.09 141,114.36V199H-0V114.36Z"
         android:strokeAlpha="0.1"
         android:fillColor="#000"
-        android:fillAlpha="1"/>
+        android:fillAlpha="0.1"/>
   </group>
 </vector>

@@ -54,10 +54,13 @@ class YearlyProgressNotification(private val context: Context) {
     if (!hasNotificationPermission()) {
       return
     }
-    val yearProgress = calculateProgress(context, TimePeriod.YEAR)
-    val monthProgress = calculateProgress(context, TimePeriod.MONTH)
-    val weekProgress = calculateProgress(context, TimePeriod.WEEK)
-    val dayProgress = calculateProgress(context, TimePeriod.DAY)
+
+    val yp = YearlyProgressUtil(context)
+
+    val yearProgress = yp.calculateProgress(TimePeriod.YEAR)
+    val monthProgress = yp.calculateProgress(TimePeriod.MONTH)
+    val weekProgress = yp.calculateProgress(TimePeriod.WEEK)
+    val dayProgress = yp.calculateProgress(TimePeriod.DAY)
 
     val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
     val pendingIntent =

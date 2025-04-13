@@ -11,12 +11,16 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.calculateProgress
+import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class EventDetailView
@@ -68,8 +72,9 @@ constructor(
     // binding.eventEnd.visibility = View.GONE
 
     launch(Dispatchers.IO) {
+      val yp = YearlyProgressUtil(context)
       val (start, end) = event.nextStartAndEndTime()
-      val newProgress = calculateProgress(context, start, end)
+      val newProgress = yp.calculateProgress(start, end)
 
       // eventStartTimeInMills = newEventStart
       // eventEndDateTimeInMillis = newEventEnd
@@ -85,7 +90,7 @@ constructor(
             settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
 
         val (_start, _end) = event.nextStartAndEndTime()
-        val _newProgress = calculateProgress(context, _start, _end)
+        val _newProgress = yp.calculateProgress(_start, _end)
         // Log.d("EventDetailView", "EventDetailView: $newProgress")
         // Log.d("EventDetailView", "EventDetailView: $_start $_end")
 
