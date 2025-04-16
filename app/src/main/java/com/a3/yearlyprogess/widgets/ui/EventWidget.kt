@@ -12,11 +12,19 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.components.EventDetailView.Companion.displayRelativeDifferenceMessage
+import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
+import com.a3.yearlyprogess.widgets.manager.eventManager.repo.EventRepository
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.util.Date
 
 /** Implementation of App Widget functionality. */
@@ -170,6 +178,10 @@ class EventWidget : BaseWidget() {
     }
   }
 
+
+  private var updateJob: Job? = null
+
+
   override fun updateWidget(
       context: Context,
       appWidgetManager: AppWidgetManager,
@@ -178,30 +190,27 @@ class EventWidget : BaseWidget() {
     val pref = context.getSharedPreferences("eventWidget_$appWidgetId", Context.MODE_PRIVATE)
     val conv = Converters()
 
+    val eventDao = EventDatabase.getDatabase(context).eventDao()
+    val repository = EventRepository(eventDao)
+
     val eventId = pref.getInt("eventId", 0)
-    val eventTitle = pref.getString("eventTitle", "Loading").toString()
-    val eventDesc = pref.getString("eventDesc", "").toString()
-    val allDayEvent = pref.getBoolean("allDayEvent", false)
-    val eventStartTimeInMills = pref.getLong("eventStartTimeInMills", 0)
-    val eventEndDateTimeInMillis = pref.getLong("eventEndDateTimeInMillis", 0)
-    val eventRepeatDays = conv.toRepeatDaysList(pref.getString("eventRepeatDays", "").toString())
 
-    // Log.d("EventWidget", "Event: $eventRepeatDays")
+    updateJob =
+      CoroutineScope(Dispatchers.IO).launch {
+        var counter = 0
+        while (isActive && counter < 5) { // Check if the coroutine is still active
+          counter++
 
-    val event =
-        Event(
-            eventId,
-            eventTitle,
-            eventDesc,
-            allDayEvent,
-            Date(eventStartTimeInMills),
-            Date(eventEndDateTimeInMillis),
-            eventRepeatDays,
-        )
+          val event = repository.getEvent(eventId)
+          val remoteViews = event?.let { eventWidgetPreview(context, it) }
+          appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
 
-    // Instruct the widget manager to update the widget
-    val remoteViews = eventWidgetPreview(context, event)
-    appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+          delay(900)
+
+        }
+      }
+
+
   }
 
   /** Delete all cached widget information in the memory after widget has been deleted. */
@@ -217,5 +226,16 @@ class EventWidget : BaseWidget() {
           ?.clear()
           ?.apply()
     }
+    clearJob()
+  }
+
+  private fun clearJob() {
+    updateJob?.cancel()
+    updateJob = null
+  }
+
+  override fun onDisabled(context: Context) {
+    clearJob()
+    super.onDisabled(context)
   }
 }
