@@ -13,12 +13,9 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a3.yearlyprogess.databinding.EventSelectorScreenListEventsBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.EventsListViewAdapter
-import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
-import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.ui.EventWidget
 import com.google.android.material.color.DynamicColors
-import java.util.Date
 
 class EventSelectorActivity : AppCompatActivity() {
   private lateinit var binding: EventSelectorScreenListEventsBinding

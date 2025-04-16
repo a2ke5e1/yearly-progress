@@ -124,8 +124,8 @@
                 android:layout_marginTop="2dp"
                 android:max="100"
                 android:progress="20"
-                android:progressBackgroundTint="@color/widget_progress_bar_background_color"
-                android:progressTint="@color/widget_text_color" />
+android:progressDrawable="@drawable/rounded_progress_bar"
+ />
         </LinearLayout>
 
     </RelativeLayout>

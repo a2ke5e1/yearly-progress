@@ -132,12 +132,12 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
 
     val pinnedWidgetCallbackIntent = Intent(context, EventSelectorActivity::class.java)
     pinnedWidgetCallbackIntent.putExtra("eventId", currentEvent.id)
-//    pinnedWidgetCallbackIntent.putExtra("eventTitle", currentEvent.eventTitle)
-//    pinnedWidgetCallbackIntent.putExtra("eventDesc", currentEvent.eventDescription)
-//    pinnedWidgetCallbackIntent.putExtra("allDayEvent", currentEvent.allDayEvent)
-//    pinnedWidgetCallbackIntent.putExtra("eventStartTimeInMills", currentEvent.eventStartTime)
-//    pinnedWidgetCallbackIntent.putExtra("eventEndDateTimeInMillis", currentEvent.eventEndTime)
-//    pinnedWidgetCallbackIntent.putExtra("eventRepeatDays", eventDays)
+    //    pinnedWidgetCallbackIntent.putExtra("eventTitle", currentEvent.eventTitle)
+    //    pinnedWidgetCallbackIntent.putExtra("eventDesc", currentEvent.eventDescription)
+    //    pinnedWidgetCallbackIntent.putExtra("allDayEvent", currentEvent.allDayEvent)
+    //    pinnedWidgetCallbackIntent.putExtra("eventStartTimeInMills", currentEvent.eventStartTime)
+    //    pinnedWidgetCallbackIntent.putExtra("eventEndDateTimeInMillis", currentEvent.eventEndTime)
+    //    pinnedWidgetCallbackIntent.putExtra("eventRepeatDays", eventDays)
 
     val pendingIntent =
         PendingIntent.getActivity(

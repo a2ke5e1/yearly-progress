@@ -7,7 +7,6 @@ import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 class EventRepository(private val eventDao: EventDao) {
   val getAllEvent: LiveData<List<Event>> = eventDao.getAllEvent()
 
-
   suspend fun getEvent(id: Int): Event? = eventDao.getEvent(id)
 
   suspend fun addEvent(event: Event) {

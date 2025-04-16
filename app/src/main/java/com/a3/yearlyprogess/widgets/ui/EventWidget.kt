@@ -25,7 +25,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.util.Date
 
 /** Implementation of App Widget functionality. */
 class EventWidget : BaseWidget() {
@@ -178,9 +177,7 @@ class EventWidget : BaseWidget() {
     }
   }
 
-
   private var updateJob: Job? = null
-
 
   override fun updateWidget(
       context: Context,
@@ -196,21 +193,18 @@ class EventWidget : BaseWidget() {
     val eventId = pref.getInt("eventId", 0)
 
     updateJob =
-      CoroutineScope(Dispatchers.IO).launch {
-        var counter = 0
-        while (isActive && counter < 5) { // Check if the coroutine is still active
-          counter++
+        CoroutineScope(Dispatchers.IO).launch {
+          var counter = 0
+          while (isActive && counter < 5) { // Check if the coroutine is still active
+            counter++
 
-          val event = repository.getEvent(eventId)
-          val remoteViews = event?.let { eventWidgetPreview(context, it) }
-          appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+            val event = repository.getEvent(eventId)
+            val remoteViews = event?.let { eventWidgetPreview(context, it) }
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
 
-          delay(900)
-
+            delay(900)
+          }
         }
-      }
-
-
   }
 
   /** Delete all cached widget information in the memory after widget has been deleted. */
