@@ -22,6 +22,10 @@
         android:theme="@style/Theme.YearlyProgress"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".screens.LocationSelectionScreen"
+            android:exported="false"
+            android:theme="@style/Theme.YearlyProgress.Compose" />
+        <activity
             android:name=".WelcomeScreenV2"
             android:exported="false"
             android:label="@string/title_activity_welcome_screen_v2"
