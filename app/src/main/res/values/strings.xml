@@ -145,6 +145,7 @@
     <string name="open_settings">Open Settings</string>
     <string name="manual_location">Manual location</string>
     <string name="enter_a_location">Enter a location</string>
+    <string name="auto_location_message">In order to automatically detect location for day/night widgets, please give app location permission in settings.</string>
 
 
     <!-- Week Preference -->

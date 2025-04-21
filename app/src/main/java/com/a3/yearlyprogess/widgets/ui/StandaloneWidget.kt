@@ -22,6 +22,7 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.loadCachedSunriseSunset
+import com.a3.yearlyprogess.screens.UserLocationPref
 import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
@@ -576,7 +577,10 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
         dayLight: Boolean,
         options: StandaloneWidgetOptions,
     ): RemoteViews {
-      if (ContextCompat.checkSelfPermission(
+
+      val userLocationPref = UserLocationPref.load(context)
+
+      if (userLocationPref.automaticallyDetectLocation &&  ContextCompat.checkSelfPermission(
           context,
           android.Manifest.permission.ACCESS_COARSE_LOCATION,
       ) != PackageManager.PERMISSION_GRANTED) {

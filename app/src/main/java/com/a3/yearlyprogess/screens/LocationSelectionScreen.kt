@@ -2,7 +2,10 @@ package com.a3.yearlyprogess.screens
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -29,6 +32,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -257,6 +265,45 @@ class LocationSelectionScreen : ComponentActivity() {
                         title = stringResource(R.string.location_permission_title),
                         body = stringResource(R.string.location_permission_message)
                       )
+                    }
+                  } else {
+                    Card(
+                      colors =
+                      CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer),
+                      modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)) {
+                      Column(
+                        modifier = Modifier
+                          .padding(16.dp)
+                          .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Text(
+                          stringResource(R.string.auto_location_message),
+                          style =
+                          MaterialTheme.typography.bodyLarge.copy(
+                            color =
+                            MaterialTheme.colorScheme.onErrorContainer))
+                        Button(
+                          colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError
+                          ),
+                          onClick = {
+                            val intent =
+                              Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                .apply {
+                                  data =
+                                    Uri.fromParts(
+                                      "package", context.packageName, null)
+                                }
+                            context.startActivity(intent)
+                          }) {
+                          Text(stringResource(R.string.open_settings))
+                        }
+                      }
                     }
                   }
                 }
