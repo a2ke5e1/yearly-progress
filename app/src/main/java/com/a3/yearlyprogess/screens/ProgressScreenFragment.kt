@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.screens
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -95,41 +96,47 @@ class ProgressScreenFragment : Fragment() {
           requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
         }
 
-    when {
-      ContextCompat.checkSelfPermission(
-          requireContext(),
-          Manifest.permission.ACCESS_COARSE_LOCATION,
-      ) == PackageManager.PERMISSION_GRANTED -> {
-        setupDayNightLightProgressView(dayLight, nightLight)
-      }
+    val userLocationPref = UserLocationPref.load(requireContext())
+   if (userLocationPref.automaticallyDetectLocation) {
 
-      ContextCompat.checkSelfPermission(
-          requireContext(),
-          Manifest.permission.ACCESS_COARSE_LOCATION,
-      ) == PackageManager.PERMISSION_DENIED -> {
-        binding.dismissibleMessageView?.visibility = View.VISIBLE
-        binding.callToAction?.setOnClickListener {
-          requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-        }
-        binding.loadingIndicator?.visibility = View.GONE
-      }
+     when {
+       ContextCompat.checkSelfPermission(
+         requireContext(),
+         Manifest.permission.ACCESS_COARSE_LOCATION,
+       ) == PackageManager.PERMISSION_GRANTED -> {
+         setupDayNightLightProgressView(dayLight, nightLight)
+       }
 
-      ActivityCompat.shouldShowRequestPermissionRationale(
-          requireActivity(),
-          Manifest.permission.ACCESS_COARSE_LOCATION,
-      ) -> {
-        locationPermissionDialog.show(parentFragmentManager, "")
-      }
+       ContextCompat.checkSelfPermission(
+         requireContext(),
+         Manifest.permission.ACCESS_COARSE_LOCATION,
+       ) == PackageManager.PERMISSION_DENIED -> {
+         binding.dismissibleMessageView?.visibility = View.VISIBLE
+         binding.callToAction?.setOnClickListener {
+           requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+         }
+         binding.loadingIndicator?.visibility = View.GONE
+       }
 
-      else -> {
-        // You can directly ask for the permission.
-        // The registered ActivityResultCallback gets the result of this request.
-        binding.dismissibleMessageView?.visibility = View.VISIBLE
-        binding.callToAction?.setOnClickListener {
-          locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
-        }
-      }
-    }
+       ActivityCompat.shouldShowRequestPermissionRationale(
+         requireActivity(),
+         Manifest.permission.ACCESS_COARSE_LOCATION,
+       ) -> {
+         locationPermissionDialog.show(parentFragmentManager, "")
+       }
+
+       else -> {
+         // You can directly ask for the permission.
+         // The registered ActivityResultCallback gets the result of this request.
+         binding.dismissibleMessageView?.visibility = View.VISIBLE
+         binding.callToAction?.setOnClickListener {
+           locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
+         }
+       }
+     }
+   } else {
+     setupDayNightLightProgressView(dayLight, nightLight)
+   }
 
     val adFrame: LinearLayout = view.findViewById(R.id.ad_frame)
 
@@ -172,25 +179,40 @@ class ProgressScreenFragment : Fragment() {
       dayLight: DayNightLightProgressView,
       nightLight: DayNightLightProgressView,
   ) {
+    val userLocationPref = UserLocationPref.load(requireContext())
     val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    if (ActivityCompat.checkSelfPermission(
-        requireContext(),
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-    ) != PackageManager.PERMISSION_GRANTED) {
-      return
-    }
-    binding.dismissibleMessageView?.visibility = View.GONE
-
     val providers = locationManager.allProviders.filter { locationManager.isProviderEnabled(it) }
-
-    if (providers.isEmpty()) {
-      Toast.makeText(context, "Your device does not have any location provider", Toast.LENGTH_LONG)
+    if (userLocationPref.automaticallyDetectLocation) {
+      if (ActivityCompat.checkSelfPermission(
+          requireContext(),
+          Manifest.permission.ACCESS_COARSE_LOCATION,
+        ) != PackageManager.PERMISSION_GRANTED
+      ) {
+        return
+      }
+      binding.dismissibleMessageView?.visibility = View.GONE
+      if (providers.isEmpty()) {
+        Toast.makeText(
+          context,
+          "Your device does not have any location provider",
+          Toast.LENGTH_LONG
+        )
           .show()
-      return
+        return
+      }
     }
 
     lifecycleScope.launch(Dispatchers.IO) {
-      val cachedLocation = context?.let { loadCachedLocation(it) }
+      val cachedLocation = if (userLocationPref.automaticallyDetectLocation) {
+        context?.let { loadCachedLocation(it) }
+      } else {
+        userLocationPref.userLocationPref?.let { place ->
+          Location("").apply {
+            latitude = place.lat.toDouble()
+            longitude = place.lon.toDouble()
+          }
+        }
+      }
       if (cachedLocation == null) {
         return@launch
       }
@@ -209,16 +231,100 @@ class ProgressScreenFragment : Fragment() {
       }
     }
 
-    locationManager.requestLocationUpdates(
+    if (userLocationPref.automaticallyDetectLocation) {
+      locationManager.requestLocationUpdates(
         providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
         2000,
         1_000f,
-    ) { location ->
-      context?.let { cacheLocation(it, location) }
+      ) { location ->
+        context?.let { cacheLocation(it, location) }
+        lifecycleScope.launch(Dispatchers.IO) {
+          val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
+          if (cachedSunriseSunset != null &&
+            cachedSunriseSunset.results[1].date == getCurrentDate()) {
+            if (isAdded) {
+              dayLight.loadSunriseSunset(cachedSunriseSunset)
+              nightLight.loadSunriseSunset(cachedSunriseSunset)
+              launch(Dispatchers.Main) {
+                dayLight.visibility = View.VISIBLE
+                nightLight.visibility = View.VISIBLE
+                binding.loadingIndicator?.visibility = View.GONE
+              }
+            }
+            return@launch
+          }
+
+          val result: Resource<SunriseSunsetResponse> =
+            try {
+              val response =
+                sunriseSunsetApi.getSunriseSunset(
+                  location.latitude,
+                  location.longitude,
+                  getDateRange(-1),
+                  getDateRange(+1),
+                )
+              val result = response.body()
+              if (response.isSuccessful && result != null && result.status == "OK") {
+                cacheSunriseSunset(requireContext(), result)
+                Resource.Success(result)
+              } else {
+                Resource.Error(response.message())
+              }
+            } catch (e: Exception) {
+              Resource.Error(e.message ?: "Error Occurred")
+            }
+
+          when (result) {
+            is Resource.Success -> {
+              result.data?.let {
+                if (isAdded) {
+                  dayLight.loadSunriseSunset(it)
+                  nightLight.loadSunriseSunset(it)
+                  launch(Dispatchers.Main) {
+                    dayLight.visibility = View.VISIBLE
+                    nightLight.visibility = View.VISIBLE
+                    binding.loadingIndicator?.visibility = View.GONE
+                  }
+                }
+              }
+            }
+
+            is Resource.Error -> {
+              if (isAdded) {
+                launch(Dispatchers.Main) {
+                  Toast.makeText(
+                    context,
+                    getString(R.string.failed_to_load_sunset_sunrise_time),
+                    Toast.LENGTH_LONG,
+                  )
+                    .show()
+                  dayLight.visibility = View.GONE
+                  nightLight.visibility = View.GONE
+                  binding.loadingIndicator?.visibility = View.GONE
+                }
+              }
+              return@launch
+            }
+          }
+        }
+      }
+    } else {
       lifecycleScope.launch(Dispatchers.IO) {
+
+        val location = userLocationPref.userLocationPref?.let { place ->
+          Location("").apply {
+            latitude = place.lat.toDouble()
+            longitude = place.lon.toDouble()
+          }
+        } ?: return@launch
+
+        launch(Dispatchers.Main) {
+          binding.dismissibleMessageView?.visibility = View.GONE
+        }
+
         val cachedSunriseSunset = context?.let { loadCachedSunriseSunset(it) }
         if (cachedSunriseSunset != null &&
-            cachedSunriseSunset.results[1].date == getCurrentDate()) {
+          cachedSunriseSunset.results[1].date == getCurrentDate()) {
           if (isAdded) {
             dayLight.loadSunriseSunset(cachedSunriseSunset)
             nightLight.loadSunriseSunset(cachedSunriseSunset)
@@ -232,24 +338,24 @@ class ProgressScreenFragment : Fragment() {
         }
 
         val result: Resource<SunriseSunsetResponse> =
-            try {
-              val response =
-                  sunriseSunsetApi.getSunriseSunset(
-                      location.latitude,
-                      location.longitude,
-                      getDateRange(-1),
-                      getDateRange(+1),
-                  )
-              val result = response.body()
-              if (response.isSuccessful && result != null && result.status == "OK") {
-                cacheSunriseSunset(requireContext(), result)
-                Resource.Success(result)
-              } else {
-                Resource.Error(response.message())
-              }
-            } catch (e: Exception) {
-              Resource.Error(e.message ?: "Error Occurred")
+          try {
+            val response =
+              sunriseSunsetApi.getSunriseSunset(
+                location.latitude,
+                location.longitude,
+                getDateRange(-1),
+                getDateRange(+1),
+              )
+            val result = response.body()
+            if (response.isSuccessful && result != null && result.status == "OK") {
+              cacheSunriseSunset(requireContext(), result)
+              Resource.Success(result)
+            } else {
+              Resource.Error(response.message())
             }
+          } catch (e: Exception) {
+            Resource.Error(e.message ?: "Error Occurred")
+          }
 
         when (result) {
           is Resource.Success -> {
@@ -270,11 +376,11 @@ class ProgressScreenFragment : Fragment() {
             if (isAdded) {
               launch(Dispatchers.Main) {
                 Toast.makeText(
-                        context,
-                        getString(R.string.failed_to_load_sunset_sunrise_time),
-                        Toast.LENGTH_LONG,
-                    )
-                    .show()
+                  context,
+                  getString(R.string.failed_to_load_sunset_sunrise_time),
+                  Toast.LENGTH_LONG,
+                )
+                  .show()
                 dayLight.visibility = View.GONE
                 nightLight.visibility = View.GONE
                 binding.loadingIndicator?.visibility = View.GONE
