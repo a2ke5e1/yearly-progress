@@ -139,6 +139,12 @@
     <string name="close">Close</string>
     <string name="select_your_calendar_system">Select your calendar system</string>
     <string name="calendar_widget_options">Calendar Widget Options</string>
+    <string name="manage_location_title">Manage location</string>
+    <string name="go_back">Go back</string>
+    <string name="automatically_detect_location">Automatically detect location</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="manual_location">Manual location</string>
+    <string name="enter_a_location">Enter a location</string>
 
 
     <!-- Week Preference -->

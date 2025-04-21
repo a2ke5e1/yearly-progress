@@ -534,7 +534,7 @@ class CalendarWidgetConfigManager : ComponentActivity() {
                       if (status.shouldShowRationale) {
                         if (showPermissionRationalMessage) {
                           PermissionRationalDialog(
-                              onDismiss = { showPermissionRationalMessage = true },
+                              onDismiss = { showPermissionRationalMessage = false },
                               onConfirm = { calendarPermissionState.launchPermissionRequest() },
                               iconPainter = painterResource(R.drawable.ic_outline_edit_calendar_24),
                               title = stringResource(R.string.calendar_permission_title),
@@ -567,7 +567,7 @@ class CalendarWidgetConfigManager : ComponentActivity() {
                                                   }
                                           context.startActivity(intent)
                                         }) {
-                                          Text("Open Settings")
+                                          Text(stringResource(R.string.open_settings))
                                         }
                                   }
                             }

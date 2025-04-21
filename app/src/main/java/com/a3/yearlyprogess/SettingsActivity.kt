@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.a3.yearlyprogess.screens.LocationSelectionScreen
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
@@ -44,6 +45,12 @@ class SettingsActivity : AppCompatActivity() {
         rootKey: String?,
     ) {
       setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
+      val locationPreference = findPreference<Preference>(getString(R.string.app_location_settings))
+      locationPreference?.setOnPreferenceClickListener {
+        startActivity(Intent(requireContext(), LocationSelectionScreen::class.java))
+        true
+      }
 
       val updateFrequencyPreference =
           findPreference<Preference>(getString(R.string.widget_widget_update_frequency))
