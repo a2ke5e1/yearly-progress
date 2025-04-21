@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.components.dialogbox.PermissionRationalDialog
+import com.a3.yearlyprogess.invalidateCachedSunriseSunset
 import com.a3.yearlyprogess.ui.theme.YearlyProgressTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
@@ -297,6 +298,7 @@ class LocationSelectionScreen : ComponentActivity() {
               innerPadding = PaddingValues(8.dp),
               onSelected = { place ->
                 selectedLocation = place
+                invalidateCachedSunriseSunset(context)
                 UserLocationPref.save(
                   context,
                   UserLocationPref(

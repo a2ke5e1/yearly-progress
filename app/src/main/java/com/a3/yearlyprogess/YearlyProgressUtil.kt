@@ -280,6 +280,16 @@ fun loadCachedLocation(context: Context): Location? {
   }
 }
 
+fun invalidateCachedSunriseSunset( context: Context,
+) {
+  val key = ContextCompat.getString(context, R.string.sunrise_sunset_data)
+  val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
+  val editor = pref.edit()
+  editor.putString(key, null)
+  editor.apply()
+}
+
+
 fun getCurrentDate(): String {
   val cal = java.util.Calendar.getInstance()
   cal.timeInMillis = System.currentTimeMillis()
