@@ -245,8 +245,11 @@ fun loadCachedSunriseSunset(context: Context): SunriseSunsetResponse? {
   val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
   val gson = Gson()
   val json = pref.getString(key, null) ?: return null
-
-  return gson.fromJson(json, SunriseSunsetResponse::class.java)
+  return try {
+    gson.fromJson(json, SunriseSunsetResponse::class.java)
+  } catch (ex: Exception) {
+    null
+  }
 }
 
 fun cacheLocation(

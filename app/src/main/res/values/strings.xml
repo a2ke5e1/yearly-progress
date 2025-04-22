@@ -21,7 +21,7 @@
     <string name="demo_month_per">50%</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
-    <string name="demo_year_per">4.3%</string>
+    <string name="demo_year_per">0%</string>
     <string name="demo_year">2022</string>
     <string name="button_text">"Add Widget "</string>
     <string name="progress">Progress</string>
