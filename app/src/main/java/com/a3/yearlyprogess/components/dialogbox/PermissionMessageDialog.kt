@@ -59,69 +59,50 @@ class PermissionMessageDialog(
 
 @Composable
 fun PermissionRationalDialog(
-  onDismiss: () -> Unit,
-  onConfirm: () -> Unit,
-  iconPainter: Painter,
-  title: String,
-  body: String
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+    iconPainter: Painter,
+    title: String,
+    body: String
 ) {
   AlertDialog(
-    onDismissRequest = onDismiss,
-    title = { },
-    text = {
-      Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-      ) {
-        Icon(
-          painter = iconPainter,
-          contentDescription = null,
-          tint = colorResource(R.color.widget_text_color)
-        )
-        Column(
-          verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-          Text(
-            text =title,
-            style = MaterialTheme.typography.titleLarge.copy(
-              color = colorResource(R.color.widget_text_color)
-            )
-          )
-          Text(
-            text = body,
-            style = MaterialTheme.typography.bodySmall
-          )
-
-        }
-      }
-    },
-    confirmButton = {
-      FilledTonalButton(
-        onClick = onConfirm
-      ) {
-        Text(stringResource(R.string.i_understand))
-      }
-    },
-    dismissButton = {
-      TextButton(
-        onClick = onDismiss
-      ) {
-        Text(stringResource(R.string.dismiss))
-      }
-    })
+      onDismissRequest = onDismiss,
+      title = {},
+      text = {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+              Icon(
+                  painter = iconPainter,
+                  contentDescription = null,
+                  tint = colorResource(R.color.widget_text_color))
+              Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = title,
+                    style =
+                        MaterialTheme.typography.titleLarge.copy(
+                            color = colorResource(R.color.widget_text_color)))
+                Text(text = body, style = MaterialTheme.typography.bodySmall)
+              }
+            }
+      },
+      confirmButton = {
+        FilledTonalButton(onClick = onConfirm) { Text(stringResource(R.string.i_understand)) }
+      },
+      dismissButton = {
+        TextButton(onClick = onDismiss) { Text(stringResource(R.string.dismiss)) }
+      })
 }
 
 @Preview
 @Composable
 fun PermissionRationalDialogPreview() {
   YearlyProgressTheme {
-    PermissionRationalDialog(onDismiss = {
-
-    }, onConfirm = {
-
-    }, iconPainter =  painterResource(R.drawable.ic_outline_edit_calendar_24),
-      title =  stringResource(R.string.calendar_permission_title),
-      body =  stringResource(R.string.calendar_permission_message)
-    )
+    PermissionRationalDialog(
+        onDismiss = {},
+        onConfirm = {},
+        iconPainter = painterResource(R.drawable.ic_outline_edit_calendar_24),
+        title = stringResource(R.string.calendar_permission_title),
+        body = stringResource(R.string.calendar_permission_message))
   }
 }

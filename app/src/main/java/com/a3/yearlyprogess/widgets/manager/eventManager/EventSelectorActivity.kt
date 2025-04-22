@@ -13,12 +13,9 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a3.yearlyprogess.databinding.EventSelectorScreenListEventsBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.EventsListViewAdapter
-import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
-import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.ui.EventWidget
 import com.google.android.material.color.DynamicColors
-import java.util.Date
 
 class EventSelectorActivity : AppCompatActivity() {
   private lateinit var binding: EventSelectorScreenListEventsBinding
@@ -51,35 +48,11 @@ class EventSelectorActivity : AppCompatActivity() {
     setResult(RESULT_CANCELED, resultValue)
 
     val eventId = intent?.getIntExtra("eventId", -1)
-    val conv = Converters()
-    val eventDays = conv.toRepeatDaysList(intent?.getStringExtra("eventRepeatDays") ?: "")
-
-    val event: Event? =
-        if (eventId == null || eventId == -1) {
-          null
-        } else {
-          Event(
-              eventId,
-              intent?.getStringExtra("eventTitle") ?: "",
-              intent?.getStringExtra("eventDesc") ?: "",
-              intent?.getBooleanExtra("allDayEvent", false) == true,
-              Date(intent?.getLongExtra("eventStartTimeInMills", 0) ?: 0),
-              Date(intent?.getLongExtra("eventEndDateTimeInMillis", 0) ?: 0),
-              eventDays,
-          )
-        }
-
-    if (event != null && appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+    if (eventId != -1 && appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
       val pref = getSharedPreferences("eventWidget_$appWidgetId", MODE_PRIVATE)
       val edit = pref.edit()
 
-      edit.putInt("eventId", event.id)
-      edit.putString("eventTitle", event.eventTitle)
-      edit.putBoolean("allDayEvent", event.allDayEvent)
-      edit.putString("eventDesc", event.eventDescription)
-      edit.putLong("eventStartTimeInMills", event.eventStartTime.time)
-      edit.putLong("eventEndDateTimeInMillis", event.eventEndTime.time)
-      edit.putString("eventRepeatDays", conv.fromRepeatDaysList(event.repeatEventDays))
+      edit.putInt("eventId", eventId!!)
 
       edit.commit()
       EventWidget().updateWidget(this, appWidgetManager, appWidgetId)

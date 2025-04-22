@@ -29,6 +29,8 @@ interface EventDao {
 
   @Query("SELECT * FROM event_table ORDER BY id ASC") fun getAllEvent(): LiveData<List<Event>>
 
+  @Query("SELECT * FROM event_table WHERE id = :id") fun getEvent(id: Int): Event?
+
   @Query(
       "SELECT * FROM event_table WHERE eventTitle LIKE '%'||:query||'%' OR eventDescription LIKE '%'||:query||'%' ORDER BY id ASC",
   )

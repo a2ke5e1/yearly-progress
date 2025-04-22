@@ -54,6 +54,12 @@
             app:title="@string/pref_title_app_decimal_places" />
 
 
+        <Preference
+            app:key="@string/app_location_settings"
+            app:title="@string/manage_location_title"
+            app:iconSpaceReserved="false"
+            />
+
     </PreferenceCategory>
 
     <PreferenceCategory

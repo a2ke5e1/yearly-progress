@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import com.a3.yearlyprogess.YearlyProgressNotification
 import com.a3.yearlyprogess.cacheSunriseSunset
 import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.loadCachedLocation
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.provideSunriseSunsetApi
+import com.a3.yearlyprogess.screens.UserLocationPref
 import com.a3.yearlyprogess.widgets.manager.updateManager.WidgetUpdateAlarmHandler
 import com.a3.yearlyprogess.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.widgets.ui.CalendarWidget
@@ -59,7 +61,18 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
 
       if (it == DayLightWidget::class.java || it == NightLightWidget::class.java) {
         CoroutineScope(Dispatchers.IO).launch {
-          val location = loadCachedLocation(context)
+          val userLocationPref = UserLocationPref.load(context)
+          val location = if (userLocationPref.automaticallyDetectLocation) {
+            loadCachedLocation(context)
+          } else {
+            userLocationPref.userLocationPref?.let { place ->
+              Location("").apply {
+                latitude = place.lat.toDouble()
+                longitude = place.lon.toDouble()
+              }
+            }
+          }
+
           // Log.d("WUBR", location.toString())
           if (location == null) {
             cancel()

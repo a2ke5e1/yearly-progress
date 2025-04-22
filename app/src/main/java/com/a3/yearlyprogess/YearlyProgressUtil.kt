@@ -245,8 +245,11 @@ fun loadCachedSunriseSunset(context: Context): SunriseSunsetResponse? {
   val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
   val gson = Gson()
   val json = pref.getString(key, null) ?: return null
-
-  return gson.fromJson(json, SunriseSunsetResponse::class.java)
+  return try {
+    gson.fromJson(json, SunriseSunsetResponse::class.java)
+  } catch (ex: Exception) {
+    null
+  }
 }
 
 fun cacheLocation(
@@ -279,6 +282,16 @@ fun loadCachedLocation(context: Context): Location? {
     longitude = lon.toDouble()
   }
 }
+
+fun invalidateCachedSunriseSunset( context: Context,
+) {
+  val key = ContextCompat.getString(context, R.string.sunrise_sunset_data)
+  val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
+  val editor = pref.edit()
+  editor.putString(key, null)
+  editor.apply()
+}
+
 
 fun getCurrentDate(): String {
   val cal = java.util.Calendar.getInstance()

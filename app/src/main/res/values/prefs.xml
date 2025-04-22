@@ -14,5 +14,6 @@
     <string name="app_calculation_type" translatable="false">app_calculation_type</string>
     <string name="progress_show_notification" translatable="false">progress_show_notification</string>
     <string name="app_calendar_type" translatable="false">app_calendar_type</string>
+    <string name="app_location_settings" translatable="false">app_location_settings</string>
 
 </resources>

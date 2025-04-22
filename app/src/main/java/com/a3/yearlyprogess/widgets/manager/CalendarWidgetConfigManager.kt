@@ -39,7 +39,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.LaunchedEffect
@@ -56,7 +55,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
@@ -71,10 +69,10 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import java.util.Calendar
 import java.util.Date
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 object CalendarEventInfo {
   fun getTodayOrNearestEvents(
@@ -338,7 +336,7 @@ class CalendarWidgetConfigManager : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       val calendarPermissionState =
-        rememberPermissionState(permission = Manifest.permission.READ_CALENDAR)
+          rememberPermissionState(permission = Manifest.permission.READ_CALENDAR)
       var showPermissionRationalMessage by rememberSaveable { mutableStateOf(false) }
       val context = LocalContext.current
 
@@ -353,257 +351,231 @@ class CalendarWidgetConfigManager : ComponentActivity() {
       val calendars = viewModel.calendar.collectAsState().value
       YearlyProgressTheme {
         Scaffold(
-          modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize(),
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
             topBar = {
               CenterAlignedTopAppBar(
-                  title = { Text(
-                    text = stringResource(R.string.calendar_widget_options),
-                  ) },
-                scrollBehavior = scrollBehavior,
+                  title = {
+                    Text(
+                        text = stringResource(R.string.calendar_widget_options),
+                    )
+                  },
+                  scrollBehavior = scrollBehavior,
               )
             },
-          floatingActionButton = {
-            Button(
-              onClick = {
-                viewModel.saveConfig()
-                setResult(RESULT_OK)
-                finish()
-              }) {
-              Text(stringResource(R.string.save))
-            }
-          },
-          floatingActionButtonPosition = FabPosition.Center,
-          contentWindowInsets = WindowInsets.safeDrawing,
+            floatingActionButton = {
+              Button(
+                  onClick = {
+                    viewModel.saveConfig()
+                    setResult(RESULT_OK)
+                    finish()
+                  }) {
+                    Text(stringResource(R.string.save))
+                  }
+            },
+            floatingActionButtonPosition = FabPosition.Center,
+            contentWindowInsets = WindowInsets.safeDrawing,
         ) { innerPadding ->
-            LazyColumn(
-                contentPadding = innerPadding,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-              modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                  item {
-                    Text(
-                        text = stringResource(R.string.widget_settings),
-                        style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier.padding(vertical = 8.dp))
-                  }
+          LazyColumn(
+              contentPadding = innerPadding,
+              verticalArrangement = Arrangement.spacedBy(8.dp),
+              modifier = Modifier.padding(horizontal = 16.dp)) {
+                item {
+                  Text(
+                      text = stringResource(R.string.widget_settings),
+                      style = MaterialTheme.typography.labelLarge,
+                      modifier = Modifier.padding(vertical = 8.dp))
+                }
 
-                  item {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                      val timeLeftInteractionSource = remember { MutableInteractionSource() }
-                      val dynamicTimeLeftInteractionSource = remember { MutableInteractionSource() }
-                      val replaceTimeLeftInteractionSource = remember { MutableInteractionSource() }
+                item {
+                  Column(
+                      verticalArrangement = Arrangement.spacedBy(8.dp),
+                  ) {
+                    val timeLeftInteractionSource = remember { MutableInteractionSource() }
+                    val dynamicTimeLeftInteractionSource = remember { MutableInteractionSource() }
+                    val replaceTimeLeftInteractionSource = remember { MutableInteractionSource() }
 
-                      Row(
-                          modifier =
-                          Modifier
-                            .fillMaxWidth()
-                            .clickable(
-                              interactionSource = timeLeftInteractionSource,
-                              indication = null
-                            ) {
-                              viewModel.updateTimeLeftCounter(
-                                !widgetConfig.value.timeLeftCounter
-                              )
-                            },
-                          verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                stringResource(R.string.time_left_counter),
-                                modifier = Modifier.weight(1f))
+                    Row(
+                        modifier =
+                            Modifier.fillMaxWidth().clickable(
+                                interactionSource = timeLeftInteractionSource, indication = null) {
+                                  viewModel.updateTimeLeftCounter(
+                                      !widgetConfig.value.timeLeftCounter)
+                                },
+                        verticalAlignment = Alignment.CenterVertically) {
+                          Text(
+                              stringResource(R.string.time_left_counter),
+                              modifier = Modifier.weight(1f))
 
-                            Switch(
-                                checked = widgetConfig.value.timeLeftCounter,
+                          Switch(
+                              checked = widgetConfig.value.timeLeftCounter,
                               onCheckedChange = { viewModel.updateTimeLeftCounter(it) },
-                                interactionSource = timeLeftInteractionSource)
-                          }
+                              interactionSource = timeLeftInteractionSource)
+                        }
 
-                      Row(
-                          modifier =
-                          Modifier
-                            .fillMaxWidth()
-                            .clickable(
-                              interactionSource = dynamicTimeLeftInteractionSource,
-                              indication = null
-                            ) {
-                              viewModel.updateDynamicTimeLeftCounter(
-                                !widgetConfig.value.dynamicLeftCounter
-                              )
-                            },
-                          verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                stringResource(R.string.dynamic_time_left_counter),
-                                modifier = Modifier.weight(1f))
+                    Row(
+                        modifier =
+                            Modifier.fillMaxWidth().clickable(
+                                interactionSource = dynamicTimeLeftInteractionSource,
+                                indication = null) {
+                                  viewModel.updateDynamicTimeLeftCounter(
+                                      !widgetConfig.value.dynamicLeftCounter)
+                                },
+                        verticalAlignment = Alignment.CenterVertically) {
+                          Text(
+                              stringResource(R.string.dynamic_time_left_counter),
+                              modifier = Modifier.weight(1f))
 
-                            Switch(
-                                checked = widgetConfig.value.dynamicLeftCounter,
+                          Switch(
+                              checked = widgetConfig.value.dynamicLeftCounter,
                               onCheckedChange = { viewModel.updateDynamicTimeLeftCounter(it) },
-                                interactionSource = dynamicTimeLeftInteractionSource)
-                          }
+                              interactionSource = dynamicTimeLeftInteractionSource)
+                        }
 
-                      Row(
-                          modifier =
-                          Modifier
-                            .fillMaxWidth()
-                            .clickable(
-                              interactionSource = replaceTimeLeftInteractionSource,
-                              indication = null
-                            ) {
-                              viewModel.updateReplaceTimeLeftCounter(
-                                !widgetConfig.value.replaceProgressWithDaysLeft
-                              )
-                            },
-                          verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                stringResource(R.string.replace_progress_with_days_left_counter),
-                                modifier = Modifier.weight(1f))
+                    Row(
+                        modifier =
+                            Modifier.fillMaxWidth().clickable(
+                                interactionSource = replaceTimeLeftInteractionSource,
+                                indication = null) {
+                                  viewModel.updateReplaceTimeLeftCounter(
+                                      !widgetConfig.value.replaceProgressWithDaysLeft)
+                                },
+                        verticalAlignment = Alignment.CenterVertically) {
+                          Text(
+                              stringResource(R.string.replace_progress_with_days_left_counter),
+                              modifier = Modifier.weight(1f))
 
-                            Switch(
-                                checked = widgetConfig.value.replaceProgressWithDaysLeft,
+                          Switch(
+                              checked = widgetConfig.value.replaceProgressWithDaysLeft,
                               onCheckedChange = { viewModel.updateReplaceTimeLeftCounter(it) },
-                                interactionSource = replaceTimeLeftInteractionSource)
-                          }
+                              interactionSource = replaceTimeLeftInteractionSource)
+                        }
 
-                      Column {
-                        var decimalPlaces by remember {
-                          mutableFloatStateOf(widgetConfig.value.decimalPlaces.toFloat())
-                        }
-                        Text(stringResource(R.string.pref_title_widget_decimal_places))
-                        Slider(
-                            value = decimalPlaces,
-                            onValueChange = { decimalPlaces = it },
-                            valueRange = 0f..5f,
-                            steps = 4,
-                            onValueChangeFinished = {
-                              viewModel.updateDecimalPlaces(decimalPlaces.toInt())
-                            },
-                        )
+                    Column {
+                      var decimalPlaces by remember {
+                        mutableFloatStateOf(widgetConfig.value.decimalPlaces.toFloat())
                       }
-                      Column {
-                        var backgroundTransparency by remember {
-                          mutableFloatStateOf(widgetConfig.value.backgroundTransparency)
-                        }
-                        Text(stringResource(R.string.widget_transparency))
-                        Slider(
-                            value = backgroundTransparency,
-                            onValueChange = { backgroundTransparency = it },
+                      Text(stringResource(R.string.pref_title_widget_decimal_places))
+                      Slider(
+                          value = decimalPlaces,
+                          onValueChange = { decimalPlaces = it },
+                          valueRange = 0f..5f,
+                          steps = 4,
+                          onValueChangeFinished = {
+                            viewModel.updateDecimalPlaces(decimalPlaces.toInt())
+                          },
+                      )
+                    }
+                    Column {
+                      var backgroundTransparency by remember {
+                        mutableFloatStateOf(widgetConfig.value.backgroundTransparency)
+                      }
+                      Text(stringResource(R.string.widget_transparency))
+                      Slider(
+                          value = backgroundTransparency,
+                          onValueChange = { backgroundTransparency = it },
                           valueRange = 0f..1f,
-                            onValueChangeFinished = {
-                              viewModel.updateBackgroundTransparency(backgroundTransparency)
-                            },
-                        )
-                      }
-                    }
-                  }
-
-                  item {
-                    Text(
-                        text = stringResource(R.string.select_calendars),
-                        style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier.padding(vertical = 16.dp))
-                  }
-
-              when (val status = calendarPermissionState.status) {
-                is PermissionStatus.Granted -> {
-                  showPermissionRationalMessage = false
-                  viewModel.loadCalendars()
-                  if (calendars.isNotEmpty()) {
-                    itemsIndexed(calendars) { _, item ->
-                      val isItemChecked =
-                        widgetConfig.value.selectedCalendarIds?.any { it == item.id } ?: true
-                      ElevatedCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                          viewModel.updateSelectedCalendars(item.id, !isItemChecked)
-                        }) {
-                        Row(
-                          horizontalArrangement = Arrangement.SpaceBetween,
-                          modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth()
-                        ) {
-                          Column(modifier = Modifier.weight(2f)) {
-                            Text(
-                              text = item.displayName,
-                              style =
-                              MaterialTheme.typography.titleLarge.copy(
-                                color = MaterialTheme.colorScheme.primary
-                              )
-                            )
-                            Text(
-                              text = item.accountName,
-                              style = MaterialTheme.typography.labelSmall
-                            )
-                          }
-                          Checkbox(
-                            checked = isItemChecked,
-                            onCheckedChange = { checked ->
-                              viewModel.updateSelectedCalendars(item.id, checked)
-                            })
-                        }
-                      }
-                    }
-                  } else {
-                    item {
-                      Text(stringResource(R.string.no_calendars_available))
+                          onValueChangeFinished = {
+                            viewModel.updateBackgroundTransparency(backgroundTransparency)
+                          },
+                      )
                     }
                   }
                 }
 
-                is PermissionStatus.Denied -> {
-                  showPermissionRationalMessage = true
-                  item {
-                    if (status.shouldShowRationale) {
-                      if (showPermissionRationalMessage) {
-                        PermissionRationalDialog(onDismiss = {
-                          showPermissionRationalMessage = true
-                        }, onConfirm = {
-                          calendarPermissionState.launchPermissionRequest()
-                        }, iconPainter =  painterResource(R.drawable.ic_outline_edit_calendar_24),
-                        title =  stringResource(R.string.calendar_permission_title),
-                          body =  stringResource(R.string.calendar_permission_message)
-                        )
-                      }
-                    }
-                    else {
-                      Card(
-                        colors = CardDefaults.cardColors(
-                          containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                      ) {
-                        Column(
-                          modifier = Modifier
-                            .padding(32.dp)
-                            .fillMaxWidth(),
-                          horizontalAlignment = Alignment.CenterHorizontally,
-                          verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                          Text(
-                            stringResource(R.string.calendar_permission_required), style =
-                            MaterialTheme.typography.bodyLarge.copy(
-                              color = MaterialTheme.colorScheme.onTertiaryContainer
-                            )
-                          )
-                          Button(
+                item {
+                  Text(
+                      text = stringResource(R.string.select_calendars),
+                      style = MaterialTheme.typography.labelLarge,
+                      modifier = Modifier.padding(vertical = 16.dp))
+                }
+
+                when (val status = calendarPermissionState.status) {
+                  is PermissionStatus.Granted -> {
+                    showPermissionRationalMessage = false
+                    viewModel.loadCalendars()
+                    if (calendars.isNotEmpty()) {
+                      itemsIndexed(calendars) { _, item ->
+                        val isItemChecked =
+                            widgetConfig.value.selectedCalendarIds?.any { it == item.id } ?: true
+                        ElevatedCard(
+                            modifier = Modifier.fillMaxWidth(),
                             onClick = {
-                              val intent =
-                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                  data = Uri.fromParts("package", context.packageName, null)
-                                }
-                              context.startActivity(intent)
+                              viewModel.updateSelectedCalendars(item.id, !isItemChecked)
                             }) {
-                            Text("Open Settings")
-                          }
+                              Row(
+                                  horizontalArrangement = Arrangement.SpaceBetween,
+                                  modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+                                    Column(modifier = Modifier.weight(2f)) {
+                                      Text(
+                                          text = item.displayName,
+                                          style =
+                                              MaterialTheme.typography.titleLarge.copy(
+                                                  color = MaterialTheme.colorScheme.primary))
+                                      Text(
+                                          text = item.accountName,
+                                          style = MaterialTheme.typography.labelSmall)
+                                    }
+                                    Checkbox(
+                                        checked = isItemChecked,
+                                        onCheckedChange = { checked ->
+                                          viewModel.updateSelectedCalendars(item.id, checked)
+                                        })
+                                  }
+                            }
+                      }
+                    } else {
+                      item { Text(stringResource(R.string.no_calendars_available)) }
+                    }
+                  }
+
+                  is PermissionStatus.Denied -> {
+                    showPermissionRationalMessage = true
+                    item {
+                      if (status.shouldShowRationale) {
+                        if (showPermissionRationalMessage) {
+                          PermissionRationalDialog(
+                              onDismiss = { showPermissionRationalMessage = false },
+                              onConfirm = { calendarPermissionState.launchPermissionRequest() },
+                              iconPainter = painterResource(R.drawable.ic_outline_edit_calendar_24),
+                              title = stringResource(R.string.calendar_permission_title),
+                              body = stringResource(R.string.calendar_permission_message))
                         }
+                      } else {
+                        Card(
+                            colors =
+                                CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer),
+                            modifier = Modifier.fillMaxWidth()) {
+                              Column(
+                                  modifier = Modifier.padding(32.dp).fillMaxWidth(),
+                                  horizontalAlignment = Alignment.CenterHorizontally,
+                                  verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    Text(
+                                        stringResource(R.string.calendar_permission_required),
+                                        style =
+                                            MaterialTheme.typography.bodyLarge.copy(
+                                                color =
+                                                    MaterialTheme.colorScheme.onTertiaryContainer))
+                                    Button(
+                                        onClick = {
+                                          val intent =
+                                              Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                                  .apply {
+                                                    data =
+                                                        Uri.fromParts(
+                                                            "package", context.packageName, null)
+                                                  }
+                                          context.startActivity(intent)
+                                        }) {
+                                          Text(stringResource(R.string.open_settings))
+                                        }
+                                  }
+                            }
                       }
                     }
                   }
                 }
               }
-            }
         }
       }
     }

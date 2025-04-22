@@ -21,7 +21,7 @@
     <string name="demo_month_per">50%</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
-    <string name="demo_year_per">4.3%</string>
+    <string name="demo_year_per">0%</string>
     <string name="demo_year">2022</string>
     <string name="button_text">"Add Widget "</string>
     <string name="progress">Progress</string>
@@ -139,6 +139,13 @@
     <string name="close">Close</string>
     <string name="select_your_calendar_system">Select your calendar system</string>
     <string name="calendar_widget_options">Calendar Widget Options</string>
+    <string name="manage_location_title">Manage location</string>
+    <string name="go_back">Go back</string>
+    <string name="automatically_detect_location">Automatically detect location</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="manual_location">Manual location</string>
+    <string name="enter_a_location">Enter a location</string>
+    <string name="auto_location_message">In order to automatically detect location for day/night widgets, please give app location permission in settings.</string>
 
 
     <!-- Week Preference -->
