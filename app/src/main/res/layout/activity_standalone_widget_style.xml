@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                app:constraint_referenced_ids="optionsLabel, leftCounter, dynamicLeftCounter, replaceCounter, decimalSliderLabel, decimalSlider,backgroundSliderLabel, backgroundSlider"
+                app:constraint_referenced_ids="optionsLabel, leftCounter, dynamicLeftCounter, replaceCounter, decimalSliderLabel, decimalSlider,backgroundSliderLabel, backgroundSlider, fontSizeLabel, fontSizeSlider"
                 app:flow_verticalAlign="top"
                 app:flow_verticalGap="8dp"
                 app:flow_verticalStyle="packed"
@@ -110,6 +110,23 @@
                 android:layout_height="wrap_content"
                 android:valueFrom="0.0"
                 android:valueTo="100.0" />
+
+            <TextView
+                android:id="@+id/fontSizeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/backgroundSlider"
+                android:text="@string/font_size"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/fontSizeSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:valueFrom="0.1"
+                android:stepSize="0.05"
+                android:valueTo="2" />
+
 
             <TextView
                 android:id="@+id/widgetStyleLabel"

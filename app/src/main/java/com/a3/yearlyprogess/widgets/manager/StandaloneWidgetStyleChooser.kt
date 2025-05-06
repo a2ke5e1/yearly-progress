@@ -56,6 +56,7 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
     binding.leftCounter.isChecked = options.timeLeftCounter
     binding.dynamicLeftCounter.isChecked = options.dynamicLeftCounter
     binding.backgroundSlider.value = options.backgroundTransparency.toFloat()
+    binding.fontSizeSlider.value = options.fontScale
     binding.decimalSlider.value = options.decimalPlaces.toFloat()
     binding.replaceCounter.isChecked = options.replaceProgressWithDaysLeft
 
@@ -185,6 +186,26 @@ class StandaloneWidgetStyleChooser : AppCompatActivity() {
           binding.pillBtn,
           binding.pillContainer,
           options.copy(shape = WidgetShape.PILL, backgroundTransparency = (value).toInt()),
+      )
+    }
+
+    binding.fontSizeSlider.addOnChangeListener { _, value, _ ->
+      options = options.copy(fontScale = value)
+      options.save(this)
+      inflateRemoteViewPreview(
+          binding.rectBtn,
+          binding.rectContainer,
+          options.copy(shape = WidgetShape.RECTANGLE, fontScale = value),
+      )
+      inflateRemoteViewPreview(
+          binding.cloverBtn,
+          binding.cloverContainer,
+          options.copy(shape = WidgetShape.CLOVER, fontScale = value),
+      )
+      inflateRemoteViewPreview(
+          binding.pillBtn,
+          binding.pillContainer,
+          options.copy(shape = WidgetShape.PILL, fontScale = value),
       )
     }
   }

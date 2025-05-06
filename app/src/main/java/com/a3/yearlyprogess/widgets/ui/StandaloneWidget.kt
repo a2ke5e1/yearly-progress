@@ -11,8 +11,10 @@ import android.os.Build
 import android.text.SpannableString
 import android.text.format.DateFormat.is24HourFormat
 import android.util.SizeF
+import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
+import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
@@ -27,16 +29,40 @@ import com.a3.yearlyprogess.widgets.ui.StandaloneWidgetOptions.Companion.WidgetS
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 /** Utility object for creating and managing widget RemoteViews. */
 object WidgetUtils {
+
+  data class DefaultWidgetTextProperties(
+    val widgetTypeSize: Float,
+    val widgetCurrentValueSize: Float,
+    val widgetDaysLeftSize: Float,
+    val widgetProgressSize: Float
+  )
+
+  private fun RemoteViews.applyCustomFontSize(
+    scale: Float, defaultWidgetTextProperties: DefaultWidgetTextProperties
+  ) {
+    val fontScale = scale.coerceIn(0.1f, 2f)
+
+    val widgetTypeSize = defaultWidgetTextProperties.widgetTypeSize * fontScale
+    val widgetCurrentValueSize = defaultWidgetTextProperties.widgetCurrentValueSize * fontScale
+    val widgetDaysLeftSize = defaultWidgetTextProperties.widgetDaysLeftSize * fontScale
+    val widgetProgressSize = defaultWidgetTextProperties.widgetProgressSize * fontScale
+
+    setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, widgetTypeSize)
+    setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, widgetCurrentValueSize)
+    setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, widgetDaysLeftSize)
+    setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, widgetProgressSize)
+  }
+
   /**
    * Creates a RemoteViews object for the widget.
    *
@@ -73,6 +99,8 @@ object WidgetUtils {
         )
       }
     }
+
+    val res = context.resources
 
     // Extract options or set default values.
     val decimalPlace = options?.decimalPlaces ?: 2
@@ -119,6 +147,15 @@ object WidgetUtils {
           setTextViewText(R.id.widgetProgress, widgetDaysLeftCounter)
           setTextViewTextSize(R.id.widgetProgress, 0, 35f)
         }
+
+        applyCustomFontSize(
+          options?.fontScale ?: 1f, DefaultWidgetTextProperties(
+            widgetTypeSize = res.getDimension(R.dimen.standalone_rect_widget_text_size_widget_type),
+            widgetCurrentValueSize = res.getDimension(R.dimen.standalone_rect_widget_text_size_widget_current_value),
+            widgetDaysLeftSize = res.getDimension(R.dimen.standalone_rect_widget_text_size_widget_days_left),
+            widgetProgressSize = res.getDimension(R.dimen.standalone_rect_widget_text_size_widget_progress),
+          )
+        )
       }
     }
 
@@ -243,55 +280,6 @@ object WidgetUtils {
     return when (options.shape) {
       WidgetShape.RECTANGLE -> rectangularRemoteView()
       WidgetShape.PILL -> {
-        /*val large =
-            pillRemoteView().apply {
-              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 13f)
-              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 24f)
-              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 40f)
-              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 12f)
-            }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-          pillRemoteView().apply {
-            setViewLayoutMargin(
-                R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
-            setViewPadding(R.id.topContainer, 86, 18, 0, 0)
-            setViewLayoutHeight(R.id.widget_spacer, 8f, TypedValue.COMPLEX_UNIT_DIP)
-          }
-          val square =
-              pillRemoteView().apply {
-                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
-                setViewLayoutMargin(
-                    R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -8f, TypedValue.COMPLEX_UNIT_DIP)
-                setViewPadding(R.id.topContainer, 86, 18, 0, 0)
-                setViewPadding(R.id.bottomContainer, 0, 0, 60, 30)
-                setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
-                setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 20f)
-                setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 32f)
-                setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 10f)
-              }
-          val small =
-              pillRemoteView().apply {
-                setViewLayoutHeight(R.id.widget_spacer, 2f, TypedValue.COMPLEX_UNIT_DIP)
-                setViewLayoutMargin(
-                    R.id.widgetDaysLeft, RemoteViews.MARGIN_TOP, -4f, TypedValue.COMPLEX_UNIT_DIP)
-                setViewPadding(R.id.topContainer, 60, 10, 0, 0)
-                setViewPadding(R.id.bottomContainer, 0, 0, 30, 10)
-
-                setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 8f)
-                setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP, 12f)
-                setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 16f)
-                setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 4f)
-              }
-          RemoteViews(
-              mapOf(
-                  SizeF(220f, 220f) to large,
-                  SizeF(160f, 160f) to square,
-                  SizeF(100f, 100f) to small))
-        } else {
-          large
-        }*/
-        // Get height and width of the widget
-
         val large = pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
         val square = pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
         val small = pillRemoteView(R.layout.standalone_widget_layout_pill_small)
@@ -313,26 +301,50 @@ object WidgetUtils {
         }
       }
       WidgetShape.CLOVER -> {
-        val large = cloverRemoteView(R.layout.standalone_widget_layout_clover_large)
-        val square = cloverRemoteView(R.layout.standalone_widget_layout_clover)
-        //              .apply {
-        //              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        //                setViewLayoutHeight(R.id.widget_spacer, 16f, TypedValue.COMPLEX_UNIT_DIP)
-        //                setViewLayoutMargin(
-        //                    R.id.widgetDaysLeft,
-        //                    RemoteViews.MARGIN_TOP,
-        //                    -8f,
-        //                    TypedValue.COMPLEX_UNIT_DIP,
-        //                )
-        //              }
-        //              setTextViewTextSize(R.id.widgetType, TypedValue.COMPLEX_UNIT_SP, 10f)
-        //              setTextViewTextSize(R.id.widgetCurrentValue, TypedValue.COMPLEX_UNIT_SP,
-        // 20f)
-        //              setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, 28f)
-        //              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
-        //            }
-        val small = cloverRemoteView(R.layout.standalone_widget_layout_clover_small)
-        val xSmall = cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small)
+        val large = cloverRemoteView(R.layout.standalone_widget_layout_clover_large).apply {
+          applyCustomFontSize(
+            options.fontScale, DefaultWidgetTextProperties(
+            widgetTypeSize = res.getDimension(R.dimen.standalone_clover_large_widget_text_size_widget_type),
+            widgetCurrentValueSize = res.getDimension(R.dimen.standalone_clover_large_widget_text_size_widget_current_value),
+            widgetDaysLeftSize = res.getDimension(R.dimen.standalone_clover_large_widget_text_size_widget_days_left),
+            widgetProgressSize = res.getDimension(R.dimen.standalone_clover_large_widget_text_size_widget_progress),
+            )
+          )
+          setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+        }
+        val square = cloverRemoteView(R.layout.standalone_widget_layout_clover).apply {
+          applyCustomFontSize(
+            options.fontScale, DefaultWidgetTextProperties(
+              widgetTypeSize = res.getDimension(R.dimen.standalone_clover_widget_text_size_widget_type),
+              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_clover_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_clover_widget_text_size_widget_days_left),
+              widgetProgressSize = res.getDimension(R.dimen.standalone_clover_widget_text_size_widget_progress),
+            )
+          )
+          setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+        }
+        val small = cloverRemoteView(R.layout.standalone_widget_layout_clover_small).apply {
+          applyCustomFontSize(
+            options.fontScale, DefaultWidgetTextProperties(
+              widgetTypeSize = res.getDimension(R.dimen.standalone_clover_small_widget_text_size_widget_type),
+              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_clover_small_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_clover_small_widget_text_size_widget_days_left),
+              widgetProgressSize = res.getDimension(R.dimen.standalone_clover_small_widget_text_size_widget_progress),
+            )
+          )
+          setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+        }
+        val xSmall = cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small).apply {
+          applyCustomFontSize(
+            options.fontScale, DefaultWidgetTextProperties(
+              widgetTypeSize = res.getDimension(R.dimen.standalone_clover_extra_small_widget_text_size_widget_type),
+              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_clover_extra_small_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_clover_extra_small_widget_text_size_widget_days_left),
+              widgetProgressSize = res.getDimension(R.dimen.standalone_clover_extra_small_widget_text_size_widget_progress),
+            )
+          )
+          setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
           RemoteViews(
@@ -375,11 +387,12 @@ data class StandaloneWidgetOptions(
     val replaceProgressWithDaysLeft: Boolean,
     @IntRange(from = 0, to = 100) val backgroundTransparency: Int,
     val widgetType: TimePeriod?,
-    val shape: WidgetShape,
+    val shape: WidgetShape, @FloatRange(from = 0.1, to = 2.0) val fontScale: Float
 ) {
   companion object {
     private const val WIDGET_TYPE = "widget_type_"
     private const val WIDGET_SHAPE = "widget_shape_"
+    private const val FONT_SCALE = "font_scale"
 
     /**
      * Loads the widget options from shared preferences.
@@ -421,8 +434,7 @@ data class StandaloneWidgetOptions(
           pref.getString(widgetTypeKey, TimePeriod.DAY.name)?.let { TimePeriod.valueOf(it) },
           pref.getString(widgetShapeKey, WidgetShape.RECTANGLE.name)?.let {
             WidgetShape.valueOf(it)
-          } ?: WidgetShape.RECTANGLE,
-      )
+          } ?: WidgetShape.RECTANGLE, pref.getFloat("$FONT_SCALE$widgetId", 1f))
     }
 
     /** Enum class representing the shape of the widget. */
@@ -459,6 +471,7 @@ data class StandaloneWidgetOptions(
       )
       putString("$WIDGET_TYPE$widgetId", widgetType?.name)
       putString("$WIDGET_SHAPE$widgetId", shape.name)
+      putFloat("$FONT_SCALE$widgetId", fontScale)
       apply()
     }
   }

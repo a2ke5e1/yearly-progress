@@ -49,7 +49,7 @@
                 android:text="@string/day"
                 android:textAllCaps="true"
                 android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="8sp"
+                android:textSize="@dimen/standalone_clover_widget_text_size_widget_type"
                 android:textStyle="normal" />
 
             <TextView
@@ -59,7 +59,7 @@
                 android:layout_marginTop="-4dp"
                 android:text="@string/demo_date"
                 android:textColor="@color/md_theme_tertiary"
-                android:textSize="11sp"
+                android:textSize="@dimen/standalone_clover_widget_text_size_widget_current_value"
                 android:textStyle="bold" />
 
 
@@ -82,14 +82,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/demo_day_per"
                 android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="16sp" />
+                android:textSize="@dimen/standalone_clover_widget_text_size_widget_progress" />
 
             <TextView
                 android:id="@+id/widgetDaysLeft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/md_theme_onSurfaceVariant"
-                android:textSize="8sp"
+                android:textSize="@dimen/standalone_clover_widget_text_size_widget_days_left"
                 android:textStyle="normal"
                 tools:text="112d left" />
 
