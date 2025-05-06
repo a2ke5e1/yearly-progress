@@ -33,4 +33,16 @@
     <dimen name="standalone_clover_extra_small_widget_text_size_widget_progress">16sp</dimen>
     <dimen name="standalone_clover_extra_small_widget_text_size_widget_current_value">8sp</dimen>
 
+    <!-- pill medium shaped standalone widgets -->
+    <dimen name="standalone_pill_medium_widget_text_size_widget_type">10sp</dimen>
+    <dimen name="standalone_pill_medium_widget_text_size_widget_days_left">10sp</dimen>
+    <dimen name="standalone_pill_medium_widget_text_size_widget_progress">32sp</dimen>
+    <dimen name="standalone_pill_medium_widget_text_size_widget_current_value">20sp</dimen>
+
+    <!-- pill small shaped standalone widgets -->
+    <dimen name="standalone_pill_small_widget_text_size_widget_type">8sp</dimen>
+    <dimen name="standalone_pill_small_widget_text_size_widget_days_left">4sp</dimen>
+    <dimen name="standalone_pill_small_widget_text_size_widget_progress">16sp</dimen>
+    <dimen name="standalone_pill_small_widget_text_size_widget_current_value">10sp</dimen>
+
 </resources>

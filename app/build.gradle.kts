@@ -49,9 +49,9 @@ android {
       compose = true
     }
     namespace = "com.a3.yearlyprogess"
-  kotlinOptions {
-    jvmTarget = "21"
-  }
+    kotlinOptions {
+      jvmTarget = "21"
+    }
 }
 
 dependencies {
@@ -63,7 +63,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
     implementation("com.google.firebase:firebase-crashlytics:19.4.3")
     implementation("androidx.activity:activity-ktx:1.10.1")
-    implementation("androidx.work:work-runtime-ktx:2.10.0")
+    implementation("androidx.work:work-runtime-ktx:2.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation(platform("androidx.compose:compose-bom:2025.04.01"))
@@ -101,7 +101,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-  // Room
+    // Room
     val roomVersion = "2.7.1"
 
     implementation("androidx.room:room-runtime:$roomVersion")

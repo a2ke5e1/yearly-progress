@@ -280,9 +280,39 @@ object WidgetUtils {
     return when (options.shape) {
       WidgetShape.RECTANGLE -> rectangularRemoteView()
       WidgetShape.PILL -> {
-        val large = pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
-        val square = pillRemoteView(R.layout.standalone_widget_layout_pill_medium)
-        val small = pillRemoteView(R.layout.standalone_widget_layout_pill_small)
+        val large = pillRemoteView(R.layout.standalone_widget_layout_pill_medium).apply {
+          applyCustomFontSize(
+            options.fontScale, DefaultWidgetTextProperties(
+              widgetTypeSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_type),
+              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_days_left),
+              widgetProgressSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_progress),
+            )
+          )
+          setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+        }
+        val square = pillRemoteView(R.layout.standalone_widget_layout_pill_medium).apply {
+          applyCustomFontSize(
+            options.fontScale, DefaultWidgetTextProperties(
+              widgetTypeSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_type),
+              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_days_left),
+              widgetProgressSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_progress),
+            )
+          )
+          setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+        }
+        val small = pillRemoteView(R.layout.standalone_widget_layout_pill_small).apply {
+          applyCustomFontSize(
+            options.fontScale, DefaultWidgetTextProperties(
+              widgetTypeSize = res.getDimension(R.dimen.standalone_pill_small_widget_text_size_widget_type),
+              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_pill_small_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_pill_small_widget_text_size_widget_days_left),
+              widgetProgressSize = res.getDimension(R.dimen.standalone_pill_small_widget_text_size_widget_progress),
+            )
+          )
+          setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
           RemoteViews(
