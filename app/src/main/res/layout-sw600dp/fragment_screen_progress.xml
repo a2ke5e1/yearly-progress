@@ -17,7 +17,6 @@
             app:flow_horizontalStyle="packed"
             app:flow_horizontalGap="30dp"
             app:flow_verticalGap="30dp"
-            app:flow_lastHorizontalStyle="spread"
             app:flow_maxElementsWrap="2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
