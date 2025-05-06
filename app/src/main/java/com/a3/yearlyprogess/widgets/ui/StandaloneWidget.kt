@@ -332,10 +332,7 @@ object WidgetUtils {
         //              setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, 8f)
         //            }
         val small = cloverRemoteView(R.layout.standalone_widget_layout_clover_small)
-        val xSmall =
-            cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small).apply {
-              setViewVisibility(R.id.widgetDaysLeft, View.GONE)
-            }
+        val xSmall = cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
           RemoteViews(
@@ -580,10 +577,11 @@ abstract class DayNightWidget(private val dayLight: Boolean) : BaseWidget() {
 
       val userLocationPref = UserLocationPref.load(context)
 
-      if (userLocationPref.automaticallyDetectLocation &&  ContextCompat.checkSelfPermission(
-          context,
-          android.Manifest.permission.ACCESS_COARSE_LOCATION,
-      ) != PackageManager.PERMISSION_GRANTED) {
+      if (userLocationPref.automaticallyDetectLocation &&
+          ContextCompat.checkSelfPermission(
+              context,
+              android.Manifest.permission.ACCESS_COARSE_LOCATION,
+          ) != PackageManager.PERMISSION_GRANTED) {
         return WidgetUtils.createRemoteView(
             context,
             if (dayLight) {

@@ -20,6 +20,8 @@ fun Double.styleFormatted(
 ): SpannableString {
   val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
   numberFormat.maximumFractionDigits = digits
+  numberFormat.minimumFractionDigits = digits
+  numberFormat.minimumIntegerDigits = 2
   val formattedNumber = numberFormat.format(this) + "%"
   val decimalSeparator = numberFormat.decimalFormatSymbols.decimalSeparator
 
