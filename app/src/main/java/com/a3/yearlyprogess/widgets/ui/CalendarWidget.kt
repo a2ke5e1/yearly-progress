@@ -13,8 +13,10 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.SizeF
+import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
+import androidx.annotation.DimenRes
 import androidx.core.graphics.toColor
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressUtil
@@ -24,14 +26,14 @@ import com.a3.yearlyprogess.widgets.manager.CalendarWidgetConfig
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
-import java.util.Date
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.util.Date
+import kotlin.math.roundToInt
 
 class CalendarEventsSwiper(val context: Context, events: List<Event>, limits: Int = 5) {
 
@@ -246,8 +248,10 @@ class CalendarWidget : BaseWidget() {
             setupCalendarWidgetView(context, smallView, event, widgetConfig)
             smallView.setViewVisibility(R.id.event_description, android.view.View.GONE)
             smallView.setTextViewText(R.id.indicator, calendarEventsSwiper.indicator())
+            setFontScale(context, smallView, widgetConfig, defaultSmallFontScale)
             setupCalendarWidgetView(context, largeView, event, widgetConfig)
             largeView.setTextViewText(R.id.indicator, calendarEventsSwiper.indicator())
+            setFontScale(context, largeView, widgetConfig, defaultFontScale)
 
             val view = mapRemoteView(context, appWidgetId, smallView, largeView)
             appWidgetManager.updateAppWidget(appWidgetId, view)
@@ -409,6 +413,67 @@ class CalendarWidget : BaseWidget() {
     val widgetBackgroundAlpha = ((widgetConfig.backgroundTransparency) * 255).toInt()
     view.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
   }
+
+  data class DefaultCalendarWidgetFontSize(
+    @DimenRes val widgetEventStatus: Int,
+    @DimenRes val widgetEventTitle: Int,
+    @DimenRes val widgetEventDescription: Int,
+    @DimenRes val widgetEventDuration: Int,
+    @DimenRes val widgetEventProgress: Int,
+    @DimenRes val widgetEventDaysLeft: Int,
+  )
+
+  private fun setFontScale(
+    context: Context,
+    view: RemoteViews,
+    widgetConfig: CalendarWidgetConfig,
+    defaultCalendarWidgetFontSize: DefaultCalendarWidgetFontSize
+  ) {
+    fun scaledFontSizeInSp(@DimenRes id: Int): Float {
+      val res = context.resources
+      val metrics = res.displayMetrics
+      val px = res.getDimension(id)
+      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        TypedValue.deriveDimension(TypedValue.COMPLEX_UNIT_SP, px, metrics)
+      } else {
+        px / metrics.scaledDensity
+      } * widgetConfig.fontScale
+    }
+
+    val widgetEventStatus = scaledFontSizeInSp(defaultCalendarWidgetFontSize.widgetEventStatus)
+    val widgetEventTitle = scaledFontSizeInSp(defaultCalendarWidgetFontSize.widgetEventTitle)
+    val widgetEventDescription = scaledFontSizeInSp(defaultCalendarWidgetFontSize.widgetEventDescription)
+    val widgetEventDuration = scaledFontSizeInSp(defaultCalendarWidgetFontSize.widgetEventDuration)
+    val widgetEventProgress = scaledFontSizeInSp(defaultCalendarWidgetFontSize.widgetEventProgress)
+    val widgetEventDaysLeft = scaledFontSizeInSp(defaultCalendarWidgetFontSize.widgetEventDaysLeft)
+
+    view.setTextViewTextSize(R.id.event_status, TypedValue.COMPLEX_UNIT_SP, widgetEventStatus)
+    view.setTextViewTextSize(R.id.event_title, TypedValue.COMPLEX_UNIT_SP, widgetEventTitle)
+    view.setTextViewTextSize(R.id.event_description, TypedValue.COMPLEX_UNIT_SP, widgetEventDescription)
+    view.setTextViewTextSize(R.id.event_duration, TypedValue.COMPLEX_UNIT_SP, widgetEventDuration)
+    view.setTextViewTextSize(R.id.widgetProgress, TypedValue.COMPLEX_UNIT_SP, widgetEventProgress)
+    view.setTextViewTextSize(R.id.widgetDays, TypedValue.COMPLEX_UNIT_SP, widgetEventDaysLeft)
+
+
+  }
+
+  private val defaultFontScale = DefaultCalendarWidgetFontSize(
+    R.dimen.calendar_widget_event_status,
+    R.dimen.calendar_widget_event_title,
+    R.dimen.calendar_widget_event_description,
+    R.dimen.calendar_widget_event_duration,
+    R.dimen.calendar_widget_event_progress,
+    R.dimen.calendar_widget_event_days_left
+  )
+
+  private val defaultSmallFontScale = DefaultCalendarWidgetFontSize(
+    R.dimen.calendar_widget_event_status,
+    R.dimen.calendar_widget_event_title,
+    R.dimen.calendar_widget_event_description,
+    R.dimen.calendar_widget_event_duration,
+    R.dimen.calendar_widget_event_progress,
+    R.dimen.calendar_widget_event_days_left
+  )
 
   private fun Date.formattedDateTime(context: Context): String {
     return android.text.format.DateFormat.format(

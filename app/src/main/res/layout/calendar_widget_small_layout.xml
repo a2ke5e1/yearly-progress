@@ -44,7 +44,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="4sp"
+                android:textSize="@dimen/calendar_widget_small_event_status"
                 android:textStyle="normal" />
 
             <TextView
@@ -56,7 +56,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textColor="@color/md_theme_tertiary"
-                android:textSize="12sp"
+                android:textSize="@dimen/calendar_widget_small_event_title"
                 android:textStyle="bold" />
 
             <TextView
@@ -67,7 +67,7 @@
                 android:text="Event Description"
                 android:textColor="@color/md_theme_onSurfaceVariant"
                 android:visibility="gone"
-                android:textSize="8sp" />
+                android:textSize="@dimen/calendar_widget_small_event_description" />
 
 
             <TextView
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:text="Event Duration"
                 android:textColor="@color/md_theme_onSurfaceVariant"
-                android:textSize="4sp"
+                android:textSize="@dimen/calendar_widget_small_event_duration"
                 />
 
 
@@ -101,7 +101,7 @@
                 android:text="@string/demo_day_per"
                 android:textAlignment="center"
                 android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="16sp" />
+                android:textSize="@dimen/calendar_widget_small_event_progress" />
 
             <TextView
                 android:id="@+id/widgetDays"
@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-4dp"
                 android:textColor="@color/md_theme_onSurfaceVariant"
-                android:textSize="8sp"
+                android:textSize="@dimen/calendar_widget_small_event_days_left"
                 android:textStyle="normal"
                 tools:text="112d left" />
 
