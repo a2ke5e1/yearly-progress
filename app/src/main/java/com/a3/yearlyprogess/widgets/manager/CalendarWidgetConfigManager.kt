@@ -233,7 +233,8 @@ data class CalendarWidgetConfig(
     val dynamicLeftCounter: Boolean,
     val replaceProgressWithDaysLeft: Boolean,
     @FloatRange(from = 0.0, to = 1.0) val backgroundTransparency: Float,
-    val selectedCalendarIds: List<Long>?
+    val selectedCalendarIds: List<Long>?,
+    @FloatRange(from = 0.1, to = 2.0) val fontScale: Float
 ) {
 
   companion object {
@@ -252,7 +253,9 @@ data class CalendarWidgetConfig(
                   dynamicLeftCounter = false,
                   replaceProgressWithDaysLeft = false,
                   backgroundTransparency = 1f,
-                  selectedCalendarIds = null)
+                  selectedCalendarIds = null,
+                  fontScale = 1f
+                )
       return Gson().fromJson(jsonString, CalendarWidgetConfig::class.java)
     }
 
@@ -303,6 +306,10 @@ class CalendarWidgetConfigManagerViewModel(private val application: Application)
 
   fun updateBackgroundTransparency(backgroundTransparency: Float) {
     _widgetConfig.update { it.copy(backgroundTransparency = backgroundTransparency) }
+  }
+
+  fun updateFontScale(fontScale: Float) {
+    _widgetConfig.update { it.copy(fontScale = fontScale.coerceIn(0.1f , 2f)) }
   }
 
   fun updateTimeLeftCounter(checked: Boolean) {
@@ -477,6 +484,20 @@ class CalendarWidgetConfigManager : ComponentActivity() {
                           onValueChangeFinished = {
                             viewModel.updateBackgroundTransparency(backgroundTransparency)
                           },
+                      )
+                    }
+                    Column {
+                      var fontScale by remember {
+                        mutableFloatStateOf(widgetConfig.value.fontScale)
+                      }
+                      Text(stringResource(R.string.font_size))
+                      Slider(
+                        value = fontScale,
+                        onValueChange = { fontScale = it },
+                        valueRange = 0.1f..2f,
+                        onValueChangeFinished = {
+                          viewModel.updateFontScale(fontScale)
+                        },
                       )
                     }
                   }

@@ -62,16 +62,17 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
       if (it == DayLightWidget::class.java || it == NightLightWidget::class.java) {
         CoroutineScope(Dispatchers.IO).launch {
           val userLocationPref = UserLocationPref.load(context)
-          val location = if (userLocationPref.automaticallyDetectLocation) {
-            loadCachedLocation(context)
-          } else {
-            userLocationPref.userLocationPref?.let { place ->
-              Location("").apply {
-                latitude = place.lat.toDouble()
-                longitude = place.lon.toDouble()
+          val location =
+              if (userLocationPref.automaticallyDetectLocation) {
+                loadCachedLocation(context)
+              } else {
+                userLocationPref.userLocationPref?.let { place ->
+                  Location("").apply {
+                    latitude = place.lat.toDouble()
+                    longitude = place.lon.toDouble()
+                  }
+                }
               }
-            }
-          }
 
           // Log.d("WUBR", location.toString())
           if (location == null) {

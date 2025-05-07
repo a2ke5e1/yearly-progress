@@ -283,7 +283,8 @@ fun loadCachedLocation(context: Context): Location? {
   }
 }
 
-fun invalidateCachedSunriseSunset( context: Context,
+fun invalidateCachedSunriseSunset(
+    context: Context,
 ) {
   val key = ContextCompat.getString(context, R.string.sunrise_sunset_data)
   val pref = context.getSharedPreferences(key, Context.MODE_PRIVATE)
@@ -291,7 +292,6 @@ fun invalidateCachedSunriseSunset( context: Context,
   editor.putString(key, null)
   editor.apply()
 }
-
 
 fun getCurrentDate(): String {
   val cal = java.util.Calendar.getInstance()

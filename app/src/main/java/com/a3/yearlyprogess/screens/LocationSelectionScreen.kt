@@ -33,7 +33,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -87,10 +86,9 @@ import retrofit2.http.Query
 
 data class NominatimPlace(val display_name: String, val lat: String, val lon: String)
 
-
 data class UserLocationPref(
-  val automaticallyDetectLocation: Boolean = true,
-  val userLocationPref: NominatimPlace? = null
+    val automaticallyDetectLocation: Boolean = true,
+    val userLocationPref: NominatimPlace? = null
 ) {
 
   companion object {
@@ -98,32 +96,28 @@ data class UserLocationPref(
     private const val USER_LOCATION_PREF = "USER_LOCATION_PREF"
 
     fun load(context: Context): UserLocationPref {
-      val sharedPreferences =
-        context.getSharedPreferences(USER_LOCATION_PREF, Context.MODE_PRIVATE)
+      val sharedPreferences = context.getSharedPreferences(USER_LOCATION_PREF, Context.MODE_PRIVATE)
       val jsonString =
-        sharedPreferences.getString(USER_LOCATION_PREF, null)
-          ?: return UserLocationPref(true, null)
+          sharedPreferences.getString(USER_LOCATION_PREF, null)
+              ?: return UserLocationPref(true, null)
       return Gson().fromJson(jsonString, UserLocationPref::class.java)
     }
 
     fun save(context: Context, config: UserLocationPref) {
-      val sharedPreferences =
-        context.getSharedPreferences(USER_LOCATION_PREF, Context.MODE_PRIVATE)
+      val sharedPreferences = context.getSharedPreferences(USER_LOCATION_PREF, Context.MODE_PRIVATE)
       val edit = sharedPreferences.edit()
       val jsonString = Gson().toJson(config)
       edit.putString(USER_LOCATION_PREF, jsonString).apply()
     }
   }
-
 }
-
 
 interface NominatimApi {
   @GET("search")
   suspend fun searchPlaces(
-    @Query("q") query: String,
-    @Query("format") format: String = "json",
-    @Query("limit") limit: Int = 5
+      @Query("q") query: String,
+      @Query("format") format: String = "json",
+      @Query("limit") limit: Int = 5
   ): List<NominatimPlace>
 }
 
@@ -132,10 +126,10 @@ object NominatimService {
 
   val api: NominatimApi by lazy {
     Retrofit.Builder()
-      .baseUrl(BASE_URL)
-      .addConverterFactory(GsonConverterFactory.create())
-      .build()
-      .create(NominatimApi::class.java)
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(NominatimApi::class.java)
   }
 }
 
@@ -146,7 +140,7 @@ class LocationSelectionScreen : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       val locationPermissionState =
-        rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
+          rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
       var showPermissionRationalMessage by rememberSaveable { mutableStateOf(true) }
       val context = LocalContext.current
       val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -173,12 +167,10 @@ class LocationSelectionScreen : ComponentActivity() {
 
       LaunchedEffect(automaticallyDetectLocation) {
         UserLocationPref.save(
-          context,
-          UserLocationPref(
-            automaticallyDetectLocation = automaticallyDetectLocation,
-            userLocationPref = selectedLocation
-          )
-        )
+            context,
+            UserLocationPref(
+                automaticallyDetectLocation = automaticallyDetectLocation,
+                userLocationPref = selectedLocation))
         if (automaticallyDetectLocation && !locationPermissionState.status.isGranted) {
           automaticallyDetectLocation = false
           locationPermissionState.launchPermissionRequest()
@@ -187,67 +179,57 @@ class LocationSelectionScreen : ComponentActivity() {
 
       YearlyProgressTheme {
         Scaffold(
-          modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize(),
-          topBar = {
-            CenterAlignedTopAppBar(
-              title = {
-                Text(
-                  text = stringResource(R.string.manage_location_title),
-                )
-              },
-              scrollBehavior = scrollBehavior,
-              navigationIcon = {
-                IconButton(onClick = { finish() }) {
-                  Icon(
-                    Icons.AutoMirrored.Default.ArrowBack,
-                    contentDescription = stringResource(R.string.go_back)
-                  )
-                }
-              })
-          },
-          contentWindowInsets = WindowInsets.safeDrawing,
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
+            topBar = {
+              CenterAlignedTopAppBar(
+                  title = {
+                    Text(
+                        text = stringResource(R.string.manage_location_title),
+                    )
+                  },
+                  scrollBehavior = scrollBehavior,
+                  navigationIcon = {
+                    IconButton(onClick = { finish() }) {
+                      Icon(
+                          Icons.AutoMirrored.Default.ArrowBack,
+                          contentDescription = stringResource(R.string.go_back))
+                    }
+                  })
+            },
+            contentWindowInsets = WindowInsets.safeDrawing,
         ) { innerPadding ->
           LazyColumn(
-            contentPadding = innerPadding,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+              contentPadding = innerPadding,
+              verticalArrangement = Arrangement.spacedBy(8.dp),
           ) {
             item {
               val automaticLocationInteractionSource = remember { MutableInteractionSource() }
               Row(
-                modifier =
-                Modifier
-                  .fillMaxWidth()
-                  .padding(horizontal = 16.dp)
-                  .clickable(
-                    interactionSource = automaticLocationInteractionSource,
-                    indication = null
-                  ) {
-                    automaticallyDetectLocation = !automaticallyDetectLocation
-                    if (automaticallyDetectLocation) {
-                      requestedLocationPermissionByUser = true
-                    }
-                  },
-                verticalAlignment = Alignment.CenterVertically
-              ) {
-                Text(
-                  stringResource(R.string.automatically_detect_location),
-                  modifier = Modifier.weight(1f),
-                  style = MaterialTheme.typography.bodyLarge
-                )
+                  modifier =
+                      Modifier.fillMaxWidth().padding(horizontal = 16.dp).clickable(
+                          interactionSource = automaticLocationInteractionSource,
+                          indication = null) {
+                            automaticallyDetectLocation = !automaticallyDetectLocation
+                            if (automaticallyDetectLocation) {
+                              requestedLocationPermissionByUser = true
+                            }
+                          },
+                  verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        stringResource(R.string.automatically_detect_location),
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.bodyLarge)
 
-                Switch(
-                  checked = automaticallyDetectLocation,
-                  onCheckedChange = {
-                    automaticallyDetectLocation = it
-                    if (it) {
-                      requestedLocationPermissionByUser = true
-                    }
-                  },
-                  interactionSource = automaticLocationInteractionSource
-                )
-              }
+                    Switch(
+                        checked = automaticallyDetectLocation,
+                        onCheckedChange = {
+                          automaticallyDetectLocation = it
+                          if (it) {
+                            requestedLocationPermissionByUser = true
+                          }
+                        },
+                        interactionSource = automaticLocationInteractionSource)
+                  }
             }
 
             when (val status = locationPermissionState.status) {
@@ -256,55 +238,49 @@ class LocationSelectionScreen : ComponentActivity() {
                   if (status.shouldShowRationale) {
                     if (showPermissionRationalMessage) {
                       PermissionRationalDialog(
-                        onDismiss = {
-                          showPermissionRationalMessage = false
-                          automaticallyDetectLocation = false
-                        },
-                        onConfirm = { locationPermissionState.launchPermissionRequest() },
-                        iconPainter = painterResource(R.drawable.ic_location_on_24),
-                        title = stringResource(R.string.location_permission_title),
-                        body = stringResource(R.string.location_permission_message)
-                      )
+                          onDismiss = {
+                            showPermissionRationalMessage = false
+                            automaticallyDetectLocation = false
+                          },
+                          onConfirm = { locationPermissionState.launchPermissionRequest() },
+                          iconPainter = painterResource(R.drawable.ic_location_on_24),
+                          title = stringResource(R.string.location_permission_title),
+                          body = stringResource(R.string.location_permission_message))
                     }
                   } else {
                     Card(
-                      colors =
-                      CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer),
-                      modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)) {
-                      Column(
-                        modifier = Modifier
-                          .padding(16.dp)
-                          .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        Text(
-                          stringResource(R.string.auto_location_message),
-                          style =
-                          MaterialTheme.typography.bodyLarge.copy(
-                            color =
-                            MaterialTheme.colorScheme.onErrorContainer))
-                        Button(
-                          colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onError
-                          ),
-                          onClick = {
-                            val intent =
-                              Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                .apply {
-                                  data =
-                                    Uri.fromParts(
-                                      "package", context.packageName, null)
-                                }
-                            context.startActivity(intent)
-                          }) {
-                          Text(stringResource(R.string.open_settings))
+                        colors =
+                            CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                          Column(
+                              modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                              horizontalAlignment = Alignment.CenterHorizontally,
+                              verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                Text(
+                                    stringResource(R.string.auto_location_message),
+                                    style =
+                                        MaterialTheme.typography.bodyLarge.copy(
+                                            color = MaterialTheme.colorScheme.onErrorContainer))
+                                Button(
+                                    colors =
+                                        ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.error,
+                                            contentColor = MaterialTheme.colorScheme.onError),
+                                    onClick = {
+                                      val intent =
+                                          Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                              .apply {
+                                                data =
+                                                    Uri.fromParts(
+                                                        "package", context.packageName, null)
+                                              }
+                                      context.startActivity(intent)
+                                    }) {
+                                      Text(stringResource(R.string.open_settings))
+                                    }
+                              }
                         }
-                      }
-                    }
                   }
                 }
               }
@@ -314,47 +290,38 @@ class LocationSelectionScreen : ComponentActivity() {
 
             item {
               Column(
-                modifier =
-                Modifier
-                  .fillMaxWidth()
-                  .clickable { showManualSelectionDialogBox = true }) {
-                Column(
                   modifier =
-                  Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                  Text(
-                    stringResource(R.string.manual_location),
-                    style =
-                    MaterialTheme.typography.labelLarge.copy(
-                      color = MaterialTheme.colorScheme.primary
-                    )
-                  )
-                  Text(
-                    selectedLocation?.display_name ?: stringResource(R.string.enter_a_location),
-                    style = MaterialTheme.typography.bodyLarge
-                  )
-                }
-              }
+                      Modifier.fillMaxWidth().clickable { showManualSelectionDialogBox = true }) {
+                    Column(
+                        modifier =
+                            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+                          Text(
+                              stringResource(R.string.manual_location),
+                              style =
+                                  MaterialTheme.typography.labelLarge.copy(
+                                      color = MaterialTheme.colorScheme.primary))
+                          Text(
+                              selectedLocation?.display_name
+                                  ?: stringResource(R.string.enter_a_location),
+                              style = MaterialTheme.typography.bodyLarge)
+                        }
+                  }
             }
           }
 
           if (showManualSelectionDialogBox) {
             LocationSearchWithNominatim(
-              innerPadding = PaddingValues(8.dp),
-              onSelected = { place ->
-                selectedLocation = place
-                invalidateCachedSunriseSunset(context)
-                UserLocationPref.save(
-                  context,
-                  UserLocationPref(
-                    automaticallyDetectLocation = automaticallyDetectLocation,
-                    userLocationPref = place
-                  )
-                )
-              },
-              onDismiss = { showManualSelectionDialogBox = false })
+                innerPadding = PaddingValues(8.dp),
+                onSelected = { place ->
+                  selectedLocation = place
+                  invalidateCachedSunriseSunset(context)
+                  UserLocationPref.save(
+                      context,
+                      UserLocationPref(
+                          automaticallyDetectLocation = automaticallyDetectLocation,
+                          userLocationPref = place))
+                },
+                onDismiss = { showManualSelectionDialogBox = false })
           }
         }
       }
@@ -365,9 +332,9 @@ class LocationSelectionScreen : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationSearchWithNominatim(
-  innerPadding: PaddingValues,
-  onSelected: (NominatimPlace) -> Unit,
-  onDismiss: () -> Unit
+    innerPadding: PaddingValues,
+    onSelected: (NominatimPlace) -> Unit,
+    onDismiss: () -> Unit
 ) {
   var query by remember { mutableStateOf("") }
   var suggestions by remember { mutableStateOf<List<NominatimPlace>>(emptyList()) }
@@ -399,105 +366,94 @@ fun LocationSearchWithNominatim(
   }
 
   Dialog(
-    onDismissRequest = onDismiss,
-    content = {
-      Column(
-        modifier =
-        Modifier
-          .padding(innerPadding)
-          .heightIn(min = 400.dp)
-          .background(
-            color = AlertDialogDefaults.containerColor,
-            shape = AlertDialogDefaults.shape
-          ),
-        verticalArrangement = Arrangement.SpaceBetween
-      ) {
-        Column {
-          Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
-          ) {
-            OutlinedTextField(
-              value = query,
-              onValueChange = { query = it },
-              label = { Text("Search Location") },
-              modifier = Modifier.weight(1f),
-              keyboardOptions =
-              KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-              keyboardActions =
-              KeyboardActions(
-                onSearch = {
-                  coroutineScope.launch {
-                    isLoading = true
-                    try {
-                      suggestions = NominatimService.api.searchPlaces(query)
-                    } catch (e: Exception) {
-                      suggestions = emptyList()
-                    } finally {
-                      isLoading = false
+      onDismissRequest = onDismiss,
+      content = {
+        Column(
+            modifier =
+                Modifier.padding(innerPadding)
+                    .heightIn(min = 400.dp)
+                    .background(
+                        color = AlertDialogDefaults.containerColor,
+                        shape = AlertDialogDefaults.shape),
+            verticalArrangement = Arrangement.SpaceBetween) {
+              Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)) {
+                      OutlinedTextField(
+                          value = query,
+                          onValueChange = { query = it },
+                          label = { Text("Search Location") },
+                          modifier = Modifier.weight(1f),
+                          keyboardOptions =
+                              KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                          keyboardActions =
+                              KeyboardActions(
+                                  onSearch = {
+                                    coroutineScope.launch {
+                                      isLoading = true
+                                      try {
+                                        suggestions = NominatimService.api.searchPlaces(query)
+                                      } catch (e: Exception) {
+                                        suggestions = emptyList()
+                                      } finally {
+                                        isLoading = false
+                                      }
+                                    }
+                                    keyboardController?.hide()
+                                  }))
+
+                      Spacer(modifier = Modifier.width(8.dp))
+
+                      FilledIconButton(
+                          onClick = {
+                            coroutineScope.launch {
+                              isLoading = true
+                              try {
+                                suggestions = NominatimService.api.searchPlaces(query)
+                              } catch (e: Exception) {
+                                suggestions = emptyList()
+                              } finally {
+                                isLoading = false
+                              }
+                            }
+                          },
+                          enabled = query.isNotEmpty() && !isLoading) {
+                            Icon(Icons.Default.Search, contentDescription = "Search")
+                          }
                     }
-                  }
-                  keyboardController?.hide()
-                })
-            )
 
-            Spacer(modifier = Modifier.width(8.dp))
-
-            FilledIconButton(
-              onClick = {
-                coroutineScope.launch {
-                  isLoading = true
-                  try {
-                    suggestions = NominatimService.api.searchPlaces(query)
-                  } catch (e: Exception) {
-                    suggestions = emptyList()
-                  } finally {
-                    isLoading = false
+                LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+                  itemsIndexed(suggestions) { _, place ->
+                    Text(
+                        text = place.display_name,
+                        modifier =
+                            Modifier.fillMaxWidth()
+                                .clickable {
+                                  query = place.display_name
+                                  onSelected(place)
+                                  suggestions = emptyList()
+                                  onDismiss()
+                                }
+                                .padding(8.dp))
                   }
                 }
-              },
-              enabled = query.isNotEmpty() && !isLoading
-            ) {
-              Icon(Icons.Default.Search, contentDescription = "Search")
-            }
-          }
+              }
+              if (isLoading) {
+                // Show loading indication
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center) {
+                      CircularProgressIndicator()
+                    }
+              }
 
-          LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-            itemsIndexed(suggestions) { _, place ->
-              Text(
-                text = place.display_name,
-                modifier =
-                Modifier
-                  .fillMaxWidth()
-                  .clickable {
-                    query = place.display_name
-                    onSelected(place)
-                    suggestions = emptyList()
-                    onDismiss()
+              FilledTonalButton(
+                  onClick = { onDismiss() },
+                  modifier = Modifier.padding(all = 16.dp).fillMaxWidth()) {
+                    Text(stringResource(R.string.dismiss))
                   }
-                  .padding(8.dp))
             }
-          }
-        }
-        if (isLoading) {
-          // Show loading indication
-          Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-          ) {
-            CircularProgressIndicator()
-          }
-        }
-
-        FilledTonalButton(
-          onClick = { onDismiss() },
-          modifier = Modifier
-            .padding(all = 16.dp)
-            .fillMaxWidth()
-        ) {
-          Text(stringResource(R.string.dismiss))
-        }
-      }
-    },
+      },
   )
 }
