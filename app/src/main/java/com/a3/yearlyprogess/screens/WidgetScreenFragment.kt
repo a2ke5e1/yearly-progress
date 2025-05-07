@@ -300,6 +300,26 @@ class WidgetScreenFragment : Fragment() {
           dayLight = false,
       )
     }
+
+    val yp = YearlyProgressUtil(requireContext())
+    val dayCurrentValue =
+      yp.getCurrentPeriodValue(TimePeriod.DAY)
+        .toFormattedTimePeriod(requireContext(), TimePeriod.DAY)
+    val weekCurrentValue =
+      yp.getCurrentPeriodValue(TimePeriod.WEEK)
+        .toFormattedTimePeriod(requireContext(), TimePeriod.WEEK)
+    val monthCurrentValue =
+      yp.getCurrentPeriodValue(TimePeriod.MONTH)
+        .toFormattedTimePeriod(requireContext(), TimePeriod.MONTH)
+    val yearCurrentValue =
+      yp.getCurrentPeriodValue(TimePeriod.YEAR)
+        .toFormattedTimePeriod(requireContext(), TimePeriod.YEAR)
+
+    allInOneTitleTextViewYear.text = yearCurrentValue
+    allInOneTitleTextViewMonth.text = monthCurrentValue
+    allInOneTitleTextViewDay.text = weekCurrentValue
+    allInOneTitleTextViewWeek.text = dayCurrentValue
+
   }
 
   private fun initProgressBarsTextViews(view: View) {
