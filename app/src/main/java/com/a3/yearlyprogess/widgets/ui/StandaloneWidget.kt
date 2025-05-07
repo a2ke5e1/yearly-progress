@@ -14,6 +14,7 @@ import android.util.SizeF
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
+import androidx.annotation.DimenRes
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
@@ -100,7 +101,17 @@ object WidgetUtils {
       }
     }
 
-    val res = context.resources
+
+    fun pxToSp(@DimenRes id: Int): Float {
+      val res = context.resources
+      val metrics = res.displayMetrics
+      val px = res.getDimension(id)
+      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        TypedValue.deriveDimension(TypedValue.COMPLEX_UNIT_SP, px, metrics)
+      } else {
+        px / metrics.scaledDensity
+      }
+    }
 
     // Extract options or set default values.
     val decimalPlace = options?.decimalPlaces ?: 2
@@ -150,10 +161,10 @@ object WidgetUtils {
 
         applyCustomFontSize(
           options?.fontScale ?: 1f, DefaultWidgetTextProperties(
-            widgetTypeSize = res.getDimension(R.dimen.standalone_rect_widget_text_size_widget_type),
-            widgetCurrentValueSize = res.getDimension(R.dimen.standalone_rect_widget_text_size_widget_current_value),
-            widgetDaysLeftSize = res.getDimension(R.dimen.standalone_rect_widget_text_size_widget_days_left),
-            widgetProgressSize = res.getDimension(R.dimen.standalone_rect_widget_text_size_widget_progress),
+            widgetTypeSize = pxToSp(R.dimen.standalone_rect_widget_text_size_widget_type),
+            widgetCurrentValueSize = pxToSp(R.dimen.standalone_rect_widget_text_size_widget_current_value),
+            widgetDaysLeftSize = pxToSp(R.dimen.standalone_rect_widget_text_size_widget_days_left),
+            widgetProgressSize = pxToSp(R.dimen.standalone_rect_widget_text_size_widget_progress),
           )
         )
       }
@@ -283,10 +294,10 @@ object WidgetUtils {
         val large = pillRemoteView(R.layout.standalone_widget_layout_pill_medium).apply {
           applyCustomFontSize(
             options.fontScale, DefaultWidgetTextProperties(
-              widgetTypeSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_type),
-              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_current_value),
-              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_days_left),
-              widgetProgressSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_progress),
+              widgetTypeSize = pxToSp(R.dimen.standalone_pill_medium_widget_text_size_widget_type),
+              widgetCurrentValueSize = pxToSp(R.dimen.standalone_pill_medium_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = pxToSp(R.dimen.standalone_pill_medium_widget_text_size_widget_days_left),
+              widgetProgressSize = pxToSp(R.dimen.standalone_pill_medium_widget_text_size_widget_progress),
             )
           )
           setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
@@ -294,10 +305,10 @@ object WidgetUtils {
         val square = pillRemoteView(R.layout.standalone_widget_layout_pill_medium).apply {
           applyCustomFontSize(
             options.fontScale, DefaultWidgetTextProperties(
-              widgetTypeSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_type),
-              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_current_value),
-              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_days_left),
-              widgetProgressSize = res.getDimension(R.dimen.standalone_pill_medium_widget_text_size_widget_progress),
+              widgetTypeSize = pxToSp(R.dimen.standalone_pill_medium_widget_text_size_widget_type),
+              widgetCurrentValueSize = pxToSp(R.dimen.standalone_pill_medium_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = pxToSp(R.dimen.standalone_pill_medium_widget_text_size_widget_days_left),
+              widgetProgressSize = pxToSp(R.dimen.standalone_pill_medium_widget_text_size_widget_progress),
             )
           )
           setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
@@ -305,10 +316,10 @@ object WidgetUtils {
         val small = pillRemoteView(R.layout.standalone_widget_layout_pill_small).apply {
           applyCustomFontSize(
             options.fontScale, DefaultWidgetTextProperties(
-              widgetTypeSize = res.getDimension(R.dimen.standalone_pill_small_widget_text_size_widget_type),
-              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_pill_small_widget_text_size_widget_current_value),
-              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_pill_small_widget_text_size_widget_days_left),
-              widgetProgressSize = res.getDimension(R.dimen.standalone_pill_small_widget_text_size_widget_progress),
+              widgetTypeSize = pxToSp(R.dimen.standalone_pill_small_widget_text_size_widget_type),
+              widgetCurrentValueSize = pxToSp(R.dimen.standalone_pill_small_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = pxToSp(R.dimen.standalone_pill_small_widget_text_size_widget_days_left),
+              widgetProgressSize = pxToSp(R.dimen.standalone_pill_small_widget_text_size_widget_progress),
             )
           )
           setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
@@ -334,10 +345,10 @@ object WidgetUtils {
         val large = cloverRemoteView(R.layout.standalone_widget_layout_clover_large).apply {
           applyCustomFontSize(
             options.fontScale, DefaultWidgetTextProperties(
-            widgetTypeSize = res.getDimension(R.dimen.standalone_clover_large_widget_text_size_widget_type),
-            widgetCurrentValueSize = res.getDimension(R.dimen.standalone_clover_large_widget_text_size_widget_current_value),
-            widgetDaysLeftSize = res.getDimension(R.dimen.standalone_clover_large_widget_text_size_widget_days_left),
-            widgetProgressSize = res.getDimension(R.dimen.standalone_clover_large_widget_text_size_widget_progress),
+            widgetTypeSize = pxToSp(R.dimen.standalone_clover_large_widget_text_size_widget_type),
+            widgetCurrentValueSize = pxToSp(R.dimen.standalone_clover_large_widget_text_size_widget_current_value),
+            widgetDaysLeftSize = pxToSp(R.dimen.standalone_clover_large_widget_text_size_widget_days_left),
+            widgetProgressSize = pxToSp(R.dimen.standalone_clover_large_widget_text_size_widget_progress),
             )
           )
           setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
@@ -345,10 +356,10 @@ object WidgetUtils {
         val square = cloverRemoteView(R.layout.standalone_widget_layout_clover).apply {
           applyCustomFontSize(
             options.fontScale, DefaultWidgetTextProperties(
-              widgetTypeSize = res.getDimension(R.dimen.standalone_clover_widget_text_size_widget_type),
-              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_clover_widget_text_size_widget_current_value),
-              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_clover_widget_text_size_widget_days_left),
-              widgetProgressSize = res.getDimension(R.dimen.standalone_clover_widget_text_size_widget_progress),
+              widgetTypeSize = pxToSp(R.dimen.standalone_clover_widget_text_size_widget_type),
+              widgetCurrentValueSize = pxToSp(R.dimen.standalone_clover_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = pxToSp(R.dimen.standalone_clover_widget_text_size_widget_days_left),
+              widgetProgressSize = pxToSp(R.dimen.standalone_clover_widget_text_size_widget_progress),
             )
           )
           setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
@@ -356,10 +367,10 @@ object WidgetUtils {
         val small = cloverRemoteView(R.layout.standalone_widget_layout_clover_small).apply {
           applyCustomFontSize(
             options.fontScale, DefaultWidgetTextProperties(
-              widgetTypeSize = res.getDimension(R.dimen.standalone_clover_small_widget_text_size_widget_type),
-              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_clover_small_widget_text_size_widget_current_value),
-              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_clover_small_widget_text_size_widget_days_left),
-              widgetProgressSize = res.getDimension(R.dimen.standalone_clover_small_widget_text_size_widget_progress),
+              widgetTypeSize = pxToSp(R.dimen.standalone_clover_small_widget_text_size_widget_type),
+              widgetCurrentValueSize = pxToSp(R.dimen.standalone_clover_small_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = pxToSp(R.dimen.standalone_clover_small_widget_text_size_widget_days_left),
+              widgetProgressSize = pxToSp(R.dimen.standalone_clover_small_widget_text_size_widget_progress),
             )
           )
           setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
@@ -367,10 +378,10 @@ object WidgetUtils {
         val xSmall = cloverRemoteView(R.layout.standalone_widget_layout_clover_extra_small).apply {
           applyCustomFontSize(
             options.fontScale, DefaultWidgetTextProperties(
-              widgetTypeSize = res.getDimension(R.dimen.standalone_clover_extra_small_widget_text_size_widget_type),
-              widgetCurrentValueSize = res.getDimension(R.dimen.standalone_clover_extra_small_widget_text_size_widget_current_value),
-              widgetDaysLeftSize = res.getDimension(R.dimen.standalone_clover_extra_small_widget_text_size_widget_days_left),
-              widgetProgressSize = res.getDimension(R.dimen.standalone_clover_extra_small_widget_text_size_widget_progress),
+              widgetTypeSize = pxToSp(R.dimen.standalone_clover_extra_small_widget_text_size_widget_type),
+              widgetCurrentValueSize = pxToSp(R.dimen.standalone_clover_extra_small_widget_text_size_widget_current_value),
+              widgetDaysLeftSize = pxToSp(R.dimen.standalone_clover_extra_small_widget_text_size_widget_days_left),
+              widgetProgressSize = pxToSp(R.dimen.standalone_clover_extra_small_widget_text_size_widget_progress),
             )
           )
           setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
