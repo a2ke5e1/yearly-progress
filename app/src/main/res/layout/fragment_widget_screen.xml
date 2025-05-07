@@ -16,23 +16,28 @@
             style="?attr/textAppearanceLabelSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="45dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="45dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/classic_widgets"
             android:textAllCaps="true"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/test2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            app:layout_constraintStart_toStartOf="@id/label_classic_widget"
+            app:layout_constraintEnd_toEndOf="@id/label_classic_widget"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             app:constraint_referenced_ids="widget_year_demo,widget_month_demo,widget_week_demo,widget_day_demo,widget_daylight_demo,widget_nightlight_demo"
-            app:flow_horizontalBias="0.1"
-            app:flow_verticalGap="10dp"
-            app:flow_wrapMode="chain"
+            app:flow_verticalGap="20dp"
+            app:flow_horizontalGap="10dp"
+            app:flow_wrapMode="aligned"
+            app:flow_horizontalStyle="spread_inside"
+            app:flow_horizontalBias="0"
             app:layout_constraintTop_toBottomOf="@id/label_classic_widget" />
+
 
 
         <TextView
@@ -40,9 +45,9 @@
             style="?attr/textAppearanceLabelSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="45dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="45dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/all_in_one_widget"
             android:textAllCaps="true"
             app:layout_constraintTop_toBottomOf="@id/test2" />
@@ -50,10 +55,9 @@
         <include
             android:id="@+id/test"
             layout="@layout/all_in_widget"
-
-            android:layout_width="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            app:layout_constraintStart_toStartOf="@id/label_all_one_widgets"
+            app:layout_constraintEnd_toEndOf="@id/label_all_one_widgets"
             android:layout_height="120dp"
             app:layout_constraintTop_toBottomOf="@id/label_all_one_widgets" />
 
@@ -62,8 +66,6 @@
             style="@style/Widget.Material3.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp"
             android:text="@string/button_text"
             app:layout_constraintStart_toStartOf="@id/test"
             app:layout_constraintEnd_toEndOf="@id/test"
