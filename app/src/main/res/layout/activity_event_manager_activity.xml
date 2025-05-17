@@ -104,6 +104,7 @@
                 android:layout_marginBottom="4dp"
                 android:text="@string/repeat_events"
                 android:textAllCaps="true"
+                android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 app:layout_constraintTop_toBottomOf="@id/allDaySwitch" />
 
@@ -162,6 +163,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/start_of_the_event"
+                android:textStyle="bold"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 app:layout_constraintTop_toBottomOf="@id/repeatDays" />
@@ -170,19 +172,16 @@
                 android:id="@+id/from_flow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+
                 app:constraint_referenced_ids="editTextStartDate,editTextStartTime"
-                app:flow_maxElementsWrap="3"
-                app:flow_wrapMode="chain"
+                app:flow_maxElementsWrap="2"
+                app:flow_wrapMode="aligned"
                 app:layout_constraintTop_toBottomOf="@id/eventStartLabel" />
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/to_flow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 app:constraint_referenced_ids="editTextEndDate,editTextEndTime"
                 app:flow_lastHorizontalStyle="packed"
                 app:flow_maxElementsWrap="2"
@@ -190,24 +189,20 @@
                 app:layout_constraintTop_toBottomOf="@id/eventEndLabel" />
 
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:id="@+id/editTextStartDate"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:paddingStart="0dp"
-                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                 tools:text="2022, August 10" />
 
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:id="@+id/editTextStartTime"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="bottom|end"
-                android:padding="8dp"
-                android:paddingEnd="0dp"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                 tools:text="11:15 AM" />
 
 
@@ -220,29 +215,26 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/end_of_the_event"
+                android:textStyle="bold"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 app:layout_constraintTop_toBottomOf="@id/from_flow" />
 
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:id="@+id/editTextEndDate"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:paddingStart="0dp"
-                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                 tools:text="2022, August 10" />
 
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:id="@+id/editTextEndTime"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="bottom|end"
-                android:padding="8dp"
-                android:paddingEnd="0dp"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                 tools:text="11:15 PM" />
 
             <HorizontalScrollView
