@@ -11,6 +11,7 @@ import com.a3.yearlyprogess.YearlyProgressUtil
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.math.roundToInt
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
@@ -19,8 +20,10 @@ fun Double.styleFormatted(
     cloverMode: Boolean = false,
 ): SpannableString {
   val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
-  numberFormat.maximumFractionDigits = digits
-  numberFormat.minimumFractionDigits = digits
+  if (this.roundToInt() != 0  && this.roundToInt() != 100 ) {
+    numberFormat.maximumFractionDigits = digits
+    numberFormat.minimumFractionDigits = digits
+  }
   val formattedNumber = numberFormat.format(this) + "%"
   val decimalSeparator = numberFormat.decimalFormatSymbols.decimalSeparator
 

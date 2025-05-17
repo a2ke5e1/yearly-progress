@@ -61,6 +61,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -289,23 +290,34 @@ class LocationSelectionScreen : ComponentActivity() {
             }
 
             item {
+              val isClickable = !automaticallyDetectLocation
               Column(
-                  modifier =
-                      Modifier.fillMaxWidth().clickable { showManualSelectionDialogBox = true }) {
-                    Column(
-                        modifier =
-                            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
-                          Text(
-                              stringResource(R.string.manual_location),
-                              style =
-                                  MaterialTheme.typography.labelLarge.copy(
-                                      color = MaterialTheme.colorScheme.primary))
-                          Text(
-                              selectedLocation?.display_name
-                                  ?: stringResource(R.string.enter_a_location),
-                              style = MaterialTheme.typography.bodyLarge)
-                        }
-                  }
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .then(
+                    if (isClickable) Modifier.clickable { showManualSelectionDialogBox = true }
+                    else Modifier
+                  )
+                  .alpha(if (isClickable) 1f else 0.5f)
+              ) {
+                Column(
+                  modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                  Text(
+                    text = stringResource(R.string.manual_location),
+                    style = MaterialTheme.typography.labelLarge.copy(
+                      color = MaterialTheme.colorScheme.primary
+                    )
+                  )
+                  Text(
+                    text = selectedLocation?.display_name
+                      ?: stringResource(R.string.enter_a_location),
+                    style = MaterialTheme.typography.bodyLarge
+                  )
+                }
+              }
             }
           }
 
