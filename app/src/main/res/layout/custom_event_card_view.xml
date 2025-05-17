@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:indeterminate="false"
                     android:max="100"
-                    android:progress="50"
+                    android:progress="0"
                     app:wavelength="20dp"
                     app:waveAmplitude="5dp"
                     android:layout_marginTop="4dp"
