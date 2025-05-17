@@ -172,10 +172,10 @@
                 android:id="@+id/from_flow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 app:constraint_referenced_ids="editTextStartDate,editTextStartTime"
                 app:flow_maxElementsWrap="2"
                 app:flow_wrapMode="aligned"
+                app:flow_horizontalStyle="spread_inside"
                 app:layout_constraintTop_toBottomOf="@id/eventStartLabel" />
 
             <androidx.constraintlayout.helper.widget.Flow
@@ -186,6 +186,7 @@
                 app:flow_lastHorizontalStyle="packed"
                 app:flow_maxElementsWrap="2"
                 app:flow_wrapMode="aligned"
+                app:flow_horizontalStyle="spread_inside"
                 app:layout_constraintTop_toBottomOf="@id/eventEndLabel" />
 
 
@@ -200,7 +201,7 @@
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:id="@+id/editTextStartTime"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:gravity="bottom|end"
                 tools:text="11:15 AM" />
@@ -232,7 +233,7 @@
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:id="@+id/editTextEndTime"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:gravity="bottom|end"
                 tools:text="11:15 PM" />
