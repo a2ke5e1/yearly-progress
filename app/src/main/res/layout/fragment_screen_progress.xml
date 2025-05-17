@@ -54,7 +54,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:indeterminate="true" />
+            android:indeterminate="true"
+            app:indeterminateAnimationTypeCircular="retreat"
+            app:indeterminateTrackVisible="true"
+            />
 
         <com.a3.yearlyprogess.components.DayNightLightProgressView
             android:id="@+id/dayLightProgressView"

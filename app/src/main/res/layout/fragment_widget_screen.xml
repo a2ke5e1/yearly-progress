@@ -86,7 +86,7 @@
 
         <LinearLayout
             android:id="@+id/widget_year_demo"
-            android:layout_width="150dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -107,7 +107,7 @@
 
         <LinearLayout
             android:id="@+id/widget_month_demo"
-            android:layout_width="150dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -130,7 +130,7 @@
 
         <LinearLayout
             android:id="@+id/widget_day_demo"
-            android:layout_width="150dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -152,7 +152,7 @@
 
         <LinearLayout
             android:id="@+id/widget_week_demo"
-            android:layout_width="150dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -174,7 +174,7 @@
 
         <LinearLayout
             android:id="@+id/widget_daylight_demo"
-            android:layout_width="150dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -195,7 +195,7 @@
 
         <LinearLayout
             android:id="@+id/widget_nightlight_demo"
-            android:layout_width="150dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 

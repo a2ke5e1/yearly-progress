@@ -15,12 +15,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.ad.CustomAdView.Companion.updateViewWithNativeAdview
 import com.a3.yearlyprogess.cacheLocation
 import com.a3.yearlyprogess.cacheSunriseSunset
-import com.a3.yearlyprogess.components.DayNightLightProgressView
 import com.a3.yearlyprogess.components.dialogbox.PermissionMessageDialog
 import com.a3.yearlyprogess.data.SunriseSunsetApi
 import com.a3.yearlyprogess.data.models.SunriseSunsetResponse
@@ -30,15 +32,79 @@ import com.a3.yearlyprogess.getDateRange
 import com.a3.yearlyprogess.loadCachedLocation
 import com.a3.yearlyprogess.loadCachedSunriseSunset
 import com.a3.yearlyprogess.provideSunriseSunsetApi
+import com.a3.yearlyprogess.screens.ProgressScreenFragment.Resource
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
+sealed class SunriseSunsetState {
+  data object Loading : SunriseSunsetState()
+  data class Error(val message: String) : SunriseSunsetState()
+  data class Success(
+    val data: SunriseSunsetResponse
+  ) : SunriseSunsetState()
+}
+
+class ProgressScreenViewModel : ViewModel() {
+
+  private val sunriseSunsetApi: SunriseSunsetApi = provideSunriseSunsetApi()
+  private val _state = MutableLiveData<SunriseSunsetState>(SunriseSunsetState.Loading)
+  val sunriseSunsetState get()= _state
+  private val firebaseCrashlytics = Firebase.crashlytics
+
+  fun fetchSunriseSunset(
+    context: Context,
+    location: Location
+  ) {
+
+    val cached = loadCachedSunriseSunset(context)
+    if (cached != null && cached.results[1].date == getCurrentDate()) {
+      _state.postValue(SunriseSunsetState.Success(cached))
+      return
+    }
+
+    viewModelScope.launch(Dispatchers.IO) {
+      val result =
+        try {
+          val response =
+            sunriseSunsetApi.getSunriseSunset(
+              location.latitude, location.longitude, getDateRange(-1), getDateRange(1))
+          response
+            .body()
+            ?.takeIf { response.isSuccessful && it.status == "OK" }
+            ?.let {
+              cacheSunriseSunset(context, it)
+              Resource.Success(it)
+            } ?: Resource.Error(response.message())
+        } catch (e: Exception) {
+          Resource.Error(e.message ?: "Unknown error")
+        }
+
+      when (result) {
+        is Resource.Success -> _state.postValue(
+          if (result.data != null) SunriseSunsetState.Success(result.data) else
+            SunriseSunsetState.Error(context.getString(R.string.failed_to_load_sunset_sunrise_time),)
+        )
+        is Resource.Error -> {
+          firebaseCrashlytics.log("Failed to load sunset data: \n ${result.message}")
+          _state.postValue(SunriseSunsetState.Error(context.getString(R.string.failed_to_load_sunset_sunrise_time),))
+        }
+      }
+    }
+  }
+
+
+}
+
+
 class ProgressScreenFragment : Fragment() {
   private lateinit var binding: FragmentScreenProgressBinding
-  private val sunriseSunsetApi: SunriseSunsetApi = provideSunriseSunsetApi()
+  private val progressScreenViewModel: ProgressScreenViewModel by viewModels()
 
   private lateinit var locationPermissionDialog: PermissionMessageDialog
   private lateinit var adLoader: AdLoader
@@ -47,8 +113,7 @@ class ProgressScreenFragment : Fragment() {
   private val requestPermissionLauncher =
       registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
-          setupDayNightLightProgressView(
-              binding.dayLightProgressView, binding.nightLightProgressView)
+          setupDayNightLightProgressView()
         } else {
           locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
         }
@@ -66,11 +131,34 @@ class ProgressScreenFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    val dayLight = binding.dayLightProgressView
-    val nightLight = binding.nightLightProgressView
+    progressScreenViewModel.sunriseSunsetState.observe(viewLifecycleOwner) { state ->
+      when (state) {
+        is SunriseSunsetState.Loading -> {
+          binding.loadingIndicator.visibility = View.VISIBLE
+          binding.dayLightProgressView.visibility = View.GONE
+          binding.nightLightProgressView.visibility = View.GONE
+        }
+        is SunriseSunsetState.Success -> {
+          binding.loadingIndicator.visibility = View.GONE
+          binding.dayLightProgressView.apply {
+            visibility = View.VISIBLE
+            loadSunriseSunset(state.data)
+          }
+          binding.nightLightProgressView.apply {
+            visibility = View.VISIBLE
+            loadSunriseSunset(state.data)
+          }
+        }
+        is SunriseSunsetState.Error -> {
+          binding.loadingIndicator.visibility = View.GONE
+          binding.dayLightProgressView.visibility = View.GONE
+          binding.nightLightProgressView.visibility = View.GONE
+          Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
+        }
+      }
+    }
 
-    dayLight.visibility = View.GONE
-    nightLight.visibility = View.GONE
+
 
     locationPermissionDialog =
         PermissionMessageDialog(
@@ -87,7 +175,7 @@ class ProgressScreenFragment : Fragment() {
         ContextCompat.checkSelfPermission(
             requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED -> {
-          setupDayNightLightProgressView(dayLight, nightLight)
+          setupDayNightLightProgressView()
         }
 
         ActivityCompat.shouldShowRequestPermissionRationale(
@@ -104,7 +192,7 @@ class ProgressScreenFragment : Fragment() {
       }
     } else {
       binding.dismissibleMessageView?.visibility = View.GONE
-      setupDayNightLightProgressView(dayLight, nightLight)
+      setupDayNightLightProgressView()
     }
 
     setupAdLoader(view.findViewById(R.id.ad_frame))
@@ -139,8 +227,6 @@ class ProgressScreenFragment : Fragment() {
   }
 
   private fun setupDayNightLightProgressView(
-      dayLight: DayNightLightProgressView,
-      nightLight: DayNightLightProgressView
   ) {
     val userLocationPref = UserLocationPref.load(requireContext())
     val locationManager =
@@ -164,19 +250,15 @@ class ProgressScreenFragment : Fragment() {
 
       val cachedLocation = context?.let { loadCachedLocation(it) }
       cachedLocation?.let {
-        lifecycleScope.launch(Dispatchers.IO) {
-          fetchAndShowSunriseSunset(it, dayLight, nightLight)
-        }
+        setupSunriseSunsetViews(it)
       }
 
       locationManager.requestLocationUpdates(
           providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
           2000,
           1000f) { location ->
-            context?.let { cacheLocation(it, location) }
-            lifecycleScope.launch(Dispatchers.IO) {
-              fetchAndShowSunriseSunset(location, dayLight, nightLight)
-            }
+              context?.let { cacheLocation(it, location) }
+              setupSunriseSunsetViews(location)
           }
     } else {
       userLocationPref.userLocationPref?.let {
@@ -185,74 +267,15 @@ class ProgressScreenFragment : Fragment() {
               latitude = it.lat.toDouble()
               longitude = it.lon.toDouble()
             }
-        lifecycleScope.launch(Dispatchers.IO) {
-          fetchAndShowSunriseSunset(location, dayLight, nightLight)
-        }
+        setupSunriseSunsetViews(location)
       }
     }
   }
 
-  private suspend fun fetchAndShowSunriseSunset(
-      location: Location,
-      dayLight: DayNightLightProgressView,
-      nightLight: DayNightLightProgressView
+  private fun setupSunriseSunsetViews(
+      location: Location
   ) {
-    lifecycleScope.launch(Dispatchers.Main) { binding.loadingIndicator?.visibility = View.VISIBLE }
-
-    val cached = context?.let { loadCachedSunriseSunset(it) }
-    if (cached != null && cached.results[1].date == getCurrentDate()) {
-      showSunriseSunset(cached, dayLight, nightLight)
-      return
-    }
-
-    val result =
-        try {
-          val response =
-              sunriseSunsetApi.getSunriseSunset(
-                  location.latitude, location.longitude, getDateRange(-1), getDateRange(1))
-          response
-              .body()
-              ?.takeIf { response.isSuccessful && it.status == "OK" }
-              ?.let {
-                cacheSunriseSunset(requireContext(), it)
-                Resource.Success(it)
-              } ?: Resource.Error(response.message())
-        } catch (e: Exception) {
-          Resource.Error(e.message ?: "Unknown error")
-        }
-
-    when (result) {
-      is Resource.Success -> showSunriseSunset(result.data, dayLight, nightLight)
-      is Resource.Error -> {
-        if (!isAdded) return
-        lifecycleScope.launch(Dispatchers.Main) {
-          Toast.makeText(
-                  context,
-                  getString(R.string.failed_to_load_sunset_sunrise_time),
-                  Toast.LENGTH_LONG)
-              .show()
-          dayLight.visibility = View.GONE
-          nightLight.visibility = View.GONE
-        }
-      }
-    }
-  }
-
-  private fun showSunriseSunset(
-      data: SunriseSunsetResponse?,
-      dayLight: DayNightLightProgressView,
-      nightLight: DayNightLightProgressView
-  ) {
-    data?.let {
-      if (!isAdded) return
-      dayLight.loadSunriseSunset(it)
-      nightLight.loadSunriseSunset(it)
-      lifecycleScope.launch(Dispatchers.Main) {
-        dayLight.visibility = View.VISIBLE
-        nightLight.visibility = View.VISIBLE
-        binding.loadingIndicator?.visibility = View.GONE
-      }
-    }
+    context?.let { progressScreenViewModel.fetchSunriseSunset(it, location) }
   }
 
   override fun onDestroyView() {
