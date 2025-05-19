@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.IntRange
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
@@ -69,181 +70,112 @@ import kotlinx.coroutines.flow.asStateFlow
 class SettingsViewModel(private val application: Application) : AndroidViewModel(application) {
 
   private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
+  private fun getStringRes(@StringRes resId: Int) = application.getString(resId)
 
-  private val _timeLeftCounter =
-      MutableStateFlow(
-          prefs.getBoolean(application.getString(R.string.widget_widget_time_left), true))
-  val timeLeftCounter: StateFlow<Boolean> = _timeLeftCounter.asStateFlow()
+  private inline fun <reified T> prefFlow(key: String, defaultValue: T): MutableStateFlow<T> {
+    val value: T = when (T::class) {
+      Boolean::class -> prefs.getBoolean(key, defaultValue as Boolean) as T
+      Int::class -> prefs.getInt(key, defaultValue as Int) as T
+      String::class -> prefs.getString(key, defaultValue as String) as T
+      else -> throw IllegalArgumentException("Unsupported type for key: $key")
+    }
+    return MutableStateFlow(value)
+  }
 
-  private val _dynamicTimeLeftCounter =
-      MutableStateFlow(
-          prefs.getBoolean(
-              application.getString(R.string.widget_widget_use_dynamic_time_left), false))
-  val dynamicTimeLeftCounter: StateFlow<Boolean> = _dynamicTimeLeftCounter.asStateFlow()
+  private fun <T> updatePref(flow: MutableStateFlow<T>, key: String, value: T) {
+    flow.value = value
+    with(prefs.edit()) {
+      when (value) {
+        is Boolean -> putBoolean(key, value)
+        is Int -> putInt(key, value)
+        is String -> putString(key, value)
+        else -> throw IllegalArgumentException("Unsupported type")
+      }
+      apply()
+    }
+  }
 
-  private val _widgetDecimalPlaces =
-      MutableStateFlow(prefs.getInt(application.getString(R.string.widget_widget_decimal_point), 2))
+  private val _timeLeftCounter = prefFlow(getStringRes(R.string.widget_widget_time_left), true)
+  val timeLeftCounter = _timeLeftCounter.asStateFlow()
+  fun setTimeLeftCounter(value: Boolean) =
+    updatePref(_timeLeftCounter, getStringRes(R.string.widget_widget_time_left), value)
+
+  private val _dynamicTimeLeftCounter = prefFlow(
+    getStringRes(R.string.widget_widget_use_dynamic_time_left), false)
+  val dynamicTimeLeftCounter = _dynamicTimeLeftCounter.asStateFlow()
+  fun setDynamicTimeLeftCounter(value: Boolean) =
+    updatePref(_dynamicTimeLeftCounter, getStringRes(R.string.widget_widget_use_dynamic_time_left), value)
+
+  private val _replaceTimeLeftCounter = prefFlow(
+    getStringRes(R.string.widget_widget_event_replace_progress_with_days_counter), false)
+  val replaceTimeLeftCounter = _replaceTimeLeftCounter.asStateFlow()
+  fun setReplaceTimeLeftCounter(value: Boolean) =
+    updatePref(_replaceTimeLeftCounter, getStringRes(R.string.widget_widget_event_replace_progress_with_days_counter), value)
+
+  private val _widgetDecimalPlaces = prefFlow(getStringRes(R.string.widget_widget_decimal_point), 2)
   val widgetDecimalPlaces = _widgetDecimalPlaces.asStateFlow()
+  fun setWidgetDecimalPlaces(value: Int) =
+    updatePref(_widgetDecimalPlaces, getStringRes(R.string.widget_widget_decimal_point), value)
 
-  private val _eventWidgetDecimalPlaces =
-      MutableStateFlow(
-          prefs.getInt(application.getString(R.string.widget_event_widget_decimal_point), 2))
+  private val _eventWidgetDecimalPlaces = prefFlow(getStringRes(R.string.widget_event_widget_decimal_point), 2)
   val eventWidgetDecimalPlaces = _eventWidgetDecimalPlaces.asStateFlow()
+  fun setEventWidgetDecimalPlaces(value: Int) =
+    updatePref(_eventWidgetDecimalPlaces, getStringRes(R.string.widget_event_widget_decimal_point), value)
 
-  private val _decimalProgressPage =
-      MutableStateFlow(prefs.getInt(application.getString(R.string.app_widget_decimal_point), 13))
+  private val _decimalProgressPage = prefFlow(getStringRes(R.string.app_widget_decimal_point), 13)
   val decimalProgressPage = _decimalProgressPage.asStateFlow()
+  fun setDecimalProgressPage(value: Int) =
+    updatePref(_decimalProgressPage, getStringRes(R.string.app_widget_decimal_point), value)
 
-  private val _widgetUpdateFreqency =
-      MutableStateFlow(
-          prefs.getInt(application.getString(R.string.widget_widget_update_frequency), 5))
+  private val _widgetUpdateFreqency = prefFlow(getStringRes(R.string.widget_widget_update_frequency), 5)
   val widgetUpdateFreqency = _widgetUpdateFreqency.asStateFlow()
+  fun setWidgetUpdateFreqency(value: Int) =
+    updatePref(_widgetUpdateFreqency, getStringRes(R.string.widget_widget_update_frequency), value)
 
-  private val _widgetTransparency =
-      MutableStateFlow(
-          prefs.getInt(application.getString(R.string.widget_widget_background_transparency), 100))
+  private val _widgetTransparency = prefFlow(getStringRes(R.string.widget_widget_background_transparency), 100)
   val widgetTransparency = _widgetTransparency.asStateFlow()
+  fun setWidgetTransparency(value: Int) =
+    updatePref(_widgetTransparency, getStringRes(R.string.widget_widget_background_transparency), value)
 
-  private val _replaceTimeLeftCounter =
-      MutableStateFlow(
-          prefs.getBoolean(
-              application.getString(
-                  R.string.widget_widget_event_replace_progress_with_days_counter),
-              false))
-  val replaceTimeLeftCounter: StateFlow<Boolean> = _replaceTimeLeftCounter.asStateFlow()
+  private val _progressShowNotification = prefFlow(getStringRes(R.string.progress_show_notification), false)
+  val progressShowNotification = _progressShowNotification.asStateFlow()
+  fun setProgressShowNotification(value: Boolean) =
+    updatePref(_progressShowNotification, getStringRes(R.string.progress_show_notification), value)
 
-  private val calendarEntries =
-      application.resources.getStringArray(R.array.app_calendar_type_entries)
-  private val calendarValues =
-      application.resources.getStringArray(R.array.app_calendar_type_values)
+  private val calendarEntries = application.resources.getStringArray(R.array.app_calendar_type_entries)
+  private val calendarValues = application.resources.getStringArray(R.array.app_calendar_type_values)
+  private val _calendarTypes = calendarEntries.zip(calendarValues) { name, code -> CalendarType(name, code) }
+  val calendarTypes get() = _calendarTypes
 
-  private val _calendarTypes =
-      calendarEntries.zip(calendarValues) { name, value -> CalendarType(name, value) }
-  val calendarTypes
-    get() = _calendarTypes
-
-  private val _selectedCalendarType =
-      MutableStateFlow(
-          prefs.getString(
-              application.getString(R.string.app_calendar_type), calendarTypes.first().code))
-  val selectedCalendarType: StateFlow<String?> = _selectedCalendarType.asStateFlow()
+  private val _selectedCalendarType = prefFlow(
+    getStringRes(R.string.app_calendar_type), calendarTypes.first().code)
+  val selectedCalendarType = _selectedCalendarType.asStateFlow()
+  fun setCalendarType(item: CalendarType) =
+    updatePref(_selectedCalendarType, getStringRes(R.string.app_calendar_type), item.code)
 
   private val weekEntries = application.resources.getStringArray(R.array.week_start_entries)
   private val weekValues = application.resources.getStringArray(R.array.week_start_values)
+  private val _weekTypes = weekEntries.zip(weekValues) { name, code -> WeekType(name, code) }
+  val weekTypes get() = _weekTypes
 
-  private val _weekTypes = weekEntries.zip(weekValues) { name, value -> WeekType(name, value) }
-  val weekTypes
-    get() = _weekTypes
+  private val _selectedWeekType = prefFlow(
+    getStringRes(R.string.app_week_widget_start_day), weekTypes.first().code)
+  val selectedWeekType = _selectedWeekType.asStateFlow()
+  fun setWeekType(item: WeekType) =
+    updatePref(_selectedWeekType, getStringRes(R.string.app_week_widget_start_day), item.code)
 
-  private val _selectedWeekType =
-      MutableStateFlow(
-          prefs.getString(
-              application.getString(R.string.app_week_widget_start_day), weekTypes.first().code))
-  val selectedWeekType: StateFlow<String?> = _selectedWeekType.asStateFlow()
-
-  fun setWeekType(weekType: WeekType) {
-    _selectedWeekType.value = weekType.code
-    prefs.edit().putString(application.getString(R.string.app_week_widget_start_day), weekType.code).apply()
+  private val calculationEntries = application.resources.getStringArray(R.array.calc_entries)
+  private val calculationValues = application.resources.getStringArray(R.array.calc_values)
+  private val _calculationModes = calculationEntries.zip(calculationValues) { name, code ->
+    CalculationMode(name, code)
   }
+  val calculationModes get() = _calculationModes
 
-  private val calculationModeEntries = application.resources.getStringArray(R.array.calc_entries)
-  private val calculationModeValues = application.resources.getStringArray(R.array.calc_values)
-
-  private val _calculationModes =
-      calculationModeEntries.zip(calculationModeValues) { name, value ->
-        CalculationMode(name, value)
-      }
-  val calculationModes
-    get() = _calculationModes
-
-  private val _selectedCalculationMode =
-      MutableStateFlow(
-          prefs.getString(
-              application.getString(R.string.app_calculation_type), calculationModes.first().code))
-  val selectedCalculationMode: StateFlow<String?> = _selectedCalculationMode.asStateFlow()
-
-  private val _progressShowNotification =
-      MutableStateFlow(
-          prefs.getBoolean(application.getString(R.string.progress_show_notification), false))
-  val progressShowNotification: StateFlow<Boolean> = _progressShowNotification.asStateFlow()
-
-  fun setProgressShowNotification(value: Boolean) {
-    _progressShowNotification.value = value
-    prefs
-        .edit()
-        .putBoolean(application.getString(R.string.progress_show_notification), value)
-        .apply()
-  }
-
-  fun setCalculationMode(calculationMode: CalculationMode) {
-    _selectedCalculationMode.value = calculationMode.code
-    prefs.edit().putString(application.getString(R.string.app_calculation_type), calculationMode.code).apply()
-  }
-
-  fun setCalendarType(item: CalendarType) {
-    _selectedCalendarType.value = item.code
-    prefs.edit().putString(application.getString(R.string.app_calendar_type), item.code).apply()
-  }
-
-  fun setTimeLeftCounter(enabled: Boolean) {
-    _timeLeftCounter.value = enabled
-    prefs
-        .edit()
-        .putBoolean(application.getString(R.string.widget_widget_time_left), enabled)
-        .apply()
-  }
-
-  fun setDynamicTimeLeftCounter(enabled: Boolean) {
-    _dynamicTimeLeftCounter.value = enabled
-    prefs
-        .edit()
-        .putBoolean(application.getString(R.string.widget_widget_use_dynamic_time_left), enabled)
-        .apply()
-  }
-
-  fun setReplaceTimeLeftCounter(enabled: Boolean) {
-    _replaceTimeLeftCounter.value = enabled
-    prefs
-        .edit()
-        .putBoolean(
-            application.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
-            enabled)
-        .apply()
-  }
-
-  fun setWidgetDecimalPlaces(digits: Int) {
-    _widgetDecimalPlaces.value = digits
-    prefs.edit().putInt(application.getString(R.string.widget_widget_decimal_point), digits).apply()
-  }
-
-  fun setEventWidgetDecimalPlaces(digits: Int) {
-    _eventWidgetDecimalPlaces.value = digits
-    prefs
-        .edit()
-        .putInt(application.getString(R.string.widget_event_widget_decimal_point), digits)
-        .apply()
-  }
-
-  fun setDecimalProgressPage(digits: Int) {
-    _decimalProgressPage.value = digits
-    prefs.edit().putInt(application.getString(R.string.app_widget_decimal_point), digits).apply()
-  }
-
-  fun setWidgetUpdateFreqency(freq: Int) {
-    _widgetUpdateFreqency.value = freq
-    prefs
-        .edit()
-        .putInt(application.getString(R.string.widget_widget_update_frequency), freq)
-        .apply()
-  }
-
-  fun setWidgetTransparency(value: Int) {
-    _widgetTransparency.value = value
-    prefs
-        .edit()
-        .putInt(application.getString(R.string.widget_widget_background_transparency), value)
-        .apply()
-  }
+  private val _selectedCalculationMode = prefFlow(
+    getStringRes(R.string.app_calculation_type), calculationModes.first().code)
+  val selectedCalculationMode = _selectedCalculationMode.asStateFlow()
+  fun setCalculationMode(item: CalculationMode) =
+    updatePref(_selectedCalculationMode, getStringRes(R.string.app_calculation_type), item.code)
 }
 
 class SettingsActivity : ComponentActivity() {
