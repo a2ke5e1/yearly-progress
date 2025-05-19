@@ -24,17 +24,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
@@ -55,9 +51,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import com.a3.yearlyprogess.components.dialogbox.CalculationMode
+import com.a3.yearlyprogess.components.dialogbox.CalendarType
+import com.a3.yearlyprogess.components.dialogbox.ListSelectorDialogBox
+import com.a3.yearlyprogess.components.dialogbox.WeekType
 import com.a3.yearlyprogess.screens.LocationSelectionScreen
 import com.a3.yearlyprogess.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
@@ -66,11 +64,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
-
-
-data class WeekType(val name: String, val code: String)
-data class CalculationMode(val name: String, val code: String)
-
 
 
 class SettingsViewModel(private val application: Application) : AndroidViewModel(application) {
@@ -613,39 +606,4 @@ class SettingsActivity : ComponentActivity() {
     }
   }
 
-  @Composable
-  fun <T>ListSelectorDialogBox(
-    title: String,
-    items: List<T>,
-    selectedItem: T?,
-    onItemSelected: (index: Int, T) -> Unit,
-    renderItem: @Composable (T) -> Unit,
-    onDismiss: () -> Unit
-  ) {
-    AlertDialog(
-      onDismissRequest = onDismiss,
-      title = {
-        Text(
-          text = title,
-          style = MaterialTheme.typography.bodyLarge)
-      },
-      text = {
-        LazyColumn {
-          itemsIndexed(items) { index, type ->
-            Row(
-              modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onItemSelected(index, type) },
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-              RadioButton(selected = type == selectedItem, onClick = { onItemSelected(index, type) })
-              renderItem(type)
-            }
-          }
-        }
-      },
-      confirmButton = {
-        FilledTonalButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
-      })
-  }
 }
