@@ -16,13 +16,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -39,7 +37,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -52,8 +49,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
@@ -357,7 +352,6 @@ class SettingsActivity : ComponentActivity() {
     val widgetUpdateFreqency by viewModel.widgetUpdateFreqency.collectAsState()
     val selectedCalendarTypeCode by viewModel.selectedCalendarType.collectAsState()
     val calendarTypes = viewModel.calendarTypes
-    var showCalendarSystemDialog by remember { mutableStateOf(false) }
 
 
 
@@ -394,53 +388,75 @@ class SettingsActivity : ComponentActivity() {
       }
 
       item {
-        val disabled = false
-        Column(modifier = Modifier
-          .fillMaxWidth()
-          .clickable(
-            enabled = !disabled,
-          ) {
-            showCalendarSystemDialog = true
-          }
-          .alpha(if (!disabled) 1f else 0.5f)
-          .animateContentSize(),
-        ) {
-          Column(modifier = Modifier.padding(16.dp)){
-          Text(
-            stringResource(R.string.select_your_calendar_system),
-            style = MaterialTheme.typography.bodyLarge,
-          )
-          AnimatedVisibility(visible = true) {
+        ListPreference(title = stringResource(R.string.select_your_calendar_system),
+          items = calendarTypes,
+          selectedItem = calendarTypes.find { it.code == selectedCalendarTypeCode }
+            ?: calendarTypes.first(),
+          onItemSelected = { _, it ->
+            viewModel.setCalendarType(it.code)
+          },
+          renderSelectedItem = {
             Text(
-              calendarTypes.find { it.code == selectedCalendarTypeCode  }?.name ?: calendarTypes.first().name, style = MaterialTheme.typography.bodyMedium.copy(
+              it.name, style = MaterialTheme.typography.bodyMedium.copy(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
               )
             )
-          }
-        }
-
-        }
+          },
+          renderItemInDialog = {
+            Text(it.name)
+          })
       }
     }
 
 
-
-    if (showCalendarSystemDialog) {
-      ListSelectorDialogBox(
-        title = stringResource(R.string.select_your_calendar_system),
-        items = calendarTypes,
-        selectedItem = calendarTypes.find { it.code == selectedCalendarTypeCode  } ?: calendarTypes.first(),
-        onItemSelected = { _, it ->
-          viewModel.setCalendarType(it.code)
-          showCalendarSystemDialog = false
-        },
-        renderItem = {
-          Text(text = it.name)
-        },
-        onDismiss = { showCalendarSystemDialog = false })
-    }
   }
 
+  @Composable
+  fun <T> ListPreference(
+    title: String,
+    items: List<T>,
+    selectedItem: T,
+    onItemSelected: (index: Int, T) -> Unit,
+    disabled: Boolean = false,
+    renderSelectedItem: @Composable (T) -> Unit,
+    renderItemInDialog: @Composable (T) -> Unit
+  ) {
+    var showDialog by remember { mutableStateOf(false) }
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+        .clickable(
+          enabled = !disabled,
+        ) {
+          showDialog = true
+        }
+        .alpha(if (!disabled) 1f else 0.5f)
+        .animateContentSize(),
+    ) {
+      Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+          stringResource(R.string.select_your_calendar_system),
+          style = MaterialTheme.typography.bodyLarge,
+        )
+        AnimatedVisibility(visible = true) {
+          renderSelectedItem(selectedItem)
+        }
+      }
+
+    }
+
+    if (showDialog) {
+      ListSelectorDialogBox(title = title,
+        items = items,
+        selectedItem = selectedItem,
+        onItemSelected = { i, it ->
+          onItemSelected(i, it)
+          showDialog = false
+        },
+        renderItem = renderItemInDialog,
+        onDismiss = { showDialog = false })
+    }
+  }
 
   @Composable
   fun <T>ListSelectorDialogBox(
@@ -462,7 +478,9 @@ class SettingsActivity : ComponentActivity() {
         LazyColumn {
           itemsIndexed(items) { index, type ->
             Row(
-              modifier = Modifier.fillMaxWidth().clickable { onItemSelected(index, type) },
+              modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onItemSelected(index, type) },
               verticalAlignment = Alignment.CenterVertically,
               horizontalArrangement = Arrangement.spacedBy(8.dp)) {
               RadioButton(selected = type == selectedItem, onClick = { onItemSelected(index, type) })
