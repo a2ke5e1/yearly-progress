@@ -511,13 +511,17 @@ class SettingsActivity : ComponentActivity() {
           ),
           modifier = Modifier.padding(16.dp)
         )
-
+        var widgetFreqSummary by remember { mutableStateOf(getString(R.string.adjust_widget_frequency_summary) + "\n\n" + getString(R.string.current_value_settings,widgetUpdateFreqency.toDuration(DurationUnit.SECONDS).toString())
+          ) }
         SliderPreference(
           title = stringResource(R.string.adjust_widget_frequency),
-          summary = stringResource(R.string.adjust_widget_frequency_summary),
+          summary = widgetFreqSummary,
           value = widgetUpdateFreqency.toFloat(),
           valueRange = 5f..900f,
-          onValueChange = { viewModel.setWidgetUpdateFreqency(it.toInt())}
+          onValueChange = {
+            viewModel.setWidgetUpdateFreqency(it.toInt())
+            widgetFreqSummary = getString(R.string.adjust_widget_frequency_summary) + "\n\n" + getString(R.string.current_value_settings,widgetUpdateFreqency.toDuration(DurationUnit.SECONDS).toString())
+          }
         )
       }
 
