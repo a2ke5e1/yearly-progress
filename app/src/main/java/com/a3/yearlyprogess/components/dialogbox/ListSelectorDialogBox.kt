@@ -19,43 +19,38 @@ import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.R
 
 data class WeekType(val name: String, val code: String)
+
 data class CalculationMode(val name: String, val code: String)
+
 data class CalendarType(val name: String, val code: String)
 
 @Composable
-fun <T>ListSelectorDialogBox(
-  title: String,
-  items: List<T>,
-  selectedItem: T?,
-  onItemSelected: (index: Int, T) -> Unit,
-  renderItem: @Composable (T) -> Unit,
-  onDismiss: () -> Unit
+fun <T> ListSelectorDialogBox(
+    title: String,
+    items: List<T>,
+    selectedItem: T?,
+    onItemSelected: (index: Int, T) -> Unit,
+    renderItem: @Composable (T) -> Unit,
+    onDismiss: () -> Unit
 ) {
   AlertDialog(
-    onDismissRequest = onDismiss,
-    title = {
-      Text(
-        text = title,
-        style = MaterialTheme.typography.bodyLarge
-      )
-    },
-    text = {
-      LazyColumn {
-        itemsIndexed(items) { index, type ->
-          Row(
-            modifier = Modifier
-              .fillMaxWidth()
-              .clickable { onItemSelected(index, type) },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-          ) {
-            RadioButton(selected = type == selectedItem, onClick = { onItemSelected(index, type) })
-            renderItem(type)
+      onDismissRequest = onDismiss,
+      title = { Text(text = title, style = MaterialTheme.typography.bodyLarge) },
+      text = {
+        LazyColumn {
+          itemsIndexed(items) { index, type ->
+            Row(
+                modifier = Modifier.fillMaxWidth().clickable { onItemSelected(index, type) },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                  RadioButton(
+                      selected = type == selectedItem, onClick = { onItemSelected(index, type) })
+                  renderItem(type)
+                }
           }
         }
-      }
-    },
-    confirmButton = {
-      FilledTonalButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
-    })
+      },
+      confirmButton = {
+        FilledTonalButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
+      })
 }

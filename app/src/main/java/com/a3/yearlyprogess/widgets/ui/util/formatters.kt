@@ -20,7 +20,7 @@ fun Double.styleFormatted(
     cloverMode: Boolean = false,
 ): SpannableString {
   val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
-  if (this.roundToInt() != 0  && this.roundToInt() != 100 ) {
+  if (this.roundToInt() != 0 && this.roundToInt() != 100) {
     numberFormat.maximumFractionDigits = digits
     numberFormat.minimumFractionDigits = digits
   }

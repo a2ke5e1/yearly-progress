@@ -21,14 +21,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -71,7 +69,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
@@ -102,7 +99,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 @Parcelize
-data class NominatimPlace(val display_name: String, val lat: String, val lon: String): Parcelable
+data class NominatimPlace(val display_name: String, val lat: String, val lon: String) : Parcelable
 
 data class UserLocationPref(
     val automaticallyDetectLocation: Boolean = true,
@@ -309,36 +306,33 @@ class LocationSelectionScreen : ComponentActivity() {
             item {
               val isClickable = !automaticallyDetectLocation
               Column(
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .then(
-                    if (isClickable) Modifier.clickable { showManualSelectionDialogBox = true }
-                    else Modifier
-                  )
-                  .alpha(if (isClickable) 1f else 0.5f)
-              ) {
-                Column(
-                  modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                  Text(
-                    text = stringResource(R.string.manual_location),
-                    style = MaterialTheme.typography.labelLarge.copy(
-                      color = MaterialTheme.colorScheme.primary
-                    )
-                  )
-                  Text(
-                    text = selectedLocation?.display_name
-                      ?: stringResource(R.string.enter_a_location),
-                    style = MaterialTheme.typography.bodyLarge
-                  )
-                }
-              }
+                  modifier =
+                      Modifier.fillMaxWidth()
+                          .then(
+                              if (isClickable)
+                                  Modifier.clickable { showManualSelectionDialogBox = true }
+                              else Modifier)
+                          .alpha(if (isClickable) 1f else 0.5f)) {
+                    Column(
+                        modifier =
+                            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+                          Text(
+                              text = stringResource(R.string.manual_location),
+                              style =
+                                  MaterialTheme.typography.labelLarge.copy(
+                                      color = MaterialTheme.colorScheme.primary))
+                          Text(
+                              text =
+                                  selectedLocation?.display_name
+                                      ?: stringResource(R.string.enter_a_location),
+                              style = MaterialTheme.typography.bodyLarge)
+                        }
+                  }
             }
 
             item {
-              HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(bottom = 8.dp, top = 32.dp))
+              HorizontalDivider(
+                  thickness = 1.dp, modifier = Modifier.padding(bottom = 8.dp, top = 32.dp))
               PoweredByInfoText()
             }
           }
@@ -365,67 +359,55 @@ class LocationSelectionScreen : ComponentActivity() {
 
 @Composable
 fun PoweredByInfoText(
-  textAlignment: TextAlign = TextAlign.Start,
-  style: TextStyle = MaterialTheme.typography.bodyMedium
+    textAlignment: TextAlign = TextAlign.Start,
+    style: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
   val linkColor = MaterialTheme.colorScheme.primary
 
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(horizontal = 16.dp),
-    verticalAlignment = Alignment.Top
-  ) {
-    Icon(
-      imageVector = Icons.Outlined.Info,
-      contentDescription = "Info",
-      tint = linkColor,
-      modifier = Modifier.padding(top = 4.dp, end = 8.dp)
-    )
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+      verticalAlignment = Alignment.Top) {
+        Icon(
+            imageVector = Icons.Outlined.Info,
+            contentDescription = "Info",
+            tint = linkColor,
+            modifier = Modifier.padding(top = 4.dp, end = 8.dp))
 
-    Text(
-      text = buildAnnotatedString {
-        append("Location selection is powered by ")
+        Text(
+            text =
+                buildAnnotatedString {
+                  append("Location selection is powered by ")
 
-        withLink(
-          LinkAnnotation.Url(
-            "https://nominatim.openstreetmap.org/",
-            TextLinkStyles(
-              style = SpanStyle(
-                color = linkColor,
-                textDecoration = TextDecoration.Underline
-              )
-            )
-          )
-        ) {
-          append("Nominatim (OpenStreetMap)")
-        }
+                  withLink(
+                      LinkAnnotation.Url(
+                          "https://nominatim.openstreetmap.org/",
+                          TextLinkStyles(
+                              style =
+                                  SpanStyle(
+                                      color = linkColor,
+                                      textDecoration = TextDecoration.Underline)))) {
+                        append("Nominatim (OpenStreetMap)")
+                      }
 
-        append(" and sunrise/sunset data is provided by ")
+                  append(" and sunrise/sunset data is provided by ")
 
-        withLink(
-          LinkAnnotation.Url(
-            "https://api.sunrisesunset.io/",
-            TextLinkStyles(
-              style = SpanStyle(
-                color = linkColor,
-                textDecoration = TextDecoration.Underline
-              )
-            )
-          )
-        ) {
-          append("SunriseSunset API")
-        }
+                  withLink(
+                      LinkAnnotation.Url(
+                          "https://api.sunrisesunset.io/",
+                          TextLinkStyles(
+                              style =
+                                  SpanStyle(
+                                      color = linkColor,
+                                      textDecoration = TextDecoration.Underline)))) {
+                        append("SunriseSunset API")
+                      }
 
-        append(".")
-      },
-      style = style,
-      textAlign = textAlignment
-    )
-  }
+                  append(".")
+                },
+            style = style,
+            textAlign = textAlignment)
+      }
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

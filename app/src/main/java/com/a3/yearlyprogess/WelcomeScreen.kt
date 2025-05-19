@@ -130,18 +130,15 @@ fun WelcomeScreen() {
 
           if (showDialog) {
             ListSelectorDialogBox(
-              items = calendarTypes,
-              selectedItem = selectedType,
-              onItemSelected = { index, it ->
-                selectedType = it
-                showDialog = false
-              },
-              renderItem = {
-                Text(it.name)
-              },
-              onDismiss = { showDialog = false },
-              title = stringResource(R.string.select_your_calendar_system)
-            )
+                items = calendarTypes,
+                selectedItem = selectedType,
+                onItemSelected = { index, it ->
+                  selectedType = it
+                  showDialog = false
+                },
+                renderItem = { Text(it.name) },
+                onDismiss = { showDialog = false },
+                title = stringResource(R.string.select_your_calendar_system))
           }
         }
   }

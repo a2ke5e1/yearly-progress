@@ -175,7 +175,7 @@ class WidgetScreenFragment : Fragment() {
               if (ContextCompat.checkSelfPermission(
                   requireContext(),
                   Manifest.permission.ACCESS_COARSE_LOCATION,
-                ) == PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable) {
+              ) == PackageManager.PERMISSION_GRANTED && isSunriseSunsetDataAvailable) {
                 updateStandaloneWidgetRemoteView(binding.widgetDaylightContainer, true)
                 updateStandaloneWidgetRemoteView(binding.widgetNightlightContainer, false)
               }
@@ -193,17 +193,17 @@ class WidgetScreenFragment : Fragment() {
             allInOneProgressBarWeek.progress = progressWeek
 
             val dayCurrentValue =
-              yp.getCurrentPeriodValue(TimePeriod.DAY)
-                .toFormattedTimePeriod(requireContext(), TimePeriod.DAY)
+                yp.getCurrentPeriodValue(TimePeriod.DAY)
+                    .toFormattedTimePeriod(requireContext(), TimePeriod.DAY)
             val weekCurrentValue =
-              yp.getCurrentPeriodValue(TimePeriod.WEEK)
-                .toFormattedTimePeriod(requireContext(), TimePeriod.WEEK)
+                yp.getCurrentPeriodValue(TimePeriod.WEEK)
+                    .toFormattedTimePeriod(requireContext(), TimePeriod.WEEK)
             val monthCurrentValue =
-              yp.getCurrentPeriodValue(TimePeriod.MONTH)
-                .toFormattedTimePeriod(requireContext(), TimePeriod.MONTH)
+                yp.getCurrentPeriodValue(TimePeriod.MONTH)
+                    .toFormattedTimePeriod(requireContext(), TimePeriod.MONTH)
             val yearCurrentValue =
-              yp.getCurrentPeriodValue(TimePeriod.YEAR)
-                .toFormattedTimePeriod(requireContext(), TimePeriod.YEAR)
+                yp.getCurrentPeriodValue(TimePeriod.YEAR)
+                    .toFormattedTimePeriod(requireContext(), TimePeriod.YEAR)
 
             allInOneTitleTextViewYear.text = yearCurrentValue
             allInOneTitleTextViewMonth.text = monthCurrentValue
@@ -305,23 +305,22 @@ class WidgetScreenFragment : Fragment() {
 
     val yp = YearlyProgressUtil(requireContext())
     val dayCurrentValue =
-      yp.getCurrentPeriodValue(TimePeriod.DAY)
-        .toFormattedTimePeriod(requireContext(), TimePeriod.DAY)
+        yp.getCurrentPeriodValue(TimePeriod.DAY)
+            .toFormattedTimePeriod(requireContext(), TimePeriod.DAY)
     val weekCurrentValue =
-      yp.getCurrentPeriodValue(TimePeriod.WEEK)
-        .toFormattedTimePeriod(requireContext(), TimePeriod.WEEK)
+        yp.getCurrentPeriodValue(TimePeriod.WEEK)
+            .toFormattedTimePeriod(requireContext(), TimePeriod.WEEK)
     val monthCurrentValue =
-      yp.getCurrentPeriodValue(TimePeriod.MONTH)
-        .toFormattedTimePeriod(requireContext(), TimePeriod.MONTH)
+        yp.getCurrentPeriodValue(TimePeriod.MONTH)
+            .toFormattedTimePeriod(requireContext(), TimePeriod.MONTH)
     val yearCurrentValue =
-      yp.getCurrentPeriodValue(TimePeriod.YEAR)
-        .toFormattedTimePeriod(requireContext(), TimePeriod.YEAR)
+        yp.getCurrentPeriodValue(TimePeriod.YEAR)
+            .toFormattedTimePeriod(requireContext(), TimePeriod.YEAR)
 
     allInOneTitleTextViewYear.text = yearCurrentValue
     allInOneTitleTextViewMonth.text = monthCurrentValue
     allInOneTitleTextViewDay.text = weekCurrentValue
     allInOneTitleTextViewWeek.text = dayCurrentValue
-
   }
 
   private fun initProgressBarsTextViews(view: View) {

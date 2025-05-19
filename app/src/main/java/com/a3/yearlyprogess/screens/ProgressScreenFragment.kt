@@ -41,26 +41,24 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 sealed class SunriseSunsetState {
   data object Loading : SunriseSunsetState()
+
   data class Error(val message: String) : SunriseSunsetState()
-  data class Success(
-    val data: SunriseSunsetResponse
-  ) : SunriseSunsetState()
+
+  data class Success(val data: SunriseSunsetResponse) : SunriseSunsetState()
 }
 
 class ProgressScreenViewModel : ViewModel() {
 
   private val sunriseSunsetApi: SunriseSunsetApi = provideSunriseSunsetApi()
   private val _state = MutableLiveData<SunriseSunsetState>(SunriseSunsetState.Loading)
-  val sunriseSunsetState get()= _state
+  val sunriseSunsetState
+    get() = _state
+
   private val firebaseCrashlytics = Firebase.crashlytics
 
-  fun fetchSunriseSunset(
-    context: Context,
-    location: Location
-  ) {
+  fun fetchSunriseSunset(context: Context, location: Location) {
 
     val cached = loadCachedSunriseSunset(context)
     if (cached != null && cached.results[1].date == getCurrentDate()) {
@@ -70,37 +68,40 @@ class ProgressScreenViewModel : ViewModel() {
 
     viewModelScope.launch(Dispatchers.IO) {
       val result =
-        try {
-          val response =
-            sunriseSunsetApi.getSunriseSunset(
-              location.latitude, location.longitude, getDateRange(-1), getDateRange(1))
-          response
-            .body()
-            ?.takeIf { response.isSuccessful && it.status == "OK" }
-            ?.let {
-              cacheSunriseSunset(context, it)
-              Resource.Success(it)
-            } ?: Resource.Error(response.message())
-        } catch (e: Exception) {
-          Resource.Error(e.message ?: "Unknown error")
-        }
+          try {
+            val response =
+                sunriseSunsetApi.getSunriseSunset(
+                    location.latitude, location.longitude, getDateRange(-1), getDateRange(1))
+            response
+                .body()
+                ?.takeIf { response.isSuccessful && it.status == "OK" }
+                ?.let {
+                  cacheSunriseSunset(context, it)
+                  Resource.Success(it)
+                } ?: Resource.Error(response.message())
+          } catch (e: Exception) {
+            Resource.Error(e.message ?: "Unknown error")
+          }
 
       when (result) {
-        is Resource.Success -> _state.postValue(
-          if (result.data != null) SunriseSunsetState.Success(result.data) else
-            SunriseSunsetState.Error(context.getString(R.string.failed_to_load_sunset_sunrise_time),)
-        )
+        is Resource.Success ->
+            _state.postValue(
+                if (result.data != null) SunriseSunsetState.Success(result.data)
+                else
+                    SunriseSunsetState.Error(
+                        context.getString(R.string.failed_to_load_sunset_sunrise_time),
+                    ))
         is Resource.Error -> {
           firebaseCrashlytics.log("Failed to load sunset data: \n ${result.message}")
-          _state.postValue(SunriseSunsetState.Error(context.getString(R.string.failed_to_load_sunset_sunrise_time),))
+          _state.postValue(
+              SunriseSunsetState.Error(
+                  context.getString(R.string.failed_to_load_sunset_sunrise_time),
+              ))
         }
       }
     }
   }
-
-
 }
-
 
 class ProgressScreenFragment : Fragment() {
   private lateinit var binding: FragmentScreenProgressBinding
@@ -157,8 +158,6 @@ class ProgressScreenFragment : Fragment() {
         }
       }
     }
-
-
 
     locationPermissionDialog =
         PermissionMessageDialog(
@@ -226,8 +225,7 @@ class ProgressScreenFragment : Fragment() {
     adLoader.loadAd(AdRequest.Builder().build())
   }
 
-  private fun setupDayNightLightProgressView(
-  ) {
+  private fun setupDayNightLightProgressView() {
     val userLocationPref = UserLocationPref.load(requireContext())
     val locationManager =
         requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -249,16 +247,14 @@ class ProgressScreenFragment : Fragment() {
       binding.dismissibleMessageView?.visibility = View.GONE
 
       val cachedLocation = context?.let { loadCachedLocation(it) }
-      cachedLocation?.let {
-        setupSunriseSunsetViews(it)
-      }
+      cachedLocation?.let { setupSunriseSunsetViews(it) }
 
       locationManager.requestLocationUpdates(
           providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
           2000,
           1000f) { location ->
-              context?.let { cacheLocation(it, location) }
-              setupSunriseSunsetViews(location)
+            context?.let { cacheLocation(it, location) }
+            setupSunriseSunsetViews(location)
           }
     } else {
       userLocationPref.userLocationPref?.let {
@@ -272,9 +268,7 @@ class ProgressScreenFragment : Fragment() {
     }
   }
 
-  private fun setupSunriseSunsetViews(
-      location: Location
-  ) {
+  private fun setupSunriseSunsetViews(location: Location) {
     context?.let { progressScreenViewModel.fetchSunriseSunset(it, location) }
   }
 

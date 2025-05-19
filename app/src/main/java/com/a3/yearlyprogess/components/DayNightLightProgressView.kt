@@ -101,11 +101,11 @@ constructor(
 
     // data that doesn't change
     titleTextView.text =
-      if (dayLight) {
-        ContextCompat.getString(context, R.string.day_light)
-      } else {
-        ContextCompat.getString(context, R.string.night_light)
-      }
+        if (dayLight) {
+          ContextCompat.getString(context, R.string.day_light)
+        } else {
+          ContextCompat.getString(context, R.string.night_light)
+        }
 
     // update the progress every seconds
     launch(Dispatchers.IO) {
@@ -121,27 +121,27 @@ constructor(
 
         launch(Dispatchers.Main) {
           val currentPeriodValue =
-            if (dayLight) {
-              context.getString(
-                R.string.today_sunrise_at_and_sunset_at,
-                startTime.toFormattedDateText(),
-                endTime.toFormattedDateText(),
-              )
-            } else {
-              context.getString(
-                R.string.last_night_s_sunset_was_at_and_next_sunrise_will_be_at,
-                startTime.toFormattedDateText(),
-                endTime.toFormattedDateText(),
-              )
-            }
+              if (dayLight) {
+                context.getString(
+                    R.string.today_sunrise_at_and_sunset_at,
+                    startTime.toFormattedDateText(),
+                    endTime.toFormattedDateText(),
+                )
+              } else {
+                context.getString(
+                    R.string.last_night_s_sunset_was_at_and_next_sunrise_will_be_at,
+                    startTime.toFormattedDateText(),
+                    endTime.toFormattedDateText(),
+                )
+              }
           widgetDataTextView.text = currentPeriodValue
           widgetDataTextView.textSize = 12f
           widgetDataTextView.setTypeface(null, Typeface.NORMAL)
           widgetDataTextView.setTextColor(
-            ContextCompat.getColor(context, R.color.widget_text_color_tertiary),
+              ContextCompat.getColor(context, R.color.widget_text_color_tertiary),
           )
           widgetDataInfoTextView.text =
-            context.getString(R.string.of_seconds, formattedTotalSeconds)
+              context.getString(R.string.of_seconds, formattedTotalSeconds)
           updateView(progress)
         }
         delay(1000)
