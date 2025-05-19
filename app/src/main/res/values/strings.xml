@@ -147,6 +147,7 @@
     <string name="enter_a_location">Enter a location</string>
     <string name="auto_location_message">In order to automatically detect location for day/night widgets, please give app location permission in settings.</string>
     <string name="font_size">Font Size</string>
+    <string name="cancel">Cancel</string>
 
 
     <!-- Week Preference -->

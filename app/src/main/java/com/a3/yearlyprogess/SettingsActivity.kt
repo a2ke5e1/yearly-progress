@@ -16,33 +16,44 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
@@ -88,6 +99,16 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
   )
   val decimalProgressPage = _decimalProgressPage.asStateFlow()
 
+  private val _widgetUpdateFreqency = MutableStateFlow(
+    prefs.getInt(application.getString(R.string.widget_widget_update_frequency), 5)
+  )
+  val widgetUpdateFreqency = _widgetUpdateFreqency.asStateFlow()
+
+  private val _widgetTransparency = MutableStateFlow(
+    prefs.getInt(application.getString(R.string.widget_widget_background_transparency), 100)
+  )
+  val widgetTransparency = _widgetTransparency.asStateFlow()
+
 
   private val _replaceTimeLeftCounter = MutableStateFlow(
     prefs.getBoolean(
@@ -96,6 +117,28 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
   )
   val replaceTimeLeftCounter: StateFlow<Boolean> = _replaceTimeLeftCounter.asStateFlow()
 
+
+
+  private val calendarEntries = application.resources.getStringArray(R.array.app_calendar_type_entries)
+  private val calendarValues = application.resources.getStringArray(R.array.app_calendar_type_values)
+
+  private val _calendarTypes =
+    calendarEntries.zip(calendarValues) { name, value -> CalendarType(name, value) }
+
+  val calendarTypes get()= _calendarTypes
+
+  private val _selectedCalendarType = MutableStateFlow(
+    prefs.getString(
+      application.getString(R.string.app_calendar_type), calendarTypes.first().code
+    )
+  )
+  val selectedCalendarType: StateFlow<String?> = _selectedCalendarType.asStateFlow()
+
+  fun setCalendarType(code: String) {
+    _selectedCalendarType.value = code
+    prefs.edit().putString(application.getString(R.string.app_calendar_type), code)
+      .apply()
+  }
 
   fun setTimeLeftCounter(enabled: Boolean) {
     _timeLeftCounter.value = enabled
@@ -132,6 +175,17 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
     _decimalProgressPage.value = digits
     prefs.edit().putInt(application.getString(R.string.app_widget_decimal_point), digits).apply()
   }
+
+  fun setWidgetUpdateFreqency(freq: Int) {
+    _widgetUpdateFreqency.value = freq
+    prefs.edit().putInt(application.getString(R.string.widget_widget_update_frequency), freq).apply()
+  }
+  fun setWidgetTransparency(value: Int) {
+    _widgetTransparency.value = value
+    prefs.edit().putInt(application.getString(R.string.widget_widget_background_transparency), value).apply()
+  }
+
+
 
 }
 
@@ -274,64 +328,45 @@ class SettingsActivity : ComponentActivity() {
     }
   }
 
+  @Composable
+  fun ManageLocation(
+    disabled: Boolean = false
+  ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Column(modifier = Modifier
+      .fillMaxWidth()
+      .clickable(
+        enabled = !disabled,
+      ) {
+        startActivity(Intent(this, LocationSelectionScreen::class.java))
+      }
+      .alpha(if (!disabled) 1f else 0.5f)
+      .animateContentSize(),
+    ) {
+
+      Text(stringResource(R.string.manage_location_title), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp)
+      )
+
+    }
+  }
+
 
   @Composable
   fun SettingsScreen(contentPadding: PaddingValues, viewModel: SettingsViewModel) {
-    val timeLeftCounter by viewModel.timeLeftCounter.collectAsState()
-    val dynamicTimeLeftCounter by viewModel.dynamicTimeLeftCounter.collectAsState()
-    val replaceTimeLeftCounter by viewModel.replaceTimeLeftCounter.collectAsState()
-    val widgetDecimalPlaces by viewModel.widgetDecimalPlaces.collectAsState()
     val decimalProgressPage by viewModel.decimalProgressPage.collectAsState()
-    val eventWidgetDecimalPlaces by viewModel.eventWidgetDecimalPlaces.collectAsState()
+    val widgetUpdateFreqency by viewModel.widgetUpdateFreqency.collectAsState()
+    val selectedCalendarTypeCode by viewModel.selectedCalendarType.collectAsState()
+    val calendarTypes = viewModel.calendarTypes
+    var showCalendarSystemDialog by remember { mutableStateOf(false) }
+
+
+
+
+
 
     LazyColumn(
       contentPadding = contentPadding, verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-      item {
-        SwitchPreference(title = stringResource(R.string.time_left_counter),
-          summary = stringResource(R.string.shows_how_much_time_left_in_the_widget),
-          checked = timeLeftCounter,
-          onCheckedChange = { viewModel.setTimeLeftCounter(it) })
-      }
-      item {
-        SwitchPreference(title = stringResource(R.string.dynamic_time_left_counter),
-          summary = stringResource(R.string.dynamic_time_left_counter_will_automatically_switch_between_days_hours_minutes_based_on_the_time_left),
-          checked = dynamicTimeLeftCounter,
-          disabled = !timeLeftCounter,
-          onCheckedChange = { viewModel.setDynamicTimeLeftCounter(it) })
-
-
-      }
-
-      item {
-        SwitchPreference(title = stringResource(R.string.replace_progress_with_days_left_counter),
-          summary = stringResource(R.string.this_will_only_work_if_the_time_left_counter_is_enabled),
-          checked = replaceTimeLeftCounter,
-          disabled = !timeLeftCounter,
-          onCheckedChange = { viewModel.setReplaceTimeLeftCounter(it) })
-      }
-
-      item {
-        SliderPreference(
-          title = stringResource(R.string.pref_title_widget_decimal_places),
-          summary = stringResource(R.string.pref_summary_widget_decimal_places),
-          value = widgetDecimalPlaces.toFloat(),
-          valueRange = 0f..5f,
-          steps = 4,
-          onValueChange = { viewModel.setWidgetDecimalPlaces(it.toInt())}
-        )
-      }
-
-      item {
-        SliderPreference(
-          title = stringResource(R.string.pref_title_widget_event_decimal_place),
-          summary = stringResource(R.string.pref_summary_widget_decimal_places),
-          value = eventWidgetDecimalPlaces.toFloat(),
-          valueRange = 0f..5f,
-          steps = 4,
-          onValueChange = { viewModel.setEventWidgetDecimalPlaces(it.toInt())}
-        )
-      }
 
       item {
         SliderPreference(
@@ -343,7 +378,102 @@ class SettingsActivity : ComponentActivity() {
           onValueChange = { viewModel.setDecimalProgressPage(it.toInt())}
         )
       }
+
+      item {
+        SliderPreference(
+          title = stringResource(R.string.adjust_widget_frequency),
+          summary = stringResource(R.string.adjust_widget_frequency_summary),
+          value = widgetUpdateFreqency.toFloat(),
+          valueRange = 5f..900f,
+          onValueChange = { viewModel.setWidgetUpdateFreqency(it.toInt())}
+        )
+      }
+
+      item {
+        ManageLocation()
+      }
+
+      item {
+        val disabled = false
+        Column(modifier = Modifier
+          .fillMaxWidth()
+          .clickable(
+            enabled = !disabled,
+          ) {
+            showCalendarSystemDialog = true
+          }
+          .alpha(if (!disabled) 1f else 0.5f)
+          .animateContentSize(),
+        ) {
+          Column(modifier = Modifier.padding(16.dp)){
+          Text(
+            stringResource(R.string.select_your_calendar_system),
+            style = MaterialTheme.typography.bodyLarge,
+          )
+          AnimatedVisibility(visible = true) {
+            Text(
+              calendarTypes.find { it.code == selectedCalendarTypeCode  }?.name ?: calendarTypes.first().name, style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+              )
+            )
+          }
+        }
+
+        }
+      }
     }
+
+
+
+    if (showCalendarSystemDialog) {
+      ListSelectorDialogBox(
+        title = stringResource(R.string.select_your_calendar_system),
+        items = calendarTypes,
+        selectedItem = calendarTypes.find { it.code == selectedCalendarTypeCode  } ?: calendarTypes.first(),
+        onItemSelected = { _, it ->
+          viewModel.setCalendarType(it.code)
+          showCalendarSystemDialog = false
+        },
+        renderItem = {
+          Text(text = it.name)
+        },
+        onDismiss = { showCalendarSystemDialog = false })
+    }
+  }
+
+
+  @Composable
+  fun <T>ListSelectorDialogBox(
+    title: String,
+    items: List<T>,
+    selectedItem: T?,
+    onItemSelected: (index: Int, T) -> Unit,
+    renderItem: @Composable (T) -> Unit,
+    onDismiss: () -> Unit
+  ) {
+    AlertDialog(
+      onDismissRequest = onDismiss,
+      title = {
+        Text(
+          text = title,
+          style = MaterialTheme.typography.bodyLarge)
+      },
+      text = {
+        LazyColumn {
+          itemsIndexed(items) { index, type ->
+            Row(
+              modifier = Modifier.fillMaxWidth().clickable { onItemSelected(index, type) },
+              verticalAlignment = Alignment.CenterVertically,
+              horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+              RadioButton(selected = type == selectedItem, onClick = { onItemSelected(index, type) })
+              renderItem(type)
+            }
+          }
+        }
+      },
+      confirmButton = {
+        FilledTonalButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
+      })
   }
 
 

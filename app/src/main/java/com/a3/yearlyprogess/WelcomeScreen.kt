@@ -211,7 +211,7 @@ fun CalendarTypeDialog(
         }
       },
       confirmButton = {
-        FilledTonalButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
+        FilledTonalButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
       })
 }
 
