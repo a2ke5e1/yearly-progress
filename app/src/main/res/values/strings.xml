@@ -156,6 +156,10 @@
         <item>Saturday</item>
         <item>Sunday</item>
         <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thrusday</item>
+        <item>Friday</item>
     </string-array>
 
     <!-- Calculation Preference -->

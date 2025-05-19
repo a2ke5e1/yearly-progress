@@ -65,6 +65,11 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
+data class WeekType(val name: String, val code: String)
+data class CalculationMode(val name: String, val code: String)
+
+
+
 class SettingsViewModel(private val application: Application) : AndroidViewModel(application) {
 
   private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
@@ -119,7 +124,6 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
 
   private val _calendarTypes =
     calendarEntries.zip(calendarValues) { name, value -> CalendarType(name, value) }
-
   val calendarTypes get()= _calendarTypes
 
   private val _selectedCalendarType = MutableStateFlow(
@@ -128,6 +132,54 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
     )
   )
   val selectedCalendarType: StateFlow<String?> = _selectedCalendarType.asStateFlow()
+
+
+
+
+  private val weekEntries= application.resources.getStringArray(R.array.week_start_entries)
+  private val weekValues= application.resources.getStringArray(R.array.week_start_values)
+
+  private val _weekTypes =
+    weekEntries.zip(weekValues) { name, value -> WeekType(name, value) }
+  val weekTypes get()= _weekTypes
+
+  private val _selectedWeekType = MutableStateFlow(
+    prefs.getString(
+      application.getString(R.string.app_week_widget_start_day), weekTypes.first().code
+    )
+  )
+  val selectedWeekType: StateFlow<String?> = _selectedWeekType.asStateFlow()
+  fun setWeekType(code: String) {
+    _selectedWeekType.value = code
+    prefs.edit().putString(application.getString(R.string.app_week_widget_start_day), code)
+      .apply()
+  }
+
+
+  private val calculationModeEntries= application.resources.getStringArray(R.array.calc_entries)
+  private val calculationModeValues= application.resources.getStringArray(R.array.calc_values)
+
+  private val _calculationModes =
+    calculationModeEntries.zip(calculationModeValues) { name, value -> CalculationMode(name, value) }
+  val calculationModes get()= _calculationModes
+
+  private val _selectedCalculationMode = MutableStateFlow(
+    prefs.getString(
+      application.getString(R.string.app_calculation_type), calculationModes.first().code
+    )
+  )
+  val selectedCalculationMode: StateFlow<String?> = _selectedCalculationMode.asStateFlow()
+  fun setCalculationMode(code: String) {
+    _selectedCalculationMode.value = code
+    prefs.edit().putString(application.getString(R.string.app_calculation_type), code)
+      .apply()
+  }
+
+
+
+
+
+
 
   fun setCalendarType(code: String) {
     _selectedCalendarType.value = code
@@ -351,7 +403,11 @@ class SettingsActivity : ComponentActivity() {
     val decimalProgressPage by viewModel.decimalProgressPage.collectAsState()
     val widgetUpdateFreqency by viewModel.widgetUpdateFreqency.collectAsState()
     val selectedCalendarTypeCode by viewModel.selectedCalendarType.collectAsState()
+    val selectedWeekTypeCode by viewModel.selectedWeekType.collectAsState()
+    val selectedCalculationMode by viewModel.selectedCalculationMode.collectAsState()
     val calendarTypes = viewModel.calendarTypes
+    val weekTypes = viewModel.weekTypes
+    val calculationModes = viewModel.calculationModes
 
 
 
@@ -406,6 +462,47 @@ class SettingsActivity : ComponentActivity() {
             Text(it.name)
           })
       }
+
+      item {
+        ListPreference(title = stringResource(R.string.pref_title_week_day),
+          items = weekTypes,
+          selectedItem = weekTypes.find { it.code == selectedWeekTypeCode }
+            ?: weekTypes.first(),
+          onItemSelected = { _, it ->
+            viewModel.setWeekType(it.code)
+          },
+          renderSelectedItem = {
+            Text(
+              it.name, style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+              )
+            )
+          },
+          renderItemInDialog = {
+            Text(it.name)
+          })
+      }
+
+      item {
+        ListPreference(title = stringResource(R.string.calculation_mode),
+          items = calculationModes,
+          selectedItem = calculationModes.find { it.code == selectedCalculationMode }
+            ?: calculationModes.first(),
+          onItemSelected = { _, it ->
+            viewModel.setCalculationMode(it.code)
+          },
+          renderSelectedItem = {
+            Text(
+              it.name, style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+              )
+            )
+          },
+          renderItemInDialog = {
+            Text(it.name)
+          })
+      }
+
     }
 
 
@@ -435,7 +532,7 @@ class SettingsActivity : ComponentActivity() {
     ) {
       Column(modifier = Modifier.padding(16.dp)) {
         Text(
-          stringResource(R.string.select_your_calendar_system),
+          title,
           style = MaterialTheme.typography.bodyLarge,
         )
         AnimatedVisibility(visible = true) {
