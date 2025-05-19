@@ -51,6 +51,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
@@ -171,6 +172,22 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
     )
   )
   val selectedCalculationMode: StateFlow<String?> = _selectedCalculationMode.asStateFlow()
+
+
+  private val _progressShowNotification = MutableStateFlow(
+    prefs.getBoolean(
+      application.getString(R.string.progress_show_notification), false
+    )
+  )
+  val progressShowNotification: StateFlow<Boolean> = _progressShowNotification.asStateFlow()
+
+
+  fun setProgressShowNotification(value: Boolean) {
+    _progressShowNotification.value = value
+    prefs.edit().putBoolean(application.getString(R.string.progress_show_notification), value)
+      .apply()
+  }
+
   fun setCalculationMode(code: String) {
     _selectedCalculationMode.value = code
     prefs.edit().putString(application.getString(R.string.app_calculation_type), code)
@@ -408,6 +425,7 @@ class SettingsActivity : ComponentActivity() {
     val selectedCalendarTypeCode by viewModel.selectedCalendarType.collectAsState()
     val selectedWeekTypeCode by viewModel.selectedWeekType.collectAsState()
     val selectedCalculationMode by viewModel.selectedCalculationMode.collectAsState()
+    val progressShowNotification by viewModel.progressShowNotification.collectAsState()
     val calendarTypes = viewModel.calendarTypes
     val weekTypes = viewModel.weekTypes
     val calculationModes = viewModel.calculationModes
@@ -430,7 +448,25 @@ class SettingsActivity : ComponentActivity() {
           style = MaterialTheme.typography.labelLarge.copy(
             color = MaterialTheme.colorScheme.primary
           ),
-          modifier = Modifier.padding( horizontal =  16.dp)
+          modifier = Modifier.padding(16.dp)
+        )
+
+        val context = LocalContext.current
+        SwitchPreference(
+          title = stringResource(R.string.progress_notification),
+          summary = stringResource(R.string.shows_progress_in_the_notification),
+          checked = progressShowNotification,
+          onCheckedChange = { newValue ->
+            if (newValue) {
+              val notificationHelper = YearlyProgressNotification(context)
+              if (!notificationHelper.hasAppNotificationPermission()) {
+                notificationHelper.requestNotificationPermission(this@SettingsActivity)
+              }
+            }
+            val widgetUpdateServiceIntent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+            context.sendBroadcast(widgetUpdateServiceIntent)
+            viewModel.setProgressShowNotification(newValue)
+          }
         )
 
 
@@ -611,66 +647,5 @@ class SettingsActivity : ComponentActivity() {
       confirmButton = {
         FilledTonalButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
       })
-  }
-
-
-
-  class SettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(
-        savedInstanceState: Bundle?,
-        rootKey: String?,
-    ) {
-      setPreferencesFromResource(R.xml.root_preferences, rootKey)
-
-      val locationPreference = findPreference<Preference>(getString(R.string.app_location_settings))
-      locationPreference?.setOnPreferenceClickListener {
-        startActivity(Intent(requireContext(), LocationSelectionScreen::class.java))
-        true
-      }
-
-      val updateFrequencyPreference =
-          findPreference<Preference>(getString(R.string.widget_widget_update_frequency))
-      val defaultUpdateFrequencyPreferenceSummary =
-          getString(R.string.adjust_widget_frequency_summary)
-
-      updatePreferenceSummary(updateFrequencyPreference, defaultUpdateFrequencyPreferenceSummary) {
-          value ->
-        (value as? Int ?: 5).toDuration(DurationUnit.SECONDS).toString()
-      }
-
-      val notificationPref =
-          findPreference<Preference>(getString(R.string.progress_show_notification))
-      notificationPref?.setOnPreferenceChangeListener { _, newValue ->
-        if (newValue == true) {
-          val notificationHelper = YearlyProgressNotification(requireContext())
-          if (!notificationHelper.hasAppNotificationPermission()) {
-            notificationHelper.requestNotificationPermission(requireActivity())
-            return@setOnPreferenceChangeListener false
-          }
-        }
-        val widgetUpdateServiceIntent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
-        context?.sendBroadcast(widgetUpdateServiceIntent)
-        true
-      }
-    }
-
-    private fun updatePreferenceSummary(
-        preference: Preference?,
-        defaultSummary: String,
-        formatValue: (Any?) -> String,
-    ) {
-      preference?.let {
-        val currentValue = it.sharedPreferences?.all?.get(it.key) ?: return
-        it.summary =
-            "$defaultSummary\n" +
-                getString(R.string.current_value_settings, formatValue(currentValue))
-        it.setOnPreferenceChangeListener { pref, newValue ->
-          pref.summary =
-              "$defaultSummary\n" +
-                  getString(R.string.current_value_settings, formatValue(newValue))
-          true
-        }
-      }
-    }
   }
 }
