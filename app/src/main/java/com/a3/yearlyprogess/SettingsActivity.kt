@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.IntRange
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
@@ -29,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -71,6 +73,21 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
   )
   val dynamicTimeLeftCounter: StateFlow<Boolean> = _dynamicTimeLeftCounter.asStateFlow()
 
+  private val _widgetDecimalPlaces = MutableStateFlow(
+    prefs.getInt(application.getString(R.string.widget_widget_decimal_point), 2)
+  )
+  val widgetDecimalPlaces = _widgetDecimalPlaces.asStateFlow()
+
+  private val _eventWidgetDecimalPlaces = MutableStateFlow(
+    prefs.getInt(application.getString(R.string.widget_event_widget_decimal_point), 2)
+  )
+  val eventWidgetDecimalPlaces = _eventWidgetDecimalPlaces.asStateFlow()
+
+  private val _decimalProgressPage = MutableStateFlow(
+    prefs.getInt(application.getString(R.string.app_widget_decimal_point), 13)
+  )
+  val decimalProgressPage = _decimalProgressPage.asStateFlow()
+
 
   private val _replaceTimeLeftCounter = MutableStateFlow(
     prefs.getBoolean(
@@ -99,6 +116,21 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
       application.getString(R.string.widget_widget_event_replace_progress_with_days_counter),
       enabled
     ).apply()
+  }
+
+  fun setWidgetDecimalPlaces(digits: Int) {
+    _widgetDecimalPlaces.value = digits
+    prefs.edit().putInt(application.getString(R.string.widget_widget_decimal_point), digits).apply()
+  }
+
+  fun setEventWidgetDecimalPlaces(digits: Int) {
+    _eventWidgetDecimalPlaces.value = digits
+    prefs.edit().putInt(application.getString(R.string.widget_event_widget_decimal_point), digits).apply()
+  }
+
+  fun setDecimalProgressPage(digits: Int) {
+    _decimalProgressPage.value = digits
+    prefs.edit().putInt(application.getString(R.string.app_widget_decimal_point), digits).apply()
   }
 
 }
@@ -203,10 +235,54 @@ class SettingsActivity : ComponentActivity() {
   }
 
   @Composable
+  fun SliderPreference(
+    title: String,
+    summary: String,
+    disabled: Boolean = false,
+    value: Float,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    @IntRange(from = 0)
+    steps: Int = 0,
+    onValueChange: (Float) -> Unit,
+  ) {
+
+    Column(modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp)
+      .alpha(if (!disabled) 1f else 0.5f)
+      .animateContentSize(),
+     ) {
+
+        Text(title, style = MaterialTheme.typography.bodyLarge)
+
+        AnimatedVisibility(visible = true) {
+          Text(
+            summary, style = MaterialTheme.typography.bodyMedium.copy(
+              color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+          )
+        }
+
+
+      Slider(
+        enabled = !disabled,
+        value = value,
+        onValueChange = onValueChange,
+        valueRange = valueRange,
+        steps = steps,
+      )
+    }
+  }
+
+
+  @Composable
   fun SettingsScreen(contentPadding: PaddingValues, viewModel: SettingsViewModel) {
     val timeLeftCounter by viewModel.timeLeftCounter.collectAsState()
     val dynamicTimeLeftCounter by viewModel.dynamicTimeLeftCounter.collectAsState()
     val replaceTimeLeftCounter by viewModel.replaceTimeLeftCounter.collectAsState()
+    val widgetDecimalPlaces by viewModel.widgetDecimalPlaces.collectAsState()
+    val decimalProgressPage by viewModel.decimalProgressPage.collectAsState()
+    val eventWidgetDecimalPlaces by viewModel.eventWidgetDecimalPlaces.collectAsState()
 
     LazyColumn(
       contentPadding = contentPadding, verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -233,6 +309,39 @@ class SettingsActivity : ComponentActivity() {
           checked = replaceTimeLeftCounter,
           disabled = !timeLeftCounter,
           onCheckedChange = { viewModel.setReplaceTimeLeftCounter(it) })
+      }
+
+      item {
+        SliderPreference(
+          title = stringResource(R.string.pref_title_widget_decimal_places),
+          summary = stringResource(R.string.pref_summary_widget_decimal_places),
+          value = widgetDecimalPlaces.toFloat(),
+          valueRange = 0f..5f,
+          steps = 4,
+          onValueChange = { viewModel.setWidgetDecimalPlaces(it.toInt())}
+        )
+      }
+
+      item {
+        SliderPreference(
+          title = stringResource(R.string.pref_title_widget_event_decimal_place),
+          summary = stringResource(R.string.pref_summary_widget_decimal_places),
+          value = eventWidgetDecimalPlaces.toFloat(),
+          valueRange = 0f..5f,
+          steps = 4,
+          onValueChange = { viewModel.setEventWidgetDecimalPlaces(it.toInt())}
+        )
+      }
+
+      item {
+        SliderPreference(
+          title = stringResource(R.string.pref_title_app_decimal_places),
+          summary = stringResource(R.string.pref_summary_app_decimal_places),
+          value = decimalProgressPage.toFloat(),
+          valueRange = 0f..13f,
+          steps = 12,
+          onValueChange = { viewModel.setDecimalProgressPage(it.toInt())}
+        )
       }
     }
   }
