@@ -39,6 +39,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -252,23 +253,7 @@ class SettingsActivity : ComponentActivity() {
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    enableEdgeToEdge() /*DynamicColors.applyToActivityIfAvailable(this)
-                       setContentView(R.layout.settings_activity)
-                       if (savedInstanceState == null) {
-                         supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
-                       }
-                       supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                       val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
-                       val appBarLayout: AppBarLayout = findViewById(R.id.appBarLayout)
-
-                       ViewCompat.setOnApplyWindowInsetsListener(appBarLayout) { view, windowInsets ->
-                         val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-                         view.updatePadding(top = insets.top)
-                         WindowInsetsCompat.CONSUMED
-                       }
-
-                       toolbar.setNavigationOnClickListener { finish() }*/
-
+    enableEdgeToEdge()
     setContent {
       val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
       YearlyProgressTheme {
@@ -502,13 +487,14 @@ class SettingsActivity : ComponentActivity() {
             style =
                 MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
             modifier = Modifier.padding(16.dp))
-        var widgetFreqSummary by remember {
-          mutableStateOf(
-              getString(R.string.adjust_widget_frequency_summary) +
-                  "\n\n" +
-                  getString(
-                      R.string.current_value_settings,
-                      widgetUpdateFreqency.toDuration(DurationUnit.SECONDS).toString()))
+        val widgetFreqSummary by remember(widgetUpdateFreqency) {
+          derivedStateOf {
+            getString(R.string.adjust_widget_frequency_summary) + "\n\n" +
+              getString(
+                R.string.current_value_settings,
+                widgetUpdateFreqency.toDuration(DurationUnit.SECONDS).toString()
+              )
+          }
         }
         SliderPreference(
             title = stringResource(R.string.adjust_widget_frequency),
@@ -517,12 +503,6 @@ class SettingsActivity : ComponentActivity() {
             valueRange = 5f..900f,
             onValueChange = {
               viewModel.setWidgetUpdateFreqency(it.toInt())
-              widgetFreqSummary =
-                  getString(R.string.adjust_widget_frequency_summary) +
-                      "\n\n" +
-                      getString(
-                          R.string.current_value_settings,
-                          widgetUpdateFreqency.toDuration(DurationUnit.SECONDS).toString())
             })
       }
     }
