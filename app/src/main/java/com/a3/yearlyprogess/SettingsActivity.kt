@@ -16,9 +16,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
@@ -364,6 +366,7 @@ class SettingsActivity : ComponentActivity() {
           )
         }
 
+      Spacer(Modifier.height(4.dp))
 
       Slider(
         enabled = !disabled,
@@ -418,32 +421,19 @@ class SettingsActivity : ComponentActivity() {
       contentPadding = contentPadding, verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
+
+
       item {
-        SliderPreference(
-          title = stringResource(R.string.pref_title_app_decimal_places),
-          summary = stringResource(R.string.pref_summary_app_decimal_places),
-          value = decimalProgressPage.toFloat(),
-          valueRange = 0f..13f,
-          steps = 12,
-          onValueChange = { viewModel.setDecimalProgressPage(it.toInt())}
+
+        Text(
+          text = stringResource(R.string.app),
+          style = MaterialTheme.typography.labelLarge.copy(
+            color = MaterialTheme.colorScheme.primary
+          ),
+          modifier = Modifier.padding( horizontal =  16.dp)
         )
-      }
 
-      item {
-        SliderPreference(
-          title = stringResource(R.string.adjust_widget_frequency),
-          summary = stringResource(R.string.adjust_widget_frequency_summary),
-          value = widgetUpdateFreqency.toFloat(),
-          valueRange = 5f..900f,
-          onValueChange = { viewModel.setWidgetUpdateFreqency(it.toInt())}
-        )
-      }
 
-      item {
-        ManageLocation()
-      }
-
-      item {
         ListPreference(title = stringResource(R.string.select_your_calendar_system),
           items = calendarTypes,
           selectedItem = calendarTypes.find { it.code == selectedCalendarTypeCode }
@@ -461,9 +451,7 @@ class SettingsActivity : ComponentActivity() {
           renderItemInDialog = {
             Text(it.name)
           })
-      }
 
-      item {
         ListPreference(title = stringResource(R.string.pref_title_week_day),
           items = weekTypes,
           selectedItem = weekTypes.find { it.code == selectedWeekTypeCode }
@@ -481,9 +469,7 @@ class SettingsActivity : ComponentActivity() {
           renderItemInDialog = {
             Text(it.name)
           })
-      }
 
-      item {
         ListPreference(title = stringResource(R.string.calculation_mode),
           items = calculationModes,
           selectedItem = calculationModes.find { it.code == selectedCalculationMode }
@@ -501,6 +487,38 @@ class SettingsActivity : ComponentActivity() {
           renderItemInDialog = {
             Text(it.name)
           })
+
+        ManageLocation()
+      }
+
+      item {
+        SliderPreference(
+          title = stringResource(R.string.pref_title_app_decimal_places),
+          summary = stringResource(R.string.pref_summary_app_decimal_places),
+          value = decimalProgressPage.toFloat(),
+          valueRange = 0f..13f,
+          steps = 12,
+          onValueChange = { viewModel.setDecimalProgressPage(it.toInt())}
+        )
+      }
+
+      item {
+
+        Text(
+          text = stringResource(R.string.widget_customization),
+          style = MaterialTheme.typography.labelLarge.copy(
+            color = MaterialTheme.colorScheme.primary
+          ),
+          modifier = Modifier.padding(16.dp)
+        )
+
+        SliderPreference(
+          title = stringResource(R.string.adjust_widget_frequency),
+          summary = stringResource(R.string.adjust_widget_frequency_summary),
+          value = widgetUpdateFreqency.toFloat(),
+          valueRange = 5f..900f,
+          onValueChange = { viewModel.setWidgetUpdateFreqency(it.toInt())}
+        )
       }
 
     }
