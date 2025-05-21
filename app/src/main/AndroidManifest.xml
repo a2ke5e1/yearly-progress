@@ -34,6 +34,9 @@
             android:name=".widgets.manager.CalendarWidgetConfigManager"
             android:exported="true" />
         <activity
+            android:name=".widgets.manager.eventManager.EventWidgetConfigManager"
+            android:exported="true" />
+        <activity
             android:name=".widgets.manager.StandaloneWidgetStyleChooser"
             android:exported="true">
             <intent-filter>

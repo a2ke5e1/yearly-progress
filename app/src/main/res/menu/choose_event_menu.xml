@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.a3.yearlyprogess.MainActivity">
+
+
+    <item
+        android:id="@+id/customize_event_widget"
+        android:icon="@drawable/tune_24dp"
+        android:title="Customize widget"
+        app:showAsAction="ifRoom" />
+
+
+
+
+</menu>
