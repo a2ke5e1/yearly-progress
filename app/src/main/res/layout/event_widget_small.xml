@@ -29,6 +29,16 @@
             android:textSize="12sp"
             android:textStyle="normal|bold" />
 
+        <TextView
+            android:id="@+id/widgetDaysLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/eventTitle"
+            android:textColor="@color/widget_text_color_tertiary"
+            android:textSize="8sp"
+            tools:text="12d 1h 45m 12s left"
+            android:textStyle="normal" />
+
 
         <TextView
             android:id="@+id/eventProgressText"

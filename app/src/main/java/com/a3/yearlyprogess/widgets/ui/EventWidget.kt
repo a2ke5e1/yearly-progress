@@ -44,10 +44,7 @@ class EventWidget : BaseWidget() {
       val yp = YearlyProgressUtil(context)
       val (newEventStart, newEventEnd) =
           event.nextStartAndEndTime(currentTime = System.currentTimeMillis())
-      var progress = yp.calculateProgress(newEventStart, newEventEnd)
-
-      progress = if (progress > 100) 100.0 else progress
-      progress = if (progress < 0) 0.0 else progress
+      val progress = yp.calculateProgress(newEventStart, newEventEnd).coerceIn(0.0, 100.0)
 
       val settingsPref = PreferenceManager.getDefaultSharedPreferences(context)
       val decimalPlace: Int =
@@ -134,9 +131,35 @@ class EventWidget : BaseWidget() {
               false,
           )
 
-      val eventTimeLeft = yp.calculateTimeLeft(newEventEnd).toTimePeriodText(dynamicTimeLeft)
+      val eventTimeLeft =context.getString(
+        R.string.time_left,
+        yp.calculateTimeLeft(newEventEnd).toTimePeriodText(dynamicTimeLeft),
+      )
+
+      if (timeLeftCounter) {
+
+        smallView.setViewVisibility(R.id.widgetDaysLeft, View.VISIBLE)
+        wideView.setViewVisibility(R.id.widgetDaysLeft, View.VISIBLE)
+        tallView.setViewVisibility(R.id.widgetDaysLeft, View.VISIBLE)
+
+        smallView.setTextViewTextSize(R.id.eventProgressText, 0, 50f)
+        wideView.setTextViewTextSize(R.id.eventProgressText, 0, 50f)
+        tallView.setTextViewTextSize(R.id.eventProgressText, 0, 50f)
+
+
+        smallView.setTextViewText(R.id.widgetDaysLeft, eventTimeLeft)
+        wideView.setTextViewText(R.id.widgetDaysLeft, eventTimeLeft)
+        tallView.setTextViewText(R.id.widgetDaysLeft, eventTimeLeft)
+
+      }
+
 
       if (timeLeftCounter && replaceProgressWithDaysLeft) {
+
+        smallView.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
+        wideView.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
+        tallView.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
+
         smallView.setTextViewText(R.id.eventProgressText, eventTimeLeft)
         wideView.setTextViewText(R.id.eventProgressText, eventTimeLeft)
         tallView.setTextViewText(R.id.eventProgressText, eventTimeLeft)
