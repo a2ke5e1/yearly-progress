@@ -100,7 +100,7 @@
     <string name="delete_selected">Delete Selected</string>
     <string name="delete_all">Delete All</string>
     <string name="today_sunrise_at_and_sunset_at">Today sunrise at %1$s and sunset at %2$s.</string>
-    <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">Last night\'s sunset was at %1$s and next sunrise will be at %2$s.</string>
+    <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">Sunset was at %1$s and next sunrise will be at %2$s.</string>
     <string name="widget_customization">Widget Customization</string>
     <string name="standalone_widget">Standalone Widget</string>
     <string name="version">Version</string>

@@ -69,7 +69,6 @@
     <string name="replace_progress_with_days_left_counter">Sostituisci il Progresso con il Contatore dei Giorni Rimanenti</string>
     <string name="this_will_only_work_if_the_time_left_counter_is_enabled">Questo funzionerà solo se il contatore del tempo rimanente è abilitato.</string>
     <string name="delete_the_selected_events_message">Sei sicuro di voler eliminare gli eventi selezionati?</string>
-    <string name="delete_selected_events">Eliminare %1$d eventi selezionati?</string>
     <string name="delete_all_events">Eliminare tutti gli eventi?</string>
     <string name="delete_all_events_message">Sei sicuro di voler eliminare tutti gli eventi?</string>
     <string name="search">Cerca</string>
@@ -100,7 +99,6 @@
     <string name="delete_selected">Elimina selezionati</string>
     <string name="delete_all">Elimina tutto</string>
     <string name="today_sunrise_at_and_sunset_at">L\'alba di oggi è alle %1$s e il tramonto alle %2$s.</string>
-    <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">Il tramonto di ieri sera è stato alle %1$s e la prossima alba sarà alle %2$s.</string>
     <string name="widget_customization">Personalizzazione del widget</string>
     <string name="standalone_widget">Widget indipendente</string>
     <string name="version">Versione</string>

@@ -54,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:textStyle="bold"
+
                     android:text="@string/demo_year"
                     android:textColor="?attr/colorTertiary"
                     android:textSize="20sp" />

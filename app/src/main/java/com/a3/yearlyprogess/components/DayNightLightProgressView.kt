@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.YearlyProgressUtil
@@ -106,6 +107,9 @@ constructor(
         } else {
           ContextCompat.getString(context, R.string.night_light)
         }
+    widgetDataTextView.updateLayoutParams<MarginLayoutParams> {
+      topMargin = 4
+    }
 
     // update the progress every seconds
     launch(Dispatchers.IO) {
@@ -135,7 +139,7 @@ constructor(
                 )
               }
           widgetDataTextView.text = currentPeriodValue
-          widgetDataTextView.textSize = 12f
+          widgetDataTextView.textSize = 13f
           widgetDataTextView.setTypeface(null, Typeface.NORMAL)
           widgetDataTextView.setTextColor(
               ContextCompat.getColor(context, R.color.widget_text_color_tertiary),
@@ -154,8 +158,8 @@ constructor(
     val yp = YearlyProgressUtil(context)
     val isSystem24Hour = is24HourFormat(context)
     val format =
-        if (isSystem24Hour) SimpleDateFormat("yyyy-MM-dd HH:mm", yp.getULocale())
-        else SimpleDateFormat("yyyy-MM-dd hh:mm a", yp.getULocale())
+        if (isSystem24Hour) SimpleDateFormat("HH:mm", yp.getULocale())
+        else SimpleDateFormat("hh:mm a", yp.getULocale())
     return format.format(date)
   }
 }
