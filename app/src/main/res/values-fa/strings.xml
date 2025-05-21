@@ -47,8 +47,6 @@
     <string name="settings">تنظیمات</string>
     <string name="pref_title_week_day">اولین روز هفته را انتخاب کنید</string>
     <string name="pref_title_widget_decimal_places">مکان اعشاری ابزارک ها</string>
-    <string name="pref_title_app_decimal_places">مکان اعشار در صفحه پیشرفت</string>
-    <string name="pref_summary_app_decimal_places">تعداد ارقام بعد از اعشار در صفحه پیشرفت برنامه</string>
     <string name="pref_summary_widget_decimal_places">تعداد ارقام بعد از اعشار در ابزارک ها</string>
     <string name="unsupported_launcher">راه‌انداز شما از این ویژگی پشتیبانی نمی‌کند. لطفا ابزارک را به صورت دستی اضافه کنید</string>
     <string name="pref_title_widget_event_decimal_place">مکان اعشار برای ابزارک رویداد</string>

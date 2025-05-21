@@ -48,8 +48,6 @@
     <string name="settings">सेटिंग्स</string>
     <string name="pref_title_week_day">सप्ताह के पहले दिन का चयन करें</string>
     <string name="pref_title_widget_decimal_places">विजेट्स के दशमलव स्थान</string>
-    <string name="pref_title_app_decimal_places">प्रगति पृष्ठ में दशमलव स्थान</string>
-    <string name="pref_summary_app_decimal_places">ऐप के प्रगति पृष्ठ में दशमलव के बाद अंकों की संख्या</string>
     <string name="pref_summary_widget_decimal_places">विजेट्स में दशमलव के बाद अंकों की संख्या</string>
     <string name="unsupported_launcher">आपका लॉन्चर इस सुविधा का समर्थन नहीं करता है। कृपया विजेट को मैन्युअल रूप से जोड़ें</string>
     <string name="pref_title_widget_event_decimal_place">इवेंट विजेट के लिए दशमलव स्थान</string>

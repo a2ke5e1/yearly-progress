@@ -319,8 +319,14 @@ class SettingsActivity : ComponentActivity() {
 
   @Composable
   fun SettingsScreen(contentPadding: PaddingValues, viewModel: SettingsViewModel) {
+    val timeLeftCounter by viewModel.timeLeftCounter.collectAsState()
+    val dynamicTimeLeftCounter by viewModel.dynamicTimeLeftCounter.collectAsState()
+    val replaceTimeLeftCounter by viewModel.replaceTimeLeftCounter.collectAsState()
+    val widgetDecimalPlaces by viewModel.widgetDecimalPlaces.collectAsState()
+    val eventWidgetDecimalPlaces by viewModel.eventWidgetDecimalPlaces.collectAsState()
     val decimalProgressPage by viewModel.decimalProgressPage.collectAsState()
     val widgetUpdateFreqency by viewModel.widgetUpdateFreqency.collectAsState()
+    val widgetTransparency by viewModel.widgetTransparency.collectAsState()
     val selectedCalendarTypeCode by viewModel.selectedCalendarType.collectAsState()
     val selectedWeekTypeCode by viewModel.selectedWeekType.collectAsState()
     val selectedCalculationMode by viewModel.selectedCalculationMode.collectAsState()
@@ -437,6 +443,81 @@ class SettingsActivity : ComponentActivity() {
               viewModel.setWidgetUpdateFreqency(it.toInt())
             })
       }
+
+      item {
+        val widgetTransparencySummary by remember(widgetTransparency) {
+          derivedStateOf {
+            getString(R.string.adjust_opacity_of_the_standalone_and_event_widget) + "\n\n" +
+              getString(
+                R.string.current_value_settings,
+                widgetTransparency.toString() + "%"
+              )
+          }
+        }
+        SliderPreference(
+            title = stringResource(R.string.widget_transparency),
+            summary = widgetTransparencySummary,
+            value = widgetTransparency.toFloat(),
+            valueRange = 0f..100f,
+            onValueChange = {
+              viewModel.setWidgetTransparency(it.toInt())
+            })
+      }
+
+      item {
+        SwitchPreference(
+          title = stringResource(R.string.time_left_counter),
+          summary = stringResource(R.string.shows_how_much_time_left_in_the_widget),
+          checked = timeLeftCounter,
+          onCheckedChange = { newValue ->
+            viewModel.setTimeLeftCounter(newValue)
+
+          })
+      }
+
+      item {
+        SwitchPreference(
+          title = stringResource(R.string.dynamic_time_left_counter),
+          summary = stringResource(R.string.dynamic_time_left_counter_will_automatically_switch_between_days_hours_minutes_based_on_the_time_left),
+          checked = dynamicTimeLeftCounter,
+          disabled = !timeLeftCounter,
+          onCheckedChange = { newValue ->
+            viewModel.setDynamicTimeLeftCounter(newValue)
+
+          })
+      }
+
+      item {
+        SwitchPreference(
+          title = stringResource(R.string.replace_progress_with_days_left_counter),
+          summary = stringResource(R.string.this_will_only_work_if_the_time_left_counter_is_enabled),
+          checked = replaceTimeLeftCounter,
+          disabled = !timeLeftCounter,
+          onCheckedChange = { newValue ->
+            viewModel.setReplaceTimeLeftCounter(newValue)
+          })
+      }
+
+      item {
+        SliderPreference(
+          title = stringResource(R.string.pref_title_widget_decimal_places),
+          summary = stringResource(R.string.pref_summary_widget_decimal_places),
+          value = widgetDecimalPlaces.toFloat(),
+          valueRange = 0f..5f,
+          steps = 4,
+          onValueChange = { viewModel.setWidgetDecimalPlaces(it.toInt()) })
+      }
+
+      item {
+        SliderPreference(
+          title = stringResource(R.string.pref_title_widget_event_decimal_place),
+          summary = stringResource(R.string.pref_summary_widget_decimal_places),
+          value = eventWidgetDecimalPlaces.toFloat(),
+          valueRange = 0f..5f,
+          steps = 4,
+          onValueChange = { viewModel.setEventWidgetDecimalPlaces(it.toInt()) })
+      }
+
     }
   }
 
