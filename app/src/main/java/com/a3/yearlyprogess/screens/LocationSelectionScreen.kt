@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,7 +31,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,6 +44,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -61,12 +65,21 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.a3.yearlyprogess.R
@@ -79,12 +92,14 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-data class NominatimPlace(val display_name: String, val lat: String, val lon: String)
+@Parcelize
+data class NominatimPlace(val display_name: String, val lat: String, val lon: String) : Parcelable
 
 data class UserLocationPref(
     val automaticallyDetectLocation: Boolean = true,
@@ -289,23 +304,36 @@ class LocationSelectionScreen : ComponentActivity() {
             }
 
             item {
+              val isClickable = !automaticallyDetectLocation
               Column(
                   modifier =
-                      Modifier.fillMaxWidth().clickable { showManualSelectionDialogBox = true }) {
+                      Modifier.fillMaxWidth()
+                          .then(
+                              if (isClickable)
+                                  Modifier.clickable { showManualSelectionDialogBox = true }
+                              else Modifier)
+                          .alpha(if (isClickable) 1f else 0.5f)) {
                     Column(
                         modifier =
                             Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
                           Text(
-                              stringResource(R.string.manual_location),
+                              text = stringResource(R.string.manual_location),
                               style =
                                   MaterialTheme.typography.labelLarge.copy(
                                       color = MaterialTheme.colorScheme.primary))
                           Text(
-                              selectedLocation?.display_name
-                                  ?: stringResource(R.string.enter_a_location),
+                              text =
+                                  selectedLocation?.display_name
+                                      ?: stringResource(R.string.enter_a_location),
                               style = MaterialTheme.typography.bodyLarge)
                         }
                   }
+            }
+
+            item {
+              HorizontalDivider(
+                  thickness = 1.dp, modifier = Modifier.padding(bottom = 8.dp, top = 32.dp))
+              PoweredByInfoText()
             }
           }
 
@@ -327,6 +355,58 @@ class LocationSelectionScreen : ComponentActivity() {
       }
     }
   }
+}
+
+@Composable
+fun PoweredByInfoText(
+    textAlignment: TextAlign = TextAlign.Start,
+    style: TextStyle = MaterialTheme.typography.bodyMedium
+) {
+  val linkColor = MaterialTheme.colorScheme.primary
+
+  Row(
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+      verticalAlignment = Alignment.Top) {
+        Icon(
+            imageVector = Icons.Outlined.Info,
+            contentDescription = "Info",
+            tint = linkColor,
+            modifier = Modifier.padding(top = 4.dp, end = 8.dp))
+
+        Text(
+            text =
+                buildAnnotatedString {
+                  append("Location selection is powered by ")
+
+                  withLink(
+                      LinkAnnotation.Url(
+                          "https://nominatim.openstreetmap.org/",
+                          TextLinkStyles(
+                              style =
+                                  SpanStyle(
+                                      color = linkColor,
+                                      textDecoration = TextDecoration.Underline)))) {
+                        append("Nominatim (OpenStreetMap)")
+                      }
+
+                  append(" and sunrise/sunset data is provided by ")
+
+                  withLink(
+                      LinkAnnotation.Url(
+                          "https://api.sunrisesunset.io/",
+                          TextLinkStyles(
+                              style =
+                                  SpanStyle(
+                                      color = linkColor,
+                                      textDecoration = TextDecoration.Underline)))) {
+                        append("SunriseSunset API")
+                      }
+
+                  append(".")
+                },
+            style = style,
+            textAlign = textAlignment)
+      }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

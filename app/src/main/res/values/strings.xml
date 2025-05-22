@@ -47,8 +47,8 @@
     <string name="settings">Settings</string>
     <string name="pref_title_week_day">Select first day of week</string>
     <string name="pref_title_widget_decimal_places">Decimal places of widgets</string>
-    <string name="pref_title_app_decimal_places">Decimal places in progress page</string>
-    <string name="pref_summary_app_decimal_places">Number of digits after a decimal in progress page of the app</string>
+    <string name="pref_title_app_decimal_places">Decimal places in app</string>
+    <string name="pref_summary_app_decimal_places">Number of digits after a decimal in the app</string>
     <string name="pref_summary_widget_decimal_places">Number of digits after a decimal in widgets</string>
     <string name="unsupported_launcher">Your Launcher does not support this feature. Please add Widget manually</string>
     <string name="pref_title_widget_event_decimal_place">Decimal places for Event Widget</string>
@@ -100,7 +100,7 @@
     <string name="delete_selected">Delete Selected</string>
     <string name="delete_all">Delete All</string>
     <string name="today_sunrise_at_and_sunset_at">Today sunrise at %1$s and sunset at %2$s.</string>
-    <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">Last night\'s sunset was at %1$s and next sunrise will be at %2$s.</string>
+    <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">Sunset was at %1$s and next sunrise will be at %2$s.</string>
     <string name="widget_customization">Widget Customization</string>
     <string name="standalone_widget">Standalone Widget</string>
     <string name="version">Version</string>
@@ -147,6 +147,8 @@
     <string name="enter_a_location">Enter a location</string>
     <string name="auto_location_message">In order to automatically detect location for day/night widgets, please give app location permission in settings.</string>
     <string name="font_size">Font Size</string>
+    <string name="cancel">Cancel</string>
+    <string name="customize_event_widget">Customize event widget</string>
 
 
     <!-- Week Preference -->
@@ -155,6 +157,10 @@
         <item>Saturday</item>
         <item>Sunday</item>
         <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thrusday</item>
+        <item>Friday</item>
     </string-array>
 
     <!-- Calculation Preference -->

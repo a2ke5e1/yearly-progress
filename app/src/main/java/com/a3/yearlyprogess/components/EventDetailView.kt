@@ -130,7 +130,7 @@ constructor(
       animate: Boolean = true,
   ) {
     val decimalPlace: Int =
-        settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
+        settingsPref.getInt(context.getString(R.string.app_widget_decimal_point), 2)
 
     val params = binding.customProgressBar.layoutParams
     val target = (progress * 0.01 * binding.parent.width).toInt()

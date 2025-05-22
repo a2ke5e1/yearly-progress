@@ -7,26 +7,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -52,6 +44,8 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.preference.PreferenceManager
+import com.a3.yearlyprogess.components.dialogbox.CalendarType
+import com.a3.yearlyprogess.components.dialogbox.ListSelectorDialogBox
 import com.a3.yearlyprogess.ui.theme.YearlyProgressTheme
 
 class WelcomeScreenV2 : ComponentActivity() {
@@ -135,14 +129,16 @@ fun WelcomeScreen() {
               }
 
           if (showDialog) {
-            CalendarTypeDialog(
-                calendarTypes = calendarTypes,
-                selectedType = selectedType,
-                onTypeSelected = {
+            ListSelectorDialogBox(
+                items = calendarTypes,
+                selectedItem = selectedType,
+                onItemSelected = { index, it ->
                   selectedType = it
                   showDialog = false
                 },
-                onDismiss = { showDialog = false })
+                renderItem = { Text(it.name) },
+                onDismiss = { showDialog = false },
+                title = stringResource(R.string.select_your_calendar_system))
           }
         }
   }
@@ -179,40 +175,6 @@ fun TermsAndPrivacyText(
       },
       textAlign = textAlignment,
       style = style)
-}
-
-data class CalendarType(val name: String, val code: String)
-
-@Composable
-fun CalendarTypeDialog(
-    calendarTypes: List<CalendarType>,
-    selectedType: CalendarType?,
-    onTypeSelected: (CalendarType) -> Unit,
-    onDismiss: () -> Unit
-) {
-  AlertDialog(
-      onDismissRequest = onDismiss,
-      title = {
-        Text(
-            text = stringResource(R.string.select_your_calendar_system),
-            style = MaterialTheme.typography.bodyLarge)
-      },
-      text = {
-        LazyColumn {
-          itemsIndexed(calendarTypes) { index, type ->
-            Row(
-                modifier = Modifier.fillMaxWidth().clickable { onTypeSelected(type) },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                  RadioButton(selected = type == selectedType, onClick = { onTypeSelected(type) })
-                  Text(text = type.name)
-                }
-          }
-        }
-      },
-      confirmButton = {
-        FilledTonalButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
-      })
 }
 
 @Preview(showBackground = true, showSystemUi = true)

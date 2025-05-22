@@ -254,8 +254,7 @@ data class CalendarWidgetConfig(
                   replaceProgressWithDaysLeft = false,
                   backgroundTransparency = 1f,
                   selectedCalendarIds = null,
-                  fontScale = 1f
-                )
+                  fontScale = 1f)
       return Gson().fromJson(jsonString, CalendarWidgetConfig::class.java)
     }
 
@@ -309,7 +308,7 @@ class CalendarWidgetConfigManagerViewModel(private val application: Application)
   }
 
   fun updateFontScale(fontScale: Float) {
-    _widgetConfig.update { it.copy(fontScale = fontScale.coerceIn(0.1f , 2f)) }
+    _widgetConfig.update { it.copy(fontScale = fontScale.coerceIn(0.1f, 2f)) }
   }
 
   fun updateTimeLeftCounter(checked: Boolean) {
@@ -492,12 +491,10 @@ class CalendarWidgetConfigManager : ComponentActivity() {
                       }
                       Text(stringResource(R.string.font_size))
                       Slider(
-                        value = fontScale,
-                        onValueChange = { fontScale = it },
-                        valueRange = 0.1f..2f,
-                        onValueChangeFinished = {
-                          viewModel.updateFontScale(fontScale)
-                        },
+                          value = fontScale,
+                          onValueChange = { fontScale = it },
+                          valueRange = 0.1f..2f,
+                          onValueChangeFinished = { viewModel.updateFontScale(fontScale) },
                       )
                     }
                   }

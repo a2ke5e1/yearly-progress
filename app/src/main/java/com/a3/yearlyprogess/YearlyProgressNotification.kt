@@ -1,6 +1,7 @@
 package com.a3.yearlyprogess
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -10,7 +11,6 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
 
 class YearlyProgressNotification(private val context: Context) {
@@ -86,7 +86,7 @@ class YearlyProgressNotification(private val context: Context) {
     with(NotificationManagerCompat.from(context)) { cancel(notificationId) }
   }
 
-  fun requestNotificationPermission(requireActivity: FragmentActivity) {
+  fun requestNotificationPermission(requireActivity: Activity) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       requireActivity.requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 0)
     }

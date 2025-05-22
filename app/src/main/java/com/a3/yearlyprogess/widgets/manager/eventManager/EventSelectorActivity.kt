@@ -1,8 +1,11 @@
 package com.a3.yearlyprogess.widgets.manager.eventManager
 
 import android.appwidget.AppWidgetManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -10,9 +13,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.EventSelectorScreenListEventsBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.EventsListViewAdapter
+import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
+import com.a3.yearlyprogess.widgets.manager.eventManager.repo.EventRepository
 import com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.ui.EventWidget
 import com.google.android.material.color.DynamicColors
@@ -69,6 +76,10 @@ class EventSelectorActivity : AppCompatActivity() {
           finish()
         }
 
+    eventAdapter.setSelectedEvent(
+      this.getSharedPreferences("eventWidget_$appWidgetId", Context.MODE_PRIVATE)
+      .getInt("eventId", -1)
+    )
     binding.eventsRecyclerViewer.apply {
       adapter = eventAdapter
       layoutManager = LinearLayoutManager(this@EventSelectorActivity)
@@ -80,6 +91,36 @@ class EventSelectorActivity : AppCompatActivity() {
       } else {
         binding.noEvents.visibility = View.GONE
       }
+    }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    menuInflater.inflate(R.menu.choose_event_menu, menu)
+    return true
+  }
+
+  override fun onOptionsItemSelected(
+    item: MenuItem
+  ): Boolean { // Handle action bar item clicks here. The action bar will
+    // automatically handle clicks on the Home/Up button, so long
+    // as you specify a parent activity in AndroidManifest.xml.
+    return when (item.itemId) {
+      R.id.customize_event_widget -> {
+
+        val appWidgetId =
+          intent
+            ?.extras
+            ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            ?: AppWidgetManager.INVALID_APPWIDGET_ID
+
+        startActivity(Intent(this, EventWidgetConfigManager::class.java).apply {
+          putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        })
+
+        true
+      }
+      else -> super.onOptionsItemSelected(item)
     }
   }
 }

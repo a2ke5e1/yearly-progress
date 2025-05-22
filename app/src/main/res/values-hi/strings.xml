@@ -48,8 +48,6 @@
     <string name="settings">सेटिंग्स</string>
     <string name="pref_title_week_day">सप्ताह के पहले दिन का चयन करें</string>
     <string name="pref_title_widget_decimal_places">विजेट्स के दशमलव स्थान</string>
-    <string name="pref_title_app_decimal_places">प्रगति पृष्ठ में दशमलव स्थान</string>
-    <string name="pref_summary_app_decimal_places">ऐप के प्रगति पृष्ठ में दशमलव के बाद अंकों की संख्या</string>
     <string name="pref_summary_widget_decimal_places">विजेट्स में दशमलव के बाद अंकों की संख्या</string>
     <string name="unsupported_launcher">आपका लॉन्चर इस सुविधा का समर्थन नहीं करता है। कृपया विजेट को मैन्युअल रूप से जोड़ें</string>
     <string name="pref_title_widget_event_decimal_place">इवेंट विजेट के लिए दशमलव स्थान</string>
@@ -70,7 +68,6 @@
     <string name="replace_progress_with_days_left_counter">प्रगति को शेष दिनों के काउंटर के साथ बदलें</string>
     <string name="this_will_only_work_if_the_time_left_counter_is_enabled">यह केवल तभी काम करेगा जब शेष समय काउंटर सक्षम हो।</string>
     <string name="delete_the_selected_events_message">क्या आप सुनिश्चित हैं कि आप चयनित घटनाओं को हटाना चाहते हैं?</string>
-    <string name="delete_selected_events">चयनित %1$d घटनाओं को हटाएं?</string>
     <string name="delete_all_events">सभी घटनाओं को हटाएं?</string>
     <string name="delete_all_events_message">क्या आप सुनिश्चित हैं कि आप सभी घटनाओं को हटाना चाहते हैं?</string>
     <string name="search">खोज</string>
@@ -101,7 +98,6 @@
     <string name="delete_selected">चयनित को हटाएं</string>
     <string name="delete_all">सभी को हटाएं</string>
     <string name="today_sunrise_at_and_sunset_at">आज सूर्योदय %1$s बजे और सूर्यास्त %2$s बजे।</string>
-    <string name="last_night_s_sunset_was_at_and_next_sunrise_will_be_at">पिछली रात का सूर्यास्त %1$s बजे था और अगला सूर्योदय %2$s बजे होगा।</string>
     <string name="widget_customization">विजेट अनुकूलन</string>
     <string name="standalone_widget">स्टैंडअलोन विजेट</string>
     <string name="version">संस्करण</string>
