@@ -1,6 +1,7 @@
 package com.a3.yearlyprogess.widgets.manager.eventManager
 
 import android.appwidget.AppWidgetManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.EventSelectorScreenListEventsBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.EventsListViewAdapter
+import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
+import com.a3.yearlyprogess.widgets.manager.eventManager.repo.EventRepository
 import com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.ui.EventWidget
 import com.google.android.material.color.DynamicColors
@@ -73,6 +76,10 @@ class EventSelectorActivity : AppCompatActivity() {
           finish()
         }
 
+    eventAdapter.setSelectedEvent(
+      this.getSharedPreferences("eventWidget_$appWidgetId", Context.MODE_PRIVATE)
+      .getInt("eventId", -1)
+    )
     binding.eventsRecyclerViewer.apply {
       adapter = eventAdapter
       layoutManager = LinearLayoutManager(this@EventSelectorActivity)

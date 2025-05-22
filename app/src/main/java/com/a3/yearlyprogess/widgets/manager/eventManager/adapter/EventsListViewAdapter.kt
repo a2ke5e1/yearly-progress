@@ -32,6 +32,14 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
 
   private var tracker: SelectionTracker<Long>? = null
 
+
+  // This is used to indicate which event is selected by the user.
+  private var selectedEventId: Int? = null
+  fun setSelectedEvent(eventId: Int?) {
+    if (eventId == -1) return
+    selectedEventId = eventId
+  }
+
   init {
     setHasStableIds(true)
   }
@@ -62,6 +70,16 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
       intent.putExtra("addMode", false)
       it.context.startActivity(intent)
     }
+
+    // This will indicate currently selected event in the event widget's
+    // event selection list.
+    if (selectedEventId != null && currentEvent.id == selectedEventId) {
+      holder.binding.customEventCardView.root.eventCheck.visibility = View.VISIBLE
+      holder.binding.customEventCardView.root.eventCheck.isChecked = true
+    } else {
+      holder.binding.customEventCardView.root.eventCheck.visibility = View.GONE
+    }
+
     if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
       holder.binding.customEventCardView.setOnAddWidgetClickListener {
         requestPinWidget(it.context, currentEvent)

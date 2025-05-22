@@ -18,10 +18,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
@@ -121,15 +125,24 @@ class EventWidgetConfigManager : ComponentActivity() {
       val widgetConfig = viewModel.widgetConfig.collectAsState()
       YearlyProgressTheme {
         Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
+            modifier = Modifier
+              .nestedScroll(scrollBehavior.nestedScrollConnection)
+              .fillMaxSize(),
             topBar = {
               CenterAlignedTopAppBar(
                   title = {
                     Text(
-                        text = "Customize event widget",
+                        text = stringResource(R.string.customize_event_widget),
                     )
                   },
                   scrollBehavior = scrollBehavior,
+                  navigationIcon = {
+                    IconButton(onClick = { finish() }) {
+                      Icon(
+                        Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.go_back))
+                    }
+                  }
               )
             },
             floatingActionButton = {
@@ -166,11 +179,15 @@ class EventWidgetConfigManager : ComponentActivity() {
 
                     Row(
                         modifier =
-                            Modifier.fillMaxWidth().clickable(
-                                interactionSource = timeLeftInteractionSource, indication = null) {
-                                  viewModel.updateTimeLeftCounter(
-                                      !widgetConfig.value.timeLeftCounter)
-                                },
+                        Modifier
+                          .fillMaxWidth()
+                          .clickable(
+                            interactionSource = timeLeftInteractionSource, indication = null
+                          ) {
+                            viewModel.updateTimeLeftCounter(
+                              !widgetConfig.value.timeLeftCounter
+                            )
+                          },
                         verticalAlignment = Alignment.CenterVertically) {
                           Text(
                               stringResource(R.string.time_left_counter),
@@ -184,12 +201,16 @@ class EventWidgetConfigManager : ComponentActivity() {
 
                     Row(
                         modifier =
-                            Modifier.fillMaxWidth().clickable(
-                                interactionSource = dynamicTimeLeftInteractionSource,
-                                indication = null) {
-                                  viewModel.updateDynamicTimeLeftCounter(
-                                      !widgetConfig.value.dynamicLeftCounter)
-                                },
+                        Modifier
+                          .fillMaxWidth()
+                          .clickable(
+                            interactionSource = dynamicTimeLeftInteractionSource,
+                            indication = null
+                          ) {
+                            viewModel.updateDynamicTimeLeftCounter(
+                              !widgetConfig.value.dynamicLeftCounter
+                            )
+                          },
                         verticalAlignment = Alignment.CenterVertically) {
                           Text(
                               stringResource(R.string.dynamic_time_left_counter),
@@ -203,12 +224,16 @@ class EventWidgetConfigManager : ComponentActivity() {
 
                     Row(
                         modifier =
-                            Modifier.fillMaxWidth().clickable(
-                                interactionSource = replaceTimeLeftInteractionSource,
-                                indication = null) {
-                                  viewModel.updateReplaceTimeLeftCounter(
-                                      !widgetConfig.value.replaceProgressWithDaysLeft)
-                                },
+                        Modifier
+                          .fillMaxWidth()
+                          .clickable(
+                            interactionSource = replaceTimeLeftInteractionSource,
+                            indication = null
+                          ) {
+                            viewModel.updateReplaceTimeLeftCounter(
+                              !widgetConfig.value.replaceProgressWithDaysLeft
+                            )
+                          },
                         verticalAlignment = Alignment.CenterVertically) {
                           Text(
                               stringResource(R.string.replace_progress_with_days_left_counter),

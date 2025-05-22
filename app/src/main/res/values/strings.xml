@@ -148,6 +148,7 @@
     <string name="auto_location_message">In order to automatically detect location for day/night widgets, please give app location permission in settings.</string>
     <string name="font_size">Font Size</string>
     <string name="cancel">Cancel</string>
+    <string name="customize_event_widget">Customize event widget</string>
 
 
     <!-- Week Preference -->
