@@ -37,7 +37,7 @@
                     android:text="Lorem ipsum"
                     android:textAllCaps="false"
                     android:textColor="@color/widget_text_color"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/event_widget_wideview_title"
                     android:textStyle="normal|bold" />
 
                 <TextView
@@ -50,7 +50,7 @@
                     android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu magna ut nisi laoreet tempus."
                     android:textAllCaps="false"
                     android:textColor="@color/widget_text_color_tertiary"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/event_widget_wideview_description"
                     android:textStyle="normal" />
 
 
@@ -62,7 +62,7 @@
                     android:text="08/01 · 7:37 PM"
                     android:textAllCaps="false"
                     android:textColor="@color/widget_text_color"
-                    android:textSize="8sp"
+                    android:textSize="@dimen/event_widget_wideview_time"
                     android:textStyle="normal" />
 
                 <TextView
@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/widget_text_color_tertiary"
-                    android:textSize="8sp"
+                    android:textSize="@dimen/event_widget_wideview_days_left"
                     tools:text="12d 1h 45m 12s left"
                     android:textStyle="normal" />
 
@@ -85,7 +85,7 @@
             android:layout_above="@id/eventProgressBar"
             android:text="40.48%"
             android:textColor="@color/widget_text_color"
-            android:textSize="28sp"
+            android:textSize="@dimen/event_widget_wideview_progress"
             android:textStyle="bold" />
 
 
@@ -99,7 +99,7 @@
             android:text="08/09"
             android:textAlignment="textEnd"
             android:textColor="@color/widget_text_color_tertiary"
-            android:textSize="11sp" />
+            android:textSize="@dimen/event_widget_wideview_current_date" />
 
         <ProgressBar
             android:id="@+id/eventProgressBar"

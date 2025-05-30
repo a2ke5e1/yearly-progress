@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="event_widget_small_title">12sp</dimen>
+    <dimen name="event_widget_small_days_left">8sp</dimen>
+    <dimen name="event_widget_small_progress">18sp</dimen>
+    <dimen name="event_widget_small_current_date">11sp</dimen>
+
+    <dimen name="event_widget_wideview_title">12sp</dimen>
+    <dimen name="event_widget_wideview_description">12sp</dimen>
+    <dimen name="event_widget_wideview_time">8sp</dimen>
+    <dimen name="event_widget_wideview_days_left">8sp</dimen>
+    <dimen name="event_widget_wideview_progress">28sp</dimen>
+    <dimen name="event_widget_wideview_current_date">11sp</dimen>
+
+    <dimen name="event_widget_tallview_title">12sp</dimen>
+    <dimen name="event_widget_tallview_description">11sp</dimen>
+    <dimen name="event_widget_tallview_time">8sp</dimen>
+    <dimen name="event_widget_tallview_days_left">8sp</dimen>
+    <dimen name="event_widget_tallview_progress">18sp</dimen>
+    <dimen name="event_widget_tallview_current_date">11sp</dimen>
+</resources>

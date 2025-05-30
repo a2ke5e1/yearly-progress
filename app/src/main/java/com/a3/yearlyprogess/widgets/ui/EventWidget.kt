@@ -5,8 +5,10 @@ import android.content.Context
 import android.os.Build
 import android.text.format.DateFormat
 import android.util.SizeF
+import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
+import androidx.annotation.DimenRes
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.preference.PreferenceManager
@@ -15,7 +17,6 @@ import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.components.EventDetailView.Companion.displayRelativeDifferenceMessage
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
-import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.manager.eventManager.repo.EventRepository
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
@@ -96,6 +97,40 @@ data class EventWidgetOption(
   }
 }
 
+data class DefaultEventWidgetTextProperties(
+  val titleSize: Float,
+  val descriptionSize: Float?,
+  val timeSize: Float?,
+  val daysLeftSize: Float,
+  val progressSize: Float,
+  val currentDateSize: Float
+)
+
+private fun RemoteViews.applyCustomFontSize(
+  scale: Float,
+  defaultWidgetTextProperties: DefaultEventWidgetTextProperties
+) {
+  val fontScale = scale.coerceIn(0.1f, 2f)
+
+  val titleSize = defaultWidgetTextProperties.titleSize * fontScale
+  val descriptionSize = defaultWidgetTextProperties.descriptionSize?.times(fontScale)
+  val timeSize = defaultWidgetTextProperties.timeSize?.times(fontScale)
+  val daysLeftSize = defaultWidgetTextProperties.daysLeftSize * fontScale
+  val progressSize = defaultWidgetTextProperties.progressSize * fontScale
+  val currentDateSize = defaultWidgetTextProperties.currentDateSize * fontScale
+
+  setTextViewTextSize(R.id.eventTitle, TypedValue.COMPLEX_UNIT_SP, titleSize)
+  if (descriptionSize != null) {
+    setTextViewTextSize(R.id.eventDesc, TypedValue.COMPLEX_UNIT_SP, descriptionSize)
+  }
+  if (timeSize != null) {
+    setTextViewTextSize(R.id.eventTime, TypedValue.COMPLEX_UNIT_SP, timeSize)
+  }
+  setTextViewTextSize(R.id.widgetDaysLeft, TypedValue.COMPLEX_UNIT_SP, daysLeftSize)
+  setTextViewTextSize(R.id.eventProgressText, TypedValue.COMPLEX_UNIT_SP, progressSize)
+  setTextViewTextSize(R.id.currentDate, TypedValue.COMPLEX_UNIT_SP, currentDateSize)
+}
+
 /** Implementation of App Widget functionality. */
 class EventWidget : BaseWidget() {
   companion object {
@@ -104,6 +139,18 @@ class EventWidget : BaseWidget() {
         event: Event,
         options: EventWidgetOption
     ): RemoteViews {
+
+      fun pxToSp(@DimenRes id: Int): Float {
+        val res = context.resources
+        val metrics = res.displayMetrics
+        val px = res.getDimension(id)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+          TypedValue.deriveDimension(TypedValue.COMPLEX_UNIT_SP, px, metrics)
+        } else {
+          px / metrics.scaledDensity
+        }
+      }
+
       // Construct the RemoteViews object
       val smallView = RemoteViews(context.packageName, R.layout.event_widget_small)
       val wideView = RemoteViews(context.packageName, R.layout.event_widget_wideview)
@@ -233,7 +280,34 @@ class EventWidget : BaseWidget() {
       tallView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
       wideView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
 
-      var remoteViews = wideView
+      smallView.applyCustomFontSize(options.fontScale, DefaultEventWidgetTextProperties(
+        titleSize = pxToSp(R.dimen.event_widget_small_title),
+        progressSize = pxToSp(R.dimen.event_widget_small_progress),
+        daysLeftSize = pxToSp(R.dimen.event_widget_small_days_left),
+        currentDateSize = pxToSp(R.dimen.event_widget_small_current_date),
+        descriptionSize = null,
+        timeSize = null
+      ))
+
+      wideView.applyCustomFontSize(options.fontScale, DefaultEventWidgetTextProperties(
+        titleSize = pxToSp(R.dimen.event_widget_wideview_title),
+        progressSize = pxToSp(R.dimen.event_widget_wideview_progress),
+        daysLeftSize = pxToSp(R.dimen.event_widget_wideview_days_left),
+        currentDateSize = pxToSp(R.dimen.event_widget_wideview_current_date),
+        descriptionSize = pxToSp(R.dimen.event_widget_wideview_description),
+        timeSize = pxToSp(R.dimen.event_widget_wideview_time)
+      ))
+
+      tallView.applyCustomFontSize(options.fontScale, DefaultEventWidgetTextProperties(
+        titleSize = pxToSp(R.dimen.event_widget_tallview_title),
+        progressSize = pxToSp(R.dimen.event_widget_tallview_progress),
+        daysLeftSize = pxToSp(R.dimen.event_widget_tallview_days_left),
+        currentDateSize = pxToSp(R.dimen.event_widget_tallview_current_date),
+        descriptionSize = pxToSp(R.dimen.event_widget_tallview_description),
+        timeSize = pxToSp(R.dimen.event_widget_tallview_time)
+      ))
+
+
       if (Build.VERSION.SDK_INT > 30) {
         val viewMapping: Map<SizeF, RemoteViews> =
             mapOf(
@@ -241,10 +315,18 @@ class EventWidget : BaseWidget() {
                 SizeF(200f, 200f) to wideView,
                 SizeF(130f, 140f) to tallView,
             )
-        remoteViews = RemoteViews(viewMapping)
+        return RemoteViews(viewMapping)
       }
 
-      return remoteViews
+      val option = AppWidgetManager.getInstance(context).getAppWidgetOptions(options.widgetId)
+      val height = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+      val width = option.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+
+      if (height >= 100 && width >= 100) {
+        return tallView
+      }
+
+      return smallView
     }
   }
 
