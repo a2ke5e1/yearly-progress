@@ -15,7 +15,6 @@ import com.a3.yearlyprogess.TimePeriod
 import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.components.EventDetailView.Companion.displayRelativeDifferenceMessage
 import com.a3.yearlyprogess.widgets.manager.eventManager.data.EventDatabase
-import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.manager.eventManager.repo.EventRepository
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
@@ -29,36 +28,34 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-
 data class EventWidgetOption(
-  val widgetId: Int,
-  val decimalPlaces: Int,
-  val timeLeftCounter: Boolean,
-  val dynamicLeftCounter: Boolean,
-  val replaceProgressWithDaysLeft: Boolean,
-  @IntRange(from = 0, to = 100) val backgroundTransparency: Int,
-  @FloatRange(from = 0.1, to = 2.0) val fontScale: Float
+    val widgetId: Int,
+    val decimalPlaces: Int,
+    val timeLeftCounter: Boolean,
+    val dynamicLeftCounter: Boolean,
+    val replaceProgressWithDaysLeft: Boolean,
+    @IntRange(from = 0, to = 100) val backgroundTransparency: Int,
+    @FloatRange(from = 0.1, to = 2.0) val fontScale: Float
 ) {
   companion object {
 
     private const val EVENT_WIDGET_PREF = "event_widget_pref"
 
     fun load(
-      context: Context,
-      widgetId: Int,
+        context: Context,
+        widgetId: Int,
     ): EventWidgetOption {
       val globalPref = PreferenceManager.getDefaultSharedPreferences(context)
       val eventWidgetPreferences =
-        context.getSharedPreferences(EVENT_WIDGET_PREF, Context.MODE_PRIVATE)
+          context.getSharedPreferences(EVENT_WIDGET_PREF, Context.MODE_PRIVATE)
 
       val globalDecimalPointKey = context.getString(R.string.widget_event_widget_decimal_point)
       val globalTimeLeftKey = context.getString(R.string.widget_widget_time_left)
       val globalDynamicTimeLeftKey = context.getString(R.string.widget_widget_use_dynamic_time_left)
       val globalReplaceWithCounterKey =
-        context.getString(R.string.widget_widget_event_replace_progress_with_days_counter)
+          context.getString(R.string.widget_widget_event_replace_progress_with_days_counter)
       val globalBackgroundTransparencyKey =
-        context.getString(R.string.widget_widget_background_transparency)
-
+          context.getString(R.string.widget_widget_background_transparency)
 
       val globalDecimalPoint = globalPref.getInt(globalDecimalPointKey, 2)
       val globalTimeLeft = globalPref.getBoolean(globalTimeLeftKey, false)
@@ -66,32 +63,32 @@ data class EventWidgetOption(
       val globalReplaceWithCounter = globalPref.getBoolean(globalReplaceWithCounterKey, false)
       val globalBackgroundTransparency = globalPref.getInt(globalBackgroundTransparencyKey, 100)
 
-      val eventWidgetOptionsJsonString = eventWidgetPreferences.getString(widgetId.toString(), null)
-        ?: return EventWidgetOption(
-          widgetId = widgetId,
-          decimalPlaces = globalDecimalPoint,
-          timeLeftCounter = globalTimeLeft,
-          dynamicLeftCounter = globalDynamicTimeLeft,
-          replaceProgressWithDaysLeft = globalReplaceWithCounter,
-          backgroundTransparency = globalBackgroundTransparency,
-          fontScale = 1f
-        )
+      val eventWidgetOptionsJsonString =
+          eventWidgetPreferences.getString(widgetId.toString(), null)
+              ?: return EventWidgetOption(
+                  widgetId = widgetId,
+                  decimalPlaces = globalDecimalPoint,
+                  timeLeftCounter = globalTimeLeft,
+                  dynamicLeftCounter = globalDynamicTimeLeft,
+                  replaceProgressWithDaysLeft = globalReplaceWithCounter,
+                  backgroundTransparency = globalBackgroundTransparency,
+                  fontScale = 1f)
       return Gson().fromJson(eventWidgetOptionsJsonString, EventWidgetOption::class.java)
     }
 
     fun save(context: Context, options: EventWidgetOption) {
-      val sharedPreferences =
-        context.getSharedPreferences(EVENT_WIDGET_PREF, Context.MODE_PRIVATE)
+      val sharedPreferences = context.getSharedPreferences(EVENT_WIDGET_PREF, Context.MODE_PRIVATE)
       val edit = sharedPreferences.edit()
       val jsonString = Gson().toJson(options)
       edit.putString(options.widgetId.toString(), jsonString).apply()
     }
 
     fun delete(context: Context, widgetId: Int) {
-      context.getSharedPreferences(EVENT_WIDGET_PREF, Context.MODE_PRIVATE)
-        .edit()
-        .putString(widgetId.toString(), null)
-        .apply()
+      context
+          .getSharedPreferences(EVENT_WIDGET_PREF, Context.MODE_PRIVATE)
+          .edit()
+          .putString(widgetId.toString(), null)
+          .apply()
     }
   }
 }
@@ -116,8 +113,6 @@ class EventWidget : BaseWidget() {
       val (newEventStart, newEventEnd) =
           event.nextStartAndEndTime(currentTime = System.currentTimeMillis())
       val progress = yp.calculateProgress(newEventStart, newEventEnd).coerceIn(0.0, 100.0)
-
-
 
       val progressText = progress.styleFormatted(options.decimalPlaces)
       val formattedEndTime =
@@ -189,10 +184,11 @@ class EventWidget : BaseWidget() {
       val replaceProgressWithDaysLeft = options.replaceProgressWithDaysLeft
       val dynamicTimeLeft = options.dynamicLeftCounter
 
-      val eventTimeLeft = context.getString(
-        R.string.time_left,
-        yp.calculateTimeLeft(newEventEnd).toTimePeriodText(dynamicTimeLeft),
-      )
+      val eventTimeLeft =
+          context.getString(
+              R.string.time_left,
+              yp.calculateTimeLeft(newEventEnd).toTimePeriodText(dynamicTimeLeft),
+          )
 
       if (timeLeftCounter) {
 
@@ -204,13 +200,10 @@ class EventWidget : BaseWidget() {
         wideView.setTextViewTextSize(R.id.eventProgressText, 0, 50f)
         tallView.setTextViewTextSize(R.id.eventProgressText, 0, 50f)
 
-
         smallView.setTextViewText(R.id.widgetDaysLeft, eventTimeLeft)
         wideView.setTextViewText(R.id.widgetDaysLeft, eventTimeLeft)
         tallView.setTextViewText(R.id.widgetDaysLeft, eventTimeLeft)
-
       }
-
 
       if (timeLeftCounter && replaceProgressWithDaysLeft) {
 
@@ -284,9 +277,7 @@ class EventWidget : BaseWidget() {
       appWidgetIds: IntArray,
   ) {
     super.onDeleted(context, appWidgetIds)
-    appWidgetIds.forEach { id ->
-      EventWidgetOption.delete(context, id)
-    }
+    appWidgetIds.forEach { id -> EventWidgetOption.delete(context, id) }
     clearJob()
   }
 

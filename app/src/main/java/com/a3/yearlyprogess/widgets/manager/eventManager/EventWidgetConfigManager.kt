@@ -51,7 +51,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
-
 class EventWidgetConfigManagerViewModel(private val application: Application) :
     AndroidViewModel(application) {
 
@@ -62,7 +61,6 @@ class EventWidgetConfigManagerViewModel(private val application: Application) :
   fun loadWidgetConfig(widgetId: Int) {
     _widgetConfig.value = EventWidgetOption.load(application, widgetId)
   }
-
 
   fun updateDecimalPlaces(places: Int) {
     _widgetConfig.update { it.copy(decimalPlaces = places) }
@@ -111,23 +109,19 @@ class EventWidgetConfigManager : ComponentActivity() {
     enableEdgeToEdge()
 
     val appWidgetId =
-      intent
-        ?.extras
-        ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-        ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        intent
+            ?.extras
+            ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
     viewModel.loadWidgetConfig(appWidgetId)
 
     setContent {
-
-
       val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
       val widgetConfig = viewModel.widgetConfig.collectAsState()
       YearlyProgressTheme {
         Scaffold(
-            modifier = Modifier
-              .nestedScroll(scrollBehavior.nestedScrollConnection)
-              .fillMaxSize(),
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
             topBar = {
               CenterAlignedTopAppBar(
                   title = {
@@ -139,11 +133,10 @@ class EventWidgetConfigManager : ComponentActivity() {
                   navigationIcon = {
                     IconButton(onClick = { finish() }) {
                       Icon(
-                        Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = stringResource(R.string.go_back))
+                          Icons.AutoMirrored.Default.ArrowBack,
+                          contentDescription = stringResource(R.string.go_back))
                     }
-                  }
-              )
+                  })
             },
             floatingActionButton = {
               Button(
@@ -179,15 +172,11 @@ class EventWidgetConfigManager : ComponentActivity() {
 
                     Row(
                         modifier =
-                        Modifier
-                          .fillMaxWidth()
-                          .clickable(
-                            interactionSource = timeLeftInteractionSource, indication = null
-                          ) {
-                            viewModel.updateTimeLeftCounter(
-                              !widgetConfig.value.timeLeftCounter
-                            )
-                          },
+                            Modifier.fillMaxWidth().clickable(
+                                interactionSource = timeLeftInteractionSource, indication = null) {
+                                  viewModel.updateTimeLeftCounter(
+                                      !widgetConfig.value.timeLeftCounter)
+                                },
                         verticalAlignment = Alignment.CenterVertically) {
                           Text(
                               stringResource(R.string.time_left_counter),
@@ -201,16 +190,12 @@ class EventWidgetConfigManager : ComponentActivity() {
 
                     Row(
                         modifier =
-                        Modifier
-                          .fillMaxWidth()
-                          .clickable(
-                            interactionSource = dynamicTimeLeftInteractionSource,
-                            indication = null
-                          ) {
-                            viewModel.updateDynamicTimeLeftCounter(
-                              !widgetConfig.value.dynamicLeftCounter
-                            )
-                          },
+                            Modifier.fillMaxWidth().clickable(
+                                interactionSource = dynamicTimeLeftInteractionSource,
+                                indication = null) {
+                                  viewModel.updateDynamicTimeLeftCounter(
+                                      !widgetConfig.value.dynamicLeftCounter)
+                                },
                         verticalAlignment = Alignment.CenterVertically) {
                           Text(
                               stringResource(R.string.dynamic_time_left_counter),
@@ -224,16 +209,12 @@ class EventWidgetConfigManager : ComponentActivity() {
 
                     Row(
                         modifier =
-                        Modifier
-                          .fillMaxWidth()
-                          .clickable(
-                            interactionSource = replaceTimeLeftInteractionSource,
-                            indication = null
-                          ) {
-                            viewModel.updateReplaceTimeLeftCounter(
-                              !widgetConfig.value.replaceProgressWithDaysLeft
-                            )
-                          },
+                            Modifier.fillMaxWidth().clickable(
+                                interactionSource = replaceTimeLeftInteractionSource,
+                                indication = null) {
+                                  viewModel.updateReplaceTimeLeftCounter(
+                                      !widgetConfig.value.replaceProgressWithDaysLeft)
+                                },
                         verticalAlignment = Alignment.CenterVertically) {
                           Text(
                               stringResource(R.string.replace_progress_with_days_left_counter),
@@ -288,7 +269,6 @@ class EventWidgetConfigManager : ComponentActivity() {
                     }*/
                   }
                 }
-
               }
         }
       }

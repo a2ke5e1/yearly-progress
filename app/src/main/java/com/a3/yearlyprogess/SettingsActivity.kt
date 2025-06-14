@@ -54,31 +54,37 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.components.dialogbox.CalculationMode
 import com.a3.yearlyprogess.components.dialogbox.CalendarType
 import com.a3.yearlyprogess.components.dialogbox.ListSelectorDialogBox
 import com.a3.yearlyprogess.components.dialogbox.WeekType
-import com.a3.yearlyprogess.screens.LocationSelectionScreen
+import com.a3.yearlyprogess.screens.LocationSettingsScreen
 import com.a3.yearlyprogess.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.serialization.Serializable
 
 class SettingsViewModel(private val application: Application) : AndroidViewModel(application) {
 
   private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
+
   private fun getStringRes(@StringRes resId: Int) = application.getString(resId)
 
   private inline fun <reified T> prefFlow(key: String, defaultValue: T): MutableStateFlow<T> {
-    val value: T = when (T::class) {
-      Boolean::class -> prefs.getBoolean(key, defaultValue as Boolean) as T
-      Int::class -> prefs.getInt(key, defaultValue as Int) as T
-      String::class -> prefs.getString(key, defaultValue as String) as T
-      else -> throw IllegalArgumentException("Unsupported type for key: $key")
-    }
+    val value: T =
+        when (T::class) {
+          Boolean::class -> prefs.getBoolean(key, defaultValue as Boolean) as T
+          Int::class -> prefs.getInt(key, defaultValue as Int) as T
+          String::class -> prefs.getString(key, defaultValue as String) as T
+          else -> throw IllegalArgumentException("Unsupported type for key: $key")
+        }
     return MutableStateFlow(value)
   }
 
@@ -97,85 +103,118 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
 
   private val _timeLeftCounter = prefFlow(getStringRes(R.string.widget_widget_time_left), true)
   val timeLeftCounter = _timeLeftCounter.asStateFlow()
+
   fun setTimeLeftCounter(value: Boolean) =
-    updatePref(_timeLeftCounter, getStringRes(R.string.widget_widget_time_left), value)
+      updatePref(_timeLeftCounter, getStringRes(R.string.widget_widget_time_left), value)
 
-  private val _dynamicTimeLeftCounter = prefFlow(
-    getStringRes(R.string.widget_widget_use_dynamic_time_left), false)
+  private val _dynamicTimeLeftCounter =
+      prefFlow(getStringRes(R.string.widget_widget_use_dynamic_time_left), false)
   val dynamicTimeLeftCounter = _dynamicTimeLeftCounter.asStateFlow()
-  fun setDynamicTimeLeftCounter(value: Boolean) =
-    updatePref(_dynamicTimeLeftCounter, getStringRes(R.string.widget_widget_use_dynamic_time_left), value)
 
-  private val _replaceTimeLeftCounter = prefFlow(
-    getStringRes(R.string.widget_widget_event_replace_progress_with_days_counter), false)
+  fun setDynamicTimeLeftCounter(value: Boolean) =
+      updatePref(
+          _dynamicTimeLeftCounter,
+          getStringRes(R.string.widget_widget_use_dynamic_time_left),
+          value)
+
+  private val _replaceTimeLeftCounter =
+      prefFlow(getStringRes(R.string.widget_widget_event_replace_progress_with_days_counter), false)
   val replaceTimeLeftCounter = _replaceTimeLeftCounter.asStateFlow()
+
   fun setReplaceTimeLeftCounter(value: Boolean) =
-    updatePref(_replaceTimeLeftCounter, getStringRes(R.string.widget_widget_event_replace_progress_with_days_counter), value)
+      updatePref(
+          _replaceTimeLeftCounter,
+          getStringRes(R.string.widget_widget_event_replace_progress_with_days_counter),
+          value)
 
   private val _widgetDecimalPlaces = prefFlow(getStringRes(R.string.widget_widget_decimal_point), 2)
   val widgetDecimalPlaces = _widgetDecimalPlaces.asStateFlow()
-  fun setWidgetDecimalPlaces(value: Int) =
-    updatePref(_widgetDecimalPlaces, getStringRes(R.string.widget_widget_decimal_point), value)
 
-  private val _eventWidgetDecimalPlaces = prefFlow(getStringRes(R.string.widget_event_widget_decimal_point), 2)
+  fun setWidgetDecimalPlaces(value: Int) =
+      updatePref(_widgetDecimalPlaces, getStringRes(R.string.widget_widget_decimal_point), value)
+
+  private val _eventWidgetDecimalPlaces =
+      prefFlow(getStringRes(R.string.widget_event_widget_decimal_point), 2)
   val eventWidgetDecimalPlaces = _eventWidgetDecimalPlaces.asStateFlow()
+
   fun setEventWidgetDecimalPlaces(value: Int) =
-    updatePref(_eventWidgetDecimalPlaces, getStringRes(R.string.widget_event_widget_decimal_point), value)
+      updatePref(
+          _eventWidgetDecimalPlaces,
+          getStringRes(R.string.widget_event_widget_decimal_point),
+          value)
 
   private val _decimalProgressPage = prefFlow(getStringRes(R.string.app_widget_decimal_point), 13)
   val decimalProgressPage = _decimalProgressPage.asStateFlow()
+
   fun setDecimalProgressPage(value: Int) =
-    updatePref(_decimalProgressPage, getStringRes(R.string.app_widget_decimal_point), value)
+      updatePref(_decimalProgressPage, getStringRes(R.string.app_widget_decimal_point), value)
 
-  private val _widgetUpdateFrequency = prefFlow(getStringRes(R.string.widget_widget_update_frequency), 5)
+  private val _widgetUpdateFrequency =
+      prefFlow(getStringRes(R.string.widget_widget_update_frequency), 5)
   val widgetUpdateFrequency = _widgetUpdateFrequency.asStateFlow()
+
   fun setWidgetUpdateFrequency(value: Int) =
-    updatePref(_widgetUpdateFrequency, getStringRes(R.string.widget_widget_update_frequency), value)
+      updatePref(
+          _widgetUpdateFrequency, getStringRes(R.string.widget_widget_update_frequency), value)
 
-  private val _widgetTransparency = prefFlow(getStringRes(R.string.widget_widget_background_transparency), 100)
+  private val _widgetTransparency =
+      prefFlow(getStringRes(R.string.widget_widget_background_transparency), 100)
   val widgetTransparency = _widgetTransparency.asStateFlow()
+
   fun setWidgetTransparency(value: Int) =
-    updatePref(_widgetTransparency, getStringRes(R.string.widget_widget_background_transparency), value)
+      updatePref(
+          _widgetTransparency, getStringRes(R.string.widget_widget_background_transparency), value)
 
-  private val _progressShowNotification = prefFlow(getStringRes(R.string.progress_show_notification), false)
+  private val _progressShowNotification =
+      prefFlow(getStringRes(R.string.progress_show_notification), false)
   val progressShowNotification = _progressShowNotification.asStateFlow()
+
   fun setProgressShowNotification(value: Boolean) =
-    updatePref(_progressShowNotification, getStringRes(R.string.progress_show_notification), value)
+      updatePref(
+          _progressShowNotification, getStringRes(R.string.progress_show_notification), value)
 
-  private val calendarEntries = application.resources.getStringArray(R.array.app_calendar_type_entries)
-  private val calendarValues = application.resources.getStringArray(R.array.app_calendar_type_values)
-  private val _calendarTypes = calendarEntries.zip(calendarValues) { name, code -> CalendarType(name, code) }
-  val calendarTypes get() = _calendarTypes
+  private val calendarEntries =
+      application.resources.getStringArray(R.array.app_calendar_type_entries)
+  private val calendarValues =
+      application.resources.getStringArray(R.array.app_calendar_type_values)
+  private val _calendarTypes =
+      calendarEntries.zip(calendarValues) { name, code -> CalendarType(name, code) }
+  val calendarTypes
+    get() = _calendarTypes
 
-  private val _selectedCalendarType = prefFlow(
-    getStringRes(R.string.app_calendar_type), calendarTypes.first().code)
+  private val _selectedCalendarType =
+      prefFlow(getStringRes(R.string.app_calendar_type), calendarTypes.first().code)
   val selectedCalendarType = _selectedCalendarType.asStateFlow()
+
   fun setCalendarType(item: CalendarType) =
-    updatePref(_selectedCalendarType, getStringRes(R.string.app_calendar_type), item.code)
+      updatePref(_selectedCalendarType, getStringRes(R.string.app_calendar_type), item.code)
 
   private val weekEntries = application.resources.getStringArray(R.array.week_start_entries)
   private val weekValues = application.resources.getStringArray(R.array.week_start_values)
   private val _weekTypes = weekEntries.zip(weekValues) { name, code -> WeekType(name, code) }
-  val weekTypes get() = _weekTypes
+  val weekTypes
+    get() = _weekTypes
 
-  private val _selectedWeekType = prefFlow(
-    getStringRes(R.string.app_week_widget_start_day), weekTypes.first().code)
+  private val _selectedWeekType =
+      prefFlow(getStringRes(R.string.app_week_widget_start_day), weekTypes.first().code)
   val selectedWeekType = _selectedWeekType.asStateFlow()
+
   fun setWeekType(item: WeekType) =
-    updatePref(_selectedWeekType, getStringRes(R.string.app_week_widget_start_day), item.code)
+      updatePref(_selectedWeekType, getStringRes(R.string.app_week_widget_start_day), item.code)
 
   private val calculationEntries = application.resources.getStringArray(R.array.calc_entries)
   private val calculationValues = application.resources.getStringArray(R.array.calc_values)
-  private val _calculationModes = calculationEntries.zip(calculationValues) { name, code ->
-    CalculationMode(name, code)
-  }
-  val calculationModes get() = _calculationModes
+  private val _calculationModes =
+      calculationEntries.zip(calculationValues) { name, code -> CalculationMode(name, code) }
+  val calculationModes
+    get() = _calculationModes
 
-  private val _selectedCalculationMode = prefFlow(
-    getStringRes(R.string.app_calculation_type), calculationModes.first().code)
+  private val _selectedCalculationMode =
+      prefFlow(getStringRes(R.string.app_calculation_type), calculationModes.first().code)
   val selectedCalculationMode = _selectedCalculationMode.asStateFlow()
+
   fun setCalculationMode(item: CalculationMode) =
-    updatePref(_selectedCalculationMode, getStringRes(R.string.app_calculation_type), item.code)
+      updatePref(_selectedCalculationMode, getStringRes(R.string.app_calculation_type), item.code)
 }
 
 class SettingsActivity : ComponentActivity() {
@@ -188,28 +227,70 @@ class SettingsActivity : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+      val navController = rememberNavController()
       YearlyProgressTheme {
-        Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
-            topBar = {
-              CenterAlignedTopAppBar(
-                  title = {
-                    Text(
-                        text = stringResource(R.string.settings),
-                    )
-                  },
-                  scrollBehavior = scrollBehavior,
-                  navigationIcon = {
-                    IconButton(onClick = { finish() }) {
-                      Icon(
-                          Icons.AutoMirrored.Default.ArrowBack,
-                          contentDescription = stringResource(R.string.go_back))
-                    }
-                  })
-            },
-            contentWindowInsets = WindowInsets.safeDrawing,
-        ) { innerPadding ->
-          SettingsScreen(contentPadding = innerPadding, viewModel = settingsViewModel)
+        NavHost(navController = navController, startDestination = SettingsScreen.Home) {
+          composable<SettingsScreen.Home> {
+            Scaffold(
+                modifier =
+                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
+                topBar = {
+                  CenterAlignedTopAppBar(
+                      title = {
+                        Text(
+                            text = stringResource(R.string.settings),
+                        )
+                      },
+                      scrollBehavior = scrollBehavior,
+                      navigationIcon = {
+                        IconButton(onClick = { finish() }) {
+                          Icon(
+                              Icons.AutoMirrored.Default.ArrowBack,
+                              contentDescription = stringResource(R.string.go_back))
+                        }
+                      })
+                },
+                contentWindowInsets = WindowInsets.safeDrawing,
+            ) { innerPadding ->
+              SettingsScreen(
+                  contentPadding = innerPadding,
+                  viewModel = settingsViewModel,
+                  onLocation = { navController.navigate(SettingsScreen.Location) },
+                  onNotification = { navController.navigate(SettingsScreen.Notification) })
+            }
+          }
+          composable<SettingsScreen.Location> {
+            LocationSettingsScreen(onBack = { navController.popBackStack() })
+          }
+          composable<SettingsScreen.Notification> {
+            Scaffold(
+                modifier =
+                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
+                topBar = {
+                  CenterAlignedTopAppBar(
+                      title = {
+                        Text(
+                            text = stringResource(R.string.progress_notification),
+                        )
+                      },
+                      scrollBehavior = scrollBehavior,
+                      navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                          Icon(
+                              Icons.AutoMirrored.Default.ArrowBack,
+                              contentDescription = stringResource(R.string.go_back))
+                        }
+                      })
+                },
+                contentWindowInsets = WindowInsets.safeDrawing,
+            ) { innerPadding ->
+              NotificationManageScreen(
+                  contentPadding = innerPadding,
+                  viewModel = settingsViewModel,
+                  onBack = { navController.popBackStack() },
+              )
+            }
+          }
         }
       }
     }
@@ -258,50 +339,48 @@ class SettingsActivity : ComponentActivity() {
 
   @Composable
   fun SwitchPreferenceWithOptions(
-    title: String,
-    summary: String,
-    checked: Boolean,
-    disabled: Boolean = false,
-    onCheckedChange: (Boolean) -> Unit,
-    onOptionClicked: () -> Unit
+      title: String,
+      summary: String,
+      checked: Boolean,
+      disabled: Boolean = false,
+      onCheckedChange: (Boolean) -> Unit,
+      onOptionClicked: () -> Unit
   ) {
     val interactionSource = remember { MutableInteractionSource() }
 
     Row(
-      modifier =
-      Modifier.fillMaxWidth()
-        .padding(end = 16.dp)
-        .alpha(if (!disabled) 1f else 0.5f)
-        .animateContentSize(),
-      verticalAlignment = Alignment.CenterVertically,
+        modifier =
+            Modifier.fillMaxWidth()
+                .padding(end = 16.dp)
+                .alpha(if (!disabled) 1f else 0.5f)
+                .animateContentSize(),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-      Column(modifier = Modifier.weight(1f)
-        .clickable(
-        enabled = !disabled) {
-        onOptionClicked()
-      }) {
-        Text(title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier
-          .padding(start = 16.dp, top = 16.dp,)
-
-        )
+      Column(modifier = Modifier.weight(1f).clickable(enabled = !disabled) { onOptionClicked() }) {
+        Text(
+            title,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier =
+                Modifier.padding(
+                    start = 16.dp,
+                    top = 16.dp,
+                ))
         AnimatedVisibility(visible = true) {
           Text(
-            summary,
-            style =
-            MaterialTheme.typography.bodyMedium.copy(
-              color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier
-              .padding(start = 16.dp,  bottom = 16.dp))
+              summary,
+              style =
+                  MaterialTheme.typography.bodyMedium.copy(
+                      color = MaterialTheme.colorScheme.onSurfaceVariant),
+              modifier = Modifier.padding(start = 16.dp, bottom = 16.dp))
         }
       }
 
-      VerticalDivider(
-        modifier = Modifier.height(40.dp).padding(end = 16.dp)
-      )
+      VerticalDivider(modifier = Modifier.height(40.dp).padding(end = 16.dp))
 
       Switch(
-        checked = checked,
-        onCheckedChange = { onCheckedChange(it) },
-        interactionSource = interactionSource)
+          checked = checked,
+          onCheckedChange = { onCheckedChange(it) },
+          interactionSource = interactionSource)
     }
   }
 
@@ -346,7 +425,7 @@ class SettingsActivity : ComponentActivity() {
   }
 
   @Composable
-  fun ManageLocation(disabled: Boolean = false) {
+  fun ManageLocation(disabled: Boolean = false, onLocation: () -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     Column(
         modifier =
@@ -354,7 +433,7 @@ class SettingsActivity : ComponentActivity() {
                 .clickable(
                     enabled = !disabled,
                 ) {
-                  startActivity(Intent(this, LocationSelectionScreen::class.java))
+                  onLocation()
                 }
                 .alpha(if (!disabled) 1f else 0.5f)
                 .animateContentSize(),
@@ -367,7 +446,12 @@ class SettingsActivity : ComponentActivity() {
   }
 
   @Composable
-  fun SettingsScreen(contentPadding: PaddingValues, viewModel: SettingsViewModel) {
+  fun SettingsScreen(
+      contentPadding: PaddingValues,
+      viewModel: SettingsViewModel,
+      onLocation: () -> Unit,
+      onNotification: () -> Unit,
+  ) {
     val timeLeftCounter by viewModel.timeLeftCounter.collectAsState()
     val dynamicTimeLeftCounter by viewModel.dynamicTimeLeftCounter.collectAsState()
     val replaceTimeLeftCounter by viewModel.replaceTimeLeftCounter.collectAsState()
@@ -409,8 +493,7 @@ class SettingsActivity : ComponentActivity() {
               context.sendBroadcast(widgetUpdateServiceIntent)
               viewModel.setProgressShowNotification(newValue)
             },
-            onOptionClicked = {}
-          )
+            onOptionClicked = { onNotification() })
 
         ListPreference(
             title = stringResource(R.string.select_your_calendar_system),
@@ -457,7 +540,7 @@ class SettingsActivity : ComponentActivity() {
             },
             renderItemInDialog = { Text(it.name) })
 
-        ManageLocation()
+        ManageLocation(onLocation = onLocation)
       }
 
       item {
@@ -476,101 +559,99 @@ class SettingsActivity : ComponentActivity() {
             style =
                 MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
             modifier = Modifier.padding(16.dp))
-        val widgetFreqSummary by remember(widgetUpdateFrequency) {
-          derivedStateOf {
-            getString(R.string.adjust_widget_frequency_summary) + "\n\n" +
-              getString(
-                R.string.current_value_settings,
-                widgetUpdateFrequency.toDuration(DurationUnit.SECONDS).toString()
-              )
-          }
-        }
+        val widgetFreqSummary by
+            remember(widgetUpdateFrequency) {
+              derivedStateOf {
+                getString(R.string.adjust_widget_frequency_summary) +
+                    "\n\n" +
+                    getString(
+                        R.string.current_value_settings,
+                        widgetUpdateFrequency.toDuration(DurationUnit.SECONDS).toString())
+              }
+            }
         SliderPreference(
             title = stringResource(R.string.adjust_widget_frequency),
             summary = widgetFreqSummary,
             value = widgetUpdateFrequency.toFloat(),
             valueRange = 5f..900f,
-            onValueChange = {
-              viewModel.setWidgetUpdateFrequency(it.toInt())
-            })
+            onValueChange = { viewModel.setWidgetUpdateFrequency(it.toInt()) })
       }
 
       item {
-        val widgetTransparencySummary by remember(widgetTransparency) {
-          derivedStateOf {
-            getString(R.string.adjust_opacity_of_the_standalone_and_event_widget) + "\n\n" +
-              getString(
-                R.string.current_value_settings,
-                widgetTransparency.toString() + "%"
-              )
-          }
-        }
+        val widgetTransparencySummary by
+            remember(widgetTransparency) {
+              derivedStateOf {
+                getString(R.string.adjust_opacity_of_the_standalone_and_event_widget) +
+                    "\n\n" +
+                    getString(R.string.current_value_settings, widgetTransparency.toString() + "%")
+              }
+            }
         SliderPreference(
             title = stringResource(R.string.widget_transparency),
             summary = widgetTransparencySummary,
             value = widgetTransparency.toFloat(),
             valueRange = 0f..100f,
-            onValueChange = {
-              viewModel.setWidgetTransparency(it.toInt())
-            })
+            onValueChange = { viewModel.setWidgetTransparency(it.toInt()) })
       }
 
       item {
         SwitchPreference(
-          title = stringResource(R.string.time_left_counter),
-          summary = stringResource(R.string.shows_how_much_time_left_in_the_widget),
-          checked = timeLeftCounter,
-          onCheckedChange = { newValue ->
-            viewModel.setTimeLeftCounter(newValue)
-
-          })
+            title = stringResource(R.string.time_left_counter),
+            summary = stringResource(R.string.shows_how_much_time_left_in_the_widget),
+            checked = timeLeftCounter,
+            onCheckedChange = { newValue -> viewModel.setTimeLeftCounter(newValue) })
       }
 
       item {
         SwitchPreference(
-          title = stringResource(R.string.dynamic_time_left_counter),
-          summary = stringResource(R.string.dynamic_time_left_counter_will_automatically_switch_between_days_hours_minutes_based_on_the_time_left),
-          checked = dynamicTimeLeftCounter,
-          disabled = !timeLeftCounter,
-          onCheckedChange = { newValue ->
-            viewModel.setDynamicTimeLeftCounter(newValue)
-
-          })
+            title = stringResource(R.string.dynamic_time_left_counter),
+            summary =
+                stringResource(
+                    R.string
+                        .dynamic_time_left_counter_will_automatically_switch_between_days_hours_minutes_based_on_the_time_left),
+            checked = dynamicTimeLeftCounter,
+            disabled = !timeLeftCounter,
+            onCheckedChange = { newValue -> viewModel.setDynamicTimeLeftCounter(newValue) })
       }
 
       item {
         SwitchPreference(
-          title = stringResource(R.string.replace_progress_with_days_left_counter),
-          summary = stringResource(R.string.this_will_only_work_if_the_time_left_counter_is_enabled),
-          checked = replaceTimeLeftCounter,
-          disabled = !timeLeftCounter,
-          onCheckedChange = { newValue ->
-            viewModel.setReplaceTimeLeftCounter(newValue)
-          })
+            title = stringResource(R.string.replace_progress_with_days_left_counter),
+            summary =
+                stringResource(R.string.this_will_only_work_if_the_time_left_counter_is_enabled),
+            checked = replaceTimeLeftCounter,
+            disabled = !timeLeftCounter,
+            onCheckedChange = { newValue -> viewModel.setReplaceTimeLeftCounter(newValue) })
       }
 
       item {
         SliderPreference(
-          title = stringResource(R.string.pref_title_widget_decimal_places),
-          summary = stringResource(R.string.pref_summary_widget_decimal_places),
-          value = widgetDecimalPlaces.toFloat(),
-          valueRange = 0f..5f,
-          steps = 4,
-          onValueChange = { viewModel.setWidgetDecimalPlaces(it.toInt()) })
+            title = stringResource(R.string.pref_title_widget_decimal_places),
+            summary = stringResource(R.string.pref_summary_widget_decimal_places),
+            value = widgetDecimalPlaces.toFloat(),
+            valueRange = 0f..5f,
+            steps = 4,
+            onValueChange = { viewModel.setWidgetDecimalPlaces(it.toInt()) })
       }
 
       item {
         SliderPreference(
-          title = stringResource(R.string.pref_title_widget_event_decimal_place),
-          summary = stringResource(R.string.pref_summary_widget_decimal_places),
-          value = eventWidgetDecimalPlaces.toFloat(),
-          valueRange = 0f..5f,
-          steps = 4,
-          onValueChange = { viewModel.setEventWidgetDecimalPlaces(it.toInt()) })
+            title = stringResource(R.string.pref_title_widget_event_decimal_place),
+            summary = stringResource(R.string.pref_summary_widget_decimal_places),
+            value = eventWidgetDecimalPlaces.toFloat(),
+            valueRange = 0f..5f,
+            steps = 4,
+            onValueChange = { viewModel.setEventWidgetDecimalPlaces(it.toInt()) })
       }
-
     }
   }
+
+  @Composable
+  fun NotificationManageScreen(
+      contentPadding: PaddingValues,
+      viewModel: SettingsViewModel,
+      onBack: () -> Unit
+  ) {}
 
   @Composable
   fun <T> ListPreference(
@@ -616,4 +697,13 @@ class SettingsActivity : ComponentActivity() {
           onDismiss = { showDialog = false })
     }
   }
+}
+
+@Serializable
+sealed class SettingsScreen {
+  @Serializable data object Home : SettingsScreen()
+
+  @Serializable data object Notification : SettingsScreen()
+
+  @Serializable data object Location : SettingsScreen()
 }

@@ -32,9 +32,9 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
 
   private var tracker: SelectionTracker<Long>? = null
 
-
   // This is used to indicate which event is selected by the user.
   private var selectedEventId: Int? = null
+
   fun setSelectedEvent(eventId: Int?) {
     if (eventId == -1) return
     selectedEventId = eventId
@@ -144,7 +144,8 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
     val myProvider = ComponentName(context, EventWidget::class.java)
     val conv = Converters()
 
-    val remoteViews: RemoteViews = EventWidget.eventWidgetPreview(context, currentEvent, EventWidgetOption.load(context, -1))
+    val remoteViews: RemoteViews =
+        EventWidget.eventWidgetPreview(context, currentEvent, EventWidgetOption.load(context, -1))
     val bundle = Bundle()
     bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
 

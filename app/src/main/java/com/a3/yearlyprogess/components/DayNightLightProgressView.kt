@@ -107,9 +107,7 @@ constructor(
         } else {
           ContextCompat.getString(context, R.string.night_light)
         }
-    widgetDataTextView.updateLayoutParams<MarginLayoutParams> {
-      topMargin = 4
-    }
+    widgetDataTextView.updateLayoutParams<MarginLayoutParams> { topMargin = 4 }
 
     // update the progress every seconds
     launch(Dispatchers.IO) {
