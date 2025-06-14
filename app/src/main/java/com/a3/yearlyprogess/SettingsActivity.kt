@@ -37,6 +37,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -64,7 +65,6 @@ import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateB
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class SettingsViewModel(private val application: Application) : AndroidViewModel(application) {
@@ -127,10 +127,10 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
   fun setDecimalProgressPage(value: Int) =
     updatePref(_decimalProgressPage, getStringRes(R.string.app_widget_decimal_point), value)
 
-  private val _widgetUpdateFreqency = prefFlow(getStringRes(R.string.widget_widget_update_frequency), 5)
-  val widgetUpdateFreqency = _widgetUpdateFreqency.asStateFlow()
-  fun setWidgetUpdateFreqency(value: Int) =
-    updatePref(_widgetUpdateFreqency, getStringRes(R.string.widget_widget_update_frequency), value)
+  private val _widgetUpdateFrequency = prefFlow(getStringRes(R.string.widget_widget_update_frequency), 5)
+  val widgetUpdateFrequency = _widgetUpdateFrequency.asStateFlow()
+  fun setWidgetUpdateFrequency(value: Int) =
+    updatePref(_widgetUpdateFrequency, getStringRes(R.string.widget_widget_update_frequency), value)
 
   private val _widgetTransparency = prefFlow(getStringRes(R.string.widget_widget_background_transparency), 100)
   val widgetTransparency = _widgetTransparency.asStateFlow()
@@ -257,6 +257,55 @@ class SettingsActivity : ComponentActivity() {
   }
 
   @Composable
+  fun SwitchPreferenceWithOptions(
+    title: String,
+    summary: String,
+    checked: Boolean,
+    disabled: Boolean = false,
+    onCheckedChange: (Boolean) -> Unit,
+    onOptionClicked: () -> Unit
+  ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Row(
+      modifier =
+      Modifier.fillMaxWidth()
+        .padding(end = 16.dp)
+        .alpha(if (!disabled) 1f else 0.5f)
+        .animateContentSize(),
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      Column(modifier = Modifier.weight(1f)
+        .clickable(
+        enabled = !disabled) {
+        onOptionClicked()
+      }) {
+        Text(title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier
+          .padding(start = 16.dp, top = 16.dp,)
+
+        )
+        AnimatedVisibility(visible = true) {
+          Text(
+            summary,
+            style =
+            MaterialTheme.typography.bodyMedium.copy(
+              color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier
+              .padding(start = 16.dp,  bottom = 16.dp))
+        }
+      }
+
+      VerticalDivider(
+        modifier = Modifier.height(40.dp).padding(end = 16.dp)
+      )
+
+      Switch(
+        checked = checked,
+        onCheckedChange = { onCheckedChange(it) },
+        interactionSource = interactionSource)
+    }
+  }
+
+  @Composable
   fun SliderPreference(
       title: String,
       summary: String,
@@ -325,7 +374,7 @@ class SettingsActivity : ComponentActivity() {
     val widgetDecimalPlaces by viewModel.widgetDecimalPlaces.collectAsState()
     val eventWidgetDecimalPlaces by viewModel.eventWidgetDecimalPlaces.collectAsState()
     val decimalProgressPage by viewModel.decimalProgressPage.collectAsState()
-    val widgetUpdateFreqency by viewModel.widgetUpdateFreqency.collectAsState()
+    val widgetUpdateFrequency by viewModel.widgetUpdateFrequency.collectAsState()
     val widgetTransparency by viewModel.widgetTransparency.collectAsState()
     val selectedCalendarTypeCode by viewModel.selectedCalendarType.collectAsState()
     val selectedWeekTypeCode by viewModel.selectedWeekType.collectAsState()
@@ -344,7 +393,7 @@ class SettingsActivity : ComponentActivity() {
             modifier = Modifier.padding(16.dp))
 
         val context = LocalContext.current
-        SwitchPreference(
+        SwitchPreferenceWithOptions(
             title = stringResource(R.string.progress_notification),
             summary = stringResource(R.string.shows_progress_in_the_notification),
             checked = progressShowNotification,
@@ -359,7 +408,9 @@ class SettingsActivity : ComponentActivity() {
                   Intent(context, WidgetUpdateBroadcastReceiver::class.java)
               context.sendBroadcast(widgetUpdateServiceIntent)
               viewModel.setProgressShowNotification(newValue)
-            })
+            },
+            onOptionClicked = {}
+          )
 
         ListPreference(
             title = stringResource(R.string.select_your_calendar_system),
@@ -425,22 +476,22 @@ class SettingsActivity : ComponentActivity() {
             style =
                 MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
             modifier = Modifier.padding(16.dp))
-        val widgetFreqSummary by remember(widgetUpdateFreqency) {
+        val widgetFreqSummary by remember(widgetUpdateFrequency) {
           derivedStateOf {
             getString(R.string.adjust_widget_frequency_summary) + "\n\n" +
               getString(
                 R.string.current_value_settings,
-                widgetUpdateFreqency.toDuration(DurationUnit.SECONDS).toString()
+                widgetUpdateFrequency.toDuration(DurationUnit.SECONDS).toString()
               )
           }
         }
         SliderPreference(
             title = stringResource(R.string.adjust_widget_frequency),
             summary = widgetFreqSummary,
-            value = widgetUpdateFreqency.toFloat(),
+            value = widgetUpdateFrequency.toFloat(),
             valueRange = 5f..900f,
             onValueChange = {
-              viewModel.setWidgetUpdateFreqency(it.toInt())
+              viewModel.setWidgetUpdateFrequency(it.toInt())
             })
       }
 
