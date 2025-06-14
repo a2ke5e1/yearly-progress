@@ -255,7 +255,7 @@ class EventWidgetConfigManager : ComponentActivity() {
                           },
                       )
                     }
-                    /*Column {
+                    Column {
                       var fontScale by remember {
                         mutableFloatStateOf(widgetConfig.value.fontScale)
                       }
@@ -266,7 +266,7 @@ class EventWidgetConfigManager : ComponentActivity() {
                           valueRange = 0.1f..2f,
                           onValueChangeFinished = { viewModel.updateFontScale(fontScale) },
                       )
-                    }*/
+                    }
                   }
                 }
               }

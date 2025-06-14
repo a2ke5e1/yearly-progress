@@ -26,7 +26,7 @@
             android:text="Lorem Ipsum"
             android:textAllCaps="false"
             android:textColor="@color/widget_text_color"
-            android:textSize="12sp"
+            android:textSize="@dimen/event_widget_small_title"
             android:textStyle="normal|bold" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/eventTitle"
             android:textColor="@color/widget_text_color_tertiary"
-            android:textSize="8sp"
+            android:textSize="@dimen/event_widget_small_days_left"
             tools:text="12d 1h 45m 12s left"
             android:textStyle="normal" />
 
@@ -47,7 +47,7 @@
             android:layout_above="@id/eventProgressBar"
             android:text="40.48%"
             android:textColor="@color/widget_text_color"
-            android:textSize="18sp"
+            android:textSize="@dimen/event_widget_small_progress"
             android:textStyle="bold" />
 
 
@@ -60,7 +60,7 @@
             android:text="08/09"
             android:textAlignment="textEnd"
             android:textColor="@color/widget_text_color_tertiary"
-            android:textSize="11sp" />
+            android:textSize="@dimen/event_widget_small_current_date" />
 
         <ProgressBar
             android:id="@+id/eventProgressBar"
