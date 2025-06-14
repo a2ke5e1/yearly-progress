@@ -8,6 +8,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("com.ncorti.ktfmt.gradle") version "0.21.0"
     id("org.jetbrains.kotlin.plugin.compose")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -17,8 +18,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 35
-        versionCode = 133
-        versionName = "2.16.0-beta05"
+        versionCode = 134
+        versionName = "2.16.0-beta06"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -73,7 +74,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("com.google.accompanist:accompanist-permissions:0.37.2")
     implementation("androidx.compose.ui:ui-tooling:1.8.1")
-    testImplementation("junit:junit:4.13.2")
+  implementation("androidx.navigation:navigation-compose:2.9.0")
+  testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
@@ -127,4 +129,7 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+
 }

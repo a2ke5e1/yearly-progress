@@ -4,12 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,7 +27,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialogDefaults
@@ -85,7 +80,6 @@ import androidx.compose.ui.window.Dialog
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.components.dialogbox.PermissionRationalDialog
 import com.a3.yearlyprogess.invalidateCachedSunriseSunset
-import com.a3.yearlyprogess.ui.theme.YearlyProgressTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
@@ -148,211 +142,197 @@ object NominatimService {
   }
 }
 
-class LocationSelectionScreen : ComponentActivity() {
-  @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    enableEdgeToEdge()
-    setContent {
-      val locationPermissionState =
-          rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
-      var showPermissionRationalMessage by rememberSaveable { mutableStateOf(true) }
-      val context = LocalContext.current
-      val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-      var automaticallyDetectLocation by rememberSaveable { mutableStateOf(false) }
-      var requestedLocationPermissionByUser by rememberSaveable { mutableStateOf(false) }
-      var selectedLocation by rememberSaveable { mutableStateOf<NominatimPlace?>(null) }
-      var showManualSelectionDialogBox by rememberSaveable { mutableStateOf(false) }
+@Composable
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+fun LocationSettingsScreen(onBack: () -> Boolean) {
+  val locationPermissionState =
+      rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
+  var showPermissionRationalMessage by rememberSaveable { mutableStateOf(true) }
+  val context = LocalContext.current
+  val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+  var automaticallyDetectLocation by rememberSaveable { mutableStateOf(false) }
+  var requestedLocationPermissionByUser by rememberSaveable { mutableStateOf(false) }
+  var selectedLocation by rememberSaveable { mutableStateOf<NominatimPlace?>(null) }
+  var showManualSelectionDialogBox by rememberSaveable { mutableStateOf(false) }
 
-      LaunchedEffect(Unit) {
-        val pref = UserLocationPref.load(context)
-        automaticallyDetectLocation = pref.automaticallyDetectLocation
-        selectedLocation = pref.userLocationPref
+  LaunchedEffect(Unit) {
+    val pref = UserLocationPref.load(context)
+    automaticallyDetectLocation = pref.automaticallyDetectLocation
+    selectedLocation = pref.userLocationPref
 
-        if (!locationPermissionState.status.isGranted) {
-          automaticallyDetectLocation = false
-        }
-      }
+    if (!locationPermissionState.status.isGranted) {
+      automaticallyDetectLocation = false
+    }
+  }
 
-      LaunchedEffect(locationPermissionState, requestedLocationPermissionByUser) {
-        if (requestedLocationPermissionByUser && locationPermissionState.status.isGranted) {
-          automaticallyDetectLocation = true
-        }
-      }
+  LaunchedEffect(locationPermissionState, requestedLocationPermissionByUser) {
+    if (requestedLocationPermissionByUser && locationPermissionState.status.isGranted) {
+      automaticallyDetectLocation = true
+    }
+  }
 
-      LaunchedEffect(automaticallyDetectLocation) {
-        UserLocationPref.save(
-            context,
-            UserLocationPref(
-                automaticallyDetectLocation = automaticallyDetectLocation,
-                userLocationPref = selectedLocation))
-        if (automaticallyDetectLocation && !locationPermissionState.status.isGranted) {
-          automaticallyDetectLocation = false
-          locationPermissionState.launchPermissionRequest()
-        }
-      }
+  LaunchedEffect(automaticallyDetectLocation) {
+    UserLocationPref.save(
+        context,
+        UserLocationPref(
+            automaticallyDetectLocation = automaticallyDetectLocation,
+            userLocationPref = selectedLocation))
+    if (automaticallyDetectLocation && !locationPermissionState.status.isGranted) {
+      automaticallyDetectLocation = false
+      locationPermissionState.launchPermissionRequest()
+    }
+  }
 
-      YearlyProgressTheme {
-        Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
-            topBar = {
-              CenterAlignedTopAppBar(
-                  title = {
-                    Text(
-                        text = stringResource(R.string.manage_location_title),
-                    )
-                  },
-                  scrollBehavior = scrollBehavior,
-                  navigationIcon = {
-                    IconButton(onClick = { finish() }) {
-                      Icon(
-                          Icons.AutoMirrored.Default.ArrowBack,
-                          contentDescription = stringResource(R.string.go_back))
-                    }
-                  })
+  Scaffold(
+      modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
+      topBar = {
+        CenterAlignedTopAppBar(
+            title = {
+              Text(
+                  text = stringResource(R.string.manage_location_title),
+              )
             },
-            contentWindowInsets = WindowInsets.safeDrawing,
-        ) { innerPadding ->
-          LazyColumn(
-              contentPadding = innerPadding,
-              verticalArrangement = Arrangement.spacedBy(8.dp),
-          ) {
-            item {
-              val automaticLocationInteractionSource = remember { MutableInteractionSource() }
-              Row(
-                  modifier =
-                      Modifier.fillMaxWidth().padding(horizontal = 16.dp).clickable(
-                          interactionSource = automaticLocationInteractionSource,
-                          indication = null) {
-                            automaticallyDetectLocation = !automaticallyDetectLocation
-                            if (automaticallyDetectLocation) {
-                              requestedLocationPermissionByUser = true
-                            }
-                          },
-                  verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        stringResource(R.string.automatically_detect_location),
-                        modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.bodyLarge)
+            scrollBehavior = scrollBehavior,
+            navigationIcon = {
+              IconButton(onClick = { onBack() }) {
+                Icon(
+                    Icons.AutoMirrored.Default.ArrowBack,
+                    contentDescription = stringResource(R.string.go_back))
+              }
+            })
+      },
+      contentWindowInsets = WindowInsets.safeDrawing,
+  ) { innerPadding ->
+    LazyColumn(
+        contentPadding = innerPadding,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+      item {
+        val automaticLocationInteractionSource = remember { MutableInteractionSource() }
+        Row(
+            modifier =
+                Modifier.fillMaxWidth().padding(horizontal = 16.dp).clickable(
+                    interactionSource = automaticLocationInteractionSource, indication = null) {
+                      automaticallyDetectLocation = !automaticallyDetectLocation
+                      if (automaticallyDetectLocation) {
+                        requestedLocationPermissionByUser = true
+                      }
+                    },
+            verticalAlignment = Alignment.CenterVertically) {
+              Text(
+                  stringResource(R.string.automatically_detect_location),
+                  modifier = Modifier.weight(1f),
+                  style = MaterialTheme.typography.bodyLarge)
 
-                    Switch(
-                        checked = automaticallyDetectLocation,
-                        onCheckedChange = {
-                          automaticallyDetectLocation = it
-                          if (it) {
-                            requestedLocationPermissionByUser = true
-                          }
-                        },
-                        interactionSource = automaticLocationInteractionSource)
-                  }
-            }
-
-            when (val status = locationPermissionState.status) {
-              is PermissionStatus.Denied -> {
-                item {
-                  if (status.shouldShowRationale) {
-                    if (showPermissionRationalMessage) {
-                      PermissionRationalDialog(
-                          onDismiss = {
-                            showPermissionRationalMessage = false
-                            automaticallyDetectLocation = false
-                          },
-                          onConfirm = { locationPermissionState.launchPermissionRequest() },
-                          iconPainter = painterResource(R.drawable.ic_location_on_24),
-                          title = stringResource(R.string.location_permission_title),
-                          body = stringResource(R.string.location_permission_message))
+              Switch(
+                  checked = automaticallyDetectLocation,
+                  onCheckedChange = {
+                    automaticallyDetectLocation = it
+                    if (it) {
+                      requestedLocationPermissionByUser = true
                     }
-                  } else {
-                    Card(
-                        colors =
-                            CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.errorContainer),
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                          Column(
-                              modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                              horizontalAlignment = Alignment.CenterHorizontally,
-                              verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                                Text(
-                                    stringResource(R.string.auto_location_message),
-                                    style =
-                                        MaterialTheme.typography.bodyLarge.copy(
-                                            color = MaterialTheme.colorScheme.onErrorContainer))
-                                Button(
-                                    colors =
-                                        ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.error,
-                                            contentColor = MaterialTheme.colorScheme.onError),
-                                    onClick = {
-                                      val intent =
-                                          Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                              .apply {
-                                                data =
-                                                    Uri.fromParts(
-                                                        "package", context.packageName, null)
-                                              }
-                                      context.startActivity(intent)
-                                    }) {
-                                      Text(stringResource(R.string.open_settings))
+                  },
+                  interactionSource = automaticLocationInteractionSource)
+            }
+      }
+
+      when (val status = locationPermissionState.status) {
+        is PermissionStatus.Denied -> {
+          item {
+            if (status.shouldShowRationale) {
+              if (showPermissionRationalMessage) {
+                PermissionRationalDialog(
+                    onDismiss = {
+                      showPermissionRationalMessage = false
+                      automaticallyDetectLocation = false
+                    },
+                    onConfirm = { locationPermissionState.launchPermissionRequest() },
+                    iconPainter = painterResource(R.drawable.ic_location_on_24),
+                    title = stringResource(R.string.location_permission_title),
+                    body = stringResource(R.string.location_permission_message))
+              }
+            } else {
+              Card(
+                  colors =
+                      CardDefaults.cardColors(
+                          containerColor = MaterialTheme.colorScheme.errorContainer),
+                  modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                    Column(
+                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                          Text(
+                              stringResource(R.string.auto_location_message),
+                              style =
+                                  MaterialTheme.typography.bodyLarge.copy(
+                                      color = MaterialTheme.colorScheme.onErrorContainer))
+                          Button(
+                              colors =
+                                  ButtonDefaults.buttonColors(
+                                      containerColor = MaterialTheme.colorScheme.error,
+                                      contentColor = MaterialTheme.colorScheme.onError),
+                              onClick = {
+                                val intent =
+                                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                      data = Uri.fromParts("package", context.packageName, null)
                                     }
+                                context.startActivity(intent)
+                              }) {
+                                Text(stringResource(R.string.open_settings))
                               }
                         }
                   }
-                }
-              }
-
-              is PermissionStatus.Granted -> {}
             }
-
-            item {
-              val isClickable = !automaticallyDetectLocation
-              Column(
-                  modifier =
-                      Modifier.fillMaxWidth()
-                          .then(
-                              if (isClickable)
-                                  Modifier.clickable { showManualSelectionDialogBox = true }
-                              else Modifier)
-                          .alpha(if (isClickable) 1f else 0.5f)) {
-                    Column(
-                        modifier =
-                            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
-                          Text(
-                              text = stringResource(R.string.manual_location),
-                              style =
-                                  MaterialTheme.typography.labelLarge.copy(
-                                      color = MaterialTheme.colorScheme.primary))
-                          Text(
-                              text =
-                                  selectedLocation?.display_name
-                                      ?: stringResource(R.string.enter_a_location),
-                              style = MaterialTheme.typography.bodyLarge)
-                        }
-                  }
-            }
-
-            item {
-              HorizontalDivider(
-                  thickness = 1.dp, modifier = Modifier.padding(bottom = 8.dp, top = 32.dp))
-              PoweredByInfoText()
-            }
-          }
-
-          if (showManualSelectionDialogBox) {
-            LocationSearchWithNominatim(
-                innerPadding = PaddingValues(8.dp),
-                onSelected = { place ->
-                  selectedLocation = place
-                  invalidateCachedSunriseSunset(context)
-                  UserLocationPref.save(
-                      context,
-                      UserLocationPref(
-                          automaticallyDetectLocation = automaticallyDetectLocation,
-                          userLocationPref = place))
-                },
-                onDismiss = { showManualSelectionDialogBox = false })
           }
         }
+
+        is PermissionStatus.Granted -> {}
       }
+
+      item {
+        val isClickable = !automaticallyDetectLocation
+        Column(
+            modifier =
+                Modifier.fillMaxWidth()
+                    .then(
+                        if (isClickable) Modifier.clickable { showManualSelectionDialogBox = true }
+                        else Modifier)
+                    .alpha(if (isClickable) 1f else 0.5f)) {
+              Column(
+                  modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+                    Text(
+                        text = stringResource(R.string.manual_location),
+                        style =
+                            MaterialTheme.typography.labelLarge.copy(
+                                color = MaterialTheme.colorScheme.primary))
+                    Text(
+                        text =
+                            selectedLocation?.display_name
+                                ?: stringResource(R.string.enter_a_location),
+                        style = MaterialTheme.typography.bodyLarge)
+                  }
+            }
+      }
+
+      item {
+        HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(bottom = 8.dp, top = 32.dp))
+        PoweredByInfoText()
+      }
+    }
+
+    if (showManualSelectionDialogBox) {
+      LocationSearchWithNominatim(
+          innerPadding = PaddingValues(8.dp),
+          onSelected = { place ->
+            selectedLocation = place
+            invalidateCachedSunriseSunset(context)
+            UserLocationPref.save(
+                context,
+                UserLocationPref(
+                    automaticallyDetectLocation = automaticallyDetectLocation,
+                    userLocationPref = place))
+          },
+          onDismiss = { showManualSelectionDialogBox = false })
     }
   }
 }
