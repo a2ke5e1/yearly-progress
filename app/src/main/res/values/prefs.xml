@@ -15,5 +15,9 @@
     <string name="progress_show_notification" translatable="false">progress_show_notification</string>
     <string name="app_calendar_type" translatable="false">app_calendar_type</string>
     <string name="app_location_settings" translatable="false">app_location_settings</string>
+    <string name="progress_show_notification_year" translatable="false">progress_show_notification_year</string>
+    <string name="progress_show_notification_month" translatable="false">progress_show_notification_month</string>
+    <string name="progress_show_notification_week" translatable="false">progress_show_notification_week</string>
+    <string name="progress_show_notification_day" translatable="false">progress_show_notification_day</string>
 
 </resources>

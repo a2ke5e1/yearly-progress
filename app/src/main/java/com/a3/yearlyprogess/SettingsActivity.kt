@@ -19,14 +19,18 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -65,11 +69,11 @@ import com.a3.yearlyprogess.components.dialogbox.WeekType
 import com.a3.yearlyprogess.screens.LocationSettingsScreen
 import com.a3.yearlyprogess.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.widgets.manager.updateManager.services.WidgetUpdateBroadcastReceiver
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.Serializable
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class SettingsViewModel(private val application: Application) : AndroidViewModel(application) {
 
@@ -172,6 +176,47 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
   fun setProgressShowNotification(value: Boolean) =
       updatePref(
           _progressShowNotification, getStringRes(R.string.progress_show_notification), value)
+
+
+
+
+  private val _progressShowNotificationYear =
+    prefFlow(getStringRes(R.string.progress_show_notification_year), true)
+  val progressShowNotificationYear = _progressShowNotificationYear.asStateFlow()
+
+  fun setProgressShowNotificationYear(value: Boolean) =
+    updatePref(
+      _progressShowNotificationYear, getStringRes(R.string.progress_show_notification_year), value)
+
+
+  private val _progressShowNotificationMonth =
+    prefFlow(getStringRes(R.string.progress_show_notification_month), true)
+  val progressShowNotificationMonth = _progressShowNotificationMonth.asStateFlow()
+
+  fun setProgressShowNotificationMonth(value: Boolean) =
+    updatePref(
+      _progressShowNotificationMonth, getStringRes(R.string.progress_show_notification_month), value)
+
+
+  private val _progressShowNotificationWeek =
+    prefFlow(getStringRes(R.string.progress_show_notification_week), true)
+  val progressShowNotificationWeek = _progressShowNotificationWeek.asStateFlow()
+
+  fun setProgressShowNotificationWeek(value: Boolean) =
+    updatePref(
+      _progressShowNotificationWeek, getStringRes(R.string.progress_show_notification_week), value)
+
+
+  private val _progressShowNotificationDay =
+    prefFlow(getStringRes(R.string.progress_show_notification_day), true)
+  val progressShowNotificationDay = _progressShowNotificationDay.asStateFlow()
+
+  fun setProgressShowNotificationDay(value: Boolean) =
+    updatePref(
+      _progressShowNotificationDay, getStringRes(R.string.progress_show_notification_day), value)
+
+
+
 
   private val calendarEntries =
       application.resources.getStringArray(R.array.app_calendar_type_entries)
@@ -299,16 +344,17 @@ class SettingsActivity : ComponentActivity() {
   @Composable
   fun SwitchPreference(
       title: String,
-      summary: String,
+      summary: String? = null,
       checked: Boolean,
       disabled: Boolean = false,
-      onCheckedChange: (Boolean) -> Unit
+      onCheckedChange: (Boolean) -> Unit,
+      modifier: Modifier = Modifier
   ) {
     val interactionSource = remember { MutableInteractionSource() }
 
     Row(
         modifier =
-            Modifier.fillMaxWidth()
+            modifier.fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .clickable(
                     enabled = !disabled, interactionSource = interactionSource, indication = null) {
@@ -318,15 +364,17 @@ class SettingsActivity : ComponentActivity() {
                 .animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-          Column(modifier = Modifier.weight(1f)) {
+          Column(modifier = Modifier.weight(1f).fillMaxHeight(),     verticalArrangement = Arrangement.Center
+          ) {
             Text(title, style = MaterialTheme.typography.bodyLarge)
-
-            AnimatedVisibility(visible = true) {
-              Text(
+            if (summary != null) {
+              AnimatedVisibility(visible = true) {
+                Text(
                   summary,
                   style =
-                      MaterialTheme.typography.bodyMedium.copy(
-                          color = MaterialTheme.colorScheme.onSurfaceVariant))
+                  MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant))
+              }
             }
           }
 
@@ -651,7 +699,88 @@ class SettingsActivity : ComponentActivity() {
       contentPadding: PaddingValues,
       viewModel: SettingsViewModel,
       onBack: () -> Unit
-  ) {}
+  ) {
+    val context = LocalContext.current
+    val progressShowNotification by viewModel.progressShowNotification.collectAsState()
+    val progressShowNotificationYear by viewModel.progressShowNotificationYear.collectAsState()
+    val progressShowNotificationMonth by viewModel.progressShowNotificationMonth.collectAsState()
+    val progressShowNotificationWeek by viewModel.progressShowNotificationWeek.collectAsState()
+    val progressShowNotificationDay by viewModel.progressShowNotificationDay.collectAsState()
+    LazyColumn(
+      contentPadding = contentPadding
+    ) {
+      item {
+        Card(
+          modifier = Modifier.padding(16.dp),
+          shape = RoundedCornerShape(16.dp),
+          colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+          )
+        ) {
+          SwitchPreference(
+            modifier = Modifier.padding(16.dp),
+            title = stringResource(R.string.progress_notification),
+            summary = stringResource(R.string.shows_progress_in_the_notification),
+            checked = progressShowNotification,
+            onCheckedChange = { newValue ->
+              if (newValue) {
+                val notificationHelper = YearlyProgressNotification(context)
+                if (!notificationHelper.hasAppNotificationPermission()) {
+                  notificationHelper.requestNotificationPermission(this@SettingsActivity)
+                }
+              }
+              val widgetUpdateServiceIntent =
+                Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+              context.sendBroadcast(widgetUpdateServiceIntent)
+              viewModel.setProgressShowNotification(newValue)
+            })
+        }
+      }
+
+      item {
+        Text(
+          text = stringResource(R.string.progress_notification),
+          style =
+          MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
+          modifier = Modifier.padding( horizontal =  16.dp, vertical = 8.dp))
+        SwitchPreference(
+          title = stringResource(R.string.year),
+          summary = null,
+          checked = progressShowNotificationYear,
+          onCheckedChange = { newValue ->
+            viewModel.setProgressShowNotificationYear(newValue)
+          })
+      }
+      item {
+        SwitchPreference(
+          title = stringResource(R.string.month),
+          summary = null,
+          checked = progressShowNotificationMonth,
+          onCheckedChange = { newValue ->
+            viewModel.setProgressShowNotificationMonth(newValue)
+          })
+      }
+      item {
+        SwitchPreference(
+          title = stringResource(R.string.week),
+          summary = null,
+          checked = progressShowNotificationWeek,
+          onCheckedChange = { newValue ->
+            viewModel.setProgressShowNotificationWeek(newValue)
+          })
+      }
+      item {
+        SwitchPreference(
+          title = stringResource(R.string.day),
+          summary = null,
+          checked = progressShowNotificationDay,
+          onCheckedChange = { newValue ->
+            viewModel.setProgressShowNotificationDay(newValue)
+          })
+      }
+
+    }
+  }
 
   @Composable
   fun <T> ListPreference(

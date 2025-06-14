@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.compose.ui.util.fastJoinToString
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -62,6 +63,36 @@ class YearlyProgressNotification(private val context: Context) {
     val weekProgress = yp.calculateProgress(TimePeriod.WEEK)
     val dayProgress = yp.calculateProgress(TimePeriod.DAY)
 
+    val settingPref = PreferenceManager.getDefaultSharedPreferences(context)
+    val showYearProgress = settingPref.getBoolean(context.getString(R.string.progress_show_notification_year), true)
+    val showMonthProgress = settingPref.getBoolean(context.getString(R.string.progress_show_notification_month), true)
+    val showWeekProgress = settingPref.getBoolean(context.getString(R.string.progress_show_notification_week), true)
+    val showDayProgress = settingPref.getBoolean(context.getString(R.string.progress_show_notification_day), true)
+
+
+    val progressInfo = mutableListOf<String>()
+    if (showDayProgress) {
+      progressInfo.add("Day: %.2f%%"
+        .format(dayProgress)
+      )
+    }
+    if (showWeekProgress) {
+      progressInfo.add("Week: %.2f%%"
+        .format(weekProgress)
+      )
+    }
+    if (showMonthProgress) {
+      progressInfo.add("Month: %.2f%%"
+        .format(monthProgress)
+      )
+    }
+    if (showYearProgress) {
+      progressInfo.add("Year: %.2f%%"
+        .format(yearProgress)
+      )
+    }
+
+
     val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
     val pendingIntent =
         intent?.let { PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_IMMUTABLE) }
@@ -71,8 +102,7 @@ class YearlyProgressNotification(private val context: Context) {
             .setSmallIcon(R.drawable.ic_notification_icon)
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(
-                "Day: %.2f%%, Week: %.2f%%, Month: %.2f%% and Year: %.2f%%"
-                    .format(dayProgress, weekProgress, monthProgress, yearProgress),
+              progressInfo.joinWithAnd()
             )
             .setSilent(true)
             .setContentIntent(pendingIntent)
@@ -91,4 +121,12 @@ class YearlyProgressNotification(private val context: Context) {
       requireActivity.requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 0)
     }
   }
+
+  fun List<String>.joinWithAnd(): String = when (size) {
+    0 -> ""
+    1 -> this[0]
+    2 -> "${this[0]} and ${this[1]}"
+    else -> dropLast(1).joinToString(", ") + " and ${last()}"
+  }
+
 }
