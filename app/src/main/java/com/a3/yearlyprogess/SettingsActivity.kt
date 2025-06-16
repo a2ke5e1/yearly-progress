@@ -11,6 +11,10 @@ import androidx.annotation.IntRange
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -53,9 +57,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
 import androidx.navigation.compose.NavHost
@@ -274,7 +280,32 @@ class SettingsActivity : ComponentActivity() {
       val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
       val navController = rememberNavController()
       YearlyProgressTheme {
-        NavHost(navController = navController, startDestination = SettingsScreen.Home) {
+        NavHost(navController = navController, startDestination = SettingsScreen.Home,
+          enterTransition = {
+            slideInHorizontally(
+              initialOffsetX = { it }, // from right
+              animationSpec = tween(durationMillis = 300)
+            )
+          },
+          exitTransition = {
+            slideOutHorizontally(
+              targetOffsetX = { -it }, // to left
+              animationSpec = tween(durationMillis = 300)
+            )
+          },
+          popEnterTransition = {
+            slideInHorizontally(
+              initialOffsetX = { -it }, // from left
+              animationSpec = tween(durationMillis = 300)
+            )
+          },
+          popExitTransition = {
+            slideOutHorizontally(
+              targetOffsetX = { it }, // to right
+              animationSpec = tween(durationMillis = 300)
+            )
+          }
+        ) {
           composable<SettingsScreen.Home> {
             Scaffold(
                 modifier =
@@ -366,7 +397,7 @@ class SettingsActivity : ComponentActivity() {
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
           Column(modifier = Modifier.weight(1f).fillMaxHeight(),     verticalArrangement = Arrangement.Center
           ) {
-            Text(title, style = MaterialTheme.typography.bodyLarge)
+            Text(title, style = MaterialTheme.typography.titleMedium)
             if (summary != null) {
               AnimatedVisibility(visible = true) {
                 Text(
@@ -407,7 +438,7 @@ class SettingsActivity : ComponentActivity() {
       Column(modifier = Modifier.weight(1f).clickable(enabled = !disabled) { onOptionClicked() }) {
         Text(
             title,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.titleMedium,
             modifier =
                 Modifier.padding(
                     start = 16.dp,
@@ -450,7 +481,7 @@ class SettingsActivity : ComponentActivity() {
                 .alpha(if (!disabled) 1f else 0.5f)
                 .animateContentSize(),
     ) {
-      Text(title, style = MaterialTheme.typography.bodyLarge)
+      Text(title, style = MaterialTheme.typography.titleMedium)
 
       AnimatedVisibility(visible = true) {
         Text(
@@ -488,7 +519,7 @@ class SettingsActivity : ComponentActivity() {
     ) {
       Text(
           stringResource(R.string.manage_location_title),
-          style = MaterialTheme.typography.bodyLarge,
+          style = MaterialTheme.typography.titleMedium,
           modifier = Modifier.padding(16.dp))
     }
   }
@@ -710,12 +741,11 @@ class SettingsActivity : ComponentActivity() {
       contentPadding = contentPadding
     ) {
       item {
-        Card(
-          modifier = Modifier.padding(16.dp),
-          shape = RoundedCornerShape(16.dp),
-          colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-          )
+        Column(
+          modifier = Modifier.padding(16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.primaryContainer),
+
         ) {
           SwitchPreference(
             modifier = Modifier.padding(16.dp),
@@ -739,7 +769,7 @@ class SettingsActivity : ComponentActivity() {
 
       item {
         Text(
-          text = stringResource(R.string.progress_notification),
+          text = stringResource(R.string.options),
           style =
           MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
           modifier = Modifier.padding( horizontal =  16.dp, vertical = 8.dp))
@@ -807,7 +837,7 @@ class SettingsActivity : ComponentActivity() {
       Column(modifier = Modifier.padding(16.dp)) {
         Text(
             title,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.titleMedium,
         )
         AnimatedVisibility(visible = true) { renderSelectedItem(selectedItem) }
       }
