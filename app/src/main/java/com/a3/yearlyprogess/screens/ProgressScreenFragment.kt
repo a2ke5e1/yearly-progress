@@ -44,6 +44,8 @@ import kotlinx.coroutines.launch
 sealed class SunriseSunsetState {
   data object Loading : SunriseSunsetState()
 
+  data object DismissibleMessageView: SunriseSunsetState()
+
   data class Error(val message: String) : SunriseSunsetState()
 
   data class Success(val data: SunriseSunsetResponse) : SunriseSunsetState()
@@ -58,8 +60,12 @@ class ProgressScreenViewModel : ViewModel() {
 
   private val firebaseCrashlytics = Firebase.crashlytics
 
-  fun fetchSunriseSunset(context: Context, location: Location) {
+  fun showDismissibleMessageView() {
+    _state.postValue(SunriseSunsetState.DismissibleMessageView)
+  }
 
+  fun fetchSunriseSunset(context: Context, location: Location) {
+    _state.postValue(SunriseSunsetState.Loading)
     val cached = loadCachedSunriseSunset(context)
     if (cached != null && cached.results[1].date == getCurrentDate()) {
       _state.postValue(SunriseSunsetState.Success(cached))
@@ -136,11 +142,13 @@ class ProgressScreenFragment : Fragment() {
       when (state) {
         is SunriseSunsetState.Loading -> {
           binding.loadingIndicator.visibility = View.VISIBLE
+          binding.dismissibleMessageView.visibility = View.GONE
           binding.dayLightProgressView.visibility = View.GONE
           binding.nightLightProgressView.visibility = View.GONE
         }
         is SunriseSunsetState.Success -> {
           binding.loadingIndicator.visibility = View.GONE
+          binding.dismissibleMessageView.visibility = View.GONE
           binding.dayLightProgressView.apply {
             visibility = View.VISIBLE
             loadSunriseSunset(state.data)
@@ -149,6 +157,12 @@ class ProgressScreenFragment : Fragment() {
             visibility = View.VISIBLE
             loadSunriseSunset(state.data)
           }
+        }
+        is SunriseSunsetState.DismissibleMessageView -> {
+          binding.dayLightProgressView.visibility = View.GONE
+          binding.nightLightProgressView.visibility = View.GONE
+          binding.loadingIndicator.visibility = View.GONE
+          binding.dismissibleMessageView.visibility = View.VISIBLE
         }
         is SunriseSunsetState.Error -> {
           binding.loadingIndicator.visibility = View.GONE
@@ -183,7 +197,8 @@ class ProgressScreenFragment : Fragment() {
         }
 
         else -> {
-          binding.dismissibleMessageView?.visibility = View.VISIBLE
+
+           progressScreenViewModel.showDismissibleMessageView()
           binding.callToAction?.setOnClickListener {
             locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
           }
@@ -244,7 +259,6 @@ class ProgressScreenFragment : Fragment() {
         return
       }
 
-      binding.dismissibleMessageView?.visibility = View.GONE
 
       val cachedLocation = context?.let { loadCachedLocation(it) }
       cachedLocation?.let { setupSunriseSunsetViews(it) }
