@@ -513,7 +513,7 @@ data class StandaloneWidgetOptions(
       val widgetShapeKey = "$WIDGET_SHAPE$widgetId"
 
       val globalDecimalPoint = pref.getInt(globalDecimalPointKey, 2)
-      val globalTimeLeft = pref.getBoolean(globalTimeLeftKey, false)
+      val globalTimeLeft = pref.getBoolean(globalTimeLeftKey, true)
       val globalDynamicTimeLeft = pref.getBoolean(globalDynamicTimeLeftKey, false)
       val globalReplaceWithCounter = pref.getBoolean(globalReplaceWithCounterKey, false)
       val globalBackgroundTransparency = pref.getInt(globalBackgroundTransparencyKey, 100)

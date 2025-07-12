@@ -149,6 +149,7 @@
     <string name="font_size">Font Size</string>
     <string name="cancel">Cancel</string>
     <string name="customize_event_widget">Customize event widget</string>
+    <string name="options">Options</string>
 
 
     <!-- Week Preference -->
