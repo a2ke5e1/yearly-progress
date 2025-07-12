@@ -101,16 +101,16 @@ constructor(
         progress = _newProgress.coerceIn(0.0, 100.0)
 
         val progressText = progress.styleFormatted(0)
-        val eventTimeLeft = if (System.currentTimeMillis() < event.eventStartTime.time) {
+        val eventTimeLeft = if (System.currentTimeMillis() < _start) {
           context.getString(
             R.string.time_in,
-            (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText()
+            (_start - System.currentTimeMillis()).toTimePeriodText()
           )
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
         } else {
           context.getString(
             R.string.time_left,
-            yp.calculateTimeLeft(event.eventEndTime.time)
+            yp.calculateTimeLeft(_end)
               .toTimePeriodText()
           )
         }
