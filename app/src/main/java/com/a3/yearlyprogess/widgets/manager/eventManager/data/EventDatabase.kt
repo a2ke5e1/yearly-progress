@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 
-@Database(entities = [Event::class], version = 2, exportSchema = false)
+@Database(entities = [Event::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class EventDatabase : RoomDatabase() {
   abstract fun eventDao(): EventDao
@@ -31,6 +31,7 @@ abstract class EventDatabase : RoomDatabase() {
                     "event_database",
                 )
                 .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_2_3)
                 .fallbackToDestructiveMigration()
                 .build()
         INSTANCE = instance
@@ -46,5 +47,14 @@ abstract class EventDatabase : RoomDatabase() {
             )
           }
         }
+
+    private val MIGRATION_2_3 =
+      object : Migration(2, 3) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
+            "ALTER TABLE event_table ADD COLUMN hasWeekDays INTEGER NOT NULL DEFAULT 0",
+          )
+        }
+      }
   }
 }

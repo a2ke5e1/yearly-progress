@@ -17,6 +17,7 @@ data class Event(
     val eventStartTime: Date,
     val eventEndTime: Date,
     val repeatEventDays: List<RepeatDays> = emptyList(),
+    val hasWeekDays: Boolean = false,
 ) : Parcelable {
   fun nextStartAndEndTime(currentTime: Long = System.currentTimeMillis()): Pair<Long, Long> {
     var nextStartTime = eventStartTime.time
@@ -61,6 +62,10 @@ data class Event(
       }
       nextStartTime = eventStartCalendar.timeInMillis
       nextEndTime = eventEndCalendar.timeInMillis
+    }
+
+    if (!hasWeekDays) {
+      return Pair(nextStartTime, nextEndTime)
     }
 
     val repeatWeekDays =

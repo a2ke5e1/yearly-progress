@@ -67,22 +67,27 @@ class EventEditorActivity : AppCompatActivity() {
     // Set Start Date and Time and End Date and Time to current date and time
     if (isAddMode) {
       val localCalendar = Calendar.getInstance()
-      val ONE_HOUR = 60 * 60 * 1000L
+      localCalendar.timeInMillis = System.currentTimeMillis()
+      localCalendar.set(Calendar.HOUR_OF_DAY, 0)
+      localCalendar.set(Calendar.MINUTE, 0)
+      localCalendar.set(Calendar.SECOND, 0)
 
-      eventStartDateTimeInMillis = System.currentTimeMillis()
-      eventEndDateTimeInMillis = System.currentTimeMillis() + ONE_HOUR
+      eventStartDateTimeInMillis = localCalendar.timeInMillis
+      localCalendar.timeInMillis = localCalendar.timeInMillis + (24 * 60 * 60 * 1000L)
+
+      eventEndDateTimeInMillis = localCalendar.timeInMillis
 
       localCalendar.timeInMillis = eventStartDateTimeInMillis
-      eventStartHour = localCalendar.get(Calendar.HOUR_OF_DAY)
-      eventStartMinute = localCalendar.get(Calendar.MINUTE)
+      eventStartHour = 0
+      eventStartMinute = 0
 
       binding.editTextStartDate.text =
           format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
       binding.editTextStartTime.text = getHourMinuteLocal(eventStartDateTimeInMillis)
 
       localCalendar.timeInMillis = eventEndDateTimeInMillis
-      eventEndHour = localCalendar.get(Calendar.HOUR_OF_DAY)
-      eventEndMinute = localCalendar.get(Calendar.MINUTE)
+      eventEndHour = 0
+      eventEndMinute = 0
 
       binding.editTextEndDate.text = format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
       binding.editTextEndTime.text = getHourMinuteLocal(eventEndDateTimeInMillis)
@@ -341,6 +346,7 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
+                  binding.repeatWeekdaysSwitch.isChecked
                 )
             mEventViewModel.updateEvent(updatedEvent)
 
@@ -381,6 +387,7 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
+                  binding.repeatWeekdaysSwitch.isChecked
                 ),
             )
           }
@@ -433,6 +440,7 @@ class EventEditorActivity : AppCompatActivity() {
     binding.editTextEndDate.text = format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
     binding.editTextEndTime.text = getHourMinuteLocal(eventEndDateTimeInMillis)
 
+    binding.repeatWeekdaysSwitch.isChecked = event.hasWeekDays
     setRepeatDays(event.repeatEventDays)
   }
 
@@ -504,21 +512,5 @@ class EventEditorActivity : AppCompatActivity() {
         RepeatDays.EVERY_YEAR -> binding.everyYearSwitch.isChecked = true
       }
     }
-
-    val checkRepeatWeekdays =
-        repeatDays.any {
-          it in
-              listOf(
-                  RepeatDays.SUNDAY,
-                  RepeatDays.MONDAY,
-                  RepeatDays.TUESDAY,
-                  RepeatDays.WEDNESDAY,
-                  RepeatDays.THURSDAY,
-                  RepeatDays.FRIDAY,
-                  RepeatDays.SATURDAY,
-              )
-        }
-
-    binding.repeatWeekdaysSwitch.isChecked = checkRepeatWeekdays
   }
 }
