@@ -124,7 +124,7 @@
     <string name="failed_to_load_sunset_sunrise_time"><![CDATA[Failed to load sunset & sunrise time.]]></string>
     <string name="progress_notification">Progress Notification</string>
     <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
-    <string name="enable_location_day_night_message">Allow location permission to see Day/Night Progress</string>
+    <string name="enable_location_day_night_message">Allow location permission to see Day/Night progress.</string>
     <string name="allow">Allow</string>
     <string name="calendar_widget_description">Shows progress of upcoming events in your calendar</string>
     <string name="ongoing">ongoing</string>

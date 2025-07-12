@@ -95,9 +95,14 @@
                 android:id="@+id/message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginBottom="8dp"
                 android:text="@string/enable_location_day_night_message" />
 
             <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3Expressive.Button"
+                android:backgroundTint="?attr/colorTertiary"
+                android:textColor="?attr/colorOnTertiary"
                 android:layout_width="wrap_content"
                 android:id="@+id/callToAction"
                 android:layout_height="wrap_content"
