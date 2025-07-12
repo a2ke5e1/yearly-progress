@@ -34,130 +34,145 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp">
-
-                <TextView
-                    android:id="@+id/eventTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                    android:textColor="?attr/colorPrimary"
-                    tools:text="Lorem Ipsum" />
-
-                <TextView
-                    android:id="@+id/eventStart"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-                    android:textColor="?attr/colorSecondary"
-                    tools:text="Wed - Thru" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp">
-
-                <TextView
-                    android:id="@+id/eventDesc"
-                    style="@style/TextAppearance.Material3.BodySmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="16dp">
-
-                <TextView
-                    android:id="@+id/progressText"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0%"
-                    android:textColor="?attr/colorPrimary" />
-
-                <com.google.android.material.progressindicator.LinearProgressIndicator
-                    android:id="@+id/progressBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:indeterminate="false"
-                    android:max="100"
-                    android:progress="0"
-                    app:wavelength="20dp"
-                    app:waveAmplitude="5dp"
-                    android:layout_marginTop="4dp"
-                    app:waveSpeed="10dp"
-                    android:visibility="visible"
-                    app:trackCornerRadius="24dp" />
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
                 android:orientation="horizontal"
+                android:paddingTop="16dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp">
+
+                        <TextView
+                            android:id="@+id/eventTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                            android:textColor="?attr/colorPrimary"
+                            tools:text="Lorem Ipsum" />
+
+                        <TextView
+                            android:id="@+id/eventStart"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                            android:textColor="?attr/colorSecondary"
+                            tools:text="Wed - Thru" />
+
+                        <TextView
+                            android:id="@+id/daysLeft"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                            android:textColor="?attr/colorSecondary"
+                            tools:text="In 12h" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp">
+
+                        <TextView
+                            android:id="@+id/eventDesc"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/progressText"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="0%"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="18sp"
+                        android:translationX="4dp" />
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/progressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:indeterminate="false"
+                        android:max="100"
+                        android:progress="0"
+                        android:visibility="visible"
+                        app:indicatorSize="64dp"
+                        app:trackCornerRadius="24dp"
+                        app:waveAmplitude="2dp"
+                        app:waveSpeed="10dp"
+                        app:wavelength="12dp"
+                        tools:progress="50" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButtonGroup
+                android:id="@+id/buttonGroup"
+                style="@style/Widget.Material3.MaterialButtonGroup.Connected"
+                android:layout_width="wrap_content"
+                android:layout_gravity="end"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="16dp"
-                android:paddingBottom="8dp">
-
-                <com.google.android.material.button.MaterialButton
+                android:paddingBottom="8dp"
+                android:layout_height="wrap_content">
+                <Button
+                    style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/editButton"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/edit"
                     app:icon="@drawable/ic_outline_event_24" />
-
-                <Space
-                    android:layout_width="8dp"
-                    android:layout_height="wrap_content" />
-
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/addButton"
-                    style="@style/Widget.Material3.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_widget"
                     android:visibility="gone" />
-
-
-            </LinearLayout>
-
-
+            </com.google.android.material.button.MaterialButtonGroup>
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/custom_progress_bar"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:backgroundTint="#12ACABAB"
-            android:backgroundTintMode="multiply"
-            app:cardBackgroundColor="?attr/colorPrimary"
-            app:cardCornerRadius="0dp"
-            app:strokeWidth="0dp" />
+        <!-- <com.google.android.material.card.MaterialCardView
+             android:id="@+id/custom_progress_bar"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:backgroundTint="#12ACABAB"
+             android:backgroundTintMode="multiply"
+             app:cardBackgroundColor="?attr/colorPrimary"
+             app:cardCornerRadius="0dp"
+             app:strokeWidth="0dp" />-->
 
 
     </com.google.android.material.card.MaterialCardView>

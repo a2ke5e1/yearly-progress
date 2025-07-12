@@ -80,7 +80,7 @@ dependencies {
   implementation("androidx.recyclerview:recyclerview-selection:1.2.0")
 
   // Material Design 3.0
-  implementation("com.google.android.material:material:1.13.0-beta01")
+  implementation("com.google.android.material:material:1.14.0-alpha02")
 
   // Splash Screen for android 11 and below
   implementation("androidx.core:core-splashscreen:1.0.1")
