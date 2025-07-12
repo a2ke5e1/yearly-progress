@@ -96,17 +96,17 @@ data class EventWidgetOption(
 }
 
 data class DefaultEventWidgetTextProperties(
-  val titleSize: Float,
-  val descriptionSize: Float?,
-  val timeSize: Float?,
-  val daysLeftSize: Float,
-  val progressSize: Float,
-  val currentDateSize: Float
+    val titleSize: Float,
+    val descriptionSize: Float?,
+    val timeSize: Float?,
+    val daysLeftSize: Float,
+    val progressSize: Float,
+    val currentDateSize: Float
 )
 
 private fun RemoteViews.applyCustomFontSize(
-  scale: Float,
-  defaultWidgetTextProperties: DefaultEventWidgetTextProperties
+    scale: Float,
+    defaultWidgetTextProperties: DefaultEventWidgetTextProperties
 ) {
   val fontScale = scale.coerceIn(0.1f, 2f)
 
@@ -232,11 +232,17 @@ class EventWidget : BaseWidget() {
       val replaceProgressWithDaysLeft = options.replaceProgressWithDaysLeft
       val dynamicTimeLeft = options.dynamicLeftCounter
 
-      val eventTimeLeft =
-          context.getString(
-              R.string.time_left,
-              yp.calculateTimeLeft(newEventEnd).toTimePeriodText(dynamicTimeLeft),
-          )
+      val eventTimeLeft =  if (System.currentTimeMillis() < event.eventStartTime.time) {
+        context.getString(
+          R.string.time_in,
+          (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText(
+            dynamicTimeLeft))
+      } else {
+        context.getString(
+          R.string.time_left,
+          yp.calculateTimeLeft(event.eventEndTime.time)
+            .toTimePeriodText(dynamicTimeLeft))
+      }
 
       if (timeLeftCounter) {
 
@@ -274,33 +280,35 @@ class EventWidget : BaseWidget() {
       tallView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
       wideView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
 
-      smallView.applyCustomFontSize(options.fontScale, DefaultEventWidgetTextProperties(
-        titleSize = pxToSp(R.dimen.event_widget_small_title),
-        progressSize = pxToSp(R.dimen.event_widget_small_progress),
-        daysLeftSize = pxToSp(R.dimen.event_widget_small_days_left),
-        currentDateSize = pxToSp(R.dimen.event_widget_small_current_date),
-        descriptionSize = null,
-        timeSize = null
-      ))
+      smallView.applyCustomFontSize(
+          options.fontScale,
+          DefaultEventWidgetTextProperties(
+              titleSize = pxToSp(R.dimen.event_widget_small_title),
+              progressSize = pxToSp(R.dimen.event_widget_small_progress),
+              daysLeftSize = pxToSp(R.dimen.event_widget_small_days_left),
+              currentDateSize = pxToSp(R.dimen.event_widget_small_current_date),
+              descriptionSize = null,
+              timeSize = null))
 
-      wideView.applyCustomFontSize(options.fontScale, DefaultEventWidgetTextProperties(
-        titleSize = pxToSp(R.dimen.event_widget_wideview_title),
-        progressSize = pxToSp(R.dimen.event_widget_wideview_progress),
-        daysLeftSize = pxToSp(R.dimen.event_widget_wideview_days_left),
-        currentDateSize = pxToSp(R.dimen.event_widget_wideview_current_date),
-        descriptionSize = pxToSp(R.dimen.event_widget_wideview_description),
-        timeSize = pxToSp(R.dimen.event_widget_wideview_time)
-      ))
+      wideView.applyCustomFontSize(
+          options.fontScale,
+          DefaultEventWidgetTextProperties(
+              titleSize = pxToSp(R.dimen.event_widget_wideview_title),
+              progressSize = pxToSp(R.dimen.event_widget_wideview_progress),
+              daysLeftSize = pxToSp(R.dimen.event_widget_wideview_days_left),
+              currentDateSize = pxToSp(R.dimen.event_widget_wideview_current_date),
+              descriptionSize = pxToSp(R.dimen.event_widget_wideview_description),
+              timeSize = pxToSp(R.dimen.event_widget_wideview_time)))
 
-      tallView.applyCustomFontSize(options.fontScale, DefaultEventWidgetTextProperties(
-        titleSize = pxToSp(R.dimen.event_widget_tallview_title),
-        progressSize = pxToSp(R.dimen.event_widget_tallview_progress),
-        daysLeftSize = pxToSp(R.dimen.event_widget_tallview_days_left),
-        currentDateSize = pxToSp(R.dimen.event_widget_tallview_current_date),
-        descriptionSize = pxToSp(R.dimen.event_widget_tallview_description),
-        timeSize = pxToSp(R.dimen.event_widget_tallview_time)
-      ))
-
+      tallView.applyCustomFontSize(
+          options.fontScale,
+          DefaultEventWidgetTextProperties(
+              titleSize = pxToSp(R.dimen.event_widget_tallview_title),
+              progressSize = pxToSp(R.dimen.event_widget_tallview_progress),
+              daysLeftSize = pxToSp(R.dimen.event_widget_tallview_days_left),
+              currentDateSize = pxToSp(R.dimen.event_widget_tallview_current_date),
+              descriptionSize = pxToSp(R.dimen.event_widget_tallview_description),
+              timeSize = pxToSp(R.dimen.event_widget_tallview_time)))
 
       if (Build.VERSION.SDK_INT > 30) {
         val viewMapping: Map<SizeF, RemoteViews> =

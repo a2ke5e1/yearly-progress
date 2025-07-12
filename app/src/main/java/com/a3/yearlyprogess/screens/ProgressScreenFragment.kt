@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 sealed class SunriseSunsetState {
   data object Loading : SunriseSunsetState()
 
-  data object DismissibleMessageView: SunriseSunsetState()
+  data object DismissibleMessageView : SunriseSunsetState()
 
   data class Error(val message: String) : SunriseSunsetState()
 
@@ -198,7 +198,7 @@ class ProgressScreenFragment : Fragment() {
 
         else -> {
 
-           progressScreenViewModel.showDismissibleMessageView()
+          progressScreenViewModel.showDismissibleMessageView()
           binding.callToAction?.setOnClickListener {
             locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
           }
@@ -258,7 +258,6 @@ class ProgressScreenFragment : Fragment() {
             .show()
         return
       }
-
 
       val cachedLocation = context?.let { loadCachedLocation(it) }
       cachedLocation?.let { setupSunriseSunsetViews(it) }
