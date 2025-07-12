@@ -29,6 +29,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.util.Locale.getDefault
 
 data class EventWidgetOption(
     val widgetId: Int,
@@ -232,15 +233,16 @@ class EventWidget : BaseWidget() {
       val replaceProgressWithDaysLeft = options.replaceProgressWithDaysLeft
       val dynamicTimeLeft = options.dynamicLeftCounter
 
-      val eventTimeLeft =  if (System.currentTimeMillis() < event.eventStartTime.time) {
+      val eventTimeLeft =  if (System.currentTimeMillis() < newEventStart) {
         context.getString(
           R.string.time_in,
-          (event.eventStartTime.time - System.currentTimeMillis()).toTimePeriodText(
+          (newEventStart - System.currentTimeMillis()).toTimePeriodText(
             dynamicTimeLeft))
+          .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
       } else {
         context.getString(
           R.string.time_left,
-          yp.calculateTimeLeft(event.eventEndTime.time)
+          yp.calculateTimeLeft(newEventEnd)
             .toTimePeriodText(dynamicTimeLeft))
       }
 

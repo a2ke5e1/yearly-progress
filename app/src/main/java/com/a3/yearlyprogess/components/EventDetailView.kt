@@ -15,12 +15,14 @@ import com.a3.yearlyprogess.YearlyProgressUtil
 import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
-import kotlin.coroutines.CoroutineContext
+import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale.getDefault
+import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class EventDetailView
@@ -96,12 +98,22 @@ constructor(
 
         // eventStartTimeInMills = newEventStart
         // eventEndDateTimeInMillis = newEventEnd
-        progress = _newProgress
+        progress = _newProgress.coerceIn(0.0, 100.0)
 
-        progress = if (progress > 100) 100.0 else progress
-        progress = if (progress < 0) 0.0 else progress
-
-        val progressText = progress.styleFormatted(decimalPlace)
+        val progressText = progress.styleFormatted(0)
+        val eventTimeLeft = if (System.currentTimeMillis() < _start) {
+          context.getString(
+            R.string.time_in,
+            (_start - System.currentTimeMillis()).toTimePeriodText()
+          )
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
+        } else {
+          context.getString(
+            R.string.time_left,
+            yp.calculateTimeLeft(_end)
+              .toTimePeriodText()
+          )
+        }
 
         launch(Dispatchers.Main) {
           binding.eventTitle.text = event.eventTitle
@@ -114,7 +126,7 @@ constructor(
 
           binding.eventStart.text =
               displayRelativeDifferenceMessage(context, _start, _end, event.allDayEvent)
-          // binding.eventEnd.visibility = View.GONE
+          binding.daysLeft.text = eventTimeLeft
 
           binding.progressText.text = progressText
           binding.progressBar.progress = progress.toInt()
@@ -132,25 +144,25 @@ constructor(
     val decimalPlace: Int =
         settingsPref.getInt(context.getString(R.string.app_widget_decimal_point), 2)
 
-    val params = binding.customProgressBar.layoutParams
-    val target = (progress * 0.01 * binding.parent.width).toInt()
-    val progressBarValueAnimator = ValueAnimator.ofInt(params.width, target)
+    // val params = binding.customProgressBar.layoutParams
+    // val target = (progress * 0.01 * binding.parent.width).toInt()
+    // val progressBarValueAnimator = ValueAnimator.ofInt(params.width, target)
     val currentProgress = binding.progressBar.progress.toFloat()
     val progressTextValueAnimator = ValueAnimator.ofFloat(currentProgress, progress.toFloat())
 
-    progressBarValueAnimator.duration = if (animate) ANIMATION_DURATION else 0
+    // progressBarValueAnimator.duration = if (animate) ANIMATION_DURATION else 0
     progressTextValueAnimator.duration = if (animate) ANIMATION_DURATION else 0
 
-    progressBarValueAnimator.addUpdateListener {
+    /*progressBarValueAnimator.addUpdateListener {
       binding.customProgressBar.layoutParams.width = it.animatedValue as Int
       binding.customProgressBar.requestLayout()
-    }
+    }*/
 
     progressTextValueAnimator.addUpdateListener {
-      binding.progressText.text = progress.styleFormatted(decimalPlace)
+      binding.progressText.text = progress.styleFormatted(0)
     }
 
-    progressBarValueAnimator.start()
+    // progressBarValueAnimator.start()
     progressTextValueAnimator.start()
   }
 
