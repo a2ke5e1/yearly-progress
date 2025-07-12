@@ -191,7 +191,7 @@
 
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3Expressive.Button.TextButton"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:id="@+id/editTextStartDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -199,7 +199,7 @@
 
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3Expressive.Button.TextButton"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:id="@+id/editTextStartTime"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
@@ -223,7 +223,7 @@
 
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3Expressive.Button.TextButton"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:id="@+id/editTextEndDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -231,7 +231,7 @@
 
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3Expressive.Button.TextButton"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:id="@+id/editTextEndTime"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
