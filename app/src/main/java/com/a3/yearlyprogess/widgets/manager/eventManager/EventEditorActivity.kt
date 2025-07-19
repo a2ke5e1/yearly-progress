@@ -346,8 +346,7 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
-                  binding.repeatWeekdaysSwitch.isChecked
-                )
+                    binding.repeatWeekdaysSwitch.isChecked)
             mEventViewModel.updateEvent(updatedEvent)
 
             val appWidgetManager = AppWidgetManager.getInstance(this)
@@ -387,8 +386,7 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
-                  binding.repeatWeekdaysSwitch.isChecked
-                ),
+                    binding.repeatWeekdaysSwitch.isChecked),
             )
           }
 

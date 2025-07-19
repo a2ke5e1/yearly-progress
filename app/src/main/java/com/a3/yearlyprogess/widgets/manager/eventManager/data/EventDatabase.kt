@@ -49,12 +49,12 @@ abstract class EventDatabase : RoomDatabase() {
         }
 
     private val MIGRATION_2_3 =
-      object : Migration(2, 3) {
-        override fun migrate(db: SupportSQLiteDatabase) {
-          db.execSQL(
-            "ALTER TABLE event_table ADD COLUMN hasWeekDays INTEGER NOT NULL DEFAULT 0",
-          )
+        object : Migration(2, 3) {
+          override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                "ALTER TABLE event_table ADD COLUMN hasWeekDays INTEGER NOT NULL DEFAULT 0",
+            )
+          }
         }
-      }
   }
 }

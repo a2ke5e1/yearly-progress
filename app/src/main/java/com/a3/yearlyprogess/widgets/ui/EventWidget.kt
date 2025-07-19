@@ -23,13 +23,13 @@ import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
 import com.google.gson.Gson
+import java.util.Locale.getDefault
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.util.Locale.getDefault
 
 data class EventWidgetOption(
     val widgetId: Int,
@@ -233,18 +233,20 @@ class EventWidget : BaseWidget() {
       val replaceProgressWithDaysLeft = options.replaceProgressWithDaysLeft
       val dynamicTimeLeft = options.dynamicLeftCounter
 
-      val eventTimeLeft =  if (System.currentTimeMillis() < newEventStart) {
-        context.getString(
-          R.string.time_in,
-          (newEventStart - System.currentTimeMillis()).toTimePeriodText(
-            dynamicTimeLeft))
-          .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
-      } else {
-        context.getString(
-          R.string.time_left,
-          yp.calculateTimeLeft(newEventEnd)
-            .toTimePeriodText(dynamicTimeLeft))
-      }
+      val eventTimeLeft =
+          if (System.currentTimeMillis() < newEventStart) {
+            context
+                .getString(
+                    R.string.time_in,
+                    (newEventStart - System.currentTimeMillis()).toTimePeriodText(dynamicTimeLeft))
+                .replaceFirstChar {
+                  if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString()
+                }
+          } else {
+            context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(newEventEnd).toTimePeriodText(dynamicTimeLeft))
+          }
 
       if (timeLeftCounter) {
 

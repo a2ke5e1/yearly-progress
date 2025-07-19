@@ -7,7 +7,6 @@ import android.icu.text.SimpleDateFormat
 import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -17,13 +16,13 @@ import com.a3.yearlyprogess.databinding.CustomEventCardViewBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
+import java.util.Locale.getDefault
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Locale.getDefault
-import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("ViewConstructor", "SetTextI18n")
 class EventDetailView
@@ -40,7 +39,6 @@ constructor(
   private var binding: CustomEventCardViewBinding =
       CustomEventCardViewBinding.inflate(LayoutInflater.from(context), this, true)
   private val settingsPref = PreferenceManager.getDefaultSharedPreferences(context)
-
 
   private var job: Job
 
@@ -92,7 +90,7 @@ constructor(
         val decimalPlace: Int =
             settingsPref.getInt(context.getString(R.string.app_widget_decimal_point), 13)
         val appEventCardOldStyle: Boolean =
-          settingsPref.getBoolean(context.getString(R.string.app_event_card_old_style), false)
+            settingsPref.getBoolean(context.getString(R.string.app_event_card_old_style), false)
 
         val (_start, _end) = event.nextStartAndEndTime()
         val _newProgress = yp.calculateProgress(_start, _end)
@@ -103,19 +101,17 @@ constructor(
         // eventEndDateTimeInMillis = newEventEnd
         progress = _newProgress.coerceIn(0.0, 100.0)
 
-        val eventTimeLeft = if (System.currentTimeMillis() < _start) {
-          context.getString(
-            R.string.time_in,
-            (_start - System.currentTimeMillis()).toTimePeriodText()
-          )
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
-        } else {
-          context.getString(
-            R.string.time_left,
-            yp.calculateTimeLeft(_end)
-              .toTimePeriodText()
-          )
-        }
+        val eventTimeLeft =
+            if (System.currentTimeMillis() < _start) {
+              context
+                  .getString(
+                      R.string.time_in, (_start - System.currentTimeMillis()).toTimePeriodText())
+                  .replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString()
+                  }
+            } else {
+              context.getString(R.string.time_left, yp.calculateTimeLeft(_end).toTimePeriodText())
+            }
 
         launch(Dispatchers.Main) {
           binding.eventTitle.text = event.eventTitle
@@ -125,7 +121,6 @@ constructor(
           } else {
             binding.eventDesc.visibility = GONE
           }
-
 
           if (appEventCardOldStyle) {
             binding.progressBarContainer.visibility = GONE
