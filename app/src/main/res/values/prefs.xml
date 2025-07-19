@@ -19,5 +19,6 @@
     <string name="progress_show_notification_month" translatable="false">progress_show_notification_month</string>
     <string name="progress_show_notification_week" translatable="false">progress_show_notification_week</string>
     <string name="progress_show_notification_day" translatable="false">progress_show_notification_day</string>
+    <string name="app_event_card_old_style">app_event_card_old_style</string>
 
 </resources>

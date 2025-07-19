@@ -98,9 +98,43 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/progressBarLinearContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="16dp">
+
+                        <TextView
+                            android:id="@+id/progressTextLinear"
+                            style="@style/TextAppearance.Material3.HeadlineSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0%"
+                            android:textColor="?attr/colorPrimary" />
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:id="@+id/progressBarLinear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="0"
+                            app:wavelength="20dp"
+                            app:waveAmplitude="5dp"
+                            android:layout_marginTop="4dp"
+                            app:waveSpeed="10dp"
+                            android:visibility="visible"
+                            app:trackCornerRadius="24dp" />
+
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
                 <RelativeLayout
+                    android:id="@+id/progressBarContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="8dp"
@@ -115,7 +149,7 @@
                         android:text="0%"
                         android:textColor="?attr/colorPrimary"
                         android:textSize="18sp"
-                        android:translationX="4dp" />
+                        android:translationX="2dp" />
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/progressBar"
@@ -126,7 +160,7 @@
                         android:max="100"
                         android:progress="0"
                         android:visibility="visible"
-                        app:indicatorSize="64dp"
+                        app:indicatorSize="66dp"
                         app:trackCornerRadius="24dp"
                         app:waveAmplitude="2dp"
                         app:waveSpeed="10dp"

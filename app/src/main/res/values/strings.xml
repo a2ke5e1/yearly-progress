@@ -150,6 +150,7 @@
     <string name="cancel">Cancel</string>
     <string name="customize_event_widget">Customize event widget</string>
     <string name="options">Options</string>
+    <string name="enable_event_card_old_style">Enble event card classic style</string>
 
 
     <!-- Week Preference -->

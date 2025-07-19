@@ -7,6 +7,7 @@ import android.icu.text.SimpleDateFormat
 import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -39,6 +40,7 @@ constructor(
   private var binding: CustomEventCardViewBinding =
       CustomEventCardViewBinding.inflate(LayoutInflater.from(context), this, true)
   private val settingsPref = PreferenceManager.getDefaultSharedPreferences(context)
+
 
   private var job: Job
 
@@ -82,14 +84,15 @@ constructor(
       // eventEndDateTimeInMillis = newEventEnd
       var progress = newProgress
 
-      progress = if (progress > 100) 100.0 else progress
-      progress = if (progress < 0) 0.0 else progress
+      progress = progress.coerceIn(0.0, 100.0)
 
       launch(Dispatchers.Main) { updateView(progress) }
 
       while (true) {
         val decimalPlace: Int =
-            settingsPref.getInt(context.getString(R.string.widget_event_widget_decimal_point), 2)
+            settingsPref.getInt(context.getString(R.string.app_widget_decimal_point), 13)
+        val appEventCardOldStyle: Boolean =
+          settingsPref.getBoolean(context.getString(R.string.app_event_card_old_style), false)
 
         val (_start, _end) = event.nextStartAndEndTime()
         val _newProgress = yp.calculateProgress(_start, _end)
@@ -100,7 +103,6 @@ constructor(
         // eventEndDateTimeInMillis = newEventEnd
         progress = _newProgress.coerceIn(0.0, 100.0)
 
-        val progressText = progress.styleFormatted(0)
         val eventTimeLeft = if (System.currentTimeMillis() < _start) {
           context.getString(
             R.string.time_in,
@@ -124,12 +126,23 @@ constructor(
             binding.eventDesc.visibility = GONE
           }
 
+
+          if (appEventCardOldStyle) {
+            binding.progressBarContainer.visibility = GONE
+            binding.progressBarLinearContainer.visibility = VISIBLE
+          } else {
+            binding.progressBarContainer.visibility = VISIBLE
+            binding.progressBarLinearContainer.visibility = GONE
+          }
+
           binding.eventStart.text =
               displayRelativeDifferenceMessage(context, _start, _end, event.allDayEvent)
           binding.daysLeft.text = eventTimeLeft
 
-          binding.progressText.text = progressText
+          binding.progressText.text = progress.styleFormatted(0)
+          binding.progressTextLinear.text = progress.styleFormatted(decimalPlace)
           binding.progressBar.progress = progress.toInt()
+          binding.progressBarLinear.progress = progress.toInt()
           updateView(progress, animate = false)
         }
         delay(1000)
@@ -142,7 +155,7 @@ constructor(
       animate: Boolean = true,
   ) {
     val decimalPlace: Int =
-        settingsPref.getInt(context.getString(R.string.app_widget_decimal_point), 2)
+        settingsPref.getInt(context.getString(R.string.app_widget_decimal_point), 13)
 
     // val params = binding.customProgressBar.layoutParams
     // val target = (progress * 0.01 * binding.parent.width).toInt()
@@ -160,6 +173,7 @@ constructor(
 
     progressTextValueAnimator.addUpdateListener {
       binding.progressText.text = progress.styleFormatted(0)
+      binding.progressTextLinear.text = progress.styleFormatted(decimalPlace)
     }
 
     // progressBarValueAnimator.start()
