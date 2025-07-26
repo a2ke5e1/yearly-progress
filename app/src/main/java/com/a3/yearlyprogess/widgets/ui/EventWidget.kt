@@ -2,6 +2,16 @@ package com.a3.yearlyprogess.widgets.ui
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Build
 import android.text.format.DateFormat
 import android.util.SizeF
@@ -30,6 +40,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import androidx.core.graphics.createBitmap
 
 data class EventWidgetOption(
     val widgetId: Int,
@@ -283,6 +294,26 @@ class EventWidget : BaseWidget() {
       smallView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
       tallView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
       wideView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+
+
+ /*     if (event.backgroundImageUri != null) {
+        val bitmap = try {
+          BitmapFactory.decodeFile(event.backgroundImageUri)
+        } catch (e: Exception) {
+          null
+        }
+        if (bitmap != null) {
+          smallView.setBitmap(R.id.widgetContainer, "setImageBitmap", bitmap)
+          tallView.setBitmap(R.id.widgetContainer, "setImageBitmap", bitmap)
+          wideView.setBitmap(R.id.widgetContainer, "setImageBitmap", bitmap)
+        }
+      } else {
+        smallView.setImageViewResource(R.id.widgetContainer,R.drawable.app_widget_background)
+        tallView.setImageViewResource(R.id.widgetContainer,R.drawable.app_widget_background)
+        wideView.setImageViewResource(R.id.widgetContainer,R.drawable.app_widget_background)
+      }*/
+
+
 
       smallView.applyCustomFontSize(
           options.fontScale,

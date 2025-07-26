@@ -566,16 +566,13 @@ class EventEditorActivity : AppCompatActivity() {
     }
   }
   private fun setupImage() {
-
-    val bitmap = try {
-      BitmapFactory.decodeFile(savedImagePath)
-    } catch (e: Exception) {
-      null
-    }
-
-    if (bitmap != null) {
+    if (savedImagePath != null) {
+      val bitmap = try {
+        BitmapFactory.decodeFile(savedImagePath)
+      } catch (e: Exception) {
+        null
+      }
       binding.imageView.setImageBitmap(bitmap)
-
     } else {
       binding.imageView.setImageBitmap(null)
     }
