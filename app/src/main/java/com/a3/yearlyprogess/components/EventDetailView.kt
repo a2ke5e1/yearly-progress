@@ -3,11 +3,13 @@ package com.a3.yearlyprogess.components
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
 import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
@@ -72,6 +74,25 @@ constructor(
             event.allDayEvent,
         )
     // binding.eventEnd.visibility = View.GONE
+
+    if (event.backgroundImageUri == null) {
+      binding.mainContent.background = null
+      binding.imageContainer.setImageDrawable(null)
+    } else {
+      val bitmap = try {
+        BitmapFactory.decodeFile(event.backgroundImageUri)
+      } catch (e: Exception) {
+        null
+      }
+
+      if (bitmap != null) {
+        binding.imageContainer.setImageBitmap(bitmap)
+        binding.mainContent.background = AppCompatResources.getDrawable(context, R.drawable.background_card_scrim)
+      } else {
+        binding.imageContainer.setImageDrawable(null)
+        binding.mainContent.background = null
+      }
+    }
 
     launch(Dispatchers.IO) {
       val yp = YearlyProgressUtil(context)

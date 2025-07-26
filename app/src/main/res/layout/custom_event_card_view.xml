@@ -19,184 +19,216 @@
         android:layout_marginBottom="8dp"
         android:orientation="vertical">
 
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/eventCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:checked="false" />
-
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/eventCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:checked="false" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageContainer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="false"
+                android:importantForAccessibility="no"
+                android:contentDescription="@null" />
+
 
             <LinearLayout
+                android:id="@+id/main_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="16dp">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@drawable/background_card_scrim"
+                android:orientation="vertical"
+                >
+
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/content_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="16dp"
+                    >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="8dp">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/eventTitle"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                            android:textColor="?attr/colorPrimary"
-                            tools:text="Lorem Ipsum" />
+                            android:orientation="vertical"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="8dp">
 
-                        <TextView
-                            android:id="@+id/eventStart"
+                            <TextView
+                                android:id="@+id/eventTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                                android:textColor="?attr/colorPrimary"
+                                tools:text="Lorem Ipsum" />
+
+                            <TextView
+                                android:id="@+id/eventStart"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                                android:textColor="?attr/colorSecondary"
+                                tools:text="Wed - Thru" />
+
+                            <TextView
+                                android:id="@+id/daysLeft"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                                android:textColor="?attr/colorSecondary"
+                                tools:text="In 12h" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-                            android:textColor="?attr/colorSecondary"
-                            tools:text="Wed - Thru" />
+                            android:orientation="vertical"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp">
 
-                        <TextView
-                            android:id="@+id/daysLeft"
+                            <TextView
+                                android:id="@+id/eventDesc"
+                                style="@style/TextAppearance.Material3.BodySmall"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/progressBarLinearContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-                            android:textColor="?attr/colorSecondary"
-                            tools:text="In 12h" />
+                            android:orientation="vertical"
+                            android:paddingBottom="16dp">
+
+                            <TextView
+                                android:id="@+id/progressTextLinear"
+                                style="@style/TextAppearance.Material3.HeadlineSmall"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textColor="?attr/colorPrimary" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progressBarLinear"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:indeterminate="false"
+                                android:max="100"
+                                android:progress="0"
+                                app:wavelength="20dp"
+                                app:waveAmplitude="5dp"
+                                android:layout_marginTop="4dp"
+                                app:waveSpeed="10dp"
+                                android:visibility="visible"
+                                app:trackCornerRadius="24dp" />
+
+
+                        </LinearLayout>
+
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp">
+                    <RelativeLayout
+                        android:id="@+id/progressBarContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/eventDesc"
-                            style="@style/TextAppearance.Material3.BodySmall"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="2"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/progressBarLinearContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingBottom="16dp">
-
-                        <TextView
-                            android:id="@+id/progressTextLinear"
+                            android:id="@+id/progressText"
                             style="@style/TextAppearance.Material3.HeadlineSmall"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
                             android:text="0%"
-                            android:textColor="?attr/colorPrimary" />
+                            android:textColor="?attr/colorPrimary"
+                            android:textSize="18sp"
+                            android:translationX="2dp" />
 
-                        <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:id="@+id/progressBarLinear"
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/progressBar"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
                             android:indeterminate="false"
                             android:max="100"
                             android:progress="0"
-                            app:wavelength="20dp"
-                            app:waveAmplitude="5dp"
-                            android:layout_marginTop="4dp"
-                            app:waveSpeed="10dp"
                             android:visibility="visible"
-                            app:trackCornerRadius="24dp" />
+                            app:indicatorSize="66dp"
+                            app:trackCornerRadius="24dp"
+                            app:waveAmplitude="2dp"
+                            app:waveSpeed="10dp"
+                            app:wavelength="12dp"
+                            tools:progress="50" />
 
 
-                    </LinearLayout>
-
+                    </RelativeLayout>
 
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:id="@+id/progressBarContainer"
+                <com.google.android.material.button.MaterialButtonGroup
+                    app:layout_constraintTop_toBottomOf="@+id/content_container"
+                    android:id="@+id/buttonGroup"
+                    style="@style/Widget.Material3.MaterialButtonGroup.Connected"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/progressText"
-                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:layout_gravity="end"
+                    android:layout_height="wrap_content">
+                    <Button
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:id="@+id/editButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="0%"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="18sp"
-                        android:translationX="2dp" />
-
-                    <com.google.android.material.progressindicator.CircularProgressIndicator
-                        android:id="@+id/progressBar"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:indeterminate="false"
-                        android:max="100"
-                        android:progress="0"
-                        android:visibility="visible"
-                        app:indicatorSize="66dp"
-                        app:trackCornerRadius="24dp"
-                        app:waveAmplitude="2dp"
-                        app:waveSpeed="10dp"
-                        app:wavelength="12dp"
-                        tools:progress="50" />
-
-
-                </RelativeLayout>
+                        android:text="@string/edit"
+                        app:icon="@drawable/ic_outline_event_24" />
+                    <Button
+                        android:id="@+id/addButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_widget"
+                        android:visibility="gone" />
+                </com.google.android.material.button.MaterialButtonGroup>
 
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButtonGroup
-                android:id="@+id/buttonGroup"
-                style="@style/Widget.Material3.MaterialButtonGroup.Connected"
-                android:layout_width="wrap_content"
-                android:layout_gravity="end"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:layout_height="wrap_content">
-                <Button
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:id="@+id/editButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/edit"
-                    app:icon="@drawable/ic_outline_event_24" />
-                <Button
-                    android:id="@+id/addButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_widget"
-                    android:visibility="gone" />
-            </com.google.android.material.button.MaterialButtonGroup>
-        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- <com.google.android.material.card.MaterialCardView
              android:id="@+id/custom_progress_bar"
