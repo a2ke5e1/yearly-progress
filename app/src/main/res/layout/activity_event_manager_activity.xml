@@ -315,30 +315,73 @@
 
             </HorizontalScrollView>
 
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/image_flow"
+            <LinearLayout
+                app:layout_constraintTop_toBottomOf="@id/to_flow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="showImage,imageView"
-                app:layout_constraintTop_toBottomOf="@id/to_flow"
-                app:flow_wrapMode="aligned"
-                app:flow_maxElementsWrap="1"
-                app:flow_verticalStyle="spread_inside"
-                />
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/image_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Image ( Optional )"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
 
 
-            <com.google.android.material.button.MaterialButton
-                app:layout_constraintTop_toBottomOf="@id/to_flow"
-                style="@style/Widget.Material3Expressive.Button"
-                android:id="@+id/showImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Image" />
+                <com.google.android.material.button.MaterialButtonGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:gravity="center_horizontal"
+                    android:spacing="4dp">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/imageView"
-                android:layout_width="200dp"
-                android:layout_height="200dp" />
+                    <Button
+                        style="?attr/materialIconButtonFilledStyle"
+                        android:id="@+id/showImage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="@string/choose_a_image"/>
+
+                    <Button
+                        style="?attr/materialIconButtonFilledTonalStyle"
+                        android:id="@+id/removeImage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/remove_image"
+                        android:gravity="center"
+                        app:icon="@drawable/outline_delete_24"
+                        app:iconTint="?attr/colorOnErrorContainer"
+                        android:backgroundTint="?attr/colorErrorContainer"
+                        app:iconGravity="textStart" />
+
+
+                </com.google.android.material.button.MaterialButtonGroup>
+
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="18dp"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/ImageRoundedCorners"
+                    app:strokeColor="@android:color/transparent"
+                    app:strokeWidth="0dp" />
+
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

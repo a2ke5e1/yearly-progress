@@ -548,8 +548,18 @@ class EventEditorActivity : AppCompatActivity() {
         // Store `file.absolutePath` in Room
         savedImagePath = file.absolutePath
 
-        val bitmap = BitmapFactory.decodeFile(savedImagePath)
-        binding.imageView.setImageBitmap(bitmap)
+        val bitmap = try {
+          BitmapFactory.decodeFile(savedImagePath)
+        } catch (e: Exception) {
+          null
+        }
+
+        if (bitmap != null) {
+          binding.imageView.setImageBitmap(bitmap)
+
+        } else {
+          binding.imageView.setImageBitmap(null)
+        }
       }
     } else {
       Log.d("PhotoPicker", "No media selected")
@@ -557,11 +567,26 @@ class EventEditorActivity : AppCompatActivity() {
   }
   private fun setupImage() {
 
-    val bitmap = BitmapFactory.decodeFile(savedImagePath)
-    binding.imageView.setImageBitmap(bitmap)
+    val bitmap = try {
+      BitmapFactory.decodeFile(savedImagePath)
+    } catch (e: Exception) {
+      null
+    }
+
+    if (bitmap != null) {
+      binding.imageView.setImageBitmap(bitmap)
+
+    } else {
+      binding.imageView.setImageBitmap(null)
+    }
 
     binding.showImage.setOnClickListener {
       pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    binding.removeImage.setOnClickListener {
+      savedImagePath = null
+      binding.imageView.setImageBitmap(null)
     }
   }
 }
