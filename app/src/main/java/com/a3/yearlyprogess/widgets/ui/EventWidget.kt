@@ -359,7 +359,9 @@ class EventWidget : BaseWidget() {
             val event = repository.getEvent(eventId)
             val options = EventWidgetOption.load(context, appWidgetId)
             val remoteViews = event?.let { eventWidgetPreview(context, it, options) }
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+            if (remoteViews != null) {
+              appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+            }
 
             delay(900)
           }

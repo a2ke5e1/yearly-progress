@@ -263,7 +263,7 @@ class ProgressScreenFragment : Fragment() {
 
       if (providers.isEmpty()) {
         Toast.makeText(
-                context, "Your device does not have any location provider", Toast.LENGTH_LONG)
+                requireContext(), "Your device does not have any location provider", Toast.LENGTH_LONG)
             .show()
         return
       }
