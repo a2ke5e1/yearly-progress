@@ -3,14 +3,18 @@ package com.a3.yearlyprogess.widgets.manager.eventManager
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.format
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -28,6 +32,8 @@ import com.google.android.material.color.DynamicColors
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,12 +49,16 @@ class EventEditorActivity : AppCompatActivity() {
   private var eventEndHour: Int = 0
   private var eventEndMinute: Int = 0
 
+  private var savedImagePath: String? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     DynamicColors.applyToActivityIfAvailable(this)
     binding = ActivityEventManagerActivityBinding.inflate(layoutInflater)
     setContentView(binding.root)
+
+    setupImage()
 
     ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
       val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -509,6 +519,41 @@ class EventEditorActivity : AppCompatActivity() {
         RepeatDays.EVERY_MONTH -> binding.everyMonthSwitch.isChecked = true
         RepeatDays.EVERY_YEAR -> binding.everyYearSwitch.isChecked = true
       }
+    }
+  }
+
+  val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    // Callback is invoked after the user selects a media item or closes the
+    // photo picker.
+    if (uri != null) {
+      Log.d("PhotoPicker", "Selected URI: $uri")
+
+      val inputStream = contentResolver.openInputStream(uri)
+      inputStream?.use { stream ->
+        val fileName = "image_${System.currentTimeMillis()}.jpg"
+        val file = File(filesDir, fileName)
+        FileOutputStream(file).use { output ->
+          stream.copyTo(output)
+        }
+        Log.d("PhotoPicker", "Copied to: ${file.absolutePath}")
+
+        // Store `file.absolutePath` in Room
+        savedImagePath = file.absolutePath
+
+        val bitmap = BitmapFactory.decodeFile(savedImagePath)
+        binding.imageView.setImageBitmap(bitmap)
+      }
+    } else {
+      Log.d("PhotoPicker", "No media selected")
+    }
+  }
+  private fun setupImage() {
+
+    val bitmap = BitmapFactory.decodeFile(savedImagePath)
+    binding.imageView.setImageBitmap(bitmap)
+
+    binding.showImage.setOnClickListener {
+      pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
   }
 }

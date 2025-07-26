@@ -315,7 +315,30 @@
 
             </HorizontalScrollView>
 
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/image_flow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="showImage,imageView"
+                app:layout_constraintTop_toBottomOf="@id/to_flow"
+                app:flow_wrapMode="aligned"
+                app:flow_maxElementsWrap="1"
+                app:flow_verticalStyle="spread_inside"
+                />
 
+
+            <com.google.android.material.button.MaterialButton
+                app:layout_constraintTop_toBottomOf="@id/to_flow"
+                style="@style/Widget.Material3Expressive.Button"
+                android:id="@+id/showImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Image" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView"
+                android:layout_width="200dp"
+                android:layout_height="200dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
