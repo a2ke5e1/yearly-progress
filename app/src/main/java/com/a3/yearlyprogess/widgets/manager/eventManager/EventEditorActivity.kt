@@ -58,7 +58,6 @@ class EventEditorActivity : AppCompatActivity() {
     binding = ActivityEventManagerActivityBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
-    setupImage()
 
     ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
       val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -125,6 +124,8 @@ class EventEditorActivity : AppCompatActivity() {
     //     "TAG",
     //    "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}",
     // )
+
+    setupImage()
   }
 
   private fun handleRepeatEventSwitch() {
@@ -356,7 +357,9 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
-                    binding.repeatWeekdaysSwitch.isChecked)
+                    binding.repeatWeekdaysSwitch.isChecked,
+                  savedImagePath
+                  )
             mEventViewModel.updateEvent(updatedEvent)
 
             val appWidgetManager = AppWidgetManager.getInstance(this)
@@ -396,7 +399,9 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
-                    binding.repeatWeekdaysSwitch.isChecked),
+                    binding.repeatWeekdaysSwitch.isChecked,
+                  savedImagePath
+                ),
             )
           }
 
@@ -450,6 +455,9 @@ class EventEditorActivity : AppCompatActivity() {
 
     binding.repeatWeekdaysSwitch.isChecked = event.hasWeekDays
     setRepeatDays(event.repeatEventDays)
+
+    savedImagePath = event.backgroundImageUri
+
   }
 
   private fun modifiedEventDateTime(

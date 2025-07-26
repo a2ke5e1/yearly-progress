@@ -18,6 +18,7 @@ data class Event(
     val eventEndTime: Date,
     val repeatEventDays: List<RepeatDays> = emptyList(),
     val hasWeekDays: Boolean = false,
+    val backgroundImageUri: String? = null
 ) : Parcelable {
   fun nextStartAndEndTime(currentTime: Long = System.currentTimeMillis()): Pair<Long, Long> {
     var nextStartTime = eventStartTime.time

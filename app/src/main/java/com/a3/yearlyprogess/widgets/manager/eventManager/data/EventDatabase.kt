@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Converters
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 
-@Database(entities = [Event::class], version = 3, exportSchema = false)
+@Database(entities = [Event::class], version = 4, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class EventDatabase : RoomDatabase() {
   abstract fun eventDao(): EventDao
@@ -25,14 +25,15 @@ abstract class EventDatabase : RoomDatabase() {
       }
       synchronized(this) {
         val instance =
-            Room.databaseBuilder(
-                    context.applicationContext,
-                    EventDatabase::class.java,
-                    "event_database",
-                )
-                .addMigrations(MIGRATION_1_2)
-                .addMigrations(MIGRATION_2_3)
-                .fallbackToDestructiveMigration()
+          Room.databaseBuilder(
+            context.applicationContext,
+            EventDatabase::class.java,
+            "event_database",
+          )
+            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_2_3)
+            .addMigrations(MIGRATION_3_4)
+            .fallbackToDestructiveMigration(true)
                 .build()
         INSTANCE = instance
         return instance
@@ -56,5 +57,14 @@ abstract class EventDatabase : RoomDatabase() {
             )
           }
         }
+
+    private val MIGRATION_3_4 =
+      object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
+            "ALTER TABLE event_table ADD COLUMN backgroundImageUri TEXT DEFAULT NULL",
+          )
+        }
+      }
   }
 }
