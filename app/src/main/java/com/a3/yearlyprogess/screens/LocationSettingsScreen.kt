@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
 import android.provider.Settings
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -121,26 +122,79 @@ data class UserLocationPref(
   }
 }
 
-interface NominatimApi {
-  @GET("search")
+interface PhotonApi {
+  @GET("api/")
   suspend fun searchPlaces(
-      @Query("q") query: String,
-      @Query("format") format: String = "json",
-      @Query("limit") limit: Int = 5
-  ): List<NominatimPlace>
+    @Query("q") query: String,
+    @Query("limit") limit: Int = 5,
+    @Query("lang") lang: String = "en"
+  ): PhotonResponse
 }
+
+data class PhotonResponse(
+  val features: List<PhotonFeature>
+)
+
+data class PhotonFeature(
+  val geometry: PhotonGeometry,
+  val properties: PhotonProperties
+)
+
+data class PhotonGeometry(
+  val coordinates: List<Double> // [lon, lat]
+)
+
+data class PhotonProperties(
+  val name: String?,
+  val country: String?,
+  val city: String?,
+  val state: String?,
+  val street: String?,
+  val postcode: String?
+)
+
 
 object NominatimService {
-  private const val BASE_URL = "https://nominatim.openstreetmap.org/"
+  private const val BASE_URL = "https://photon.komoot.io/"
 
-  val api: NominatimApi by lazy {
+  private val retrofit: Retrofit by lazy {
     Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(NominatimApi::class.java)
+      .baseUrl(BASE_URL)
+      .addConverterFactory(GsonConverterFactory.create())
+      .build()
+  }
+
+  private val api: PhotonApi by lazy {
+    retrofit.create(PhotonApi::class.java)
+  }
+
+  suspend fun searchPlaces(query: String): List<NominatimPlace> {
+    return try {
+      val response = api.searchPlaces(query)
+      response.features.mapNotNull { feature ->
+        val coords = feature.geometry.coordinates
+        val props = feature.properties
+        val name = props.name ?: props.city ?: props.state ?: props.country
+        if (name != null && coords.size >= 2) {
+          NominatimPlace(
+            display_name = buildString {
+              append(name)
+              props.city?.let { append(", $it") }
+              props.state?.let { append(", $it") }
+              props.country?.let { append(", $it") }
+            },
+            lat = coords[1].toString(),
+            lon = coords[0].toString()
+          )
+        } else null
+      }
+    } catch (e: Exception) {
+      Log.e("PhotonSearch", "Failed to fetch places", e)
+      emptyList()
+    }
   }
 }
+
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
@@ -360,13 +414,13 @@ fun PoweredByInfoText(
 
                   withLink(
                       LinkAnnotation.Url(
-                          "https://nominatim.openstreetmap.org/",
+                          "https://photon.komoot.io/",
                           TextLinkStyles(
                               style =
                                   SpanStyle(
                                       color = linkColor,
                                       textDecoration = TextDecoration.Underline)))) {
-                        append("Nominatim (OpenStreetMap)")
+                        append("https://photon.komoot.io/")
                       }
 
                   append(" and sunrise/sunset data is provided by ")
@@ -413,7 +467,7 @@ fun LocationSearchWithNominatim(
       if (query == queryState.value) {
         try {
           isLoading = true // Start loading
-          suggestions = NominatimService.api.searchPlaces(query)
+          suggestions = NominatimService.searchPlaces(query)
         } catch (e: Exception) {
           suggestions = emptyList()
         } finally {
@@ -453,7 +507,7 @@ fun LocationSearchWithNominatim(
                                     coroutineScope.launch {
                                       isLoading = true
                                       try {
-                                        suggestions = NominatimService.api.searchPlaces(query)
+                                        suggestions = NominatimService.searchPlaces(query)
                                       } catch (e: Exception) {
                                         suggestions = emptyList()
                                       } finally {
@@ -470,8 +524,9 @@ fun LocationSearchWithNominatim(
                             coroutineScope.launch {
                               isLoading = true
                               try {
-                                suggestions = NominatimService.api.searchPlaces(query)
+                                suggestions = NominatimService.searchPlaces(query)
                               } catch (e: Exception) {
+                                Log.d("LocationSettingsScreen", e.stackTraceToString())
                                 suggestions = emptyList()
                               } finally {
                                 isLoading = false
