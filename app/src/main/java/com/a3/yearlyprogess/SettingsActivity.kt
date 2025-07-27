@@ -262,6 +262,13 @@ class SettingsViewModel(private val application: Application) : AndroidViewModel
 
   fun setCalculationMode(item: CalculationMode) =
       updatePref(_selectedCalculationMode, getStringRes(R.string.app_calculation_type), item.code)
+
+  private val _appEventCardOldStyle =
+      prefFlow(getStringRes(R.string.app_event_card_old_style), false)
+  val appEventCardOldStyle = _appEventCardOldStyle.asStateFlow()
+
+  fun setAppEventCardOldStyle(value: Boolean) =
+      updatePref(_appEventCardOldStyle, getStringRes(R.string.app_event_card_old_style), value)
 }
 
 class SettingsActivity : ComponentActivity() {
@@ -529,6 +536,7 @@ class SettingsActivity : ComponentActivity() {
     val timeLeftCounter by viewModel.timeLeftCounter.collectAsState()
     val dynamicTimeLeftCounter by viewModel.dynamicTimeLeftCounter.collectAsState()
     val replaceTimeLeftCounter by viewModel.replaceTimeLeftCounter.collectAsState()
+    val appEventCardOldStyle by viewModel.appEventCardOldStyle.collectAsState()
     val widgetDecimalPlaces by viewModel.widgetDecimalPlaces.collectAsState()
     val eventWidgetDecimalPlaces by viewModel.eventWidgetDecimalPlaces.collectAsState()
     val decimalProgressPage by viewModel.decimalProgressPage.collectAsState()
@@ -716,6 +724,13 @@ class SettingsActivity : ComponentActivity() {
             valueRange = 0f..5f,
             steps = 4,
             onValueChange = { viewModel.setEventWidgetDecimalPlaces(it.toInt()) })
+      }
+
+      item {
+        SwitchPreference(
+            title = stringResource(R.string.enable_event_card_old_style),
+            checked = appEventCardOldStyle,
+            onCheckedChange = { newValue -> viewModel.setAppEventCardOldStyle(newValue) })
       }
     }
   }

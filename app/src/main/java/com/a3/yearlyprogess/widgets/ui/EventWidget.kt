@@ -2,6 +2,16 @@ package com.a3.yearlyprogess.widgets.ui
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Build
 import android.text.format.DateFormat
 import android.util.SizeF
@@ -23,13 +33,14 @@ import com.a3.yearlyprogess.widgets.ui.util.styleFormatted
 import com.a3.yearlyprogess.widgets.ui.util.toFormattedTimePeriod
 import com.a3.yearlyprogess.widgets.ui.util.toTimePeriodText
 import com.google.gson.Gson
+import java.util.Locale.getDefault
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.util.Locale.getDefault
+import androidx.core.graphics.createBitmap
 
 data class EventWidgetOption(
     val widgetId: Int,
@@ -38,7 +49,8 @@ data class EventWidgetOption(
     val dynamicLeftCounter: Boolean,
     val replaceProgressWithDaysLeft: Boolean,
     @IntRange(from = 0, to = 100) val backgroundTransparency: Int,
-    @FloatRange(from = 0.1, to = 2.0) val fontScale: Float
+    @FloatRange(from = 0.1, to = 2.0) val fontScale: Float,
+    val showEventImage: Boolean,
 ) {
   companion object {
 
@@ -75,7 +87,8 @@ data class EventWidgetOption(
                   dynamicLeftCounter = globalDynamicTimeLeft,
                   replaceProgressWithDaysLeft = globalReplaceWithCounter,
                   backgroundTransparency = globalBackgroundTransparency,
-                  fontScale = 1f)
+                  fontScale = 1f,
+                  showEventImage=false)
       return Gson().fromJson(eventWidgetOptionsJsonString, EventWidgetOption::class.java)
     }
 
@@ -233,18 +246,20 @@ class EventWidget : BaseWidget() {
       val replaceProgressWithDaysLeft = options.replaceProgressWithDaysLeft
       val dynamicTimeLeft = options.dynamicLeftCounter
 
-      val eventTimeLeft =  if (System.currentTimeMillis() < newEventStart) {
-        context.getString(
-          R.string.time_in,
-          (newEventStart - System.currentTimeMillis()).toTimePeriodText(
-            dynamicTimeLeft))
-          .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
-      } else {
-        context.getString(
-          R.string.time_left,
-          yp.calculateTimeLeft(newEventEnd)
-            .toTimePeriodText(dynamicTimeLeft))
-      }
+      val eventTimeLeft =
+          if (System.currentTimeMillis() < newEventStart) {
+            context
+                .getString(
+                    R.string.time_in,
+                    (newEventStart - System.currentTimeMillis()).toTimePeriodText(dynamicTimeLeft))
+                .replaceFirstChar {
+                  if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString()
+                }
+          } else {
+            context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(newEventEnd).toTimePeriodText(dynamicTimeLeft))
+          }
 
       if (timeLeftCounter) {
 
@@ -281,6 +296,32 @@ class EventWidget : BaseWidget() {
       smallView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
       tallView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
       wideView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
+
+
+      val bitmap =  if (options.showEventImage &&  event.backgroundImageUri != null) {
+        try {
+          BitmapFactory.decodeFile(event.backgroundImageUri)
+        } catch (e: Exception) {
+          null
+        }
+      } else null
+
+      fun setEventImage(view: RemoteViews, bitmap: Bitmap?) {
+        if (bitmap != null) {
+          view.setBitmap(R.id.imageContainer, "setImageBitmap", bitmap)
+          view.setViewVisibility(R.id.imageContainer, View.VISIBLE)
+          view.setViewVisibility(R.id.widgetContainer, View.GONE)
+        } else {
+          view.setViewVisibility(R.id.imageContainer, View.GONE)
+          view.setViewVisibility(R.id.widgetContainer, View.VISIBLE)
+        }
+      }
+
+      setEventImage(smallView,bitmap)
+      setEventImage(tallView,bitmap)
+      setEventImage(wideView,bitmap)
+
+
 
       smallView.applyCustomFontSize(
           options.fontScale,
@@ -357,7 +398,9 @@ class EventWidget : BaseWidget() {
             val event = repository.getEvent(eventId)
             val options = EventWidgetOption.load(context, appWidgetId)
             val remoteViews = event?.let { eventWidgetPreview(context, it, options) }
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+            if (remoteViews != null) {
+              appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+            }
 
             delay(900)
           }

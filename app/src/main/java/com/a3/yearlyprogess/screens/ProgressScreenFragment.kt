@@ -64,6 +64,14 @@ class ProgressScreenViewModel : ViewModel() {
     _state.postValue(SunriseSunsetState.DismissibleMessageView)
   }
 
+  fun setLoadingState() {
+    _state.postValue(SunriseSunsetState.Loading)
+  }
+
+  fun setError(message: String) {
+    _state.postValue(SunriseSunsetState.Error(message))
+  }
+
   fun fetchSunriseSunset(context: Context, location: Location) {
     _state.postValue(SunriseSunsetState.Loading)
     val cached = loadCachedSunriseSunset(context)
@@ -120,6 +128,7 @@ class ProgressScreenFragment : Fragment() {
   private val requestPermissionLauncher =
       registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
+          progressScreenViewModel.setLoadingState()
           setupDayNightLightProgressView()
         } else {
           locationPermissionDialog.show(parentFragmentManager, "location_permission_dialog")
@@ -254,7 +263,7 @@ class ProgressScreenFragment : Fragment() {
 
       if (providers.isEmpty()) {
         Toast.makeText(
-                context, "Your device does not have any location provider", Toast.LENGTH_LONG)
+                requireContext(), "Your device does not have any location provider", Toast.LENGTH_LONG)
             .show()
         return
       }
@@ -264,7 +273,7 @@ class ProgressScreenFragment : Fragment() {
 
       locationManager.requestLocationUpdates(
           providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
-          2000,
+          500,
           1000f) { location ->
             context?.let { cacheLocation(it, location) }
             setupSunriseSunsetViews(location)

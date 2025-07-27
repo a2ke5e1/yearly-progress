@@ -3,14 +3,18 @@ package com.a3.yearlyprogess.widgets.manager.eventManager
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.format
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -28,6 +32,8 @@ import com.google.android.material.color.DynamicColors
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,12 +49,15 @@ class EventEditorActivity : AppCompatActivity() {
   private var eventEndHour: Int = 0
   private var eventEndMinute: Int = 0
 
+  private var savedImagePath: String? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     DynamicColors.applyToActivityIfAvailable(this)
     binding = ActivityEventManagerActivityBinding.inflate(layoutInflater)
     setContentView(binding.root)
+
 
     ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
       val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -67,22 +76,27 @@ class EventEditorActivity : AppCompatActivity() {
     // Set Start Date and Time and End Date and Time to current date and time
     if (isAddMode) {
       val localCalendar = Calendar.getInstance()
-      val ONE_HOUR = 60 * 60 * 1000L
+      localCalendar.timeInMillis = System.currentTimeMillis()
+      localCalendar.set(Calendar.HOUR_OF_DAY, 0)
+      localCalendar.set(Calendar.MINUTE, 0)
+      localCalendar.set(Calendar.SECOND, 0)
 
-      eventStartDateTimeInMillis = System.currentTimeMillis()
-      eventEndDateTimeInMillis = System.currentTimeMillis() + ONE_HOUR
+      eventStartDateTimeInMillis = localCalendar.timeInMillis
+      localCalendar.timeInMillis = localCalendar.timeInMillis + (24 * 60 * 60 * 1000L)
+
+      eventEndDateTimeInMillis = localCalendar.timeInMillis
 
       localCalendar.timeInMillis = eventStartDateTimeInMillis
-      eventStartHour = localCalendar.get(Calendar.HOUR_OF_DAY)
-      eventStartMinute = localCalendar.get(Calendar.MINUTE)
+      eventStartHour = 0
+      eventStartMinute = 0
 
       binding.editTextStartDate.text =
           format("MMMM dd, yyyy", eventStartDateTimeInMillis).toString()
       binding.editTextStartTime.text = getHourMinuteLocal(eventStartDateTimeInMillis)
 
       localCalendar.timeInMillis = eventEndDateTimeInMillis
-      eventEndHour = localCalendar.get(Calendar.HOUR_OF_DAY)
-      eventEndMinute = localCalendar.get(Calendar.MINUTE)
+      eventEndHour = 0
+      eventEndMinute = 0
 
       binding.editTextEndDate.text = format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
       binding.editTextEndTime.text = getHourMinuteLocal(eventEndDateTimeInMillis)
@@ -110,6 +124,8 @@ class EventEditorActivity : AppCompatActivity() {
     //     "TAG",
     //    "EventEnd: ${SimpleDateFormat.getDateTimeInstance().format(eventEndDateTimeInMillis)}",
     // )
+
+    setupImage()
   }
 
   private fun handleRepeatEventSwitch() {
@@ -341,7 +357,9 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
-                )
+                    binding.repeatWeekdaysSwitch.isChecked,
+                  savedImagePath
+                  )
             mEventViewModel.updateEvent(updatedEvent)
 
             val appWidgetManager = AppWidgetManager.getInstance(this)
@@ -381,6 +399,8 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventStartDateTimeInMillis),
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
+                    binding.repeatWeekdaysSwitch.isChecked,
+                  savedImagePath
                 ),
             )
           }
@@ -433,7 +453,11 @@ class EventEditorActivity : AppCompatActivity() {
     binding.editTextEndDate.text = format("MMMM dd, yyyy", eventEndDateTimeInMillis).toString()
     binding.editTextEndTime.text = getHourMinuteLocal(eventEndDateTimeInMillis)
 
+    binding.repeatWeekdaysSwitch.isChecked = event.hasWeekDays
     setRepeatDays(event.repeatEventDays)
+
+    savedImagePath = event.backgroundImageUri
+
   }
 
   private fun modifiedEventDateTime(
@@ -504,21 +528,62 @@ class EventEditorActivity : AppCompatActivity() {
         RepeatDays.EVERY_YEAR -> binding.everyYearSwitch.isChecked = true
       }
     }
+  }
 
-    val checkRepeatWeekdays =
-        repeatDays.any {
-          it in
-              listOf(
-                  RepeatDays.SUNDAY,
-                  RepeatDays.MONDAY,
-                  RepeatDays.TUESDAY,
-                  RepeatDays.WEDNESDAY,
-                  RepeatDays.THURSDAY,
-                  RepeatDays.FRIDAY,
-                  RepeatDays.SATURDAY,
-              )
+  val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    // Callback is invoked after the user selects a media item or closes the
+    // photo picker.
+    if (uri != null) {
+      Log.d("PhotoPicker", "Selected URI: $uri")
+
+      val inputStream = contentResolver.openInputStream(uri)
+      inputStream?.use { stream ->
+        val fileName = "image_${System.currentTimeMillis()}.jpg"
+        val file = File(filesDir, fileName)
+        FileOutputStream(file).use { output ->
+          stream.copyTo(output)
+        }
+        Log.d("PhotoPicker", "Copied to: ${file.absolutePath}")
+
+        // Store `file.absolutePath` in Room
+        savedImagePath = file.absolutePath
+
+        val bitmap = try {
+          BitmapFactory.decodeFile(savedImagePath)
+        } catch (e: Exception) {
+          null
         }
 
-    binding.repeatWeekdaysSwitch.isChecked = checkRepeatWeekdays
+        if (bitmap != null) {
+          binding.imageView.setImageBitmap(bitmap)
+
+        } else {
+          binding.imageView.setImageBitmap(null)
+        }
+      }
+    } else {
+      Log.d("PhotoPicker", "No media selected")
+    }
+  }
+  private fun setupImage() {
+    if (savedImagePath != null) {
+      val bitmap = try {
+        BitmapFactory.decodeFile(savedImagePath)
+      } catch (e: Exception) {
+        null
+      }
+      binding.imageView.setImageBitmap(bitmap)
+    } else {
+      binding.imageView.setImageBitmap(null)
+    }
+
+    binding.showImage.setOnClickListener {
+      pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    binding.removeImage.setOnClickListener {
+      savedImagePath = null
+      binding.imageView.setImageBitmap(null)
+    }
   }
 }
