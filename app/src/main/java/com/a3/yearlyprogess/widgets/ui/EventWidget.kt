@@ -49,7 +49,8 @@ data class EventWidgetOption(
     val dynamicLeftCounter: Boolean,
     val replaceProgressWithDaysLeft: Boolean,
     @IntRange(from = 0, to = 100) val backgroundTransparency: Int,
-    @FloatRange(from = 0.1, to = 2.0) val fontScale: Float
+    @FloatRange(from = 0.1, to = 2.0) val fontScale: Float,
+    val showEventImage: Boolean,
 ) {
   companion object {
 
@@ -86,7 +87,8 @@ data class EventWidgetOption(
                   dynamicLeftCounter = globalDynamicTimeLeft,
                   replaceProgressWithDaysLeft = globalReplaceWithCounter,
                   backgroundTransparency = globalBackgroundTransparency,
-                  fontScale = 1f)
+                  fontScale = 1f,
+                  showEventImage=false)
       return Gson().fromJson(eventWidgetOptionsJsonString, EventWidgetOption::class.java)
     }
 
@@ -296,22 +298,28 @@ class EventWidget : BaseWidget() {
       wideView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
 
 
- /*     if (event.backgroundImageUri != null) {
-        val bitmap = try {
+      val bitmap =  if (options.showEventImage &&  event.backgroundImageUri != null) {
+        try {
           BitmapFactory.decodeFile(event.backgroundImageUri)
         } catch (e: Exception) {
           null
         }
+      } else null
+
+      fun setEventImage(view: RemoteViews, bitmap: Bitmap?) {
         if (bitmap != null) {
-          smallView.setBitmap(R.id.widgetContainer, "setImageBitmap", bitmap)
-          tallView.setBitmap(R.id.widgetContainer, "setImageBitmap", bitmap)
-          wideView.setBitmap(R.id.widgetContainer, "setImageBitmap", bitmap)
+          view.setBitmap(R.id.imageContainer, "setImageBitmap", bitmap)
+          view.setViewVisibility(R.id.imageContainer, View.VISIBLE)
+          view.setViewVisibility(R.id.widgetContainer, View.GONE)
+        } else {
+          view.setViewVisibility(R.id.imageContainer, View.GONE)
+          view.setViewVisibility(R.id.widgetContainer, View.VISIBLE)
         }
-      } else {
-        smallView.setImageViewResource(R.id.widgetContainer,R.drawable.app_widget_background)
-        tallView.setImageViewResource(R.id.widgetContainer,R.drawable.app_widget_background)
-        wideView.setImageViewResource(R.id.widgetContainer,R.drawable.app_widget_background)
-      }*/
+      }
+
+      setEventImage(smallView,bitmap)
+      setEventImage(tallView,bitmap)
+      setEventImage(wideView,bitmap)
 
 
 

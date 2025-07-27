@@ -153,6 +153,7 @@
     <string name="enable_event_card_old_style">Enble event card classic style</string>
     <string name="remove_image">Remove Image</string>
     <string name="choose_a_image">Choose a Image</string>
+    <string name="show_event_image_in_background">Show event image in background</string>
 
 
     <!-- Week Preference -->

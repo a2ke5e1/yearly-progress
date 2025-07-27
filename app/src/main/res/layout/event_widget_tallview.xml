@@ -12,6 +12,15 @@
         android:layout_height="match_parent"
         android:src="@drawable/app_widget_background"/>
 
+    <ImageView
+        android:id="@+id/imageContainer"
+        android:layout_width="match_parent"
+        android:scaleType="centerCrop"
+        android:layout_height="match_parent"
+        android:clipToOutline="true"
+        android:foreground="@drawable/background_card_scrim"
+        android:background="@drawable/app_widget_background"/>
+
     <RelativeLayout
         style="@style/Widget.YearlyProgress.AppWidget.Container.Transparent"
         android:layout_width="match_parent"
