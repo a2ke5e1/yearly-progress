@@ -1,19 +1,18 @@
 package com.a3.yearlyprogess.widgets.ui
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.res.Resources
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.Rect
-import android.graphics.RectF
 import android.os.Build
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.format.DateFormat
+import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.util.SizeF
 import android.util.TypedValue
 import android.view.View
@@ -21,6 +20,7 @@ import android.widget.RemoteViews
 import androidx.annotation.DimenRes
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
+import androidx.core.graphics.toColor
 import androidx.preference.PreferenceManager
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.TimePeriod
@@ -40,7 +40,77 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import androidx.core.graphics.createBitmap
+
+class EventsSwiper(val appWidgetId: Int, val context: Context, events: List<Event>) {
+
+  private val pref =
+      context.getSharedPreferences("${SWIPER_KEY}_${appWidgetId}", Context.MODE_PRIVATE)
+  private val SWIPER_CURRENT_INDEX = "${SWIPER_CURRENT_INDEX_EVENT}_${appWidgetId}"
+
+  private val _events =
+      events
+          //            .filter { it.eventEndTime.time > System.currentTimeMillis() }
+          .sortedBy { it.eventStartTime }
+
+  private var _currentEventIndex: Int
+    get() {
+      val index =
+          if (pref.getInt(SWIPER_CURRENT_INDEX, 0) < _events.size) {
+            pref.getInt(SWIPER_CURRENT_INDEX, 0)
+          } else {
+            0
+          }
+      Log.d("SWIPER_CURRENT_INDEX", "${SWIPER_CURRENT_INDEX} - ${index}")
+      Log.d("event size", "event size - ${_events.size}")
+
+      return index
+    }
+    set(value) {
+      pref.edit().putInt(SWIPER_CURRENT_INDEX, value).apply()
+      Log.d("SWIPER_CURRENT_INDEX", "${SWIPER_CURRENT_INDEX} - ${value}")
+      Log.d("event size", "event size - ${_events.size}")
+    }
+
+  fun next() {
+    if (_events.isEmpty()) return
+    _currentEventIndex = (_currentEventIndex + 1) % _events.size
+  }
+
+  fun previous() {
+    if (_events.isEmpty()) return
+    _currentEventIndex = (_currentEventIndex - 1 + _events.size) % _events.size
+  }
+
+  fun current(): Event? {
+    return _events.getOrNull(_currentEventIndex)
+  }
+
+  fun indicator(): SpannableString {
+    val indicatorText = _events.indices.joinToString("") { _ -> "⬤" }
+    val spannableString = SpannableString(indicatorText)
+    val indicatorColor = context.getColor(R.color.widget_text_color).toColor()
+    val colorWithOpacity =
+        Color.argb(0.5f, indicatorColor.red(), indicatorColor.green(), indicatorColor.blue())
+    spannableString.setSpan(
+        ForegroundColorSpan(colorWithOpacity),
+        0,
+        _currentEventIndex,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    spannableString.setSpan(
+        ForegroundColorSpan(colorWithOpacity),
+        _currentEventIndex + 1,
+        indicatorText.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    return spannableString
+  }
+
+  companion object {
+    private const val SWIPER_KEY = "EventsSwiper"
+    private const val SWIPER_CURRENT_INDEX_EVENT = "EventsSwiperIndex"
+    const val ACTION_NEXT = "com.a3.yearlyprogress.widgets.ui.EventWidget.ACTION_NEXT"
+    const val ACTION_PREV = "com.a3.yearlyprogress.widgets.ui.EventWidget.ACTION_PREV"
+  }
+}
 
 data class EventWidgetOption(
     val widgetId: Int,
@@ -88,7 +158,7 @@ data class EventWidgetOption(
                   replaceProgressWithDaysLeft = globalReplaceWithCounter,
                   backgroundTransparency = globalBackgroundTransparency,
                   fontScale = 1f,
-                  showEventImage=false)
+                  showEventImage = false)
       return Gson().fromJson(eventWidgetOptionsJsonString, EventWidgetOption::class.java)
     }
 
@@ -149,7 +219,7 @@ class EventWidget : BaseWidget() {
     fun eventWidgetPreview(
         context: Context,
         event: Event,
-        options: EventWidgetOption
+        options: EventWidgetOption,
     ): RemoteViews {
 
       fun pxToSp(@DimenRes id: Int): Float {
@@ -161,6 +231,35 @@ class EventWidget : BaseWidget() {
         } else {
           px / metrics.scaledDensity
         }
+      }
+
+      fun setUpSwiperActions(view: RemoteViews) {
+        val nextIntent =
+            Intent(context, EventWidget::class.java).apply {
+              action = EventsSwiper.ACTION_NEXT // ✅ correct
+              putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, options.widgetId)
+            }
+        val prevIntent =
+            Intent(context, EventWidget::class.java).apply {
+              action = EventsSwiper.ACTION_PREV // ✅ correct
+              putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, options.widgetId)
+            }
+
+        val nextPendingIntent =
+            PendingIntent.getBroadcast(
+                context,
+                options.widgetId * 100 + 1, // stable per widget
+                nextIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val prevPendingIntent =
+            PendingIntent.getBroadcast(
+                context,
+                options.widgetId * 100 + 2,
+                prevIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        view.setOnClickPendingIntent(R.id.next_btn, nextPendingIntent)
+        view.setOnClickPendingIntent(R.id.prev_btn, prevPendingIntent)
       }
 
       // Construct the RemoteViews object
@@ -297,14 +396,14 @@ class EventWidget : BaseWidget() {
       tallView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
       wideView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
 
-
-      val bitmap =  if (options.showEventImage &&  event.backgroundImageUri != null) {
-        try {
-          BitmapFactory.decodeFile(event.backgroundImageUri)
-        } catch (e: Exception) {
-          null
-        }
-      } else null
+      val bitmap =
+          if (options.showEventImage && event.backgroundImageUri != null) {
+            try {
+              BitmapFactory.decodeFile(event.backgroundImageUri)
+            } catch (e: Exception) {
+              null
+            }
+          } else null
 
       fun setEventImage(view: RemoteViews, bitmap: Bitmap?) {
         if (bitmap != null) {
@@ -317,11 +416,9 @@ class EventWidget : BaseWidget() {
         }
       }
 
-      setEventImage(smallView,bitmap)
-      setEventImage(tallView,bitmap)
-      setEventImage(wideView,bitmap)
-
-
+      setEventImage(smallView, bitmap)
+      setEventImage(tallView, bitmap)
+      setEventImage(wideView, bitmap)
 
       smallView.applyCustomFontSize(
           options.fontScale,
@@ -353,6 +450,10 @@ class EventWidget : BaseWidget() {
               descriptionSize = pxToSp(R.dimen.event_widget_tallview_description),
               timeSize = pxToSp(R.dimen.event_widget_tallview_time)))
 
+      setUpSwiperActions(smallView)
+      setUpSwiperActions(tallView)
+      setUpSwiperActions(wideView)
+
       if (Build.VERSION.SDK_INT > 30) {
         val viewMapping: Map<SizeF, RemoteViews> =
             mapOf(
@@ -377,6 +478,44 @@ class EventWidget : BaseWidget() {
 
   private var updateJob: Job? = null
 
+  override fun onReceive(context: Context, intent: Intent) {
+    super.onReceive(context, intent)
+
+    val appWidgetManager = AppWidgetManager.getInstance(context)
+    val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1)
+    if (appWidgetId == -1) return
+
+    Log.d("intent.action", intent.action.toString())
+
+    CoroutineScope(Dispatchers.IO).launch {
+      val pref = context.getSharedPreferences("eventWidget_$appWidgetId", Context.MODE_PRIVATE)
+      val eventIds =
+          pref.getString("eventIds", "")?.split(",")?.mapNotNull { it.toIntOrNull() } ?: emptyList()
+
+      if (eventIds.isEmpty()) return@launch
+
+      val eventDao = EventDatabase.getDatabase(context).eventDao()
+      val repository = EventRepository(eventDao)
+
+      val events = eventIds.mapNotNull { repository.getEvent(it) }
+      Log.d("events onReceive", "onReceive ${events.size}")
+      val swiper = EventsSwiper(appWidgetId, context, events)
+
+      when (intent.action) {
+        EventsSwiper.ACTION_NEXT -> {
+          clearJob()
+          swiper.next()
+          updateWidget(context, appWidgetManager, appWidgetId)
+        }
+        EventsSwiper.ACTION_PREV -> {
+          clearJob()
+          swiper.previous()
+          updateWidget(context, appWidgetManager, appWidgetId)
+        }
+      }
+    }
+  }
+
   override fun updateWidget(
       context: Context,
       appWidgetManager: AppWidgetManager,
@@ -387,15 +526,28 @@ class EventWidget : BaseWidget() {
     val eventDao = EventDatabase.getDatabase(context).eventDao()
     val repository = EventRepository(eventDao)
 
-    val eventId = pref.getInt("eventId", 0)
+    val eventId = pref.getInt("eventId", -1)
 
     updateJob =
         CoroutineScope(Dispatchers.IO).launch {
           var counter = 0
           while (isActive && counter < 5) { // Check if the coroutine is still active
             counter++
+            var eventIds =
+                pref.getString("eventIds", "")?.split(",")?.mapNotNull { it.toIntOrNull() }
+                    ?: emptyList()
 
-            val event = repository.getEvent(eventId)
+            if (eventIds.isEmpty() && eventId != -1) {
+              eventIds = listOf(eventId)
+            }
+
+            Log.d("eventsIds", "${eventIds}")
+
+            val events = eventIds.mapNotNull { repository.getEvent(it) }
+            val swiper = EventsSwiper(appWidgetId, context, events)
+            val event = swiper.current()
+            Log.d("selected eventsIds", "${eventIds} - ${event?.id}")
+
             val options = EventWidgetOption.load(context, appWidgetId)
             val remoteViews = event?.let { eventWidgetPreview(context, it, options) }
             if (remoteViews != null) {

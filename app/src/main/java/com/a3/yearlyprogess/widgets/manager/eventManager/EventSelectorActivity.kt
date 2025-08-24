@@ -7,16 +7,23 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.EventSelectorScreenListEventsBinding
+import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.EventItemKeyProvider
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.EventsListViewAdapter
+import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.MyItemDetailsLookup
 import com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel.EventViewModel
 import com.a3.yearlyprogess.widgets.ui.EventWidget
 import com.google.android.material.color.DynamicColors
@@ -24,6 +31,8 @@ import com.google.android.material.color.DynamicColors
 class EventSelectorActivity : AppCompatActivity() {
   private lateinit var binding: EventSelectorScreenListEventsBinding
   private val mEventViewModel: EventViewModel by viewModels()
+
+  private var tracker: SelectionTracker<Long>? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -56,7 +65,7 @@ class EventSelectorActivity : AppCompatActivity() {
       val pref = getSharedPreferences("eventWidget_$appWidgetId", MODE_PRIVATE)
       val edit = pref.edit()
 
-      edit.putInt("eventId", eventId!!)
+      edit.putString("eventIds", eventId.toString())
 
       edit.commit()
       EventWidget().updateWidget(this, appWidgetManager, appWidgetId)
@@ -68,18 +77,29 @@ class EventSelectorActivity : AppCompatActivity() {
 
     val eventAdapter =
         EventsListViewAdapter(appWidgetId) {
-          val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-          setResult(RESULT_OK, resultValue)
-          finish()
+          //          val resultValue = Intent()G.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+          // appWidgetId)
+          //          setResult(RESULT_OK, resultValue)
+          //          finish()
         }
 
-    eventAdapter.setSelectedEvent(
-        this.getSharedPreferences("eventWidget_$appWidgetId", Context.MODE_PRIVATE)
-            .getInt("eventId", -1))
     binding.eventsRecyclerViewer.apply {
       adapter = eventAdapter
       layoutManager = LinearLayoutManager(this@EventSelectorActivity)
     }
+
+    tracker =
+        SelectionTracker.Builder<Long>(
+                "mySelection",
+                binding.eventsRecyclerViewer,
+                EventItemKeyProvider(binding.eventsRecyclerViewer),
+                MyItemDetailsLookup(binding.eventsRecyclerViewer),
+                StorageStrategy.createLongStorage(),
+            )
+            .withSelectionPredicate(SelectionPredicates.createSelectAnything())
+            .build()
+
+    eventAdapter.setTracker(tracker!!)
     mEventViewModel.readAllData.observe(this) { events ->
       eventAdapter.setData(events)
       if (events.isEmpty()) {
@@ -88,6 +108,74 @@ class EventSelectorActivity : AppCompatActivity() {
         binding.noEvents.visibility = View.GONE
       }
     }
+
+    tracker?.addObserver(
+        object : SelectionTracker.SelectionObserver<Long>() {
+          override fun onSelectionChanged() {
+            super.onSelectionChanged()
+
+            val selected = tracker?.selection?.toList()?.map { it.toInt() } ?: emptyList()
+            if (selected.isNotEmpty()) {
+              // update toolbar title, enable save button etc.
+              binding.toolbar.title = getString(R.string.no_events_selected, selected.size)
+            } else {
+              binding.toolbar.title = getString(R.string.events)
+            }
+          }
+        })
+
+    val getSelectedIds = getSavedEventIds(appWidgetId)
+    eventAdapter.setSelectedEventIds(getSelectedIds)
+
+    manageEventAddButton(eventAdapter)
+  }
+
+  private fun manageEventAddButton(eventAdapter: EventsListViewAdapter) {
+    binding.addEventFab.setOnClickListener {
+      if (eventAdapter.getSelectedEvents().isEmpty()) {
+        Toast.makeText(
+                this, getString(R.string.please_select_at_least_one_event), Toast.LENGTH_LONG)
+            .show()
+        return@setOnClickListener
+      }
+
+      val appWidgetId =
+          intent
+              ?.extras
+              ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+              ?: AppWidgetManager.INVALID_APPWIDGET_ID
+
+      val appWidgetManager = AppWidgetManager.getInstance(it.context)
+      val pref = it.context.getSharedPreferences("eventWidget_$appWidgetId", Context.MODE_PRIVATE)
+      val edit = pref.edit()
+
+      edit.putString(
+          "eventIds", eventAdapter.getSelectedEvents().map { it -> it.id }.joinToString(","))
+
+      edit.commit()
+
+      EventWidget().updateWidget(it.context, appWidgetManager, appWidgetId)
+
+      val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+      setResult(RESULT_OK, resultValue)
+      finish()
+    }
+
+    binding.eventsRecyclerViewer.addOnScrollListener(
+        object : RecyclerView.OnScrollListener() {
+          override fun onScrolled(
+              recyclerView: RecyclerView,
+              dx: Int,
+              dy: Int,
+          ) {
+            if (dy > 0 && binding.addEventFab.visibility == View.VISIBLE) {
+              binding.addEventFab.hide()
+            } else if (dy < 0 && binding.addEventFab.visibility != View.VISIBLE) {
+              binding.addEventFab.show()
+            }
+          }
+        },
+    )
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -117,7 +205,14 @@ class EventSelectorActivity : AppCompatActivity() {
 
         true
       }
+
       else -> super.onOptionsItemSelected(item)
     }
+  }
+
+  private fun getSavedEventIds(appWidgetId: Int): List<Int> {
+    val pref = getSharedPreferences("eventWidget_$appWidgetId", MODE_PRIVATE)
+    val saved = pref.getString("eventIds", "") ?: ""
+    return saved.split(",").filter { it.isNotBlank() }.map { it.toInt() }
   }
 }

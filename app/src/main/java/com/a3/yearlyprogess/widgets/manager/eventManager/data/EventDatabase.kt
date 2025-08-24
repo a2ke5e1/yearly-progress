@@ -25,15 +25,15 @@ abstract class EventDatabase : RoomDatabase() {
       }
       synchronized(this) {
         val instance =
-          Room.databaseBuilder(
-            context.applicationContext,
-            EventDatabase::class.java,
-            "event_database",
-          )
-            .addMigrations(MIGRATION_1_2)
-            .addMigrations(MIGRATION_2_3)
-            .addMigrations(MIGRATION_3_4)
-            .fallbackToDestructiveMigration(true)
+            Room.databaseBuilder(
+                    context.applicationContext,
+                    EventDatabase::class.java,
+                    "event_database",
+                )
+                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_2_3)
+                .addMigrations(MIGRATION_3_4)
+                .fallbackToDestructiveMigration(true)
                 .build()
         INSTANCE = instance
         return instance
@@ -59,12 +59,12 @@ abstract class EventDatabase : RoomDatabase() {
         }
 
     private val MIGRATION_3_4 =
-      object : Migration(3, 4) {
-        override fun migrate(db: SupportSQLiteDatabase) {
-          db.execSQL(
-            "ALTER TABLE event_table ADD COLUMN backgroundImageUri TEXT DEFAULT NULL",
-          )
+        object : Migration(3, 4) {
+          override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                "ALTER TABLE event_table ADD COLUMN backgroundImageUri TEXT DEFAULT NULL",
+            )
+          }
         }
-      }
   }
 }

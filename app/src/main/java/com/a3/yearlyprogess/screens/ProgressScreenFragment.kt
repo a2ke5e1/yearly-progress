@@ -263,7 +263,9 @@ class ProgressScreenFragment : Fragment() {
 
       if (providers.isEmpty()) {
         Toast.makeText(
-                requireContext(), "Your device does not have any location provider", Toast.LENGTH_LONG)
+                requireContext(),
+                "Your device does not have any location provider",
+                Toast.LENGTH_LONG)
             .show()
         return
       }
@@ -272,9 +274,8 @@ class ProgressScreenFragment : Fragment() {
       cachedLocation?.let { setupSunriseSunsetViews(it) }
 
       locationManager.requestLocationUpdates(
-          providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(),
-          500,
-          1000f) { location ->
+          providers.find { it == LocationManager.GPS_PROVIDER } ?: providers.first(), 500, 1000f) {
+              location ->
             context?.let { cacheLocation(it, location) }
             setupSunriseSunsetViews(location)
           }

@@ -58,7 +58,6 @@ class EventEditorActivity : AppCompatActivity() {
     binding = ActivityEventManagerActivityBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
-
     ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, windowInsets ->
       val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
       view.updatePadding(top = insets.top)
@@ -358,8 +357,7 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
                     binding.repeatWeekdaysSwitch.isChecked,
-                  savedImagePath
-                  )
+                    savedImagePath)
             mEventViewModel.updateEvent(updatedEvent)
 
             val appWidgetManager = AppWidgetManager.getInstance(this)
@@ -400,8 +398,7 @@ class EventEditorActivity : AppCompatActivity() {
                     Date(eventEndDateTimeInMillis),
                     repeatDays,
                     binding.repeatWeekdaysSwitch.isChecked,
-                  savedImagePath
-                ),
+                    savedImagePath),
             )
           }
 
@@ -457,7 +454,6 @@ class EventEditorActivity : AppCompatActivity() {
     setRepeatDays(event.repeatEventDays)
 
     savedImagePath = event.backgroundImageUri
-
   }
 
   private fun modifiedEventDateTime(
@@ -530,48 +526,49 @@ class EventEditorActivity : AppCompatActivity() {
     }
   }
 
-  val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-    // Callback is invoked after the user selects a media item or closes the
-    // photo picker.
-    if (uri != null) {
-      Log.d("PhotoPicker", "Selected URI: $uri")
+  val pickMedia =
+      registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // Callback is invoked after the user selects a media item or closes the
+        // photo picker.
+        if (uri != null) {
+          Log.d("PhotoPicker", "Selected URI: $uri")
 
-      val inputStream = contentResolver.openInputStream(uri)
-      inputStream?.use { stream ->
-        val fileName = "image_${System.currentTimeMillis()}.jpg"
-        val file = File(filesDir, fileName)
-        FileOutputStream(file).use { output ->
-          stream.copyTo(output)
-        }
-        Log.d("PhotoPicker", "Copied to: ${file.absolutePath}")
+          val inputStream = contentResolver.openInputStream(uri)
+          inputStream?.use { stream ->
+            val fileName = "image_${System.currentTimeMillis()}.jpg"
+            val file = File(filesDir, fileName)
+            FileOutputStream(file).use { output -> stream.copyTo(output) }
+            Log.d("PhotoPicker", "Copied to: ${file.absolutePath}")
 
-        // Store `file.absolutePath` in Room
-        savedImagePath = file.absolutePath
+            // Store `file.absolutePath` in Room
+            savedImagePath = file.absolutePath
 
-        val bitmap = try {
-          BitmapFactory.decodeFile(savedImagePath)
-        } catch (e: Exception) {
-          null
-        }
+            val bitmap =
+                try {
+                  BitmapFactory.decodeFile(savedImagePath)
+                } catch (e: Exception) {
+                  null
+                }
 
-        if (bitmap != null) {
-          binding.imageView.setImageBitmap(bitmap)
-
+            if (bitmap != null) {
+              binding.imageView.setImageBitmap(bitmap)
+            } else {
+              binding.imageView.setImageBitmap(null)
+            }
+          }
         } else {
-          binding.imageView.setImageBitmap(null)
+          Log.d("PhotoPicker", "No media selected")
         }
       }
-    } else {
-      Log.d("PhotoPicker", "No media selected")
-    }
-  }
+
   private fun setupImage() {
     if (savedImagePath != null) {
-      val bitmap = try {
-        BitmapFactory.decodeFile(savedImagePath)
-      } catch (e: Exception) {
-        null
-      }
+      val bitmap =
+          try {
+            BitmapFactory.decodeFile(savedImagePath)
+          } catch (e: Exception) {
+            null
+          }
       binding.imageView.setImageBitmap(bitmap)
     } else {
       binding.imageView.setImageBitmap(null)

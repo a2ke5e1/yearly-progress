@@ -79,15 +79,17 @@ constructor(
       binding.mainContent.background = null
       binding.imageContainer.setImageDrawable(null)
     } else {
-      val bitmap = try {
-        BitmapFactory.decodeFile(event.backgroundImageUri)
-      } catch (e: Exception) {
-        null
-      }
+      val bitmap =
+          try {
+            BitmapFactory.decodeFile(event.backgroundImageUri)
+          } catch (e: Exception) {
+            null
+          }
 
       if (bitmap != null) {
         binding.imageContainer.setImageBitmap(bitmap)
-        binding.mainContent.background = AppCompatResources.getDrawable(context, R.drawable.background_card_scrim)
+        binding.mainContent.background =
+            AppCompatResources.getDrawable(context, R.drawable.background_card_scrim)
       } else {
         binding.imageContainer.setImageDrawable(null)
         binding.mainContent.background = null
