@@ -482,6 +482,11 @@ class EventWidget : BaseWidget() {
 
       return smallView
     }
+
+      private fun emptyEventView(context: Context): RemoteViews {
+          val view = RemoteViews(context.packageName, R.layout.event_widget_no_events)
+          return view
+      }
   }
 
   private var updateJob: Job? = null
@@ -562,6 +567,8 @@ class EventWidget : BaseWidget() {
 
             if (remoteViews != null) {
               appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+            } else {
+                appWidgetManager.updateAppWidget(appWidgetId,  emptyEventView(context))
             }
 
             delay(900)
