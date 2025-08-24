@@ -86,6 +86,9 @@ class EventsSwiper(val appWidgetId: Int, val context: Context, events: List<Even
   }
 
   fun indicator(): SpannableString {
+
+    if (_events.isEmpty() || _events.size == 1) return SpannableString("")
+
     val indicatorText = _events.indices.joinToString("") { _ -> "⬤" }
     val spannableString = SpannableString(indicatorText)
     val indicatorColor = context.getColor(R.color.widget_text_color).toColor()
@@ -220,6 +223,7 @@ class EventWidget : BaseWidget() {
         context: Context,
         event: Event,
         options: EventWidgetOption,
+        swiperIndicator: SpannableString = SpannableString(""),
     ): RemoteViews {
 
       fun pxToSp(@DimenRes id: Int): Float {
@@ -396,6 +400,10 @@ class EventWidget : BaseWidget() {
       tallView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
       wideView.setInt(R.id.widgetContainer, "setImageAlpha", widgetBackgroundAlpha)
 
+      smallView.setTextViewText(R.id.indicator, swiperIndicator)
+      tallView.setTextViewText(R.id.indicator, swiperIndicator)
+      wideView.setTextViewText(R.id.indicator, swiperIndicator)
+
       val bitmap =
           if (options.showEventImage && event.backgroundImageUri != null) {
             try {
@@ -549,7 +557,9 @@ class EventWidget : BaseWidget() {
             Log.d("selected eventsIds", "${eventIds} - ${event?.id}")
 
             val options = EventWidgetOption.load(context, appWidgetId)
-            val remoteViews = event?.let { eventWidgetPreview(context, it, options) }
+            val remoteViews =
+                event?.let { eventWidgetPreview(context, it, options, swiper.indicator()) }
+
             if (remoteViews != null) {
               appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
             }
