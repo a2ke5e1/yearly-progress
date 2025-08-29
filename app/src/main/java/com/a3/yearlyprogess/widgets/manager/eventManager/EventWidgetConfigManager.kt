@@ -99,7 +99,7 @@ class EventWidgetConfigManagerViewModel(private val application: Application) :
   }
 
   fun updateShowEventImage(checked: Boolean) {
-      _widgetConfig.update { it.copy(showEventImage = checked) }
+    _widgetConfig.update { it.copy(showEventImage = checked) }
   }
 }
 
@@ -125,9 +125,7 @@ class EventWidgetConfigManager : ComponentActivity() {
       val widgetConfig = viewModel.widgetConfig.collectAsState()
       YearlyProgressTheme {
         Scaffold(
-            modifier = Modifier
-              .nestedScroll(scrollBehavior.nestedScrollConnection)
-              .fillMaxSize(),
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize(),
             topBar = {
               CenterAlignedTopAppBar(
                   title = {
@@ -179,15 +177,11 @@ class EventWidgetConfigManager : ComponentActivity() {
 
                     Row(
                         modifier =
-                            Modifier
-                              .fillMaxWidth()
-                              .clickable(
-                                interactionSource = timeLeftInteractionSource, indication = null
-                              ) {
-                                viewModel.updateTimeLeftCounter(
-                                  !widgetConfig.value.timeLeftCounter
-                                )
-                              },
+                            Modifier.fillMaxWidth().clickable(
+                                interactionSource = timeLeftInteractionSource, indication = null) {
+                                  viewModel.updateTimeLeftCounter(
+                                      !widgetConfig.value.timeLeftCounter)
+                                },
                         verticalAlignment = Alignment.CenterVertically) {
                           Text(
                               stringResource(R.string.time_left_counter),
@@ -201,16 +195,12 @@ class EventWidgetConfigManager : ComponentActivity() {
 
                     Row(
                         modifier =
-                            Modifier
-                              .fillMaxWidth()
-                              .clickable(
+                            Modifier.fillMaxWidth().clickable(
                                 interactionSource = dynamicTimeLeftInteractionSource,
-                                indication = null
-                              ) {
-                                viewModel.updateDynamicTimeLeftCounter(
-                                  !widgetConfig.value.dynamicLeftCounter
-                                )
-                              },
+                                indication = null) {
+                                  viewModel.updateDynamicTimeLeftCounter(
+                                      !widgetConfig.value.dynamicLeftCounter)
+                                },
                         verticalAlignment = Alignment.CenterVertically) {
                           Text(
                               stringResource(R.string.dynamic_time_left_counter),
@@ -224,16 +214,12 @@ class EventWidgetConfigManager : ComponentActivity() {
 
                     Row(
                         modifier =
-                            Modifier
-                              .fillMaxWidth()
-                              .clickable(
+                            Modifier.fillMaxWidth().clickable(
                                 interactionSource = replaceTimeLeftInteractionSource,
-                                indication = null
-                              ) {
-                                viewModel.updateReplaceTimeLeftCounter(
-                                  !widgetConfig.value.replaceProgressWithDaysLeft
-                                )
-                              },
+                                indication = null) {
+                                  viewModel.updateReplaceTimeLeftCounter(
+                                      !widgetConfig.value.replaceProgressWithDaysLeft)
+                                },
                         verticalAlignment = Alignment.CenterVertically) {
                           Text(
                               stringResource(R.string.replace_progress_with_days_left_counter),
@@ -288,26 +274,22 @@ class EventWidgetConfigManager : ComponentActivity() {
                     }
 
                     Row(
-                      modifier =
-                        Modifier
-                          .fillMaxWidth()
-                          .clickable(
-                            interactionSource = showEventImageInteractionSource, indication = null
-                          ) {
-                            viewModel.updateShowEventImage(
-                              !widgetConfig.value.showEventImage
-                            )
-                          },
-                      verticalAlignment = Alignment.CenterVertically) {
-                      Text(
-                        stringResource(R.string.show_event_image_in_background),
-                        modifier = Modifier.weight(1f))
+                        modifier =
+                            Modifier.fillMaxWidth().clickable(
+                                interactionSource = showEventImageInteractionSource,
+                                indication = null) {
+                                  viewModel.updateShowEventImage(!widgetConfig.value.showEventImage)
+                                },
+                        verticalAlignment = Alignment.CenterVertically) {
+                          Text(
+                              stringResource(R.string.show_event_image_in_background),
+                              modifier = Modifier.weight(1f))
 
-                      Switch(
-                        checked = widgetConfig.value.showEventImage,
-                        onCheckedChange = { viewModel.updateShowEventImage(it) },
-                        interactionSource = showEventImageInteractionSource)
-                    }
+                          Switch(
+                              checked = widgetConfig.value.showEventImage,
+                              onCheckedChange = { viewModel.updateShowEventImage(it) },
+                              interactionSource = showEventImageInteractionSource)
+                        }
                   }
                 }
               }

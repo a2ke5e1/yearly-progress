@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
@@ -40,11 +41,16 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
     selectedEventId = eventId
   }
 
+  fun setSelectedEventIds(selectedIds: List<Int>) {
+    tracker?.clearSelection()
+    selectedIds.forEach { id -> tracker?.select(id.toLong()) }
+  }
+
   init {
     setHasStableIds(true)
   }
 
-  override fun getItemId(position: Int): Long = position.toLong()
+  override fun getItemId(position: Int): Long = eventList[position].id.toLong()
 
   override fun onCreateViewHolder(
       parent: ViewGroup,
@@ -84,45 +90,20 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
       holder.binding.customEventCardView.setOnAddWidgetClickListener {
         requestPinWidget(it.context, currentEvent)
       }
+    }
 
-      if (tracker != null) {
-        holder.binding.customEventCardView.root.eventCheck.visibility =
-            if (tracker!!.hasSelection() || tracker!!.selection.size() > 0) {
-              View.VISIBLE
-            } else {
-              View.GONE
-            }
-        holder.binding.customEventCardView.root.eventCheck.isChecked =
-            tracker!!.isSelected(position.toLong())
+    if (tracker != null) {
+      val isSelected = tracker!!.isSelected(currentEvent.id.toLong())
+      holder.binding.customEventCardView.root.eventCheck.visibility =
+          if (tracker!!.hasSelection()) View.VISIBLE else View.GONE
+      holder.binding.customEventCardView.root.eventCheck.isChecked = isSelected
 
-        holder.binding.customEventCardView.root.eventCheck.setOnClickListener {
-          if (tracker!!.isSelected(position.toLong())) {
-            tracker!!.deselect(position.toLong())
-          } else {
-            tracker!!.select(position.toLong())
-          }
+      holder.binding.customEventCardView.root.eventCheck.setOnClickListener {
+        if (isSelected) {
+          tracker!!.deselect(currentEvent.id.toLong())
+        } else {
+          tracker!!.select(currentEvent.id.toLong())
         }
-      }
-    } else {
-      holder.binding.customEventCardView.setOnClickListener {
-        val appWidgetManager = AppWidgetManager.getInstance(it.context)
-        val pref = it.context.getSharedPreferences("eventWidget_$appWidgetId", Context.MODE_PRIVATE)
-        val edit = pref.edit()
-        val conv = Converters()
-        val eventDays = conv.fromRepeatDaysList(currentEvent.repeatEventDays)
-
-        edit.putInt("eventId", currentEvent.id)
-        edit.putString("eventTitle", currentEvent.eventTitle)
-        edit.putString("eventDesc", currentEvent.eventDescription)
-        edit.putBoolean("allDayEvent", currentEvent.allDayEvent)
-        edit.putLong("eventStartTimeInMills", currentEvent.eventStartTime.time)
-        edit.putLong("eventEndDateTimeInMillis", currentEvent.eventEndTime.time)
-        edit.putString("eventRepeatDays", eventDays)
-
-        edit.commit()
-
-        EventWidget().updateWidget(it.context, appWidgetManager, appWidgetId)
-        sendResult()
       }
     }
   }
@@ -183,15 +164,9 @@ class EventsListViewAdapter(private val appWidgetId: Int, private val sendResult
   }
 
   fun getSelectedEvents(): List<Event> {
-    val selectedEvents = mutableListOf<Event>()
-    if (tracker != null) {
-      for (i in 0 until itemCount) {
-        if (tracker!!.isSelected(i.toLong())) {
-          selectedEvents.add(eventList[i])
-        }
-      }
-    }
-    return selectedEvents
+    if (tracker == null) return emptyList()
+    val selectedIds = tracker!!.selection.map { it.toInt() }
+    return eventList.filter { it.id in selectedIds }
   }
 }
 
@@ -213,5 +188,20 @@ class MyItemDetailsLookup(private val recyclerView: RecyclerView) : ItemDetailsL
           .getItemDetails()
     }
     return null
+  }
+}
+
+class EventItemKeyProvider(private val recyclerView: RecyclerView) :
+    ItemKeyProvider<Long>(SCOPE_CACHED) {
+
+  override fun getKey(position: Int): Long? {
+    val adapter = recyclerView.adapter as? EventsListViewAdapter
+    return adapter?.currentEventList?.get(position)?.id?.toLong()
+  }
+
+  override fun getPosition(key: Long): Int {
+    val adapter = recyclerView.adapter as? EventsListViewAdapter
+    return adapter?.currentEventList?.indexOfFirst { it.id.toLong() == key }
+        ?: RecyclerView.NO_POSITION
   }
 }

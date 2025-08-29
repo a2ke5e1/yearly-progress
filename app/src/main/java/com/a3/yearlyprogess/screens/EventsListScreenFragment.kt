@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.databinding.FragmentScreenListEventsBinding
 import com.a3.yearlyprogess.widgets.manager.eventManager.EventEditorActivity
+import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.EventItemKeyProvider
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.EventsListViewAdapter
-import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.ImportEventItemKeyProvider
 import com.a3.yearlyprogess.widgets.manager.eventManager.adapter.MyItemDetailsLookup
 import com.a3.yearlyprogess.widgets.manager.eventManager.model.Event
 import com.a3.yearlyprogess.widgets.manager.eventManager.viewmodel.EventViewModel
@@ -62,7 +62,7 @@ class EventsListScreenFragment : Fragment() {
         SelectionTracker.Builder<Long>(
                 "mySelection",
                 binding.eventsRecyclerViewer,
-                ImportEventItemKeyProvider(binding.eventsRecyclerViewer),
+                EventItemKeyProvider(binding.eventsRecyclerViewer),
                 MyItemDetailsLookup(binding.eventsRecyclerViewer),
                 StorageStrategy.createLongStorage(),
             )

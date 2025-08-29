@@ -154,6 +154,7 @@
     <string name="remove_image">Remove Image</string>
     <string name="choose_a_image">Choose a Image</string>
     <string name="show_event_image_in_background">Show event image in background</string>
+    <string name="please_select_at_least_one_event">Please select at least one event</string>
 
 
     <!-- Week Preference -->

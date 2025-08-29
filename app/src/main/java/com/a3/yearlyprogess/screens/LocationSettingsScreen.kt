@@ -125,48 +125,37 @@ data class UserLocationPref(
 interface PhotonApi {
   @GET("api/")
   suspend fun searchPlaces(
-    @Query("q") query: String,
-    @Query("limit") limit: Int = 5,
-    @Query("lang") lang: String = "en"
+      @Query("q") query: String,
+      @Query("limit") limit: Int = 5,
+      @Query("lang") lang: String = "en"
   ): PhotonResponse
 }
 
-data class PhotonResponse(
-  val features: List<PhotonFeature>
-)
+data class PhotonResponse(val features: List<PhotonFeature>)
 
-data class PhotonFeature(
-  val geometry: PhotonGeometry,
-  val properties: PhotonProperties
-)
+data class PhotonFeature(val geometry: PhotonGeometry, val properties: PhotonProperties)
 
 data class PhotonGeometry(
-  val coordinates: List<Double> // [lon, lat]
+    val coordinates: List<Double> // [lon, lat]
 )
 
 data class PhotonProperties(
-  val name: String?,
-  val country: String?,
-  val city: String?,
-  val state: String?,
-  val street: String?,
-  val postcode: String?
+    val name: String?,
+    val country: String?,
+    val city: String?,
+    val state: String?,
+    val street: String?,
+    val postcode: String?
 )
-
 
 object NominatimService {
   private const val BASE_URL = "https://photon.komoot.io/"
 
   private val retrofit: Retrofit by lazy {
-    Retrofit.Builder()
-      .baseUrl(BASE_URL)
-      .addConverterFactory(GsonConverterFactory.create())
-      .build()
+    Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build()
   }
 
-  private val api: PhotonApi by lazy {
-    retrofit.create(PhotonApi::class.java)
-  }
+  private val api: PhotonApi by lazy { retrofit.create(PhotonApi::class.java) }
 
   suspend fun searchPlaces(query: String): List<NominatimPlace> {
     return try {
@@ -177,15 +166,15 @@ object NominatimService {
         val name = props.name ?: props.city ?: props.state ?: props.country
         if (name != null && coords.size >= 2) {
           NominatimPlace(
-            display_name = buildString {
-              append(name)
-              props.city?.let { append(", $it") }
-              props.state?.let { append(", $it") }
-              props.country?.let { append(", $it") }
-            },
-            lat = coords[1].toString(),
-            lon = coords[0].toString()
-          )
+              display_name =
+                  buildString {
+                    append(name)
+                    props.city?.let { append(", $it") }
+                    props.state?.let { append(", $it") }
+                    props.country?.let { append(", $it") }
+                  },
+              lat = coords[1].toString(),
+              lon = coords[0].toString())
         } else null
       }
     } catch (e: Exception) {
@@ -194,7 +183,6 @@ object NominatimService {
     }
   }
 }
-
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
