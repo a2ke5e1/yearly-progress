@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.YearlyProgress" parent="android:Theme.Material.Light.NoActionBar" />
+
+
+    <style name="App.SplashScreen" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="windowSplashScreenAnimationDuration">1600</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground_animated</item>
+        <item name="postSplashScreenTheme">@style/Theme.YearlyProgress</item>
+    </style>
+
+</resources>
