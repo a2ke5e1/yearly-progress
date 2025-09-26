@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.ui.components
+package com.a3.yearlyprogess.feature.home.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,9 +23,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.a3.yearlyprogess.ProgressSettings
-import com.a3.yearlyprogess.TimePeriod
-import com.a3.yearlyprogess.YearlyProgressUtil
+import com.a3.yearlyprogess.core.util.ProgressSettings
+import com.a3.yearlyprogess.core.util.TimePeriod
+import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import kotlinx.coroutines.delay
 
 @Composable

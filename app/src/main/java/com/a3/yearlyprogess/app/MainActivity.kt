@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess
+package com.a3.yearlyprogess.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,10 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.a3.yearlyprogess.ui.components.ProgressCard
-import com.a3.yearlyprogess.ui.theme.YearlyProgressTheme
+import androidx.navigation.compose.rememberNavController
+import com.a3.yearlyprogess.app.navigation.AppNavGraph
+import com.a3.yearlyprogess.app.navigation.BottomNavigationBar
+import com.a3.yearlyprogess.feature.home.ui.components.ProgressCard
+import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
+import com.a3.yearlyprogess.core.util.TimePeriod
+import com.a3.yearlyprogess.feature.home.ui.HomeScreen
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,33 +34,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             YearlyProgressTheme {
+                val navController = rememberNavController()
                 Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    contentWindowInsets = WindowInsets.safeDrawing
-                ) { innerPadding ->
-                    LazyColumn(
-                        modifier = Modifier.padding(8.dp, 0.dp),
-                        contentPadding = innerPadding,
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        item { ProgressCard(timePeriod = TimePeriod.YEAR) }
-                        item { ProgressCard(timePeriod = TimePeriod.MONTH) }
-                        item { ProgressCard(timePeriod = TimePeriod.WEEK) }
-                        item { ProgressCard(timePeriod = TimePeriod.DAY) }
+                    bottomBar = {
+                        BottomNavigationBar(navController)
                     }
+                ) { innerPadding ->
+                    AppNavGraph(
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(text = "Hello $name!", modifier = modifier)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    YearlyProgressTheme { Greeting("Android") }
 }

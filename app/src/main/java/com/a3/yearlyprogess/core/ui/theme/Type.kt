@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.ui.theme
+package com.a3.yearlyprogess.core.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

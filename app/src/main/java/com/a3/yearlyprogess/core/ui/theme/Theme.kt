@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess.ui.theme
+package com.a3.yearlyprogess.core.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

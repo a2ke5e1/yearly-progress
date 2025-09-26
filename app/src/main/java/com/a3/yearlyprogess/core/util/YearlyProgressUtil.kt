@@ -1,4 +1,4 @@
-package com.a3.yearlyprogess
+package com.a3.yearlyprogess.core.util
 
 import android.annotation.SuppressLint
 import android.icu.text.DateFormat
