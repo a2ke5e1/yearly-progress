@@ -1,22 +1,10 @@
 package com.a3.yearlyprogess.app.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.Event
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Widgets
-import androidx.compose.material.icons.outlined.Dashboard
-import androidx.compose.material.icons.outlined.Event
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Widgets
-import androidx.compose.material.icons.rounded.BarChart
-import androidx.compose.material.icons.rounded.Widgets
-import androidx.compose.material3.Icon
+
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,27 +13,20 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
-data class BottomNavItem(
-    val route: Destination,
-    val label: String,
-    val icon: @Composable () -> Unit,
-    val selectedIcon: @Composable () -> Unit
-)
-
 @Composable
-fun BottomNavigationBar(
+fun AppNavigationRail(
     navController: NavHostController,
     items: List<NavItem> = appNavItems
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    NavigationBar {
+    NavigationRail {
         items.forEach { item ->
             val isSelected =
                 currentDestination?.hierarchy?.any { it.hasRoute(item.route::class) } == true
 
-            NavigationBarItem(
+            NavigationRailItem(
                 selected = isSelected,
                 onClick = {
                     navController.navigate(item.route) {
@@ -56,8 +37,7 @@ fun BottomNavigationBar(
                 },
                 icon = { if (isSelected) item.selectedIcon() else item.icon() },
                 label = { Text(item.label) },
-                alwaysShowLabel = true,
-                colors = NavigationBarItemDefaults.colors(
+                colors = NavigationRailItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
                     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -67,4 +47,3 @@ fun BottomNavigationBar(
         }
     }
 }
-
