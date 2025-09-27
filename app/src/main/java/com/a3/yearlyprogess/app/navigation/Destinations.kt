@@ -1,6 +1,6 @@
 package com.a3.yearlyprogess.app.navigation
 
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.rounded.BarChart

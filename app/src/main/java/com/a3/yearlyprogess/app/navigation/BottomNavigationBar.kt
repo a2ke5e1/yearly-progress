@@ -57,12 +57,6 @@ fun BottomNavigationBar(
                 icon = { if (isSelected) item.selectedIcon() else item.icon() },
                 label = { Text(item.label) },
                 alwaysShowLabel = true,
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             )
         }
     }
