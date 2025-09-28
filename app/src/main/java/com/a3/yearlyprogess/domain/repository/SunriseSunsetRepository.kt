@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface SunriseSunsetRepository {
     fun getSunriseSunset(
         lat: Double,
-        lon: Double,
-        startDate: String,
-        endDate: String
+        lon: Double
     ): Flow<Resource<List<SunriseSunset>>>
 }

@@ -26,12 +26,12 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState
 
     init {
-        loadData(26.16, 72.93, "2025-09-27", "2025-09-29")
+        loadData(26.16, 72.93)
     }
 
-    fun loadData(lat: Double, lon: Double, startDate: String, endDate: String) {
+    fun loadData(lat: Double, lon: Double) {
         viewModelScope.launch {
-            repository.getSunriseSunset(lat, lon, startDate, endDate).collect { result ->
+            repository.getSunriseSunset(lat, lon).collect { result ->
                 _uiState.value = when (result) {
                     is Resource.Loading -> HomeUiState.Loading
                     is Resource.Success -> HomeUiState.Success(result.data)
