@@ -4,9 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -17,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.a3.yearlyprogess.app.navigation.AppNavGraph
 import com.a3.yearlyprogess.app.navigation.AppNavigationRail
 import com.a3.yearlyprogess.app.navigation.BottomNavigationBar
+import com.a3.yearlyprogess.app.ui.AppTopBar
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,21 +40,32 @@ class MainActivity : ComponentActivity() {
                     WindowWidthSizeClass.Compact -> {
                         // Phone
                         Scaffold(
-                            bottomBar = { BottomNavigationBar(navController) }
+                            topBar = { AppTopBar() }, bottomBar = {
+                                BottomNavigationBar(navController)
+                            }, contentWindowInsets = WindowInsets.safeDrawing
                         ) { innerPadding ->
                             AppNavGraph(navController, Modifier.padding(innerPadding))
                         }
                     }
                     else -> {
                         // Foldable / Tablet
-                        Scaffold { innerPadding ->
-                            Row(
-                                modifier = Modifier
-                                    .padding(innerPadding)
+                        Row(
+                            modifier = Modifier
                                     .fillMaxSize(),
                             ) {
                                 AppNavigationRail(navController)
-                                AppNavGraph(navController)
+                            Scaffold(
+                                topBar = { AppTopBar() },
+                                contentWindowInsets = WindowInsets.safeDrawing
+                            ) { innerPadding ->
+                                AppNavGraph(
+                                    navController, modifier = Modifier.padding(
+                                        PaddingValues(
+                                            top = innerPadding.calculateTopPadding(),
+                                            bottom = innerPadding.calculateBottomPadding()
+                                        )
+                                    )
+                                )
                             }
                         }
                     }
