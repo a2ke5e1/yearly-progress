@@ -8,30 +8,26 @@ import androidx.compose.material.icons.rounded.Widgets
 import androidx.compose.runtime.Composable
 import kotlinx.serialization.Serializable
 
-@Serializable
-sealed class Destination(val route: String) {
+
+sealed class Destination {
     @Serializable
-    data object Home : Destination("home")
+    data object Home : Destination()
     @Serializable
-    data object Events : Destination("events")
+    data object Events : Destination()
 
     @Serializable
-    data object EventDetail : Destination("events/detail/{eventId}") {
-        fun createRoute(eventId: String) = "events/detail/$eventId"
-    }
+    data class EventDetail(val editId: String) : Destination()
 
     @Serializable
-    data object EventEdit : Destination("events/edit/{eventId}") {
-        fun createRoute(eventId: String) = "events/edit/$eventId"
-    }
+    data class EventEdit(val editId: String) : Destination()
 
     @Serializable
-    data object EventCreate : Destination("events/create")
+    data object EventCreate : Destination()
 
     @Serializable
-    data object Settings : Destination("settings")
+    data object Settings : Destination()
     @Serializable
-    data object Widgets : Destination("widgets")
+    data object Widgets : Destination()
 }
 
 

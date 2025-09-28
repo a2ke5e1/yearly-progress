@@ -2,6 +2,8 @@ package com.a3.yearlyprogess.feature.home.ui.components
 
 
 import android.icu.text.NumberFormat
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -43,7 +45,8 @@ data class ProgressCardStyle(
     val labelTextStyle: androidx.compose.ui.text.TextStyle,
     val titleTextStyle: androidx.compose.ui.text.TextStyle,
     val progressTextStyle: androidx.compose.ui.text.TextStyle,
-    val durationTextStyle: androidx.compose.ui.text.TextStyle
+    val durationTextStyle: androidx.compose.ui.text.TextStyle,
+    val cornerAnimationSpec: TweenSpec<Dp>
 )
 
 // Defaults factory, @Composable to access MaterialTheme safely
@@ -67,6 +70,10 @@ object ProgressCardDefaults {
         ),
         durationTextStyle = MaterialTheme.typography.bodySmall.copy(
             color = MaterialTheme.colorScheme.onSurface
+        ),
+        cornerAnimationSpec = TweenSpec(
+            durationMillis = 300,
+            easing = FastOutSlowInEasing
         )
     )
 }
@@ -101,7 +108,8 @@ fun ProgressCard(
     // Press state and animated corner radius
     var pressed by remember { mutableStateOf(false) }
     val cornerRadius: Dp by animateDpAsState(
-        targetValue = if (pressed) style.cornerRadiusPressed else style.cornerRadiusDefault
+        targetValue = if (pressed) style.cornerRadiusPressed else style.cornerRadiusDefault,
+        animationSpec = style.cornerAnimationSpec
     )
 
     Box(
