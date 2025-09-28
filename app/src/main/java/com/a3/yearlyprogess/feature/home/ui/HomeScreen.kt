@@ -15,7 +15,7 @@ fun HomeScreen() {
 
         LazyColumn(
             modifier = Modifier.padding(8.dp, 0.dp).fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             item { ProgressCard(timePeriod = TimePeriod.YEAR) }
             item { ProgressCard(timePeriod = TimePeriod.MONTH) }

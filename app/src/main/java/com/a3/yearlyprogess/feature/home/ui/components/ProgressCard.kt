@@ -1,6 +1,10 @@
 package com.a3.yearlyprogess.feature.home.ui.components
 
+
+import android.icu.text.NumberFormat
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,22 +24,63 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.a3.yearlyprogess.core.util.ProgressSettings
 import com.a3.yearlyprogess.core.util.TimePeriod
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import kotlinx.coroutines.delay
 
+// Data class for ProgressCard style
+data class ProgressCardStyle(
+    val cardHeight: Dp,
+    val cardPadding: Dp,
+    val cornerRadiusDefault: Dp,
+    val cornerRadiusPressed: Dp,
+    val progressBarColor: androidx.compose.ui.graphics.Color,
+    val backgroundColor: androidx.compose.ui.graphics.Color,
+    val labelTextStyle: androidx.compose.ui.text.TextStyle,
+    val titleTextStyle: androidx.compose.ui.text.TextStyle,
+    val progressTextStyle: androidx.compose.ui.text.TextStyle,
+    val durationTextStyle: androidx.compose.ui.text.TextStyle
+)
+
+// Defaults factory, @Composable to access MaterialTheme safely
+object ProgressCardDefaults {
+    @Composable
+    fun progressCardStyle(): ProgressCardStyle = ProgressCardStyle(
+        cardHeight = 150.dp,
+        cardPadding = 18.dp,
+        cornerRadiusDefault = 16.dp,
+        cornerRadiusPressed = 32.dp,
+        progressBarColor = MaterialTheme.colorScheme.primaryContainer,
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
+        labelTextStyle = MaterialTheme.typography.labelSmall.copy(
+            color = MaterialTheme.colorScheme.onSurface
+        ),
+        titleTextStyle = MaterialTheme.typography.titleMedium.copy(
+            color = MaterialTheme.colorScheme.onSurface
+        ),
+        progressTextStyle = MaterialTheme.typography.displaySmall.copy(
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        ),
+        durationTextStyle = MaterialTheme.typography.bodySmall.copy(
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    )
+}
+
 @Composable
 fun ProgressCard(
+    modifier: Modifier = Modifier,
     timePeriod: TimePeriod,
     settings: ProgressSettings = ProgressSettings(),
-    modifier: Modifier = Modifier, decimals: Int = 13, refreshInterval: Long = 1L
+    decimals: Int = 13,
+    refreshInterval: Long = 1L,
+    style: ProgressCardStyle = ProgressCardDefaults.progressCardStyle()
 ) {
     val progressUtil = remember { YearlyProgressUtil(settings) }
-
     val startTime = progressUtil.calculateStartTime(timePeriod)
     val endTime = progressUtil.calculateEndTime(timePeriod)
     val duration = (endTime - startTime) / 1000
@@ -49,71 +94,70 @@ fun ProgressCard(
         }
     }
 
+    val durationFormatted = remember(duration) {
+        NumberFormat.getNumberInstance(settings.uLocale).format(duration)
+    }
+
+    // Press state and animated corner radius
+    var pressed by remember { mutableStateOf(false) }
+    val cornerRadius: Dp by animateDpAsState(
+        targetValue = if (pressed) style.cornerRadiusPressed else style.cornerRadiusDefault
+    )
+
     Box(
         modifier = modifier
+            .height(style.cardHeight)
             .fillMaxWidth()
-            .height(160.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-    ) {
-
-        Box(
-            modifier = modifier
-                .fillMaxWidth((progress / 100).toFloat().coerceIn(0f, 1f))
-                .fillMaxHeight()
-                .background(
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    shape = RoundedCornerShape(16.dp)
+            .clip(RoundedCornerShape(cornerRadius))
+            .background(style.backgroundColor)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        pressed = true
+                        tryAwaitRelease()
+                        pressed = false
+                    }
                 )
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth((progress / 100).toFloat().coerceIn(0f, 1f))
+                .background(style.progressBarColor, shape = RoundedCornerShape(cornerRadius))
                 .align(Alignment.CenterStart)
         )
 
         Column(
-            modifier = Modifier.padding(18.dp), horizontalAlignment = Alignment.Start
+            modifier = Modifier.padding(style.cardPadding),
+            horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = timePeriod.name.lowercase().replaceFirstChar { it.uppercase() },
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = style.labelTextStyle
             )
+
             Text(
                 text = when (timePeriod) {
-                    TimePeriod.MONTH -> progressUtil.getMonthName(
-                        progressUtil.getCurrentPeriodValue(
-                            timePeriod
-                        )
-                    )
-
-                    TimePeriod.WEEK -> progressUtil.getWeekDayName(
-                        progressUtil.getCurrentPeriodValue(
-                            timePeriod
-                        )
-                    )
-
+                    TimePeriod.MONTH -> progressUtil.getMonthName(progressUtil.getCurrentPeriodValue(timePeriod))
+                    TimePeriod.WEEK -> progressUtil.getWeekDayName(progressUtil.getCurrentPeriodValue(timePeriod))
                     TimePeriod.DAY -> progressUtil.getCurrentPeriodValue(timePeriod)
-                        .toString() + progressUtil.getOrdinalSuffix(
-                        progressUtil.getCurrentPeriodValue(
-                            timePeriod
-                        )
-                    )
-
+                        .toString() + progressUtil.getOrdinalSuffix(progressUtil.getCurrentPeriodValue(timePeriod))
                     else -> progressUtil.getCurrentPeriodValue(timePeriod).toString()
                 },
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = style.titleTextStyle
             )
+
             Spacer(modifier = Modifier.height(16.dp))
+
             Text(
-                text = "%.${decimals}f%%".format(progress), // update directly using Double
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                text = "%.${decimals}f%%".format(progress),
+                style = style.progressTextStyle
             )
+
             Text(
-                text = "of ${duration}s",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface,
+                text = "of ${durationFormatted}s",
+                style = style.durationTextStyle
             )
         }
     }
