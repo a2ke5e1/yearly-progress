@@ -1,16 +1,20 @@
 package com.a3.yearlyprogess.data.repository
 
+import android.content.Context
 import android.util.Log
 import com.a3.yearlyprogess.core.util.Resource
+import com.a3.yearlyprogess.core.util.SunriseSunsetCache
 import com.a3.yearlyprogess.data.mapper.toDomain
 import com.a3.yearlyprogess.data.remote.SunriseSunsetApi
 import com.a3.yearlyprogess.domain.model.SunriseSunset
 import com.a3.yearlyprogess.domain.repository.SunriseSunsetRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class SunriseSunsetRepositoryImpl @Inject constructor(
+    @param:ApplicationContext private val context: Context,
     private val api: SunriseSunsetApi
 ) : SunriseSunsetRepository {
 
@@ -21,10 +25,18 @@ class SunriseSunsetRepositoryImpl @Inject constructor(
         endDate: String
     ): Flow<Resource<List<SunriseSunset>>> = flow {
         emit(Resource.Loading())
+        val cached = SunriseSunsetCache.get(context,lat, lon)
+        if (cached != null && cached.size == 3) {
+            Log.d("SunriseSunsetRepository", "Returning cached data for $lat,$lon")
+            emit(Resource.Success(cached.map { it.toDomain() }))
+            return@flow
+        }
         try {
             val response = api.getSunriseSunset(lat, lon, startDate, endDate)
             if (response.status == "OK") {
-                emit(Resource.Success(response.results.map { it.toDomain() }))
+                val results = response.results
+                SunriseSunsetCache.set(context,lat, lon, results)
+                emit(Resource.Success(results.map { it.toDomain() }))
             } else {
                 emit(Resource.Error("API returned status ${response.status}"))
             }

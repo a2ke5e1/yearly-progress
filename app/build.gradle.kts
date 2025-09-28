@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.material3.window.size.class1)
     implementation(libs.retrofit)
     implementation(libs.converter.kotlinx.serialization)
+    implementation(libs.androidx.datastore.preferences)
     ksp(libs.hilt.android.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
