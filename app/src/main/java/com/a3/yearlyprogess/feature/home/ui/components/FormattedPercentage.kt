@@ -40,7 +40,7 @@ fun FormattedPercentage(
             // Decimal + % smaller
             append(formattedNumber.substring(dotPos))
             addStyle(
-                style = SpanStyle(fontSize = (MaterialTheme.typography.displaySmall.fontSize.value * 0.7f).sp),
+                style = SpanStyle(fontSize = (style.fontSize.value * 0.7f).sp),
                 start = dotPos,
                 end = formattedNumber.length
             )
@@ -55,7 +55,7 @@ fun FormattedPercentage(
             // % smaller
             append(formattedNumber.last())
             addStyle(
-                style = SpanStyle(fontSize = (MaterialTheme.typography.displaySmall.fontSize.value * 0.7f).sp),
+                style = SpanStyle(fontSize = (style.fontSize.value * 0.7f).sp),
                 start = formattedNumber.length - 1,
                 end = formattedNumber.length
             )
