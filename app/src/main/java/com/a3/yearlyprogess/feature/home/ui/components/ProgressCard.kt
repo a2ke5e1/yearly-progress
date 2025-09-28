@@ -53,7 +53,7 @@ data class ProgressCardStyle(
 object ProgressCardDefaults {
     @Composable
     fun progressCardStyle(): ProgressCardStyle = ProgressCardStyle(
-        cardHeight = 150.dp,
+        cardHeight = 160.dp,
         cardPadding = 18.dp,
         cornerRadiusDefault = 16.dp,
         cornerRadiusPressed = 32.dp,
@@ -158,8 +158,9 @@ fun ProgressCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = "%.${decimals}f%%".format(progress),
+            FormattedPercentage(
+                value = progress,
+                digits = decimals,
                 style = style.progressTextStyle
             )
 
