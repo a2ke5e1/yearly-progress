@@ -17,6 +17,8 @@ material = "1.10.0-alpha04"
 materialIconsExtended = "1.7.8"
 kotlinxSerializationJson = "1.9.0"
 material3WindowSizeClass = "1.4.0"
+retrofit = "3.0.0"
+converterKotlinxSerialization = "3.0.0"
 
 
 [libraries]
@@ -43,6 +45,8 @@ androidx-material = { group = "androidx.compose.material", name = "material", ve
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 androidx-material3-window-size-class1 = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3WindowSizeClass" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "converterKotlinxSerialization" }
 
 
 [plugins]

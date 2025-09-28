@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.material3.window.size.class1)
+    implementation(libs.retrofit)
+    implementation(libs.converter.kotlinx.serialization)
     ksp(libs.hilt.android.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
