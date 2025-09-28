@@ -1,7 +1,6 @@
 package com.a3.yearlyprogess.app
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,11 +24,9 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.a3.yearlyprogess.app.navigation.AppNavGraph
 import com.a3.yearlyprogess.app.navigation.AppNavigationRail
 import com.a3.yearlyprogess.app.navigation.BottomNavigationBar
-import com.a3.yearlyprogess.app.navigation.Destination
 import com.a3.yearlyprogess.app.navigation.appNavItems
 import com.a3.yearlyprogess.app.ui.AppTopBar
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
