@@ -1,7 +1,7 @@
 package com.a3.yearlyprogess.data.repository
 
 import android.content.Context
-import android.util.Log
+import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.core.util.Resource
 import com.a3.yearlyprogess.core.util.SunriseSunsetCache
 import com.a3.yearlyprogess.data.mapper.toDomain
