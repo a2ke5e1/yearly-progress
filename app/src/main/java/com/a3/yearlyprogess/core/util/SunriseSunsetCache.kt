@@ -7,12 +7,26 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.a3.yearlyprogess.data.remote.ResultDto
+import com.a3.yearlyprogess.domain.model.SunriseSunset
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 
 val Context.sunriseSunsetDataStore: DataStore<Preferences> by preferencesDataStore(
     name = "sunrise_sunset_cache"
 )
+
+fun getStartAndEndTime(dayLight: Boolean, results: List<SunriseSunset>): Pair<Long, Long> {
+    return if (dayLight) {
+        results[1].sunrise.time to results[1].sunset.time
+    } else {
+        if (System.currentTimeMillis() < results[1].sunset.time) {
+            results[0].sunset.time to results[1].sunrise.time
+        } else {
+            results[1].sunset.time to results[2].sunrise.time
+        }
+    }
+}
+
 
 object SunriseSunsetCache {
 

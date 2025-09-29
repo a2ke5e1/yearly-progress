@@ -132,7 +132,7 @@ fun ProgressCard(
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth((progress / 100).toFloat().coerceIn(0f, 1f))
-                .background(style.progressBarColor, shape = RoundedCornerShape(cornerRadius))
+                .background(style.progressBarColor, shape = RoundedCornerShape(style.cornerRadiusDefault))
                 .align(Alignment.CenterStart)
         )
 

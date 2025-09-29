@@ -1,8 +1,11 @@
 package com.a3.yearlyprogess.feature.home.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -15,6 +18,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.a3.yearlyprogess.core.util.TimePeriod
 import com.a3.yearlyprogess.feature.home.HomeUiState
 import com.a3.yearlyprogess.feature.home.HomeViewModel
+import com.a3.yearlyprogess.feature.home.ui.components.DayNightProgressCard
 import com.a3.yearlyprogess.feature.home.ui.components.ProgressCard
 
 @Composable
@@ -37,10 +41,19 @@ fun HomeScreen(
             is HomeUiState.Error -> item { Text("Error: ${(state as HomeUiState.Error).message}") }
             is HomeUiState.Success -> {
                 val data = (state as HomeUiState.Success).data
-                    item {
-                        Text("$data")
-                    }
-
+                item {
+                    DayNightProgressCard(
+                        sunriseSunsetList = data,
+                        dayLight = true
+                    )
+                }
+                item {
+                    DayNightProgressCard(
+                        sunriseSunsetList = data,
+                        dayLight = false
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
             }
         }
     }
