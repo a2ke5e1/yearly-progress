@@ -3,7 +3,7 @@ package com.a3.yearlyprogess.data.repository
 import android.content.Context
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.core.util.Resource
-import com.a3.yearlyprogess.core.util.SunriseSunsetCache
+import com.a3.yearlyprogess.data.local.SunriseSunsetCache
 import com.a3.yearlyprogess.data.mapper.toDomain
 import com.a3.yearlyprogess.data.remote.SunriseSunsetApi
 import com.a3.yearlyprogess.domain.model.SunriseSunset

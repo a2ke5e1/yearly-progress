@@ -19,7 +19,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.core.util.ProgressSettings
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
-import com.a3.yearlyprogess.core.util.getStartAndEndTime
+import com.a3.yearlyprogess.data.local.getStartAndEndTime
 import com.a3.yearlyprogess.domain.model.SunriseSunset
 import kotlinx.coroutines.delay
 import java.time.Instant

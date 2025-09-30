@@ -10,4 +10,6 @@ interface LocationRepository {
     suspend fun clearSavedLocation()
     fun hasLocationPermission(): Boolean
     fun isLocationEnabled(): Boolean
+    fun wasPermissionAsked(): Flow<Boolean>
+    suspend fun setPermissionAsked()
 }

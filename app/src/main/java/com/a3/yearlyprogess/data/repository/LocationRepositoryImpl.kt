@@ -43,4 +43,12 @@ class LocationRepositoryImpl @Inject constructor(
     override fun isLocationEnabled(): Boolean {
         return locationManager.isLocationEnabled()
     }
+
+    override fun wasPermissionAsked(): Flow<Boolean> {
+        return locationPreferences.wasPermissionAsked
+    }
+
+    override suspend fun setPermissionAsked() {
+        locationPreferences.setPermissionAsked()
+    }
 }

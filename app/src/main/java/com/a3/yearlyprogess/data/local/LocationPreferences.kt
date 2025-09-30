@@ -18,13 +18,14 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 @Singleton
 class LocationPreferences @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) {
     companion object {
         private val LATITUDE_KEY = doublePreferencesKey("latitude")
         private val LONGITUDE_KEY = doublePreferencesKey("longitude")
         private val IS_MANUAL_KEY = booleanPreferencesKey("is_manual")
         private val HAS_SAVED_LOCATION_KEY = booleanPreferencesKey("has_saved_location")
+        private val PERMISSION_ASKED_KEY = booleanPreferencesKey("permission_asked")
     }
 
     val savedLocation: Flow<Location?> = context.dataStore.data.map { preferences ->
@@ -40,12 +41,22 @@ class LocationPreferences @Inject constructor(
         }
     }
 
+    val wasPermissionAsked: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[PERMISSION_ASKED_KEY] ?: false
+    }
+
     suspend fun saveLocation(location: Location) {
         context.dataStore.edit { preferences ->
             preferences[LATITUDE_KEY] = location.latitude
             preferences[LONGITUDE_KEY] = location.longitude
             preferences[IS_MANUAL_KEY] = location.isManual
             preferences[HAS_SAVED_LOCATION_KEY] = true
+        }
+    }
+
+    suspend fun setPermissionAsked() {
+        context.dataStore.edit { preferences ->
+            preferences[PERMISSION_ASKED_KEY] = true
         }
     }
 
