@@ -20,6 +20,7 @@ material3WindowSizeClass = "1.4.0"
 retrofit = "3.0.0"
 converterKotlinxSerialization = "3.0.0"
 datastorePreferences = "1.2.0-alpha02"
+accompanistPermissions = "0.37.3"
 
 
 [libraries]
@@ -49,6 +50,7 @@ androidx-material3-window-size-class1 = { group = "androidx.compose.material3", 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "converterKotlinxSerialization" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
 
 
 [plugins]
