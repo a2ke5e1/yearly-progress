@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.core.util.TimePeriod
 import com.a3.yearlyprogess.feature.home.HomeUiState
 import com.a3.yearlyprogess.feature.home.HomeViewModel
@@ -23,6 +25,7 @@ import com.a3.yearlyprogess.feature.home.ui.components.DayNightProgressCard
 import com.a3.yearlyprogess.feature.home.ui.components.LocationPermissionDialog
 import com.a3.yearlyprogess.feature.home.ui.components.LocationRequiredCard
 import com.a3.yearlyprogess.feature.home.ui.components.ProgressCard
+import com.a3.yearlyprogess.feature.home.ui.components.ProgressCardDefaults
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 
@@ -34,7 +37,6 @@ fun HomeScreen(
     val state by viewModel.uiState.collectAsState()
     val shouldShowPermissionDialog by viewModel.shouldShowPermissionDialog.collectAsState()
 
-    // Only request coarse location permission
     val locationPermissionState = rememberPermissionState(
         permission = android.Manifest.permission.ACCESS_COARSE_LOCATION
     ) { isGranted ->
@@ -45,7 +47,6 @@ fun HomeScreen(
         }
     }
 
-    // Show dialog only when explicitly requested
     if (shouldShowPermissionDialog) {
         LocationPermissionDialog(
             onDismiss = {
@@ -63,10 +64,43 @@ fun HomeScreen(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        item { ProgressCard(timePeriod = TimePeriod.YEAR) }
-        item { ProgressCard(timePeriod = TimePeriod.MONTH) }
-        item { ProgressCard(timePeriod = TimePeriod.WEEK) }
-        item { ProgressCard(timePeriod = TimePeriod.DAY) }
+        // Time period cards
+        item {
+            ProgressCard(
+                timePeriod = TimePeriod.YEAR,
+                style = ProgressCardDefaults.progressCardStyle(
+                    cornerStyle = CardCornerStyle.FirstInList
+                )
+            )
+        }
+        item {
+            ProgressCard(
+                timePeriod = TimePeriod.MONTH,
+                style = ProgressCardDefaults.progressCardStyle(
+                    cornerStyle = CardCornerStyle.MiddleInList
+                )
+            )
+        }
+        item {
+            ProgressCard(
+                timePeriod = TimePeriod.WEEK,
+                style = ProgressCardDefaults.progressCardStyle(
+                    cornerStyle = CardCornerStyle.MiddleInList
+                )
+            )
+        }
+        item {
+            ProgressCard(
+                timePeriod = TimePeriod.DAY,
+                style = ProgressCardDefaults.progressCardStyle(
+                    cornerStyle = when (state) {
+                        is HomeUiState.Success -> CardCornerStyle.MiddleInList
+                        is HomeUiState.LocationRequired -> CardCornerStyle.MiddleInList
+                        else -> CardCornerStyle.LastInList
+                    }
+                )
+            )
+        }
 
         when (state) {
             is HomeUiState.Loading -> {
@@ -84,8 +118,10 @@ fun HomeScreen(
             is HomeUiState.LocationRequired -> {
                 item {
                     LocationRequiredCard(
-                        onGoToSettings = { viewModel.onGoToSettings() }
+                        onGoToSettings = { viewModel.onGoToSettings() },
+                        cornerStyle = CardCornerStyle.LastInList
                     )
+                    Spacer(Modifier.height(4.dp))
                 }
             }
             is HomeUiState.Error -> {
@@ -101,13 +137,19 @@ fun HomeScreen(
                 item {
                     DayNightProgressCard(
                         sunriseSunsetList = data,
-                        dayLight = true
+                        dayLight = true,
+                        style = ProgressCardDefaults.progressCardStyle(
+                            cornerStyle = CardCornerStyle.MiddleInList
+                        )
                     )
                 }
                 item {
                     DayNightProgressCard(
                         sunriseSunsetList = data,
-                        dayLight = false
+                        dayLight = false,
+                        style = ProgressCardDefaults.progressCardStyle(
+                            cornerStyle = CardCornerStyle.LastInList
+                        )
                     )
                     Spacer(Modifier.height(4.dp))
                 }

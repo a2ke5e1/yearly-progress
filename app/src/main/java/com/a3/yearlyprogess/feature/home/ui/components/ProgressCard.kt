@@ -1,12 +1,7 @@
 package com.a3.yearlyprogess.feature.home.ui.components
 
-
 import android.icu.text.NumberFormat
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,55 +20,65 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.a3.yearlyprogess.core.ui.interaction.PressAnimationConfig
+import com.a3.yearlyprogess.core.ui.interaction.applyPressGesture
+import com.a3.yearlyprogess.core.ui.interaction.rememberPressInteractionState
+import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.core.util.ProgressSettings
 import com.a3.yearlyprogess.core.util.TimePeriod
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import kotlinx.coroutines.delay
 
-// Data class for ProgressCard style
 data class ProgressCardStyle(
     val cardHeight: Dp,
     val cardPadding: Dp,
-    val cornerRadiusDefault: Dp,
-    val cornerRadiusPressed: Dp,
-    val progressBarColor: androidx.compose.ui.graphics.Color,
-    val backgroundColor: androidx.compose.ui.graphics.Color,
-    val labelTextStyle: androidx.compose.ui.text.TextStyle,
-    val titleTextStyle: androidx.compose.ui.text.TextStyle,
-    val progressTextStyle: androidx.compose.ui.text.TextStyle,
-    val durationTextStyle: androidx.compose.ui.text.TextStyle,
-    val cornerAnimationSpec: TweenSpec<Dp>
+    val progressBarColor: Color,
+    val backgroundColor: Color,
+    val labelTextStyle: TextStyle,
+    val titleTextStyle: TextStyle,
+    val progressTextStyle: TextStyle,
+    val durationTextStyle: TextStyle,
+    val cornerStyle: CardCornerStyle,
+    val pressConfig: PressAnimationConfig
 )
 
-// Defaults factory, @Composable to access MaterialTheme safely
 object ProgressCardDefaults {
+
     @Composable
-    fun progressCardStyle(): ProgressCardStyle = ProgressCardStyle(
-        cardHeight = 160.dp,
-        cardPadding = 18.dp,
-        cornerRadiusDefault = 16.dp,
-        cornerRadiusPressed = 32.dp,
-        progressBarColor = MaterialTheme.colorScheme.primaryContainer,
-        backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-        labelTextStyle = MaterialTheme.typography.labelSmall.copy(
+    fun progressCardStyle(
+        cardHeight: Dp = 160.dp,
+        cardPadding: Dp = 18.dp,
+        progressBarColor: Color = MaterialTheme.colorScheme.primaryContainer,
+        backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+        labelTextStyle: TextStyle = MaterialTheme.typography.labelSmall.copy(
             color = MaterialTheme.colorScheme.onSurface
         ),
-        titleTextStyle = MaterialTheme.typography.titleMedium.copy(
+        titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(
             color = MaterialTheme.colorScheme.onSurface
         ),
-        progressTextStyle = MaterialTheme.typography.displaySmall.copy(
+        progressTextStyle: TextStyle = MaterialTheme.typography.displaySmall.copy(
             color = MaterialTheme.colorScheme.onPrimaryContainer
         ),
-        durationTextStyle = MaterialTheme.typography.bodySmall.copy(
+        durationTextStyle: TextStyle = MaterialTheme.typography.bodySmall.copy(
             color = MaterialTheme.colorScheme.onSurface
         ),
-        cornerAnimationSpec = TweenSpec(
-            durationMillis = 300,
-            easing = FastOutSlowInEasing
-        )
+        cornerStyle: CardCornerStyle = CardCornerStyle.Default,
+        pressConfig: PressAnimationConfig = PressAnimationConfig()
+    ): ProgressCardStyle = ProgressCardStyle(
+        cardHeight = cardHeight,
+        cardPadding = cardPadding,
+        progressBarColor = progressBarColor,
+        backgroundColor = backgroundColor,
+        labelTextStyle = labelTextStyle,
+        titleTextStyle = titleTextStyle,
+        progressTextStyle = progressTextStyle,
+        durationTextStyle = durationTextStyle,
+        cornerStyle = cornerStyle,
+        pressConfig = pressConfig
     )
 }
 
@@ -85,13 +89,13 @@ fun ProgressCard(
     settings: ProgressSettings = ProgressSettings(),
     decimals: Int = 13,
     refreshInterval: Long = 1L,
-    style: ProgressCardStyle = ProgressCardDefaults.progressCardStyle()
+    style: ProgressCardStyle = ProgressCardDefaults.progressCardStyle(),
 ) {
     val progressUtil = remember { YearlyProgressUtil(settings) }
     var startTime by remember { mutableStateOf(progressUtil.calculateStartTime(timePeriod)) }
     var endTime by remember { mutableStateOf(progressUtil.calculateEndTime(timePeriod)) }
 
-     val duration = (endTime - startTime) / 1000
+    val duration = (endTime - startTime) / 1000
 
     var progress by remember { mutableStateOf(progressUtil.calculateProgress(startTime, endTime)) }
 
@@ -109,34 +113,25 @@ fun ProgressCard(
         NumberFormat.getNumberInstance(settings.uLocale).format(duration)
     }
 
-    // Press state and animated corner radius
-    var pressed by remember { mutableStateOf(false) }
-    val cornerRadius: Dp by animateDpAsState(
-        targetValue = if (pressed) style.cornerRadiusPressed else style.cornerRadiusDefault,
-        animationSpec = style.cornerAnimationSpec
-    )
+    val pressState = rememberPressInteractionState(style.pressConfig)
+    val animatedCorners = pressState.animateCorners(default = style.cornerStyle)
 
     Box(
         modifier = modifier
             .height(style.cardHeight)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(cornerRadius))
+            .clip(style.cornerStyle.toAnimatedShape(animatedCorners))
             .background(style.backgroundColor)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        pressed = true
-                        tryAwaitRelease()
-                        pressed = false
-                    }
-                )
-            }
+            .applyPressGesture(pressState)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth((progress / 100).toFloat().coerceIn(0f, 1f))
-                .background(style.progressBarColor, shape = RoundedCornerShape(style.cornerRadiusDefault))
+                .background(
+                    style.progressBarColor,
+                    shape = style.cornerStyle.toShape()
+                )
                 .align(Alignment.CenterStart)
         )
 
@@ -175,4 +170,3 @@ fun ProgressCard(
         }
     }
 }
-
