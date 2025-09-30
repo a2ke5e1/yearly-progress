@@ -88,13 +88,17 @@ fun ProgressCard(
     style: ProgressCardStyle = ProgressCardDefaults.progressCardStyle()
 ) {
     val progressUtil = remember { YearlyProgressUtil(settings) }
-    val startTime = progressUtil.calculateStartTime(timePeriod)
-    val endTime = progressUtil.calculateEndTime(timePeriod)
-    val duration = (endTime - startTime) / 1000
+    var startTime by remember { mutableStateOf(progressUtil.calculateStartTime(timePeriod)) }
+    var endTime by remember { mutableStateOf(progressUtil.calculateEndTime(timePeriod)) }
+
+     val duration = (endTime - startTime) / 1000
 
     var progress by remember { mutableStateOf(progressUtil.calculateProgress(startTime, endTime)) }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(progressUtil.calculateStartTime(timePeriod), progressUtil.calculateEndTime(timePeriod)) {
+        startTime = progressUtil.calculateStartTime(timePeriod)
+        endTime = progressUtil.calculateEndTime(timePeriod)
+
         while (true) {
             progress = progressUtil.calculateProgress(startTime, endTime)
             delay(refreshInterval)

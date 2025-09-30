@@ -72,10 +72,9 @@ class YearlyProgressUtil(private val settings: ProgressSettings = ProgressSettin
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH),
-                    0,
-                    0,
-                    0,
+                    0, 0, 0
                 )
+                cal.set(Calendar.MILLISECOND, 0) // reset ms
                 cal.timeInMillis
             }
 
@@ -92,11 +91,13 @@ class YearlyProgressUtil(private val settings: ProgressSettings = ProgressSettin
 
             TimePeriod.MONTH -> {
                 cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, 0, 0)
+                cal.set(Calendar.MILLISECOND, 0)
                 cal.timeInMillis
             }
 
             TimePeriod.YEAR -> {
                 cal.set(cal.get(Calendar.YEAR), 0, 1, 0, 0, 0)
+                cal.set(Calendar.MILLISECOND, 0)
                 cal.timeInMillis
             }
         }
@@ -110,10 +111,9 @@ class YearlyProgressUtil(private val settings: ProgressSettings = ProgressSettin
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH) + 1,
-                    0,
-                    0,
-                    0,
+                    0, 0, 0
                 )
+                cal.set(Calendar.MILLISECOND, 0)
                 cal.timeInMillis
             }
 
@@ -124,15 +124,18 @@ class YearlyProgressUtil(private val settings: ProgressSettings = ProgressSettin
 
             TimePeriod.MONTH -> {
                 cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, 1, 0, 0, 0)
+                cal.set(Calendar.MILLISECOND, 0)
                 cal.timeInMillis
             }
 
             TimePeriod.YEAR -> {
                 cal.set(cal.get(Calendar.YEAR) + 1, 0, 1, 0, 0, 0)
+                cal.set(Calendar.MILLISECOND, 0)
                 cal.timeInMillis
             }
         }
     }
+
 
     fun getMonthName(monthNumber: Int): String {
         val cal = Calendar.getInstance(locale())
