@@ -7,7 +7,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 
 data class PressAnimationConfig(
-    val pressedRadiusModifier: Dp = 8.dp, // Amount to add when pressed
+    val pressedRadius: Dp = 16.dp, // Amount to add when pressed
     val animationSpec: AnimationSpec<Dp> = TweenSpec(
         durationMillis = 300,
         easing = FastOutSlowInEasing
@@ -48,28 +47,27 @@ class PressInteractionState(
 
     @Composable
     fun animateCorners(default: CardCornerStyle = CardCornerStyle.Default): AnimatedCorners {
-        val modifier = if (isPressed) config.pressedRadiusModifier else 0.dp
 
         val topStart by animateDpAsState(
-            targetValue = default.topStart + modifier,
+            targetValue = if (isPressed) config.pressedRadius else default.topStart,
             animationSpec = config.animationSpec,
             label = "topStart"
         )
 
         val topEnd by animateDpAsState(
-            targetValue = default.topEnd + modifier,
+            targetValue = if (isPressed) config.pressedRadius else default.topEnd,
             animationSpec = config.animationSpec,
             label = "topEnd"
         )
 
         val bottomStart by animateDpAsState(
-            targetValue = default.bottomStart + modifier,
+            targetValue = if (isPressed) config.pressedRadius else default.bottomStart,
             animationSpec = config.animationSpec,
             label = "bottomStart"
         )
 
         val bottomEnd by animateDpAsState(
-            targetValue = default.bottomEnd + modifier,
+            targetValue = if (isPressed) config.pressedRadius else default.bottomEnd,
             animationSpec = config.animationSpec,
             label = "bottomEnd"
         )
