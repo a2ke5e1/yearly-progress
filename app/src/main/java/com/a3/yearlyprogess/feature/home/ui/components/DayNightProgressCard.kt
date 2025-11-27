@@ -51,12 +51,12 @@ object DayNightCardDefaults {
 fun DayNightProgressCard(
     modifier: Modifier = Modifier,
     settings: ProgressSettings = ProgressSettings(),
-    decimals: Int = 13,
     refreshInterval: Long = 1L,
     sunriseSunsetList: List<SunriseSunset>,
     dayLight: Boolean,
     style: ProgressCardStyle = if (dayLight) DayNightCardDefaults.dayStyle() else DayNightCardDefaults.nightStyle(),
 ) {
+    val decimals = settings.decimalDigits.coerceIn(0, 13)
     val progressUtil = remember { YearlyProgressUtil(settings) }
     val (startTime, endTime) = remember(sunriseSunsetList, dayLight) {
         getStartAndEndTime(dayLight, sunriseSunsetList)
@@ -102,8 +102,9 @@ fun DayNightProgressCard(
                 .fillMaxWidth((progress / 100).toFloat().coerceIn(0f, 1f))
                 .background(
                     style.progressBarColor,
-                    shape = style.cornerStyle.toShape()
+                    shape = animatedCorners.toShape() // ← Use animated shape!
                 )
+                .clip(animatedCorners.toShape()) // ← Also clip to match
                 .align(Alignment.CenterStart)
         )
 

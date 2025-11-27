@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_dynamic_background_color">@android:color/system_neutral2_50</color>
+    <color name="widget_dynamic_background_low_color">@android:color/system_neutral2_100</color>
+    <color name="widget_dynamic_primary_color">@android:color/system_accent1_600</color>
+    <color name="widget_dynamic_secondary_color">@android:color/system_neutral1_400</color>
+    <color name="widget_dynamic_accent_color">@android:color/system_accent3_600</color>
+    <color name="widget_dynamic_progress_bar_background">@android:color/system_neutral2_200</color>
+
+</resources>

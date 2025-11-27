@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="app_calendar_type_values" translatable="false">
+        <item>default</item>
+        <item>gregorian</item>
+        <item>buddhist</item>
+        <item>chinese</item>
+        <item>coptic</item>
+        <item>dangi</item>
+        <item>ethiopic</item>
+        <item>ethiopic-amete-alem</item>
+        <item>hebrew</item>
+        <item>indian</item>
+        <item>islamic</item>
+        <item>islamic-civil</item>
+        <item>islamic-tbla</item>
+        <item>islamic-umalqura</item>
+        <item>islamic-rgsa</item>
+        <item>iso8601</item>
+        <item>japanese</item>
+        <item>persian</item>
+        <item>roc</item>
+    </string-array>
+</resources>

@@ -20,10 +20,12 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.a3.yearlyprogess.R
 
 data class BottomNavItem(
     val route: Destination,
@@ -33,9 +35,33 @@ data class BottomNavItem(
 )
 
 @Composable
+fun getBottomNavItems(): List<BottomNavItem> {
+    return listOf(
+        BottomNavItem(
+            Destination.Home,
+            stringResource(R.string.progress),
+            { Icon(Icons.Rounded.BarChart, contentDescription = "Progress") },
+            { Icon(Icons.Rounded.BarChart, contentDescription = "Progress") }
+        ),
+        BottomNavItem(
+            Destination.Widgets,
+            stringResource(R.string.widgets),
+            { Icon(Icons.Rounded.Widgets, contentDescription = "Widgets") },
+            { Icon(Icons.Rounded.Widgets, contentDescription = "Widgets") }
+        ),
+        BottomNavItem(
+            Destination.Events,
+            stringResource(R.string.events),
+            { Icon(Icons.Filled.Event, contentDescription = "Events") },
+            { Icon(Icons.Filled.Event, contentDescription = "Events") }
+        ),
+    )
+}
+
+@Composable
 fun BottomNavigationBar(
     navController: NavHostController,
-    items: List<NavItem> = appNavItems
+    items: List<BottomNavItem> = getBottomNavItems()
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

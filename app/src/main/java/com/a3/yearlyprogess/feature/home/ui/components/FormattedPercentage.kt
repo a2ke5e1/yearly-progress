@@ -2,6 +2,7 @@ package com.a3.yearlyprogess.feature.home.ui.components
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -14,6 +15,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun FormattedPercentage(
+    modifier: Modifier = Modifier,
     value: Double,
     digits: Int = 2,
     style: TextStyle
@@ -30,7 +32,7 @@ fun FormattedPercentage(
     val annotatedString = buildAnnotatedString {
         if (dotPos != -1) {
             // Integer part bold
-            append(formattedNumber.substring(0, dotPos))
+            append(formattedNumber.take(dotPos))
             addStyle(
                 style = SpanStyle(fontWeight = FontWeight.Bold),
                 start = 0,
@@ -45,7 +47,7 @@ fun FormattedPercentage(
             )
         } else {
             // Whole number bold
-            append(formattedNumber.substring(0, formattedNumber.length - 1))
+            append(formattedNumber.dropLast(1))
             addStyle(
                 style = SpanStyle(fontWeight = FontWeight.Bold),
                 start = 0,
@@ -61,5 +63,5 @@ fun FormattedPercentage(
         }
     }
 
-    Text(text = annotatedString, style = style)
+    Text(text = annotatedString, style = style , modifier = modifier)
 }

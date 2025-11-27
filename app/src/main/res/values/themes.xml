@@ -12,4 +12,42 @@
         <item name="postSplashScreenTheme">@style/Theme.YearlyProgress</item>
     </style>
 
+
+    <style name="WidgetTheme.Default" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_default_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_default_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_default_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_default_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_default_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Green" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_green_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_green_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_green_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_green_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_green_accent_color</item>
+    </style>
+
+
+
+
+
+
+    <style name="Theme.YearlyProgress.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <!-- Radius of the outer bound of widgets to make the rounded corners -->
+        <item name="appWidgetRadius">16dp</item>
+        <!--
+        Radius of the inner view's bound of widgets to make the rounded corners.
+        It needs to be 8dp or less than the value of appWidgetRadius
+        -->
+        <item name="appWidgetInnerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.YearlyProgress.AppWidgetContainer" parent="Theme.YearlyProgress.AppWidgetContainerParent">
+        <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
+        <item name="appWidgetPadding">16dp</item>
+    </style>
+
+
 </resources>

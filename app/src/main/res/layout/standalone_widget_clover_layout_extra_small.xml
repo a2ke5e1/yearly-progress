@@ -1,0 +1,79 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:theme="@style/Theme.YearlyProgress.AppWidgetContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <include
+        layout="@layout/standalone_clover_progress_bar_containers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        style="@style/Widget.YearlyProgress.AppWidget.Container"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_height="90dp">
+
+
+        <LinearLayout
+            android:id="@+id/topContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/widgetType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:textSize="@dimen/standalone_clover_extra_small_widget_text_size_widget_type"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/widgetCurrentValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/standalone_clover_extra_small_widget_text_size_widget_current_value"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/bottomContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/widgetProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/standalone_clover_extra_small_widget_text_size_widget_progress" />
+
+            <TextView
+                android:id="@+id/widgetDaysLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:textSize="@dimen/standalone_clover_extra_small_widget_text_size_widget_days_left"
+                android:textStyle="normal"
+                tools:text="112d left" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>
+

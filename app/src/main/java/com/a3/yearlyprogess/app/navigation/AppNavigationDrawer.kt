@@ -14,7 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun AppNavigationDrawer(
     navController: NavHostController,
-    items: List<NavItem> = appNavItems,
+    items: List<BottomNavItem> = getBottomNavItems(),
     content: @Composable () -> Unit
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--
+    Having themes.xml for v31 variant because @android:dimen/system_app_widget_background_radius
+     and @android:dimen/system_app_widget_internal_padding requires API level 31
+    -->
+    <style name="Theme.YearlyProgress.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="appWidgetRadius">@android:dimen/system_app_widget_background_radius</item>
+        <item name="appWidgetInnerRadius">@android:dimen/system_app_widget_inner_radius</item>
+    </style>
+
+
+    <style name="WidgetTheme.Dynamic" parent="WidgetTheme.Default">
+        <item name="widgetBackgroundColor">@color/widget_dynamic_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_dynamic_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_dynamic_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_dynamic_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_dynamic_accent_color</item>
+    </style>
+</resources>

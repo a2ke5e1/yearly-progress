@@ -16,7 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun AppNavigationRail(
     navController: NavHostController,
-    items: List<NavItem> = appNavItems
+    items: List<BottomNavItem> = getBottomNavItems()
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

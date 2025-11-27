@@ -2,6 +2,8 @@ package com.a3.yearlyprogess.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.a3.yearlyprogess.core.domain.model.AppSettings
+import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.core.util.Resource
 import com.a3.yearlyprogess.domain.model.Location
@@ -11,9 +13,11 @@ import com.a3.yearlyprogess.domain.repository.SunriseSunsetRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -35,8 +39,16 @@ sealed class LocationState {
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val sunriseSunsetRepository: SunriseSunsetRepository,
-    private val locationRepository: LocationRepository
+    private val locationRepository: LocationRepository,
+    private val appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
+
+    val settings: StateFlow<AppSettings> = appSettingsRepository.appSettings
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = AppSettings()
+        )
 
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()

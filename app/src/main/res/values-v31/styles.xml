@@ -1,0 +1,19 @@
+<resources>
+
+    <style name="Widget.YearlyProgress.AppWidget.Container" parent="android:Widget">
+        <item name="android:id">@android:id/background</item>
+        <item name="android:padding">?attr/appWidgetPadding</item>
+        <item name="android:clipToOutline">true</item>
+    </style>
+
+    <style name="Widget.YearlyProgress.AppWidget.InnerView" parent="android:Widget">
+        <item name="android:padding">?attr/appWidgetPadding</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:clipToOutline">true</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Dynamic" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_dynamic_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_dynamic_progress_bar_background</item>
+    </style>
+</resources>

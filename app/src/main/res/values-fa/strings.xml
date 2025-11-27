@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">پیشرفت سالانه</string>
+
+    <!-- Destination Labels -->
+    <string name="progress">پیشرفت</string>
+    <string name="widgets">ابزارک</string>
+    <string name="about">درباره</string>
+    <string name="settings">تنظیمات</string>
+    <string name="events">رویدادها</string>
+
+
+    <string name="share">اشتراک گذاری</string>
+    <string name="week">هفته</string>
+
+</resources>

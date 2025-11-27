@@ -1,10 +1,18 @@
 package com.a3.yearlyprogess.core.util
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.icu.util.ULocale
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
+import android.text.style.SuperscriptSpan
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.Locale
 
 enum class TimePeriod {
     DAY, WEEK, MONTH, YEAR,
@@ -19,9 +27,10 @@ data class ProgressSettings(
     val uLocale: ULocale = ULocale.getDefault(),
     val calculationType: CalculationType = CalculationType.ELAPSED,
     val weekStartDay: Int = Calendar.SUNDAY,
+    val decimalDigits: Int = 2,
 )
 
-class YearlyProgressUtil(private val settings: ProgressSettings = ProgressSettings()) {
+class YearlyProgressUtil(val settings: ProgressSettings = ProgressSettings()) {
     private fun locale(): ULocale = settings.uLocale
 
     fun calculateProgress(startTime: Long, endTime: Long): Double {
@@ -79,13 +88,22 @@ class YearlyProgressUtil(private val settings: ProgressSettings = ProgressSettin
             }
 
             TimePeriod.WEEK -> {
-                cal.set(Calendar.HOUR_OF_DAY, 0)
-                cal.clear(Calendar.MINUTE)
-                cal.clear(Calendar.SECOND)
-                cal.clear(Calendar.MILLISECOND)
-
+                // This logic correctly finds the beginning of the current week
                 cal.firstDayOfWeek = settings.weekStartDay
-                cal.set(Calendar.DAY_OF_WEEK, cal.firstDayOfWeek)
+                cal.set(Calendar.DAY_OF_WEEK, settings.weekStartDay)
+
+                // Reset time to the beginning of the day (midnight)
+                cal.set(Calendar.HOUR_OF_DAY, 0)
+                cal.set(Calendar.MINUTE, 0)
+                cal.set(Calendar.SECOND, 0)
+                cal.set(Calendar.MILLISECOND, 0)
+
+                // If today is before the weekStartDay (e.g., today is Mon, start is Wed),
+                // the calendar will have jumped to the *next* week. We need to go back one week.
+                if (cal.timeInMillis > System.currentTimeMillis()) {
+                    cal.add(Calendar.WEEK_OF_YEAR, -1)
+                }
+
                 cal.timeInMillis
             }
 
@@ -118,8 +136,17 @@ class YearlyProgressUtil(private val settings: ProgressSettings = ProgressSettin
             }
 
             TimePeriod.WEEK -> {
+                // Get the corrected start time
                 val startTime = calculateStartTime(timePeriod)
-                startTime + (7L * 24 * 60 * 60 * 1000) // exactly 1 week
+
+                // Create a new calendar instance from the start time
+                val endCal = Calendar.getInstance(locale())
+                endCal.timeInMillis = startTime
+
+                // Safely add exactly one week
+                endCal.add(Calendar.WEEK_OF_YEAR, 1)
+
+                endCal.timeInMillis
             }
 
             TimePeriod.MONTH -> {
@@ -160,5 +187,54 @@ class YearlyProgressUtil(private val settings: ProgressSettings = ProgressSettin
         val cal = Calendar.getInstance(locale())
         cal.set(Calendar.DAY_OF_WEEK, dayOfWeek)
         return DateFormat.getPatternInstance(DateFormat.ABBR_WEEKDAY, locale()).format(cal.time)
+    }
+
+    companion object {
+        fun Int.formattedDay(yp: YearlyProgressUtil): SpannableString {
+            val ordinalSuffix = yp.getOrdinalSuffix(this)
+
+            val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
+            numberFormat.maximumFractionDigits = 0
+            val formattedNumber = numberFormat.format(this)
+
+            val stringBuilder = StringBuilder()
+            stringBuilder.append(formattedNumber)
+            stringBuilder.append(ordinalSuffix)
+
+            val spannable = SpannableString(stringBuilder.toString())
+            spannable.setSpan(
+                SuperscriptSpan(),
+                spannable.length - 2,
+                spannable.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+
+            spannable.setSpan(
+                RelativeSizeSpan(0.5f),
+                spannable.length - 2,
+                spannable.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+
+            return spannable
+        }
+
+        fun Int.toFormattedTimePeriod(yp: YearlyProgressUtil, timePeriod: TimePeriod): SpannableString {
+            return when (timePeriod) {
+                TimePeriod.DAY -> this.formattedDay(yp)
+                TimePeriod.MONTH -> SpannableString(yp.getMonthName(this))
+                TimePeriod.WEEK -> SpannableString(yp.getWeekDayName(this))
+                else -> {
+                    val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
+                    numberFormat.maximumFractionDigits = 0
+
+                    // Don't add commas to the number
+                    numberFormat.isGroupingUsed = false
+
+                    val formattedNumber = numberFormat.format(this)
+                    SpannableString(formattedNumber)
+                }
+            }
+        }
     }
 }

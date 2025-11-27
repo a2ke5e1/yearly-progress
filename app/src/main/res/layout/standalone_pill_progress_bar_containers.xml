@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/widgetContainerDefault"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:src="@drawable/background_pill_00"
+        android:theme="@style/WidgetTheme.Default" />
+
+
+    <ImageView
+        android:id="@+id/widgetContainerGreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:src="@drawable/background_pill_00"
+        android:theme="@style/WidgetTheme.Green" />
+
+    <ImageView
+        android:id="@+id/widgetContainerDynamic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:src="@drawable/background_pill_00"
+        android:theme="@style/WidgetTheme.Dynamic" />
+
+</LinearLayout>

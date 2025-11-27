@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WidgetTheme">
+        <attr name="widgetBackgroundColor" format="color" />
+        <attr name="widgetBackgroundLowColor" format="color" />
+        <attr name="widgetPrimaryColor" format="color" />
+        <attr name="widgetSecondaryColor" format="color" />
+        <attr name="widgetAccentColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="AppWidgetAttrs">
+        <attr name="appWidgetPadding" format="dimension" />
+        <attr name="appWidgetInnerRadius" format="dimension" />
+        <attr name="appWidgetRadius" format="dimension" />
+    </declare-styleable>
+</resources>

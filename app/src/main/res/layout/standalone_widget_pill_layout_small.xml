@@ -1,0 +1,83 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
+
+
+    <include
+        layout="@layout/standalone_pill_progress_bar_containers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        style="@style/Widget.YearlyProgress.AppWidget.Container"
+        android:layout_width="90dp"
+        android:layout_gravity="center"
+        android:layout_height="100dp">
+
+
+        <LinearLayout
+            android:id="@+id/topContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="end"
+            android:paddingStart="18dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/widgetType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:textSize="@dimen/standalone_pill_small_widget_text_size_widget_type"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/widgetCurrentValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:textSize="@dimen/standalone_pill_small_widget_text_size_widget_current_value"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/bottomContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:gravity="end"
+            android:paddingEnd="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/widgetProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/standalone_pill_small_widget_text_size_widget_progress" />
+
+            <TextView
+                android:id="@+id/widgetDaysLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:textSize="@dimen/standalone_pill_small_widget_text_size_widget_days_left"
+                android:layout_marginEnd="2dp"
+                android:textStyle="normal"
+                tools:text="112d left" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>
+

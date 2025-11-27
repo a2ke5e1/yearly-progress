@@ -34,6 +34,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
+    val settings by viewModel.settings.collectAsState()
     val shouldShowPermissionDialog by viewModel.shouldShowPermissionDialog.collectAsState()
 
     val locationPermissionState = rememberPermissionState(
@@ -69,7 +70,8 @@ fun HomeScreen(
                 timePeriod = TimePeriod.YEAR,
                 style = ProgressCardDefaults.progressCardStyle(
                     cornerStyle = CardCornerStyle.FirstInList
-                )
+                ),
+                settings = settings.progressSettings
             )
         }
         item {
@@ -77,7 +79,8 @@ fun HomeScreen(
                 timePeriod = TimePeriod.MONTH,
                 style = ProgressCardDefaults.progressCardStyle(
                     cornerStyle = CardCornerStyle.MiddleInList
-                )
+                ),
+                settings = settings.progressSettings
             )
         }
         item {
@@ -85,7 +88,9 @@ fun HomeScreen(
                 timePeriod = TimePeriod.WEEK,
                 style = ProgressCardDefaults.progressCardStyle(
                     cornerStyle = CardCornerStyle.MiddleInList
-                )
+                ),
+                settings = settings.progressSettings
+
             )
         }
         item {
@@ -97,7 +102,9 @@ fun HomeScreen(
                         is HomeUiState.LocationRequired -> CardCornerStyle.MiddleInList
                         else -> CardCornerStyle.LastInList
                     }
-                )
+                ),
+                settings = settings.progressSettings
+
             )
         }
 
@@ -139,7 +146,8 @@ fun HomeScreen(
                         dayLight = true,
                         style = ProgressCardDefaults.progressCardStyle(
                             cornerStyle = CardCornerStyle.MiddleInList
-                        )
+                        ),
+                        settings = settings.progressSettings
                     )
                 }
                 item {
@@ -148,7 +156,8 @@ fun HomeScreen(
                         dayLight = false,
                         style = ProgressCardDefaults.progressCardStyle(
                             cornerStyle = CardCornerStyle.LastInList
-                        )
+                        ),
+                        settings = settings.progressSettings
                     )
                     Spacer(Modifier.height(4.dp))
                 }

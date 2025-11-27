@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Yearly Progress</string>
+
+    <!-- Destination Labels -->
+    <string name="progress">Progresso</string>
+    <string name="widgets">Widget</string>
+    <string name="about">A riguardo</string>
+    <string name="settings">Impostazioni</string>
+    <string name="events">Eventi</string>
+
+    <string name="share">Condividi</string>
+    <string name="week">هفته</string>
+</resources>

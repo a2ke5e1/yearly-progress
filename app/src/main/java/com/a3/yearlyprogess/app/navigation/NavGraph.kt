@@ -1,76 +1,67 @@
 package com.a3.yearlyprogess.app.navigation
 
-
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.a3.yearlyprogess.feature.events.ui.EventDetailScreen
-import com.a3.yearlyprogess.feature.home.ui.HomeScreen
-
-//import com.a3.yearlyprogess.feature.events.ui.EventListScreen
-//import com.a3.yearlyprogess.feature.events.ui.EventDetailScreen
-//import com.a3.yearlyprogess.feature.settings.ui.SettingsScreen
-//import com.a3.yearlyprogess.feature.widgets.ui.WidgetShowcaseScreen
+import com.a3.yearlyprogess.app.ui.MainScaffold
+import com.a3.yearlyprogess.feature.events.ui.EventCreateScreen
+import com.a3.yearlyprogess.feature.events.ui.ImportEventsScreen
+import com.a3.yearlyprogess.feature.settings.ui.SettingsScreen
 
 @Composable
 fun AppNavGraph(
-    navController: NavHostController, modifier: Modifier = Modifier
+    navController: NavHostController,
+    windowWidthSizeClass: WindowWidthSizeClass
 ) {
     NavHost(
         navController = navController,
-        startDestination = Destination.Home,
-        modifier = modifier
+        startDestination = Destination.MainFlow,
+        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
+        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
+        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) },
+        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) }
+
     ) {
-        // Home
-        composable<Destination.Home> {
-            HomeScreen(
-//                onNavigateEvents = { navController.navigate(Destination.Events.route) },
-//                onNavigateSettings = { navController.navigate(Destination.Settings.route) },
-//                onNavigateWidgets = { navController.navigate(Destination.Widgets.route) }
+        composable<Destination.MainFlow> {
+            MainScaffold(
+                parentNavController = navController,
+                windowWidthSizeClass = windowWidthSizeClass
             )
         }
 
-        // Events
-        composable<Destination.Events> {
-            Column {
-                Text("EventListScreen")
-                Button(onClick = {
-                    navController.navigate(Destination.EventDetail("test route"))
-                }) { Text("test route") }
-
-                Button(onClick = {
-                    navController.navigate(Destination.EventDetail("test route 2"))
-                }) { Text("test route 2") }
-            }
-//            EventListScreen(
-//                onEventClick = { eventId ->
-//                    navController.navigate(Destination.EventDetail.createRoute(eventId))
-//                }
-//            )
-        }
-
-        // Event Detail with argument
         composable<Destination.EventDetail> { backStackEntry ->
             val args = backStackEntry.toRoute<Destination.EventDetail>()
-            EventDetailScreen(eventName = args.editId)
+//            EventDetailScreen(eventName = args.editId)
+            EventCreateScreen(
+                eventId = args.editId,  onNavigateUp = {
+                    navController.navigateUp()
+                }
+            )
         }
 
-        // Widgets
-        composable<Destination.Widgets> {
-            Text("WidgetShowcaseScreen")
-//            WidgetShowcaseScreen()
+        composable<Destination.EventCreate> {
+            EventCreateScreen(
+                onNavigateUp = {
+                    navController.navigateUp()
+                }
+            )
         }
 
-        // Settings
         composable<Destination.Settings> {
-            Text("SettingsScreen")
-//            SettingsScreen()
+            SettingsScreen(
+                navController =  navController,
+            )
+        }
+
+        composable<Destination.ImportEvents> {
+            ImportEventsScreen(
+                navController =  navController,
+            )
         }
     }
 }

@@ -1,0 +1,35 @@
+<resources>
+
+    <style name="Widget.YearlyProgress.AppWidget.Container" parent="android:Widget">
+        <item name="android:id">@android:id/background</item>
+        <item name="android:padding">?attr/appWidgetPadding</item>
+    </style>
+
+    <style name="Widget.YearlyProgress.AppWidget.InnerView" parent="android:Widget">
+        <item name="android:padding">?attr/appWidgetPadding</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="WidgetProgressBarBase" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminate">false</item>
+        <item name="android:max">100</item>
+        <item name="android:progressDrawable">@drawable/rounded_progress_bar</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Default" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_default_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_default_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Green" parent="WidgetProgressBarBase">
+    <item name="android:progressTint">@color/widget_green_primary_color</item>
+    <item name="android:progressBackgroundTint">@color/widget_green_progress_bar_background</item>
+</style>
+
+
+
+
+
+</resources>

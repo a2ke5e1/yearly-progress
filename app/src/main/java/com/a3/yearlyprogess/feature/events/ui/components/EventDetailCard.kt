@@ -1,0 +1,278 @@
+package com.a3.yearlyprogess.feature.events.ui.components
+
+import android.icu.text.NumberFormat
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Event
+import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.core.ui.interaction.PressAnimationConfig
+import com.a3.yearlyprogess.core.ui.interaction.applyPressGesture
+import com.a3.yearlyprogess.core.ui.interaction.rememberPressInteractionState
+import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
+import com.a3.yearlyprogess.core.util.ProgressSettings
+import com.a3.yearlyprogess.core.util.YearlyProgressUtil
+import com.a3.yearlyprogess.core.util.formatEventDateTime
+import com.a3.yearlyprogess.core.util.toTimePeriodText
+import com.a3.yearlyprogess.feature.events.domain.model.Event
+import com.a3.yearlyprogess.feature.home.ui.components.FormattedPercentage
+import kotlinx.coroutines.delay
+
+
+data class EventDetailCardStyle(
+    val cardHeight: Dp,
+    val cardPadding: Dp,
+    val backgroundColor: Color,
+    val labelTextStyle: TextStyle,
+    val titleTextStyle: TextStyle,
+    val progressTextStyle: TextStyle,
+    val durationTextStyle: TextStyle,
+    val cornerStyle: CardCornerStyle,
+    val pressConfig: PressAnimationConfig
+)
+
+
+object EventDetailCardDefaults {
+
+    @Composable
+    fun eventDetailCardStyle(
+        cardHeight: Dp = 160.dp,
+        cardPadding: Dp = 18.dp,
+        progressBarColor: Color = MaterialTheme.colorScheme.primaryContainer,
+        backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+        labelTextStyle: TextStyle = MaterialTheme.typography.labelSmall.copy(
+            color = MaterialTheme.colorScheme.onSurface
+        ),
+        titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(
+            color = MaterialTheme.colorScheme.onSurface
+        ),
+        progressTextStyle: TextStyle = MaterialTheme.typography.bodyLarge.copy(
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+        ),
+        durationTextStyle: TextStyle = MaterialTheme.typography.bodySmall.copy(
+            color = MaterialTheme.colorScheme.onSurface
+        ),
+        cornerStyle: CardCornerStyle = CardCornerStyle.Default,
+        pressConfig: PressAnimationConfig = PressAnimationConfig()
+    ): EventDetailCardStyle = EventDetailCardStyle(
+        cardHeight = cardHeight,
+        cardPadding = cardPadding,
+        backgroundColor = backgroundColor,
+        labelTextStyle = labelTextStyle,
+        titleTextStyle = titleTextStyle,
+        progressTextStyle = progressTextStyle,
+        durationTextStyle = durationTextStyle,
+        cornerStyle = cornerStyle,
+        pressConfig = pressConfig
+    )
+}
+
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun EventDetailCard(
+    modifier: Modifier = Modifier,
+    event: Event,
+    onClick: () -> Unit,
+    isSelected: Boolean = false,
+    onLongPress: (() -> Unit)? = null,
+    settings: ProgressSettings = ProgressSettings(),
+    refreshInterval: Long = 1L,
+    style: EventDetailCardStyle = EventDetailCardDefaults.eventDetailCardStyle(),
+) {
+    val decimals = settings.decimalDigits.coerceIn(0, 2)
+    val progressUtil = remember { YearlyProgressUtil(settings) }
+    var startTime by remember { mutableLongStateOf(event.eventStartTime.time) }
+    var endTime by remember { mutableLongStateOf(event.eventEndTime.time) }
+
+    val duration = (endTime - startTime) / 1000
+
+    var progress by remember { mutableDoubleStateOf(progressUtil.calculateProgress(startTime, endTime)) }
+    var timeStatusText by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    LaunchedEffect(
+        event,
+    ) {
+        val (_start, _end) = event.nextStartAndEndTime()
+        startTime = _start
+        endTime = _end
+
+        while (true) {
+            progress = progressUtil.calculateProgress(startTime, endTime)
+
+            timeStatusText = if (System.currentTimeMillis() < _start) {
+                    val timeIn = (_start - System.currentTimeMillis()).toTimePeriodText()
+                context.getString(R.string.time_in, timeIn).replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase() else it.toString()
+                }
+            } else {
+                val timeLeft = (_end - System.currentTimeMillis()).toTimePeriodText()
+                context.getString(R.string.time_left, timeLeft)
+            }
+
+            delay(refreshInterval)
+        }
+    }
+
+    val durationFormatted = remember(duration) {
+        NumberFormat.getNumberInstance(settings.uLocale).format(duration)
+    }
+
+    val pressState = rememberPressInteractionState(style.pressConfig)
+    val animatedCorners = pressState.animateCorners(default = style.cornerStyle)
+
+    pressState.setPressed(isSelected)
+
+
+    Box(
+        modifier = modifier
+            .height(style.cardHeight)
+            .fillMaxWidth()
+            .clip(style.cornerStyle.toAnimatedShape(animatedCorners))
+            .background(if (event.backgroundImageUri == null) style.backgroundColor else MaterialTheme.colorScheme.surface)
+            .applyPressGesture(pressState, onTap = onClick, onLongPress = onLongPress)
+    ) {
+        // Background Image (if available)
+        event.backgroundImageUri?.let { imagePath ->
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imagePath)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.2f,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(style.cornerStyle.toAnimatedShape(animatedCorners))
+            )
+        }
+
+        // Content
+
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f),
+                    ) {
+                        Text(
+                            text = event.eventTitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+//                            Icon(
+//                                Icons.Filled.Event,
+//                                contentDescription = null,
+//                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+//                                modifier = Modifier.size(16.dp)
+//                            )
+                            Text(
+                                text = formatEventDateTime(
+                                    context, startTime, endTime, event.allDayEvent
+                                ),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        Text(
+                            text = timeStatusText,
+                            style = MaterialTheme.typography.bodySmall,
+                            color =  MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
+                        )
+                        if (event.eventDescription.isNotEmpty()) {
+                            Text(
+                                text = event.eventDescription.trimIndent(),
+                                overflow = TextOverflow.Ellipsis,
+                                style = MaterialTheme.typography.bodySmall,
+                                color =  MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 2
+                            )
+                        }
+                    }
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(start = 8.dp)
+                    ) {
+                        CircularWavyProgressIndicator(
+                            progress = {
+                                progress.toFloat() / 100
+                            },
+                            modifier = Modifier.size(70.dp)
+                        )
+                        FormattedPercentage(
+//                           modifier = Modifier.offset((4).dp),
+                            value = progress,
+                            digits = decimals,
+                            style = style.progressTextStyle,
+                        )
+                    }
+                }
+
+
+            }
+
+        if (isSelected) {
+            Box(
+                Modifier
+                    .matchParentSize()
+                    .background(
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                    )
+            )
+        }
+
+
+    }
+}

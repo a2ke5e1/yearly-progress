@@ -16,6 +16,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 
 data class PressAnimationConfig(
     val pressedRadius: Dp = 16.dp, // Amount to add when pressed
@@ -80,20 +86,46 @@ class PressInteractionState(
         )
     }
 
-    internal fun setPressed(pressed: Boolean) {
+    fun setPressed(pressed: Boolean) {
         _isPressed.value = pressed
     }
 }
 
 // Extension function for cleaner API
-fun Modifier.applyPressGesture(pressState: PressInteractionState): Modifier {
+fun Modifier.applyPressGesture(
+    pressState: PressInteractionState,
+    debounceTime: Long = 200L,
+    onTap: (() -> Unit)? = null,
+    onLongPress: (() -> Unit)? = null,
+): Modifier {
+    val isClickable = AtomicBoolean(true)
     return this.pointerInput(Unit) {
+        val scope = CoroutineScope(currentCoroutineContext() + Job())
         detectTapGestures(
             onPress = {
+                // Start press animation
                 pressState.setPressed(true)
-                tryAwaitRelease()
-                pressState.setPressed(false)
-            }
+
+                // Wait until user lifts finger or gesture is cancelled
+                val released = try {
+                    tryAwaitRelease()
+                } finally {
+                    pressState.setPressed(false)
+                }
+
+                // Optionally you can do something after release if needed
+            },
+            onTap = {
+                if (isClickable.getAndSet(false)) {
+                    onTap?.invoke()
+                    // Re-enable click after debounce delay
+                    scope.launch {
+                        delay(debounceTime)
+                        isClickable.set(true)
+                    }
+                }
+            },
+            onLongPress = { onLongPress?.invoke() }
         )
     }
 }

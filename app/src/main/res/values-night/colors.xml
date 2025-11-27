@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_default_background_color">#2b3035</color>
+    <color name="widget_default_background_low_color">#41474d</color>
+    <color name="widget_default_primary_color">#cce7ff</color>
+    <color name="widget_default_secondary_color">#71777b</color>
+    <color name="widget_default_accent_color">#d2bfe7</color>
+    <color name="widget_default_progress_bar_background">#4b5256</color>
+
+
+    <color name="widget_green_background_color">#2f2f2f</color>
+    <color name="widget_green_background_low_color">#464747</color>
+    <color name="widget_green_primary_color">#c1f089</color>
+    <color name="widget_green_secondary_color">#737373</color>
+    <color name="widget_green_accent_color">#a1d0ce</color>
+    <color name="widget_green_progress_bar_background">#545454</color>
+</resources>

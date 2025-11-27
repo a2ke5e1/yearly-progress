@@ -87,10 +87,10 @@ fun ProgressCard(
     modifier: Modifier = Modifier,
     timePeriod: TimePeriod,
     settings: ProgressSettings = ProgressSettings(),
-    decimals: Int = 13,
     refreshInterval: Long = 1L,
     style: ProgressCardStyle = ProgressCardDefaults.progressCardStyle(),
 ) {
+    val decimals = settings.decimalDigits.coerceIn(0, 13)
     val progressUtil = remember { YearlyProgressUtil(settings) }
     var startTime by remember { mutableStateOf(progressUtil.calculateStartTime(timePeriod)) }
     var endTime by remember { mutableStateOf(progressUtil.calculateEndTime(timePeriod)) }
@@ -130,8 +130,9 @@ fun ProgressCard(
                 .fillMaxWidth((progress / 100).toFloat().coerceIn(0f, 1f))
                 .background(
                     style.progressBarColor,
-                    shape = style.cornerStyle.toShape()
+                    shape = animatedCorners.toShape()
                 )
+                .clip(animatedCorners.toShape())
                 .align(Alignment.CenterStart)
         )
 

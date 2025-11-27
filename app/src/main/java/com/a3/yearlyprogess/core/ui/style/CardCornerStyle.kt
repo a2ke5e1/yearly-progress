@@ -35,20 +35,20 @@ data class CardCornerStyle(
         val FirstInList = CardCornerStyle(
             topStart = 16.dp,
             topEnd = 16.dp,
-            bottomStart = 8.dp,
-            bottomEnd = 8.dp
+            bottomStart =  4.dp,
+            bottomEnd = 4.dp
         )
 
         val MiddleInList = CardCornerStyle(
-            topStart = 8.dp,
-            topEnd = 8.dp,
-            bottomStart = 8.dp,
-            bottomEnd = 8.dp
+            topStart =  4.dp,
+            topEnd = 4.dp,
+            bottomStart = 4.dp,
+            bottomEnd = 4.dp
         )
 
         val LastInList = CardCornerStyle(
-            topStart = 8.dp,
-            topEnd = 8.dp,
+            topStart = 4.dp,
+            topEnd = 4.dp,
             bottomStart = 16.dp,
             bottomEnd = 16.dp
         )
