@@ -32,4 +32,420 @@
         />
 
 
+    <ProgressBar
+        android:id="@+id/widgetProgressBarOcean"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Ocean" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarSunset"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Sunset" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarPurple"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Purple" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarRose"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Rose" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarMint"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Mint" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarCoral"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Coral" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarSky"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Sky" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarForest"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Forest" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarAmber"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Amber" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarTeal"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Teal" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarLavender"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Lavender" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarCrimson"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Crimson" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarIndigo"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Indigo" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarPeach"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Peach" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarCyan"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Cyan" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarMagenta"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Magenta" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarLime"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Lime" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarRuby"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Ruby" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarSlate"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Slate" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarEmerald"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Emerald" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarFuchsia"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Fuchsia" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarYellow"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Yellow" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarViolet"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Violet" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarSteel"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Steel" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarBronze"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Bronze" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarAqua"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Aqua" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarCherry"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Cherry" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarNavy"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Navy" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarSage"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Sage" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarBurgundy"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Burgundy" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarCharcoal"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Charcoal" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarTurquoise"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Turquoise" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarMauve"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Mauve" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarGold"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Gold" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarSeafoam"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Seafoam" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarRaspberry"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Raspberry" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarMidnight"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Midnight" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarOlive"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Olive" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarSalmon"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Salmon" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarPeriwinkle"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Periwinkle" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarAutumn"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Autumn" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarGraphite"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Graphite" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarSpring"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Spring" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarBlush"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Blush" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarCobalt"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Cobalt" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarPistachio"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Pistachio" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarMocha"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Mocha" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarLilac"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Lilac" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarTangerine"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Tangerine" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarArctic"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Arctic" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarPlum"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Plum" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarHoneydew"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Honeydew" />
+
 </LinearLayout>

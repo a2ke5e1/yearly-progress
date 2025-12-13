@@ -47,6 +47,7 @@ import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.core.util.ProgressSettings
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import com.a3.yearlyprogess.core.util.formatEventDateTime
+import com.a3.yearlyprogess.core.util.formatEventTimeStatus
 import com.a3.yearlyprogess.core.util.toTimePeriodText
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 import com.a3.yearlyprogess.feature.home.ui.components.FormattedPercentage
@@ -135,15 +136,7 @@ fun EventDetailCard(
         while (true) {
             progress = progressUtil.calculateProgress(startTime, endTime)
 
-            timeStatusText = if (System.currentTimeMillis() < _start) {
-                    val timeIn = (_start - System.currentTimeMillis()).toTimePeriodText()
-                context.getString(R.string.time_in, timeIn).replaceFirstChar {
-                    if (it.isLowerCase()) it.titlecase() else it.toString()
-                }
-            } else {
-                val timeLeft = (_end - System.currentTimeMillis()).toTimePeriodText()
-                context.getString(R.string.time_left, timeLeft)
-            }
+            timeStatusText = formatEventTimeStatus(context,startTime,endTime)
 
             delay(refreshInterval)
         }

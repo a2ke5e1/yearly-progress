@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import com.a3.yearlyprogess.feature.widgets.ui.DayWidget
+import com.a3.yearlyprogess.feature.widgets.ui.EventWidget
 import com.a3.yearlyprogess.feature.widgets.ui.MonthWidget
 import com.a3.yearlyprogess.feature.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.feature.widgets.ui.YearWidget
@@ -23,6 +24,7 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
                 WeekWidget::class.java,
                 MonthWidget::class.java,
                 YearWidget::class.java,
+                EventWidget::class.java
             )
         // force widget update
 

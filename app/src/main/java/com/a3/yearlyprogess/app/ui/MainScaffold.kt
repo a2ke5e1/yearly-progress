@@ -6,7 +6,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material.icons.Icons
@@ -19,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +36,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.a3.yearlyprogess.app.navigation.AppNavigationRail
 import com.a3.yearlyprogess.app.navigation.BottomNavigationBar
 import com.a3.yearlyprogess.app.navigation.Destination
 import com.a3.yearlyprogess.app.navigation.appNavItems
@@ -121,30 +124,20 @@ fun MainScaffold(
         else -> homeScrollBehavior
     }
 
+    val topBar: @Composable () -> Unit = {
+        AppTopBar(
+            title = topBarTitle, scrollBehavior = currentScrollBehavior, onSettingsClick = {
+            // use parentNavController to open global screens
+            parentNavController.navigate(Destination.Settings)
+        }, onImportEvents = {
+            parentNavController.navigate(Destination.ImportEvents)
+        }, eventViewModel = eventViewModel, showShareButton = true
+        )
+    }
 
-    Scaffold(
-        modifier = Modifier.nestedScroll(currentScrollBehavior.nestedScrollConnection),
-        topBar = {
-            AppTopBar(
-                title = topBarTitle,
-                scrollBehavior = currentScrollBehavior,
-                onSettingsClick = {
-                    // use parentNavController to open global screens
-                    parentNavController.navigate(Destination.Settings)
-                },
-                onImportEvents = {
-                    parentNavController.navigate(Destination.ImportEvents)
-                },
-                eventViewModel = eventViewModel,
-                showShareButton = true
-            )
-        },
-        bottomBar = bottomBarContent,
-        contentWindowInsets = WindowInsets.safeDrawing,
-        floatingActionButton = fabContent
-    ) { innerPadding ->
+    val content: @Composable (innerPadding: PaddingValues) -> Unit = { innerPadding ->
         NavHost(
-            navController = mainFlowNavController, // ✅ use local controller
+            navController = mainFlowNavController,
             startDestination = Destination.Home,
             modifier = Modifier.padding(innerPadding)
         ) {
@@ -167,5 +160,48 @@ fun MainScaffold(
                 Text("Widget Screen")
             }
         }
+    }
+
+    when (windowWidthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            Scaffold(
+                modifier = Modifier.nestedScroll(currentScrollBehavior.nestedScrollConnection),
+                topBar = topBar,
+                bottomBar = bottomBarContent,
+                contentWindowInsets = WindowInsets.safeDrawing,
+                floatingActionButton = fabContent
+            ) { innerPadding ->
+                content(innerPadding)
+            }
+        }
+
+        else -> {
+            // Foldable / Tablet
+            Row(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                AppNavigationRail(navController = mainFlowNavController)
+                Scaffold(
+                    modifier = Modifier.nestedScroll(currentScrollBehavior.nestedScrollConnection),
+                    topBar = topBar,
+                    contentWindowInsets = WindowInsets.safeDrawing,
+                    floatingActionButton = fabContent
+                ) { innerPadding ->
+                    content(
+                        PaddingValues(
+                            top = innerPadding.calculateTopPadding(),
+                            bottom = innerPadding.calculateBottomPadding()
+                        )
+
+                    )
+                }
+            }
+        }
+//                    WindowWidthSizeClass.Expanded -> {
+//                        // Desktop
+//                        AppNavigationDrawer(navController) {
+//                            AppNavGraph(navController, Modifier.fillMaxSize())
+//                        }
+//                    }
     }
 }

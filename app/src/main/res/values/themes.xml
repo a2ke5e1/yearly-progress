@@ -3,7 +3,6 @@
 
     <style name="Theme.YearlyProgress" parent="android:Theme.Material.Light.NoActionBar" />
 
-
     <style name="App.SplashScreen" parent="Theme.SplashScreen">
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
@@ -12,6 +11,7 @@
         <item name="postSplashScreenTheme">@style/Theme.YearlyProgress</item>
     </style>
 
+    <!-- Widget Themes -->
 
     <style name="WidgetTheme.Default" parent="@style/Theme.YearlyProgress">
         <item name="widgetBackgroundColor">@color/widget_default_background_color</item>
@@ -29,10 +29,423 @@
         <item name="widgetAccentColor">@color/widget_green_accent_color</item>
     </style>
 
+    <style name="WidgetTheme.Ocean" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_ocean_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_ocean_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_ocean_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_ocean_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_ocean_accent_color</item>
+    </style>
 
+    <style name="WidgetTheme.Sunset" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_sunset_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_sunset_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_sunset_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_sunset_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_sunset_accent_color</item>
+    </style>
 
+    <style name="WidgetTheme.Purple" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_purple_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_purple_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_purple_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_purple_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_purple_accent_color</item>
+    </style>
 
+    <style name="WidgetTheme.Rose" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_rose_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_rose_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_rose_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_rose_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_rose_accent_color</item>
+    </style>
 
+    <style name="WidgetTheme.Mint" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_mint_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_mint_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_mint_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_mint_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_mint_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Coral" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_coral_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_coral_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_coral_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_coral_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_coral_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Sky" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_sky_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_sky_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_sky_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_sky_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_sky_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Forest" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_forest_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_forest_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_forest_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_forest_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_forest_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Amber" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_amber_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_amber_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_amber_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_amber_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_amber_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Teal" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_teal_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_teal_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_teal_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_teal_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_teal_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Lavender" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_lavender_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_lavender_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_lavender_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_lavender_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_lavender_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Crimson" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_crimson_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_crimson_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_crimson_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_crimson_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_crimson_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Indigo" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_indigo_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_indigo_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_indigo_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_indigo_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_indigo_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Peach" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_peach_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_peach_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_peach_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_peach_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_peach_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Cyan" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_cyan_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_cyan_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_cyan_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_cyan_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_cyan_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Magenta" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_magenta_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_magenta_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_magenta_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_magenta_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_magenta_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Lime" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_lime_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_lime_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_lime_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_lime_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_lime_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Ruby" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_ruby_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_ruby_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_ruby_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_ruby_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_ruby_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Slate" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_slate_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_slate_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_slate_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_slate_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_slate_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Emerald" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_emerald_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_emerald_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_emerald_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_emerald_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_emerald_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Fuchsia" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_fuchsia_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_fuchsia_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_fuchsia_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_fuchsia_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_fuchsia_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Yellow" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_yellow_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_yellow_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_yellow_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_yellow_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_yellow_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Violet" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_violet_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_violet_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_violet_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_violet_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_violet_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Steel" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_steel_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_steel_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_steel_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_steel_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_steel_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Bronze" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_bronze_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_bronze_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_bronze_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_bronze_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_bronze_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Aqua" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_aqua_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_aqua_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_aqua_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_aqua_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_aqua_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Cherry" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_cherry_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_cherry_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_cherry_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_cherry_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_cherry_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Navy" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_navy_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_navy_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_navy_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_navy_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_navy_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Sage" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_sage_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_sage_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_sage_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_sage_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_sage_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Burgundy" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_burgundy_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_burgundy_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_burgundy_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_burgundy_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_burgundy_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Charcoal" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_charcoal_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_charcoal_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_charcoal_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_charcoal_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_charcoal_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Turquoise" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_turquoise_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_turquoise_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_turquoise_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_turquoise_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_turquoise_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Mauve" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_mauve_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_mauve_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_mauve_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_mauve_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_mauve_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Gold" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_gold_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_gold_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_gold_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_gold_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_gold_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Seafoam" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_seafoam_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_seafoam_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_seafoam_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_seafoam_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_seafoam_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Raspberry" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_raspberry_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_raspberry_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_raspberry_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_raspberry_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_raspberry_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Midnight" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_midnight_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_midnight_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_midnight_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_midnight_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_midnight_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Olive" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_olive_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_olive_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_olive_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_olive_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_olive_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Salmon" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_salmon_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_salmon_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_salmon_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_salmon_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_salmon_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Periwinkle" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_periwinkle_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_periwinkle_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_periwinkle_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_periwinkle_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_periwinkle_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Autumn" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_autumn_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_autumn_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_autumn_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_autumn_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_autumn_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Graphite" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_graphite_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_graphite_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_graphite_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_graphite_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_graphite_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Spring" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_spring_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_spring_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_spring_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_spring_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_spring_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Blush" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_blush_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_blush_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_blush_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_blush_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_blush_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Cobalt" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_cobalt_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_cobalt_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_cobalt_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_cobalt_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_cobalt_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Pistachio" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_pistachio_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_pistachio_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_pistachio_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_pistachio_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_pistachio_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Mocha" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_mocha_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_mocha_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_mocha_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_mocha_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_mocha_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Lilac" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_lilac_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_lilac_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_lilac_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_lilac_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_lilac_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Tangerine" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_tangerine_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_tangerine_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_tangerine_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_tangerine_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_tangerine_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Arctic" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_arctic_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_arctic_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_arctic_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_arctic_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_arctic_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Plum" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_plum_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_plum_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_plum_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_plum_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_plum_accent_color</item>
+    </style>
+
+    <style name="WidgetTheme.Honeydew" parent="@style/Theme.YearlyProgress">
+        <item name="widgetBackgroundColor">@color/widget_honeydew_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_honeydew_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_honeydew_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_honeydew_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_honeydew_accent_color</item>
+    </style>
+
+    <!-- Widget Container Themes -->
 
     <style name="Theme.YearlyProgress.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
         <!-- Radius of the outer bound of widgets to make the rounded corners -->

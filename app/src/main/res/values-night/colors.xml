@@ -14,4 +14,421 @@
     <color name="widget_green_secondary_color">#737373</color>
     <color name="widget_green_accent_color">#a1d0ce</color>
     <color name="widget_green_progress_bar_background">#545454</color>
+
+    <!-- Ocean Blue Theme -->
+    <color name="widget_ocean_background_color">#1a2332</color>
+    <color name="widget_ocean_background_low_color">#2d3b4e</color>
+    <color name="widget_ocean_primary_color">#7dd3fc</color>
+    <color name="widget_ocean_secondary_color">#64748b</color>
+    <color name="widget_ocean_accent_color">#a5f3fc</color>
+    <color name="widget_ocean_progress_bar_background">#3d4b5e</color>
+
+    <!-- Sunset Orange Theme -->
+    <color name="widget_sunset_background_color">#2d1b1e</color>
+    <color name="widget_sunset_background_low_color">#442c30</color>
+    <color name="widget_sunset_primary_color">#fdba74</color>
+    <color name="widget_sunset_secondary_color">#78716c</color>
+    <color name="widget_sunset_accent_color">#fca5a5</color>
+    <color name="widget_sunset_progress_bar_background">#543c40</color>
+
+    <!-- Purple Dream Theme -->
+    <color name="widget_purple_background_color">#261d31</color>
+    <color name="widget_purple_background_low_color">#3d2e4c</color>
+    <color name="widget_purple_primary_color">#d8b4fe</color>
+    <color name="widget_purple_secondary_color">#71717a</color>
+    <color name="widget_purple_accent_color">#f0abfc</color>
+    <color name="widget_purple_progress_bar_background">#4d3e5c</color>
+
+    <!-- Rose Pink Theme -->
+    <color name="widget_rose_background_color">#2d1a26</color>
+    <color name="widget_rose_background_low_color">#442b3c</color>
+    <color name="widget_rose_primary_color">#fda4af</color>
+    <color name="widget_rose_secondary_color">#78716c</color>
+    <color name="widget_rose_accent_color">#fbcfe8</color>
+    <color name="widget_rose_progress_bar_background">#543b4c</color>
+
+    <!-- Mint Fresh Theme -->
+    <color name="widget_mint_background_color">#1a2d2a</color>
+    <color name="widget_mint_background_low_color">#2b4440</color>
+    <color name="widget_mint_primary_color">#6ee7b7</color>
+    <color name="widget_mint_secondary_color">#6b7280</color>
+    <color name="widget_mint_accent_color">#99f6e4</color>
+    <color name="widget_mint_progress_bar_background">#3b5450</color>
+
+    <!-- Coral Theme -->
+    <color name="widget_coral_background_color">#2d1e1a</color>
+    <color name="widget_coral_background_low_color">#442f2b</color>
+    <color name="widget_coral_primary_color">#fca5a5</color>
+    <color name="widget_coral_secondary_color">#78716c</color>
+    <color name="widget_coral_accent_color">#fdba74</color>
+    <color name="widget_coral_progress_bar_background">#543f3b</color>
+
+    <!-- Sky Blue Theme -->
+    <color name="widget_sky_background_color">#1a2632</color>
+    <color name="widget_sky_background_low_color">#2b3744</color>
+    <color name="widget_sky_primary_color">#7dd3fc</color>
+    <color name="widget_sky_secondary_color">#64748b</color>
+    <color name="widget_sky_accent_color">#bae6fd</color>
+    <color name="widget_sky_progress_bar_background">#3b4754</color>
+
+    <!-- Forest Green Theme -->
+    <color name="widget_forest_background_color">#1a2a1e</color>
+    <color name="widget_forest_background_low_color">#2b3b2f</color>
+    <color name="widget_forest_primary_color">#86efac</color>
+    <color name="widget_forest_secondary_color">#6b7280</color>
+    <color name="widget_forest_accent_color">#bef264</color>
+    <color name="widget_forest_progress_bar_background">#3b4b3f</color>
+
+    <!-- Amber Glow Theme -->
+    <color name="widget_amber_background_color">#2d2218</color>
+    <color name="widget_amber_background_low_color">#443329</color>
+    <color name="widget_amber_primary_color">#fcd34d</color>
+    <color name="widget_amber_secondary_color">#78716c</color>
+    <color name="widget_amber_accent_color">#fde68a</color>
+    <color name="widget_amber_progress_bar_background">#544339</color>
+
+    <!-- Teal Wave Theme -->
+    <color name="widget_teal_background_color">#1a2d2d</color>
+    <color name="widget_teal_background_low_color">#2b3e3e</color>
+    <color name="widget_teal_primary_color">#5eead4</color>
+    <color name="widget_teal_secondary_color">#6b7280</color>
+    <color name="widget_teal_accent_color">#99f6e4</color>
+    <color name="widget_teal_progress_bar_background">#3b4e4e</color>
+
+    <!-- Lavender Theme -->
+    <color name="widget_lavender_background_color">#26212f</color>
+    <color name="widget_lavender_background_low_color">#3d3240</color>
+    <color name="widget_lavender_primary_color">#ddd6fe</color>
+    <color name="widget_lavender_secondary_color">#71717a</color>
+    <color name="widget_lavender_accent_color">#e9d5ff</color>
+    <color name="widget_lavender_progress_bar_background">#4d4250</color>
+
+    <!-- Crimson Theme -->
+    <color name="widget_crimson_background_color">#2d1a1e</color>
+    <color name="widget_crimson_background_low_color">#442b2f</color>
+    <color name="widget_crimson_primary_color">#fda4af</color>
+    <color name="widget_crimson_secondary_color">#78716c</color>
+    <color name="widget_crimson_accent_color">#fbbf24</color>
+    <color name="widget_crimson_progress_bar_background">#543b3f</color>
+
+    <!-- Indigo Night Theme -->
+    <color name="widget_indigo_background_color">#1e1b2d</color>
+    <color name="widget_indigo_background_low_color">#2f2c44</color>
+    <color name="widget_indigo_primary_color">#a5b4fc</color>
+    <color name="widget_indigo_secondary_color">#6b7280</color>
+    <color name="widget_indigo_accent_color">#c7d2fe</color>
+    <color name="widget_indigo_progress_bar_background">#3f3c54</color>
+
+    <!-- Peach Theme -->
+    <color name="widget_peach_background_color">#2d2218</color>
+    <color name="widget_peach_background_low_color">#443329</color>
+    <color name="widget_peach_primary_color">#fdba74</color>
+    <color name="widget_peach_secondary_color">#78716c</color>
+    <color name="widget_peach_accent_color">#fed7aa</color>
+    <color name="widget_peach_progress_bar_background">#544339</color>
+
+    <!-- Cyan Electric Theme -->
+    <color name="widget_cyan_background_color">#1a2a32</color>
+    <color name="widget_cyan_background_low_color">#2b3b44</color>
+    <color name="widget_cyan_primary_color">#67e8f9</color>
+    <color name="widget_cyan_secondary_color">#64748b</color>
+    <color name="widget_cyan_accent_color">#a5f3fc</color>
+    <color name="widget_cyan_progress_bar_background">#3b4b54</color>
+
+    <!-- Magenta Theme -->
+    <color name="widget_magenta_background_color">#2d1a2d</color>
+    <color name="widget_magenta_background_low_color">#442b44</color>
+    <color name="widget_magenta_primary_color">#f0abfc</color>
+    <color name="widget_magenta_secondary_color">#71717a</color>
+    <color name="widget_magenta_accent_color">#f5d0fe</color>
+    <color name="widget_magenta_progress_bar_background">#543b54</color>
+
+    <!-- Lime Theme -->
+    <color name="widget_lime_background_color">#232d1a</color>
+    <color name="widget_lime_background_low_color">#34442b</color>
+    <color name="widget_lime_primary_color">#bef264</color>
+    <color name="widget_lime_secondary_color">#6b7280</color>
+    <color name="widget_lime_accent_color">#d9f99d</color>
+    <color name="widget_lime_progress_bar_background">#44543b</color>
+
+    <!-- Ruby Red Theme -->
+    <color name="widget_ruby_background_color">#2d1a1a</color>
+    <color name="widget_ruby_background_low_color">#442b2b</color>
+    <color name="widget_ruby_primary_color">#fca5a5</color>
+    <color name="widget_ruby_secondary_color">#78716c</color>
+    <color name="widget_ruby_accent_color">#fecaca</color>
+    <color name="widget_ruby_progress_bar_background">#543b3b</color>
+
+    <!-- Slate Gray Theme -->
+    <color name="widget_slate_background_color">#1e293b</color>
+    <color name="widget_slate_background_low_color">#334155</color>
+    <color name="widget_slate_primary_color">#cbd5e1</color>
+    <color name="widget_slate_secondary_color">#64748b</color>
+    <color name="widget_slate_accent_color">#94a3b8</color>
+    <color name="widget_slate_progress_bar_background">#475569</color>
+
+    <!-- Emerald Theme -->
+    <color name="widget_emerald_background_color">#1a2d23</color>
+    <color name="widget_emerald_background_low_color">#2b4434</color>
+    <color name="widget_emerald_primary_color">#6ee7b7</color>
+    <color name="widget_emerald_secondary_color">#6b7280</color>
+    <color name="widget_emerald_accent_color">#a7f3d0</color>
+    <color name="widget_emerald_progress_bar_background">#3b5444</color>
+
+    <!-- Fuchsia Theme -->
+    <color name="widget_fuchsia_background_color">#2d1a2a</color>
+    <color name="widget_fuchsia_background_low_color">#442b3b</color>
+    <color name="widget_fuchsia_primary_color">#f0abfc</color>
+    <color name="widget_fuchsia_secondary_color">#71717a</color>
+    <color name="widget_fuchsia_accent_color">#f5d0fe</color>
+    <color name="widget_fuchsia_progress_bar_background">#543b4b</color>
+
+    <!-- Yellow Sunshine Theme -->
+    <color name="widget_yellow_background_color">#2d2a1a</color>
+    <color name="widget_yellow_background_low_color">#443b2b</color>
+    <color name="widget_yellow_primary_color">#fde047</color>
+    <color name="widget_yellow_secondary_color">#78716c</color>
+    <color name="widget_yellow_accent_color">#fef08a</color>
+    <color name="widget_yellow_progress_bar_background">#544b3b</color>
+
+    <!-- Violet Theme -->
+    <color name="widget_violet_background_color">#221d2d</color>
+    <color name="widget_violet_background_low_color">#332e44</color>
+    <color name="widget_violet_primary_color">#c4b5fd</color>
+    <color name="widget_violet_secondary_color">#71717a</color>
+    <color name="widget_violet_accent_color">#ddd6fe</color>
+    <color name="widget_violet_progress_bar_background">#433e54</color>
+
+    <!-- Steel Blue Theme -->
+    <color name="widget_steel_background_color">#1a2632</color>
+    <color name="widget_steel_background_low_color">#2b3744</color>
+    <color name="widget_steel_primary_color">#93c5fd</color>
+    <color name="widget_steel_secondary_color">#64748b</color>
+    <color name="widget_steel_accent_color">#bfdbfe</color>
+    <color name="widget_steel_progress_bar_background">#3b4754</color>
+
+    <!-- Bronze Theme -->
+    <color name="widget_bronze_background_color">#2a231a</color>
+    <color name="widget_bronze_background_low_color">#3b342b</color>
+    <color name="widget_bronze_primary_color">#fdba74</color>
+    <color name="widget_bronze_secondary_color">#78716c</color>
+    <color name="widget_bronze_accent_color">#fed7aa</color>
+    <color name="widget_bronze_progress_bar_background">#4b443b</color>
+
+    <!-- Aqua Theme -->
+    <color name="widget_aqua_background_color">#1a2d2d</color>
+    <color name="widget_aqua_background_low_color">#2b3e3e</color>
+    <color name="widget_aqua_primary_color">#5eead4</color>
+    <color name="widget_aqua_secondary_color">#6b7280</color>
+    <color name="widget_aqua_accent_color">#99f6e4</color>
+    <color name="widget_aqua_progress_bar_background">#3b4e4e</color>
+
+    <!-- Cherry Blossom Theme -->
+    <color name="widget_cherry_background_color">#2d1e26</color>
+    <color name="widget_cherry_background_low_color">#442f37</color>
+    <color name="widget_cherry_primary_color">#fbcfe8</color>
+    <color name="widget_cherry_secondary_color">#78716c</color>
+    <color name="widget_cherry_accent_color">#fce7f3</color>
+    <color name="widget_cherry_progress_bar_background">#543f47</color>
+
+    <!-- Navy Theme -->
+    <color name="widget_navy_background_color">#1a1e2d</color>
+    <color name="widget_navy_background_low_color">#2b2f44</color>
+    <color name="widget_navy_primary_color">#93c5fd</color>
+    <color name="widget_navy_secondary_color">#64748b</color>
+    <color name="widget_navy_accent_color">#dbeafe</color>
+    <color name="widget_navy_progress_bar_background">#3b3f54</color>
+
+    <!-- Sage Green Theme -->
+    <color name="widget_sage_background_color">#222d26</color>
+    <color name="widget_sage_background_low_color">#333e37</color>
+    <color name="widget_sage_primary_color">#86efac</color>
+    <color name="widget_sage_secondary_color">#6b7280</color>
+    <color name="widget_sage_accent_color">#bbf7d0</color>
+    <color name="widget_sage_progress_bar_background">#434e47</color>
+
+    <!-- Burgundy Theme -->
+    <color name="widget_burgundy_background_color">#2d1a1e</color>
+    <color name="widget_burgundy_background_low_color">#442b2f</color>
+    <color name="widget_burgundy_primary_color">#fda4af</color>
+    <color name="widget_burgundy_secondary_color">#78716c</color>
+    <color name="widget_burgundy_accent_color">#fecdd3</color>
+    <color name="widget_burgundy_progress_bar_background">#543b3f</color>
+
+    <!-- Charcoal Theme -->
+    <color name="widget_charcoal_background_color">#1f2937</color>
+    <color name="widget_charcoal_background_low_color">#374151</color>
+    <color name="widget_charcoal_primary_color">#d1d5db</color>
+    <color name="widget_charcoal_secondary_color">#6b7280</color>
+    <color name="widget_charcoal_accent_color">#9ca3af</color>
+    <color name="widget_charcoal_progress_bar_background">#4b5563</color>
+
+    <!-- Turquoise Theme -->
+    <color name="widget_turquoise_background_color">#1a2d2a</color>
+    <color name="widget_turquoise_background_low_color">#2b3e3b</color>
+    <color name="widget_turquoise_primary_color">#2dd4bf</color>
+    <color name="widget_turquoise_secondary_color">#6b7280</color>
+    <color name="widget_turquoise_accent_color">#5eead4</color>
+    <color name="widget_turquoise_progress_bar_background">#3b4e4b</color>
+
+    <!-- Mauve Theme -->
+    <color name="widget_mauve_background_color">#26212f</color>
+    <color name="widget_mauve_background_low_color">#37324e</color>
+    <color name="widget_mauve_primary_color">#d8b4fe</color>
+    <color name="widget_mauve_secondary_color">#71717a</color>
+    <color name="widget_mauve_accent_color">#e9d5ff</color>
+    <color name="widget_mauve_progress_bar_background">#47425e</color>
+
+    <!-- Gold Theme -->
+    <color name="widget_gold_background_color">#2d271a</color>
+    <color name="widget_gold_background_low_color">#44382b</color>
+    <color name="widget_gold_primary_color">#fbbf24</color>
+    <color name="widget_gold_secondary_color">#78716c</color>
+    <color name="widget_gold_accent_color">#fcd34d</color>
+    <color name="widget_gold_progress_bar_background">#54483b</color>
+
+    <!-- Seafoam Theme -->
+    <color name="widget_seafoam_background_color">#1a2d2a</color>
+    <color name="widget_seafoam_background_low_color">#2b3e3b</color>
+    <color name="widget_seafoam_primary_color">#6ee7b7</color>
+    <color name="widget_seafoam_secondary_color">#6b7280</color>
+    <color name="widget_seafoam_accent_color">#a7f3d0</color>
+    <color name="widget_seafoam_progress_bar_background">#3b4e4b</color>
+
+    <!-- Raspberry Theme -->
+    <color name="widget_raspberry_background_color">#2d1a23</color>
+    <color name="widget_raspberry_background_low_color">#442b34</color>
+    <color name="widget_raspberry_primary_color">#f472b6</color>
+    <color name="widget_raspberry_secondary_color">#78716c</color>
+    <color name="widget_raspberry_accent_color">#f9a8d4</color>
+    <color name="widget_raspberry_progress_bar_background">#543b44</color>
+
+    <!-- Midnight Theme -->
+    <color name="widget_midnight_background_color">#1a1a2d</color>
+    <color name="widget_midnight_background_low_color">#2b2b44</color>
+    <color name="widget_midnight_primary_color">#a5b4fc</color>
+    <color name="widget_midnight_secondary_color">#6b7280</color>
+    <color name="widget_midnight_accent_color">#c7d2fe</color>
+    <color name="widget_midnight_progress_bar_background">#3b3b54</color>
+
+    <!-- Olive Theme -->
+    <color name="widget_olive_background_color">#252d1a</color>
+    <color name="widget_olive_background_low_color">#363e2b</color>
+    <color name="widget_olive_primary_color">#a3e635</color>
+    <color name="widget_olive_secondary_color">#6b7280</color>
+    <color name="widget_olive_accent_color">#bef264</color>
+    <color name="widget_olive_progress_bar_background">#464e3b</color>
+
+    <!-- Salmon Theme -->
+    <color name="widget_salmon_background_color">#2d211a</color>
+    <color name="widget_salmon_background_low_color">#44322b</color>
+    <color name="widget_salmon_primary_color">#fca5a5</color>
+    <color name="widget_salmon_secondary_color">#78716c</color>
+    <color name="widget_salmon_accent_color">#fecaca</color>
+    <color name="widget_salmon_progress_bar_background">#54423b</color>
+
+    <!-- Periwinkle Theme -->
+    <color name="widget_periwinkle_background_color">#1e212d</color>
+    <color name="widget_periwinkle_background_low_color">#2f3244</color>
+    <color name="widget_periwinkle_primary_color">#c7d2fe</color>
+    <color name="widget_periwinkle_secondary_color">#71717a</color>
+    <color name="widget_periwinkle_accent_color">#ddd6fe</color>
+    <color name="widget_periwinkle_progress_bar_background">#3f4254</color>
+
+    <!-- Autumn Theme -->
+    <color name="widget_autumn_background_color">#2d221a</color>
+    <color name="widget_autumn_background_low_color">#44332b</color>
+    <color name="widget_autumn_primary_color">#fb923c</color>
+    <color name="widget_autumn_secondary_color">#78716c</color>
+    <color name="widget_autumn_accent_color">#fdba74</color>
+    <color name="widget_autumn_progress_bar_background">#54433b</color>
+
+    <!-- Graphite Theme -->
+    <color name="widget_graphite_background_color">#212121</color>
+    <color name="widget_graphite_background_low_color">#323232</color>
+    <color name="widget_graphite_primary_color">#e5e5e5</color>
+    <color name="widget_graphite_secondary_color">#737373</color>
+    <color name="widget_graphite_accent_color">#a3a3a3</color>
+    <color name="widget_graphite_progress_bar_background">#424242</color>
+
+    <!-- Spring Theme -->
+    <color name="widget_spring_background_color">#1e2d23</color>
+    <color name="widget_spring_background_low_color">#2f3e34</color>
+    <color name="widget_spring_primary_color">#86efac</color>
+    <color name="widget_spring_secondary_color">#6b7280</color>
+    <color name="widget_spring_accent_color">#bbf7d0</color>
+    <color name="widget_spring_progress_bar_background">#3f4e44</color>
+
+    <!-- Blush Theme -->
+    <color name="widget_blush_background_color">#2d1e23</color>
+    <color name="widget_blush_background_low_color">#442f34</color>
+    <color name="widget_blush_primary_color">#fda4af</color>
+    <color name="widget_blush_secondary_color">#78716c</color>
+    <color name="widget_blush_accent_color">#fecdd3</color>
+    <color name="widget_blush_progress_bar_background">#543f44</color>
+
+    <!-- Cobalt Theme -->
+    <color name="widget_cobalt_background_color">#1a1e2d</color>
+    <color name="widget_cobalt_background_low_color">#2b2f44</color>
+    <color name="widget_cobalt_primary_color">#60a5fa</color>
+    <color name="widget_cobalt_secondary_color">#64748b</color>
+    <color name="widget_cobalt_accent_color">#93c5fd</color>
+    <color name="widget_cobalt_progress_bar_background">#3b3f54</color>
+
+    <!-- Pistachio Theme -->
+    <color name="widget_pistachio_background_color">#222d1e</color>
+    <color name="widget_pistachio_background_low_color">#333e2f</color>
+    <color name="widget_pistachio_primary_color">#a3e635</color>
+    <color name="widget_pistachio_secondary_color">#6b7280</color>
+    <color name="widget_pistachio_accent_color">#bef264</color>
+    <color name="widget_pistachio_progress_bar_background">#434e3f</color>
+
+    <!-- Mocha Theme -->
+    <color name="widget_mocha_background_color">#2d231e</color>
+    <color name="widget_mocha_background_low_color">#44342f</color>
+    <color name="widget_mocha_primary_color">#d4a574</color>
+    <color name="widget_mocha_secondary_color">#78716c</color>
+    <color name="widget_mocha_accent_color">#e4b98a</color>
+    <color name="widget_mocha_progress_bar_background">#54443f</color>
+
+    <!-- Lilac Theme -->
+    <color name="widget_lilac_background_color">#26212f</color>
+    <color name="widget_lilac_background_low_color">#37324e</color>
+    <color name="widget_lilac_primary_color">#e9d5ff</color>
+    <color name="widget_lilac_secondary_color">#71717a</color>
+    <color name="widget_lilac_accent_color">#f3e8ff</color>
+    <color name="widget_lilac_progress_bar_background">#47425e</color>
+
+    <!-- Tangerine Theme -->
+    <color name="widget_tangerine_background_color">#2d1f1a</color>
+    <color name="widget_tangerine_background_low_color">#44302b</color>
+    <color name="widget_tangerine_primary_color">#fb923c</color>
+    <color name="widget_tangerine_secondary_color">#78716c</color>
+    <color name="widget_tangerine_accent_color">#fdba74</color>
+    <color name="widget_tangerine_progress_bar_background">#54403b</color>
+
+    <!-- Arctic Theme -->
+    <color name="widget_arctic_background_color">#1a2a32</color>
+    <color name="widget_arctic_background_low_color">#2b3b44</color>
+    <color name="widget_arctic_primary_color">#bae6fd</color>
+    <color name="widget_arctic_secondary_color">#64748b</color>
+    <color name="widget_arctic_accent_color">#e0f2fe</color>
+    <color name="widget_arctic_progress_bar_background">#3b4b54</color>
+
+    <!-- Plum Theme -->
+    <color name="widget_plum_background_color">#2a1d2d</color>
+    <color name="widget_plum_background_low_color">#3b2e44</color>
+    <color name="widget_plum_primary_color">#c084fc</color>
+    <color name="widget_plum_secondary_color">#71717a</color>
+    <color name="widget_plum_accent_color">#d8b4fe</color>
+    <color name="widget_plum_progress_bar_background">#4b3e54</color>
+
+    <!-- Honeydew Theme -->
+    <color name="widget_honeydew_background_color">#222d23</color>
+    <color name="widget_honeydew_background_low_color">#333e34</color>
+    <color name="widget_honeydew_primary_color">#bbf7d0</color>
+    <color name="widget_honeydew_secondary_color">#6b7280</color>
+    <color name="widget_honeydew_accent_color">#d1fae5</color>
+    <color name="widget_honeydew_progress_bar_background">#434e44</color>
+
 </resources>

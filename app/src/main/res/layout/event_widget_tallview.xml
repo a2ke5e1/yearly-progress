@@ -1,0 +1,158 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/widgetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/app_widget_background"/>
+
+    <ImageView
+        android:id="@+id/imageContainer"
+        android:layout_width="match_parent"
+        android:scaleType="centerCrop"
+        android:layout_height="match_parent"
+        android:clipToOutline="true"
+        android:foreground="@drawable/event_widget_background_scrim"
+        android:background="@drawable/app_widget_background"/>
+
+    <RelativeLayout
+        style="@style/Widget.YearlyProgress.AppWidget.Container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/eventProgressText" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="18dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/eventTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Lorem ipsum"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/event_widget_tallview_title"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:id="@+id/eventDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu magna ut nisi laoreet tempus."
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/event_widget_tallview_description"
+                    android:ellipsize="end"
+                    android:maxLines="4"
+                    android:textStyle="normal" />
+
+
+                <TextView
+                    android:id="@+id/eventTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    tools:text="08/01 · 7:37 PM"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/event_widget_tallview_time"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/widgetDaysLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/event_widget_tallview_days_left"
+                    tools:text="12d 1h 45m 12s left"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/eventProgressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/widgetProgressBarsContainer"
+            android:text="40.48%"
+            android:textSize="@dimen/event_widget_tallview_progress"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/currentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/widgetProgressBarsContainer"
+            android:layout_alignParentEnd="true"
+            android:text="08/09"
+            android:layout_alignBaseline="@id/eventProgressText"
+            android:textAlignment="textEnd"
+            android:textSize="@dimen/event_widget_tallview_current_date" />
+
+        <include
+            android:id="@+id/widgetProgressBarsContainer"
+            layout="@layout/standalone_progress_bar_containers"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="3sp"
+        android:fontFamily="@font/inter_semibold"
+        android:padding="4dp"
+        android:letterSpacing="0.5"
+        android:layout_gravity="center_horizontal|bottom"
+         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:clipChildren="true"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/prev_btn"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/home_btn"
+            android:background="#00000000"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/next_btn"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</FrameLayout>

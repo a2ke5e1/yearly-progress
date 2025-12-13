@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/widgetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/app_widget_background" />
+
+
+    <RelativeLayout
+        style="@style/Widget.YearlyProgress.AppWidget.Container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/Theme.YearlyProgress.AppWidgetContainer"
+        tools:ignore="HardcodedText">
+
+<!--        <ImageView-->
+<!--            android:id="@+id/no_events"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:src="@drawable/baseline_event_24"-->
+<!--            android:tint="@color/widget_text_color"-->
+<!--            tools:ignore="UseAppTint" />-->
+
+
+        <TextView
+            android:id="@+id/eventTitle"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"
+            android:text="@string/no_events"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="normal|bold" />
+
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>

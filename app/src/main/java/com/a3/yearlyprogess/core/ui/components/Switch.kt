@@ -40,12 +40,13 @@ fun Switch(
                     enabled = !disabled, interactionSource = interactionSource, indication = null) {
                     onCheckedChange(!checked)
                 }
-                .alpha(if (!disabled) 1f else 0.5f)
                 .animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         Column(
-            modifier = Modifier.weight(1f).fillMaxHeight(),
+            modifier = Modifier.weight(1f).fillMaxHeight()
+                .alpha(if (!disabled) 1f else 0.5f)
+            ,
             verticalArrangement = Arrangement.Center) {
             Text(title, style = MaterialTheme.typography.titleMedium)
             if (description != null) {
@@ -62,7 +63,8 @@ fun Switch(
         Switch(
             checked = checked,
             onCheckedChange = { onCheckedChange(it) },
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            enabled = !disabled
         )
     }
 }

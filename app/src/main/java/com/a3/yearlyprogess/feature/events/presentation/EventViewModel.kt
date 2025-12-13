@@ -60,6 +60,11 @@ class EventViewModel @Inject constructor(
                 _selectedIds.value + id
     }
 
+    fun setSelectedEventIds(ids: Set<Int>) {
+        _selectedIds.value = ids
+    }
+
+
     fun toggleAllSelections() {
         val allIds = events.value.map { it.id }.toSet()
 

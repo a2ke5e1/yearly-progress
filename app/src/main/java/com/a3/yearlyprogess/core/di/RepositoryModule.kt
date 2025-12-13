@@ -1,11 +1,15 @@
 package com.a3.yearlyprogess.core.di
 
 import com.a3.yearlyprogess.core.data.repository.AppSettingsRepositoryImpl
+import com.a3.yearlyprogess.core.data.repository.CalendarRepositoryImpl
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
+import com.a3.yearlyprogess.core.domain.repository.CalendarRepository
 import com.a3.yearlyprogess.data.repository.LocationRepositoryImpl
 import com.a3.yearlyprogess.data.repository.SunriseSunsetRepositoryImpl
 import com.a3.yearlyprogess.domain.repository.LocationRepository
 import com.a3.yearlyprogess.domain.repository.SunriseSunsetRepository
+import com.a3.yearlyprogess.feature.widgets.data.repository.EventWidgetOptionsRepositoryImpl
+import com.a3.yearlyprogess.feature.widgets.domain.repository.EventWidgetOptionsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -34,4 +38,15 @@ abstract class RepositoryModule {
         locationRepositoryImpl: LocationRepositoryImpl
     ): LocationRepository
 
+    @Binds
+    @Singleton
+    abstract fun bindCalendarRepository(
+        calendarRepositoryImpl: CalendarRepositoryImpl
+    ): CalendarRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindEventWidgetOptionsRepository(
+        impl: EventWidgetOptionsRepositoryImpl
+    ): EventWidgetOptionsRepository
 }

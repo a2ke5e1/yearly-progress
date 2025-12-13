@@ -31,6 +31,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".feature.widgets.ui.config_screens.EventConfigActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+
+
         <!-- Widget Update Receiver -->
         <receiver android:name=".feature.widgets.update.WidgetUpdateBroadcastReceiver"
             android:exported="true">
@@ -90,6 +100,18 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/year_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".feature.widgets.ui.EventWidget"
+            android:exported="false"
+            android:label="Event Progress Tracker">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/event_widget_info" />
         </receiver>
 
     </application>

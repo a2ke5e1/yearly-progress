@@ -5,6 +5,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -15,9 +18,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -31,10 +36,10 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,6 +47,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -58,16 +65,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.core.ui.components.ExpandableSection
 import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 import com.a3.yearlyprogess.feature.events.domain.model.RepeatDays
+import com.a3.yearlyprogess.feature.events.domain.model.Weekday
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -93,14 +106,14 @@ fun EventCreateScreen(
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
     var isStartDateTime by remember { mutableStateOf(true) }
+    var isEditingDate by remember { mutableStateOf(false) }
+    var isEditingTime by remember { mutableStateOf(false) }
     var repeatEveryYear by remember { mutableStateOf(false) }
     var repeatEveryMonth by remember { mutableStateOf(false) }
     var repeatWeekdays by remember { mutableStateOf(false) }
     var selectedWeekdays by remember { mutableStateOf(setOf<RepeatDays>()) }
     var showError by remember { mutableStateOf(false) }
     var savedImagePath by remember { mutableStateOf<String?>(null) }
-//    var selectedImageBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
-
     val isEditMode = eventId != null
 
     // Image picker launcher
@@ -116,9 +129,7 @@ fun EventCreateScreen(
                     FileOutputStream(file).use { output ->
                         stream.copyTo(output)
                     }
-
                     savedImagePath = file.absolutePath
-//                    selectedImageBitmap = BitmapFactory.decodeFile(savedImagePath)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -146,7 +157,6 @@ fun EventCreateScreen(
                     val file = File(path)
                     if (file.exists()) {
                         savedImagePath = path
-//                        selectedImageBitmap = BitmapFactory.decodeFile(path)
                     }
                 }
             }
@@ -207,88 +217,42 @@ fun EventCreateScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            // Title Section
-            OutlinedTextField(
-                value = eventTitle,
-                onValueChange = {
-                    eventTitle = it
-                    showError = false
-                },
-                label = { Text("Event Title") },
-                placeholder = { Text("Enter event title") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                isError = showError,
-                supportingText = if (showError) {
-                    { Text("Event title is required") }
-                } else null,
-                singleLine = true
-            )
-
-            // Description Section
-            OutlinedTextField(
-                value = eventDescription,
-                onValueChange = { eventDescription = it },
-                label = { Text("Description") },
-                placeholder = { Text("Enter event description (optional)") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .height(120.dp),
-                maxLines = 5
-            )
-
-            // Background Image Section
-            Text(
-                text = "Background Image (Optional)",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
 
             if (savedImagePath != null) {
-                Card(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .height(200.dp)
+                        .clip(RoundedCornerShape(12.dp))
                 ) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(savedImagePath)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(12.dp))
-                        )
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(savedImagePath)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
 
-                        // Remove image button
-                        IconButton(
-                            onClick = {
-                                savedImagePath = null
-//                                selectedImageBitmap = null
-                            },
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .padding(8.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Close,
-                                contentDescription = "Remove image",
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
+                    IconButton(
+                        onClick = { savedImagePath = null },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "Remove image",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 }
             } else {
-                OutlinedCard(
+                Card(
                     onClick = {
                         imagePickerLauncher.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -297,7 +261,12 @@ fun EventCreateScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .height(120.dp)
+                        .height(120.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow   // no background
+                    ),
+                    elevation = CardDefaults.cardElevation(0.dp), // no shadow
+                    shape = RoundedCornerShape(12.dp) // optional
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -312,7 +281,7 @@ fun EventCreateScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Tap to select background image",
+                            text = "Add Image",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -320,111 +289,140 @@ fun EventCreateScreen(
                 }
             }
 
+            Spacer(Modifier.height(12.dp))
+
+            EventDetailsSection(
+                eventTitle = eventTitle,
+                showError = showError,
+                eventDescription = eventDescription,
+                isAllDay = isAllDay,
+                onTitleChange = {
+                    eventTitle = it
+                    showError = false
+                },
+                onDescriptionChange = { eventDescription = it },
+                onAllDayChange = { isAllDay = it }
+            )
+
             // All Day Switch
+
+            ExpandableSection(title = "Schedule", collapsible = false) {
+
+                // Start Date/Time - Material Design Style
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "Start",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        // Date Chip
+                        MaterialDateTimeChip(
+                            label = formatDateForChip(startDateTime), onClick = {
+                                isStartDateTime = true
+                                isEditingDate = true
+                                isEditingTime = false
+                                showDatePicker = true
+                            }, modifier = Modifier.weight(1f)
+                        )
+
+                        // Time Chip (only if not all-day)
+                        AnimatedVisibility(
+                            visible = !isAllDay, modifier = Modifier.weight(1f)
+                        ) {
+                            MaterialDateTimeChip(
+                                label = formatTimeForChip(startDateTime), onClick = {
+                                    isStartDateTime = true
+                                    isEditingDate = false
+                                    isEditingTime = true
+                                    showTimePicker = true
+                                })
+                        }
+                    }
+                }
+
+                // End Date/Time - Material Design Style
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "End",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        // Date Chip
+                        MaterialDateTimeChip(
+                            label = formatDateForChip(endDateTime), onClick = {
+                                isStartDateTime = false
+                                isEditingDate = true
+                                isEditingTime = false
+                                showDatePicker = true
+                            }, modifier = Modifier.weight(1f)
+                        )
+
+                        // Time Chip (only if not all-day)
+                        AnimatedVisibility(
+                            visible = !isAllDay, modifier = Modifier.weight(1f)
+                        ) {
+                            MaterialDateTimeChip(
+                                label = formatTimeForChip(endDateTime), onClick = {
+                                    isStartDateTime = false
+                                    isEditingDate = false
+                                    isEditingTime = true
+                                    showTimePicker = true
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+
+            ExpandableSection(title = "Repeat") {
+
                 Switch(
-                    title = "All Day Event",
-                    checked = isAllDay,
-                    onCheckedChange = { isAllDay = it }
-                )
+                    title = "Every Year", checked = repeatEveryYear, onCheckedChange = {
+                        repeatEveryYear = it
+                        if (it) {
+                            repeatEveryMonth = false
+                            repeatWeekdays = false
+                        }
+                    })
 
+                Switch(
+                    title = "Every Month", checked = repeatEveryMonth, onCheckedChange = {
+                        repeatEveryMonth = it
+                        if (it) {
+                            repeatEveryYear = false
+                            repeatWeekdays = false
+                        }
+                    })
 
-            // Date & Time Section
-            Text(
-                text = "Date & Time",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-
-            // Start Date/Time
-            OutlinedCard(
-                onClick = {
-                    isStartDateTime = true
-                    showDatePicker = true
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Text("Start", style = MaterialTheme.typography.labelMedium)
-                        Text(
-                            formatDateTime(startDateTime, isAllDay),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
+                Switch(
+                    title = "On Weekdays", checked = repeatWeekdays, onCheckedChange = {
+                        repeatWeekdays = it
+                        if (it) {
+                            repeatEveryYear = false
+                            repeatEveryMonth = false
+                        }
+                    })
             }
-
-            // End Date/Time
-            OutlinedCard(
-                onClick = {
-                    isStartDateTime = false
-                    showDatePicker = true
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Text("End", style = MaterialTheme.typography.labelMedium)
-                        Text(
-                            formatDateTime(endDateTime, isAllDay),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
-            }
-
-            // Repeat Section
-            Text(
-                text = "Repeat",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-
-            Switch(
-                title = "Every Year", checked = repeatEveryYear, onCheckedChange = {
-                    repeatEveryYear = it
-                    if (it) {
-                        repeatEveryMonth = false
-                        repeatWeekdays = false
-                    }
-                })
-
-            Switch(
-                title = "Every Month", checked = repeatEveryMonth, onCheckedChange = {
-                    repeatEveryMonth = it
-                    if (it) {
-                        repeatEveryYear = false
-                        repeatWeekdays = false
-                    }
-                })
-
-            Switch(
-                title = "On Weekdays", checked = repeatWeekdays, onCheckedChange = {
-                    repeatWeekdays = it
-                    if (it) {
-                        repeatEveryYear = false
-                        repeatEveryMonth = false
-                    }
-                })
-
 
             // Weekday Selection
             AnimatedVisibility(
@@ -454,7 +452,10 @@ fun EventCreateScreen(
             initialSelectedDateMillis = if (isStartDateTime) startDateTime else endDateTime
         )
         DatePickerDialog(
-            onDismissRequest = { showDatePicker = false },
+            onDismissRequest = {
+                showDatePicker = false
+                isEditingDate = false
+            },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -466,17 +467,22 @@ fun EventCreateScreen(
                             }
                         }
                         showDatePicker = false
-                        if (!isAllDay) {
+
+                        if (!isAllDay && !isEditingTime) {
                             showTimePicker = true
                         }
+                        isEditingDate = false
                     }
                 ) {
-                    Text("OK")
+                   Text(stringResource(R.string.okay))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel")
+                TextButton(onClick = {
+                    showDatePicker = false
+                    isEditingDate = false
+                }) {
+                    Text(stringResource(R.string.cancel))
                 }
             }
         ) {
@@ -489,14 +495,19 @@ fun EventCreateScreen(
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = if (isStartDateTime) startDateTime else endDateTime
 
+
         val timePickerState = rememberTimePickerState(
             initialHour = calendar.get(Calendar.HOUR_OF_DAY),
             initialMinute = calendar.get(Calendar.MINUTE),
-            is24Hour = true
+            is24Hour = android.text.format.DateFormat.is24HourFormat(context)
+
         )
 
         AlertDialog(
-            onDismissRequest = { showTimePicker = false },
+            onDismissRequest = {
+                showTimePicker = false
+                isEditingTime = false
+            },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -509,20 +520,50 @@ fun EventCreateScreen(
                             endDateTime = calendar.timeInMillis
                         }
                         showTimePicker = false
+                        isEditingTime = false
                     }
                 ) {
-                    Text("OK")
+                   Text(stringResource(R.string.okay))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showTimePicker = false }) {
-                    Text("Cancel")
+                TextButton(onClick = {
+                    showTimePicker = false
+                    isEditingTime = false
+                }) {
+                    Text(stringResource(R.string.cancel))
                 }
             },
             text = {
                 TimePicker(state = timePickerState)
             }
         )
+    }
+}
+
+@Composable
+fun MaterialDateTimeChip(
+    label: String, onClick: () -> Unit, modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        modifier = modifier.height(64.dp),
+        shape = RoundedCornerShape(8.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        tonalElevation = 0.dp
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
 
@@ -539,15 +580,12 @@ fun WeekdaySelector(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            WeekdayChip("S", RepeatDays.SUNDAY, selectedWeekdays, onWeekdayToggle, Modifier.weight(1f))
-            WeekdayChip("M", RepeatDays.MONDAY, selectedWeekdays, onWeekdayToggle, Modifier.weight(1f))
-            WeekdayChip("T", RepeatDays.TUESDAY, selectedWeekdays, onWeekdayToggle, Modifier.weight(1f))
-            WeekdayChip("W", RepeatDays.WEDNESDAY, selectedWeekdays, onWeekdayToggle, Modifier.weight(1f))
-            WeekdayChip("T", RepeatDays.THURSDAY, selectedWeekdays, onWeekdayToggle, Modifier.weight(1f))
-            WeekdayChip("F", RepeatDays.FRIDAY, selectedWeekdays, onWeekdayToggle, Modifier.weight(1f))
-            WeekdayChip("S", RepeatDays.SATURDAY, selectedWeekdays, onWeekdayToggle, Modifier.weight(1f))
+            WeekdayChipRow(
+                selectedWeekdays = selectedWeekdays,
+                onWeekdayToggle = onWeekdayToggle
+            )
         }
     }
 }
@@ -560,12 +598,64 @@ fun WeekdayChip(
     onWeekdayToggle: (RepeatDays) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    FilterChip(
-        selected = selectedWeekdays.contains(day),
-        onClick = { onWeekdayToggle(day) },
-        label = { Text(label) },
-        modifier = modifier
+    val isSelected = day in selectedWeekdays
+
+    val animatedCorner by animateDpAsState(
+        targetValue = if (!isSelected) 8.dp else 12.dp,
+        label = ""
     )
+
+    val containerColor by animateColorAsState(
+        targetValue = if (isSelected)
+            MaterialTheme.colorScheme.primary
+        else
+            MaterialTheme.colorScheme.surfaceContainerLow,
+        label = ""
+    )
+
+    val labelColor by animateColorAsState(
+        targetValue = if (isSelected)
+            MaterialTheme.colorScheme.onPrimary
+        else
+            MaterialTheme.colorScheme.onSurfaceVariant,
+        label = ""
+    )
+
+    Surface(
+        onClick = { onWeekdayToggle(day) },
+        shape = RoundedCornerShape(animatedCorner),
+        color = containerColor,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
+        modifier = modifier
+            .height(40.dp)
+            .clip(RoundedCornerShape(animatedCorner))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = label,
+                color = labelColor,
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+    }
+}
+
+// Format date for chip display
+private fun formatDateForChip(timeInMillis: Long): String {
+    val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    return dateFormat.format(Date(timeInMillis))
+}
+
+// Format time for chip display
+private fun formatTimeForChip(timeInMillis: Long): String {
+    val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+    return timeFormat.format(Date(timeInMillis))
 }
 
 private fun formatDateTime(timeInMillis: Long, isAllDay: Boolean): String {
@@ -578,3 +668,121 @@ private fun formatDateTime(timeInMillis: Long, isAllDay: Boolean): String {
         "${dateFormat.format(Date(timeInMillis))} at ${timeFormat.format(Date(timeInMillis))}"
     }
 }
+
+private @Composable
+fun EventTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String,
+    isError: Boolean = false,
+    errorText: String? = null,
+    singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    maxHeight: Dp? = null
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        placeholder = { Text(placeholder) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .animateContentSize()
+            .let {
+                if (maxHeight != null) it.heightIn(max = maxHeight) else it
+            },
+        isError = isError,
+        supportingText = errorText?.let { { Text(it) } },
+        singleLine = singleLine,
+        maxLines = maxLines
+    )
+}
+
+
+private @Composable
+fun AllDaySwitch(
+    isAllDay: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(stringResource(R.string.all_day_event))
+        Switch(
+            checked = isAllDay,
+            onCheckedChange = onCheckedChange
+        )
+    }
+}
+
+private @Composable
+fun EventDetailsSection(
+    eventTitle: String,
+    showError: Boolean,
+    eventDescription: String,
+    isAllDay: Boolean,
+    onTitleChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
+    onAllDayChange: (Boolean) -> Unit
+) {
+    ExpandableSection(title = "Event Details", collapsible = false) {
+
+        EventTextField(
+            value = eventTitle,
+            onValueChange = { onTitleChange(it) },
+            label = "Event Title",
+            placeholder = "Enter event title",
+            isError = showError,
+            errorText = if (showError) "Event title is required" else null,
+            singleLine = true
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        EventTextField(
+            value = eventDescription,
+            onValueChange = onDescriptionChange,
+            label = "Description",
+            placeholder = "Enter event description (optional)",
+            maxLines = 5,
+            maxHeight = 120.dp
+        )
+        Spacer(Modifier.height(12.dp))
+        AllDaySwitch(
+            isAllDay = isAllDay,
+            onCheckedChange = onAllDayChange
+        )
+    }
+}
+
+private @Composable
+fun WeekdayChipRow(
+    selectedWeekdays: Set<RepeatDays>,
+    onWeekdayToggle: (RepeatDays) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Weekday.entries.forEach { weekday ->
+            WeekdayChip(
+                label = weekday.label,
+                day = weekday.repeatDay,
+                selectedWeekdays = selectedWeekdays,
+                onWeekdayToggle = onWeekdayToggle,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+
+
+

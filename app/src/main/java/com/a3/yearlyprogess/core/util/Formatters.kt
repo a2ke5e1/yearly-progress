@@ -175,3 +175,21 @@ fun formatEventDateTime(
         }
     }
 }
+
+fun formatEventTimeStatus(
+    context: Context,
+    start: Long,
+    end: Long,
+    dynamic: Boolean = false,
+): String {
+    val now = System.currentTimeMillis()
+
+    return if (now < start) {
+        val timeIn = (start - now).toTimePeriodText(dynamic)
+        context.getString(R.string.time_in, timeIn)
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+    } else {
+        val timeLeft = (end - now).toTimePeriodText(dynamic)
+        context.getString(R.string.time_left, timeLeft)
+    }
+}

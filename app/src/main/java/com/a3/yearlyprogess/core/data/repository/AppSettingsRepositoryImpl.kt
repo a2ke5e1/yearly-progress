@@ -9,10 +9,12 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.CalculationType
+import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.core.util.ProgressSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -32,6 +34,7 @@ class AppSettingsRepositoryImpl @Inject constructor(
     override val appSettings: Flow<AppSettings> = context.dataStore.data.map { preferences ->
         val uLocale = ULocale(preferences[PreferencesKeys.LOCALE] ?: ULocale.getDefault().toString())
         val calendar = Calendar.getInstance(uLocale)
+        Log.d("appSettings", preferences.toString())
         AppSettings(
             isFirstLaunch = preferences[PreferencesKeys.IS_FIRST_LAUNCH] ?: true,
             progressSettings = ProgressSettings(
@@ -42,6 +45,9 @@ class AppSettingsRepositoryImpl @Inject constructor(
                 weekStartDay = preferences[PreferencesKeys.WEEK_START_DAY] ?: calendar.firstDayOfWeek,
                 decimalDigits = preferences[PreferencesKeys.DECIMAL_DIGITS] ?: 13
             ),
+            selectedCalendarIds = preferences[PreferencesKeys.SELECTED_CALENDAR_IDS]
+                ?.map { it.toLong() }
+                ?.toSet() ?: emptySet()
         )
     }
 
@@ -75,11 +81,19 @@ class AppSettingsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun setSelectedCalendarIds(calendarIds: Set<Long>) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.SELECTED_CALENDAR_IDS] = calendarIds.map { it.toString() }.toSet()
+        }
+    }
+
     private object PreferencesKeys {
         val IS_FIRST_LAUNCH = booleanPreferencesKey("is_first_launch")
         val LOCALE = stringPreferencesKey("locale")
         val CALCULATION_TYPE = stringPreferencesKey("calculation_type")
         val WEEK_START_DAY = intPreferencesKey("week_start_day")
         val DECIMAL_DIGITS = intPreferencesKey("decimal_digits")
+        val SELECTED_CALENDAR_IDS = stringSetPreferencesKey("selected_calendar_ids")
+
     }
 }

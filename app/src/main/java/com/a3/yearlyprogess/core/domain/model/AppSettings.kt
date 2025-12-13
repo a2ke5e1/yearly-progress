@@ -5,4 +5,5 @@ import com.a3.yearlyprogess.core.util.ProgressSettings
 data class AppSettings(
     val isFirstLaunch: Boolean = true,
     val progressSettings: ProgressSettings = ProgressSettings(),
+    val selectedCalendarIds: Set<Long> = emptySet()
 )

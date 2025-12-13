@@ -23,8 +23,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.interaction.PressAnimationConfig
 import com.a3.yearlyprogess.core.ui.interaction.applyPressGesture
 import com.a3.yearlyprogess.core.ui.interaction.rememberPressInteractionState
@@ -90,7 +92,7 @@ fun LocationRequiredCard(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Settings")
+                Text(stringResource(R.string.settings))
             }
         }
 

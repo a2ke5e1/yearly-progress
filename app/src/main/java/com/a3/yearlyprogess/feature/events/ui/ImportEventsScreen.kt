@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.Deselect
+import androidx.compose.material.icons.outlined.EditCalendar
 import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.SelectAll
@@ -42,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -53,13 +55,16 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.components.DateRangePickerModal
+import com.a3.yearlyprogess.core.ui.components.SelectDialog
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
+import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.feature.events.presentation.CalendarUiState
 import com.a3.yearlyprogess.feature.events.presentation.ImportEventsViewModel
 import com.a3.yearlyprogess.feature.events.ui.components.CalendarPermissionDialog
 import com.a3.yearlyprogess.feature.events.ui.components.CalendarRequiredCard
 import com.a3.yearlyprogess.feature.events.ui.components.EventDetailCard
 import com.a3.yearlyprogess.feature.events.ui.components.EventDetailCardDefaults
+import com.a3.yearlyprogess.feature.events.ui.components.EventList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,6 +85,12 @@ fun ImportEventsScreen(
     val shouldShowPermissionDialog by importEventsViewModel.shouldShowPermissionDialog.collectAsState()
     val showDateFilter by importEventsViewModel.showDateFilter.collectAsState()
     val dateFilter by importEventsViewModel.dateFilter.collectAsState()
+    val availableCalendars by importEventsViewModel.availableCalendars.collectAsState()
+    val selectedCalendars by importEventsViewModel.selectedCalendars.collectAsState()
+
+    var isCalendarDialogOpen by remember { mutableStateOf(false) }
+
+    Log.d("selectedCalendars", selectedCalendars.toString())
 
 
 
@@ -152,6 +163,12 @@ fun ImportEventsScreen(
                 actions = {
 
                     IconButton(onClick = {
+                        isCalendarDialogOpen = true
+                    }) {
+                        Icon(Icons.Outlined.EditCalendar, contentDescription = "Choose Calendars")
+                    }
+
+                    IconButton(onClick = {
                         importEventsViewModel.showDateFilter(true)
                     }) {
                         Icon(Icons.Outlined.FilterList, contentDescription = "Filter")
@@ -193,6 +210,23 @@ fun ImportEventsScreen(
             },
             initialStartDateMillis = dateFilter.first,
             initialEndDateMillis = dateFilter.second
+        )
+
+        SelectDialog(
+            title = "Your Calendars",
+            items = availableCalendars,
+            selectedItems = selectedCalendars.toSet(),
+            onDismiss = {
+                isCalendarDialogOpen = false
+            },
+            renderItem = { it, _ ->
+                Text(it.displayName)
+            },
+            isOpen = isCalendarDialogOpen,
+            onConfirm = { selectedCalendars ->
+                importEventsViewModel.setSelectedCalendars(selectedCalendars)
+                isCalendarDialogOpen = false
+            }
         )
 
         when (uiState) {
@@ -238,66 +272,15 @@ fun ImportEventsScreen(
             }
 
             is CalendarUiState.Success -> {
-                if (events.isEmpty()) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("No calendar events found")
-                    }
-                } else {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(8.dp, 0.dp)
-                            .fillMaxSize(),
-                        contentPadding = innerPadding,
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        itemsIndexed(events, key = { _, event -> event.id }) { index, event ->
-                            val isSelected = selectedIds.contains(event.id)
-                            val isPreviousSelected = index > 0 && selectedIds.contains(events[index - 1].id)
-                            val isNextSelected =
-                                index < events.size - 1 && selectedIds.contains(events[index + 1].id)
-                            EventDetailCard(
-                                event = event,
-                                isSelected = isSelected,
-                                onClick = {
-                                    importEventsViewModel.toggleSelection(event.id)
-                                },
-                                onLongPress = {
-                                    importEventsViewModel.toggleSelection(event.id)
-                                },
-                                style = EventDetailCardDefaults.eventDetailCardStyle(
-                                    cornerStyle = when {
-                                        events.size <= 1 -> CardCornerStyle.Default
-
-                                        isPreviousSelected && isNextSelected ->
-                                            CardCornerStyle.Default
-
-                                        isPreviousSelected && !isNextSelected ->
-                                            CardCornerStyle.FirstInList
-
-                                        !isPreviousSelected && isNextSelected ->
-                                            if (index == 0) CardCornerStyle.Default else CardCornerStyle.LastInList
-
-                                        else ->
-                                            when (index) {
-                                                0 -> CardCornerStyle.FirstInList
-                                                events.lastIndex -> CardCornerStyle.LastInList
-                                                else -> CardCornerStyle.MiddleInList
-                                            }
-                                    }
-                                ),
-                                settings = settings.progressSettings
-                            )
-                        }
-                        item {
-                            Spacer(Modifier.height(4.dp))
-                        }
-                    }
-                }
+                EventList(
+                    events = events,
+                    selectedIds = selectedIds,
+                    emptyText = "No calendar events found",
+                    contentPadding = innerPadding,
+                    onItemClick = { importEventsViewModel.toggleSelection(it.id) },
+                    onItemLongPress = { importEventsViewModel.toggleSelection(it.id) },
+                    settings = settings.progressSettings
+                )
             }
 
             is CalendarUiState.Error -> {

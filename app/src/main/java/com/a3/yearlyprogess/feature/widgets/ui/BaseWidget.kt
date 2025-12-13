@@ -72,6 +72,7 @@ abstract class BaseWidget : AppWidgetProvider() {
             WeekWidget::class.java,
             MonthWidget::class.java,
             YearWidget::class.java,
+            EventWidget::class.java,
         )
         var totalWidgets = 0
         widgetIntentsAndComponents.forEach {

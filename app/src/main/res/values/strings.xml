@@ -62,5 +62,13 @@
     <string name="time_left">%1$s left</string>
     <string name="all_day">All Day</string>
     <string name="import_events">Import Events</string>
+    <string name="no_events">No Events</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="okay">Okay</string>
+    <string name="select_date_range">Select date range</string>
+    <string name="all_day_event">All Day Event</string>
+    <string name="event_widget">Event Widget</string>
+    <string name="customization">Customization</string>
 
 </resources>

@@ -66,7 +66,7 @@ fun AppTopBar(
     val context = LocalContext.current
     TopAppBar(
         title = {
-            if (isActionMode) Text("Select events ${selectedIds?.value?.size ?: 0}") else Text(
+            if (isActionMode) Text("${selectedIds?.value?.size ?: 0}") else Text(
                 title
             )
         },
@@ -177,12 +177,12 @@ fun AppTopBar(
                 TextButton(onClick = {
                     showDeleteDialogBox = false
                     eventViewModel?.deleteSelectedEvents()
-                }) { Text("Yes") }
+                }) { Text(stringResource(R.string.yes)) }
             },
             dismissButton = {
                 TextButton(onClick = {
                     showDeleteDialogBox = false
-                }) { Text("No") }
+                }) { Text(stringResource(R.string.no)) }
             },
         )
     }

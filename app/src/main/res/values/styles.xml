@@ -18,18 +18,276 @@
         <item name="android:progressDrawable">@drawable/rounded_progress_bar</item>
     </style>
 
+    <!-- Progress Bar Themes -->
+
     <style name="WidgetProgressTheme.Default" parent="WidgetProgressBarBase">
         <item name="android:progressTint">@color/widget_default_primary_color</item>
         <item name="android:progressBackgroundTint">@color/widget_default_progress_bar_background</item>
     </style>
 
     <style name="WidgetProgressTheme.Green" parent="WidgetProgressBarBase">
-    <item name="android:progressTint">@color/widget_green_primary_color</item>
-    <item name="android:progressBackgroundTint">@color/widget_green_progress_bar_background</item>
-</style>
+        <item name="android:progressTint">@color/widget_green_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_green_progress_bar_background</item>
+    </style>
 
+    <style name="WidgetProgressTheme.Ocean" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_ocean_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_ocean_progress_bar_background</item>
+    </style>
 
+    <style name="WidgetProgressTheme.Sunset" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_sunset_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_sunset_progress_bar_background</item>
+    </style>
 
+    <style name="WidgetProgressTheme.Purple" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_purple_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_purple_progress_bar_background</item>
+    </style>
 
+    <style name="WidgetProgressTheme.Rose" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_rose_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_rose_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Mint" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_mint_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_mint_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Coral" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_coral_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_coral_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Sky" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_sky_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_sky_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Forest" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_forest_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_forest_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Amber" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_amber_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_amber_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Teal" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_teal_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_teal_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Lavender" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_lavender_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_lavender_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Crimson" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_crimson_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_crimson_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Indigo" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_indigo_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_indigo_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Peach" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_peach_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_peach_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Cyan" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_cyan_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_cyan_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Magenta" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_magenta_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_magenta_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Lime" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_lime_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_lime_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Ruby" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_ruby_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_ruby_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Slate" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_slate_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_slate_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Emerald" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_emerald_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_emerald_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Fuchsia" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_fuchsia_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_fuchsia_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Yellow" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_yellow_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_yellow_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Violet" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_violet_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_violet_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Steel" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_steel_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_steel_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Bronze" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_bronze_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_bronze_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Aqua" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_aqua_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_aqua_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Cherry" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_cherry_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_cherry_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Navy" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_navy_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_navy_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Sage" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_sage_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_sage_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Burgundy" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_burgundy_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_burgundy_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Charcoal" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_charcoal_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_charcoal_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Turquoise" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_turquoise_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_turquoise_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Mauve" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_mauve_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_mauve_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Gold" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_gold_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_gold_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Seafoam" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_seafoam_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_seafoam_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Raspberry" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_raspberry_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_raspberry_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Midnight" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_midnight_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_midnight_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Olive" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_olive_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_olive_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Salmon" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_salmon_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_salmon_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Periwinkle" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_periwinkle_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_periwinkle_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Autumn" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_autumn_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_autumn_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Graphite" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_graphite_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_graphite_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Spring" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_spring_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_spring_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Blush" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_blush_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_blush_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Cobalt" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_cobalt_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_cobalt_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Pistachio" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_pistachio_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_pistachio_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Mocha" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_mocha_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_mocha_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Lilac" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_lilac_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_lilac_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Tangerine" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_tangerine_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_tangerine_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Arctic" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_arctic_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_arctic_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Plum" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_plum_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_plum_progress_bar_background</item>
+    </style>
+
+    <style name="WidgetProgressTheme.Honeydew" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_honeydew_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_honeydew_progress_bar_background</item>
+    </style>
 
 </resources>

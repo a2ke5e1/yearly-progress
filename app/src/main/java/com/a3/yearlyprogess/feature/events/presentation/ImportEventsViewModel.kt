@@ -11,7 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.a3.yearlyprogess.core.domain.model.AppSettings
+import com.a3.yearlyprogess.core.domain.model.CalendarInfo
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
+import com.a3.yearlyprogess.core.domain.repository.CalendarRepository
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 import com.a3.yearlyprogess.feature.events.domain.repository.EventRepository
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -49,6 +52,7 @@ class ImportEventsViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val appSettingsRepository: AppSettingsRepository,
     private val repository: EventRepository,
+    private val calendarRepository: CalendarRepository,
 ) : ViewModel() {
 
     private val _importedEvents = MutableStateFlow<List<Event>>(emptyList())
@@ -110,21 +114,78 @@ class ImportEventsViewModel @Inject constructor(
         )
     )
 
+    private val _availableCalendars = MutableStateFlow<List<CalendarInfo>>(emptyList())
+    val availableCalendars: StateFlow<List<CalendarInfo>> =
+        _availableCalendars.asStateFlow().stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000), initialValue = emptyList()
+        )
+
+    private val _selectedCalendars = MutableStateFlow<List<CalendarInfo>>(emptyList())
+    val selectedCalendars: StateFlow<List<CalendarInfo>> =
+        _selectedCalendars.asStateFlow().stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000), initialValue = emptyList()
+        )
+
+    fun loadAvailableCalendars() {
+        viewModelScope.launch {
+            calendarRepository.getAvailableCalendars()
+                .onSuccess { calendars ->
+                    _availableCalendars.value = calendars
+                }
+                .onFailure { error ->
+                    Log.e("ImportEventsViewModel", "Failed to load calendars", error)
+                }
+        }
+    }
+
+    fun loadSelectedCalendarDetails(selectedIds: Set<Long>) {
+        viewModelScope.launch {
+            Log.d("ViewModel", "Selected Ids $selectedIds")
+            calendarRepository.getSelectedCalendarDetails(selectedIds)
+                .onSuccess { calendars ->
+                    if (calendars.isEmpty()) {
+                        _selectedCalendars.value = _availableCalendars.value
+                        Log.d("ViewModel", "No Calendar selected, so showing all")
+                        return@onSuccess
+                    }
+                    _selectedCalendars.value = calendars
+                    Log.d("ViewModel", "Selected calendars: ${calendars.map { it.displayName }}")
+                }
+                .onFailure { error ->
+                    Log.e("ViewModel", "Failed to load selected calendars", error)
+                }
+        }
+    }
+
     init {
         checkCalendarPermission()
 
         viewModelScope.launch {
             permissionState.collect { state ->
                 if (state == CalendarPermissionState.Available) {
-                    readEventsFromCalendar()
+                    loadAvailableCalendars()
                 }
             }
         }
 
+        // Combine both settings and dateFilter to trigger reload only when either changes
         viewModelScope.launch {
-            dateFilter.collect {
-                if (permissionState.value == CalendarPermissionState.Available) {
-                    readEventsFromCalendar()
+            combine(
+                appSettingsRepository.appSettings,
+                dateFilter,
+                permissionState
+            ) { settings, filter, permission ->
+                Triple(settings, filter, permission)
+            }.collect { (settings, filter, permission) ->
+                Log.d("ViewModel", "Combined trigger - Calendar IDs: ${settings.selectedCalendarIds}, Date: ${filter.first} to ${filter.second}, Permission: $permission")
+                loadSelectedCalendarDetails(settings.selectedCalendarIds)
+                if (permission == CalendarPermissionState.Available) {
+                    readEventsFromCalendar(
+                        selectedCalendarIds = settings.selectedCalendarIds,
+                        dateRange = filter
+                    )
                 }
             }
         }
@@ -135,7 +196,6 @@ class ImportEventsViewModel @Inject constructor(
             when {
                 hasCalendarPermission() -> {
                     _permissionState.value = CalendarPermissionState.Available
-                    readEventsFromCalendar()
                 }
 
                 else -> {
@@ -158,7 +218,6 @@ class ImportEventsViewModel @Inject constructor(
         viewModelScope.launch {
             _shouldShowPermissionDialog.value = false
             _permissionState.value = CalendarPermissionState.Available
-            readEventsFromCalendar()
         }
     }
 
@@ -174,7 +233,6 @@ class ImportEventsViewModel @Inject constructor(
         viewModelScope.launch {
             if (hasCalendarPermission()) {
                 _permissionState.value = CalendarPermissionState.Available
-                readEventsFromCalendar()
             } else {
                 _permissionState.value = CalendarPermissionState.PermissionRequired
                 _shouldShowPermissionDialog.value = true
@@ -193,55 +251,63 @@ class ImportEventsViewModel @Inject constructor(
         context.startActivity(intent)
     }
 
-    private fun readEventsFromCalendar() {
+    private fun readEventsFromCalendar(
+        selectedCalendarIds: Set<Long>,
+        dateRange: Pair<Long?, Long?>
+    ) {
         val eventList = mutableListOf<Event>()
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.value = CalendarUiState.Loading
+            withContext(Dispatchers.Main) {
+                _uiState.value = CalendarUiState.Loading
+            }
 
             if (!hasCalendarPermission()) {
-                _uiState.value = CalendarUiState.PermissionRequired
+                withContext(Dispatchers.Main) {
+                    _uiState.value = CalendarUiState.PermissionRequired
+                }
                 return@launch
             }
 
-            val uri = CalendarContract.Events.CONTENT_URI
+            // Get date filter range
+            val (filterStart, filterEnd) = dateRange
+
+            if (filterStart == null || filterEnd == null) {
+                withContext(Dispatchers.Main) {
+                    _uiState.value = CalendarUiState.Error("Date filter is required")
+                }
+                return@launch
+            }
+
+            Log.d("ReadEvents", "Reading events - Calendar IDs: $selectedCalendarIds, Date: $filterStart to $filterEnd")
+
+            // Build URI for calendar instances within the date range
+            val uri = CalendarContract.Instances.CONTENT_URI.buildUpon()
+                .appendPath(filterStart.toString())
+                .appendPath(filterEnd.toString())
+                .build()
+
             val projection = arrayOf(
-                CalendarContract.Events._ID,
-                CalendarContract.Events.TITLE,
-                CalendarContract.Events.DESCRIPTION,
-                CalendarContract.Events.DTSTART,
-                CalendarContract.Events.DTEND,
-                CalendarContract.Events.ALL_DAY
+                CalendarContract.Instances.EVENT_ID,
+                CalendarContract.Instances.TITLE,
+                CalendarContract.Instances.DESCRIPTION,
+                CalendarContract.Instances.BEGIN,
+                CalendarContract.Instances.END,
+                CalendarContract.Instances.ALL_DAY,
+                CalendarContract.Instances.CALENDAR_ID
             )
 
-            // Build selection and selectionArgs based on date filter
-            val (filterStart, filterEnd) = dateFilter.value
-
+            // Build selection to filter by selected calendars
             var selection: String? = null
             var selectionArgs: Array<String>? = null
 
-            if (filterStart != null && filterEnd != null) {
-                // Overlap condition: event starts before filterEnd AND ends after filterStart
-                selection = """
-                (${CalendarContract.Events.DTSTART} <= ? AND ${CalendarContract.Events.DTEND} >= ?)
-                OR (${CalendarContract.Events.DTSTART} >= ? AND ${CalendarContract.Events.DTSTART} <= ?)
-                OR (${CalendarContract.Events.DTEND} >= ? AND ${CalendarContract.Events.DTEND} <= ?)
-                OR (${CalendarContract.Events.DTSTART} <= ? AND (${CalendarContract.Events.DTEND} IS NULL OR ${CalendarContract.Events.DTEND} >= ?))
-            """.trimIndent()
-
-                selectionArgs = arrayOf(
-                    filterEnd.toString(), filterStart.toString(),  // start before end AND end after start
-                    filterStart.toString(), filterEnd.toString(),   // event starts within range
-                    filterStart.toString(), filterEnd.toString(),   // event ends within range
-                    filterStart.toString(), filterStart.toString()  // ongoing events at start time
-                )
-            } else if (filterStart != null) {
-                // Only start date: show events starting on or after this date
-                selection = "${CalendarContract.Events.DTSTART} >= ?"
-                selectionArgs = arrayOf(filterStart.toString())
-            } else if (filterEnd != null) {
-                // Only end date: show events ending on or before this date
-                selection = "${CalendarContract.Events.DTEND} <= ? OR ${CalendarContract.Events.DTEND} IS NULL"
-                selectionArgs = arrayOf(filterEnd.toString())
+            if (selectedCalendarIds.isNotEmpty()) {
+                // Create placeholders for each calendar ID
+                val placeholders = selectedCalendarIds.joinToString(",") { "?" }
+                selection = "${CalendarContract.Instances.CALENDAR_ID} IN ($placeholders)"
+                selectionArgs = selectedCalendarIds.map { it.toString() }.toTypedArray()
+                Log.d("ReadEvents", "Selection: $selection with args: ${selectionArgs.joinToString()}")
+            } else {
+                Log.d("ReadEvents", "No calendar filter - showing all calendars")
             }
 
             var count = 0
@@ -251,16 +317,17 @@ class ImportEventsViewModel @Inject constructor(
                     projection,
                     selection,
                     selectionArgs,
-                    "${CalendarContract.Events.DTSTART} DESC"
+                    "${CalendarContract.Instances.BEGIN} ASC"
                 )
 
                 cursor?.use { cur ->
-                    val idCol = cur.getColumnIndex(CalendarContract.Events._ID)
-                    val titleCol = cur.getColumnIndex(CalendarContract.Events.TITLE)
-                    val descCol = cur.getColumnIndex(CalendarContract.Events.DESCRIPTION)
-                    val startCol = cur.getColumnIndex(CalendarContract.Events.DTSTART)
-                    val endCol = cur.getColumnIndex(CalendarContract.Events.DTEND)
-                    val allDayCol = cur.getColumnIndex(CalendarContract.Events.ALL_DAY)
+                    val eventIdCol = cur.getColumnIndex(CalendarContract.Instances.EVENT_ID)
+                    val titleCol = cur.getColumnIndex(CalendarContract.Instances.TITLE)
+                    val descCol = cur.getColumnIndex(CalendarContract.Instances.DESCRIPTION)
+                    val startCol = cur.getColumnIndex(CalendarContract.Instances.BEGIN)
+                    val endCol = cur.getColumnIndex(CalendarContract.Instances.END)
+                    val allDayCol = cur.getColumnIndex(CalendarContract.Instances.ALL_DAY)
+                    val calendarIdCol = cur.getColumnIndex(CalendarContract.Instances.CALENDAR_ID)
 
                     while (cur.moveToNext()) {
                         try {
@@ -269,8 +336,9 @@ class ImportEventsViewModel @Inject constructor(
                             val dtStart = cur.getLong(startCol)
                             val dtEnd = cur.getLong(endCol).takeIf { !cur.isNull(endCol) && it != 0L }
                             val isAllDay = cur.getInt(allDayCol) == 1
+                            val calId = cur.getLong(calendarIdCol)
 
-                            // Optional: Adjust all-day events to local timezone (they are usually in UTC midnight)
+                            // Adjust all-day events to local timezone
                             val startDate = Date(dtStart).let {
                                 if (isAllDay) adjustAllDayToLocal(it) else it
                             }
@@ -278,27 +346,32 @@ class ImportEventsViewModel @Inject constructor(
                                 Date(it).let { date -> if (isAllDay) adjustAllDayToLocal(date) else date }
                             }
 
-                            val event = Event(
-                                id = count++,
-                                eventTitle = title,
-                                eventDescription = description,
-                                eventStartTime = startDate,
-                                eventEndTime = endDate!!,
-                                allDayEvent = isAllDay
-                            )
-                            eventList.add(event)
+                            if (endDate != null) {
+                                val event = Event(
+                                    id = count++,
+                                    eventTitle = title,
+                                    eventDescription = description,
+                                    eventStartTime = startDate,
+                                    eventEndTime = endDate,
+                                    allDayEvent = isAllDay
+                                )
+                                eventList.add(event)
+                            }
                         } catch (e: Exception) {
-                            Log.e("ImportEventsViewModel", "Failed to parse event", e)
+                            Log.e("ImportEventsViewModel", "Failed to parse event instance", e)
                         }
                     }
                 }
+
+                Log.d("ReadEvents", "Loaded ${eventList.size} events")
             } catch (e: SecurityException) {
+                Log.e("ReadEvents", "Security exception", e)
                 withContext(Dispatchers.Main) {
                     _uiState.value = CalendarUiState.PermissionRequired
                 }
                 return@launch
             } catch (e: Exception) {
-                Log.e("ImportEventsViewModel", "Failed to read calendar", e)
+                Log.e("ImportEventsViewModel", "Failed to read calendar instances", e)
                 withContext(Dispatchers.Main) {
                     _uiState.value = CalendarUiState.Error("Failed to load events: ${e.message}")
                 }
@@ -323,6 +396,7 @@ class ImportEventsViewModel @Inject constructor(
         }
         return calendar.time
     }
+
     fun toggleSelection(id: Int) {
         _selectedIds.value =
             if (_selectedIds.value.contains(id))
@@ -364,7 +438,7 @@ class ImportEventsViewModel @Inject constructor(
                 }
                 repository.insertAllEvents(selectedEvents)
             }
-            onFinish()  // now always on Main
+            onFinish()
         }
     }
 
@@ -377,7 +451,17 @@ class ImportEventsViewModel @Inject constructor(
     fun setDateFilter(
         dateFilter: Pair<Long?, Long?>
     ) {
+        Log.d("SetDateFilter", "Setting date filter: ${dateFilter.first} to ${dateFilter.second}")
         _dateFilter.value = dateFilter
     }
 
+    fun setSelectedCalendars(selectedCalendars: Set<CalendarInfo>) {
+        viewModelScope.launch {
+            Log.d("SetSelectedCalendars", "Selected calendars: $selectedCalendars")
+            val ids = selectedCalendars.map { it.id }.toSet()
+            withContext(Dispatchers.IO) {
+                appSettingsRepository.setSelectedCalendarIds(ids)
+            }
+        }
+    }
 }

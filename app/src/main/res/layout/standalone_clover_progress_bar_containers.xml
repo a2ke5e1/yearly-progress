@@ -28,4 +28,369 @@
         android:theme="@style/WidgetTheme.Dynamic"
         />
 
+
+    <ImageView
+        android:id="@+id/widgetContainerOcean"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Ocean" />
+
+    <ImageView
+        android:id="@+id/widgetContainerSunset"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Sunset" />
+
+    <ImageView
+        android:id="@+id/widgetContainerPurple"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Purple" />
+
+    <ImageView
+        android:id="@+id/widgetContainerRose"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Rose" />
+
+    <ImageView
+        android:id="@+id/widgetContainerMint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Mint" />
+
+    <ImageView
+        android:id="@+id/widgetContainerCoral"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Coral" />
+
+    <ImageView
+        android:id="@+id/widgetContainerSky"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Sky" />
+
+    <ImageView
+        android:id="@+id/widgetContainerForest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Forest" />
+
+    <ImageView
+        android:id="@+id/widgetContainerAmber"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Amber" />
+
+    <ImageView
+        android:id="@+id/widgetContainerTeal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Teal" />
+
+    <ImageView
+        android:id="@+id/widgetContainerLavender"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Lavender" />
+
+    <ImageView
+        android:id="@+id/widgetContainerCrimson"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Crimson" />
+
+    <ImageView
+        android:id="@+id/widgetContainerIndigo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Indigo" />
+
+    <ImageView
+        android:id="@+id/widgetContainerPeach"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Peach" />
+
+    <ImageView
+        android:id="@+id/widgetContainerCyan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Cyan" />
+
+    <ImageView
+        android:id="@+id/widgetContainerMagenta"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Magenta" />
+
+    <ImageView
+        android:id="@+id/widgetContainerLime"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Lime" />
+
+    <ImageView
+        android:id="@+id/widgetContainerRuby"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Ruby" />
+
+    <ImageView
+        android:id="@+id/widgetContainerSlate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Slate" />
+
+    <ImageView
+        android:id="@+id/widgetContainerEmerald"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Emerald" />
+
+    <ImageView
+        android:id="@+id/widgetContainerFuchsia"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Fuchsia" />
+
+    <ImageView
+        android:id="@+id/widgetContainerYellow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Yellow" />
+
+    <ImageView
+        android:id="@+id/widgetContainerViolet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Violet" />
+
+    <ImageView
+        android:id="@+id/widgetContainerSteel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Steel" />
+
+    <ImageView
+        android:id="@+id/widgetContainerBronze"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Bronze" />
+
+    <ImageView
+        android:id="@+id/widgetContainerAqua"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Aqua" />
+
+    <ImageView
+        android:id="@+id/widgetContainerCherry"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Cherry" />
+
+    <ImageView
+        android:id="@+id/widgetContainerNavy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Navy" />
+
+    <ImageView
+        android:id="@+id/widgetContainerSage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Sage" />
+
+    <ImageView
+        android:id="@+id/widgetContainerBurgundy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Burgundy" />
+
+    <ImageView
+        android:id="@+id/widgetContainerCharcoal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Charcoal" />
+
+    <ImageView
+        android:id="@+id/widgetContainerTurquoise"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Turquoise" />
+
+    <ImageView
+        android:id="@+id/widgetContainerMauve"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Mauve" />
+
+    <ImageView
+        android:id="@+id/widgetContainerGold"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Gold" />
+
+    <ImageView
+        android:id="@+id/widgetContainerSeafoam"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Seafoam" />
+
+    <ImageView
+        android:id="@+id/widgetContainerRaspberry"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Raspberry" />
+
+    <ImageView
+        android:id="@+id/widgetContainerMidnight"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Midnight" />
+
+    <ImageView
+        android:id="@+id/widgetContainerOlive"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Olive" />
+
+    <ImageView
+        android:id="@+id/widgetContainerSalmon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Salmon" />
+
+    <ImageView
+        android:id="@+id/widgetContainerPeriwinkle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Periwinkle" />
+
+    <ImageView
+        android:id="@+id/widgetContainerAutumn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Autumn" />
+
+    <ImageView
+        android:id="@+id/widgetContainerGraphite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Graphite" />
+
+    <ImageView
+        android:id="@+id/widgetContainerSpring"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Spring" />
+
+    <ImageView
+        android:id="@+id/widgetContainerBlush"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Blush" />
+
+    <ImageView
+        android:id="@+id/widgetContainerCobalt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Cobalt" />
+
+    <ImageView
+        android:id="@+id/widgetContainerPistachio"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Pistachio" />
+
+    <ImageView
+        android:id="@+id/widgetContainerMocha"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Mocha" />
+
+    <ImageView
+        android:id="@+id/widgetContainerLilac"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Lilac" />
+
+    <ImageView
+        android:id="@+id/widgetContainerTangerine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Tangerine" />
+
+    <ImageView
+        android:id="@+id/widgetContainerArctic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Arctic" />
+
+    <ImageView
+        android:id="@+id/widgetContainerPlum"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Plum" />
+
+    <ImageView
+        android:id="@+id/widgetContainerHoneydew"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_clover_50"
+        android:theme="@style/WidgetTheme.Honeydew" />
+
 </LinearLayout>

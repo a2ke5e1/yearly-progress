@@ -1,0 +1,117 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/widgetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/app_widget_background" />
+
+    <ImageView
+        android:id="@+id/imageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/app_widget_background"
+        android:clipToOutline="true"
+        android:foreground="@drawable/event_widget_background_scrim"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
+        style="@style/Widget.YearlyProgress.AppWidget.Container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/Theme.YearlyProgress.AppWidgetContainer"
+        tools:ignore="HardcodedText">
+
+
+        <TextView
+            android:id="@+id/eventTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="Lorem Ipsum"
+            android:textAllCaps="false"
+            android:textSize="@dimen/event_widget_small_title"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/widgetDaysLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/eventTitle"
+            android:textSize="@dimen/event_widget_small_days_left"
+            android:textStyle="normal"
+            tools:text="12d 1h 45m 12s left" />
+
+
+        <TextView
+            android:id="@+id/eventProgressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/widgetProgressBarsContainer"
+            android:text="40.48%"
+            android:textSize="@dimen/event_widget_small_progress"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/currentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/widgetProgressBarsContainer"
+            android:layout_alignParentEnd="true"
+            android:text="08/09"
+            android:textAlignment="textEnd"
+            android:textSize="@dimen/event_widget_small_current_date" />
+
+        <include
+            android:id="@+id/widgetProgressBarsContainer"
+            layout="@layout/standalone_progress_bar_containers"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:fontFamily="@font/inter_semibold"
+        android:letterSpacing="0.5"
+        android:padding="4dp"
+        android:textSize="3sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/prev_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground" />
+
+        <Button
+            android:id="@+id/home_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00000000" />
+
+        <Button
+            android:id="@+id/next_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground" />
+    </LinearLayout>
+</FrameLayout>

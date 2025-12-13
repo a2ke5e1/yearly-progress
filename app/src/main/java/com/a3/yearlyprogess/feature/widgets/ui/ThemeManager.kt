@@ -9,14 +9,11 @@ import kotlinx.coroutines.flow.first
 
 object ThemeManager {
 
-    suspend fun getWidgetColors(
+    fun getWidgetColors(
         context: Context,
-        repository: WidgetThemeRepository
+        theme: WidgetTheme
     ): WidgetColors {
-        val theme = repository.getSelectedTheme().first()
-        val useDynamic = repository.useDynamicColors().first()
-
-        return if (useDynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && theme === WidgetTheme.DYNAMIC) {
             WidgetColors.fromTheme(context, WidgetTheme.DYNAMIC)
         } else {
             WidgetColors.fromTheme(context, theme)

@@ -25,6 +25,7 @@ import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 import com.a3.yearlyprogess.feature.events.ui.components.EventDetailCard
 import com.a3.yearlyprogess.feature.events.ui.components.EventDetailCardDefaults
+import com.a3.yearlyprogess.feature.events.ui.components.EventList
 
 @Composable
 fun EventListScreen(
@@ -52,66 +53,19 @@ fun EventListScreen(
         }
     }
 
-    if (events.isEmpty()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("No events yet. Add one to get started!")
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier
-                .padding(8.dp, 0.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            itemsIndexed(events, key = { _, event -> event.id }) { index, event ->
-                val isSelected = selectedIds.contains(event.id)
-                val isPreviousSelected = index > 0 && selectedIds.contains(events[index - 1].id)
-                val isNextSelected =
-                    index < events.size - 1 && selectedIds.contains(events[index + 1].id)
-                EventDetailCard(
-                    event = event,
-                    isSelected = isSelected,
-                    onClick = {
-                        if (selectedIds.isEmpty()) {
-                            onNavigateToEventDetail(event.id)
-                        } else {
-                            viewModel.toggleSelection(event.id)
-                        }
-                    },
-                    onLongPress = { viewModel.toggleSelection(event.id) },
-                    style = EventDetailCardDefaults.eventDetailCardStyle(
-                        cornerStyle = when {
-                            events.size <= 1 -> CardCornerStyle.Default
-
-                            isPreviousSelected && isNextSelected ->
-                                CardCornerStyle.Default
-
-                            isPreviousSelected && !isNextSelected ->
-                                CardCornerStyle.FirstInList
-
-                            !isPreviousSelected && isNextSelected ->
-                                if (index == 0) CardCornerStyle.Default else CardCornerStyle.LastInList
-
-                            else ->
-                                when (index) {
-                                    0 -> CardCornerStyle.FirstInList
-                                    events.lastIndex -> CardCornerStyle.LastInList
-                                    else -> CardCornerStyle.MiddleInList
-                                }
-                        }
-                    ),
-                    settings = settings.progressSettings
-                )
+    EventList(
+        events = events,
+        selectedIds = selectedIds,
+        emptyText = "No events yet. Add one to get started!",
+        onItemClick = { event ->
+            if (selectedIds.isEmpty()) {
+                onNavigateToEventDetail(event.id)
+            } else {
+                viewModel.toggleSelection(event.id)
             }
-            item {
-                Spacer(Modifier.height(4.dp))
-            }
-        }
-    }
+        },
+        onItemLongPress = { viewModel.toggleSelection(it.id) },
+        settings = settings.progressSettings
+    )
 
 }
