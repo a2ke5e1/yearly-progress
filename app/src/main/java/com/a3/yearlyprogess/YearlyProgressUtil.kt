@@ -107,20 +107,21 @@ class YearlyProgressUtil(val context: Context) {
         val weekStartDay =
             settingPref.getString(context.getString(R.string.app_week_widget_start_day), "0") ?: "0"
 
-        cal.set(Calendar.HOUR_OF_DAY, 0)
-        cal.clear(Calendar.MINUTE)
-        cal.clear(Calendar.SECOND)
-        cal.clear(Calendar.MILLISECOND)
 
-        // This make sures if week prefs is not 0
-        // then it loads the user prefs
-        // otherwise it load default
-        if (weekStartDay.toInt() > 0) {
-          cal.firstDayOfWeek = weekStartDay.toInt()
-        }
+          cal.set(Calendar.DAY_OF_WEEK, weekStartDay.toInt())
 
-        cal.set(Calendar.DAY_OF_WEEK, cal.firstDayOfWeek)
-        cal.timeInMillis
+          cal.set(Calendar.HOUR_OF_DAY, 0)
+          cal.set(Calendar.MINUTE, 0)
+          cal.set(Calendar.SECOND, 0)
+          cal.set(Calendar.MILLISECOND, 0)
+
+          // If today is before the weekStartDay (e.g., today is Mon, start is Wed),
+          // the calendar will have jumped to the *next* week. We need to go back one week.
+          if (cal.timeInMillis > System.currentTimeMillis()) {
+              cal.add(Calendar.WEEK_OF_YEAR, -1)
+          }
+
+          cal.timeInMillis
       }
 
       TimePeriod.MONTH -> {

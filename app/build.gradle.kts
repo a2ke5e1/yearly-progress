@@ -6,7 +6,7 @@ plugins {
   id("androidx.navigation.safeargs.kotlin")
   id("com.google.gms.google-services")
   id("com.google.firebase.crashlytics")
-  id("com.ncorti.ktfmt.gradle") version "0.23.0"
+  id("com.ncorti.ktfmt.gradle") version "0.24.0"
   id("org.jetbrains.kotlin.plugin.compose")
   id("org.jetbrains.kotlin.plugin.serialization")
 }
@@ -18,8 +18,8 @@ android {
     applicationId = "com.a3.yearlyprogess"
     minSdk = 30
     targetSdk = 36
-    versionCode = 143
-    versionName = "2.16.0-beta15"
+    versionCode = 144
+    versionName = "2.16.0-beta16"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
