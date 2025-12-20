@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 class SunriseSunsetRepositoryImpl @Inject constructor(
     @param:ApplicationContext private val context: Context,
@@ -51,6 +52,7 @@ class SunriseSunsetRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             Log.w("SunriseSunsetRepository", "Failed to fetch data", e)
+            if (e is CancellationException) throw e
             emit(Resource.Error("Failed to fetch data", e))
         }
     }

@@ -7,6 +7,7 @@ import com.a3.yearlyprogess.feature.events.data.local.EventDatabase
 import com.a3.yearlyprogess.feature.events.data.repository.EventRepositoryImpl
 import com.a3.yearlyprogess.feature.events.domain.repository.EventRepository
 import com.a3.yearlyprogess.feature.widgets.data.datastore.EventWidgetOptionsDataStore
+import com.a3.yearlyprogess.feature.widgets.data.datastore.StandaloneWidgetOptionsDataStore
 import com.a3.yearlyprogess.feature.widgets.data.repository.EventWidgetOptionsRepositoryImpl
 import com.a3.yearlyprogess.feature.widgets.domain.repository.EventWidgetOptionsRepository
 import dagger.Module
@@ -46,6 +47,14 @@ object DatabaseModule {
         @ApplicationContext context: Context
     ): EventWidgetOptionsDataStore {
         return EventWidgetOptionsDataStore(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStandaloneWidgetOptionsDataStore(
+        @ApplicationContext context: Context
+    ): StandaloneWidgetOptionsDataStore {
+        return StandaloneWidgetOptionsDataStore(context)
     }
 
 }

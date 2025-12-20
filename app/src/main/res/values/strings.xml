@@ -70,5 +70,10 @@
     <string name="all_day_event">All Day Event</string>
     <string name="event_widget">Event Widget</string>
     <string name="customization">Customization</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="day_light">Day Light</string>
+    <string name="night_light">Night Light</string>
 
 </resources>

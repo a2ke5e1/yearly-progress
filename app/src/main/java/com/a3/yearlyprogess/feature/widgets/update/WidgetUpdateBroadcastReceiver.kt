@@ -5,9 +5,11 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import com.a3.yearlyprogess.feature.widgets.ui.DayLightWidget
 import com.a3.yearlyprogess.feature.widgets.ui.DayWidget
 import com.a3.yearlyprogess.feature.widgets.ui.EventWidget
 import com.a3.yearlyprogess.feature.widgets.ui.MonthWidget
+import com.a3.yearlyprogess.feature.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.feature.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.feature.widgets.ui.YearWidget
 
@@ -21,6 +23,8 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
         val widgetIntentsAndComponents =
             arrayOf(
                 DayWidget::class.java,
+                DayLightWidget::class.java,
+                NightLightWidget::class.java,
                 WeekWidget::class.java,
                 MonthWidget::class.java,
                 YearWidget::class.java,

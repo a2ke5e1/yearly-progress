@@ -170,18 +170,20 @@ class ImportEventsViewModel @Inject constructor(
             }
         }
 
-        // Combine both settings and dateFilter to trigger reload only when either changes
+        // Combine settings, dateFilter, permissionState AND availableCalendars
         viewModelScope.launch {
             combine(
                 appSettingsRepository.appSettings,
                 dateFilter,
-                permissionState
-            ) { settings, filter, permission ->
-                Triple(settings, filter, permission)
-            }.collect { (settings, filter, permission) ->
-                Log.d("ViewModel", "Combined trigger - Calendar IDs: ${settings.selectedCalendarIds}, Date: ${filter.first} to ${filter.second}, Permission: $permission")
-                loadSelectedCalendarDetails(settings.selectedCalendarIds)
-                if (permission == CalendarPermissionState.Available) {
+                permissionState,
+                _availableCalendars
+            ) { settings, filter, permission, availableCalendars ->
+                Tuple4(settings, filter, permission, availableCalendars)
+            }.collect { (settings, filter, permission, availableCalendars) ->
+                Log.d("ViewModel", "Combined trigger - Calendar IDs: ${settings.selectedCalendarIds}, Date: ${filter.first} to ${filter.second}, Permission: $permission, Available: ${availableCalendars.size}")
+                // Only proceed if we have permission and calendars are loaded
+                if (permission == CalendarPermissionState.Available && availableCalendars.isNotEmpty()) {
+                    loadSelectedCalendarDetails(settings.selectedCalendarIds)
                     readEventsFromCalendar(
                         selectedCalendarIds = settings.selectedCalendarIds,
                         dateRange = filter
@@ -190,6 +192,14 @@ class ImportEventsViewModel @Inject constructor(
             }
         }
     }
+
+    // Helper data class for combine
+    private data class Tuple4<A, B, C, D>(
+        val first: A,
+        val second: B,
+        val third: C,
+        val fourth: D
+    )
 
     private fun checkCalendarPermission() {
         viewModelScope.launch {

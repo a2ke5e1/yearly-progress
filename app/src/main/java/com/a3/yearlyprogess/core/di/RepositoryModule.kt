@@ -9,7 +9,9 @@ import com.a3.yearlyprogess.data.repository.SunriseSunsetRepositoryImpl
 import com.a3.yearlyprogess.domain.repository.LocationRepository
 import com.a3.yearlyprogess.domain.repository.SunriseSunsetRepository
 import com.a3.yearlyprogess.feature.widgets.data.repository.EventWidgetOptionsRepositoryImpl
+import com.a3.yearlyprogess.feature.widgets.data.repository.StandaloneWidgetOptionsRepositoryImpl
 import com.a3.yearlyprogess.feature.widgets.domain.repository.EventWidgetOptionsRepository
+import com.a3.yearlyprogess.feature.widgets.domain.repository.StandaloneWidgetOptionsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -49,4 +51,12 @@ abstract class RepositoryModule {
     abstract fun bindEventWidgetOptionsRepository(
         impl: EventWidgetOptionsRepositoryImpl
     ): EventWidgetOptionsRepository
+
+
+    @Binds
+    @Singleton
+    abstract fun bindStandaloneWidgetOptionsRepository(
+        impl: StandaloneWidgetOptionsRepositoryImpl
+    ): StandaloneWidgetOptionsRepository
+
 }

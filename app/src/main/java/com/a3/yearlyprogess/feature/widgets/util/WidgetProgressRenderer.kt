@@ -8,6 +8,7 @@ import android.widget.RemoteViews
 import androidx.annotation.DimenRes
 import androidx.annotation.IdRes
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 
 object WidgetProgressRenderer {
@@ -348,5 +349,15 @@ object WidgetProgressRenderer {
         val finalSp = (baseSp * fontScale).coerceIn(minSp, maxSp)
         this.setTextViewTextSize(viewId, TypedValue.COMPLEX_UNIT_SP, finalSp)
     }
+
+    fun errorWidgetRemoteView(context: Context, message: String, widgetColors: WidgetColors? = null): RemoteViews {
+        val view = RemoteViews(context.packageName, R.layout.error_widget)
+        view.setTextViewText(R.id.error_text, message)
+        if (widgetColors != null) {
+            view.setTextColor(R.id.error_text, widgetColors.primaryColor)
+        }
+        return view
+    }
+
 
 }

@@ -275,7 +275,7 @@ fun ImportEventsScreen(
                 EventList(
                     events = events,
                     selectedIds = selectedIds,
-                    emptyText = "No calendar events found",
+                    emptyText = "No events found",
                     contentPadding = innerPadding,
                     onItemClick = { importEventsViewModel.toggleSelection(it.id) },
                     onItemLongPress = { importEventsViewModel.toggleSelection(it.id) },

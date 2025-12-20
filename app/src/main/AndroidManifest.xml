@@ -39,6 +39,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".feature.widgets.ui.config_screens.StandaloneConfigActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
 
 
         <!-- Widget Update Receiver -->
@@ -56,7 +64,7 @@
         <receiver
             android:name=".feature.widgets.ui.DayWidget"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/day">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -68,7 +76,7 @@
         <receiver
             android:name=".feature.widgets.ui.WeekWidget"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/week">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -80,7 +88,7 @@
         <receiver
             android:name=".feature.widgets.ui.MonthWidget"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/month">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -92,7 +100,7 @@
         <receiver
             android:name=".feature.widgets.ui.YearWidget"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/year">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -101,6 +109,33 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/year_widget_info" />
         </receiver>
+
+        <receiver
+            android:name=".feature.widgets.ui.DayLightWidget"
+            android:exported="true"
+            android:label="@string/day_light">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/day_light_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".feature.widgets.ui.NightLightWidget"
+            android:exported="true"
+            android:label="@string/night_light">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/night_light_widget_info" />
+        </receiver>
+
         <receiver
             android:name=".feature.widgets.ui.EventWidget"
             android:exported="false"

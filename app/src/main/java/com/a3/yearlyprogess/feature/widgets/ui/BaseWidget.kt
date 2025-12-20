@@ -69,6 +69,8 @@ abstract class BaseWidget : AppWidgetProvider() {
 
         val widgetIntentsAndComponents = arrayOf(
             DayWidget::class.java,
+            DayLightWidget::class.java,
+            NightLightWidget::class.java,
             WeekWidget::class.java,
             MonthWidget::class.java,
             YearWidget::class.java,
