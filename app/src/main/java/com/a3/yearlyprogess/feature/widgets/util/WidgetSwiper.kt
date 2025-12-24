@@ -129,39 +129,46 @@ class WidgetSwiper<T>(
 
     companion object {
         /**
-         * Factory method to create an EventSwiper
+         * Factory method to create an EventSwiper for EventWidget
          */
         fun forEvents(
             context: Context,
             events: List<Event>,
-            widgetId: Int
+            widgetId: Int,
+            widgetTheme: WidgetTheme = WidgetTheme.DEFAULT
         ): WidgetSwiper<Event> {
             return WidgetSwiper(
                 context = context,
                 items = events,
                 widgetId = widgetId,
-                preferenceName = "EventSwiper"
+                preferenceName = "EventSwiper",
+                widgetTheme = widgetTheme
             )
         }
 
         /**
-         * Factory method to create a CalendarSwiper
+         * Factory method to create a CalendarSwiper for CalendarWidget
+         * Automatically filters to future events and limits to specified count
          */
         fun forCalendar(
             context: Context,
             events: List<Event>,
-            limit: Int = 5
+            widgetId: Int,
+            limit: Int = 5,
+            widgetTheme: WidgetTheme = WidgetTheme.DEFAULT
         ): WidgetSwiper<Event> {
+            val now = System.currentTimeMillis()
             val filteredEvents = events
-                .filter { it.eventEndTime.time > System.currentTimeMillis() }
+                .filter { it.eventEndTime.time > now }
                 .sortedBy { it.eventStartTime }
                 .take(limit)
 
             return WidgetSwiper(
                 context = context,
                 items = filteredEvents,
-                widgetId = 0, // Calendar widget doesn't use widgetId for preferences
-                preferenceName = "CalendarSwiper"
+                widgetId = widgetId,
+                preferenceName = "CalendarSwiper",
+                widgetTheme = widgetTheme
             )
         }
     }

@@ -47,6 +47,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".feature.widgets.ui.config_screens.CalendarConfigActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
 
 
         <!-- Widget Update Receiver -->
@@ -147,6 +155,19 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/event_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".feature.widgets.ui.CalendarWidget"
+            android:exported="false"
+            android:label="Calendar Widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/calendar_widget_info" />
         </receiver>
 
     </application>

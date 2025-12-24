@@ -9,6 +9,7 @@ data class EventWidgetOptions(
     val theme: WidgetTheme,
     val timeStatusCounter: Boolean,
     val dynamicTimeStatusCounter: Boolean,
+    val replaceProgressWithTimeLeft: Boolean,
     @param:IntRange(0, 5) val decimalDigits: Int,
     @param:IntRange(from = 0, to = 100) val backgroundTransparency: Int,
     @param:FloatRange(from = 0.5, to = 2.0) val fontScale: Float,

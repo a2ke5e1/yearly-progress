@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import com.a3.yearlyprogess.feature.widgets.ui.CalendarWidget
 import com.a3.yearlyprogess.feature.widgets.ui.DayLightWidget
 import com.a3.yearlyprogess.feature.widgets.ui.DayWidget
 import com.a3.yearlyprogess.feature.widgets.ui.EventWidget
@@ -28,8 +29,9 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
                 WeekWidget::class.java,
                 MonthWidget::class.java,
                 YearWidget::class.java,
-                EventWidget::class.java
-            )
+                EventWidget::class.java,
+                CalendarWidget::class.java,
+                )
         // force widget update
 
         var totalWidgetCount = 0

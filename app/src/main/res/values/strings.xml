@@ -75,5 +75,9 @@
     <string name="year">Year</string>
     <string name="day_light">Day Light</string>
     <string name="night_light">Night Light</string>
+    <string name="calendar_widget">Calendar Widget</string>
+    <string name="calendars">Calendars</string>
+    <string name="ongoing">Now</string>
+    <string name="upcoming">Upcoming</string>
 
 </resources>

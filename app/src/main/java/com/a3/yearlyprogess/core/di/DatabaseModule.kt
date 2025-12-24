@@ -6,6 +6,7 @@ import com.a3.yearlyprogess.feature.events.data.local.EventDao
 import com.a3.yearlyprogess.feature.events.data.local.EventDatabase
 import com.a3.yearlyprogess.feature.events.data.repository.EventRepositoryImpl
 import com.a3.yearlyprogess.feature.events.domain.repository.EventRepository
+import com.a3.yearlyprogess.feature.widgets.data.datastore.CalendarWidgetOptionsDataStore
 import com.a3.yearlyprogess.feature.widgets.data.datastore.EventWidgetOptionsDataStore
 import com.a3.yearlyprogess.feature.widgets.data.datastore.StandaloneWidgetOptionsDataStore
 import com.a3.yearlyprogess.feature.widgets.data.repository.EventWidgetOptionsRepositoryImpl
@@ -55,6 +56,14 @@ object DatabaseModule {
         @ApplicationContext context: Context
     ): StandaloneWidgetOptionsDataStore {
         return StandaloneWidgetOptionsDataStore(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCalendarWidgetOptionsDataStore(
+        @ApplicationContext context: Context
+    ): CalendarWidgetOptionsDataStore {
+        return CalendarWidgetOptionsDataStore(context)
     }
 
 }

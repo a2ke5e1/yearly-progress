@@ -10,6 +10,7 @@ interface EventWidgetOptionsRepository {
     suspend fun updateTheme(widgetId: Int, theme: WidgetTheme)
     suspend fun updateTimeStatusCounter(widgetId: Int, enabled: Boolean)
     suspend fun updateDynamicTimeStatusCounter(widgetId: Int, enabled: Boolean)
+    suspend fun updateReplaceProgressWithTimeLeft(widgetId: Int, enabled: Boolean)
     suspend fun updateDecimalDigits(widgetId: Int, digits: Int)
     suspend fun updateBackgroundTransparency(widgetId: Int, transparency: Int)
     suspend fun updateFontScale(widgetId: Int, scale: Float)

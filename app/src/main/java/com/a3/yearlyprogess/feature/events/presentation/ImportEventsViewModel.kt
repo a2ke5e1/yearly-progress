@@ -201,7 +201,7 @@ class ImportEventsViewModel @Inject constructor(
         val fourth: D
     )
 
-    private fun checkCalendarPermission() {
+    fun checkCalendarPermission() {
         viewModelScope.launch {
             when {
                 hasCalendarPermission() -> {

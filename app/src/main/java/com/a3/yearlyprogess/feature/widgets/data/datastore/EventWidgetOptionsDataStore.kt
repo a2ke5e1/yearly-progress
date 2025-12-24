@@ -28,6 +28,7 @@ class EventWidgetOptionsDataStore(
         theme = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
         timeStatusCounter = true,
         dynamicTimeStatusCounter = false,
+        replaceProgressWithTimeLeft = false,
         decimalDigits = 2,
         backgroundTransparency = 100,
         fontScale = 1.0f,
@@ -38,6 +39,7 @@ class EventWidgetOptionsDataStore(
     private fun getThemeKey(widgetId: Int) = stringPreferencesKey("theme_$widgetId")
     private fun getTimeStatusCounterKey(widgetId: Int) = booleanPreferencesKey("time_status_counter_$widgetId")
     private fun getDynamicTimeStatusCounterKey(widgetId: Int) = booleanPreferencesKey("dynamic_time_status_counter_$widgetId")
+    private fun getReplaceProgressWithTimeLeftKey(widgetId: Int) = booleanPreferencesKey("replace_progress_with_time_left_$widgetId")
     private fun getDecimalDigitsKey(widgetId: Int) = intPreferencesKey("decimal_digits_$widgetId")
     private fun getBackgroundTransparencyKey(widgetId: Int) = intPreferencesKey("background_transparency_$widgetId")
     private fun getFontScaleKey(widgetId: Int) = floatPreferencesKey("font_scale_$widgetId")
@@ -54,6 +56,7 @@ class EventWidgetOptionsDataStore(
                 } ?: defaultEventWidgetOptions.theme,
                 timeStatusCounter = prefs[getTimeStatusCounterKey(widgetId)] ?: defaultEventWidgetOptions.timeStatusCounter,
                 dynamicTimeStatusCounter = prefs[getDynamicTimeStatusCounterKey(widgetId)] ?: defaultEventWidgetOptions.dynamicTimeStatusCounter,
+                replaceProgressWithTimeLeft = prefs[getReplaceProgressWithTimeLeftKey(widgetId)] ?: defaultEventWidgetOptions.replaceProgressWithTimeLeft,
                 decimalDigits = prefs[getDecimalDigitsKey(widgetId)]?.coerceIn(0, 5) ?: defaultEventWidgetOptions.decimalDigits,
                 backgroundTransparency = prefs[getBackgroundTransparencyKey(widgetId)]?.coerceIn(0, 100) ?: defaultEventWidgetOptions.backgroundTransparency,
                 fontScale = prefs[getFontScaleKey(widgetId)]?.coerceIn(0.1f, 2.0f) ?: defaultEventWidgetOptions.fontScale,
@@ -67,6 +70,7 @@ class EventWidgetOptionsDataStore(
             prefs[getThemeKey(widgetId)] = options.theme.name
             prefs[getTimeStatusCounterKey(widgetId)] = options.timeStatusCounter
             prefs[getDynamicTimeStatusCounterKey(widgetId)] = options.dynamicTimeStatusCounter
+            prefs[getReplaceProgressWithTimeLeftKey(widgetId)] = options.replaceProgressWithTimeLeft
             prefs[getDecimalDigitsKey(widgetId)] = options.decimalDigits
             prefs[getBackgroundTransparencyKey(widgetId)] = options.backgroundTransparency
             prefs[getFontScaleKey(widgetId)] = options.fontScale
@@ -90,6 +94,12 @@ class EventWidgetOptionsDataStore(
     suspend fun updateDynamicTimeStatusCounter(widgetId: Int, enabled: Boolean) {
         context.eventWidgetOptionsDataStore.edit { prefs ->
             prefs[getDynamicTimeStatusCounterKey(widgetId)] = enabled
+        }
+    }
+
+    suspend fun updateReplaceProgressWithTimeLeft(widgetId: Int, enabled: Boolean) {
+        context.eventWidgetOptionsDataStore.edit { prefs ->
+            prefs[getReplaceProgressWithTimeLeftKey(widgetId)] = enabled
         }
     }
 
@@ -129,6 +139,7 @@ class EventWidgetOptionsDataStore(
             prefs.remove(getThemeKey(widgetId))
             prefs.remove(getTimeStatusCounterKey(widgetId))
             prefs.remove(getDynamicTimeStatusCounterKey(widgetId))
+            prefs.remove(getReplaceProgressWithTimeLeftKey(widgetId))
             prefs.remove(getDecimalDigitsKey(widgetId))
             prefs.remove(getBackgroundTransparencyKey(widgetId))
             prefs.remove(getFontScaleKey(widgetId))

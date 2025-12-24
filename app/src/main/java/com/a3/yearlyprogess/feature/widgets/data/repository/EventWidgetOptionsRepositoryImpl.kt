@@ -28,6 +28,11 @@ class EventWidgetOptionsRepositoryImpl @Inject constructor(
     override suspend fun updateDynamicTimeStatusCounter(widgetId: Int, enabled: Boolean) =
         dataStore.updateDynamicTimeStatusCounter(widgetId, enabled)
 
+    override suspend fun updateReplaceProgressWithTimeLeft(
+        widgetId: Int,
+        enabled: Boolean
+    )  =  dataStore.updateReplaceProgressWithTimeLeft(widgetId, enabled)
+
     override suspend fun updateDecimalDigits(widgetId: Int, digits: Int) =
         dataStore.updateDecimalDigits(widgetId, digits)
 

@@ -1,11 +1,13 @@
 package com.a3.yearlyprogess.feature.widgets.ui.config_screens
 
+import android.Manifest
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,12 +32,14 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -46,19 +50,30 @@ import com.a3.yearlyprogess.core.ui.components.Slider
 import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.core.ui.components.ThemeSelector
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
-import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
-import com.a3.yearlyprogess.feature.events.ui.components.EventList
-import com.a3.yearlyprogess.feature.widgets.domain.model.EventWidgetOptions
+import com.a3.yearlyprogess.feature.events.presentation.CalendarUiState
+import com.a3.yearlyprogess.feature.events.presentation.ImportEventsViewModel
+import com.a3.yearlyprogess.feature.events.ui.components.CalendarPermissionDialog
+import com.a3.yearlyprogess.feature.events.ui.components.CalendarRequiredCard
+import com.a3.yearlyprogess.feature.widgets.ui.components.CalendarSelectionList
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
-class EventConfigActivity : ComponentActivity() {
+class CalendarConfigActivity : ComponentActivity() {
 
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
+    // Permission launcher
+    private val permissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            // Permission granted - the ViewModel will handle loading calendars
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -85,7 +100,7 @@ class EventConfigActivity : ComponentActivity() {
 
         setContent {
             YearlyProgressTheme {
-                EventWidgetConfigScreen(
+                CalendarWidgetConfigScreen(
                     appWidgetId = appWidgetId,
                     onSaveSuccess = {
                         // 4. On successful save, pass back the original ID and finish
@@ -95,6 +110,9 @@ class EventConfigActivity : ComponentActivity() {
                         )
                         setResult(RESULT_OK, resultValue)
                         finish()
+                    },
+                    onRequestPermission = {
+                        permissionLauncher.launch(Manifest.permission.READ_CALENDAR)
                     }
                 )
             }
@@ -104,22 +122,25 @@ class EventConfigActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun EventWidgetConfigScreen(
+fun CalendarWidgetConfigScreen(
     modifier: Modifier = Modifier,
     appWidgetId: Int,
     onSaveSuccess: () -> Unit,
-    configViewModel: EventWidgetConfigViewModel = hiltViewModel(),
-    eventViewModel: EventViewModel = hiltViewModel(),
+    onRequestPermission: () -> Unit,
+    configViewModel: CalendarWidgetConfigViewModel = hiltViewModel(),
+    importEventsViewModel: ImportEventsViewModel = hiltViewModel(),
 ) {
     // Load options for this specific ID when the screen launches
     LaunchedEffect(appWidgetId) {
         configViewModel.setWidgetId(appWidgetId)
+        importEventsViewModel.checkCalendarPermission()
     }
+
     // Listen for the Save Success event
     LaunchedEffect(true) {
         configViewModel.uiEvent.collect { event ->
             when (event) {
-                is EventWidgetConfigViewModel.UiEvent.SaveSuccess -> {
+                is CalendarWidgetConfigViewModel.UiEvent.SaveSuccess -> {
                     onSaveSuccess()
                 }
             }
@@ -133,7 +154,7 @@ fun EventWidgetConfigScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.event_widget)) },
+                title = { Text(stringResource(R.string.calendar_widget)) },
             )
         },
         floatingActionButton = {
@@ -187,7 +208,7 @@ fun EventWidgetConfigScreen(
                             pagerState.animateScrollToPage(1)
                         }
                     },
-                    text = { Text(stringResource(R.string.events)) }
+                    text = { Text(stringResource(R.string.calendars)) }
                 )
             }
 
@@ -196,15 +217,15 @@ fun EventWidgetConfigScreen(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
-
                 when (page) {
-                    0 -> SettingsTab(
+                    0 -> CalendarSettingsTab(
                         options = options,
                         viewModel = configViewModel
                     )
-                    1 -> EventSelectionTab(
-                        eventViewModel = eventViewModel,
-                        configViewModel = configViewModel
+                    1 -> CalendarSelectionTab(
+                        importEventsViewModel = importEventsViewModel,
+                        configViewModel = configViewModel,
+                        onRequestPermission = onRequestPermission
                     )
                 }
             }
@@ -213,9 +234,9 @@ fun EventWidgetConfigScreen(
 }
 
 @Composable
-fun SettingsTab(
-    options: EventWidgetOptions,
-    viewModel: EventWidgetConfigViewModel,
+fun CalendarSettingsTab(
+    options: com.a3.yearlyprogess.feature.widgets.domain.model.CalendarWidgetOptions,
+    viewModel: CalendarWidgetConfigViewModel,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -255,9 +276,10 @@ fun SettingsTab(
             onCheckedChange = { enabled ->
                 viewModel.updateDynamicTimeStatusCounter(enabled)
             },
-            disabled = options.timeStatusCounter.not()
+            disabled = !options.timeStatusCounter
         )
 
+        // Replace Progress with Time Left
         Switch(
             title = "Replace Progress with Time Left",
             description = "Show time left instead of progress percentage",
@@ -266,16 +288,6 @@ fun SettingsTab(
                 viewModel.updateReplaceProgressWithTimeLeft(enabled)
             },
             disabled = !options.timeStatusCounter
-        )
-
-        // Show Event Image
-        Switch(
-            title = "Show Event Image",
-            description = "Display event background image",
-            checked = options.showEventImage,
-            onCheckedChange = { enabled ->
-                viewModel.updateShowEventImage(enabled)
-            }
         )
 
         // Decimal Digits Slider
@@ -316,28 +328,59 @@ fun SettingsTab(
 }
 
 @Composable
-fun EventSelectionTab(
-    eventViewModel: EventViewModel,
-    configViewModel: EventWidgetConfigViewModel
+fun CalendarSelectionTab(
+    importEventsViewModel: ImportEventsViewModel,
+    configViewModel: CalendarWidgetConfigViewModel,
+    onRequestPermission: () -> Unit
 ) {
-    val events by eventViewModel.events.collectAsState()
-    val settings by eventViewModel.settings.collectAsState()
+    val uiState by importEventsViewModel.uiState.collectAsState()
+    val shouldShowPermissionDialog by importEventsViewModel.shouldShowPermissionDialog.collectAsState()
+    val availableCalendars by importEventsViewModel.availableCalendars.collectAsState()
     val options by configViewModel.options.collectAsState()
+
+    var showPermissionDialog by remember { mutableStateOf(false) }
+
+    // Show permission dialog
+    if (shouldShowPermissionDialog || showPermissionDialog) {
+        CalendarPermissionDialog(
+            onDismiss = {
+                importEventsViewModel.onPermissionDenied()
+                showPermissionDialog = false
+            },
+            onConfirm = {
+                onRequestPermission()
+                showPermissionDialog = false
+            }
+        )
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(Modifier.height(8.dp))
-
-        EventList(
-            events = events,
-            selectedIds = options.selectedEventIds,
-            emptyText = "No events yet. Add one to get started!",
-            onItemClick = { event ->
-                configViewModel.toggleEventSelection(event.id)
-            },
-            onItemLongPress = { configViewModel.toggleEventSelection(it.id) },
-            settings = settings.progressSettings
-        )
+        when (uiState) {
+            is CalendarUiState.Initial,
+            is CalendarUiState.Loading -> {
+                // Loading state handled by ViewModel
+            }
+            is CalendarUiState.PermissionRequired -> {
+                CalendarRequiredCard(
+                    onGoToSettings = {
+                        importEventsViewModel.onGoToSettings()
+                    }
+                )
+            }
+            is CalendarUiState.Success -> {
+                CalendarSelectionList(
+                    calendars = availableCalendars,
+                    selectedCalendarIds = options.selectedCalendarIds,
+                    onCalendarToggle = { calendarId ->
+                        configViewModel.toggleCalendarSelection(calendarId)
+                    }
+                )
+            }
+            is CalendarUiState.Error -> {
+                Text("Error: ${(uiState as CalendarUiState.Error).message}")
+            }
+        }
     }
 }

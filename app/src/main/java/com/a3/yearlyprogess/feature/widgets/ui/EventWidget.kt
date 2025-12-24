@@ -32,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -81,13 +82,17 @@ class EventWidget : BaseWidget() {
         val manager = AppWidgetManager.getInstance(context)
         val options = manager.getAppWidgetOptions(appWidgetId)
 
-        val userConfig: EventWidgetOptions = runBlocking(Dispatchers.IO) {
-            eventWidgetOptionsRepository.getOptions(appWidgetId).first()
-        }
+        val (userConfig, events) = runBlocking {
+            withContext(Dispatchers.IO) {
+                val config = eventWidgetOptionsRepository
+                    .getOptions(appWidgetId)
+                    .first()
 
-        val events: List<Event> = runBlocking(Dispatchers.IO) {
-            userConfig.selectedEventIds.mapNotNull {
-                eventRepository.getEvent(it)
+                val events = config.selectedEventIds.mapNotNull { id ->
+                    eventRepository.getEvent(id)
+                }
+
+                config to events
             }
         }
 
@@ -95,7 +100,12 @@ class EventWidget : BaseWidget() {
         Log.d("EventWidget", "Selected Events ${events}")
 
         // Use swiper to get current event
-        val swiper = WidgetSwiper.forEvents(context, events, appWidgetId)
+        val swiper = WidgetSwiper.forEvents(
+            context = context,
+            events = events,
+            widgetId = appWidgetId,
+            widgetTheme = userConfig.theme
+        )
         val event = swiper.current()
 
         val theme: WidgetTheme = userConfig.theme
@@ -133,6 +143,7 @@ class EventWidget : BaseWidget() {
 
         private fun applyText(
             views: RemoteViews,
+            userConfig: EventWidgetOptions,
             event: Event,
             styledProgressBar: SpannableString,
             timeStatusText: String,
@@ -153,6 +164,14 @@ class EventWidget : BaseWidget() {
             } else {
                 views.setViewVisibility(R.id.eventDesc, View.VISIBLE)
             }
+
+            if (userConfig.timeStatusCounter && userConfig.replaceProgressWithTimeLeft) {
+                views.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
+                views.setTextViewText(R.id.eventProgressText, timeStatusText)
+            } else {
+                views.setViewVisibility(R.id.widgetDaysLeft, View.VISIBLE)
+            }
+
         }
 
         private fun applyEventImage(views: RemoteViews, event: Event) {
@@ -275,9 +294,9 @@ class EventWidget : BaseWidget() {
             WidgetProgressRenderer.applyLinearProgressBar(wide, eventData.progress.roundToInt(), theme)
 
             // Apply text content to all layouts
-            applyText(small, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)
-            applyText(tall, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)
-            applyText(wide, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)
+            applyText(small, userConfig, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)
+            applyText(tall,userConfig, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)
+            applyText(wide,userConfig, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)
 
             // Apply event images
             applyEventImage(small, event)

@@ -4,9 +4,9 @@ import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.a3.yearlyprogess.core.util.Log
-import com.a3.yearlyprogess.feature.widgets.domain.model.EventWidgetOptions
+import com.a3.yearlyprogess.feature.widgets.domain.model.CalendarWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
-import com.a3.yearlyprogess.feature.widgets.domain.repository.EventWidgetOptionsRepository
+import com.a3.yearlyprogess.feature.widgets.domain.repository.CalendarWidgetOptionsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,12 +18,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EventWidgetConfigViewModel @Inject constructor(
-    private val repository: EventWidgetOptionsRepository
+class CalendarWidgetConfigViewModel @Inject constructor(
+    private val repository: CalendarWidgetOptionsRepository
 ) : ViewModel() {
 
     private val _options = MutableStateFlow(
-        EventWidgetOptions(
+        CalendarWidgetOptions(
             theme = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
             timeStatusCounter = true,
             dynamicTimeStatusCounter = false,
@@ -31,29 +31,16 @@ class EventWidgetConfigViewModel @Inject constructor(
             decimalDigits = 2,
             backgroundTransparency = 100,
             fontScale = 1.0f,
-            showEventImage = false,
-            selectedEventIds = emptySet()
+            selectedCalendarIds = emptySet()
         )
     )
-    val options: StateFlow<EventWidgetOptions> = _options.asStateFlow()
+    val options: StateFlow<CalendarWidgetOptions> = _options.asStateFlow()
 
     // Channel to send one-time events to the UI (like "Save Complete")
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private var currentWidgetId: Int? = null
-
-    fun toggleEventSelection(eventId: Int) {
-        _options.update { current ->
-            val updated = if (eventId in current.selectedEventIds) {
-                current.selectedEventIds - eventId
-            } else {
-                current.selectedEventIds + eventId
-            }
-            current.copy(selectedEventIds = updated)
-        }
-        Log.d("EventWidgetConfigViewModel", "after toggleEventSelection ${_options.value}")
-    }
 
     fun setWidgetId(widgetId: Int) {
         this.currentWidgetId = widgetId
@@ -64,7 +51,6 @@ class EventWidgetConfigViewModel @Inject constructor(
         viewModelScope.launch {
             // Collect the flow from repository to populate the UI with saved data
             repository.getOptions(appWidgetId).collect { savedOptions ->
-                // Only update if we actually got options back (DataStore might return defaults)
                 _options.value = savedOptions
             }
         }
@@ -73,16 +59,15 @@ class EventWidgetConfigViewModel @Inject constructor(
     fun saveOptions() {
         val widgetId = currentWidgetId ?: return
         viewModelScope.launch {
-            Log.d("EventWidgetConfigViewModel", "during saveOptions ${_options.value}")
+            Log.d("CalendarWidgetConfigViewModel", "Saving options: ${_options.value}")
             repository.updateOptions(widgetId, _options.value)
             _uiEvent.send(UiEvent.SaveSuccess)
         }
     }
 
-    // ... (Your existing update methods remain the same) ...
     fun updateTheme(theme: WidgetTheme) {
         _options.update { it.copy(theme = theme) }
-        Log.d("EventWidgetConfigViewModel", "after theme selected ${_options.value}")
+        Log.d("CalendarWidgetConfigViewModel", "Updated theme: ${_options.value}")
     }
 
     fun updateTimeStatusCounter(enabled: Boolean) {
@@ -112,19 +97,22 @@ class EventWidgetConfigViewModel @Inject constructor(
         _options.update { it.copy(fontScale = validated) }
     }
 
-    fun updateShowEventImage(enabled: Boolean) {
-        _options.update { it.copy(showEventImage = enabled) }
+    fun updateSelectedCalendarIds(calendarIds: Set<Long>) {
+        Log.d("CalendarWidgetConfigViewModel", "Updating calendar ids: $calendarIds")
+        _options.update { it.copy(selectedCalendarIds = calendarIds) }
+        Log.d("CalendarWidgetConfigViewModel", "Updated options: ${_options.value}")
     }
 
-    fun updateSelectedEventIds(eventIds: Set<Int>) {
-        Log.d("EventWidgetConfigViewModel", "event ids ${eventIds}")
-        _options.update {
-            it.copy(
-                selectedEventIds = eventIds
-            )
+    fun toggleCalendarSelection(calendarId: Long) {
+        _options.update { current ->
+            val updated = if (calendarId in current.selectedCalendarIds) {
+                current.selectedCalendarIds - calendarId
+            } else {
+                current.selectedCalendarIds + calendarId
+            }
+            current.copy(selectedCalendarIds = updated)
         }
-        Log.d("EventWidgetConfigViewModel", "_options ${_options.value}")
-
+        Log.d("CalendarWidgetConfigViewModel", "After toggle: ${_options.value}")
     }
 
     sealed class UiEvent {

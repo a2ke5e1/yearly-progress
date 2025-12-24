@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="calendar_widget_event_status">8sp</dimen>
+    <dimen name="calendar_widget_event_title">16sp</dimen>
+    <dimen name="calendar_widget_event_description">10sp</dimen>
+    <dimen name="calendar_widget_event_duration">8sp</dimen>
+    <dimen name="calendar_widget_event_progress">24sp</dimen>
+    <dimen name="calendar_widget_event_days_left">11sp</dimen>
+
+
+    <dimen name="calendar_widget_small_event_status">4sp</dimen>
+    <dimen name="calendar_widget_small_event_title">12sp</dimen>
+    <dimen name="calendar_widget_small_event_description">8sp</dimen>
+    <dimen name="calendar_widget_small_event_duration">4sp</dimen>
+    <dimen name="calendar_widget_small_event_progress">16sp</dimen>
+    <dimen name="calendar_widget_small_event_days_left">8sp</dimen>
+</resources>
