@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -163,7 +164,7 @@ fun CalendarWidgetConfigScreen(
                     configViewModel.saveOptions()
                 },
                 containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+                contentColor = MaterialTheme.colorScheme.onPrimary,
             ) {
                 Icon(Icons.Default.Save, contentDescription = "Save")
             }
@@ -338,21 +339,17 @@ fun CalendarSelectionTab(
     val availableCalendars by importEventsViewModel.availableCalendars.collectAsState()
     val options by configViewModel.options.collectAsState()
 
-    var showPermissionDialog by remember { mutableStateOf(false) }
 
-    // Show permission dialog
-    if (shouldShowPermissionDialog || showPermissionDialog) {
-        CalendarPermissionDialog(
-            onDismiss = {
-                importEventsViewModel.onPermissionDenied()
-                showPermissionDialog = false
-            },
-            onConfirm = {
-                onRequestPermission()
-                showPermissionDialog = false
-            }
-        )
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            importEventsViewModel.onPermissionGranted()
+        } else {
+            importEventsViewModel.onPermissionDenied()
+        }
     }
+
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -382,5 +379,17 @@ fun CalendarSelectionTab(
                 Text("Error: ${(uiState as CalendarUiState.Error).message}")
             }
         }
+    }
+
+    // Show permission dialog
+    if (shouldShowPermissionDialog) {
+        CalendarPermissionDialog(
+            onDismiss = {
+                importEventsViewModel.onPermissionDenied()
+            },
+            onConfirm = {
+                permissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+            }
+        )
     }
 }
