@@ -44,7 +44,7 @@ fun EventList(
 
     LazyColumn(
         modifier = modifier
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = 14.dp)
             .fillMaxSize(),
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(4.dp)

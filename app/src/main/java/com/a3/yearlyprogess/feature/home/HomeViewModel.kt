@@ -11,6 +11,7 @@ import com.a3.yearlyprogess.domain.model.SunriseSunset
 import com.a3.yearlyprogess.domain.repository.LocationRepository
 import com.a3.yearlyprogess.domain.repository.SunriseSunsetRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -56,39 +57,27 @@ class HomeViewModel @Inject constructor(
     private val _locationState = MutableStateFlow<LocationState>(LocationState.Unknown)
     val locationState: StateFlow<LocationState> = _locationState.asStateFlow()
 
-    private val _currentLocation = MutableStateFlow<Location?>(null)
-    val currentLocation: StateFlow<Location?> = _currentLocation.asStateFlow()
-
     private val _shouldShowPermissionDialog = MutableStateFlow(false)
     val shouldShowPermissionDialog: StateFlow<Boolean> = _shouldShowPermissionDialog.asStateFlow()
 
     private var lastLoadedDate: LocalDate? = null
+    private var dateObservationJob: Job? = null
 
     init {
-        initializeLocation()
-    }
-
-    private fun initializeLocation() {
         viewModelScope.launch {
-            // First, check if we have a saved location
-            val savedLocation = locationRepository.getSavedLocation().first()
-
-            if (savedLocation != null) {
-                _currentLocation.value = savedLocation
-                _locationState.value = LocationState.Available(savedLocation)
-                loadData(savedLocation.latitude, savedLocation.longitude)
-                observeDateChange()
-            } else {
-                // No saved location, check if permission was already asked
-                val wasAsked = locationRepository.wasPermissionAsked().first()
-
-                if (!wasAsked && !locationRepository.hasLocationPermission()) {
-                    // First time - show permission dialog
-                    _locationState.value = LocationState.PermissionRequired
-                    _shouldShowPermissionDialog.value = true
+            locationRepository.getSavedLocation().collect { location ->
+                if (location != null) {
+                    _locationState.value = LocationState.Available(location)
+                    loadData(location.latitude, location.longitude)
+                    observeDateChange(location)
                 } else {
-                    // Permission was asked before or already granted
-                    checkLocationPermissionAndFetch()
+                    val wasAsked = locationRepository.wasPermissionAsked().first()
+                    if (!wasAsked && !locationRepository.hasLocationPermission()) {
+                        _locationState.value = LocationState.PermissionRequired
+                        _shouldShowPermissionDialog.value = true
+                    } else {
+                        checkLocationPermissionAndFetch()
+                    }
                 }
             }
         }
@@ -144,12 +133,7 @@ class HomeViewModel @Inject constructor(
 
             if (location != null) {
                 Log.d("HomeViewModel", "Location fetched: ${location.latitude}, ${location.longitude}")
-                _currentLocation.value = location
-                _locationState.value = LocationState.Available(location)
-                // Save the fetched location
                 locationRepository.saveManualLocation(location.latitude, location.longitude)
-                loadData(location.latitude, location.longitude)
-                observeDateChange()
             } else {
                 Log.e("HomeViewModel", "Failed to fetch location")
                 _locationState.value = LocationState.PermissionRequired
@@ -161,11 +145,6 @@ class HomeViewModel @Inject constructor(
     fun saveManualLocation(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             locationRepository.saveManualLocation(latitude, longitude)
-            val location = Location(latitude, longitude, isManual = true)
-            _currentLocation.value = location
-            _locationState.value = LocationState.Available(location)
-            loadData(latitude, longitude)
-            observeDateChange()
         }
     }
 
@@ -187,10 +166,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun observeDateChange() {
-        val location = _currentLocation.value ?: return
-
-        viewModelScope.launch {
+    private fun observeDateChange(location: Location) {
+        dateObservationJob?.cancel()
+        dateObservationJob = viewModelScope.launch {
             while (true) {
                 delay(1_000L) // check every 1 sec
                 val today = LocalDate.now()

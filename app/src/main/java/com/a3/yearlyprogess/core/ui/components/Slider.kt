@@ -36,7 +36,7 @@ fun Slider(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 4.dp)
             .alpha(if (!disabled) 1f else 0.5f)
             .animateContentSize(),
     ) {

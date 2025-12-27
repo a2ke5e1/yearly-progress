@@ -127,11 +127,11 @@ fun MainScaffold(
     val topBar: @Composable () -> Unit = {
         AppTopBar(
             title = topBarTitle, scrollBehavior = currentScrollBehavior, onSettingsClick = {
-            // use parentNavController to open global screens
-            parentNavController.navigate(Destination.Settings)
-        }, onImportEvents = {
-            parentNavController.navigate(Destination.ImportEvents)
-        }, eventViewModel = eventViewModel, showShareButton = true
+                // use parentNavController to open global screens
+                parentNavController.navigate(Destination.SettingsFlow)
+            }, onImportEvents = {
+                parentNavController.navigate(Destination.ImportEvents)
+            }, eventViewModel = eventViewModel, showShareButton = true
         )
     }
 

@@ -12,5 +12,6 @@ interface AppSettingsRepository {
     suspend fun setCalculationType(calculationType: CalculationType)
     suspend fun setWeekStartDay(weekStartDay: Int)
     suspend fun setDecimalDigits(decimalDigits: Int)
-    suspend fun setSelectedCalendarIds(calendarIds: Set<Long>) // Add this
+    suspend fun setSelectedCalendarIds(calendarIds: Set<Long>)
+    suspend fun setAutomaticallyDetectLocation(enabled: Boolean)
 }

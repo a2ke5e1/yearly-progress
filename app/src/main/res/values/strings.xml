@@ -80,4 +80,13 @@
     <string name="ongoing">Now</string>
     <string name="upcoming">Upcoming</string>
 
+    <string name="progress_notification">Progress Notification</string>
+    <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
+    <string name="automatically_detect_location">Automatic Detect Location</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="manual_location">Manual Location</string>
+    <string name="enter_a_location">Enter a location</string>
+    <string name="location">Location</string>
+
+
 </resources>

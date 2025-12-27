@@ -15,7 +15,8 @@ class LocationRepositoryImpl @Inject constructor(
 ) : LocationRepository {
 
     override suspend fun getCurrentLocation(): Location? {
-        return locationManager.getCurrentLocation()
+        val location = locationManager.getCurrentLocation()
+        return location?.copy(isManual = false) // Always mark auto-detected location as non-manual
     }
 
     override suspend fun saveManualLocation(latitude: Double, longitude: Double) {
@@ -24,6 +25,16 @@ class LocationRepositoryImpl @Inject constructor(
                 latitude = latitude,
                 longitude = longitude,
                 isManual = true
+            )
+        )
+    }
+
+    override suspend fun saveAutoDetectedLocation(latitude: Double, longitude: Double) {
+        locationPreferences.saveLocation(
+            Location(
+                latitude = latitude,
+                longitude = longitude,
+                isManual = false
             )
         )
     }

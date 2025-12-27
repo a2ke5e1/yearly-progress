@@ -1,33 +1,28 @@
 package com.a3.yearlyprogess.feature.settings.ui
 
+import android.content.Intent
 import android.icu.util.ULocale
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.app.ui.AppTopBar
 import com.a3.yearlyprogess.core.ui.components.SelectItemDialog
 import com.a3.yearlyprogess.core.ui.components.SelectableItem
 import com.a3.yearlyprogess.core.ui.components.Slider
+import com.a3.yearlyprogess.core.ui.components.SwitchWithOptions
 import com.a3.yearlyprogess.core.util.CalculationType
 import com.a3.yearlyprogess.core.util.toSelectableItem
 import java.util.Calendar
@@ -48,45 +43,46 @@ fun getLocaleSelectableItems(): List<SelectableItem<ULocale>> {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
-    navController: NavHostController,
-    viewModel: SettingsViewModel = hiltViewModel()
+fun SettingsHomeScreen(
+    viewModel: SettingsViewModel,
+    onNavigateToLocation: () -> Unit,
+    onNavigateToNotification: () -> Unit
 ) {
     val settings by viewModel.settings.collectAsState()
-    var showWeekStartDialog by remember { mutableStateOf(false) }
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            AppTopBar(
-                title = stringResource(R.string.settings),
-                scrollBehavior = scrollBehavior,
-                onNavigateUp = {
-                    navController.navigateUp()
-                }
-            )
-        },
-        contentWindowInsets = WindowInsets.safeDrawing
-    ) { innerPadding ->
-
-    LazyColumn(
-        modifier = Modifier.padding(innerPadding)
-    ) {
-
-
+    LazyColumn {
         item {
-
             Text(
                 text = stringResource(R.string.app_label),
-                style =
-                    MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = MaterialTheme.colorScheme.primary
+                ),
                 modifier = Modifier.padding(16.dp)
             )
 
+
+                SwitchWithOptions(
+                    title = stringResource(R.string.progress_notification),
+                    summary = stringResource(R.string.shows_progress_in_the_notification),
+                    checked = false,
+                    onCheckedChange = { newValue ->
+//                    if (newValue) {
+//                        val notificationHelper = YearlyProgressNotification(context)
+//                        if (!notificationHelper.hasAppNotificationPermission()) {
+//                            notificationHelper.requestNotificationPermission(this@SettingsActivity)
+//                        }
+//                    }
+//                    val widgetUpdateServiceIntent =
+//                        Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+//                    context.sendBroadcast(widgetUpdateServiceIntent)
+//                    viewModel.setProgressShowNotification(newValue)
+                    },
+                    onOptionClicked = {  onNavigateToNotification()
+                    }
+                )
+            }
+        item {
 
             SelectItemDialog(
                 title = stringResource(R.string.calendar_system_label),
@@ -106,7 +102,6 @@ fun SettingsScreen(
         }
 
         item {
-            // 1. Define the list of days once and store it in a variable.
             val daysOfWeek = listOf(
                 SelectableItem(name = "Sunday", value = Calendar.SUNDAY),
                 SelectableItem(name = "Monday", value = Calendar.MONDAY),
@@ -117,20 +112,16 @@ fun SettingsScreen(
                 SelectableItem(name = "Saturday", value = Calendar.SATURDAY)
             )
 
-            // 2. Use this list to find the selected item.
             val selectedDay = daysOfWeek.find { it.value == settings.progressSettings.weekStartDay }
-                ?: daysOfWeek.first() // Default to the first item (Sunday) if not found
+                ?: daysOfWeek.first()
 
-            // 3. Now, your dialog call is much cleaner.
             SelectItemDialog(
                 title = "First day of the week",
                 items = daysOfWeek,
                 selectedItem = selectedDay,
                 onItemSelected = { _, item -> viewModel.setWeekStartDay(item.value) },
             )
-
         }
-
 
         item {
             Slider(
@@ -142,7 +133,19 @@ fun SettingsScreen(
                 steps = 12,
             )
         }
-        }
 
+        item {
+            ListItem(
+                headlineContent = { Text("Location") },
+                supportingContent = { Text("Manage location for day/night light widgets.") },
+                trailingContent = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = "Navigate to location settings"
+                    )
+                },
+                modifier = Modifier.clickable { onNavigateToLocation() }
+            )
+        }
     }
 }

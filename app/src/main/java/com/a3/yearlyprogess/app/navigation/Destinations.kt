@@ -16,9 +16,10 @@ sealed class Destination {
     @Serializable
     data object Widgets : Destination()
 
-    // Other screens outside nested graph
+
     @Serializable
-    data object Settings : Destination()
+    data object SettingsFlow : Destination()
+
     @Serializable
     data class EventDetail(val editId: Int) : Destination()
 
@@ -33,6 +34,18 @@ sealed class Destination {
     @Serializable
     data object SelectCalendars: Destination()
 
+}
+
+
+sealed class SettingsDestination {
+    @Serializable
+    data object SettingsHome : SettingsDestination()
+
+    @Serializable
+    data object SettingsLocation : SettingsDestination()
+
+    @Serializable
+    data object SettingsNotification : SettingsDestination()
 }
 
 
@@ -60,7 +73,7 @@ val appNavItems = listOf(
 
         ),
     NavItem(
-        Destination.Settings,
+        Destination.SettingsFlow,
         "Settings"
     )
 )

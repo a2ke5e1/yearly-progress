@@ -47,7 +47,8 @@ class AppSettingsRepositoryImpl @Inject constructor(
             ),
             selectedCalendarIds = preferences[PreferencesKeys.SELECTED_CALENDAR_IDS]
                 ?.map { it.toLong() }
-                ?.toSet() ?: emptySet()
+                ?.toSet() ?: emptySet(),
+            automaticallyDetectLocation = preferences[PreferencesKeys.AUTOMATICALLY_DETECT_LOCATION] ?: false
         )
     }
 
@@ -87,6 +88,12 @@ class AppSettingsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun setAutomaticallyDetectLocation(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.AUTOMATICALLY_DETECT_LOCATION] = enabled
+        }
+    }
+
     private object PreferencesKeys {
         val IS_FIRST_LAUNCH = booleanPreferencesKey("is_first_launch")
         val LOCALE = stringPreferencesKey("locale")
@@ -94,6 +101,6 @@ class AppSettingsRepositoryImpl @Inject constructor(
         val WEEK_START_DAY = intPreferencesKey("week_start_day")
         val DECIMAL_DIGITS = intPreferencesKey("decimal_digits")
         val SELECTED_CALENDAR_IDS = stringSetPreferencesKey("selected_calendar_ids")
-
+        val AUTOMATICALLY_DETECT_LOCATION = booleanPreferencesKey("automatically_detect_location")
     }
 }

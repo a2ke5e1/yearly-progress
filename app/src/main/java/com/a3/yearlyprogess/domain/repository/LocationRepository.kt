@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface LocationRepository {
     suspend fun getCurrentLocation(): Location?
     suspend fun saveManualLocation(latitude: Double, longitude: Double)
+    suspend fun saveAutoDetectedLocation(latitude: Double, longitude: Double)
     fun getSavedLocation(): Flow<Location?>
     suspend fun clearSavedLocation()
     fun hasLocationPermission(): Boolean

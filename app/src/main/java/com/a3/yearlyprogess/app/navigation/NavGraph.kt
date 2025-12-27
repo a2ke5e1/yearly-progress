@@ -11,7 +11,7 @@ import androidx.navigation.toRoute
 import com.a3.yearlyprogess.app.ui.MainScaffold
 import com.a3.yearlyprogess.feature.events.ui.EventCreateScreen
 import com.a3.yearlyprogess.feature.events.ui.ImportEventsScreen
-import com.a3.yearlyprogess.feature.settings.ui.SettingsScreen
+import com.a3.yearlyprogess.feature.settings.ui.SettingsScaffold
 
 @Composable
 fun AppNavGraph(
@@ -52,9 +52,9 @@ fun AppNavGraph(
             )
         }
 
-        composable<Destination.Settings> {
-            SettingsScreen(
-                navController =  navController,
+        composable<Destination.SettingsFlow> {
+            SettingsScaffold(
+                parentNavController = navController
             )
         }
 
