@@ -1,35 +1,105 @@
 <resources>
     <string name="app_name">Yearly Progress</string>
+    <string name="app_label">App</string>
+    <string name="app_version">Version: %1$s</string>
 
+    <string name="okay">Okay</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="search">Search</string>
+    <string name="share">Share</string>
+    <string name="share_message">Check out %1$s on Google Play: https://play.google.com/store/apps/details?id=%2$s\nAdd beautiful, customizable widgets to track daily, monthly, and yearly progress.</string>
 
-    <!-- Destination Labels -->
     <string name="progress">Progress</string>
     <string name="widgets">Widgets</string>
-    <string name="about">About</string>
-    <string name="settings">Settings</string>
     <string name="events">Events</string>
+    <string name="calendars">Calendars</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="customization">Customization</string>
 
-
-    <string name="share">Share</string>
+    <string name="day">Day</string>
     <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="time_in">in %1$s</string>
+    <string name="time_left">%1$s left</string>
+    <string name="progress_card_total_duration">of %1$ss</string>
 
-
-    <string name="cancel">Cancel</string>
-
-
-    <!-- Settings Options - Labels -->
-
-    <!-- Calculation Modes - Labels -->
+    <string name="open_settings">Open Settings</string>
     <string name="calculation_mode_label">Calculation Mode</string>
     <string name="calculation_mode_elapsed">Elapsed (Default)</string>
     <string name="calculation_mode_remaining">Remaining</string>
-
-    <string name="first_day_of_the_week">First day of the week</string>
-    <string name="calendar_system_label">Select your calendar system</string>
     <string name="decimal_places_label">Decimal Places</string>
     <string name="decimal_places_description">Number of decimal places to show in progress calculations</string>
-    <string name="app_label">App</string>
-    <string name="share_message">Check out %1$s on Google Play: https://play.google.com/store/apps/details?id=%2$s\nAdd beautiful, customizable widgets to track daily, monthly, and yearly progress.</string>
+    <string name="first_day_of_the_week">First day of the week</string>
+    <string name="calendar_system_label">Select your calendar system</string>
+    <string name="no_calendars_available">No calendars available</string>
+    <string name="progress_notification">Progress Notification</string>
+    <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
+
+    <string name="add_event">Add Event</string>
+    <string name="import_events">Import Events</string>
+    <string name="select_date_range">Select date range</string>
+    <string name="no_events">No Events</string>
+    <string name="no_events_message">No events yet. Add one to get started!</string>
+    <string name="all_day">All Day</string>
+    <string name="all_day_event">All Day Event</string>
+    <string name="ongoing">Now</string>
+    <string name="upcoming">Upcoming</string>
+    <plurals name="delete_events_selection_confirmation">
+        <item quantity="one">Are you sure you want to delete %d selected event?</item>
+        <item quantity="other">Are you sure you want to delete %d selected events?</item>
+    </plurals>
+
+    <string name="location">Location</string>
+    <string name="current_location">Current Location</string>
+    <string name="automatically_detect_location">Automatic Detect Location</string>
+    <string name="auto_detected">Auto Detected</string>
+    <string name="detect_current_location">Detect Current Location</string>
+    <string name="detecting">Detecting...</string>
+    <string name="location_settings_permission_disabled_message">Location services are disabled on your device. Please enable them to use automatic location detection.</string>
+    <string name="manual_location">Manual Location</string>
+    <string name="suggest_location_manually_message">Set location manually if automatic detection doesn\'t work</string>
+    <string name="no_location_set">No location set</string>
+    <string name="enter_location">Enter a location</string>
+    <string name="search_city">Search city</string>
+    <string name="select_city">Select City</string>
+    <string name="enter_city_name">Enter city name...</string>
+    <string name="start_typing_to_search_for_a_city">Start typing to search for a city</string>
+    <string name="no_cities_found">No cities found</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="enter_coordinates">Enter Coordinates</string>
+    <string name="coordinates_validation_message">Latitude must be between -90 and 90, longitude between -180 and 180</string>
+    <string name="latitude">Latitude</string>
+    <string name="lat_example">e.g., 40.7128</string>
+    <string name="longitude">Longitude</string>
+    <string name="lon_example">e.g., -74.0060</string>
+
+    <string name="event_widget">Event Widget</string>
+    <string name="calendar_widget">Calendar Widget</string>
+    <string name="widget_shape">Widget Shape</string>
+    <string name="day_light">Day Light</string>
+    <string name="night_light">Night Light</string>
+    <string name="allow">Allow</string>
+    <string name="not_now">Not Now</string>
+
+    <string name="calendar_permission_title">Calendar Permission Needed</string>
+    <string name="calendar_permission_description">This app needs permission to read your calendar to read your events for the following features:</string>
+    <string-array name="calendar_permission_bullet_points">
+        <item>Import events from your calendar to this app.</item>
+        <item>Allow Calendar widget to show your upcoming and ongoing events</item>
+    </string-array>
+
+    <string name="location_permission_title">Location Permission Needed</string>
+    <string name="location_permission_description">This app needs your approximate location to show accurate sunrise and sunset times for your area.</string>
+    <string-array name="location_permission_bullet_points">
+        <item>Only city-level accuracy is used</item>
+        <item>Your location data stays on your device</item>
+        <item>You can manually enter coordinates in settings later</item>
+    </string-array>
 
     <string-array name="app_calendar_type_entries">
         <item>Default (Based on Region)</item>
@@ -52,41 +122,5 @@
         <item>Persian</item>
         <item>Republic of China (ROC)</item>
     </string-array>
-
-
-    <plurals name="delete_events_selection_confirmation">
-        <item quantity="one">Are you sure you want to delete %d selected event?</item>
-        <item quantity="other">Are you sure you want to delete %d selected events?</item>
-    </plurals>
-    <string name="time_in">in %1$s</string>
-    <string name="time_left">%1$s left</string>
-    <string name="all_day">All Day</string>
-    <string name="import_events">Import Events</string>
-    <string name="no_events">No Events</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="okay">Okay</string>
-    <string name="select_date_range">Select date range</string>
-    <string name="all_day_event">All Day Event</string>
-    <string name="event_widget">Event Widget</string>
-    <string name="customization">Customization</string>
-    <string name="day">Day</string>
-    <string name="month">Month</string>
-    <string name="year">Year</string>
-    <string name="day_light">Day Light</string>
-    <string name="night_light">Night Light</string>
-    <string name="calendar_widget">Calendar Widget</string>
-    <string name="calendars">Calendars</string>
-    <string name="ongoing">Now</string>
-    <string name="upcoming">Upcoming</string>
-
-    <string name="progress_notification">Progress Notification</string>
-    <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
-    <string name="automatically_detect_location">Automatic Detect Location</string>
-    <string name="open_settings">Open Settings</string>
-    <string name="manual_location">Manual Location</string>
-    <string name="enter_a_location">Enter a location</string>
-    <string name="location">Location</string>
-
 
 </resources>

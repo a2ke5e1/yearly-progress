@@ -2,49 +2,23 @@ package com.a3.yearlyprogess.feature.home.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
+import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.core.ui.components.PermissionDialog
 
 @Composable
 fun LocationPermissionDialog(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        icon = {
-            Icon(
-                imageVector = Icons.Default.LocationOn,
-                contentDescription = null
-            )
-        },
-        title = {
-            Text("Location Permission Needed", style = TextStyle(
-                textAlign = TextAlign.Center
-            ))
-        },
-        text = {
-            Text(
-                "This app needs your approximate location to show accurate sunrise and sunset times for your area.\n\n" +
-                        "• Only city-level accuracy is used\n" +
-                        "• Your location data stays on your device\n" +
-                        "• You can manually enter coordinates in settings later"
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text("Allow")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Not Now")
-            }
-        }
+    PermissionDialog(
+        icon = Icons.Default.LocationOn,
+        title = stringResource(R.string.location_permission_title),
+        description = stringResource(R.string.location_permission_description),
+        bulletPoints = stringArrayResource(R.array.location_permission_bullet_points),
+        onDismiss = onDismiss,
+        onConfirm = onConfirm,
     )
 }

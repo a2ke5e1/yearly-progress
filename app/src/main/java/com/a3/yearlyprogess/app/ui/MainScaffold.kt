@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -36,6 +37,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.app.navigation.AppNavigationRail
 import com.a3.yearlyprogess.app.navigation.BottomNavigationBar
 import com.a3.yearlyprogess.app.navigation.Destination
@@ -107,7 +109,7 @@ fun MainScaffold(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Add Event"
+                    contentDescription = stringResource(R.string.add_event)
                 )
             }
         }
@@ -131,7 +133,7 @@ fun MainScaffold(
                 parentNavController.navigate(Destination.SettingsFlow)
             }, onImportEvents = {
                 parentNavController.navigate(Destination.ImportEvents)
-            }, eventViewModel = eventViewModel, showShareButton = true
+            }, eventViewModel = eventViewModel, showShareButton = true, showAboutButton = true
         )
     }
 

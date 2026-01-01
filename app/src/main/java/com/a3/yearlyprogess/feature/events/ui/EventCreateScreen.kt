@@ -7,7 +7,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -44,11 +46,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -65,10 +65,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -602,6 +604,10 @@ fun WeekdayChip(
 
     val animatedCorner by animateDpAsState(
         targetValue = if (!isSelected) 8.dp else 12.dp,
+        animationSpec = tween(
+            durationMillis = 100,
+            easing = LinearOutSlowInEasing
+        ),
         label = ""
     )
 
@@ -610,6 +616,10 @@ fun WeekdayChip(
             MaterialTheme.colorScheme.primary
         else
             MaterialTheme.colorScheme.surfaceContainerLow,
+        animationSpec = tween(
+            durationMillis = 100,
+            easing = LinearOutSlowInEasing
+        ),
         label = ""
     )
 
@@ -618,6 +628,10 @@ fun WeekdayChip(
             MaterialTheme.colorScheme.onPrimary
         else
             MaterialTheme.colorScheme.onSurfaceVariant,
+        animationSpec = tween(
+            durationMillis = 100,
+            easing = LinearOutSlowInEasing
+        ),
         label = ""
     )
 
@@ -630,6 +644,9 @@ fun WeekdayChip(
         modifier = modifier
             .height(40.dp)
             .clip(RoundedCornerShape(animatedCorner))
+            .semantics {
+                role = Role.Checkbox
+            }
     ) {
         Box(
             modifier = Modifier
@@ -669,8 +686,8 @@ private fun formatDateTime(timeInMillis: Long, isAllDay: Boolean): String {
     }
 }
 
-private @Composable
-fun EventTextField(
+@Composable
+private fun EventTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
@@ -699,30 +716,8 @@ fun EventTextField(
         maxLines = maxLines
     )
 }
-
-
-private @Composable
-fun AllDaySwitch(
-    isAllDay: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(stringResource(R.string.all_day_event))
-        Switch(
-            checked = isAllDay,
-            onCheckedChange = onCheckedChange
-        )
-    }
-}
-
-private @Composable
-fun EventDetailsSection(
+@Composable
+private fun EventDetailsSection(
     eventTitle: String,
     showError: Boolean,
     eventDescription: String,
@@ -754,15 +749,16 @@ fun EventDetailsSection(
             maxHeight = 120.dp
         )
         Spacer(Modifier.height(12.dp))
-        AllDaySwitch(
-            isAllDay = isAllDay,
+        Switch(
+            title = stringResource(R.string.all_day_event),
+            checked = isAllDay,
             onCheckedChange = onAllDayChange
         )
     }
 }
 
-private @Composable
-fun WeekdayChipRow(
+@Composable
+private fun WeekdayChipRow(
     selectedWeekdays: Set<RepeatDays>,
     onWeekdayToggle: (RepeatDays) -> Unit,
     modifier: Modifier = Modifier

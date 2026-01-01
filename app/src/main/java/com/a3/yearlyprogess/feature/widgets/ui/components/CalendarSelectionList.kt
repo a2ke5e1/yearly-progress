@@ -14,7 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.domain.model.CalendarInfo
 
 @Composable
@@ -32,7 +34,7 @@ fun CalendarSelectionList(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "No calendars available",
+                text = stringResource(R.string.no_calendars_available),
                 style = MaterialTheme.typography.bodyLarge
             )
         }

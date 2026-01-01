@@ -328,7 +328,7 @@ private fun PermissionWarnings(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Text(
-                            "Location services are disabled on your device. Please enable them to use automatic location detection.",
+                            stringResource(R.string.location_settings_permission_disabled_message),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 color = MaterialTheme.colorScheme.onErrorContainer
                             ),
@@ -341,7 +341,7 @@ private fun PermissionWarnings(
                             ),
                             onClick = onOpenSettings
                         ) {
-                            Text("Open Settings")
+                            Text(stringResource(R.string.open_settings))
                         }
                     }
                 }
@@ -368,7 +368,7 @@ private fun CurrentLocationCard(
                 .fillMaxWidth()
         ) {
             Text(
-                text = "Current Location",
+                text = stringResource(R.string.current_location),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -400,7 +400,9 @@ private fun CurrentLocationCard(
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = if (savedLocation.isManual) "Manual Location" else "Auto-detected",
+                                text = if (savedLocation.isManual) stringResource(R.string.manual_location) else stringResource(
+                                    R.string.auto_detected
+                                ),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -427,7 +429,7 @@ private fun CurrentLocationCard(
                 }
             } else {
                 Text(
-                    text = "No location set",
+                    text = stringResource(R.string.no_location_set),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -446,7 +448,7 @@ private fun CurrentLocationCard(
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(if (isDetecting) "Detecting..." else "Detect Current Location")
+                Text(if (isDetecting) stringResource(R.string.detecting) else stringResource(R.string.detect_current_location))
             }
         }
     }
@@ -463,7 +465,7 @@ private fun ManualLocationSection(
             .padding(16.dp)
     ) {
         Text(
-            text = "Manual Location",
+            text = stringResource(R.string.manual_location),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
@@ -471,7 +473,7 @@ private fun ManualLocationSection(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Set location manually if automatic detection doesn't work",
+            text = stringResource(R.string.suggest_location_manually_message),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -492,7 +494,7 @@ private fun ManualLocationSection(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Select City")
+                Text(stringResource(R.string.select_city))
             }
 
             OutlinedButton(
@@ -505,7 +507,7 @@ private fun ManualLocationSection(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Coordinates")
+                Text(stringResource(R.string.coordinates))
             }
         }
     }
@@ -535,7 +537,7 @@ private fun CitySearchDialog(
             Column(
             ) {
                 Text(
-                    text = "Select City",
+                    text = stringResource(R.string.select_city),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
@@ -549,12 +551,12 @@ private fun CitySearchDialog(
                         onSearchQueryChange(query)
                         searchResults = onSearchCities(query)
                     },
-                    label = { Text("Search city") },
-                    placeholder = { Text("Enter city name...") },
+                    label = { Text(stringResource(R.string.search_city)) },
+                    placeholder = { Text(stringResource(R.string.enter_city_name)) },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search"
+                            contentDescription = stringResource(R.string.search)
                         )
                     },
                     keyboardOptions = KeyboardOptions(
@@ -565,7 +567,9 @@ private fun CitySearchDialog(
                             keyboardController?.hide()
                         }
                     ),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     singleLine = true
                 )
 
@@ -578,7 +582,7 @@ private fun CitySearchDialog(
                         if (searchResults.isEmpty()) {
                             item {
                                 Text(
-                                    text = "No cities found",
+                                    text = stringResource(R.string.no_cities_found),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.padding(vertical = 16.dp)
@@ -598,7 +602,7 @@ private fun CitySearchDialog(
                     }
                 } else {
                     Text(
-                        text = "Start typing to search for a city",
+                        text = stringResource(R.string.start_typing_to_search_for_a_city),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
@@ -608,11 +612,13 @@ private fun CitySearchDialog(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(all = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                 }
             }
@@ -641,13 +647,13 @@ private fun ManualCoordinatesDialog(
                 modifier = Modifier.padding(24.dp)
             ) {
                 Text(
-                    text = "Enter Coordinates",
+                    text = stringResource(R.string.enter_coordinates),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Latitude must be between -90 and 90, longitude between -180 and 180",
+                    text = stringResource(R.string.coordinates_validation_message),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -656,8 +662,8 @@ private fun ManualCoordinatesDialog(
                 OutlinedTextField(
                     value = latitude,
                     onValueChange = onLatitudeChange,
-                    label = { Text("Latitude") },
-                    placeholder = { Text("e.g., 40.7128") },
+                    label = { Text(stringResource(R.string.latitude)) },
+                    placeholder = { Text(stringResource(R.string.lat_example)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Decimal,
                         imeAction = ImeAction.Next
@@ -673,8 +679,8 @@ private fun ManualCoordinatesDialog(
                 OutlinedTextField(
                     value = longitude,
                     onValueChange = onLongitudeChange,
-                    label = { Text("Longitude") },
-                    placeholder = { Text("e.g., -74.0060") },
+                    label = { Text(stringResource(R.string.longitude)) },
+                    placeholder = { Text(stringResource(R.string.lon_example)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Decimal,
                         imeAction = ImeAction.Done
@@ -698,14 +704,14 @@ private fun ManualCoordinatesDialog(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                     Button(
                         onClick = onSave,
                         enabled = isValid,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Save")
+                        Text(stringResource(R.string.save))
                     }
                 }
             }

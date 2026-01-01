@@ -21,9 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.interaction.PressAnimationConfig
 import com.a3.yearlyprogess.core.ui.interaction.applyPressGesture
 import com.a3.yearlyprogess.core.ui.interaction.rememberPressInteractionState
@@ -165,7 +167,7 @@ fun ProgressCard(
             )
 
             Text(
-                text = "of ${durationFormatted}s",
+                text = stringResource(R.string.progress_card_total_duration, durationFormatted),
                 style = style.durationTextStyle
             )
         }

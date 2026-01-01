@@ -1,7 +1,5 @@
 package com.a3.yearlyprogess.app.ui
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -41,8 +39,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import com.a3.yearlyprogess.BuildConfig
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.core.util.CommunityUtil
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,13 +53,15 @@ fun AppTopBar(
     onNavigateUp: (() -> Unit)? = null,
     onImportEvents: (() -> Unit)? = null,
     eventViewModel: EventViewModel? = null,
-    showShareButton: Boolean = false
+    showShareButton: Boolean = false,
+    showAboutButton: Boolean = false
     ) {
     var expanded by remember { mutableStateOf(false) }
     val selectedIds = eventViewModel?.selectedIds?.collectAsState()
     val isAllSelected = eventViewModel?.isAllSelected?.collectAsState()
     val isActionMode by remember { derivedStateOf { selectedIds?.value?.isNotEmpty() == true } }
     var showDeleteDialogBox by remember { mutableStateOf(false) }
+    var showAboutDialogBox by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     TopAppBar(
@@ -137,7 +137,13 @@ fun AppTopBar(
                     if (showShareButton) {
                         DropdownMenuItem(text = { Text(stringResource(R.string.share)) }, onClick = {
                             expanded = false
-                            showShareScreen(context)
+                            CommunityUtil.onShare(context)
+                        })
+                    }
+                    if (showAboutButton) {
+                        DropdownMenuItem(text = { Text(stringResource(R.string.about)) }, onClick = {
+                            expanded = false
+                            showAboutDialogBox = true
                         })
                     }
                 }
@@ -186,21 +192,9 @@ fun AppTopBar(
             },
         )
     }
-}
 
-private fun showShareScreen(context: Context): Boolean {
-    // Launch share if users want to share app with their friends
-    val intent = Intent(Intent.ACTION_SEND)
-    intent.type = "text/plain"
-    intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
-    val shareMessage =
-        context.getString(
-            R.string.share_message,
-            context.getString(R.string.app_name),
-            BuildConfig.APPLICATION_ID
-        )
-            .trimIndent()
-    intent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-    context.startActivity(Intent.createChooser(intent, "Share"))
-    return true
+    AboutModal(
+        open = showAboutDialogBox,
+        onDismissRequest = { showAboutDialogBox = false }
+    )
 }

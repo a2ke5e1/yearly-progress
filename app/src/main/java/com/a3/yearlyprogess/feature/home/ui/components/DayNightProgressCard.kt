@@ -26,7 +26,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.interaction.applyPressGesture
 import com.a3.yearlyprogess.core.ui.interaction.rememberPressInteractionState
 import com.a3.yearlyprogess.core.util.ProgressSettings
@@ -113,7 +115,7 @@ fun DayNightProgressCard(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = if (dayLight) "Day Light" else "Night Light",
+                text = if (dayLight) stringResource(R.string.day_light) else stringResource(R.string.night_light),
                 style = style.labelTextStyle
             )
 
@@ -140,7 +142,7 @@ fun DayNightProgressCard(
             )
 
             Text(
-                text = "of ${durationFormatted}s",
+                text = stringResource(R.string.progress_card_total_duration, durationFormatted),
                 style = style.durationTextStyle
             )
         }

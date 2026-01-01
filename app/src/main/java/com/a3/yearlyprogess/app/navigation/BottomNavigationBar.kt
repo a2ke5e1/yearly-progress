@@ -40,20 +40,20 @@ fun getBottomNavItems(): List<BottomNavItem> {
         BottomNavItem(
             Destination.Home,
             stringResource(R.string.progress),
-            { Icon(Icons.Rounded.BarChart, contentDescription = "Progress") },
-            { Icon(Icons.Rounded.BarChart, contentDescription = "Progress") }
+            { Icon(Icons.Rounded.BarChart, contentDescription = stringResource(R.string.progress)) },
+            { Icon(Icons.Rounded.BarChart, contentDescription = stringResource(R.string.progress)) }
         ),
         BottomNavItem(
             Destination.Widgets,
             stringResource(R.string.widgets),
-            { Icon(Icons.Rounded.Widgets, contentDescription = "Widgets") },
-            { Icon(Icons.Rounded.Widgets, contentDescription = "Widgets") }
+            { Icon(Icons.Rounded.Widgets, contentDescription = stringResource(R.string.widgets)) },
+            { Icon(Icons.Rounded.Widgets, contentDescription = stringResource(R.string.widgets)) }
         ),
         BottomNavItem(
             Destination.Events,
             stringResource(R.string.events),
-            { Icon(Icons.Filled.Event, contentDescription = "Events") },
-            { Icon(Icons.Filled.Event, contentDescription = "Events") }
+            { Icon(Icons.Filled.Event, contentDescription = stringResource(R.string.events)) },
+            { Icon(Icons.Filled.Event, contentDescription =  stringResource(R.string.events)) }
         ),
     )
 }

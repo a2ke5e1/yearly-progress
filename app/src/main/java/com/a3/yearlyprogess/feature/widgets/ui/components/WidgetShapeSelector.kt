@@ -28,8 +28,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions
 
 @Composable
@@ -40,7 +42,7 @@ fun WidgetShapeSelector(
 ) {
     Column(modifier = modifier) {
         Text(
-            text = "Widget Shape",
+            text = stringResource(R.string.widget_shape),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 12.dp)
         )

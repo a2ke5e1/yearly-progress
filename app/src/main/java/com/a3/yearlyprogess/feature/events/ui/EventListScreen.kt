@@ -1,30 +1,17 @@
 package com.a3.yearlyprogess.feature.events.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
-import com.a3.yearlyprogess.feature.events.ui.components.EventDetailCard
-import com.a3.yearlyprogess.feature.events.ui.components.EventDetailCardDefaults
 import com.a3.yearlyprogess.feature.events.ui.components.EventList
 
 @Composable
@@ -56,7 +43,7 @@ fun EventListScreen(
     EventList(
         events = events,
         selectedIds = selectedIds,
-        emptyText = "No events yet. Add one to get started!",
+        emptyText = stringResource(R.string.no_events_message),
         onItemClick = { event ->
             if (selectedIds.isEmpty()) {
                 onNavigateToEventDetail(event.id)
