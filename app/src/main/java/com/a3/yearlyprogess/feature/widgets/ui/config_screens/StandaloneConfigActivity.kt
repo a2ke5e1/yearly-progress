@@ -46,9 +46,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.core.ui.components.Slider
-import com.a3.yearlyprogess.core.ui.components.Switch
-import com.a3.yearlyprogess.core.ui.components.ThemeSelector
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import com.a3.yearlyprogess.domain.model.SunriseSunset
@@ -56,15 +53,15 @@ import com.a3.yearlyprogess.feature.home.HomeUiState
 import com.a3.yearlyprogess.feature.home.HomeViewModel
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions.Companion.WidgetShape
-import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.cloverRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.pillRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.rectangularRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidgetType
 import com.a3.yearlyprogess.feature.widgets.ui.components.WidgetShapeSelector
-import com.a3.yearlyprogess.feature.widgets.util.WidgetProgressRenderer
+import com.a3.yearlyprogess.feature.widgets.ui.components.SharedWidgetSettings
+import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
+import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class StandaloneConfigActivity : ComponentActivity() {
@@ -101,10 +98,14 @@ class StandaloneConfigActivity : ComponentActivity() {
                 StandaloneWidgetConfigScreen(
                     appWidgetId = appWidgetId,
                     onSaveSuccess = {
-                        // 4. On successful save, pass back the original ID and finish
+                        // On successful save, pass back the original ID and finish
                         val resultValue = Intent().putExtra(
                             AppWidgetManager.EXTRA_APPWIDGET_ID,
                             appWidgetId
+                        )
+                        // Tell the Widget to update
+                        sendBroadcast(
+                            Intent(this, WidgetUpdateBroadcastReceiver::class.java)
                         )
                         setResult(RESULT_OK, resultValue)
                         finish()
@@ -214,7 +215,7 @@ fun WidgetPreview(
             modifier = modifier
                 .fillMaxWidth()
                 .background(
-                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .clip(shape = RoundedCornerShape(16.dp))
@@ -279,7 +280,7 @@ private fun createRemoteViews(
                 userConfig,
                 sunsetData,
             )
-            null -> WidgetProgressRenderer.errorWidgetRemoteView(context, "Error failed to load preview")
+            null -> WidgetRenderer.errorWidgetRemoteView(context, "Error failed to load preview")
             else -> rectangularRemoteView(context, yp, userConfig)
         }
 
@@ -304,7 +305,7 @@ private fun createRemoteViews(
                     sunsetData,
                     bundleOptions
                 )
-                null -> WidgetProgressRenderer.errorWidgetRemoteView(context, "Error failed to load preview")
+                null -> WidgetRenderer.errorWidgetRemoteView(context, "Error failed to load preview")
                 else -> cloverRemoteView(context, yp, userConfig, bundleOptions)
             }
 
@@ -331,7 +332,7 @@ private fun createRemoteViews(
                     sunsetData,
                     bundleOptions
                 )
-                null -> WidgetProgressRenderer.errorWidgetRemoteView(context, "Error failed to load preview")
+                null -> WidgetRenderer.errorWidgetRemoteView(context, "Error failed to load preview")
                 else -> pillRemoteView(context, yp, userConfig, bundleOptions)
             }
         }
@@ -349,18 +350,7 @@ fun StandaloneSettingsContent(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        // Theme Selector
-        ThemeSelector(
-            selectedTheme = options.theme,
-            onThemeSelected = { theme ->
-                viewModel.updateTheme(theme)
-            },
-            Modifier.padding(horizontal = 16.dp)
-        )
-
-        Spacer(Modifier.height(8.dp))
-
-        // Widget Shape Selector (if applicable)
+        // Widget Shape Selector (specific to Standalone widget)
         WidgetShapeSelector(
             selectedShape = options.widgetShape,
             onShapeSelected = { shape ->
@@ -371,68 +361,21 @@ fun StandaloneSettingsContent(
 
         Spacer(Modifier.height(8.dp))
 
-        // Time Left Counter
-        Switch(
-            title = "Time Left Counter",
-            description = "Show countdown or time remaining",
-            checked = options.timeLeftCounter,
-            onCheckedChange = { enabled ->
-                viewModel.updateTimeLeftCounter(enabled)
-            }
-        )
-
-        // Dynamic Left Counter
-        Switch(
-            title = "Dynamic Time Counter",
-            description = "Automatically adjust time format",
-            checked = options.dynamicLeftCounter,
-            onCheckedChange = { enabled ->
-                viewModel.updateDynamicLeftCounter(enabled)
-            },
-            disabled = !options.timeLeftCounter
-        )
-
-        // Replace Progress with Days Left
-        Switch(
-            title = "Replace Progress with Days Left",
-            description = "Show days left instead of progress percentage",
-            checked = options.replaceProgressWithDaysLeft,
-            onCheckedChange = { enabled ->
-                viewModel.updateReplaceProgressWithDaysLeft(enabled)
-            },
-            disabled = !options.timeLeftCounter
-        )
-
-        // Decimal Places Slider
-        Slider(
-            title = "Decimal Places",
-            value = options.decimalPlaces.toFloat(),
-            valueRange = 0f..5f,
-            steps = 4,
-            onValueChange = { value ->
-                viewModel.updateDecimalPlaces(value.roundToInt())
-            },
-            modifier = Modifier.padding(top = 8.dp)
-        )
-
-        // Background Transparency Slider
-        Slider(
-            title = "Background Transparency",
-            value = options.backgroundTransparency.toFloat(),
-            valueRange = 0f..100f,
-            onValueChange = { value ->
-                viewModel.updateBackgroundTransparency(value.roundToInt())
-            }
-        )
-
-        // Font Scale Slider
-        Slider(
-            title = "Font Scale",
-            value = options.fontScale,
-            valueRange = 0.5f..2.0f,
-            onValueChange = { value ->
-                viewModel.updateFontScale(value)
-            }
-        )
+        SharedWidgetSettings(
+            theme = options.theme,
+            timeStatusCounter = options.timeLeftCounter,
+            dynamicTimeStatusCounter = options.dynamicLeftCounter,
+            replaceProgressWithTimeLeft = options.replaceProgressWithDaysLeft,
+            decimalDigits = options.decimalPlaces,
+            backgroundTransparency = options.backgroundTransparency,
+            fontScale = options.fontScale,
+            onThemeChange = viewModel::updateTheme,
+            onTimeStatusCounterChange = viewModel::updateTimeLeftCounter,
+            onDynamicTimeStatusCounterChange = viewModel::updateDynamicLeftCounter,
+            onReplaceProgressChange = viewModel::updateReplaceProgressWithDaysLeft,
+            onDecimalDigitsChange = viewModel::updateDecimalPlaces,
+            onBackgroundTransparencyChange = viewModel::updateBackgroundTransparency,
+            onFontScaleChange = viewModel::updateFontScale,
+           )
     }
 }

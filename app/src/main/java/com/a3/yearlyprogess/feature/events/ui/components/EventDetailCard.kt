@@ -156,8 +156,14 @@ fun EventDetailCard(
         modifier = modifier
             .height(style.cardHeight)
             .fillMaxWidth()
+            // FIX: Use the 'background' modifier that accepts a shape
+            // instead of clipping then applying background.
+            .background(
+                color = if (event.backgroundImageUri == null) style.backgroundColor else MaterialTheme.colorScheme.surface,
+                shape = style.cornerStyle.toAnimatedShape(animatedCorners)
+            )
+            // Keep the clip here to ensure children (like the AsyncImage) don't bleed out
             .clip(style.cornerStyle.toAnimatedShape(animatedCorners))
-            .background(if (event.backgroundImageUri == null) style.backgroundColor else MaterialTheme.colorScheme.surface)
             .applyPressGesture(pressState, onTap = onClick, onLongPress = onLongPress)
     ) {
         // Background Image (if available)
@@ -256,15 +262,18 @@ fun EventDetailCard(
 
             }
 
+        // In EventDetailCard.kt - Selection Overlay logic
         if (isSelected) {
             Box(
                 Modifier
                     .matchParentSize()
                     .background(
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
+                        shape = style.cornerStyle.toAnimatedShape(animatedCorners)
                     )
             )
         }
+
 
 
     }

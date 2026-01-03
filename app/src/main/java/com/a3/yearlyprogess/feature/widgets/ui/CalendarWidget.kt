@@ -27,8 +27,8 @@ import com.a3.yearlyprogess.feature.widgets.domain.model.CalendarWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.domain.repository.CalendarWidgetOptionsRepository
-import com.a3.yearlyprogess.feature.widgets.util.WidgetProgressRenderer
-import com.a3.yearlyprogess.feature.widgets.util.WidgetProgressRenderer.applyTextViewTextSize
+import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer
+import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer.applyTextViewTextSize
 import com.a3.yearlyprogess.feature.widgets.util.WidgetSwiper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +38,6 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import kotlin.math.roundToInt
-import kotlin.ranges.rangeTo
 
 /**
  * Calendar Widget that displays today's or upcoming calendar events
@@ -97,11 +96,10 @@ class CalendarWidget : BaseWidget() {
         // Check calendar permission
         if (context.checkSelfPermission(Manifest.permission.READ_CALENDAR) !=
             PackageManager.PERMISSION_GRANTED) {
-            return errorRemoteView(
+            return WidgetRenderer.errorWidgetRemoteView(
                 context,
+                "Calendar Permission Required",
                 userConfig.theme,
-                "Permission Required",
-                "Calendar permission is needed"
             )
         }
 
@@ -414,9 +412,9 @@ class CalendarWidget : BaseWidget() {
             wide.setInt(R.id.widgetContainer, "setImageAlpha", alpha)
 
             // Apply progress bars
-            WidgetProgressRenderer.applyLinearProgressBar(small, eventData.progress.roundToInt(), theme)
+            WidgetRenderer.applyLinearProgressBar(small, eventData.progress.roundToInt(), theme)
 //            WidgetProgressRenderer.applyLinearProgressBar(tall, eventData.progress.roundToInt(), theme)
-            WidgetProgressRenderer.applyLinearProgressBar(wide, eventData.progress.roundToInt(), theme)
+            WidgetRenderer.applyLinearProgressBar(wide, eventData.progress.roundToInt(), theme)
 
             // Apply text content to all layouts
             applyText(
@@ -505,20 +503,6 @@ class CalendarWidget : BaseWidget() {
             val colors = WidgetColors.fromTheme(context, theme)
             views.setTextColor(R.id.error_text, colors.primaryColor)
             views.setTextViewText(R.id.error_text, "No Events")
-            views.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
-            return views
-        }
-
-        fun errorRemoteView(
-            context: Context,
-            theme: WidgetTheme,
-            title: String,
-            message: String
-        ): RemoteViews {
-            val views = RemoteViews(context.packageName, R.layout.error_widget)
-            val colors = WidgetColors.fromTheme(context, theme)
-            views.setTextColor(R.id.error_text, colors.primaryColor)
-            views.setTextViewText(R.id.error_text, title)
             views.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
             return views
         }

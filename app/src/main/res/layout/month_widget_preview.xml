@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/background"
+    style="@style/Widget.YearlyProgress.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_widget_background"
+    android:backgroundTint="@color/widget_dynamic_background_color"
+    android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
+
+    <TextView
+        android:id="@+id/widget_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/month"
+        android:textAllCaps="true"
+        android:textColor="@color/widget_dynamic_primary_color"
+        android:textSize="@dimen/standalone_rect_widget_text_size_widget_type"
+        android:textStyle="normal" />
+
+    <TextView
+        android:layout_below="@id/widget_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30d 6h 0m 32s left"
+        android:textColor="@color/widget_dynamic_secondary_color"
+        android:textSize="@dimen/standalone_rect_widget_text_size_widget_days_left"
+        android:textStyle="normal" />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        tools:ignore="HardcodedText">
+
+        <LinearLayout
+            android:id="@+id/progress_text_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/progress_bar_day"
+            android:layout_toStartOf="@+id/text_day"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2."
+                android:textColor="@color/widget_dynamic_primary_color"
+                android:textSize="@dimen/standalone_rect_widget_text_size_widget_progress"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="41%"
+                android:textColor="@color/widget_dynamic_primary_color"
+                android:textSize="12.6sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/progress_bar_day"
+            android:layout_alignEnd="@id/progress_bar_day"
+            android:text="Jan"
+            android:textColor="@color/widget_dynamic_secondary_color"
+            android:textSize="@dimen/standalone_rect_widget_text_size_widget_current_value" />
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar_day"
+            style="@style/WidgetProgressBarBase"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_below="@id/progress_text_day"
+            android:max="100"
+            android:progress="2"
+            android:theme="@style/WidgetProgressTheme.Dynamic" />
+    </RelativeLayout>
+
+</RelativeLayout>

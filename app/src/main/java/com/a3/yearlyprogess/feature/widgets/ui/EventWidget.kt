@@ -25,8 +25,8 @@ import com.a3.yearlyprogess.feature.widgets.domain.model.EventWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.domain.repository.EventWidgetOptionsRepository
-import com.a3.yearlyprogess.feature.widgets.util.WidgetProgressRenderer
-import com.a3.yearlyprogess.feature.widgets.util.WidgetProgressRenderer.applyTextViewTextSize
+import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer
+import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer.applyTextViewTextSize
 import com.a3.yearlyprogess.feature.widgets.util.WidgetSwiper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -289,9 +289,9 @@ class EventWidget : BaseWidget() {
             wide.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
 
             // Apply progress bars
-            WidgetProgressRenderer.applyLinearProgressBar(small, eventData.progress.roundToInt(), theme)
-            WidgetProgressRenderer.applyLinearProgressBar(tall, eventData.progress.roundToInt(), theme)
-            WidgetProgressRenderer.applyLinearProgressBar(wide, eventData.progress.roundToInt(), theme)
+            WidgetRenderer.applyLinearProgressBar(small, eventData.progress.roundToInt(), theme)
+            WidgetRenderer.applyLinearProgressBar(tall, eventData.progress.roundToInt(), theme)
+            WidgetRenderer.applyLinearProgressBar(wide, eventData.progress.roundToInt(), theme)
 
             // Apply text content to all layouts
             applyText(small, userConfig, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)

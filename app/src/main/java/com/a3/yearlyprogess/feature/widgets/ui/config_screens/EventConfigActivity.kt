@@ -42,16 +42,15 @@ import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.a3.yearlyprogess.R
-import com.a3.yearlyprogess.core.ui.components.Slider
 import com.a3.yearlyprogess.core.ui.components.Switch
-import com.a3.yearlyprogess.core.ui.components.ThemeSelector
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 import com.a3.yearlyprogess.feature.events.ui.components.EventList
 import com.a3.yearlyprogess.feature.widgets.domain.model.EventWidgetOptions
+import com.a3.yearlyprogess.feature.widgets.ui.components.SharedWidgetSettings
+import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class EventConfigActivity : ComponentActivity() {
@@ -92,6 +91,10 @@ class EventConfigActivity : ComponentActivity() {
                         val resultValue = Intent().putExtra(
                             AppWidgetManager.EXTRA_APPWIDGET_ID,
                             appWidgetId
+                        )
+                        // Tell the Widget to update
+                        sendBroadcast(
+                            Intent(this, WidgetUpdateBroadcastReceiver::class.java)
                         )
                         setResult(RESULT_OK, resultValue)
                         finish()
@@ -198,7 +201,7 @@ fun EventWidgetConfigScreen(
             ) { page ->
 
                 when (page) {
-                    0 -> SettingsTab(
+                    0 -> EventSettingsTab(
                         options = options,
                         viewModel = configViewModel
                     )
@@ -213,7 +216,7 @@ fun EventWidgetConfigScreen(
 }
 
 @Composable
-fun SettingsTab(
+fun EventSettingsTab(
     options: EventWidgetOptions,
     viewModel: EventWidgetConfigViewModel,
     modifier: Modifier = Modifier
@@ -226,87 +229,32 @@ fun SettingsTab(
     ) {
         Spacer(Modifier.height(8.dp))
 
-        // Theme Selector
-        ThemeSelector(
-            selectedTheme = options.theme,
-            onThemeSelected = { theme ->
-                viewModel.updateTheme(theme)
-            },
-            Modifier.padding(horizontal = 16.dp)
+        SharedWidgetSettings(
+            theme = options.theme,
+            timeStatusCounter = options.timeStatusCounter,
+            dynamicTimeStatusCounter = options.dynamicTimeStatusCounter,
+            replaceProgressWithTimeLeft = options.replaceProgressWithTimeLeft,
+            decimalDigits = options.decimalDigits,
+            backgroundTransparency = options.backgroundTransparency,
+            fontScale = options.fontScale,
+            onThemeChange = viewModel::updateTheme,
+            onTimeStatusCounterChange = viewModel::updateTimeStatusCounter,
+            onDynamicTimeStatusCounterChange = viewModel::updateDynamicTimeStatusCounter,
+            onReplaceProgressChange = viewModel::updateReplaceProgressWithTimeLeft,
+            onDecimalDigitsChange = viewModel::updateDecimalDigits,
+            onBackgroundTransparencyChange = viewModel::updateBackgroundTransparency,
+            onFontScaleChange = viewModel::updateFontScale
         )
 
         Spacer(Modifier.height(8.dp))
 
-        // Time Status Counter
-        Switch(
-            title = "Time Status Counter",
-            description = "Show countdown or time remaining",
-            checked = options.timeStatusCounter,
-            onCheckedChange = { enabled ->
-                viewModel.updateTimeStatusCounter(enabled)
-            }
-        )
-
-        // Dynamic Time Status Counter
-        Switch(
-            title = "Dynamic Time Status Counter",
-            description = "Automatically adjust time format",
-            checked = options.dynamicTimeStatusCounter,
-            onCheckedChange = { enabled ->
-                viewModel.updateDynamicTimeStatusCounter(enabled)
-            },
-            disabled = options.timeStatusCounter.not()
-        )
-
-        Switch(
-            title = "Replace Progress with Time Left",
-            description = "Show time left instead of progress percentage",
-            checked = options.replaceProgressWithTimeLeft,
-            onCheckedChange = { enabled ->
-                viewModel.updateReplaceProgressWithTimeLeft(enabled)
-            },
-            disabled = !options.timeStatusCounter
-        )
-
-        // Show Event Image
+        // Show Event Image (specific to Event widget)
         Switch(
             title = "Show Event Image",
             description = "Display event background image",
             checked = options.showEventImage,
             onCheckedChange = { enabled ->
                 viewModel.updateShowEventImage(enabled)
-            }
-        )
-
-        // Decimal Digits Slider
-        Slider(
-            title = "Decimal Digits",
-            value = options.decimalDigits.toFloat(),
-            valueRange = 0f..5f,
-            steps = 4,
-            onValueChange = { value ->
-                viewModel.updateDecimalDigits(value.roundToInt())
-            },
-            modifier = Modifier.padding(top = 8.dp)
-        )
-
-        // Background Transparency Slider
-        Slider(
-            title = "Background Transparency",
-            value = options.backgroundTransparency.toFloat(),
-            valueRange = 0f..100f,
-            onValueChange = { value ->
-                viewModel.updateBackgroundTransparency(value.roundToInt())
-            }
-        )
-
-        // Font Scale Slider
-        Slider(
-            title = "Font Scale",
-            value = options.fontScale,
-            valueRange = 0.5f..2.0f,
-            onValueChange = { value ->
-                viewModel.updateFontScale(value)
             }
         )
 

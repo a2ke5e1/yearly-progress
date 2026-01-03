@@ -123,4 +123,15 @@
         <item>Republic of China (ROC)</item>
     </string-array>
 
+    <string name="settings_time_status_title">Time Status Display</string>
+    <string name="settings_time_status_description">Show time remaining or upcoming (e.g., \"2h left\" or \"in 1h 5m\")</string>
+    <string name="settings_dynamic_time_title">Compact Time Format</string>
+    <string name="settings_dynamic_time_description">Use simplified format (e.g., \"2h left\" or \"in 1h\" instead of \"2h 1m left\")</string>
+    <string name="settings_replace_progress_title">Show Time Instead of Percentage</string>
+    <string name="settings_replace_progress_description">Replace progress percentage with time status</string>
+    <string name="settings_decimal_digits">Decimal Digits</string>
+    <string name="settings_background_transparency">Background Transparency</string>
+    <string name="settings_font_scale">Font Scale</string>
+
+
 </resources>

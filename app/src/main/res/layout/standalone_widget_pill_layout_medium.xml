@@ -72,8 +72,7 @@
                 android:id="@+id/widgetDaysLeft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-8dp"
-                android:textSize="@dimen/standalone_pill_medium_widget_text_size_widget_days_left"
+                    android:textSize="@dimen/standalone_pill_medium_widget_text_size_widget_days_left"
                 android:textStyle="normal"
                 tools:text="112d left" />
 

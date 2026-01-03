@@ -1,7 +1,9 @@
 package com.a3.yearlyprogess.feature.widgets.ui
 
+import android.Manifest
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
@@ -24,8 +26,8 @@ import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
 import com.a3.yearlyprogess.feature.widgets.domain.repository.StandaloneWidgetOptionsRepository
-import com.a3.yearlyprogess.feature.widgets.util.WidgetProgressRenderer
-import com.a3.yearlyprogess.feature.widgets.util.WidgetProgressRenderer.applyTextViewTextSize
+import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer
+import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer.applyTextViewTextSize
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -74,6 +76,9 @@ open class StandaloneWidget(
         }
 
         val sunsetData = runBlocking(Dispatchers.IO) {
+            if (widgetType != StandaloneWidgetType.DAY_LIGHT && widgetType != StandaloneWidgetType.NIGHT_LIGHT) {
+                return@runBlocking null
+            }
             val location = locationRepository.getSavedLocation().first() ?: return@runBlocking null
             val lat = location.latitude
             val lon = location.longitude
@@ -88,6 +93,19 @@ open class StandaloneWidget(
 
             // Return the data if we got a success within 1s, otherwise null
             return@runBlocking (result as? Resource.Success)?.data
+        }
+
+        if (
+            (widgetType == StandaloneWidgetType.DAY_LIGHT || widgetType == StandaloneWidgetType.NIGHT_LIGHT)
+            && context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED
+            && sunsetData == null
+            ) {
+            return WidgetRenderer.errorWidgetRemoteView(
+                context,
+                "Location Permission Required",
+                userConfig.theme,
+            )
         }
 
 
@@ -177,7 +195,7 @@ open class StandaloneWidget(
             views: RemoteViews,
             progress: Double,
             widgetName: String,
-            daysLeft: Long,
+            daysLeft: String,
             currentValue: SpannableString,
             userConfig: StandaloneWidgetOptions
         ) {
@@ -189,7 +207,7 @@ open class StandaloneWidget(
                 // Replace progress with days left
                 views.setTextViewText(
                     R.id.widgetProgress,
-                    daysLeft.toTimePeriodText(userConfig.dynamicLeftCounter)
+                    daysLeft
                 )
             } else {
                 // Show normal progress percentage
@@ -204,7 +222,7 @@ open class StandaloneWidget(
                 views.setViewVisibility(R.id.widgetDaysLeft, View.VISIBLE)
                 views.setTextViewText(
                     R.id.widgetDaysLeft,
-                    daysLeft.toTimePeriodText(userConfig.dynamicLeftCounter)
+                    daysLeft
                 )
             } else {
                 views.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
@@ -471,11 +489,15 @@ open class StandaloneWidget(
             context: Context,
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
+            isWidthClickable: Boolean = true
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
             val endTime = yp.calculateEndTime(timePeriod)
-            val daysLeft = yp.calculateTimeLeft(endTime)
+            val daysLeft = context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
+            )
             val currentValue = yp.getCurrentPeriodValue(timePeriod).toFormattedTimePeriod(yp, timePeriod)
             return rectangularRemoteView(
                 context,
@@ -483,7 +505,8 @@ open class StandaloneWidget(
                 progress,
                 timePeriod.name,
                 daysLeft,
-                currentValue
+                currentValue,
+                isWidthClickable
             )
         }
 
@@ -492,14 +515,18 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
+            isWidthClickable: Boolean = true
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
-                return WidgetProgressRenderer.errorWidgetRemoteView(context, "Failed to load sunset data")
+                return WidgetRenderer.errorWidgetRemoteView(context, "Failed to load sunset data")
             }
             val (startTime, endTime) = getStartAndEndTime(dayLight, sunriseSunsetData)
             val progress = yp.calculateProgress(startTime, endTime)
-            val daysLeft = yp.calculateTimeLeft(endTime)
+            val daysLeft = context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
+            )
 
 
             val format =
@@ -521,13 +548,15 @@ open class StandaloneWidget(
                 )
 
 
+
             return rectangularRemoteView(
                 context,
                 userConfig,
                 progress,
                 widgetName,
                 daysLeft,
-                SpannableString(currentValue)
+                SpannableString(currentValue),
+                isWidthClickable
             )
         }
 
@@ -536,10 +565,15 @@ open class StandaloneWidget(
             userConfig: StandaloneWidgetOptions,
             progress: Double,
             widgetName: String,
-            daysLeft: Long,
+            daysLeft: String,
             currentValue: SpannableString,
+            isWidthClickable: Boolean
         ): RemoteViews {
             val views = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
+
+            if (isWidthClickable) {
+                WidgetRenderer.onParentTap(views, context)
+            }
 
             // Apply theme from user config
             val colors = WidgetColors.fromTheme(context, userConfig.theme)
@@ -553,7 +587,7 @@ open class StandaloneWidget(
             applyTexts(views, progress, widgetName, daysLeft, currentValue, userConfig)
 
             // Apply progress bar
-            WidgetProgressRenderer.applyLinearProgressBar(views, progress.roundToInt(), userConfig.theme)
+            WidgetRenderer.applyLinearProgressBar(views, progress.roundToInt(), userConfig.theme)
 
             // Apply font scale
             applyFontScaleRectangular(views, userConfig.fontScale, context)
@@ -568,12 +602,16 @@ open class StandaloneWidget(
             context: Context,
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
-            options: Bundle? = null
+            options: Bundle? = null,
+            isWidthClickable: Boolean = true
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
             val endTime = yp.calculateEndTime(timePeriod)
-            val daysLeft = yp.calculateTimeLeft(endTime)
+            val daysLeft = context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
+            )
             val currentValue =
                 yp.getCurrentPeriodValue(timePeriod).toFormattedTimePeriod(yp, timePeriod)
             val widgetName = timePeriod.name
@@ -586,7 +624,8 @@ open class StandaloneWidget(
                 widgetName,
                 daysLeft,
                 currentValue,
-                options
+                options,
+                isWidthClickable
             )
         }
 
@@ -595,15 +634,19 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
-            options: Bundle? = null
+            options: Bundle? = null,
+            isWidthClickable: Boolean = true
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
-                return WidgetProgressRenderer.errorWidgetRemoteView(context, "Failed to load sunset data")
+                return WidgetRenderer.errorWidgetRemoteView(context, "Failed to load sunset data")
             }
             val (startTime, endTime) = getStartAndEndTime(dayLight, sunriseSunsetData)
             val progress = yp.calculateProgress(startTime, endTime)
-            val daysLeft = yp.calculateTimeLeft(endTime)
+            val daysLeft = context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
+            )
 
             val format =
                 DateTimeFormatter
@@ -631,7 +674,8 @@ open class StandaloneWidget(
                 widgetName,
                 daysLeft,
                 SpannableString(currentValue),
-                options
+                options,
+                isWidthClickable
             )
         }
 
@@ -641,14 +685,22 @@ open class StandaloneWidget(
             userConfig: StandaloneWidgetOptions,
             progress: Double,
             widgetName: String,
-            daysLeft: Long,
+            daysLeft: String,
             currentValue: SpannableString,
-            options: Bundle? = null
+            options: Bundle? = null,
+            isWidthClickable: Boolean
         ): RemoteViews {
             val large = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout_large)
             val square = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout)
             val small = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout_small)
             val xSmall = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout_extra_small)
+
+            if (isWidthClickable) {
+                WidgetRenderer.onParentTap(large, context)
+                WidgetRenderer.onParentTap(square, context)
+                WidgetRenderer.onParentTap(small, context)
+                WidgetRenderer.onParentTap(xSmall, context)
+            }
 
             // Apply theme from user config
             val colors = WidgetColors.fromTheme(context, userConfig.theme)
@@ -657,28 +709,28 @@ open class StandaloneWidget(
             applyTheme(large, colors)
             large.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(large, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetProgressRenderer.applyCloverProgressContainer(large, progress, userConfig.theme)
+            WidgetRenderer.applyCloverProgressContainer(large, progress, userConfig.theme)
             applyFontScaleCloverLarge(large, userConfig.fontScale, context)
 
             // Apply to square view
             applyTheme(square, colors)
             square.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(square, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetProgressRenderer.applyCloverProgressContainer(square, progress, userConfig.theme)
+            WidgetRenderer.applyCloverProgressContainer(square, progress, userConfig.theme)
             applyFontScaleClover(square, userConfig.fontScale, context)
 
             // Apply to small view
             applyTheme(small, colors)
             small.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(small, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetProgressRenderer.applyCloverProgressContainer(small, progress, userConfig.theme)
+            WidgetRenderer.applyCloverProgressContainer(small, progress, userConfig.theme)
             applyFontScaleCloverSmall(small, userConfig.fontScale, context)
 
             // Apply to extra small view
             applyTheme(xSmall, colors)
             xSmall.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(xSmall, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetProgressRenderer.applyCloverProgressContainer(xSmall, progress, userConfig.theme)
+            WidgetRenderer.applyCloverProgressContainer(xSmall, progress, userConfig.theme)
             applyFontScaleCloverExtraSmall(xSmall, userConfig.fontScale, context)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -710,12 +762,16 @@ open class StandaloneWidget(
             context: Context,
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
-            options: Bundle? = null
+            options: Bundle? = null,
+            isWidthClickable: Boolean = true
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
             val endTime = yp.calculateEndTime(timePeriod)
-            val daysLeft = yp.calculateTimeLeft(endTime)
+            val daysLeft = context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
+            )
             val currentValue = yp.getCurrentPeriodValue(timePeriod).toFormattedTimePeriod(yp, timePeriod)
             val widgetName = timePeriod.name
 
@@ -727,7 +783,8 @@ open class StandaloneWidget(
                 widgetName,
                 daysLeft,
                 currentValue,
-                options
+                options,
+                isWidthClickable
             )
         }
 
@@ -745,15 +802,19 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
-            options: Bundle? = null
+            options: Bundle? = null,
+            isWidthClickable: Boolean = true
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
-                return WidgetProgressRenderer.errorWidgetRemoteView(context, "Failed to load sunset data")
+                return WidgetRenderer.errorWidgetRemoteView(context, "Failed to load sunset data")
             }
             val (startTime, endTime) = getStartAndEndTime(dayLight, sunriseSunsetData)
             val progress = yp.calculateProgress(startTime, endTime)
-            val daysLeft = yp.calculateTimeLeft(endTime)
+            val daysLeft = context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
+            )
 
             val format =
                 DateTimeFormatter
@@ -781,7 +842,8 @@ open class StandaloneWidget(
                 widgetName,
                 daysLeft,
                 SpannableString(currentValue),
-                options
+                options,
+                isWidthClickable
             )
         }
 
@@ -791,14 +853,20 @@ open class StandaloneWidget(
             userConfig: StandaloneWidgetOptions,
             progress: Double,
             widgetName: String,
-            daysLeft: Long,
+            daysLeft: String,
             currentValue: SpannableString,
-            options: Bundle? = null
+            options: Bundle? = null,
+            isWidthClickable: Boolean
         ): RemoteViews {
             val large =
                 RemoteViews(context.packageName, R.layout.standalone_widget_pill_layout_medium)
             val small =
                 RemoteViews(context.packageName, R.layout.standalone_widget_pill_layout_small)
+
+            if (isWidthClickable) {
+                WidgetRenderer.onParentTap(large, context)
+                WidgetRenderer.onParentTap(small, context)
+            }
 
             // Apply theme from user config
             val colors = WidgetColors.fromTheme(context, userConfig.theme)
@@ -807,14 +875,14 @@ open class StandaloneWidget(
             applyTheme(large, colors)
             large.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(large, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetProgressRenderer.applyPillProgressContainer(large, progress, userConfig.theme)
+            WidgetRenderer.applyPillProgressContainer(large, progress, userConfig.theme)
             applyFontScalePillMedium(large, userConfig.fontScale, context)
 
             // Apply to small view
             applyTheme(small, colors)
             small.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(small, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetProgressRenderer.applyPillProgressContainer(small, progress, userConfig.theme)
+            WidgetRenderer.applyPillProgressContainer(small, progress, userConfig.theme)
             applyFontScalePillSmall(small, userConfig.fontScale, context)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

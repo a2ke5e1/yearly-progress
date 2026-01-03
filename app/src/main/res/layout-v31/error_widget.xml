@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:theme="@style/Theme.YearlyProgress.AppWidgetContainer"
     android:background="@drawable/app_widget_background"
-    android:backgroundTint="@color/widget_default_background_color"
+    android:backgroundTint="@color/widget_dynamic_background_color"
     tools:ignore="HardcodedText">
 
 
@@ -17,7 +17,7 @@
         android:layout_gravity="center"
         android:padding="8dp"
         android:text="Error"
-        android:textColor="@color/widget_default_primary_color"
+        android:textColor="@color/widget_dynamic_primary_color"
         android:textAlignment="center" />
 
 </FrameLayout>

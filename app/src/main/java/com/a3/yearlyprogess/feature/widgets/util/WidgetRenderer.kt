@@ -1,6 +1,8 @@
 package com.a3.yearlyprogess.feature.widgets.util
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
@@ -8,10 +10,11 @@ import android.widget.RemoteViews
 import androidx.annotation.DimenRes
 import androidx.annotation.IdRes
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.app.MainActivity
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 
-object WidgetProgressRenderer {
+object WidgetRenderer {
 
     private val linearProgressIds = listOf(
         R.id.widgetProgressBarDefault,
@@ -337,6 +340,12 @@ object WidgetProgressRenderer {
         }
     }
 
+    private fun getSpValue(context: Context, @DimenRes id: Int): Float {
+        val typedValue = TypedValue()
+        context.resources.getValue(id, typedValue, true)
+        return TypedValue.complexToFloat(typedValue.data)
+    }
+
     fun RemoteViews.applyTextViewTextSize(
         context: Context,
         @IdRes viewId: Int,
@@ -345,18 +354,32 @@ object WidgetProgressRenderer {
         minSp: Float = 8f,
         maxSp: Float = 32f
     ) {
-        val baseSp = pxToSp(context, defaultTextSize)
+        val baseSp = getSpValue(context, defaultTextSize)
         val finalSp = (baseSp * fontScale).coerceIn(minSp, maxSp)
         this.setTextViewTextSize(viewId, TypedValue.COMPLEX_UNIT_SP, finalSp)
     }
 
-    fun errorWidgetRemoteView(context: Context, message: String, widgetColors: WidgetColors? = null): RemoteViews {
+    fun errorWidgetRemoteView(context: Context, message: String, widgetTheme: WidgetTheme = WidgetTheme.DEFAULT): RemoteViews {
         val view = RemoteViews(context.packageName, R.layout.error_widget)
+        val widgetColors = WidgetColors.fromTheme(context, widgetTheme)
         view.setTextViewText(R.id.error_text, message)
-        if (widgetColors != null) {
             view.setTextColor(R.id.error_text, widgetColors.primaryColor)
-        }
         return view
+    }
+
+     fun onParentTap(view: RemoteViews, context: Context) {
+        val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+            ?: Intent(context, MainActivity::class.java)
+
+        view.setOnClickPendingIntent(
+            R.id.background,
+            PendingIntent.getActivity(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            ),
+        )
     }
 
 
