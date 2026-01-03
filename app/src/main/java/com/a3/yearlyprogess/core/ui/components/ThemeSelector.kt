@@ -36,9 +36,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.ThemeManager
@@ -71,7 +73,7 @@ fun ThemeSelector(
 
     Column(modifier = modifier) {
         Text(
-            text = "Theme",
+            text = stringResource(R.string.settings_theme),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )

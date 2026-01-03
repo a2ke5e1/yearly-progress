@@ -132,6 +132,7 @@
     <string name="settings_decimal_digits">Decimal Digits</string>
     <string name="settings_background_transparency">Background Transparency</string>
     <string name="settings_font_scale">Font Scale</string>
+    <string name="settings_theme">Theme</string>
 
 
 </resources>
