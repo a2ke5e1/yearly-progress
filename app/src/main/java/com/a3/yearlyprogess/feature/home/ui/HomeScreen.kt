@@ -24,6 +24,8 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.a3.yearlyprogess.core.domain.model.AppSettings
+import com.a3.yearlyprogess.core.ui.components.ad.AdCard
+import com.a3.yearlyprogess.core.ui.components.ad.AdCardDefaults
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.core.util.TimePeriod
 import com.a3.yearlyprogess.feature.home.HomeUiState
@@ -142,8 +144,17 @@ private fun HomeScreenColumn(
                 ),
                 settings = settings.progressSettings
             )
+            AdCard(
+                style = AdCardDefaults.adCardStyle(
+                    cornerStyle = when (state) {
+                        is HomeUiState.Success -> CardCornerStyle.MiddleInList
+                        is HomeUiState.LocationRequired -> CardCornerStyle.MiddleInList
+                        else -> CardCornerStyle.LastInList
+                    }
+                ),
+                modifier = Modifier.padding(top = 4.dp)
+            )
         }
-
         when (state) {
             is HomeUiState.Loading -> {
                 item {

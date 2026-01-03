@@ -75,6 +75,8 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.coil.compose)
     implementation(libs.androidx.compose.animation.core)
+    implementation(libs.play.services.ads)
+    implementation(libs.user.messaging.platform)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

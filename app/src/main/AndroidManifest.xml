@@ -19,6 +19,12 @@
         android:supportsRtl="true"
         android:localeConfig="@xml/locales_config"
         android:theme="@style/Theme.YearlyProgress">
+
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_application_id" />
+
         <activity
             android:name=".app.MainActivity"
             android:exported="true"

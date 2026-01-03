@@ -4,6 +4,10 @@ import kotlinx.serialization.Serializable
 
 
 sealed class Destination {
+    // Welcome screen
+    @Serializable
+    data object Welcome : Destination()
+
     // Parent graph
     @Serializable
     data object MainFlow : Destination()

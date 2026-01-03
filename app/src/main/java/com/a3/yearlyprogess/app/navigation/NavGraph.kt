@@ -8,7 +8,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.app.ui.MainScaffold
+import com.a3.yearlyprogess.app.ui.WelcomeScreen
 import com.a3.yearlyprogess.feature.events.ui.EventCreateScreen
 import com.a3.yearlyprogess.feature.events.ui.ImportEventsScreen
 import com.a3.yearlyprogess.feature.settings.ui.SettingsScaffold
@@ -16,17 +18,25 @@ import com.a3.yearlyprogess.feature.settings.ui.SettingsScaffold
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
-    windowWidthSizeClass: WindowWidthSizeClass
+    windowWidthSizeClass: WindowWidthSizeClass,
+    startDestination: Destination,
+    onWelcomeCompleted: () -> Unit
 ) {
     NavHost(
         navController = navController,
-        startDestination = Destination.MainFlow,
+        startDestination = startDestination,
         enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
         exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
         popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) },
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) }
 
     ) {
+        composable<Destination.Welcome> {
+            WelcomeScreen(
+                onStartClicked = onWelcomeCompleted
+            )
+        }
+
         composable<Destination.MainFlow> {
             MainScaffold(
                 parentNavController = navController,
