@@ -44,7 +44,9 @@ import com.a3.yearlyprogess.app.navigation.Destination
 import com.a3.yearlyprogess.app.navigation.appNavItems
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 import com.a3.yearlyprogess.feature.events.ui.EventListScreen
+import com.a3.yearlyprogess.feature.home.HomeViewModel
 import com.a3.yearlyprogess.feature.home.ui.HomeScreen
+import com.a3.yearlyprogess.feature.widgets.ui.WidgetPreviewScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +56,7 @@ fun MainScaffold(
 ) {
 
     val eventViewModel: EventViewModel = hiltViewModel()
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
     val mainFlowNavController = rememberNavController() // local controller for this flow
 
@@ -144,7 +147,7 @@ fun MainScaffold(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable<Destination.Home> {
-                HomeScreen()
+                HomeScreen(viewModel = homeViewModel)
             }
 
             composable<Destination.Events> {
@@ -159,7 +162,7 @@ fun MainScaffold(
             }
 
             composable<Destination.Widgets> {
-                Text("Widget Screen")
+                WidgetPreviewScreen(homeViewModel = homeViewModel)
             }
         }
     }

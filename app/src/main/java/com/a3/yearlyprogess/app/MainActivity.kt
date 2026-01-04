@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        
+
         // Keep the splash screen visible until settings are loaded to prevent white flicker
         splashScreen.setKeepOnScreenCondition {
             viewModel.isFirstLaunch.value == null
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                     if (isFirstLaunch != null) {
                         val navController = rememberNavController()
                         val windowSizeClass = calculateWindowSizeClass(this)
-                        
+
                         // Lock the start destination so it doesn't change when isFirstLaunch updates.
                         // This prevents double navigation/animation issues.
                         val startDestination = remember {
@@ -70,20 +70,22 @@ class MainActivity : ComponentActivity() {
                             windowWidthSizeClass = windowSizeClass.widthSizeClass,
                             startDestination = startDestination,
                             onWelcomeCompleted = {
-                                // Show consent form after welcome screen
+                                // Navigate to main flow immediately for better UX
+                                navController.navigate(Destination.MainFlow) {
+                                    popUpTo(Destination.Welcome) { inclusive = true }
+                                }
+
+                                // Mark welcome as completed
+                                viewModel.onWelcomeCompleted()
+
+                                // Show consent form in background after navigation
+                                // This won't block the user from using the app
                                 viewModel.consentManager.gatherConsent(this) { error ->
                                     if (error != null) {
                                         Log.e("MainActivity", "Consent gathering failed: ${error.message}")
                                     }
                                     if (viewModel.consentManager.canRequestAds()) {
                                         initializeMobileAds()
-                                    }
-                                    // Mark welcome as completed
-                                    viewModel.onWelcomeCompleted()
-                                    
-                                    // Navigate to main flow explicitly
-                                    navController.navigate(Destination.MainFlow) {
-                                        popUpTo(Destination.Welcome) { inclusive = true }
                                     }
                                 }
                             }
