@@ -1,5 +1,6 @@
 package com.a3.yearlyprogess.feature.events.ui
 
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,6 +44,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -84,6 +87,7 @@ import com.a3.yearlyprogess.feature.events.domain.model.Event
 import com.a3.yearlyprogess.feature.events.domain.model.RepeatDays
 import com.a3.yearlyprogess.feature.events.domain.model.Weekday
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
+import com.a3.yearlyprogess.core.util.resizeImageForAppStorage
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -124,15 +128,19 @@ fun EventCreateScreen(
     ) { uri: Uri? ->
         uri?.let {
             try {
-                val inputStream = context.contentResolver.openInputStream(uri)
-                inputStream?.use { stream ->
-                    val fileName = "image_${System.currentTimeMillis()}.jpg"
-                    val file = File(context.filesDir, fileName)
-                    FileOutputStream(file).use { output ->
-                        stream.copyTo(output)
-                    }
-                    savedImagePath = file.absolutePath
+                // Decode and resize the image
+                val resizedBitmap = resizeImageForAppStorage(context, uri)
+
+                // Save the resized bitmap
+                val fileName = "image_${System.currentTimeMillis()}.jpg"
+                val file = File(context.filesDir, fileName)
+                FileOutputStream(file).use { output ->
+                    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 85, output)
                 }
+                savedImagePath = file.absolutePath
+
+                // Clean up
+                resizedBitmap.recycle()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -227,7 +235,7 @@ fun EventCreateScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .height(200.dp)
+                        .aspectRatio(16f / 9f)
                         .clip(RoundedCornerShape(12.dp))
                 ) {
                     AsyncImage(
@@ -240,7 +248,7 @@ fun EventCreateScreen(
                         modifier = Modifier.fillMaxSize()
                     )
 
-                    IconButton(
+                    FilledTonalIconButton(
                         onClick = { savedImagePath = null },
                         modifier = Modifier
                             .align(Alignment.TopEnd)
@@ -249,7 +257,6 @@ fun EventCreateScreen(
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = "Remove image",
-                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -263,7 +270,8 @@ fun EventCreateScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .height(120.dp),
+                        .aspectRatio(16f / 9f)
+                    ,
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLow   // no background
                     ),

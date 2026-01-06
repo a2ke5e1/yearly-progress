@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
@@ -21,6 +20,7 @@ import com.a3.yearlyprogess.core.util.formatEventTimeStatus
 import com.a3.yearlyprogess.core.util.styleFormatted
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 import com.a3.yearlyprogess.feature.events.domain.repository.EventRepository
+import com.a3.yearlyprogess.core.util.loadBitmapOptimizedForWidget
 import com.a3.yearlyprogess.feature.widgets.domain.model.EventWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
@@ -174,11 +174,13 @@ class EventWidget : BaseWidget() {
 
         }
 
-        private fun applyEventImage(views: RemoteViews, event: Event) {
+        private fun applyEventImage(context:Context, views: RemoteViews, event: Event) {
             val bitmap = if (event.backgroundImageUri != null) {
                 try {
-                    BitmapFactory.decodeFile(event.backgroundImageUri)
+                    // Use the specialized widget loader here
+                    loadBitmapOptimizedForWidget(context, event.backgroundImageUri)
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     null
                 }
             } else null
@@ -299,9 +301,9 @@ class EventWidget : BaseWidget() {
             applyText(wide,userConfig, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)
 
             // Apply event images
-            applyEventImage(small, event)
-            applyEventImage(tall, event)
-            applyEventImage(wide, event)
+            applyEventImage(context, small, event)
+            applyEventImage(context, tall, event)
+            applyEventImage(context, wide, event)
 
             // Apply swiper actions if appWidgetId is valid
             if (appWidgetId != -1) {
