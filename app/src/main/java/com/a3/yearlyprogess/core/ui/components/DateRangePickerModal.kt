@@ -49,14 +49,14 @@ fun DateRangePickerModal(
             state = dateRangePickerState,
             title = {
                 Text(
-                    text = stringResource(R.string.select_date_range)
+                    text = stringResource(R.string.select_date_range),
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
                 )
             },
             showModeToggle = false,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(500.dp)
-                .padding(16.dp)
         )
     }
 }
