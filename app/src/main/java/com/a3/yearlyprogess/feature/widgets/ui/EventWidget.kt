@@ -4,12 +4,16 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
+import androidx.core.graphics.ColorUtils
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.core.util.TimePeriod
@@ -35,6 +39,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.roundToInt
+import androidx.core.graphics.get
 
 
 @AndroidEntryPoint
@@ -132,14 +137,36 @@ class EventWidget : BaseWidget() {
         const val ACTION_NEXT = "com.a3.yearlyprogess.feature.widgets.ui.EventWidget.ACTION_NEXT"
         const val ACTION_PREV = "com.a3.yearlyprogess.feature.widgets.ui.EventWidget.ACTION_PREV"
 
-        private fun applyTheme(views: RemoteViews, colors: WidgetColors) {
+        private fun applyTheme(
+            views: RemoteViews,
+            colors: WidgetColors,
+            backgroundLuminance: Double?
+        ) {
             views.setTextColor(R.id.eventTitle, colors.primaryColor)
             views.setTextColor(R.id.eventProgressText, colors.primaryColor)
-            views.setTextColor(R.id.eventDesc, colors.secondaryColor)
-            views.setTextColor(R.id.currentDate, colors.secondaryColor)
-            views.setTextColor(R.id.eventTime, colors.secondaryColor)
             views.setTextColor(R.id.widgetDaysLeft, colors.accentColor)
+
+            if (backgroundLuminance == null) {
+                views.setTextColor(R.id.eventDesc, colors.secondaryColor)
+                views.setTextColor(R.id.currentDate, colors.secondaryColor)
+                views.setTextColor(R.id.eventTime, colors.secondaryColor)
+                return
+            }
+
+            val blendedColor =
+                if (backgroundLuminance < 0.45) {
+                    // Dark image → brighten text
+                    ColorUtils.blendARGB(colors.secondaryColor, Color.WHITE, 0.65f)
+                } else {
+                    // Light image → darken text
+                    ColorUtils.blendARGB(colors.secondaryColor, Color.BLACK, 0.45f)
+                }
+
+            views.setTextColor(R.id.eventDesc, blendedColor)
+            views.setTextColor(R.id.currentDate, blendedColor)
+            views.setTextColor(R.id.eventTime, blendedColor)
         }
+
 
         private fun applyText(
             views: RemoteViews,
@@ -174,13 +201,39 @@ class EventWidget : BaseWidget() {
 
         }
 
-        private fun applyEventImage(context:Context, views: RemoteViews, event: Event) {
+        private fun calculateAverageLuminance(
+            bitmap: Bitmap,
+            step: Int = 8
+        ): Double {
+            var sum = 0.0
+            var count = 0
+
+            var x = 0
+            while (x < bitmap.width) {
+                var y = 0
+                while (y < bitmap.height) {
+                    sum += ColorUtils.calculateLuminance(bitmap[x, y])
+                    count++
+                    y += step
+                }
+                x += step
+            }
+            return if (count == 0) 0.0 else sum / count
+        }
+
+        /**
+        *  Returns bitmaps average luminance
+        */
+        private fun applyEventImage(
+            context: Context,
+            views: RemoteViews,
+            event: Event
+        ): Double? {
+
             val bitmap = if (event.backgroundImageUri != null) {
                 try {
-                    // Use the specialized widget loader here
                     loadBitmapOptimizedForWidget(context, event.backgroundImageUri)
                 } catch (e: Exception) {
-                    e.printStackTrace()
                     null
                 }
             } else null
@@ -189,9 +242,12 @@ class EventWidget : BaseWidget() {
                 views.setBitmap(R.id.imageContainer, "setImageBitmap", bitmap)
                 views.setViewVisibility(R.id.imageContainer, View.VISIBLE)
                 views.setViewVisibility(R.id.widgetContainer, View.GONE)
+
+                return calculateAverageLuminance(bitmap)
             } else {
                 views.setViewVisibility(R.id.imageContainer, View.GONE)
                 views.setViewVisibility(R.id.widgetContainer, View.VISIBLE)
+                return null
             }
         }
 
@@ -280,10 +336,6 @@ class EventWidget : BaseWidget() {
             val eventData = calculateEventData(context, event, yp, userConfig)
             val colors = WidgetColors.fromTheme(context, theme)
 
-            // Apply theme to all layouts
-            applyTheme(small, colors)
-            applyTheme(tall, colors)
-            applyTheme(wide, colors)
 
             // Apply background colors
             small.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
@@ -300,10 +352,11 @@ class EventWidget : BaseWidget() {
             applyText(tall,userConfig, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)
             applyText(wide,userConfig, event, eventData.styledProgressBar, eventData.timeStatusText, eventData.eventDateText, eventData.currentDate, indicator)
 
-            // Apply event images
-            applyEventImage(context, small, event)
-            applyEventImage(context, tall, event)
-            applyEventImage(context, wide, event)
+
+            // event images and Apply theme to all layouts
+            applyTheme(small, colors, applyEventImage(context, small, event))
+            applyTheme(tall, colors, applyEventImage(context, tall, event))
+            applyTheme(wide, colors, applyEventImage(context, wide, event))
 
             // Apply swiper actions if appWidgetId is valid
             if (appWidgetId != -1) {
