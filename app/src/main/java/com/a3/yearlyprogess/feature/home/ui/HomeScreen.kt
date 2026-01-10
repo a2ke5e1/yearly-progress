@@ -41,7 +41,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    onNavigateToSettingsLocation: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     val settings by viewModel.settings.collectAsState()
@@ -75,13 +76,15 @@ fun HomeScreen(
             HomeScreenGrid(
                 state = state,
                 settings = settings,
-                viewModel = viewModel
+                viewModel = viewModel,
+                onNavigateToSettingsLocation = onNavigateToSettingsLocation
             )
         } else {
             HomeScreenColumn(
                 state = state,
                 settings = settings,
-                viewModel = viewModel
+                viewModel = viewModel,
+                onNavigateToSettingsLocation = onNavigateToSettingsLocation
             )
         }
     }
@@ -96,7 +99,8 @@ fun HomeScreen(
 private fun HomeScreenColumn(
     state: HomeUiState,
     settings: AppSettings,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    onNavigateToSettingsLocation: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -171,7 +175,7 @@ private fun HomeScreenColumn(
             is HomeUiState.LocationRequired -> {
                 item {
                     LocationRequiredCard(
-                        onGoToSettings = { viewModel.onGoToSettings() },
+                        onGoToSettings = onNavigateToSettingsLocation,
                         cornerStyle = CardCornerStyle.LastInList
                     )
                     Spacer(Modifier.height(4.dp))
@@ -217,7 +221,8 @@ private fun HomeScreenColumn(
 private fun HomeScreenGrid(
     state: HomeUiState,
     settings: AppSettings,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    onNavigateToSettingsLocation: () -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -284,7 +289,7 @@ private fun HomeScreenGrid(
             is HomeUiState.LocationRequired -> {
                 item {
                     LocationRequiredCard(
-                        onGoToSettings = { viewModel.onGoToSettings() },
+                        onGoToSettings = onNavigateToSettingsLocation,
                         cornerStyle = CardCornerStyle.Default
                     )
                 }

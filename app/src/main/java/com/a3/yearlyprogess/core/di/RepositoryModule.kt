@@ -8,9 +8,11 @@ import com.a3.yearlyprogess.data.repository.LocationRepositoryImpl
 import com.a3.yearlyprogess.data.repository.SunriseSunsetRepositoryImpl
 import com.a3.yearlyprogess.domain.repository.LocationRepository
 import com.a3.yearlyprogess.domain.repository.SunriseSunsetRepository
+import com.a3.yearlyprogess.feature.widgets.data.repository.AllInWidgetOptionsRepositoryImpl
 import com.a3.yearlyprogess.feature.widgets.data.repository.CalendarWidgetOptionsRepositoryImpl
 import com.a3.yearlyprogess.feature.widgets.data.repository.EventWidgetOptionsRepositoryImpl
 import com.a3.yearlyprogess.feature.widgets.data.repository.StandaloneWidgetOptionsRepositoryImpl
+import com.a3.yearlyprogess.feature.widgets.domain.repository.AllInWidgetOptionsRepository
 import com.a3.yearlyprogess.feature.widgets.domain.repository.CalendarWidgetOptionsRepository
 import com.a3.yearlyprogess.feature.widgets.domain.repository.EventWidgetOptionsRepository
 import com.a3.yearlyprogess.feature.widgets.domain.repository.StandaloneWidgetOptionsRepository
@@ -66,5 +68,11 @@ abstract class RepositoryModule {
     abstract fun bindCalendarWidgetOptionsRepository(
         impl: CalendarWidgetOptionsRepositoryImpl
     ): CalendarWidgetOptionsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAllInWidgetOptionsRepository(
+        impl: AllInWidgetOptionsRepositoryImpl
+    ): AllInWidgetOptionsRepository
 
 }

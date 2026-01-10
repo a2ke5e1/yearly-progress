@@ -7,8 +7,8 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.app.ui.MainScaffold
 import com.a3.yearlyprogess.app.ui.WelcomeScreen
 import com.a3.yearlyprogess.feature.events.ui.EventCreateScreen
@@ -62,10 +62,27 @@ fun AppNavGraph(
             )
         }
 
-        composable<Destination.SettingsFlow> {
-            SettingsScaffold(
-                parentNavController = navController
-            )
+        navigation<Destination.SettingsGraph>(
+            startDestination = Destination.SettingsHome
+        ) {
+            composable<Destination.SettingsHome> {
+                SettingsScaffold(
+                    navController = navController,
+                    destination = Destination.SettingsHome
+                )
+            }
+            composable<Destination.SettingsLocation> {
+                SettingsScaffold(
+                    navController = navController,
+                    destination = Destination.SettingsLocation
+                )
+            }
+            composable<Destination.SettingsNotification> {
+                SettingsScaffold(
+                    navController = navController,
+                    destination = Destination.SettingsNotification
+                )
+            }
         }
 
         composable<Destination.ImportEvents> {

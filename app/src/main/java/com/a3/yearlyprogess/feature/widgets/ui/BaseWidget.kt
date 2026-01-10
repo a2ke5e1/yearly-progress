@@ -76,6 +76,7 @@ abstract class BaseWidget : AppWidgetProvider() {
             YearWidget::class.java,
             EventWidget::class.java,
             CalendarWidget::class.java,
+            AllInWidget::class.java
         )
         var totalWidgets = 0
         widgetIntentsAndComponents.forEach {

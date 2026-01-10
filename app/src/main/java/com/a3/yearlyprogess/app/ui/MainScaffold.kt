@@ -18,7 +18,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -133,7 +132,7 @@ fun MainScaffold(
         AppTopBar(
             title = topBarTitle, scrollBehavior = currentScrollBehavior, onSettingsClick = {
                 // use parentNavController to open global screens
-                parentNavController.navigate(Destination.SettingsFlow)
+                parentNavController.navigate(Destination.SettingsGraph)
             }, onImportEvents = {
                 parentNavController.navigate(Destination.ImportEvents)
             }, eventViewModel = eventViewModel, showShareButton = true, showAboutButton = true
@@ -147,7 +146,12 @@ fun MainScaffold(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable<Destination.Home> {
-                HomeScreen(viewModel = homeViewModel)
+                HomeScreen(
+                    viewModel = homeViewModel,
+                    onNavigateToSettingsLocation = {
+                        parentNavController.navigate(Destination.SettingsLocation)
+                    }
+                )
             }
 
             composable<Destination.Events> {

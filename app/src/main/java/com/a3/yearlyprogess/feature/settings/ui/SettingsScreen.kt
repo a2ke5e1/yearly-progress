@@ -1,6 +1,5 @@
 package com.a3.yearlyprogess.feature.settings.ui
 
-import android.content.Intent
 import android.icu.util.ULocale
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -47,11 +46,12 @@ fun getLocaleSelectableItems(): List<SelectableItem<ULocale>> {
 fun SettingsHomeScreen(
     viewModel: SettingsViewModel,
     onNavigateToLocation: () -> Unit,
-    onNavigateToNotification: () -> Unit
+    onNavigateToNotification: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val settings by viewModel.settings.collectAsState()
 
-    LazyColumn {
+    LazyColumn(modifier = modifier) {
         item {
             Text(
                 text = stringResource(R.string.app_label),

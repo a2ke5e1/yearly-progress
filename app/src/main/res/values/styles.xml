@@ -18,6 +18,12 @@
         <item name="android:progressDrawable">@drawable/rounded_progress_bar</item>
     </style>
 
+    <style name="CircularProgressIndicatorBase" parent="android:Widget.ProgressBar">
+        <item name="android:padding">5dp</item>
+        <item name="android:progressDrawable">@drawable/circular_progress_drawable</item>
+        <item name="android:max">100</item>
+    </style>
+
     <!-- Progress Bar Themes -->
 
     <style name="WidgetProgressTheme.Default" parent="WidgetProgressBarBase">

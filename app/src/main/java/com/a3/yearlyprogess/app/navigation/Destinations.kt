@@ -22,7 +22,16 @@ sealed class Destination {
 
 
     @Serializable
-    data object SettingsFlow : Destination()
+    data object SettingsGraph : Destination()
+
+    @Serializable
+    data object SettingsHome : Destination()
+
+    @Serializable
+    data object SettingsLocation : Destination()
+
+    @Serializable
+    data object SettingsNotification : Destination()
 
     @Serializable
     data class EventDetail(val editId: Int) : Destination()
@@ -39,22 +48,6 @@ sealed class Destination {
     data object SelectCalendars: Destination()
 
 }
-
-
-sealed class SettingsDestination {
-    @Serializable
-    data object SettingsHome : SettingsDestination()
-
-    @Serializable
-    data object SettingsLocation : SettingsDestination()
-
-    @Serializable
-    data object SettingsNotification : SettingsDestination()
-}
-
-
-
-
 
 data class NavItem(
     val route: Destination,
@@ -77,7 +70,7 @@ val appNavItems = listOf(
 
         ),
     NavItem(
-        Destination.SettingsFlow,
+        Destination.SettingsGraph,
         "Settings"
     )
 )

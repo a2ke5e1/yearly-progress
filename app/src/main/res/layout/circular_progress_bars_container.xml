@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/circularProgressBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:src="@drawable/circular_progress_bg" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarDefault"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Default"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarGreen"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Green"
+        android:visibility="gone" />
+
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarDynamic"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Dynamic"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarOcean"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Ocean"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarSunset"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Sunset"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarPurple"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Purple"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarRose"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Rose"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarMint"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Mint"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarCoral"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Coral"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarSky"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Sky"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarForest"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Forest"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarAmber"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Amber"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarTeal"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Teal"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarLavender"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Lavender"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarCrimson"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Crimson"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarIndigo"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Indigo"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarPeach"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Peach"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarCyan"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Cyan"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarMagenta"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Magenta"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarLime"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Lime"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarRuby"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Ruby"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarSlate"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Slate"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarEmerald"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Emerald"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarFuchsia"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Fuchsia"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarYellow"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Yellow"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarViolet"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Violet"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarSteel"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Steel"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarBronze"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Bronze"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarAqua"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Aqua"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarCherry"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Cherry"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarNavy"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Navy"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarSage"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Sage"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarBurgundy"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Burgundy"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarCharcoal"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Charcoal"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarTurquoise"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Turquoise"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarMauve"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Mauve"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarGold"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Gold"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarSeafoam"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Seafoam"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarRaspberry"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Raspberry"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarMidnight"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Midnight"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarOlive"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Olive"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarSalmon"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Salmon"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarPeriwinkle"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Periwinkle"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarAutumn"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Autumn"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarGraphite"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Graphite"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarSpring"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Spring"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarBlush"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Blush"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarCobalt"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Cobalt"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarPistachio"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Pistachio"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarMocha"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Mocha"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarLilac"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Lilac"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarTangerine"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Tangerine"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarArctic"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Arctic"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarPlum"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Plum"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/circularProgressBarHoneydew"
+        style="@style/CircularProgressIndicatorBase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="50"
+        android:theme="@style/WidgetProgressTheme.Honeydew"
+        android:visibility="gone" />
+
+</RelativeLayout>

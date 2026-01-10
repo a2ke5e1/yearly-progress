@@ -41,12 +41,11 @@ import kotlin.math.roundToInt
  * @param onBackgroundTransparencyChange Callback when background transparency changes
  * @param onFontScaleChange Callback when font scale changes
  * @param modifier Modifier for the root Column
+ * @param showTheme Whether to show theme selector (default: true)
  * @param showTimeStatusCounter Whether to show time status related toggles (default: true)
- * @param timeStatusCounterTitle Title for the time status counter switch (default: "Time Status Counter")
- * @param timeStatusCounterDescription Description for the time status counter switch
- * @param replaceProgressTitle Title for the replace progress switch (default: "Replace Progress with Time Left")
- * @param replaceProgressDescription Description for the replace progress switch
- * @param decimalDigitsTitle Title for decimal digits slider (default: "Decimal Digits")
+ * @param showDecimalDigits Whether to show decimal digits slider (default: true)
+ * @param showBackgroundTransparency Whether to show background transparency slider (default: true)
+ * @param showFontScale Whether to show font scale slider (default: true)
  */
 @Composable
 fun SharedWidgetSettings(
@@ -65,20 +64,26 @@ fun SharedWidgetSettings(
     onBackgroundTransparencyChange: (Int) -> Unit,
     onFontScaleChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
+    showTheme: Boolean = true,
     showTimeStatusCounter: Boolean = true,
+    showDecimalDigits: Boolean = true,
+    showBackgroundTransparency: Boolean = true,
+    showFontScale: Boolean = true,
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        // Theme Selector
-        ThemeSelector(
-            selectedTheme = theme,
-            onThemeSelected = onThemeChange,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+        if (showTheme) {
+            // Theme Selector
+            ThemeSelector(
+                selectedTheme = theme,
+                onThemeSelected = onThemeChange,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
 
-        Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(8.dp))
+        }
 
         if (showTimeStatusCounter) {
             // Time Status Counter
@@ -108,34 +113,40 @@ fun SharedWidgetSettings(
             )
         }
 
-        // Decimal Digits Slider
-        Slider(
-            title = stringResource(R.string.settings_decimal_digits),
-            value = decimalDigits.toFloat(),
-            valueRange = 0f..5f,
-            steps = 4,
-            onValueChange = { value ->
-                onDecimalDigitsChange(value.roundToInt())
-            },
-            modifier = Modifier.padding(top = 8.dp)
-        )
+        if (showDecimalDigits) {
+            // Decimal Digits Slider
+            Slider(
+                title = stringResource(R.string.settings_decimal_digits),
+                value = decimalDigits.toFloat(),
+                valueRange = 0f..5f,
+                steps = 4,
+                onValueChange = { value ->
+                    onDecimalDigitsChange(value.roundToInt())
+                },
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
 
-        // Background Transparency Slider
-        Slider(
-            title = stringResource(R.string.settings_background_transparency),
-            value = backgroundTransparency.toFloat(),
-            valueRange = 0f..100f,
-            onValueChange = { value ->
-                onBackgroundTransparencyChange(value.roundToInt())
-            }
-        )
+        if (showBackgroundTransparency) {
+            // Background Transparency Slider
+            Slider(
+                title = stringResource(R.string.settings_background_transparency),
+                value = backgroundTransparency.toFloat(),
+                valueRange = 0f..100f,
+                onValueChange = { value ->
+                    onBackgroundTransparencyChange(value.roundToInt())
+                }
+            )
+        }
 
-        // Font Scale Slider
-        Slider(
-            title = stringResource(R.string.settings_font_scale),
-            value = fontScale,
-            valueRange = 0.5f..2.0f,
-            onValueChange = onFontScaleChange
-        )
+        if (showFontScale) {
+            // Font Scale Slider
+            Slider(
+                title = stringResource(R.string.settings_font_scale),
+                value = fontScale,
+                valueRange = 0.5f..2.0f,
+                onValueChange = onFontScaleChange
+            )
+        }
     }
 }

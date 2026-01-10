@@ -136,6 +136,8 @@
     <string name="start">Start</string>
     <string name="terms_and_privacy_message">By clicking on start you agree to our &lt;a href=\"%1$s\"&gt;terms of service&lt;/a&gt; and &lt;a href=\"%2$s\"&gt;privacy policy&lt;/a&gt;.</string>
     <string name="add">Add</string>
+    <string name="all_in_one_widget">All In One Widget</string>
+    <string name="app_widget_description_all_in_one">Shows progress of day, week, month and year all in one widget</string>
 
 
 </resources>

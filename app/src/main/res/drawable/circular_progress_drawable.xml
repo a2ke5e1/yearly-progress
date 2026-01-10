@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/backgroundCenter">
+        <shape android:shape="oval">
+            <!-- Made transparent so the container background shows through -->
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+    <item android:id="@android:id/background">
+        <!-- Track of the progress bar -->
+        <shape
+            android:innerRadiusRatio="2.488"
+            android:shape="ring"
+            android:thicknessRatio="10"
+            android:useLevel="false">
+            <!-- Subtle track, semi-transparent white -->
+            <solid android:color="#1AFFFFFF" />
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <rotate
+            android:fromDegrees="270"
+            android:toDegrees="270">
+            <shape
+                android:shape="ring"
+                android:innerRadiusRatio="2.488"
+                android:thicknessRatio="10"
+                android:useLevel="true">
+                <solid android:color="#FFFFFF" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>

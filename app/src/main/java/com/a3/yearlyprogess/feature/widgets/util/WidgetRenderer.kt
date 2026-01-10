@@ -383,4 +383,144 @@ object WidgetRenderer {
     }
 
 
+    // Circular Progress Bar IDs (for All-In Widget)
+    private val circularProgressIds = listOf(
+        R.id.circularProgressBarDefault,
+        R.id.circularProgressBarGreen,
+        R.id.circularProgressBarDynamic,
+        R.id.circularProgressBarOcean,
+        R.id.circularProgressBarSunset,
+        R.id.circularProgressBarPurple,
+        R.id.circularProgressBarRose,
+        R.id.circularProgressBarMint,
+        R.id.circularProgressBarCoral,
+        R.id.circularProgressBarSky,
+        R.id.circularProgressBarForest,
+        R.id.circularProgressBarAmber,
+        R.id.circularProgressBarTeal,
+        R.id.circularProgressBarLavender,
+        R.id.circularProgressBarCrimson,
+        R.id.circularProgressBarIndigo,
+        R.id.circularProgressBarPeach,
+        R.id.circularProgressBarCyan,
+        R.id.circularProgressBarMagenta,
+        R.id.circularProgressBarLime,
+        R.id.circularProgressBarRuby,
+        R.id.circularProgressBarSlate,
+        R.id.circularProgressBarEmerald,
+        R.id.circularProgressBarFuchsia,
+        R.id.circularProgressBarYellow,
+        R.id.circularProgressBarViolet,
+        R.id.circularProgressBarSteel,
+        R.id.circularProgressBarBronze,
+        R.id.circularProgressBarAqua,
+        R.id.circularProgressBarCherry,
+        R.id.circularProgressBarNavy,
+        R.id.circularProgressBarSage,
+        R.id.circularProgressBarBurgundy,
+        R.id.circularProgressBarCharcoal,
+        R.id.circularProgressBarTurquoise,
+        R.id.circularProgressBarMauve,
+        R.id.circularProgressBarGold,
+        R.id.circularProgressBarSeafoam,
+        R.id.circularProgressBarRaspberry,
+        R.id.circularProgressBarMidnight,
+        R.id.circularProgressBarOlive,
+        R.id.circularProgressBarSalmon,
+        R.id.circularProgressBarPeriwinkle,
+        R.id.circularProgressBarAutumn,
+        R.id.circularProgressBarGraphite,
+        R.id.circularProgressBarSpring,
+        R.id.circularProgressBarBlush,
+        R.id.circularProgressBarCobalt,
+        R.id.circularProgressBarPistachio,
+        R.id.circularProgressBarMocha,
+        R.id.circularProgressBarLilac,
+        R.id.circularProgressBarTangerine,
+        R.id.circularProgressBarArctic,
+        R.id.circularProgressBarPlum,
+        R.id.circularProgressBarHoneydew
+    )
+
+    private fun circularProgressId(theme: WidgetTheme): Int =
+        when (theme) {
+            WidgetTheme.DEFAULT -> R.id.circularProgressBarDefault
+            WidgetTheme.GREEN -> R.id.circularProgressBarGreen
+            WidgetTheme.DYNAMIC -> R.id.circularProgressBarDynamic
+            WidgetTheme.OCEAN -> R.id.circularProgressBarOcean
+            WidgetTheme.SUNSET -> R.id.circularProgressBarSunset
+            WidgetTheme.PURPLE -> R.id.circularProgressBarPurple
+            WidgetTheme.ROSE -> R.id.circularProgressBarRose
+            WidgetTheme.MINT -> R.id.circularProgressBarMint
+            WidgetTheme.CORAL -> R.id.circularProgressBarCoral
+            WidgetTheme.SKY -> R.id.circularProgressBarSky
+            WidgetTheme.FOREST -> R.id.circularProgressBarForest
+            WidgetTheme.AMBER -> R.id.circularProgressBarAmber
+            WidgetTheme.TEAL -> R.id.circularProgressBarTeal
+            WidgetTheme.LAVENDER -> R.id.circularProgressBarLavender
+            WidgetTheme.CRIMSON -> R.id.circularProgressBarCrimson
+            WidgetTheme.INDIGO -> R.id.circularProgressBarIndigo
+            WidgetTheme.PEACH -> R.id.circularProgressBarPeach
+            WidgetTheme.CYAN -> R.id.circularProgressBarCyan
+            WidgetTheme.MAGENTA -> R.id.circularProgressBarMagenta
+            WidgetTheme.LIME -> R.id.circularProgressBarLime
+            WidgetTheme.RUBY -> R.id.circularProgressBarRuby
+            WidgetTheme.SLATE -> R.id.circularProgressBarSlate
+            WidgetTheme.EMERALD -> R.id.circularProgressBarEmerald
+            WidgetTheme.FUCHSIA -> R.id.circularProgressBarFuchsia
+            WidgetTheme.YELLOW -> R.id.circularProgressBarYellow
+            WidgetTheme.VIOLET -> R.id.circularProgressBarViolet
+            WidgetTheme.STEEL -> R.id.circularProgressBarSteel
+            WidgetTheme.BRONZE -> R.id.circularProgressBarBronze
+            WidgetTheme.AQUA -> R.id.circularProgressBarAqua
+            WidgetTheme.CHERRY -> R.id.circularProgressBarCherry
+            WidgetTheme.NAVY -> R.id.circularProgressBarNavy
+            WidgetTheme.SAGE -> R.id.circularProgressBarSage
+            WidgetTheme.BURGUNDY -> R.id.circularProgressBarBurgundy
+            WidgetTheme.CHARCOAL -> R.id.circularProgressBarCharcoal
+            WidgetTheme.TURQUOISE -> R.id.circularProgressBarTurquoise
+            WidgetTheme.MAUVE -> R.id.circularProgressBarMauve
+            WidgetTheme.GOLD -> R.id.circularProgressBarGold
+            WidgetTheme.SEAFOAM -> R.id.circularProgressBarSeafoam
+            WidgetTheme.RASPBERRY -> R.id.circularProgressBarRaspberry
+            WidgetTheme.MIDNIGHT -> R.id.circularProgressBarMidnight
+            WidgetTheme.OLIVE -> R.id.circularProgressBarOlive
+            WidgetTheme.SALMON -> R.id.circularProgressBarSalmon
+            WidgetTheme.PERIWINKLE -> R.id.circularProgressBarPeriwinkle
+            WidgetTheme.AUTUMN -> R.id.circularProgressBarAutumn
+            WidgetTheme.GRAPHITE -> R.id.circularProgressBarGraphite
+            WidgetTheme.SPRING -> R.id.circularProgressBarSpring
+            WidgetTheme.BLUSH -> R.id.circularProgressBarBlush
+            WidgetTheme.COBALT -> R.id.circularProgressBarCobalt
+            WidgetTheme.PISTACHIO -> R.id.circularProgressBarPistachio
+            WidgetTheme.MOCHA -> R.id.circularProgressBarMocha
+            WidgetTheme.LILAC -> R.id.circularProgressBarLilac
+            WidgetTheme.TANGERINE -> R.id.circularProgressBarTangerine
+            WidgetTheme.ARCTIC -> R.id.circularProgressBarArctic
+            WidgetTheme.PLUM -> R.id.circularProgressBarPlum
+            WidgetTheme.HONEYDEW -> R.id.circularProgressBarHoneydew
+        }
+
+    /**
+     * Apply circular progress bar with theme (same pattern as applyLinearProgressBar)
+     * Shows only the progress bar matching the selected theme
+     */
+    fun applyCircularProgressBar(
+        views: RemoteViews,
+        progress: Int,
+        theme: WidgetTheme
+    ) {
+        val activeId = circularProgressId(theme)
+        circularProgressIds.forEach { id ->
+            if (id == activeId) {
+                views.setViewVisibility(id, View.VISIBLE)
+                views.setProgressBar(id, 100, progress, false)
+            } else {
+                views.setViewVisibility(id, View.GONE)
+            }
+        }
+    }
+
+
+
 }
