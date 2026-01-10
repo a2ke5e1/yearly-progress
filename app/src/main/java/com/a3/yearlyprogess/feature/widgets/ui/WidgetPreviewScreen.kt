@@ -3,10 +3,10 @@ package com.a3.yearlyprogess.feature.widgets.ui
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RemoteViews
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,11 +41,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.components.ad.AdCard
-import com.a3.yearlyprogess.core.ui.components.ad.AdCardDefaults
-import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import com.a3.yearlyprogess.feature.home.HomeUiState
 import com.a3.yearlyprogess.feature.home.HomeViewModel
+import com.a3.yearlyprogess.feature.widgets.ui.config_screens.AllInWidgetConfigViewModel
 import com.a3.yearlyprogess.feature.widgets.ui.config_screens.StandaloneWidgetConfigViewModel
 import kotlinx.coroutines.delay
 
@@ -59,11 +58,13 @@ data class WidgetPreviewItem(
 fun WidgetPreviewScreen(
     homeViewModel: HomeViewModel,
     configViewModel: StandaloneWidgetConfigViewModel = hiltViewModel(),
+    allInOneWidgetConfigViewModel: AllInWidgetConfigViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val yp = remember { YearlyProgressUtil() }
     val homeUiState by homeViewModel.uiState.collectAsState()
     val userWidgetDefaultOptions by configViewModel.options.collectAsState()
+    val allInOneWidgetDefaultOptions by allInOneWidgetConfigViewModel.options.collectAsState()
     val sunsetData = (homeUiState as? HomeUiState.Success)?.data
 
     // Timer state to trigger updates every 500ms
@@ -122,8 +123,23 @@ fun WidgetPreviewScreen(
                         StandaloneWidget.rectangularRemoteView(context, yp, options, false)
                     }
                 }
-                WidgetPreviewCard(item, remoteViews) {
+                WidgetPreviewCard(remoteViews) {
                     pinWidget(context, item.componentClass)
+                }
+            }
+            item(key = "all_in_one", span = { GridItemSpan(maxLineSpan) }) {
+                val remoteViews = remember(tick) {
+                    val bundleOptions = Bundle().apply {
+                        putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 320)
+                        putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 220)
+                    }
+                    AllInWidget.createAllInOneWidgetRemoteView(
+                        context, yp, allInOneWidgetDefaultOptions,
+                        bundleOptions, isWidgetPreview = true
+                    )
+                }
+                WidgetPreviewCard(remoteViews) {
+                    pinWidget(context, AllInWidget::class.java)
                 }
             }
             item(key = "native_ad_card", span = { GridItemSpan(maxLineSpan) }) {
@@ -140,7 +156,6 @@ fun WidgetPreviewScreen(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun WidgetPreviewCard(
-    item: WidgetPreviewItem,
     remoteViews: RemoteViews,
     onAddClicked: () -> Unit
 ) {

@@ -1,0 +1,330 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/testBg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.YearlyProgress.AppWidgetContainer">
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:columnCount="4">
+
+
+        <RelativeLayout
+            android:id="@+id/testDay"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/circularProgressBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:src="@drawable/circular_progress_bg"
+                android:tint="@color/widget_dynamic_background_color"
+                />
+
+            <ProgressBar
+                android:id="@+id/progressBarDay"
+                style="@style/CircularProgressIndicatorBase"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminateOnly="false"
+                android:max="100"
+                android:progress="16"
+                android:theme="@style/WidgetProgressTheme.Dynamic" />
+
+            <LinearLayout
+                android:id="@+id/progressTextDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarDay"
+                android:layout_alignTop="@id/progressBarDay"
+                android:layout_alignEnd="@id/progressBarDay"
+                android:layout_alignBottom="@id/progressBarDay"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="16"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="%"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="8sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/progressTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarDay"
+                android:layout_alignEnd="@id/progressBarDay"
+                android:layout_alignBottom="@id/progressBarDay"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="23"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="8sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:text="rd"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="4sp" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/testWeek"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:src="@drawable/circular_progress_bg"
+                android:tint="@color/widget_dynamic_background_color"
+                />
+
+            <ProgressBar
+                android:id="@+id/progressBarWeek"
+                style="@style/CircularProgressIndicatorBase"
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:indeterminateOnly="false"
+                android:max="100"
+                android:progress="31"
+                android:theme="@style/WidgetProgressTheme.Dynamic" />
+
+
+            <LinearLayout
+                android:id="@+id/progressTextWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarWeek"
+                android:layout_alignTop="@id/progressBarWeek"
+                android:layout_alignEnd="@id/progressBarWeek"
+                android:layout_alignBottom="@id/progressBarWeek"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="35"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="12sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="%"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="8sp" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/progressWeekTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarWeek"
+                android:layout_alignEnd="@id/progressBarWeek"
+                android:layout_alignBottom="@id/progressBarWeek"
+                android:layout_marginBottom="20dp"
+                android:text="TUE"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/widget_dynamic_secondary_color"
+                android:textSize="8sp"
+                tools:text="FRI" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/testMonth"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:src="@drawable/circular_progress_bg"
+                android:tint="@color/widget_dynamic_background_color"
+                />
+
+            <ProgressBar
+                android:id="@+id/progressBarMonth"
+                style="@style/CircularProgressIndicatorBase"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminateOnly="false"
+                android:max="100"
+                android:progress="71"
+                android:theme="@style/WidgetProgressTheme.Dynamic" />
+
+
+            <LinearLayout
+                android:id="@+id/progressTextMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarMonth"
+                android:layout_alignTop="@id/progressBarMonth"
+                android:layout_alignEnd="@id/progressBarMonth"
+                android:layout_alignBottom="@id/progressBarMonth"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="72"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="%"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="8sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/progressMonthTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarMonth"
+                android:layout_alignEnd="@id/progressBarMonth"
+                android:layout_alignBottom="@id/progressBarMonth"
+                android:layout_marginBottom="20dp"
+                android:text="JUL"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/widget_dynamic_secondary_color"
+                android:textSize="8sp"
+                tools:text="DEC" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/testYear"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:src="@drawable/circular_progress_bg"
+                android:tint="@color/widget_dynamic_background_color"
+                />
+
+            <ProgressBar
+                android:id="@+id/progressBarYear"
+                style="@style/CircularProgressIndicatorBase"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminateOnly="false"
+                android:max="100"
+                android:progress="56"
+                android:theme="@style/WidgetProgressTheme.Dynamic" />
+
+            <LinearLayout
+                android:id="@+id/progressTextYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarYear"
+                android:layout_alignTop="@id/progressBarYear"
+                android:layout_alignEnd="@id/progressBarYear"
+                android:layout_alignBottom="@id/progressBarYear"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="55"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="%"
+                    android:textColor="@color/widget_dynamic_secondary_color"
+                    android:textSize="8sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/progressYearTitle"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/progressBarYear"
+                android:layout_alignEnd="@id/progressBarYear"
+                android:layout_alignBottom="@id/progressBarYear"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="20dp"
+                android:text="2024"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/widget_dynamic_secondary_color"
+                android:textSize="8sp"
+                tools:text="2022" />
+
+
+        </RelativeLayout>
+
+    </GridLayout>
+
+</RelativeLayout>
