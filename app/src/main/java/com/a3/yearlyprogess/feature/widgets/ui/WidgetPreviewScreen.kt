@@ -124,7 +124,7 @@ fun WidgetPreviewScreen(
                     }
                 }
                 WidgetPreviewCard(remoteViews) {
-                    pinWidget(context, item.componentClass)
+                    pinWidget(context, item.componentClass, remoteViews)
                 }
             }
             item(key = "all_in_one", span = { GridItemSpan(maxLineSpan) }) {
@@ -139,7 +139,7 @@ fun WidgetPreviewScreen(
                     )
                 }
                 WidgetPreviewCard(remoteViews) {
-                    pinWidget(context, AllInWidget::class.java)
+                    pinWidget(context, AllInWidget::class.java, remoteViews)
                 }
             }
             item(key = "native_ad_card", span = { GridItemSpan(maxLineSpan) }) {
@@ -223,11 +223,17 @@ fun RemoteViewsHost(remoteViews: RemoteViews) {
     )
 }
 
-private fun pinWidget(context: Context, widgetClass: Class<*>) {
+private fun pinWidget(context: Context, widgetClass: Class<*>, remoteViews: RemoteViews? = null) {
     val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
     val myProvider = ComponentName(context, widgetClass)
 
+    var bundle: Bundle? = null
+    if (remoteViews != null) {
+        bundle = Bundle()
+        bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
+    }
+
     if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
-        appWidgetManager.requestPinAppWidget(myProvider, null, null)
+        appWidgetManager.requestPinAppWidget(myProvider, bundle, null)
     }
 }

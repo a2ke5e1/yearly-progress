@@ -33,7 +33,7 @@ class AllInWidgetOptionsDataStore(
         timeLeftCounter = true,
         dynamicLeftCounter = false,
         replaceProgressWithDaysLeft = false,
-        decimalPlaces = 2,
+        decimalPlaces = 0,
         backgroundTransparency = 100,
         fontScale = 1.0f
     )
