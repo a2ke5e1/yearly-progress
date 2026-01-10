@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -32,6 +36,7 @@ import com.a3.yearlyprogess.core.ui.interaction.applyPressGesture
 import com.a3.yearlyprogess.core.ui.interaction.rememberPressInteractionState
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun LocationRequiredCard(
     onGoToSettings: () -> Unit,
@@ -61,7 +66,7 @@ fun LocationRequiredCard(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Location Required",
+            text = stringResource(R.string.location_required),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSecondaryContainer
         )
@@ -69,7 +74,7 @@ fun LocationRequiredCard(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Day and Night progress requires your location to calculate accurate sunrise and sunset times.",
+            text = stringResource(R.string.location_card_message),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             textAlign = TextAlign.Center
@@ -77,29 +82,29 @@ fun LocationRequiredCard(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Row(
+        Button(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            shapes = ButtonDefaults.shapes(
+                shape = RoundedCornerShape(12.dp),
+                pressedShape = RoundedCornerShape(24.dp)
+            ),
+            onClick = onGoToSettings,
         ) {
-            OutlinedButton(
-                onClick = onGoToSettings,
-                modifier = Modifier.weight(1f)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.settings))
-            }
+            Icon(
+                imageVector = Icons.Default.Settings,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
+            Text(
+                text = stringResource(R.string.settings),
+                modifier = Modifier.padding(8.dp)
+            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Add location manually or enable automatic detection in settings",
+            text = stringResource(R.string.location_card_tooltip),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f),
             textAlign = TextAlign.Center

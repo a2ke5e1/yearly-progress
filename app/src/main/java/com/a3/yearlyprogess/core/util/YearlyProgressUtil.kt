@@ -10,6 +10,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
+import kotlinx.serialization.Serializable
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
@@ -22,13 +23,16 @@ enum class CalculationType {
     ELAPSED, // progress so far
     REMAINING, // progress left
 }
-
+@Serializable
 data class ProgressSettings(
-    val uLocale: ULocale = ULocale.getDefault(),
+    val localeTag: String = ULocale.getDefault().toLanguageTag(),
     val calculationType: CalculationType = CalculationType.ELAPSED,
     val weekStartDay: Int = Calendar.SUNDAY,
     val decimalDigits: Int = 2,
-)
+) {
+    val uLocale: ULocale
+        get() = ULocale.forLanguageTag(localeTag)
+}
 
 class YearlyProgressUtil(val settings: ProgressSettings = ProgressSettings()) {
     private fun locale(): ULocale = settings.uLocale

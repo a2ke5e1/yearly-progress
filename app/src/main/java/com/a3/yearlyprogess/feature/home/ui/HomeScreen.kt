@@ -23,10 +23,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.ui.components.ad.AdCard
 import com.a3.yearlyprogess.core.ui.components.ad.AdCardDefaults
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
+import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.core.util.TimePeriod
 import com.a3.yearlyprogess.feature.home.HomeUiState
 import com.a3.yearlyprogess.feature.home.HomeViewModel
@@ -42,10 +44,11 @@ import com.google.accompanist.permissions.rememberPermissionState
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel,
     onNavigateToSettingsLocation: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
-    val settings by viewModel.settings.collectAsState()
+    val settings by mainViewModel.appSettings.collectAsState()
     val shouldShowPermissionDialog by viewModel.shouldShowPermissionDialog.collectAsState()
 
     val locationPermissionState = rememberPermissionState(
@@ -69,29 +72,25 @@ fun HomeScreen(
         )
     }
 
-    BoxWithConstraints {
-        // maxWidth is automatically provided in Dp
-        val isLargeEnoughForGrid = maxWidth >= 600.dp
-        if (isLargeEnoughForGrid) {
-            HomeScreenGrid(
-                state = state,
-                settings = settings,
-                viewModel = viewModel,
-                onNavigateToSettingsLocation = onNavigateToSettingsLocation
-            )
-        } else {
-            HomeScreenColumn(
-                state = state,
-                settings = settings,
-                viewModel = viewModel,
-                onNavigateToSettingsLocation = onNavigateToSettingsLocation
-            )
+    settings?.let { settings ->
+        BoxWithConstraints {
+            // maxWidth is automatically provided in Dp
+            val isLargeEnoughForGrid = maxWidth >= 600.dp
+            if (isLargeEnoughForGrid) {
+                HomeScreenGrid(
+                    state = state,
+                    settings = settings,
+                    onNavigateToSettingsLocation = onNavigateToSettingsLocation
+                )
+            } else {
+                HomeScreenColumn(
+                    state = state,
+                    settings = settings,
+                    onNavigateToSettingsLocation = onNavigateToSettingsLocation
+                )
+            }
         }
     }
-
-
-
-
 
 }
 
@@ -99,7 +98,6 @@ fun HomeScreen(
 private fun HomeScreenColumn(
     state: HomeUiState,
     settings: AppSettings,
-    viewModel: HomeViewModel,
     onNavigateToSettingsLocation: () -> Unit
 ) {
     LazyColumn(
@@ -221,7 +219,6 @@ private fun HomeScreenColumn(
 private fun HomeScreenGrid(
     state: HomeUiState,
     settings: AppSettings,
-    viewModel: HomeViewModel,
     onNavigateToSettingsLocation: () -> Unit
 ) {
     LazyVerticalGrid(

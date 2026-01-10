@@ -37,14 +37,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.app.navigation.AppNavigationRail
 import com.a3.yearlyprogess.app.navigation.BottomNavigationBar
 import com.a3.yearlyprogess.app.navigation.Destination
 import com.a3.yearlyprogess.app.navigation.appNavItems
+import com.a3.yearlyprogess.core.backup.BackupManager
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 import com.a3.yearlyprogess.feature.events.ui.EventListScreen
 import com.a3.yearlyprogess.feature.home.HomeViewModel
 import com.a3.yearlyprogess.feature.home.ui.HomeScreen
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup
 import com.a3.yearlyprogess.feature.widgets.ui.WidgetPreviewScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,11 +55,11 @@ import com.a3.yearlyprogess.feature.widgets.ui.WidgetPreviewScreen
 fun MainScaffold(
     parentNavController: NavHostController, // parent for cross-graph navigation
     windowWidthSizeClass: WindowWidthSizeClass,
+    backupManager: BackupManager,
+    mainViewModel: MainViewModel,
+    eventViewModel: EventViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-
-    val eventViewModel: EventViewModel = hiltViewModel()
-    val homeViewModel: HomeViewModel = hiltViewModel()
-
     val mainFlowNavController = rememberNavController() // local controller for this flow
 
 
@@ -130,12 +133,20 @@ fun MainScaffold(
 
     val topBar: @Composable () -> Unit = {
         AppTopBar(
-            title = topBarTitle, scrollBehavior = currentScrollBehavior, onSettingsClick = {
+            title = topBarTitle,
+            scrollBehavior = currentScrollBehavior,
+            onSettingsClick = {
                 // use parentNavController to open global screens
                 parentNavController.navigate(Destination.SettingsGraph)
-            }, onImportEvents = {
+            },
+            onImportEvents = {
                 parentNavController.navigate(Destination.ImportEvents)
-            }, eventViewModel = eventViewModel, showShareButton = true, showAboutButton = true
+            },
+            eventViewModel = eventViewModel,
+            backupManager = backupManager,
+            showShareButton = true,
+            showAboutButton = true,
+            showBackAndRestore = true
         )
     }
 
@@ -148,6 +159,7 @@ fun MainScaffold(
             composable<Destination.Home> {
                 HomeScreen(
                     viewModel = homeViewModel,
+                    mainViewModel = mainViewModel,
                     onNavigateToSettingsLocation = {
                         parentNavController.navigate(Destination.SettingsLocation)
                     }
@@ -157,6 +169,7 @@ fun MainScaffold(
             composable<Destination.Events> {
                 EventListScreen(
                     viewModel = eventViewModel,
+                    mainViewModel = mainViewModel,
                     onNavigateToEventDetail = {
                         parentNavController.navigate(Destination.EventDetail(it))  {
                             launchSingleTop = true
@@ -166,7 +179,10 @@ fun MainScaffold(
             }
 
             composable<Destination.Widgets> {
-                WidgetPreviewScreen(homeViewModel = homeViewModel)
+                WidgetPreviewScreen(
+                    homeViewModel = homeViewModel,
+//                    mainViewModel = mainViewModel
+                )
             }
         }
     }

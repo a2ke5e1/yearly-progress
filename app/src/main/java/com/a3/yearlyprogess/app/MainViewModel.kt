@@ -2,6 +2,7 @@ package com.a3.yearlyprogess.app
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.IConsentManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,8 +20,7 @@ class MainViewModel @Inject constructor(
     val consentManager: IConsentManager
 ) : ViewModel() {
 
-    val isFirstLaunch: StateFlow<Boolean?> = appSettingsRepository.appSettings
-        .map { it.isFirstLaunch }
+    val appSettings: StateFlow<AppSettings?> = appSettingsRepository.appSettings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     private val _consentGathered = MutableStateFlow(false)

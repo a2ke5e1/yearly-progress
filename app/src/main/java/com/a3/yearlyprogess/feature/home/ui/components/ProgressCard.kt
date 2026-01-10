@@ -93,7 +93,7 @@ fun ProgressCard(
     style: ProgressCardStyle = ProgressCardDefaults.progressCardStyle(),
 ) {
     val decimals = settings.decimalDigits.coerceIn(0, 13)
-    val progressUtil = remember { YearlyProgressUtil(settings) }
+    val progressUtil = remember(settings) { YearlyProgressUtil(settings) }
     var startTime by remember { mutableStateOf(progressUtil.calculateStartTime(timePeriod)) }
     var endTime by remember { mutableStateOf(progressUtil.calculateEndTime(timePeriod)) }
 

@@ -6,11 +6,15 @@
     <string name="okay">Okay</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="add">Add</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="start">Start</string>
     <string name="search">Search</string>
     <string name="share">Share</string>
-    <string name="share_message">Check out %1$s on Google Play: https://play.google.com/store/apps/details?id=%2$s\nAdd beautiful, customizable widgets to track daily, monthly, and yearly progress.</string>
+    <string name="allow">Allow</string>
+    <string name="not_now">Not Now</string>
+    <string name="open_settings">Open Settings</string>
 
     <string name="progress">Progress</string>
     <string name="widgets">Widgets</string>
@@ -27,18 +31,6 @@
     <string name="time_in">in %1$s</string>
     <string name="time_left">%1$s left</string>
     <string name="progress_card_total_duration">of %1$ss</string>
-
-    <string name="open_settings">Open Settings</string>
-    <string name="calculation_mode_label">Calculation Mode</string>
-    <string name="calculation_mode_elapsed">Elapsed (Default)</string>
-    <string name="calculation_mode_remaining">Remaining</string>
-    <string name="decimal_places_label">Decimal Places</string>
-    <string name="decimal_places_description">Number of decimal places to show in progress calculations</string>
-    <string name="first_day_of_the_week">First day of the week</string>
-    <string name="calendar_system_label">Select your calendar system</string>
-    <string name="no_calendars_available">No calendars available</string>
-    <string name="progress_notification">Progress Notification</string>
-    <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
 
     <string name="add_event">Add Event</string>
     <string name="import_events">Import Events</string>
@@ -60,16 +52,21 @@
     <string name="auto_detected">Auto Detected</string>
     <string name="detect_current_location">Detect Current Location</string>
     <string name="detecting">Detecting...</string>
-    <string name="location_settings_permission_disabled_message">Location services are disabled on your device. Please enable them to use automatic location detection.</string>
     <string name="manual_location">Manual Location</string>
     <string name="suggest_location_manually_message">Set location manually if automatic detection doesn\'t work</string>
     <string name="no_location_set">No location set</string>
+    <string name="location_required">Location Required</string>
+    <string name="location_card_message">Day and Night progress requires your location to show sunrise and sunset time.</string>
+    <string name="location_card_tooltip">Add location manually or enable automatic detection in settings</string>
+    <string name="location_settings_permission_disabled_message">Location services are disabled on your device. Please enable them to use automatic location detection.</string>
+
     <string name="enter_location">Enter a location</string>
     <string name="search_city">Search city</string>
     <string name="select_city">Select City</string>
     <string name="enter_city_name">Enter city name...</string>
     <string name="start_typing_to_search_for_a_city">Start typing to search for a city</string>
     <string name="no_cities_found">No cities found</string>
+
     <string name="coordinates">Coordinates</string>
     <string name="enter_coordinates">Enter Coordinates</string>
     <string name="coordinates_validation_message">Latitude must be between -90 and 90, longitude between -180 and 180</string>
@@ -80,11 +77,40 @@
 
     <string name="event_widget">Event Widget</string>
     <string name="calendar_widget">Calendar Widget</string>
+    <string name="all_in_one_widget">All In One Widget</string>
+    <string name="app_widget_description_all_in_one">Shows progress of day, week, month and year all in one widget</string>
     <string name="widget_shape">Widget Shape</string>
     <string name="day_light">Day Light</string>
     <string name="night_light">Night Light</string>
-    <string name="allow">Allow</string>
-    <string name="not_now">Not Now</string>
+
+    <string name="backup_restore">Backup &amp; Restore</string>
+    <string name="backup">Backup</string>
+    <string name="restore">Restore</string>
+    <string name="backup_restore_message">Time to reunite with your data - it missed you more than you know</string>
+
+    <string name="calendar_system_label">Select your calendar system</string>
+    <string name="no_calendars_available">No calendars available</string>
+    <string name="first_day_of_the_week">First day of the week</string>
+
+    <string name="calculation_mode_label">Calculation Mode</string>
+    <string name="calculation_mode_elapsed">Elapsed (Default)</string>
+    <string name="calculation_mode_remaining">Remaining</string>
+
+    <string name="decimal_places_label">Decimal Places</string>
+    <string name="decimal_places_description">Number of decimal places to show in progress calculations</string>
+    <string name="settings_decimal_digits">Decimal Digits</string>
+    <string name="settings_background_transparency">Background Transparency</string>
+    <string name="settings_font_scale">Font Scale</string>
+    <string name="settings_theme">Theme</string>
+
+    <string name="progress_notification">Progress Notification</string>
+    <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
+    <string name="settings_time_status_title">Time Status Display</string>
+    <string name="settings_time_status_description">Show time remaining or upcoming (e.g., \"2h left\" or \"in 1h 5m\")</string>
+    <string name="settings_dynamic_time_title">Compact Time Format</string>
+    <string name="settings_dynamic_time_description">Use simplified format (e.g., \"2h left\" or \"in 1h\" instead of \"2h 1m left\")</string>
+    <string name="settings_replace_progress_title">Show Time Instead of Percentage</string>
+    <string name="settings_replace_progress_description">Replace progress percentage with time status</string>
 
     <string name="calendar_permission_title">Calendar Permission Needed</string>
     <string name="calendar_permission_description">This app needs permission to read your calendar to read your events for the following features:</string>
@@ -100,6 +126,9 @@
         <item>Your location data stays on your device</item>
         <item>You can manually enter coordinates in settings later</item>
     </string-array>
+
+    <string name="share_message">Check out %1$s on Google Play: https://play.google.com/store/apps/details?id=%2$s\nAdd beautiful, customizable widgets to track daily, monthly, and yearly progress.</string>
+    <string name="terms_and_privacy_message">By clicking on start you agree to our &lt;a href=\"%1$s\"&gt;terms of service&lt;/a&gt; and &lt;a href=\"%2$s\"&gt;privacy policy&lt;/a&gt;.</string>
 
     <string-array name="app_calendar_type_entries">
         <item>Default (Based on Region)</item>
@@ -122,22 +151,5 @@
         <item>Persian</item>
         <item>Republic of China (ROC)</item>
     </string-array>
-
-    <string name="settings_time_status_title">Time Status Display</string>
-    <string name="settings_time_status_description">Show time remaining or upcoming (e.g., \"2h left\" or \"in 1h 5m\")</string>
-    <string name="settings_dynamic_time_title">Compact Time Format</string>
-    <string name="settings_dynamic_time_description">Use simplified format (e.g., \"2h left\" or \"in 1h\" instead of \"2h 1m left\")</string>
-    <string name="settings_replace_progress_title">Show Time Instead of Percentage</string>
-    <string name="settings_replace_progress_description">Replace progress percentage with time status</string>
-    <string name="settings_decimal_digits">Decimal Digits</string>
-    <string name="settings_background_transparency">Background Transparency</string>
-    <string name="settings_font_scale">Font Scale</string>
-    <string name="settings_theme">Theme</string>
-    <string name="start">Start</string>
-    <string name="terms_and_privacy_message">By clicking on start you agree to our &lt;a href=\"%1$s\"&gt;terms of service&lt;/a&gt; and &lt;a href=\"%2$s\"&gt;privacy policy&lt;/a&gt;.</string>
-    <string name="add">Add</string>
-    <string name="all_in_one_widget">All In One Widget</string>
-    <string name="app_widget_description_all_in_one">Shows progress of day, week, month and year all in one widget</string>
-
 
 </resources>

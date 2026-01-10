@@ -11,16 +11,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 import com.a3.yearlyprogess.feature.events.ui.components.EventList
 
 @Composable
 fun EventListScreen(
     viewModel: EventViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel,
     onNavigateToEventDetail: (Int) -> Unit,
 ) {
     val events by viewModel.events.collectAsState()
-    val settings by viewModel.settings.collectAsState()
+    val settings by mainViewModel.appSettings.collectAsState()
     val selectedIds by viewModel.selectedIds.collectAsState()
 
     BackHandler(enabled = selectedIds.isNotEmpty()) {
@@ -40,19 +42,21 @@ fun EventListScreen(
         }
     }
 
-    EventList(
-        events = events,
-        selectedIds = selectedIds,
-        emptyText = stringResource(R.string.no_events_message),
-        onItemClick = { event ->
-            if (selectedIds.isEmpty()) {
-                onNavigateToEventDetail(event.id)
-            } else {
-                viewModel.toggleSelection(event.id)
-            }
-        },
-        onItemLongPress = { viewModel.toggleSelection(it.id) },
-        settings = settings.progressSettings
-    )
+    settings?.let { settings ->
+        EventList(
+            events = events,
+            selectedIds = selectedIds,
+            emptyText = stringResource(R.string.no_events_message),
+            onItemClick = { event ->
+                if (selectedIds.isEmpty()) {
+                    onNavigateToEventDetail(event.id)
+                } else {
+                    viewModel.toggleSelection(event.id)
+                }
+            },
+            onItemLongPress = { viewModel.toggleSelection(it.id) },
+            settings = settings.progressSettings
+        )
+    }
 
 }

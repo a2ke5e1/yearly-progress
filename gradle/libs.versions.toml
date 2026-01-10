@@ -25,6 +25,7 @@ room = "2.8.4"
 coilCompose = "3.3.0"
 material3 = "1.5.0-alpha11"
 animationCore = "1.10.0"
+roomdatabasebackup = "1.1.0"
 playServicesAds = "24.9.0"
 userMessagingPlatform = "4.0.0"
 
@@ -61,6 +62,7 @@ coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref 
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-material3-window-size-class1 = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3" }
 androidx-compose-animation-core = { group = "androidx.compose.animation", name = "animation-core", version.ref = "animationCore" }
+roomdatabasebackup = { group = "de.raphaelebner", name = "roomdatabasebackup", version.ref = "roomdatabasebackup" }
 play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
 user-messaging-platform = { group = "com.google.android.ump", name = "user-messaging-platform", version.ref = "userMessagingPlatform" }
 

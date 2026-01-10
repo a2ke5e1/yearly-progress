@@ -9,16 +9,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.app.ui.MainScaffold
+import com.a3.yearlyprogess.core.backup.BackupManager
 import com.a3.yearlyprogess.app.ui.WelcomeScreen
 import com.a3.yearlyprogess.feature.events.ui.EventCreateScreen
 import com.a3.yearlyprogess.feature.events.ui.ImportEventsScreen
 import com.a3.yearlyprogess.feature.settings.ui.SettingsScaffold
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup
 
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
     windowWidthSizeClass: WindowWidthSizeClass,
+    backupManager: BackupManager,
+    mainViewModel: MainViewModel,
     startDestination: Destination,
     onWelcomeCompleted: () -> Unit
 ) {
@@ -40,7 +45,9 @@ fun AppNavGraph(
         composable<Destination.MainFlow> {
             MainScaffold(
                 parentNavController = navController,
-                windowWidthSizeClass = windowWidthSizeClass
+                windowWidthSizeClass = windowWidthSizeClass,
+                backupManager = backupManager,
+                mainViewModel = mainViewModel
             )
         }
 

@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppSettingsRepository {
     val appSettings: Flow<AppSettings>
+
+    suspend fun setAppSettings(appSettings: AppSettings)
+
     suspend fun setFirstLaunch(isFirstLaunch: Boolean)
     suspend fun setLocale(locale: ULocale)
     suspend fun setCalculationType(calculationType: CalculationType)

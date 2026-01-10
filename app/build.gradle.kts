@@ -16,8 +16,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 36
-        versionCode = 203
-        versionName = "4-alpha04"
+        versionCode = 204
+        versionName = "4-alpha05"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.coil.compose)
     implementation(libs.androidx.compose.animation.core)
+    implementation(libs.roomdatabasebackup)
     implementation(libs.play.services.ads)
     implementation(libs.user.messaging.platform)
     ksp(libs.hilt.android.compiler)

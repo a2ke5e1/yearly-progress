@@ -21,6 +21,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.map
+import kotlin.collections.toSet
 
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "yearly_progress_settings")
@@ -38,7 +40,7 @@ class AppSettingsRepositoryImpl @Inject constructor(
         AppSettings(
             isFirstLaunch = preferences[PreferencesKeys.IS_FIRST_LAUNCH] ?: true,
             progressSettings = ProgressSettings(
-                uLocale = uLocale,
+                localeTag = uLocale.toLanguageTag(),
                 calculationType = CalculationType.valueOf(
                     preferences[PreferencesKeys.CALCULATION_TYPE] ?: CalculationType.ELAPSED.name
                 ),
@@ -91,6 +93,17 @@ class AppSettingsRepositoryImpl @Inject constructor(
     override suspend fun setAutomaticallyDetectLocation(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.AUTOMATICALLY_DETECT_LOCATION] = enabled
+        }
+    }
+
+    override suspend fun setAppSettings(appSettings: AppSettings) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IS_FIRST_LAUNCH] = appSettings.isFirstLaunch
+            preferences[PreferencesKeys.LOCALE] = appSettings.progressSettings.localeTag
+            preferences[PreferencesKeys.CALCULATION_TYPE] = appSettings.progressSettings.calculationType.name
+            preferences[PreferencesKeys.WEEK_START_DAY] = appSettings.progressSettings.weekStartDay
+            preferences[PreferencesKeys.DECIMAL_DIGITS] = appSettings.progressSettings.decimalDigits
+            preferences[PreferencesKeys.SELECTED_CALENDAR_IDS] = appSettings.selectedCalendarIds.map { it.toString() }.toSet()
         }
     }
 

@@ -19,46 +19,69 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.a3.yearlyprogess.app.navigation.AppNavGraph
 import com.a3.yearlyprogess.app.navigation.Destination
+import com.a3.yearlyprogess.core.backup.BackupManager
+import com.a3.yearlyprogess.core.backup.RoomBackupHelper
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.core.util.Log
+import com.a3.yearlyprogess.feature.events.data.local.EventDatabase
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var backupManager: BackupManager
+
+    @Inject
+    lateinit var database: EventDatabase
 
     private val viewModel: MainViewModel by viewModels()
+
+    // Initialize RoomBackup early in the Activity lifecycle
+    private lateinit var roomBackup: RoomBackup
+    private lateinit var roomBackupHelper: RoomBackupHelper
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
+        // Initialize RoomBackup BEFORE the Activity is STARTED
+        roomBackup = RoomBackup(this).apply {
+            database(database)
+            enableLogDebug(true)
+            backupIsEncrypted(true)
+            customEncryptPassword("haha idc if you forgot")
+        }
+
+        roomBackupHelper = RoomBackupHelper(this, roomBackup)
+
+        // Set the helper in BackupManager
+        backupManager.setRoomBackupHelper(roomBackupHelper)
+
         // Keep the splash screen visible until settings are loaded to prevent white flicker
         splashScreen.setKeepOnScreenCondition {
-            viewModel.isFirstLaunch.value == null
+            viewModel.appSettings.value?.isFirstLaunch == null
         }
 
         enableEdgeToEdge()
 
         setContent {
-            val isFirstLaunch by viewModel.isFirstLaunch.collectAsState()
+            val appSettings by viewModel.appSettings.collectAsState()
 
             YearlyProgressTheme {
-                // Ensure we have a background surface immediately to prevent white flashes
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Wait for settings to load
-                    if (isFirstLaunch != null) {
+                    if (appSettings != null) {
                         val navController = rememberNavController()
                         val windowSizeClass = calculateWindowSizeClass(this)
 
-                        // Lock the start destination so it doesn't change when isFirstLaunch updates.
-                        // This prevents double navigation/animation issues.
                         val startDestination = remember {
-                            if (isFirstLaunch == true) {
+                            if (appSettings?.isFirstLaunch == true) {
                                 Destination.Welcome
                             } else {
                                 Destination.MainFlow
@@ -68,18 +91,14 @@ class MainActivity : ComponentActivity() {
                         AppNavGraph(
                             navController = navController,
                             windowWidthSizeClass = windowSizeClass.widthSizeClass,
+                            backupManager = backupManager,
                             startDestination = startDestination,
+                            mainViewModel = viewModel,
                             onWelcomeCompleted = {
-                                // Navigate to main flow immediately for better UX
                                 navController.navigate(Destination.MainFlow) {
                                     popUpTo(Destination.Welcome) { inclusive = true }
                                 }
-
-                                // Mark welcome as completed
                                 viewModel.onWelcomeCompleted()
-
-                                // Show consent form in background after navigation
-                                // This won't block the user from using the app
                                 viewModel.consentManager.gatherConsent(this) { error ->
                                     if (error != null) {
                                         Log.e("MainActivity", "Consent gathering failed: ${error.message}")
@@ -95,9 +114,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        // Gather consent on every launch if not first launch
-        val isFirstLaunchValue = viewModel.isFirstLaunch.value
-        if (isFirstLaunchValue == false) {
+        if (viewModel.appSettings.value?.isFirstLaunch == false) {
             viewModel.consentManager.gatherConsent(this) { error ->
                 if (error != null) {
                     Log.e("MainActivity", "Consent gathering failed: ${error.message}")

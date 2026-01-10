@@ -19,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class EventViewModel @Inject constructor(
     private val repository: EventRepository,
-    private val appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
 
     // Similar pattern to your settings
@@ -28,13 +27,6 @@ class EventViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
-        )
-
-    val settings: StateFlow<AppSettings> = appSettingsRepository.appSettings
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = AppSettings()
         )
 
     private val _selectedIds = MutableStateFlow<Set<Int>>(emptySet())

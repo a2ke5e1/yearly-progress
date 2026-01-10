@@ -1,5 +1,7 @@
 package com.a3.yearlyprogess.app.ui
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -30,6 +32,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,8 +43,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.core.backup.BackupManager
+import com.a3.yearlyprogess.feature.backup_restore.BackupRestoreDialog
 import com.a3.yearlyprogess.core.util.CommunityUtil
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,17 +61,46 @@ fun AppTopBar(
     onNavigateUp: (() -> Unit)? = null,
     onImportEvents: (() -> Unit)? = null,
     eventViewModel: EventViewModel? = null,
+    backupManager: BackupManager? = null,
     showShareButton: Boolean = false,
-    showAboutButton: Boolean = false
-    ) {
+    showAboutButton: Boolean = false,
+    showBackAndRestore: Boolean = false
+) {
     var expanded by remember { mutableStateOf(false) }
     val selectedIds = eventViewModel?.selectedIds?.collectAsState()
     val isAllSelected = eventViewModel?.isAllSelected?.collectAsState()
     val isActionMode by remember { derivedStateOf { selectedIds?.value?.isNotEmpty() == true } }
     var showDeleteDialogBox by remember { mutableStateOf(false) }
+    var showBackupRestoreDialog by remember { mutableStateOf(false) }
     var showAboutDialogBox by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    // Generate timestamp for backup filename
+    val backupFileName = remember {
+        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"))
+        "backup-$timestamp.ypp"
+    }
+
+    val backupLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.CreateDocument("application/octet-stream")
+        ) { uri ->
+            uri ?: return@rememberLauncherForActivityResult
+            scope.launch {
+                backupManager?.backup(uri)
+            }
+        }
+    val restoreLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.OpenDocument()
+        ) { uri ->
+            uri ?: return@rememberLauncherForActivityResult
+            scope.launch {
+                backupManager?.restore(uri)
+            }
+        }
     TopAppBar(
         title = {
             if (isActionMode) Text("${selectedIds?.value?.size ?: 0}") else Text(
@@ -127,6 +164,15 @@ fun AppTopBar(
                                 expanded = false
                                 onImportEvents()
                             })
+                    }
+                    if (showBackAndRestore) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.backup_restore)) },
+                            onClick = {
+                                expanded = false
+                                showBackupRestoreDialog = true
+                            }
+                        )
                     }
                     if(onSettingsClick != null) {
                         DropdownMenuItem(text = { Text(stringResource(R.string.settings)) }, onClick = {
@@ -193,8 +239,24 @@ fun AppTopBar(
         )
     }
 
+
     AboutModal(
         open = showAboutDialogBox,
         onDismissRequest = { showAboutDialogBox = false }
     )
+
+    BackupRestoreDialog(
+        open = showBackupRestoreDialog,
+        onBackup = {
+            // Use the generated filename with timestamp
+            backupLauncher.launch(backupFileName)
+        },
+        onRestore = {
+            restoreLauncher.launch(arrayOf("application/octet-stream"))
+        },
+        onDismissRequest = {
+            showBackupRestoreDialog = false
+        }
+    )
+
 }

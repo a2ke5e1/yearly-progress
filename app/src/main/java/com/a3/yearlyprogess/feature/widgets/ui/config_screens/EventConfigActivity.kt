@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
@@ -111,6 +112,7 @@ fun EventWidgetConfigScreen(
     modifier: Modifier = Modifier,
     appWidgetId: Int,
     onSaveSuccess: () -> Unit,
+    mainViewModel: MainViewModel = hiltViewModel(),
     configViewModel: EventWidgetConfigViewModel = hiltViewModel(),
     eventViewModel: EventViewModel = hiltViewModel(),
 ) {
@@ -207,7 +209,8 @@ fun EventWidgetConfigScreen(
                     )
                     1 -> EventSelectionTab(
                         eventViewModel = eventViewModel,
-                        configViewModel = configViewModel
+                        configViewModel = configViewModel,
+                        mainViewModel = mainViewModel
                     )
                 }
             }
@@ -265,27 +268,30 @@ fun EventSettingsTab(
 
 @Composable
 fun EventSelectionTab(
+    mainViewModel: MainViewModel,
     eventViewModel: EventViewModel,
     configViewModel: EventWidgetConfigViewModel
 ) {
     val events by eventViewModel.events.collectAsState()
-    val settings by eventViewModel.settings.collectAsState()
+    val settings by mainViewModel.appSettings.collectAsState()
     val options by configViewModel.options.collectAsState()
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Spacer(Modifier.height(8.dp))
+    settings?.let { settings ->
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Spacer(Modifier.height(8.dp))
 
-        EventList(
-            events = events,
-            selectedIds = options.selectedEventIds,
-            emptyText = "No events yet. Add one to get started!",
-            onItemClick = { event ->
-                configViewModel.toggleEventSelection(event.id)
-            },
-            onItemLongPress = { configViewModel.toggleEventSelection(it.id) },
-            settings = settings.progressSettings
-        )
+            EventList(
+                events = events,
+                selectedIds = options.selectedEventIds,
+                emptyText = "No events yet. Add one to get started!",
+                onItemClick = { event ->
+                    configViewModel.toggleEventSelection(event.id)
+                },
+                onItemLongPress = { configViewModel.toggleEventSelection(it.id) },
+                settings = settings.progressSettings
+            )
+        }
     }
 }

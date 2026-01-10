@@ -59,7 +59,7 @@ fun DayNightProgressCard(
     style: ProgressCardStyle = if (dayLight) DayNightCardDefaults.dayStyle() else DayNightCardDefaults.nightStyle(),
 ) {
     val decimals = settings.decimalDigits.coerceIn(0, 13)
-    val progressUtil = remember { YearlyProgressUtil(settings) }
+    val progressUtil = remember(settings) { YearlyProgressUtil(settings) }
     val (startTime, endTime) = remember(sunriseSunsetList, dayLight) {
         getStartAndEndTime(dayLight, sunriseSunsetList)
     }

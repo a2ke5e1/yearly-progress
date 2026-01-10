@@ -41,15 +41,7 @@ sealed class LocationState {
 class HomeViewModel @Inject constructor(
     private val sunriseSunsetRepository: SunriseSunsetRepository,
     private val locationRepository: LocationRepository,
-    private val appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
-
-    val settings: StateFlow<AppSettings> = appSettingsRepository.appSettings
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = AppSettings()
-        )
 
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
