@@ -3,6 +3,7 @@
     android:initialKeyguardLayout="@layout/calendar_widget_layout"
     android:initialLayout="@layout/loading_widget"
     android:previewLayout="@layout/calendar_widget_preview"
+    android:previewImage="@drawable/calendar_preview"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
     android:maxResizeHeight="220dp"

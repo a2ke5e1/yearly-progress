@@ -2,6 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/app_widget_description_all_in_one"
     android:initialKeyguardLayout="@layout/all_in_widget"
+    android:previewImage="@drawable/all_in_one_preview"
     android:initialLayout="@layout/loading_widget"
     android:resizeMode="horizontal|vertical"
     android:previewLayout="@layout/all_in_widget_preview"
