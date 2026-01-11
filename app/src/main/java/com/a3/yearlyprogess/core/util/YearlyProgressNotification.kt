@@ -20,7 +20,7 @@ import javax.inject.Singleton
 
 @Singleton
 class YearlyProgressNotification @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) {
     private val channelId = "progress_channel"
     private val notificationId = 1
