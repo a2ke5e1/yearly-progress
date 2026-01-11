@@ -69,7 +69,7 @@ fun AboutModal(
 private fun AboutModalContent() {
     val context = LocalContext.current
     Surface(
-        modifier = Modifier.clip(MaterialTheme.shapes.medium)
+        modifier = Modifier.clip(MaterialTheme.shapes.largeIncreased),
     ) {
         Row(
             modifier = Modifier.padding(16.dp),

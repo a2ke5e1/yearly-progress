@@ -68,7 +68,7 @@ private fun BackupRestoreModalContent(
     onDismissRequest: () -> Unit = {},
 ) {
     Surface(
-        modifier = Modifier.clip(MaterialTheme.shapes.medium),
+        modifier = Modifier.clip(MaterialTheme.shapes.largeIncreased),
 
     ) {
         Column(
