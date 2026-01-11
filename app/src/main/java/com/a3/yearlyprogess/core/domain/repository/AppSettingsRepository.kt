@@ -17,4 +17,11 @@ interface AppSettingsRepository {
     suspend fun setDecimalDigits(decimalDigits: Int)
     suspend fun setSelectedCalendarIds(calendarIds: Set<Long>)
     suspend fun setAutomaticallyDetectLocation(enabled: Boolean)
+
+    // Notification settings
+    suspend fun setProgressShowNotification(enabled: Boolean)
+    suspend fun setProgressShowNotificationYear(enabled: Boolean)
+    suspend fun setProgressShowNotificationMonth(enabled: Boolean)
+    suspend fun setProgressShowNotificationWeek(enabled: Boolean)
+    suspend fun setProgressShowNotificationDay(enabled: Boolean)
 }

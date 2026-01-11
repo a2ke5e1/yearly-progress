@@ -88,6 +88,40 @@ class SettingsViewModel @Inject constructor(
     }
 
     // ============================================================
+    // Notification Settings
+    // ============================================================
+
+    fun setProgressShowNotification(enabled: Boolean) {
+        viewModelScope.launch {
+            appSettingsRepository.setProgressShowNotification(enabled)
+        }
+    }
+
+    fun setProgressShowNotificationYear(enabled: Boolean) {
+        viewModelScope.launch {
+            appSettingsRepository.setProgressShowNotificationYear(enabled)
+        }
+    }
+
+    fun setProgressShowNotificationMonth(enabled: Boolean) {
+        viewModelScope.launch {
+            appSettingsRepository.setProgressShowNotificationMonth(enabled)
+        }
+    }
+
+    fun setProgressShowNotificationWeek(enabled: Boolean) {
+        viewModelScope.launch {
+            appSettingsRepository.setProgressShowNotificationWeek(enabled)
+        }
+    }
+
+    fun setProgressShowNotificationDay(enabled: Boolean) {
+        viewModelScope.launch {
+            appSettingsRepository.setProgressShowNotificationDay(enabled)
+        }
+    }
+
+    // ============================================================
     // Location Mode Management
     // ============================================================
 

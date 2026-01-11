@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
+import com.a3.yearlyprogess.core.util.YearlyProgressNotification
 import com.a3.yearlyprogess.feature.widgets.ui.AllInWidget
 import com.a3.yearlyprogess.feature.widgets.ui.CalendarWidget
 import com.a3.yearlyprogess.feature.widgets.ui.DayLightWidget
@@ -14,8 +16,24 @@ import com.a3.yearlyprogess.feature.widgets.ui.MonthWidget
 import com.a3.yearlyprogess.feature.widgets.ui.NightLightWidget
 import com.a3.yearlyprogess.feature.widgets.ui.WeekWidget
 import com.a3.yearlyprogess.feature.widgets.ui.YearWidget
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
+
+    @Inject
+    lateinit var yearlyProgressNotification: YearlyProgressNotification
+
+    @Inject
+    lateinit var appSettingsRepository: AppSettingsRepository
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
     override fun onReceive(
         context: Context,
         intent: Intent,
@@ -46,16 +64,20 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
             widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
             context.sendBroadcast(widgetIntent)
 
-
             totalWidgetCount += ids.size
         }
 
-        // Cancels the alarm if there are no widgets
-        // just in case.
-        if (totalWidgetCount == 0) {
-            WidgetUpdateAlarmHandler(context).cancelAlarmManager()
+        // Update notification with current settings
+        scope.launch {
+                appSettingsRepository.appSettings.collect { settings ->
+                yearlyProgressNotification.showProgressNotification(settings)
+
+                // Cancels the alarm if there are no widgets
+                // just in case.
+                if (totalWidgetCount == 0 && !settings.notificationSettings.progressShowNotification) {
+                    WidgetUpdateAlarmHandler(context).cancelAlarmManager()
+                }
+            }
         }
-
-
     }
 }

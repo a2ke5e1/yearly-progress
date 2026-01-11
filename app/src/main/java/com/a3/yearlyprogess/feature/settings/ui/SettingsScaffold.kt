@@ -7,14 +7,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.app.navigation.Destination
 import com.a3.yearlyprogess.app.ui.AppTopBar
+import com.a3.yearlyprogess.core.util.YearlyProgressNotification
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,6 +34,10 @@ fun SettingsScaffold(
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    val context = LocalContext.current
+    val yearlyProgressNotification = remember { YearlyProgressNotification(context) }
+
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -56,6 +63,7 @@ fun SettingsScaffold(
                         onNavigateToNotification = {
                             navController.navigate(Destination.SettingsNotification)
                         },
+                        yearlyProgressNotification = yearlyProgressNotification,
                         modifier = modifier
                     )
                 }
@@ -69,7 +77,8 @@ fun SettingsScaffold(
 
                 Destination.SettingsNotification -> {
                     SettingsNotificationScreen(
-                        modifier = modifier
+                        modifier = modifier,
+                        yearlyProgressNotification = yearlyProgressNotification
                     )
                 }
                 else -> {}

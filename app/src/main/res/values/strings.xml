@@ -140,6 +140,7 @@
 
     <string name="share_message">Check out %1$s on Google Play: https://play.google.com/store/apps/details?id=%2$s\nAdd beautiful, customizable widgets to track daily, monthly, and yearly progress.</string>
     <string name="terms_and_privacy_message">By clicking on start you agree to our &lt;a href=\"%1$s\"&gt;terms of service&lt;/a&gt; and &lt;a href=\"%2$s\"&gt;privacy policy&lt;/a&gt;.</string>
+    <string name="options">Options</string>
 
     <string-array name="app_calendar_type_entries">
         <item>Default (Based on Region)</item>

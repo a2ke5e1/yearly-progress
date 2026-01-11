@@ -1,6 +1,8 @@
 package com.a3.yearlyprogess.feature.settings.ui
 
+import android.content.Intent
 import android.icu.util.ULocale
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,7 +27,10 @@ import com.a3.yearlyprogess.core.ui.components.SelectableItem
 import com.a3.yearlyprogess.core.ui.components.Slider
 import com.a3.yearlyprogess.core.ui.components.SwitchWithOptions
 import com.a3.yearlyprogess.core.util.CalculationType
+import com.a3.yearlyprogess.core.util.YearlyProgressNotification
 import com.a3.yearlyprogess.core.util.toSelectableItem
+import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @Composable
@@ -45,10 +52,13 @@ fun getLocaleSelectableItems(): List<SelectableItem<ULocale>> {
 @Composable
 fun SettingsHomeScreen(
     viewModel: SettingsViewModel,
+    yearlyProgressNotification: YearlyProgressNotification,
     onNavigateToLocation: () -> Unit,
     onNavigateToNotification: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val settings by viewModel.settings.collectAsState()
 
     LazyColumn(modifier = modifier) {
@@ -65,18 +75,37 @@ fun SettingsHomeScreen(
                 SwitchWithOptions(
                     title = stringResource(R.string.progress_notification),
                     summary = stringResource(R.string.shows_progress_in_the_notification),
-                    checked = false,
+                    checked = settings.notificationSettings.progressShowNotification,
                     onCheckedChange = { newValue ->
-//                    if (newValue) {
-//                        val notificationHelper = YearlyProgressNotification(context)
-//                        if (!notificationHelper.hasAppNotificationPermission()) {
-//                            notificationHelper.requestNotificationPermission(this@SettingsActivity)
-//                        }
-//                    }
-//                    val widgetUpdateServiceIntent =
-//                        Intent(context, WidgetUpdateBroadcastReceiver::class.java)
-//                    context.sendBroadcast(widgetUpdateServiceIntent)
-//                    viewModel.setProgressShowNotification(newValue)
+                        if (newValue) {
+                            if (!yearlyProgressNotification.hasAppNotificationPermission()) {
+                                (context as ComponentActivity).let { activity ->
+                                    yearlyProgressNotification.requestNotificationPermission(activity)
+                                }
+                            }
+                        }
+
+                        // Broadcast widget update
+                        val widgetUpdateServiceIntent =
+                            Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+                        context.sendBroadcast(widgetUpdateServiceIntent)
+
+                        scope.launch {
+                            viewModel.setProgressShowNotification(newValue)
+
+                            // Update notification immediately
+                            if (newValue) {
+                                yearlyProgressNotification.showProgressNotification(
+                                    settings.copy(
+                                        notificationSettings = settings.notificationSettings.copy(
+                                            progressShowNotification = newValue
+                                        )
+                                    )
+                                )
+                            } else {
+                                yearlyProgressNotification.hideProgressNotification()
+                            }
+                        }
                     },
                     onOptionClicked = {  onNavigateToNotification()
                     }

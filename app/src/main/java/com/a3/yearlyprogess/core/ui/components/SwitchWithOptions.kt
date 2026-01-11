@@ -34,12 +34,12 @@ fun SwitchWithOptions(
     Row(
         modifier =
             Modifier.fillMaxWidth()
-                .padding(end = 16.dp)
                 .alpha(if (!disabled) 1f else 0.5f)
-                .animateContentSize(),
+                .animateContentSize()
+                .clickable(enabled = !disabled) { onOptionClicked() },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(modifier = Modifier.weight(1f).clickable(enabled = !disabled) { onOptionClicked() }) {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 title,
                 style = MaterialTheme.typography.titleMedium,
@@ -63,7 +63,8 @@ fun SwitchWithOptions(
         Switch(
             checked = checked,
             onCheckedChange = { onCheckedChange(it) },
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            modifier = Modifier.padding(end = 16.dp),
         )
     }
 }

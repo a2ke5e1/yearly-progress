@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.a3.yearlyprogess.core.domain.model.AppSettings
+import com.a3.yearlyprogess.core.domain.model.NotificationSettings
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.CalculationType
 import com.a3.yearlyprogess.core.util.Log
@@ -46,6 +47,13 @@ class AppSettingsRepositoryImpl @Inject constructor(
                 ),
                 weekStartDay = preferences[PreferencesKeys.WEEK_START_DAY] ?: calendar.firstDayOfWeek,
                 decimalDigits = preferences[PreferencesKeys.DECIMAL_DIGITS] ?: 13
+            ),
+            notificationSettings = NotificationSettings(
+                progressShowNotification = preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION] ?: false,
+                progressShowNotificationYear = preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_YEAR] ?: true,
+                progressShowNotificationMonth = preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_MONTH] ?: true,
+                progressShowNotificationWeek = preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_WEEK] ?: true,
+                progressShowNotificationDay = preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_DAY] ?: true
             ),
             selectedCalendarIds = preferences[PreferencesKeys.SELECTED_CALENDAR_IDS]
                 ?.map { it.toLong() }
@@ -96,6 +104,36 @@ class AppSettingsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun setProgressShowNotification(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION] = enabled
+        }
+    }
+
+    override suspend fun setProgressShowNotificationYear(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_YEAR] = enabled
+        }
+    }
+
+    override suspend fun setProgressShowNotificationMonth(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_MONTH] = enabled
+        }
+    }
+
+    override suspend fun setProgressShowNotificationWeek(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_WEEK] = enabled
+        }
+    }
+
+    override suspend fun setProgressShowNotificationDay(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_DAY] = enabled
+        }
+    }
+
     override suspend fun setAppSettings(appSettings: AppSettings) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_FIRST_LAUNCH] = appSettings.isFirstLaunch
@@ -104,6 +142,13 @@ class AppSettingsRepositoryImpl @Inject constructor(
             preferences[PreferencesKeys.WEEK_START_DAY] = appSettings.progressSettings.weekStartDay
             preferences[PreferencesKeys.DECIMAL_DIGITS] = appSettings.progressSettings.decimalDigits
             preferences[PreferencesKeys.SELECTED_CALENDAR_IDS] = appSettings.selectedCalendarIds.map { it.toString() }.toSet()
+
+            // Notification settings
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION] = appSettings.notificationSettings.progressShowNotification
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_YEAR] = appSettings.notificationSettings.progressShowNotificationYear
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_MONTH] = appSettings.notificationSettings.progressShowNotificationMonth
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_WEEK] = appSettings.notificationSettings.progressShowNotificationWeek
+            preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION_DAY] = appSettings.notificationSettings.progressShowNotificationDay
         }
     }
 
@@ -115,5 +160,12 @@ class AppSettingsRepositoryImpl @Inject constructor(
         val DECIMAL_DIGITS = intPreferencesKey("decimal_digits")
         val SELECTED_CALENDAR_IDS = stringSetPreferencesKey("selected_calendar_ids")
         val AUTOMATICALLY_DETECT_LOCATION = booleanPreferencesKey("automatically_detect_location")
+
+        // Notification preferences
+        val PROGRESS_SHOW_NOTIFICATION = booleanPreferencesKey("progress_show_notification")
+        val PROGRESS_SHOW_NOTIFICATION_YEAR = booleanPreferencesKey("progress_show_notification_year")
+        val PROGRESS_SHOW_NOTIFICATION_MONTH = booleanPreferencesKey("progress_show_notification_month")
+        val PROGRESS_SHOW_NOTIFICATION_WEEK = booleanPreferencesKey("progress_show_notification_week")
+        val PROGRESS_SHOW_NOTIFICATION_DAY = booleanPreferencesKey("progress_show_notification_day")
     }
 }
