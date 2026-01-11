@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/app_widget_description_month"
     android:configure="com.a3.yearlyprogess.feature.widgets.ui.config_screens.StandaloneConfigActivity"
     android:widgetFeatures="reconfigurable|configuration_optional"
     android:initialKeyguardLayout="@layout/standalone_widget_layout"

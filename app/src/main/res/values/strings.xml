@@ -78,7 +78,18 @@
     <string name="event_widget">Event Widget</string>
     <string name="calendar_widget">Calendar Widget</string>
     <string name="all_in_one_widget">All In One Widget</string>
+    
+    <!-- Widget Descriptions -->
+    <string name="app_widget_description_day">Tracks your progress through the current day in real-time</string>
+    <string name="app_widget_description_week">Shows how much of the current week has elapsed</string>
+    <string name="app_widget_description_month">Displays the percentage of the current month completed</string>
+    <string name="app_widget_description_year">Visualizes your journey through the current year</string>
+    <string name="app_widget_description_event">Keep track of progress for your custom countdowns and events</string>
+    <string name="app_widget_description_calendar">Displays upcoming and ongoing events from your calendars</string>
     <string name="app_widget_description_all_in_one">Shows progress of day, week, month and year all in one widget</string>
+    <string name="app_widget_description_day_light">Tracks the remaining daylight hours based on your location</string>
+    <string name="app_widget_description_night_light">Shows progress through the night until sunrise</string>
+
     <string name="widget_shape">Widget Shape</string>
     <string name="day_light">Day Light</string>
     <string name="night_light">Night Light</string>
