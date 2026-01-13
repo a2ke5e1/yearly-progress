@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -53,7 +54,7 @@ object DayNightCardDefaults {
 fun DayNightProgressCard(
     modifier: Modifier = Modifier,
     settings: ProgressSettings = ProgressSettings(),
-    refreshInterval: Long = 1L,
+    refreshInterval: Long = 16L,
     sunriseSunsetList: List<SunriseSunset>,
     dayLight: Boolean,
     style: ProgressCardStyle = if (dayLight) DayNightCardDefaults.dayStyle() else DayNightCardDefaults.nightStyle(),
@@ -63,29 +64,35 @@ fun DayNightProgressCard(
     val (startTime, endTime) = remember(sunriseSunsetList, dayLight) {
         getStartAndEndTime(dayLight, sunriseSunsetList)
     }
-
-    var progress by remember { mutableDoubleStateOf(progressUtil.calculateProgress(startTime, endTime)) }
-
-    LaunchedEffect(startTime, endTime) {
+    val progress by produceState(
+        initialValue = progressUtil.calculateProgress(startTime, endTime),
+        key1 = startTime,
+        key2 = endTime
+    ) {
         while (true) {
-            progress = progressUtil.calculateProgress(startTime, endTime)
+            value = progressUtil.calculateProgress(startTime, endTime)
             delay(refreshInterval)
         }
     }
 
-    val duration = (endTime - startTime) / 1000
-    val durationFormatted = remember(duration) {
-        NumberFormat.getNumberInstance().format(duration)
+    val durationFormatted = remember(startTime, endTime) {
+        val durationSecs = (endTime - startTime) / 1000
+        NumberFormat.getNumberInstance(settings.uLocale.toLocale()).format(durationSecs)
     }
 
-    val formatter = remember {
+    val formatter = remember(settings.uLocale) {
         DateTimeFormatter
             .ofLocalizedTime(FormatStyle.SHORT)
             .withLocale(settings.uLocale.toLocale())
             .withZone(ZoneId.systemDefault())
     }
-    val startTimeFormatted = remember(startTime) { formatter.format(Instant.ofEpochMilli(startTime)) }
-    val endTimeFormatted = remember(endTime) { formatter.format(Instant.ofEpochMilli(endTime)) }
+
+    val startTimeFormatted = remember(startTime, formatter) {
+        formatter.format(Instant.ofEpochMilli(startTime))
+    }
+    val endTimeFormatted = remember(endTime, formatter) {
+        formatter.format(Instant.ofEpochMilli(endTime))
+    }
 
     val pressState = rememberPressInteractionState(style.pressConfig)
     val animatedCorners = pressState.animateCorners(default = style.cornerStyle)
