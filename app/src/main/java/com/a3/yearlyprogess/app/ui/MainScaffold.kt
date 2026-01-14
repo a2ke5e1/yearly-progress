@@ -154,7 +154,9 @@ fun MainScaffold(
         NavHost(
             navController = mainFlowNavController,
             startDestination = Destination.Home,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            enterTransition = { fadeIn(tween(200)) },
+            exitTransition = { fadeOut(tween(200)) }
         ) {
             composable<Destination.Home> {
                 HomeScreen(
