@@ -1,5 +1,7 @@
 package com.a3.yearlyprogess.app.navigation
 
+import android.view.HapticFeedbackConstants
+import android.view.SoundEffectConstants
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.rounded.BarChart
@@ -10,8 +12,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -57,7 +58,7 @@ fun BottomNavigationBar(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
 
     NavigationBar {
         items.forEach { item ->
@@ -67,8 +68,11 @@ fun BottomNavigationBar(
             NavigationBarItem(
                 selected = isSelected,
                 onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                     if (!isSelected) {
+                        // Play system click sound and perform haptic feedback
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+
                         navController.navigate(item.route) {
                             popUpTo(navController.graph.startDestinationId) { saveState = true }
                             launchSingleTop = true

@@ -156,7 +156,9 @@ fun MainScaffold(
             startDestination = Destination.Home,
             modifier = Modifier.padding(innerPadding),
             enterTransition = { fadeIn(tween(200)) },
-            exitTransition = { fadeOut(tween(200)) }
+            exitTransition = { fadeOut(tween(200)) },
+            popEnterTransition = { fadeIn(tween(200)) },
+            popExitTransition = { fadeOut(tween(200)) }
         ) {
             composable<Destination.Home> {
                 HomeScreen(
@@ -183,7 +185,6 @@ fun MainScaffold(
             composable<Destination.Widgets> {
                 WidgetPreviewScreen(
                     homeViewModel = homeViewModel,
-//                    mainViewModel = mainViewModel
                 )
             }
         }
@@ -224,11 +225,5 @@ fun MainScaffold(
                 }
             }
         }
-//                    WindowWidthSizeClass.Expanded -> {
-//                        // Desktop
-//                        AppNavigationDrawer(navController) {
-//                            AppNavGraph(navController, Modifier.fillMaxSize())
-//                        }
-//                    }
     }
 }

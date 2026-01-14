@@ -37,6 +37,7 @@
     <string name="select_date_range">Select date range</string>
     <string name="no_events">No Events</string>
     <string name="no_events_message">No events yet.\nAdd one to get started!</string>
+    <string name="delete_event">Delete Event</string>
     <string name="all_day">All Day</string>
     <string name="all_day_event">All Day Event</string>
     <string name="ongoing">Now</string>

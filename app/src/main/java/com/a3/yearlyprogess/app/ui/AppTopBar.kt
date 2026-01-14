@@ -1,5 +1,7 @@
 package com.a3.yearlyprogess.app.ui
 
+import android.view.HapticFeedbackConstants
+import android.view.SoundEffectConstants
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -35,9 +37,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -60,6 +61,7 @@ fun AppTopBar(
     title: String = stringResource(R.string.app_name),
     scrollBehavior: TopAppBarScrollBehavior,
     onSettingsClick: (() -> Unit)? = null,
+    onSettingsLocationClick: (() -> Unit)? = null,
     onNavigateUp: (() -> Unit)? = null,
     onImportEvents: (() -> Unit)? = null,
     eventViewModel: EventViewModel? = null,
@@ -68,7 +70,7 @@ fun AppTopBar(
     showAboutButton: Boolean = false,
     showBackAndRestore: Boolean = false
 ) {
-    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
     var expanded by remember { mutableStateOf(false) }
     val selectedIds = eventViewModel?.selectedIds?.collectAsState()
     val isAllSelected = eventViewModel?.isAllSelected?.collectAsState()
@@ -104,6 +106,25 @@ fun AppTopBar(
                 backupManager?.restore(uri)
             }
         }
+
+    // Standard feedback for general buttons
+    val performFeedback = {
+        view.playSoundEffect(SoundEffectConstants.CLICK)
+        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+    }
+
+    // Correct feedback for positive confirmation (Confirm)
+    val performConfirmFeedback = {
+        view.playSoundEffect(SoundEffectConstants.CLICK)
+        view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+    }
+
+    // Correct feedback for negative/dismissal actions (Reject)
+    val performRejectFeedback = {
+        view.playSoundEffect(SoundEffectConstants.CLICK)
+        view.performHapticFeedback(HapticFeedbackConstants.REJECT)
+    }
+
     TopAppBar(
         title = {
             if (isActionMode) Text("${selectedIds?.value?.size ?: 0}") else Text(
@@ -112,12 +133,16 @@ fun AppTopBar(
         },
         navigationIcon = {
             if (onNavigateUp != null && !isActionMode) {
-                IconButton(onClick = onNavigateUp) {
+                IconButton(onClick = {
+                    performFeedback()
+                    onNavigateUp()
+                }) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
             }
             if (isActionMode) {
                 IconButton(onClick = {
+                    performRejectFeedback()
                     eventViewModel?.clearSelection()
                 }) {
                     Icon(Icons.Outlined.Close, contentDescription = "Back")
@@ -131,7 +156,7 @@ fun AppTopBar(
                 exit = fadeOut() + scaleOut()
             ) {
                 IconButton(onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    performFeedback()
                     showDeleteDialogBox = true
                 }) {
                     Icon(Icons.Outlined.Delete, contentDescription = "Delete")
@@ -143,7 +168,7 @@ fun AppTopBar(
                 exit = fadeOut() + scaleOut()
             ) {
                 IconButton(onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    performFeedback()
                     eventViewModel?.toggleAllSelections()
                 }) {
                     Icon(
@@ -156,8 +181,10 @@ fun AppTopBar(
             }
             Box {
                 if (onImportEvents != null || onSettingsClick != null || showShareButton) {
-                    IconButton(onClick = { expanded = true }) {
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    IconButton(onClick = {
+                        performFeedback()
+                        expanded = true
+                    }) {
                         Icon(Icons.Default.MoreVert, contentDescription = "More")
                     }
                 }
@@ -167,7 +194,7 @@ fun AppTopBar(
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.import_events)) },
                             onClick = {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                performFeedback()
                                 expanded = false
                                 onImportEvents()
                             })
@@ -176,7 +203,7 @@ fun AppTopBar(
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.backup_restore)) },
                             onClick = {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                performFeedback()
                                 expanded = false
                                 showBackupRestoreDialog = true
                             }
@@ -184,21 +211,21 @@ fun AppTopBar(
                     }
                     if(onSettingsClick != null) {
                         DropdownMenuItem(text = { Text(stringResource(R.string.settings)) }, onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            performFeedback()
                             expanded = false
                             onSettingsClick()
                         })
                     }
                     if (showShareButton) {
                         DropdownMenuItem(text = { Text(stringResource(R.string.share)) }, onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            performFeedback()
                             expanded = false
                             CommunityUtil.onShare(context)
                         })
                     }
                     if (showAboutButton) {
                         DropdownMenuItem(text = { Text(stringResource(R.string.about)) }, onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            performFeedback()
                             expanded = false
                             showAboutDialogBox = true
                         })
@@ -211,10 +238,11 @@ fun AppTopBar(
     if (showDeleteDialogBox) {
         AlertDialog(
             onDismissRequest = {
+                performRejectFeedback()
                 showDeleteDialogBox = false
                 eventViewModel?.clearSelection()
             },
-            title = { Text(text = "Delete Event", style = MaterialTheme.typography.bodyLarge) },
+            title = { Text(text = stringResource(R.string.delete_event), style = MaterialTheme.typography.bodyLarge) },
             text = {
                 val selectionCount = selectedIds?.value?.size ?: 0
                 val pluralString = pluralStringResource(
@@ -238,14 +266,14 @@ fun AppTopBar(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                    performConfirmFeedback()
                     showDeleteDialogBox = false
                     eventViewModel?.deleteSelectedEvents()
                 }) { Text(stringResource(R.string.yes)) }
             },
             dismissButton = {
                 TextButton(onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.Reject)
+                    performRejectFeedback()
                     showDeleteDialogBox = false
                 }) { Text(stringResource(R.string.no)) }
             },
@@ -256,22 +284,24 @@ fun AppTopBar(
     AboutModal(
         open = showAboutDialogBox,
         onDismissRequest = {
+            performRejectFeedback()
             showAboutDialogBox = false
-            haptic.performHapticFeedback(HapticFeedbackType.Reject)
         }
     )
 
     BackupRestoreDialog(
         open = showBackupRestoreDialog,
         onBackup = {
+            performConfirmFeedback()
             // Use the generated filename with timestamp
             backupLauncher.launch(backupFileName)
         },
         onRestore = {
+            performConfirmFeedback()
             restoreLauncher.launch(arrayOf("application/octet-stream"))
         },
         onDismissRequest = {
-            haptic.performHapticFeedback(HapticFeedbackType.Reject)
+            performRejectFeedback()
             showBackupRestoreDialog = false
         }
     )
