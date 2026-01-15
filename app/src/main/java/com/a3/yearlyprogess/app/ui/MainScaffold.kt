@@ -1,5 +1,7 @@
 package com.a3.yearlyprogess.app.ui
 
+import android.view.HapticFeedbackConstants
+import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -61,6 +64,7 @@ fun MainScaffold(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val mainFlowNavController = rememberNavController() // local controller for this flow
+    val view = LocalView.current
 
 
     val navBackStackEntry by mainFlowNavController.currentBackStackEntryAsState()
@@ -106,6 +110,8 @@ fun MainScaffold(
                     val now = System.currentTimeMillis()
                     if (now - lastClickTime > 600) { // debounce 600ms
                         lastClickTime = now
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         parentNavController.navigate(Destination.EventCreate) {
                             launchSingleTop = true
                         }
@@ -154,7 +160,11 @@ fun MainScaffold(
         NavHost(
             navController = mainFlowNavController,
             startDestination = Destination.Home,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            enterTransition = { fadeIn(tween(200)) },
+            exitTransition = { fadeOut(tween(200)) },
+            popEnterTransition = { fadeIn(tween(200)) },
+            popExitTransition = { fadeOut(tween(200)) }
         ) {
             composable<Destination.Home> {
                 HomeScreen(
@@ -181,7 +191,6 @@ fun MainScaffold(
             composable<Destination.Widgets> {
                 WidgetPreviewScreen(
                     homeViewModel = homeViewModel,
-//                    mainViewModel = mainViewModel
                 )
             }
         }
@@ -222,11 +231,5 @@ fun MainScaffold(
                 }
             }
         }
-//                    WindowWidthSizeClass.Expanded -> {
-//                        // Desktop
-//                        AppNavigationDrawer(navController) {
-//                            AppNavGraph(navController, Modifier.fillMaxSize())
-//                        }
-//                    }
     }
 }

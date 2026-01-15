@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -8,6 +10,21 @@ plugins {
     id("kotlin-parcelize")
 }
 
+val envProperties = Properties().apply {
+    val envFile = rootProject.file("env.properties")
+    if (envFile.exists()) {
+        envFile.inputStream().use { load(it) }
+    }
+}
+
+fun getEnvProperty(key: String, required: Boolean = false): String {
+    val prop = envProperties.getProperty(key)
+    if (prop == null && required) {
+        throw GradleException("Property '$key' not found in env.properties. Please add it to root/env.properties")
+    }
+    return prop ?: ""
+}
+
 android {
     namespace = "com.a3.yearlyprogess"
     compileSdk = 36
@@ -16,21 +33,26 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 36
-        versionCode = 205
-        versionName = "4-alpha06"
+        versionCode = 208
+        versionName = "4-alpha09"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
         create("release") {
-            storeFile = file("\\keystore\\keystore.jks")
-            storePassword = System.getenv("SIGNING_STORE_PASSWORD")
-            keyAlias = System.getenv("SIGNING_KEY_ALIAS")
-            keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+            storeFile = file(getEnvProperty("SIGNING_KEYSTORE_FILE"))
+            storePassword = getEnvProperty("SIGNING_STORE_PASSWORD")
+            keyAlias = getEnvProperty("SIGNING_KEY_ALIAS")
+            keyPassword = getEnvProperty("SIGNING_KEY_PASSWORD")
         }
     }
+
     buildTypes {
+        debug {
+            resValue("string", "admob_application_id", "ca-app-pub-3940256099942544~3347511713")
+            resValue("string", "admob_native_ad_unit", "ca-app-pub-3940256099942544/2247696110")
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -39,8 +61,12 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
+
+            resValue("string", "admob_application_id", getEnvProperty("ADMOB_APPLICATION_ID", required = true))
+            resValue("string", "admob_native_ad_unit", getEnvProperty("ADMOB_NATIVE_AD_UNIT", required = true))
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21

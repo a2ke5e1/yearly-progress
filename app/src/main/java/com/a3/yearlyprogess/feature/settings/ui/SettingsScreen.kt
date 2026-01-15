@@ -1,7 +1,9 @@
 package com.a3.yearlyprogess.feature.settings.ui
 
 import android.content.Intent
+import android.icu.text.DateFormatSymbols
 import android.icu.util.ULocale
+import android.view.SoundEffectConstants
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -15,9 +17,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -58,6 +64,8 @@ fun SettingsHomeScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
     val scope = rememberCoroutineScope()
     val settings by viewModel.settings.collectAsState()
 
@@ -131,21 +139,24 @@ fun SettingsHomeScreen(
         }
 
         item {
-            val daysOfWeek = listOf(
-                SelectableItem(name = "Sunday", value = Calendar.SUNDAY),
-                SelectableItem(name = "Monday", value = Calendar.MONDAY),
-                SelectableItem(name = "Tuesday", value = Calendar.TUESDAY),
-                SelectableItem(name = "Wednesday", value = Calendar.WEDNESDAY),
-                SelectableItem(name = "Thursday", value = Calendar.THURSDAY),
-                SelectableItem(name = "Friday", value = Calendar.FRIDAY),
-                SelectableItem(name = "Saturday", value = Calendar.SATURDAY)
-            )
+            val daysOfWeek = remember {
+                val dayNames = DateFormatSymbols.getInstance().weekdays
+                listOf(
+                    SelectableItem(name = dayNames[Calendar.SUNDAY], value = Calendar.SUNDAY),
+                    SelectableItem(name = dayNames[Calendar.MONDAY], value = Calendar.MONDAY),
+                    SelectableItem(name = dayNames[Calendar.TUESDAY], value = Calendar.TUESDAY),
+                    SelectableItem(name = dayNames[Calendar.WEDNESDAY], value = Calendar.WEDNESDAY),
+                    SelectableItem(name = dayNames[Calendar.THURSDAY], value = Calendar.THURSDAY),
+                    SelectableItem(name = dayNames[Calendar.FRIDAY], value = Calendar.FRIDAY),
+                    SelectableItem(name = dayNames[Calendar.SATURDAY], value = Calendar.SATURDAY)
+                )
+            }
 
             val selectedDay = daysOfWeek.find { it.value == settings.progressSettings.weekStartDay }
                 ?: daysOfWeek.first()
 
             SelectItemDialog(
-                title = "First day of the week",
+                title = stringResource(R.string.first_day_of_the_week),
                 items = daysOfWeek,
                 selectedItem = selectedDay,
                 onItemSelected = { _, item -> viewModel.setWeekStartDay(item.value) },
@@ -165,15 +176,19 @@ fun SettingsHomeScreen(
 
         item {
             ListItem(
-                headlineContent = { Text("Location") },
-                supportingContent = { Text("Manage location for day/night light widgets.") },
+                headlineContent = { Text(stringResource(R.string.location)) },
+                supportingContent = { Text(stringResource(R.string.location_supporting_description)) },
                 trailingContent = {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = "Navigate to location settings"
+                        contentDescription = null
                     )
                 },
-                modifier = Modifier.clickable { onNavigateToLocation() }
+                modifier = Modifier.clickable {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    onNavigateToLocation()
+                }
             )
         }
     }

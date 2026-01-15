@@ -13,8 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -89,24 +91,26 @@ fun ProgressCard(
     modifier: Modifier = Modifier,
     timePeriod: TimePeriod,
     settings: ProgressSettings = ProgressSettings(),
-    refreshInterval: Long = 1L,
+    refreshInterval: Long = 16L,
     style: ProgressCardStyle = ProgressCardDefaults.progressCardStyle(),
 ) {
     val decimals = settings.decimalDigits.coerceIn(0, 13)
     val progressUtil = remember(settings) { YearlyProgressUtil(settings) }
-    var startTime by remember { mutableStateOf(progressUtil.calculateStartTime(timePeriod)) }
-    var endTime by remember { mutableStateOf(progressUtil.calculateEndTime(timePeriod)) }
-
+    val startTime by remember(progressUtil, timePeriod) {
+        derivedStateOf { progressUtil.calculateStartTime(timePeriod) }
+    }
+    val endTime by remember(progressUtil, timePeriod) {
+        derivedStateOf { progressUtil.calculateEndTime(timePeriod) }
+    }
     val duration = (endTime - startTime) / 1000
-
-    var progress by remember { mutableStateOf(progressUtil.calculateProgress(startTime, endTime)) }
-
-    LaunchedEffect(progressUtil.calculateStartTime(timePeriod), progressUtil.calculateEndTime(timePeriod)) {
-        startTime = progressUtil.calculateStartTime(timePeriod)
-        endTime = progressUtil.calculateEndTime(timePeriod)
-
+    val progress by produceState(
+        initialValue = progressUtil.calculateProgress(startTime, endTime),
+        startTime,
+        endTime,
+        progressUtil
+    ) {
         while (true) {
-            progress = progressUtil.calculateProgress(startTime, endTime)
+            value = progressUtil.calculateProgress(startTime, endTime)
             delay(refreshInterval)
         }
     }

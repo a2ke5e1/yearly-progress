@@ -15,10 +15,12 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
-
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -32,6 +34,7 @@ fun Slider(
     @IntRange(from = 0) steps: Int = 0,
     onValueChange: (Float) -> Unit,
 ) {
+    val haptic = LocalHapticFeedback.current
 
     Column(
         modifier = modifier
@@ -55,17 +58,26 @@ fun Slider(
         Slider(
             enabled = !disabled,
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = { newValue ->
+                if (steps > 0 && newValue != value) {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                }
+                onValueChange(newValue)
+            },
+            onValueChangeFinished = {
+                if (steps == 0) {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                }
+            },
             valueRange = valueRange,
             steps = steps,
             track = { sliderState ->
                 SliderDefaults.Track(
                     sliderState = sliderState,
                     modifier = Modifier.height(32.dp),
-                        trackCornerSize = 8.dp
+                    trackCornerSize = 8.dp
                 )
             }
         )
-
     }
 }

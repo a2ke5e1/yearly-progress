@@ -37,6 +37,7 @@
     <string name="select_date_range">Select date range</string>
     <string name="no_events">No Events</string>
     <string name="no_events_message">No events yet.\nAdd one to get started!</string>
+    <string name="delete_event">Delete Event</string>
     <string name="all_day">All Day</string>
     <string name="all_day_event">All Day Event</string>
     <string name="ongoing">Now</string>
@@ -59,7 +60,7 @@
     <string name="location_card_message">Day and Night progress requires your location to show sunrise and sunset time.</string>
     <string name="location_card_tooltip">Add location manually or enable automatic detection in settings</string>
     <string name="location_settings_permission_disabled_message">Location services are disabled on your device. Please enable them to use automatic location detection.</string>
-
+    <string name="location_supporting_description">Manage location for day/night light widgets.</string>
     <string name="enter_location">Enter a location</string>
     <string name="search_city">Search city</string>
     <string name="select_city">Select City</string>

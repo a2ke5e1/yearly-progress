@@ -1,7 +1,10 @@
 package com.a3.yearlyprogess.app.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.navigation.NavHostController
@@ -30,11 +33,23 @@ fun AppNavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
-        exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
-        popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) },
-        popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) }
-
+        // Latest native Activity launch animation (Scale + Fade)
+        enterTransition = {
+            fadeIn(animationSpec = tween(300)) + 
+            scaleIn(initialScale = 0.92f, animationSpec = tween(300))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(150)) + 
+            scaleOut(targetScale = 1.08f, animationSpec = tween(150))
+        },
+        popEnterTransition = {
+            fadeIn(animationSpec = tween(300)) + 
+            scaleIn(initialScale = 1.08f, animationSpec = tween(300))
+        },
+        popExitTransition = {
+            fadeOut(animationSpec = tween(150)) + 
+            scaleOut(targetScale = 0.92f, animationSpec = tween(150))
+        }
     ) {
         composable<Destination.Welcome> {
             WelcomeScreen(
@@ -53,9 +68,9 @@ fun AppNavGraph(
 
         composable<Destination.EventDetail> { backStackEntry ->
             val args = backStackEntry.toRoute<Destination.EventDetail>()
-//            EventDetailScreen(eventName = args.editId)
             EventCreateScreen(
-                eventId = args.editId,  onNavigateUp = {
+                eventId = args.editId,  
+                onNavigateUp = {
                     navController.navigateUp()
                 }
             )

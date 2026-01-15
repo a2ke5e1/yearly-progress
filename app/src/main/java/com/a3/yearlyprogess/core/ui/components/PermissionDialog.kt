@@ -1,5 +1,7 @@
 package com.a3.yearlyprogess.core.ui.components
 
+import android.view.HapticFeedbackConstants
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -33,8 +36,14 @@ fun PermissionDialog(
     confirmButtonText: String = stringResource(R.string.allow),
     dismissButtonText: String = stringResource(R.string.not_now)
 ) {
+    val view = LocalView.current
+
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            view.performHapticFeedback(HapticFeedbackConstants.REJECT)
+            onDismiss()
+        },
         icon = {
             Icon(
                 imageVector = icon,
@@ -57,7 +66,13 @@ fun PermissionDialog(
             )
         },
         confirmButton = {
-            TextButton(onClick = onConfirm) {
+            TextButton(
+                onClick = {
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                    onConfirm()
+                }
+            ) {
                 Text(
                     text = confirmButtonText,
                     style = MaterialTheme.typography.labelLarge
@@ -65,7 +80,13 @@ fun PermissionDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(
+                onClick = {
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    view.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                    onDismiss()
+                }
+            ) {
                 Text(
                     text = dismissButtonText,
                     style = MaterialTheme.typography.labelLarge

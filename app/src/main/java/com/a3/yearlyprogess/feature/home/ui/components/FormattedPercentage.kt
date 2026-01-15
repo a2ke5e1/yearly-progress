@@ -2,6 +2,7 @@ package com.a3.yearlyprogess.feature.home.ui.components
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -20,10 +21,11 @@ fun FormattedPercentage(
     digits: Int = 2,
     style: TextStyle
 ) {
-    val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
-    if (value.roundToInt() != 0 && value.roundToInt() != 100) {
-        numberFormat.maximumFractionDigits = digits
-        numberFormat.minimumFractionDigits = digits
+    val numberFormat = remember(digits) {
+        (NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat).apply {
+            maximumFractionDigits = digits
+            minimumFractionDigits = digits
+        }
     }
     val formattedNumber = numberFormat.format(value) + "%"
     val decimalSeparator = numberFormat.decimalFormatSymbols.decimalSeparator
@@ -63,5 +65,5 @@ fun FormattedPercentage(
         }
     }
 
-    Text(text = annotatedString, style = style , modifier = modifier)
+    Text(text = annotatedString, style = style, modifier = modifier)
 }

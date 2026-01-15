@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RemoteViews
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,10 +27,12 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -48,17 +51,28 @@ import com.a3.yearlyprogess.feature.widgets.ui.config_screens.AllInWidgetConfigV
 import com.a3.yearlyprogess.feature.widgets.ui.config_screens.StandaloneWidgetConfigViewModel
 import kotlinx.coroutines.delay
 
+
+@Immutable
 data class WidgetPreviewItem(
-    val title: String,
+    @param:StringRes val titleRes: Int,
     val type: StandaloneWidgetType,
     val componentClass: Class<*>
+)
+
+private val WIDGET_PREVIEW_ITEMS = listOf(
+    WidgetPreviewItem(R.string.day, StandaloneWidgetType.DAY, DayWidget::class.java),
+    WidgetPreviewItem(R.string.week, StandaloneWidgetType.WEEK, WeekWidget::class.java),
+    WidgetPreviewItem(R.string.month, StandaloneWidgetType.MONTH, MonthWidget::class.java),
+    WidgetPreviewItem(R.string.year, StandaloneWidgetType.YEAR, YearWidget::class.java),
+    WidgetPreviewItem(R.string.day_light, StandaloneWidgetType.DAY_LIGHT, DayLightWidget::class.java),
+    WidgetPreviewItem(R.string.night_light, StandaloneWidgetType.NIGHT_LIGHT, NightLightWidget::class.java)
 )
 
 @Composable
 fun WidgetPreviewScreen(
     homeViewModel: HomeViewModel,
     configViewModel: StandaloneWidgetConfigViewModel = hiltViewModel(),
-    allInOneWidgetConfigViewModel: AllInWidgetConfigViewModel = hiltViewModel()
+    allInOneWidgetConfigViewModel: AllInWidgetConfigViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val yp = remember { YearlyProgressUtil() }
@@ -67,34 +81,18 @@ fun WidgetPreviewScreen(
     val allInOneWidgetDefaultOptions by allInOneWidgetConfigViewModel.options.collectAsState()
     val sunsetData = (homeUiState as? HomeUiState.Success)?.data
 
-    // Timer state to trigger updates every 500ms
-    var tick by remember { mutableStateOf(0L) }
-    LaunchedEffect(Unit) {
+
+    val tick by produceState(
+        initialValue = 0L,
+    ) {
         while (true) {
             delay(500)
-            tick = System.currentTimeMillis()
+            value = System.currentTimeMillis()
         }
     }
 
-    val widgetItems = remember {
-        listOf(
-            WidgetPreviewItem("Day", StandaloneWidgetType.DAY, DayWidget::class.java),
-            WidgetPreviewItem("Week", StandaloneWidgetType.WEEK, WeekWidget::class.java),
-            WidgetPreviewItem("Month", StandaloneWidgetType.MONTH, MonthWidget::class.java),
-            WidgetPreviewItem("Year", StandaloneWidgetType.YEAR, YearWidget::class.java),
-            WidgetPreviewItem(
-                "Day Light",
-                StandaloneWidgetType.DAY_LIGHT,
-                DayLightWidget::class.java
-            ),
-            WidgetPreviewItem(
-                "Night Light",
-                StandaloneWidgetType.NIGHT_LIGHT,
-                NightLightWidget::class.java
-            )
-        )
-    }
 
+    val widgetItems = WIDGET_PREVIEW_ITEMS
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -106,7 +104,10 @@ fun WidgetPreviewScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            items(widgetItems) { item ->
+            items(
+                items = widgetItems,
+                key = { it.type.name }
+            ) { item ->
                 val remoteViews = remember(item, tick, sunsetData) {
                     val options = userWidgetDefaultOptions.copy(
                         widgetType = item.type,
