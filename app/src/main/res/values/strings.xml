@@ -165,4 +165,10 @@
         <item>Republic of China (ROC)</item>
     </string-array>
 
+    <string name="settings_migration_title">Settings Migration</string>
+    <string name="settings_migration_message">We found settings from a previous version of the app. Would you like to transfer them to the new version? This will ensure your preferences for notifications, location, and progress display are preserved.</string>
+    <string name="transfer_settings">Transfer Settings</string>
+    <string name="migration_completed">Migration Completed</string>
+    <string name="migration_completed_message">Your settings have been successfully transferred.</string>
+
 </resources>

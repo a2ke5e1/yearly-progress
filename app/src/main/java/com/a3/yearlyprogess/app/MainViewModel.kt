@@ -1,7 +1,11 @@
 package com.a3.yearlyprogess.app
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.a3.yearlyprogess.core.data.migration.SettingsMigrationManager
 import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.IConsentManager
@@ -17,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
+    private val migrationManager: SettingsMigrationManager,
     val consentManager: IConsentManager
 ) : ViewModel() {
 
@@ -26,6 +31,15 @@ class MainViewModel @Inject constructor(
     private val _consentGathered = MutableStateFlow(false)
     val consentGathered = _consentGathered.asStateFlow()
 
+    var showMigrationDialog by mutableStateOf(false)
+        private set
+
+    init {
+        if (migrationManager.hasLegacySettings()) {
+            showMigrationDialog = true
+        }
+    }
+
     fun onWelcomeCompleted() {
         viewModelScope.launch {
             appSettingsRepository.setFirstLaunch(false)
@@ -34,5 +48,16 @@ class MainViewModel @Inject constructor(
 
     fun setConsentGathered(gathered: Boolean) {
         _consentGathered.value = gathered
+    }
+
+    fun onMigrateSettings() {
+        viewModelScope.launch {
+            migrationManager.migrate()
+            showMigrationDialog = false
+        }
+    }
+
+    fun onDismissMigration() {
+        showMigrationDialog = false
     }
 }

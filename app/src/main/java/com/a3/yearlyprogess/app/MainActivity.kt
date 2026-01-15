@@ -6,17 +6,22 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.app.navigation.AppNavGraph
 import com.a3.yearlyprogess.app.navigation.Destination
 import com.a3.yearlyprogess.core.backup.BackupManager
@@ -86,6 +91,24 @@ class MainActivity : ComponentActivity() {
                             } else {
                                 Destination.MainFlow
                             }
+                        }
+
+                        if (viewModel.showMigrationDialog) {
+                            AlertDialog(
+                                onDismissRequest = { viewModel.onDismissMigration() },
+                                title = { Text(stringResource(R.string.settings_migration_title)) },
+                                text = { Text(stringResource(R.string.settings_migration_message)) },
+                                confirmButton = {
+                                    TextButton(onClick = { viewModel.onMigrateSettings() }) {
+                                        Text(stringResource(R.string.transfer_settings))
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(onClick = { viewModel.onDismissMigration() }) {
+                                        Text(stringResource(R.string.not_now))
+                                    }
+                                }
+                            )
                         }
 
                         AppNavGraph(
