@@ -1,5 +1,6 @@
 package com.a3.yearlyprogess.core.ui.components
 
+import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
@@ -18,6 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -30,6 +34,13 @@ fun SwitchWithOptions(
     onOptionClicked: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
+
+    val triggerFeedback = {
+        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        view.playSoundEffect(SoundEffectConstants.CLICK)
+    }
 
     Row(
         modifier =
@@ -62,9 +73,13 @@ fun SwitchWithOptions(
 
         Switch(
             checked = checked,
-            onCheckedChange = { onCheckedChange(it) },
+            onCheckedChange = {
+                triggerFeedback()
+                onCheckedChange(it)
+            },
             interactionSource = interactionSource,
             modifier = Modifier.padding(end = 16.dp),
+            enabled = !disabled
         )
     }
 }
