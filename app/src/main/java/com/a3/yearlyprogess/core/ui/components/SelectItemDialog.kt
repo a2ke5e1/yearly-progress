@@ -1,5 +1,6 @@
 package com.a3.yearlyprogess.core.ui.components
 
+import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
@@ -23,6 +24,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.R
@@ -49,12 +53,17 @@ fun <T>SelectItemDialog(
     renderItemInDialog: @Composable (SelectableItem<T>) -> Unit = { Text(it.name) }
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
+
     Column(
         modifier = modifier
             .fillMaxWidth()
             .clickable(
                 enabled = !disabled,
             ) {
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                view.playSoundEffect(SoundEffectConstants.CLICK)
                 showDialog = true
             }
             .alpha(if (!disabled) 1f else 0.5f)
@@ -79,7 +88,10 @@ fun <T>SelectItemDialog(
                 showDialog = false
             },
             renderItem = renderItemInDialog,
-            onDismiss = { showDialog = false })
+            onDismiss = { 
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+                showDialog = false 
+            })
     }
 }
 
@@ -93,22 +105,34 @@ private fun <T> ListSelectorDialogBox(
     renderItem: @Composable (T) -> Unit,
     onDismiss: () -> Unit
 ) {
+    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(text = title, style = MaterialTheme.typography.bodyLarge) },
         text = {
             LazyColumn {
                 itemsIndexed(items) { index, type ->
+                    val isSelected = type == selectedItem
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onItemSelected(index, type) },
+                            .clickable { 
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                view.playSoundEffect(SoundEffectConstants.CLICK)
+                                onItemSelected(index, type) 
+                            },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         RadioButton(
-                            selected = type == selectedItem,
-                            onClick = { onItemSelected(index, type) })
+                            selected = isSelected,
+                            onClick = { 
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                view.playSoundEffect(SoundEffectConstants.CLICK)
+                                onItemSelected(index, type) 
+                            })
                         renderItem(type)
                     }
                 }

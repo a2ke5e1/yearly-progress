@@ -47,7 +47,10 @@ fun SwitchWithOptions(
             Modifier.fillMaxWidth()
                 .alpha(if (!disabled) 1f else 0.5f)
                 .animateContentSize()
-                .clickable(enabled = !disabled) { onOptionClicked() },
+                .clickable(enabled = !disabled) {
+                    triggerFeedback()
+                    onOptionClicked()
+                },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(1f)) {
