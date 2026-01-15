@@ -1,8 +1,11 @@
 package com.a3.yearlyprogess.core.data.migration
 
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.icu.util.ULocale
+import androidx.core.content.ContextCompat
 import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.domain.model.NotificationSettings
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
@@ -12,10 +15,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.content.edit
 
 @Singleton
 class SettingsMigrationManager @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val appSettingsRepository: AppSettingsRepository
 ) {
     private val prefs: SharedPreferences by lazy {
@@ -47,7 +51,7 @@ class SettingsMigrationManager @Inject constructor(
         val legacyCalculationType = prefs.getString("app_calculation_type", null)
         val calculationType = if (legacyCalculationType != null) {
             try { 
-                if (legacyCalculationType == "1") CalculationType.ELAPSED else CalculationType.REMAINING
+                if (legacyCalculationType == "0") CalculationType.ELAPSED else CalculationType.REMAINING
             } catch (e: Exception) { currentSettings.progressSettings.calculationType }
         } else {
             currentSettings.progressSettings.calculationType
@@ -71,7 +75,11 @@ class SettingsMigrationManager @Inject constructor(
         )
 
         // Location settings
-        val autoLocation = prefs.getBoolean("app_location_settings", currentSettings.automaticallyDetectLocation)
+        val autoLocation =  if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            prefs.getBoolean("app_location_settings", currentSettings.automaticallyDetectLocation)
+        } else {
+            currentSettings.automaticallyDetectLocation
+        }
 
         val migratedSettings = currentSettings.copy(
             isFirstLaunch = false,
@@ -88,6 +96,6 @@ class SettingsMigrationManager @Inject constructor(
     }
 
     private fun clearLegacySettings() {
-        prefs.edit().clear().apply()
+        prefs.edit { clear() }
     }
 }
