@@ -2,6 +2,7 @@ package com.a3.yearlyprogess.app.ui
 
 import android.view.HapticFeedbackConstants
 import android.view.SoundEffectConstants
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -10,6 +11,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -18,12 +24,14 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Deselect
 import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -36,6 +44,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -45,11 +54,15 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.backup.BackupManager
-import com.a3.yearlyprogess.feature.backup_restore.BackupRestoreDialog
 import com.a3.yearlyprogess.core.util.CommunityUtil
+import com.a3.yearlyprogess.feature.backup_restore.BackupRestoreDialog
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -78,6 +91,9 @@ fun AppTopBar(
     var showDeleteDialogBox by remember { mutableStateOf(false) }
     var showBackupRestoreDialog by remember { mutableStateOf(false) }
     var showAboutDialogBox by remember { mutableStateOf(false) }
+    
+    var isBackupInProgress by remember { mutableStateOf(false) }
+    var isRestoreInProgress by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -94,7 +110,21 @@ fun AppTopBar(
         ) { uri ->
             uri ?: return@rememberLauncherForActivityResult
             scope.launch {
-                backupManager?.backup(uri)
+                try {
+                    isBackupInProgress = true
+                    val startTime = System.currentTimeMillis()
+                    
+                    backupManager?.backup(uri)
+                    
+                    val elapsedTime = System.currentTimeMillis() - startTime
+                    if (elapsedTime < 500) delay(500 - elapsedTime)
+                    
+                    backupManager?.restartApp()
+                } catch (e: Exception) {
+                    Toast.makeText(context, "Backup failed: ${e.message}", Toast.LENGTH_LONG).show()
+                } finally {
+                    isBackupInProgress = false
+                }
             }
         }
     val restoreLauncher =
@@ -103,7 +133,21 @@ fun AppTopBar(
         ) { uri ->
             uri ?: return@rememberLauncherForActivityResult
             scope.launch {
-                backupManager?.restore(uri)
+                try {
+                    isRestoreInProgress = true
+                    val startTime = System.currentTimeMillis()
+
+                    backupManager?.restore(uri)
+
+                    val elapsedTime = System.currentTimeMillis() - startTime
+                    if (elapsedTime < 500) delay(500 - elapsedTime)
+                    
+                    backupManager?.restartApp()
+                } catch (e: Exception) {
+                    Toast.makeText(context, "Restore failed: ${e.message}", Toast.LENGTH_LONG).show()
+                } finally {
+                    isRestoreInProgress = false
+                }
             }
         }
 
@@ -305,5 +349,32 @@ fun AppTopBar(
             showBackupRestoreDialog = false
         }
     )
+    
+    if (isBackupInProgress || isRestoreInProgress) {
+        LoadingDialog(message = if (isBackupInProgress) "Backing up..." else "Restoring...")
+    }
 
+}
+
+@Composable
+fun LoadingDialog(message: String) {
+    Dialog(
+        onDismissRequest = { },
+        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+    ) {
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            color = MaterialTheme.colorScheme.surface,
+            tonalElevation = 4.dp
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator(modifier = Modifier.size(48.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = message, style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+    }
 }

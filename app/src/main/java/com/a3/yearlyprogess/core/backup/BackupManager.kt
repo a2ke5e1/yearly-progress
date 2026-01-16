@@ -8,11 +8,11 @@ import android.os.Process
 import com.a3.yearlyprogess.app.MainActivity
 import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
 
@@ -27,7 +27,7 @@ class BackupManager(
         roomHelper = helper
     }
 
-    suspend fun backup(outputUri: Uri) {
+    suspend fun backup(outputUri: Uri) = withContext(Dispatchers.IO) {
         val helper = roomHelper ?: throw IllegalStateException("RoomBackupHelper not initialized")
 
         val tempDir = File(context.cacheDir, "backup_tmp").apply {
@@ -61,37 +61,45 @@ class BackupManager(
             tempDir.deleteRecursively()
             throw e
         }
-
-        // Restart the app properly - must be last step after all operations complete
-        restartApp()
     }
 
-    suspend fun restore(inputUri: Uri) {
+    suspend fun restore(inputUri: Uri) = withContext(Dispatchers.IO) {
         val helper = roomHelper ?: throw IllegalStateException("RoomBackupHelper not initialized")
 
         val tempDir = File(context.cacheDir, "restore_tmp").apply { mkdirs() }
 
         try {
-            // 1. Copy zip from SAF
-            val zipFile = File(tempDir, "backup.ypp")
+            // 1. Copy file from SAF
+            val backupFile = File(tempDir, "temp_backup")
             context.contentResolver.openInputStream(inputUri)?.use { input ->
-                zipFile.outputStream().use { output ->
+                backupFile.outputStream().use { output ->
                     input.copyTo(output)
                 }
             }
 
-            // 2. Unzip
-            val extractedFiles = ZipUtils.unzip(zipFile, tempDir)
+            // 2. Check if it's a zip (new format) or sqlite/aes (old format)
+            if (ZipUtils.isZipFile(backupFile)) {
+                // New format: .ypp (zip)
+                val zipFile = File(tempDir, "backup.zip")
+                backupFile.renameTo(zipFile)
+                
+                val extractedFiles = ZipUtils.unzip(zipFile, tempDir)
 
-            val roomFile = extractedFiles.first { it.name.endsWith(".aes") }
-            val prefsFile = extractedFiles.first { it.name == "settings.json" }
+                val roomFile = extractedFiles.firstOrNull { it.name.endsWith(".aes") }
+                val prefsFile = extractedFiles.firstOrNull { it.name == "settings.json" }
 
-            // 3. Restore database using custom file
-            helper.restoreFromCustomFile(roomFile)
+                // Restore database
+                roomFile?.let { helper.restoreFromCustomFile(it) }
 
-            // 4. Restore App Settings to DataStore
-            val settings = json.decodeFromString(AppSettings.serializer(), prefsFile.readText())
-            appSettingsRepository.setAppSettings(settings)
+                // Restore App Settings
+                prefsFile?.let {
+                    val settings = json.decodeFromString(AppSettings.serializer(), it.readText())
+                    appSettingsRepository.setAppSettings(settings)
+                }
+            } else {
+                // Old format: direct database file (.sqlite3 or .aes)
+                helper.restoreFromCustomFile(backupFile)
+            }
 
             // Cleanup
             tempDir.deleteRecursively()
@@ -101,12 +109,9 @@ class BackupManager(
             tempDir.deleteRecursively()
             throw e
         }
-
-        // Restart the app properly - must be last step after all operations complete
-        restartApp()
     }
 
-    private fun restartApp() {
+    fun restartApp() {
         val intent = Intent(context, MainActivity::class.java).apply {
             addFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK or
