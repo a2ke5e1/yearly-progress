@@ -1,14 +1,186 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Yearly Progress</string>
 
-    <!-- Destination Labels -->
+    <!--
+
+    Some of the strings are translated by Matteo and others
+    translated using AI and Google Translate.
+
+    Need a proper translation.
+    -->
+
+    <string name="app_name">Yearly Progress</string>
+    <string name="app_label">App</string>
+    <string name="app_version">Versione: %1$s</string>
+
+    <string name="okay">OK</string>
+    <string name="cancel">Annulla</string>
+    <string name="save">Salva</string>
+    <string name="add">Aggiungi</string>
+    <string name="yes">Sì</string>
+    <string name="no">No</string>
+    <string name="start">Avvia</string>
+    <string name="search">Ricerca</string>
+    <string name="share">Condividi</string>
+    <string name="allow">Consenti</string>
+    <string name="not_now">Non ora</string>
+    <string name="open_settings">Apri impostazioni</string>
+
     <string name="progress">Progresso</string>
     <string name="widgets">Widget</string>
-    <string name="about">A riguardo</string>
-    <string name="settings">Impostazioni</string>
     <string name="events">Eventi</string>
+    <string name="calendars">Calendari</string>
+    <string name="settings">Impostazioni</string>
+    <string name="about">A riguardo</string>
+    <string name="customization">Personalizzazione</string>
 
-    <string name="share">Condividi</string>
-    <string name="week">هفته</string>
+    <string name="day">Giorno</string>
+    <string name="week">Settimana</string>
+    <string name="month">Mese</string>
+    <string name="year">Anno</string>
+    <string name="time_in">nel %1$s</string>
+    <string name="time_left">%1$s rimasti</string>
+    <string name="progress_card_total_duration">di %1$s</string>
+
+    <string name="add_event">Aggiungi evento</string>
+    <string name="import_events">Importa eventi</string>
+    <string name="select_date_range">Seleziona intervallo di date</string>
+    <string name="no_events">Nessun evento</string>
+    <string name="no_events_message">Nessun evento.\nAggiungine uno per iniziare!</string>
+    <string name="delete_event">Elimina evento</string>
+    <string name="all_day">Tutto il giorno</string>
+    <string name="all_day_event">Evento di tutto il giorno</string>
+    <string name="ongoing">Ora</string>
+    <string name="upcoming">In arrivo</string>
+
+    <plurals name="delete_events_selection_confirmation">
+        <item quantity="one">Sei sicuro di voler eliminare %d evento selezionato?</item>
+        <item quantity="other">Sei sicuro di voler eliminare %d eventi selezionati?</item>
+    </plurals>
+
+    <string name="location">Posizione</string>
+    <string name="current_location">Posizione attuale</string>
+    <string name="automatically_detect_location">Rilevamento automatico posizione</string>
+    <string name="auto_detected">Rilevata automaticamente</string>
+    <string name="detect_current_location">Rileva posizione attuale</string>
+    <string name="detecting">Rilevamento...</string>
+    <string name="manual_location">Posizione manuale</string>
+    <string name="suggest_location_manually_message">Imposta manualmente la posizione se il rilevamento automatico non funziona</string>
+    <string name="no_location_set">Nessuna posizione impostata</string>
+    <string name="location_required">Posizione richiesta</string>
+    <string name="location_card_message">Il progresso giorno/notte richiede la tua posizione per mostrare orari di alba e tramonto.</string>
+    <string name="location_card_tooltip">Aggiungi manualmente la posizione o abilita il rilevamento automatico nelle impostazioni</string>
+    <string name="location_settings_permission_disabled_message">I servizi di localizzazione sono disattivati sul dispositivo. Abilitali per usare il rilevamento automatico.</string>
+    <string name="location_supporting_description">Gestisci la posizione per i widget giorno/notte.</string>
+    <string name="enter_location">Inserisci una posizione</string>
+    <string name="search_city">Cerca città</string>
+    <string name="select_city">Seleziona città</string>
+    <string name="enter_city_name">Inserisci il nome della città...</string>
+    <string name="start_typing_to_search_for_a_city">Inizia a digitare per cercare una città</string>
+    <string name="no_cities_found">Nessuna città trovata</string>
+
+    <string name="coordinates">Coordinate</string>
+    <string name="enter_coordinates">Inserisci coordinate</string>
+    <string name="coordinates_validation_message">La latitudine deve essere tra -90 e 90, la longitudine tra -180 e 180</string>
+    <string name="latitude">Latitudine</string>
+    <string name="lat_example">es. 40.7128</string>
+    <string name="longitude">Longitudine</string>
+    <string name="lon_example">es. -74.0060</string>
+
+    <string name="event_widget">Widget evento</string>
+    <string name="calendar_widget">Widget calendario</string>
+    <string name="all_in_one_widget">Widget tutto in uno</string>
+
+    <!-- Descrizioni widget -->
+    <string name="app_widget_description_day">Traccia il progresso del giorno corrente in tempo reale</string>
+    <string name="app_widget_description_week">Mostra quanto della settimana corrente è trascorso</string>
+    <string name="app_widget_description_month">Visualizza la percentuale del mese corrente completata</string>
+    <string name="app_widget_description_year">Visualizza il progresso durante l’anno corrente</string>
+    <string name="app_widget_description_event">Tieni traccia dei tuoi countdown ed eventi personalizzati</string>
+    <string name="app_widget_description_calendar">Mostra eventi imminenti e in corso dai tuoi calendari</string>
+    <string name="app_widget_description_all_in_one">Mostra il progresso di giorno, settimana, mese e anno in un solo widget</string>
+    <string name="app_widget_description_day_light">Traccia le ore di luce rimanenti in base alla tua posizione</string>
+    <string name="app_widget_description_night_light">Mostra il progresso della notte fino all’alba</string>
+
+    <string name="widget_shape">Forma del widget</string>
+    <string name="day_light">Luce diurna</string>
+    <string name="night_light">Luce notturna</string>
+
+    <string name="backup_restore">Backup e ripristino</string>
+    <string name="backup">Backup</string>
+    <string name="restore">Ripristina</string>
+    <string name="backup_restore_message">È ora di ritrovare i tuoi dati — ti sono mancati più di quanto pensi</string>
+    <string name="backing_up">Backup in corso...</string>
+    <string name="restoring">Ripristino in corso...</string>
+
+    <string name="calendar_system_label">Seleziona il sistema di calendario</string>
+    <string name="no_calendars_available">Nessun calendario disponibile</string>
+    <string name="first_day_of_the_week">Primo giorno della settimana</string>
+
+    <string name="calculation_mode_label">Modalità di calcolo</string>
+    <string name="calculation_mode_elapsed">Trascorso (predefinito)</string>
+    <string name="calculation_mode_remaining">Rimanente</string>
+
+    <string name="decimal_places_label">Posizioni decimali</string>
+    <string name="decimal_places_description">Numero di cifre decimali da mostrare nei calcoli del progresso</string>
+    <string name="settings_decimal_digits">Cifre decimali</string>
+    <string name="settings_background_transparency">Trasparenza dello sfondo</string>
+    <string name="settings_font_scale">Dimensione carattere</string>
+    <string name="settings_theme">Tema</string>
+
+    <string name="progress_notification">Notifica di progresso</string>
+    <string name="shows_progress_in_the_notification">Mostra il progresso nella notifica</string>
+    <string name="settings_time_status_title">Visualizzazione stato del tempo</string>
+    <string name="settings_time_status_description">Mostra il tempo rimanente o imminente (es. \"2h rimanenti\" o \"tra 1h 5m\")</string>
+    <string name="settings_dynamic_time_title">Formato tempo compatto</string>
+    <string name="settings_dynamic_time_description">Usa un formato semplificato (es. \"2h rimanenti\" o \"tra 1h\")</string>
+    <string name="settings_replace_progress_title">Mostra tempo invece della percentuale</string>
+    <string name="settings_replace_progress_description">Sostituisce la percentuale di progresso con lo stato del tempo</string>
+
+    <string name="calendar_permission_title">Autorizzazione calendario necessaria</string>
+    <string name="calendar_permission_description">L’app necessita dell’accesso al calendario per le seguenti funzionalità:</string>
+    <string-array name="calendar_permission_bullet_points">
+        <item>Importare eventi dal tuo calendario</item>
+        <item>Consentire al widget calendario di mostrare eventi imminenti e in corso</item>
+    </string-array>
+
+    <string name="location_permission_title">Autorizzazione posizione necessaria</string>
+    <string name="location_permission_description">L’app necessita della tua posizione approssimativa per mostrare orari corretti di alba e tramonto.</string>
+    <string-array name="location_permission_bullet_points">
+        <item>Viene utilizzata solo l’accuratezza a livello di città</item>
+        <item>I dati sulla posizione restano sul dispositivo</item>
+        <item>Puoi inserire manualmente le coordinate nelle impostazioni</item>
+    </string-array>
+
+    <string name="share_message">Scopri %1$s su Google Play: https://play.google.com/store/apps/details?id=%2$s\nAggiungi widget belli e personalizzabili per monitorare il progresso giornaliero, mensile e annuale.</string>
+    <string name="terms_and_privacy_message">Cliccando su Avvia accetti i nostri &lt;a href=\"%1$s\"&gt;termini di servizio&lt;/a&gt; e la &lt;a href=\"%2$s\"&gt;privacy policy&lt;/a&gt;.</string>
+    <string name="options">Opzioni</string>
+
+    <string-array name="app_calendar_type_entries">
+        <item>Predefinito (in base alla regione)</item>
+        <item>Gregoriano</item>
+        <item>Buddista</item>
+        <item>Cinese</item>
+        <item>Copto</item>
+        <item>Dangi</item>
+        <item>Etiopico</item>
+        <item>Etiopico Amete Alem</item>
+        <item>Ebraico</item>
+        <item>Indiano</item>
+        <item>Islamico</item>
+        <item>Islamico civile</item>
+        <item>Islamico TBLA</item>
+        <item>Islamico Umm al-Qura</item>
+        <item>Islamico RGSA</item>
+        <item>ISO 8601</item>
+        <item>Giapponese</item>
+        <item>Persiano</item>
+        <item>Repubblica di Cina (ROC)</item>
+    </string-array>
+
+    <string name="settings_migration_title">Migrazione delle impostazioni</string>
+    <string name="settings_migration_message">Abbiamo trovato impostazioni di una versione precedente dell’app. Vuoi trasferirle alla nuova versione? In questo modo manterrai notifiche, posizione e preferenze di visualizzazione.</string>
+    <string name="transfer_settings">Trasferisci impostazioni</string>
+    <string name="migration_completed">Migrazione completata</string>
+    <string name="migration_completed_message">Le tue impostazioni sono state trasferite con successo.</string>
+
 </resources>
