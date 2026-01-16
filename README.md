@@ -6,3 +6,11 @@ It can also track Custom events.
 **This will be new version of yearly progess, everything will be build from scratch.** 
 
 ![Yearly Progress](https://www.a3group.co.in/_next/image?url=%2Fyearly-progress%2Fimages%2Fcover-banner.webp&w=1920&q=100)
+
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0).
+
+Any distributed fork or modification must also be open source
+and licensed under GPL-3.0.
