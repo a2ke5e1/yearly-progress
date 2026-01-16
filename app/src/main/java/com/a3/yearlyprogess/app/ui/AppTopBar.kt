@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -28,6 +29,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.pluralStringResource
@@ -91,7 +94,7 @@ fun AppTopBar(
     var showDeleteDialogBox by remember { mutableStateOf(false) }
     var showBackupRestoreDialog by remember { mutableStateOf(false) }
     var showAboutDialogBox by remember { mutableStateOf(false) }
-    
+
     var isBackupInProgress by remember { mutableStateOf(false) }
     var isRestoreInProgress by remember { mutableStateOf(false) }
 
@@ -113,12 +116,12 @@ fun AppTopBar(
                 try {
                     isBackupInProgress = true
                     val startTime = System.currentTimeMillis()
-                    
+
                     backupManager?.backup(uri)
-                    
+
                     val elapsedTime = System.currentTimeMillis() - startTime
-                    if (elapsedTime < 500) delay(500 - elapsedTime)
-                    
+                    if (elapsedTime < 1500) delay(1500 - elapsedTime)
+
                     backupManager?.restartApp()
                 } catch (e: Exception) {
                     Toast.makeText(context, "Backup failed: ${e.message}", Toast.LENGTH_LONG).show()
@@ -140,8 +143,8 @@ fun AppTopBar(
                     backupManager?.restore(uri)
 
                     val elapsedTime = System.currentTimeMillis() - startTime
-                    if (elapsedTime < 500) delay(500 - elapsedTime)
-                    
+                    if (elapsedTime < 1500) delay(1500 - elapsedTime)
+
                     backupManager?.restartApp()
                 } catch (e: Exception) {
                     Toast.makeText(context, "Restore failed: ${e.message}", Toast.LENGTH_LONG).show()
@@ -349,31 +352,49 @@ fun AppTopBar(
             showBackupRestoreDialog = false
         }
     )
-    
+
     if (isBackupInProgress || isRestoreInProgress) {
-        LoadingDialog(message = if (isBackupInProgress) "Backing up..." else "Restoring...")
+        LoadingDialog(message = if (isBackupInProgress) stringResource(R.string.backing_up) else stringResource(
+            R.string.restoring
+        ))
     }
 
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun LoadingDialog(message: String) {
     Dialog(
         onDismissRequest = { },
-        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+        properties = DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false
+        )
     ) {
         Surface(
-            shape = MaterialTheme.shapes.medium,
-            color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 4.dp
+            modifier = Modifier.width(280.dp),
+            shape = MaterialTheme.shapes.extraLarge,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            tonalElevation = 6.dp
         ) {
             Column(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier.padding(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CircularProgressIndicator(modifier = Modifier.size(48.dp))
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = message, style = MaterialTheme.typography.bodyMedium)
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    strokeCap = StrokeCap.Round,
+                    gapSize = 8.dp,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
         }
     }

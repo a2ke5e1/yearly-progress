@@ -99,6 +99,8 @@
     <string name="backup">Backup</string>
     <string name="restore">Restore</string>
     <string name="backup_restore_message">Time to reunite with your data - it missed you more than you know</string>
+    <string name="backing_up">Backing up...</string>
+    <string name="restoring">Restoring...</string>
 
     <string name="calendar_system_label">Select your calendar system</string>
     <string name="no_calendars_available">No calendars available</string>
