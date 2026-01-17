@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -102,6 +103,11 @@ object EventDetailCardDefaults {
     )
 }
 
+data class EventProgressState(
+    val progress: Double,
+    val statusText: String,
+    val formattedText: String,
+)
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -112,38 +118,26 @@ fun EventDetailCard(
     isSelected: Boolean = false,
     onLongPress: (() -> Unit)? = null,
     settings: ProgressSettings = ProgressSettings(),
-    refreshInterval: Long = 1L,
+    refreshInterval: Long = 16L,
     style: EventDetailCardStyle = EventDetailCardDefaults.eventDetailCardStyle(),
 ) {
     val decimals = settings.decimalDigits.coerceIn(0, 2)
     val progressUtil = remember { YearlyProgressUtil(settings) }
-    var startTime by remember { mutableLongStateOf(event.eventStartTime.time) }
-    var endTime by remember { mutableLongStateOf(event.eventEndTime.time) }
-
-    val duration = (endTime - startTime) / 1000
-
-    var progress by remember { mutableDoubleStateOf(progressUtil.calculateProgress(startTime, endTime)) }
-    var timeStatusText by remember { mutableStateOf("") }
     val context = LocalContext.current
 
-    LaunchedEffect(
-        event,
+    val uiState by produceState(
+        initialValue = EventProgressState(0.0, "", ""),
+        key1 = event
     ) {
-        val (_start, _end) = event.nextStartAndEndTime()
-        startTime = _start
-        endTime = _end
-
+        val (start, end) = event.nextStartAndEndTime()
         while (true) {
-            progress = progressUtil.calculateProgress(startTime, endTime)
-
-            timeStatusText = formatEventTimeStatus(context,startTime,endTime)
-
+            value = EventProgressState(
+                progress = progressUtil.calculateProgress(start, end),
+                statusText = formatEventTimeStatus(context, start, end),
+                formattedText = formatEventDateTime(context, start, end, event.allDayEvent)
+            )
             delay(refreshInterval)
         }
-    }
-
-    val durationFormatted = remember(duration) {
-        NumberFormat.getNumberInstance(settings.uLocale).format(duration)
     }
 
     val pressState = rememberPressInteractionState(style.pressConfig)
@@ -216,15 +210,13 @@ fun EventDetailCard(
 //                                modifier = Modifier.size(16.dp)
 //                            )
                             Text(
-                                text = formatEventDateTime(
-                                    context, startTime, endTime, event.allDayEvent
-                                ),
+                                text = uiState.formattedText,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                         Text(
-                            text = timeStatusText,
+                            text = uiState.statusText,
                             style = MaterialTheme.typography.bodySmall,
                             color =  MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
@@ -246,13 +238,13 @@ fun EventDetailCard(
                     ) {
                         CircularWavyProgressIndicator(
                             progress = {
-                                progress.toFloat() / 100
+                                uiState.progress.toFloat() / 100
                             },
                             modifier = Modifier.size(70.dp)
                         )
                         FormattedPercentage(
 //                           modifier = Modifier.offset((4).dp),
-                            value = progress,
+                            value = uiState.progress,
                             digits = decimals,
                             style = style.progressTextStyle,
                         )
