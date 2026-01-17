@@ -35,6 +35,12 @@ data class BackupFiles(
 @Serializable
 data class IntegrityInfo(
     val algorithm: String,
-    val generatedBy: String,
-    val fileChecksums: Map<String, String> = emptyMap()
+    val fileChecksums: Map<String, String> = emptyMap(),
+    val imageChecksums: List<ImageChecksum> = emptyList()
+)
+
+@Serializable
+data class ImageChecksum(
+    val filename: String,
+    val checksum: String
 )

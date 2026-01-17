@@ -64,10 +64,17 @@ class BackupManager(
                 zipEntries["images/${jpg.name}"] = jpg
             }
 
-            // Calculate checksums for all files before creating manifest
+            // Calculate checksums for non-image files
             val fileChecksums = mutableMapOf<String, String>()
-            zipEntries.forEach { (path, file) ->
-                fileChecksums[path] = calculateSHA256(file)
+            fileChecksums[roomFile.name] = calculateSHA256(roomFile)
+            fileChecksums["settings.json"] = calculateSHA256(settingsFile)
+
+            // Calculate checksums for images separately
+            val imageChecksums = imageFiles.map { imageFile ->
+                ImageChecksum(
+                    filename = imageFile.name,
+                    checksum = calculateSHA256(imageFile)
+                )
             }
 
             // Generate manifest
@@ -90,8 +97,8 @@ class BackupManager(
                 ),
                 integrity = IntegrityInfo(
                     algorithm = "SHA-256",
-                    generatedBy = "BackupManager",
-                    fileChecksums = fileChecksums
+                    fileChecksums = fileChecksums,
+                    imageChecksums = imageChecksums
                 )
             )
 
@@ -217,9 +224,14 @@ class BackupManager(
                 "Backup is from a newer app version (${manifest.app.versionCode}). Current version: $currentVersionCode. Please update the app first."
             }
 
-            // Validate checksums if present
+            // Validate checksums for non-image files
             if (manifest.integrity.fileChecksums.isNotEmpty()) {
-                validateChecksums(manifest.integrity.fileChecksums, extractedFiles)
+                validateFileChecksums(manifest.integrity.fileChecksums, extractedFiles)
+            }
+
+            // Validate image checksums
+            if (manifest.integrity.imageChecksums.isNotEmpty()) {
+                validateImageChecksums(manifest.integrity.imageChecksums, extractedFiles)
             }
 
             Log.d("BackupManager", "Manifest validated: v${manifest.app.versionName} (${manifest.app.versionCode}), created ${manifest.backup.createdAt}")
@@ -233,32 +245,33 @@ class BackupManager(
         }
     }
 
-    private fun validateChecksums(expectedChecksums: Map<String, String>, extractedFiles: List<File>) {
+    private fun validateFileChecksums(expectedChecksums: Map<String, String>, extractedFiles: List<File>) {
         var validatedCount = 0
         var mismatchCount = 0
 
         extractedFiles.forEach { file ->
-            // Find the relative path in the ZIP structure
+            // Find the relative path in the ZIP structure (excluding images)
             val relativePath = when {
                 file.name == "manifest.json" -> "manifest.json"
                 file.name == "settings.json" -> "settings.json"
                 file.name.endsWith(".aes") -> file.name
-                file.parentFile?.name == "images" -> "images/${file.name}"
-                file.path.contains("/images/") -> "images/${file.name}"
+                file.parentFile?.name == "images" || file.path.contains("/images/") -> null // Skip images
                 else -> file.name
             }
 
-            val expectedChecksum = expectedChecksums[relativePath]
-            if (expectedChecksum != null) {
-                val actualChecksum = calculateSHA256(file)
-                if (expectedChecksum == actualChecksum) {
-                    validatedCount++
-                    Log.d("BackupManager", "Checksum verified: $relativePath")
-                } else {
-                    mismatchCount++
-                    Log.w("BackupManager", "Checksum mismatch for $relativePath")
-                    Log.w("BackupManager", "Expected: $expectedChecksum")
-                    Log.w("BackupManager", "Actual: $actualChecksum")
+            if (relativePath != null) {
+                val expectedChecksum = expectedChecksums[relativePath]
+                if (expectedChecksum != null) {
+                    val actualChecksum = calculateSHA256(file)
+                    if (expectedChecksum == actualChecksum) {
+                        validatedCount++
+                        Log.d("BackupManager", "Checksum verified: $relativePath")
+                    } else {
+                        mismatchCount++
+                        Log.w("BackupManager", "Checksum mismatch for $relativePath")
+                        Log.w("BackupManager", "Expected: $expectedChecksum")
+                        Log.w("BackupManager", "Actual: $actualChecksum")
+                    }
                 }
             }
         }
@@ -267,7 +280,43 @@ class BackupManager(
             throw SecurityException("Backup integrity check failed: $mismatchCount file(s) have invalid checksums")
         }
 
-        Log.d("BackupManager", "All checksums validated successfully ($validatedCount files)")
+        Log.d("BackupManager", "All file checksums validated successfully ($validatedCount files)")
+    }
+
+    private fun validateImageChecksums(imageChecksums: List<ImageChecksum>, extractedFiles: List<File>) {
+        var validatedCount = 0
+        var mismatchCount = 0
+
+        // Get all image files from extracted files
+        val imageFiles = extractedFiles.filter {
+            it.parentFile?.name == "images" || it.path.contains("/images/")
+        }
+
+        imageChecksums.forEach { expectedImage ->
+            val imageFile = imageFiles.firstOrNull { it.name == expectedImage.filename }
+
+            if (imageFile != null) {
+                val actualChecksum = calculateSHA256(imageFile)
+                if (expectedImage.checksum == actualChecksum) {
+                    validatedCount++
+                    Log.d("BackupManager", "Image checksum verified: ${expectedImage.filename}")
+                } else {
+                    mismatchCount++
+                    Log.w("BackupManager", "Image checksum mismatch for ${expectedImage.filename}")
+                    Log.w("BackupManager", "Expected: ${expectedImage.checksum}")
+                    Log.w("BackupManager", "Actual: $actualChecksum")
+                }
+            } else {
+                mismatchCount++
+                Log.w("BackupManager", "Image file not found: ${expectedImage.filename}")
+            }
+        }
+
+        if (mismatchCount > 0) {
+            throw SecurityException("Backup integrity check failed: $mismatchCount image(s) have invalid checksums or are missing")
+        }
+
+        Log.d("BackupManager", "All image checksums validated successfully ($validatedCount images)")
     }
 
     /**
