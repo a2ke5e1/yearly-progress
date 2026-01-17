@@ -48,9 +48,7 @@ fun WelcomeScreen(
         topBar = {
             TopAppBar(
                 title = { Text("") },
-                actions = {
-
-                })
+            )
         },
         contentWindowInsets = WindowInsets.safeContent,
     ) { innerPadding ->
@@ -59,9 +57,13 @@ fun WelcomeScreen(
                 .padding(innerPadding)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineLarge)
+                Text(
+                    stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.headlineLarge
+                )
             }
 
             Image(
@@ -81,20 +83,21 @@ fun WelcomeScreen(
                     textAlignment = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 24.dp)
                 )
+
                 if (isProcessing) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(32.dp),
                     )
                 } else {
                     Button(
-                        enabled = !isProcessing,
+                        enabled = true,
                         onClick = {
                             if (!isProcessing) {
                                 isProcessing = true
                                 onStartClicked()
                             }
                         }
-                ) {
+                    ) {
                         Text(stringResource(R.string.start))
                     }
                 }

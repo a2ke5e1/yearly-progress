@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.app.navigation.AppNavGraph
@@ -32,6 +33,8 @@ import com.a3.yearlyprogess.feature.events.data.local.EventDatabase
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 import de.raphaelebner.roomdatabasebackup.core.RoomBackup
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,6 +50,11 @@ class MainActivity : ComponentActivity() {
     // Initialize RoomBackup early in the Activity lifecycle
     private lateinit var roomBackup: RoomBackup
     private lateinit var roomBackupHelper: RoomBackupHelper
+
+    companion object {
+        // Minimum delay to ensure smooth transition with scale+fade animations
+        private const val TRANSITION_DELAY_MS = 300L
+    }
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,16 +126,20 @@ class MainActivity : ComponentActivity() {
                             startDestination = startDestination,
                             mainViewModel = viewModel,
                             onWelcomeCompleted = {
-                                navController.navigate(Destination.MainFlow) {
-                                    popUpTo(Destination.Welcome) { inclusive = true }
-                                }
-                                viewModel.onWelcomeCompleted()
-                                viewModel.consentManager.gatherConsent(this) { error ->
-                                    if (error != null) {
-                                        Log.e("MainActivity", "Consent gathering failed: ${error.message}")
+                                lifecycleScope.launch {
+                                    delay(TRANSITION_DELAY_MS)
+                                    navController.navigate(Destination.MainFlow) {
+                                        popUpTo(Destination.Welcome) { inclusive = true }
+                                        launchSingleTop = true
                                     }
-                                    if (viewModel.consentManager.canRequestAds()) {
-                                        initializeMobileAds()
+                                    viewModel.onWelcomeCompleted()
+                                    viewModel.consentManager.gatherConsent(this@MainActivity) { error ->
+                                        if (error != null) {
+                                            Log.e("MainActivity", "Consent gathering failed: ${error.message}")
+                                        }
+                                        if (viewModel.consentManager.canRequestAds()) {
+                                            initializeMobileAds()
+                                        }
                                     }
                                 }
                             }
