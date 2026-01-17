@@ -1,6 +1,7 @@
 package com.a3.yearlyprogess.feature.events.ui.components
 
 import android.icu.text.NumberFormat
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.a3.yearlyprogess.R
@@ -145,18 +147,23 @@ fun EventDetailCard(
 
     pressState.setPressed(isSelected)
 
+    // Track if the background image is successfully loaded
+    var isImageVisible by remember(event.backgroundImageUri) { mutableStateOf(false) }
+
+    // Animate background color for a smoother transition when image loads
+    val animatedBackgroundColor by animateColorAsState(
+        targetValue = if (isImageVisible) MaterialTheme.colorScheme.surface else style.backgroundColor,
+        label = "EventCardBackground"
+    )
 
     Box(
         modifier = modifier
             .height(style.cardHeight)
             .fillMaxWidth()
-            // FIX: Use the 'background' modifier that accepts a shape
-            // instead of clipping then applying background.
             .background(
-                color = if (event.backgroundImageUri == null) style.backgroundColor else MaterialTheme.colorScheme.surface,
+                color = animatedBackgroundColor,
                 shape = style.cornerStyle.toAnimatedShape(animatedCorners)
             )
-            // Keep the clip here to ensure children (like the AsyncImage) don't bleed out
             .clip(style.cornerStyle.toAnimatedShape(animatedCorners))
             .applyPressGesture(pressState, onTap = onClick, onLongPress = onLongPress)
     ) {
@@ -167,6 +174,9 @@ fun EventDetailCard(
                     .data(imagePath)
                     .crossfade(true)
                     .build(),
+                onState = { state ->
+                    isImageVisible = state is AsyncImagePainter.State.Success
+                },
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 alpha = 0.2f,
@@ -177,60 +187,53 @@ fun EventDetailCard(
         }
 
         // Content
-
-            Column(
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .weight(1f),
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f),
+                    Text(
+                        text = event.eventTitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = event.eventTitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.primary
+                            text = uiState.formattedText,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-//                            Icon(
-//                                Icons.Filled.Event,
-//                                contentDescription = null,
-//                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-//                                modifier = Modifier.size(16.dp)
-//                            )
-                            Text(
-                                text = uiState.formattedText,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                        Text(
-                            text = uiState.statusText,
-                            style = MaterialTheme.typography.bodySmall,
-                            color =  MaterialTheme.colorScheme.tertiary,
-                            modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
-                        )
-                        if (event.eventDescription.isNotEmpty()) {
-                            Text(
-                                text = event.eventDescription.trimIndent(),
-                                overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.bodySmall,
-                                color =  MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 2
-                            )
-                        }
                     }
+                    Text(
+                        text = uiState.statusText,
+                        style = MaterialTheme.typography.bodySmall,
+                        color =  MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
+                    )
+                    if (event.eventDescription.isNotEmpty()) {
+                        Text(
+                            text = event.eventDescription.trimIndent(),
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodySmall,
+                            color =  MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 2
+                        )
+                    }
+                }
 
                     Box(
                         contentAlignment = Alignment.Center,
@@ -254,7 +257,7 @@ fun EventDetailCard(
 
             }
 
-        // In EventDetailCard.kt - Selection Overlay logic
+        // Selection Overlay
         if (isSelected) {
             Box(
                 Modifier
@@ -265,8 +268,5 @@ fun EventDetailCard(
                     )
             )
         }
-
-
-
     }
 }
