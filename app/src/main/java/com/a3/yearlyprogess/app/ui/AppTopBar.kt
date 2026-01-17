@@ -56,6 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -97,6 +98,7 @@ fun AppTopBar(
 
     var isBackupInProgress by remember { mutableStateOf(false) }
     var isRestoreInProgress by remember { mutableStateOf(false) }
+    var progressMessage by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -115,9 +117,12 @@ fun AppTopBar(
             scope.launch {
                 try {
                     isBackupInProgress = true
+                    progressMessage = "Starting backup..."
                     val startTime = System.currentTimeMillis()
 
-                    backupManager?.backup(uri)
+                    backupManager?.backup(uri) { message ->
+                        progressMessage = message
+                    }
 
                     val elapsedTime = System.currentTimeMillis() - startTime
                     if (elapsedTime < 1500) delay(1500 - elapsedTime)
@@ -138,9 +143,12 @@ fun AppTopBar(
             scope.launch {
                 try {
                     isRestoreInProgress = true
+                    progressMessage = "Starting restore..."
                     val startTime = System.currentTimeMillis()
 
-                    backupManager?.restore(uri)
+                    backupManager?.restore(uri) { message ->
+                        progressMessage = message
+                    }
 
                     val elapsedTime = System.currentTimeMillis() - startTime
                     if (elapsedTime < 1500) delay(1500 - elapsedTime)
@@ -339,12 +347,10 @@ fun AppTopBar(
     BackupRestoreDialog(
         open = showBackupRestoreDialog,
         onBackup = {
-            performConfirmFeedback()
             // Use the generated filename with timestamp
             backupLauncher.launch(backupFileName)
         },
         onRestore = {
-            performConfirmFeedback()
             restoreLauncher.launch(arrayOf("application/octet-stream"))
         },
         onDismissRequest = {
@@ -354,16 +360,17 @@ fun AppTopBar(
     )
 
     if (isBackupInProgress || isRestoreInProgress) {
-        LoadingDialog(message = if (isBackupInProgress) stringResource(R.string.backing_up) else stringResource(
-            R.string.restoring
-        ))
+        LoadingDialog(
+            title = if (isBackupInProgress) "Backing up..." else "Restoring...",
+            message = progressMessage
+        )
     }
 
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun LoadingDialog(message: String) {
+fun LoadingDialog(title: String, message: String) {
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(
@@ -390,11 +397,20 @@ fun LoadingDialog(message: String) {
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = message,
+                    text = title,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold
                 )
+                if (message.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

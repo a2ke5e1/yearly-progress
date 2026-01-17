@@ -31,7 +31,7 @@ class BackupManager(
         roomHelper = helper
     }
 
-    suspend fun backup(outputUri: Uri) = withContext(Dispatchers.IO) {
+    suspend fun backup(outputUri: Uri, onProgress: (String) -> Unit = {}) = withContext(Dispatchers.IO) {
         val helper = roomHelper ?: throw IllegalStateException("RoomBackupHelper not initialized")
 
         val tempDir = File(context.cacheDir, "backup_tmp").apply {
@@ -40,8 +40,10 @@ class BackupManager(
         }
 
         try {
+            onProgress("Creating database backup...")
             val roomFile = helper.backupToCustomLocation(tempDir)
 
+            onProgress("Exporting settings...")
             val settings = appSettingsRepository.appSettings.first()
             val settingsFile = File(tempDir, "settings.json").apply {
                 writeText(json.encodeToString(AppSettings.serializer(), settings))
@@ -64,6 +66,7 @@ class BackupManager(
                 zipEntries["images/${jpg.name}"] = jpg
             }
 
+            onProgress("Calculating checksums...")
             // Calculate checksums for non-image files
             val fileChecksums = mutableMapOf<String, String>()
             fileChecksums[roomFile.name] = calculateSHA256(roomFile)
@@ -77,6 +80,7 @@ class BackupManager(
                 )
             }
 
+            onProgress("Generating manifest...")
             // Generate manifest
             val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
             val manifest = BackupManifest(
@@ -109,6 +113,7 @@ class BackupManager(
             // Add manifest to entries
             zipEntries["manifest.json"] = manifestFile
 
+            onProgress("Creating backup archive...")
             // Create ZIP
             val zipFile = File(context.cacheDir, "backup.ypp")
             ZipUtils.zipWithPaths(zipEntries, zipFile)
@@ -117,6 +122,7 @@ class BackupManager(
             val zipChecksum = calculateSHA256(zipFile)
             Log.d("BackupManager", "Backup created - ZIP SHA-256: $zipChecksum")
 
+            onProgress("Saving backup...")
             // Copy to output URI
             context.contentResolver.openOutputStream(outputUri)?.use { out ->
                 zipFile.inputStream().use { it.copyTo(out) }
@@ -131,12 +137,13 @@ class BackupManager(
         }
     }
 
-    suspend fun restore(inputUri: Uri) = withContext(Dispatchers.IO) {
+    suspend fun restore(inputUri: Uri, onProgress: (String) -> Unit = {}) = withContext(Dispatchers.IO) {
         val helper = roomHelper ?: throw IllegalStateException("RoomBackupHelper not initialized")
 
         val tempDir = File(context.cacheDir, "restore_tmp").apply { mkdirs() }
 
         try {
+            onProgress("Loading backup file...")
             // 1. Copy file from SAF
             val backupFile = File(tempDir, "temp_backup")
             context.contentResolver.openInputStream(inputUri)?.use { input ->
@@ -153,30 +160,35 @@ class BackupManager(
 
             // 2. Check if it's a zip (new format) or sqlite/aes (old format)
             if (ZipUtils.isZipFile(backupFile)) {
+                onProgress("Extracting backup...")
                 // New format: .ypp (zip)
                 val zipFile = File(tempDir, "backup.zip")
                 backupFile.renameTo(zipFile)
 
                 val extractedFiles = ZipUtils.unzip(zipFile, tempDir)
 
+                onProgress("Validating integrity...")
                 // Validate manifest if present
                 val manifestFile = extractedFiles.firstOrNull { it.name == "manifest.json" }
                 if (manifestFile != null) {
-                    validateManifest(manifestFile, extractedFiles)
+                    validateManifest(manifestFile, extractedFiles, onProgress)
                 }
 
                 val roomFile = extractedFiles.firstOrNull { it.name.endsWith(".aes") }
                 val prefsFile = extractedFiles.firstOrNull { it.name == "settings.json" }
 
+                onProgress("Restoring database...")
                 // Restore database
                 roomFile?.let { helper.restoreFromCustomFile(it) }
 
+                onProgress("Restoring settings...")
                 // Restore App Settings
                 prefsFile?.let {
                     val settings = json.decodeFromString(AppSettings.serializer(), it.readText())
                     appSettingsRepository.setAppSettings(settings)
                 }
 
+                onProgress("Restoring images...")
                 // Restore images
                 val imagesDir = context.filesDir
                 extractedFiles
@@ -187,6 +199,7 @@ class BackupManager(
                     }
 
             } else {
+                onProgress("Restoring legacy backup...")
                 // Old format: direct database file (.sqlite3 or .aes)
                 helper.restoreFromCustomFile(backupFile)
             }
@@ -201,7 +214,7 @@ class BackupManager(
         }
     }
 
-    private fun validateManifest(manifestFile: File, extractedFiles: List<File>) {
+    private fun validateManifest(manifestFile: File, extractedFiles: List<File>, onProgress: (String) -> Unit) {
         try {
             val manifest = json.decodeFromString(BackupManifest.serializer(), manifestFile.readText())
 
@@ -226,11 +239,13 @@ class BackupManager(
 
             // Validate checksums for non-image files
             if (manifest.integrity.fileChecksums.isNotEmpty()) {
+                onProgress("Verifying file checksums...")
                 validateFileChecksums(manifest.integrity.fileChecksums, extractedFiles)
             }
 
             // Validate image checksums
             if (manifest.integrity.imageChecksums.isNotEmpty()) {
+                onProgress("Verifying image checksums...")
                 validateImageChecksums(manifest.integrity.imageChecksums, extractedFiles)
             }
 
