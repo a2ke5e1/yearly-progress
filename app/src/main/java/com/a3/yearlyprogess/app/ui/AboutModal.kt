@@ -1,7 +1,10 @@
 package com.a3.yearlyprogess.app.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,11 +38,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.BuildConfig
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.util.CommunityUtil
+import androidx.core.net.toUri
+
+data class Credits(
+    val name: String,
+    val username: String? = null,
+    val language: String
+) {
+    fun getTelegramLink(): String? {
+        return username?.let { "https://t.me/$it" }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,6 +83,12 @@ fun AboutModal(
 @Composable
 private fun AboutModalContent() {
     val context = LocalContext.current
+    val credits = listOf(
+//        Credits("ASG13043", "ASG13043", "हिंदी"),
+//        Credits("mojienjoyment", "mojienjoyment", "فارسی"),
+        Credits("Matteo", "Sgattocuki", "Italian")
+    )
+
     Surface(
         modifier = Modifier.clip(MaterialTheme.shapes.largeIncreased),
     ) {
@@ -97,6 +118,61 @@ private fun AboutModalContent() {
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Translation Credits",
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    credits.forEach { credit ->
+                        CreditsItem(credit = credit)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Open Source",
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                )
+                Text(
+                    text = "This app is open source under GPL-3.0 license. Supported by ads and community contributions.",
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = {
+                        CommunityUtil.onViewSourceCode(context)
+                    },
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                    shapes = ButtonDefaults.shapes(
+                        shape = RoundedCornerShape(10.dp),
+                        pressedShape = RoundedCornerShape(16.dp)
+                    ), colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Text(
+                        text = "View Source Code",
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -150,7 +226,32 @@ private fun AboutModalContent() {
                         )
                     }
                 }
+
             }
         }
     }
+}
+
+@Composable
+private fun CreditsItem(credit: Credits) {
+    val context = LocalContext.current
+    val link = credit.getTelegramLink()
+
+    Text(
+        text = "${credit.name} - ${credit.language}",
+        style = MaterialTheme.typography.bodySmall.copy(
+            color = if (link != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+            textDecoration = if (link != null) TextDecoration.Underline else TextDecoration.None
+        ),
+        modifier = Modifier.then(
+            if (link != null) {
+                Modifier.clickable {
+                    val intent = Intent(Intent.ACTION_VIEW, link.toUri())
+                    context.startActivity(intent)
+                }
+            } else {
+                Modifier
+            }
+        )
+    )
 }
