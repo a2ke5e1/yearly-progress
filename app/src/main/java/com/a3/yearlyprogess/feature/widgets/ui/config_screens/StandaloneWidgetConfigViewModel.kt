@@ -3,8 +3,8 @@ package com.a3.yearlyprogess.feature.widgets.ui.config_screens
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.Log
+import com.a3.yearlyprogess.core.util.TimePeriod
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
@@ -15,7 +15,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,13 +22,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StandaloneWidgetConfigViewModel @Inject constructor(
-    private val repository: StandaloneWidgetOptionsRepository,
-    private val appSettingsRepository: AppSettingsRepository
+    private val repository: StandaloneWidgetOptionsRepository
 ) : ViewModel() {
 
     private val _options = MutableStateFlow(
         StandaloneWidgetOptions(
-            theme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
+            theme = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
             widgetType = null,
             widgetShape = WidgetShape.RECTANGULAR,
             timeLeftCounter = true,
@@ -55,29 +53,13 @@ class StandaloneWidgetConfigViewModel @Inject constructor(
 
     private fun loadOptions(appWidgetId: Int, widgetType: StandaloneWidgetType? = null) {
         viewModelScope.launch {
-            val appTheme = appSettingsRepository.appSettings.first().appTheme
             // Collect the flow from repository to populate the UI with saved data
             repository.getOptions(appWidgetId).collect { savedOptions ->
-                // If it's a new widget (saved theme is the default and we want to sync with app theme)
-                // Actually, DataStore will return the default from its implementation.
-                // We should check if the theme was never set. But DataStore doesn't easily tell us that.
-                // For now, let's just use the saved options, but when we initialize _options, we can use appTheme.
-                
-                // If we want to force the app theme for NEW widgets:
-                // We need a way to know if it's the first time.
-                // Usually, if the widgetId is not in DataStore, it returns the default.
-                
+                // Set the widget type if provided, otherwise use saved value
                 _options.value = savedOptions.copy(
                     widgetType = widgetType ?: savedOptions.widgetType
                 )
             }
-        }
-    }
-
-    init {
-        viewModelScope.launch {
-            val appTheme = appSettingsRepository.appSettings.first().appTheme
-            _options.update { it.copy(theme = appTheme) }
         }
     }
 
