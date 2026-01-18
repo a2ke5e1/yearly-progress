@@ -190,6 +190,7 @@ fun MainScaffold(
 
             composable<Destination.Widgets> {
                 WidgetPreviewScreen(
+                    mainViewModel = mainViewModel,
                     homeViewModel = homeViewModel,
                 )
             }

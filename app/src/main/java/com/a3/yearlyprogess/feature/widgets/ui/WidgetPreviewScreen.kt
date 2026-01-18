@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.feature.widgets.ui
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -43,10 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.core.ui.components.ad.AdCard
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import com.a3.yearlyprogess.feature.home.HomeUiState
 import com.a3.yearlyprogess.feature.home.HomeViewModel
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.config_screens.AllInWidgetConfigViewModel
 import com.a3.yearlyprogess.feature.widgets.ui.config_screens.StandaloneWidgetConfigViewModel
 import kotlinx.coroutines.delay
@@ -70,16 +73,19 @@ private val WIDGET_PREVIEW_ITEMS = listOf(
 
 @Composable
 fun WidgetPreviewScreen(
+    mainViewModel: MainViewModel,
     homeViewModel: HomeViewModel,
     configViewModel: StandaloneWidgetConfigViewModel = hiltViewModel(),
     allInOneWidgetConfigViewModel: AllInWidgetConfigViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val yp = remember { YearlyProgressUtil() }
+    val appSettings by mainViewModel.appSettings.collectAsState()
     val homeUiState by homeViewModel.uiState.collectAsState()
     val userWidgetDefaultOptions by configViewModel.options.collectAsState()
     val allInOneWidgetDefaultOptions by allInOneWidgetConfigViewModel.options.collectAsState()
     val sunsetData = (homeUiState as? HomeUiState.Success)?.data
+    val appTheme = appSettings?.appTheme ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT
 
 
     val tick by produceState(
@@ -108,9 +114,10 @@ fun WidgetPreviewScreen(
                 items = widgetItems,
                 key = { it.type.name }
             ) { item ->
-                val remoteViews = remember(item, tick, sunsetData) {
+                val remoteViews = remember(item, tick, sunsetData, appTheme) {
                     val options = userWidgetDefaultOptions.copy(
                         widgetType = item.type,
+                        theme = appTheme
                     )
                     if (item.type == StandaloneWidgetType.DAY_LIGHT || item.type == StandaloneWidgetType.NIGHT_LIGHT) {
                         StandaloneWidget.rectangularRemoteView(
@@ -129,13 +136,15 @@ fun WidgetPreviewScreen(
                 }
             }
             item(key = "all_in_one", span = { GridItemSpan(maxLineSpan) }) {
-                val remoteViews = remember(tick) {
+                val remoteViews = remember(tick, appTheme) {
                     val bundleOptions = Bundle().apply {
                         putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 320)
                         putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 220)
                     }
                     AllInWidget.createAllInOneWidgetRemoteView(
-                        context, yp, allInOneWidgetDefaultOptions,
+                        context, yp, allInOneWidgetDefaultOptions.copy(
+                            theme = appTheme
+                        ),
                         bundleOptions, isWidgetPreview = true
                     )
                 }
