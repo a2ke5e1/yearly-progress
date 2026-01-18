@@ -116,6 +116,8 @@
     <string name="settings_background_transparency">Background Transparency</string>
     <string name="settings_font_scale">Font Scale</string>
     <string name="settings_theme">Theme</string>
+    <string name="widget_preview">Widget Preview</string>
+
 
     <string name="progress_notification">Progress Notification</string>
     <string name="shows_progress_in_the_notification">Shows progress in the notification</string>

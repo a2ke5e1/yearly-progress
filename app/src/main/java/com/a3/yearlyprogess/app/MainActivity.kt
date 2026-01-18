@@ -30,6 +30,7 @@ import com.a3.yearlyprogess.core.backup.RoomBackupHelper
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.feature.events.data.local.EventDatabase
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 import de.raphaelebner.roomdatabasebackup.core.RoomBackup
@@ -84,7 +85,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             val appSettings by viewModel.appSettings.collectAsState()
 
-            YearlyProgressTheme {
+            YearlyProgressTheme(
+                appTheme = appSettings?.appTheme ?: WidgetTheme.DEFAULT
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

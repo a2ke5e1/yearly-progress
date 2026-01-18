@@ -40,6 +40,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import androidx.core.graphics.get
+import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 
 
 @AndroidEntryPoint
@@ -50,6 +51,9 @@ class EventWidget : BaseWidget() {
 
     @Inject
     lateinit var eventRepository: EventRepository
+
+    @Inject
+    lateinit var appSettingsRepository: AppSettingsRepository
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
@@ -89,9 +93,19 @@ class EventWidget : BaseWidget() {
 
         val (userConfig, events) = runBlocking {
             withContext(Dispatchers.IO) {
-                val config = eventWidgetOptionsRepository
+                var config = eventWidgetOptionsRepository
                     .getOptions(appWidgetId)
                     .first()
+
+
+                config = if (config.theme == null) {
+                    val appSettings = appSettingsRepository.appSettings.first()
+                    eventWidgetOptionsRepository.updateTheme(appWidgetId, appSettings.appTheme)
+                    config.copy(theme = appSettings.appTheme)
+                } else {
+                    config
+                }
+
 
                 val events = config.selectedEventIds.mapNotNull { id ->
                     eventRepository.getEvent(id)
@@ -109,11 +123,11 @@ class EventWidget : BaseWidget() {
             context = context,
             events = events,
             widgetId = appWidgetId,
-            widgetTheme = userConfig.theme
+            widgetTheme = userConfig.theme ?: WidgetTheme.DEFAULT
         )
         val event = swiper.current()
 
-        val theme: WidgetTheme = userConfig.theme
+        val theme: WidgetTheme = userConfig.theme ?: WidgetTheme.DEFAULT
         val indicator = swiper.indicator()
 
         if (event == null) {

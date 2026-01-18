@@ -32,6 +32,7 @@ import com.a3.yearlyprogess.core.ui.components.SelectItemDialog
 import com.a3.yearlyprogess.core.ui.components.SelectableItem
 import com.a3.yearlyprogess.core.ui.components.Slider
 import com.a3.yearlyprogess.core.ui.components.SwitchWithOptions
+import com.a3.yearlyprogess.core.ui.components.ThemeSelector
 import com.a3.yearlyprogess.core.util.CalculationType
 import com.a3.yearlyprogess.core.util.YearlyProgressNotification
 import com.a3.yearlyprogess.core.util.toSelectableItem
@@ -79,48 +80,54 @@ fun SettingsHomeScreen(
                 modifier = Modifier.padding(16.dp)
             )
 
-
-                SwitchWithOptions(
-                    title = stringResource(R.string.progress_notification),
-                    summary = stringResource(R.string.shows_progress_in_the_notification),
-                    checked = settings.notificationSettings.progressShowNotification,
-                    onCheckedChange = { newValue ->
-                        if (newValue) {
-                            if (!yearlyProgressNotification.hasAppNotificationPermission()) {
-                                (context as ComponentActivity).let { activity ->
-                                    yearlyProgressNotification.requestNotificationPermission(activity)
-                                }
+            SwitchWithOptions(
+                title = stringResource(R.string.progress_notification),
+                summary = stringResource(R.string.shows_progress_in_the_notification),
+                checked = settings.notificationSettings.progressShowNotification,
+                onCheckedChange = { newValue ->
+                    if (newValue) {
+                        if (!yearlyProgressNotification.hasAppNotificationPermission()) {
+                            (context as ComponentActivity).let { activity ->
+                                yearlyProgressNotification.requestNotificationPermission(activity)
                             }
                         }
+                    }
 
-                        // Broadcast widget update
-                        val widgetUpdateServiceIntent =
-                            Intent(context, WidgetUpdateBroadcastReceiver::class.java)
-                        context.sendBroadcast(widgetUpdateServiceIntent)
+                    // Broadcast widget update
+                    val widgetUpdateServiceIntent =
+                        Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+                    context.sendBroadcast(widgetUpdateServiceIntent)
 
-                        scope.launch {
-                            viewModel.setProgressShowNotification(newValue)
+                    scope.launch {
+                        viewModel.setProgressShowNotification(newValue)
 
-                            // Update notification immediately
-                            if (newValue) {
-                                yearlyProgressNotification.showProgressNotification(
-                                    settings.copy(
-                                        notificationSettings = settings.notificationSettings.copy(
-                                            progressShowNotification = newValue
-                                        )
+                        // Update notification immediately
+                        if (newValue) {
+                            yearlyProgressNotification.showProgressNotification(
+                                settings.copy(
+                                    notificationSettings = settings.notificationSettings.copy(
+                                        progressShowNotification = newValue
                                     )
                                 )
-                            } else {
-                                yearlyProgressNotification.hideProgressNotification()
-                            }
+                            )
+                        } else {
+                            yearlyProgressNotification.hideProgressNotification()
                         }
-                    },
-                    onOptionClicked = {  onNavigateToNotification()
                     }
-                )
-            }
-        item {
+                },
+                onOptionClicked = { onNavigateToNotification() }
+            )
+        }
 
+        item {
+            ThemeSelector(
+                selectedTheme = settings.appTheme,
+                onThemeSelected = { viewModel.setAppTheme(it) },
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        item {
             SelectItemDialog(
                 title = stringResource(R.string.calendar_system_label),
                 items = getLocaleSelectableItems(),

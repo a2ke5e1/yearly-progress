@@ -28,6 +28,7 @@ animationCore = "1.10.1"
 roomdatabasebackup = "1.1.0"
 playServicesAds = "24.9.0"
 userMessagingPlatform = "4.0.0"
+materialKolor = "1.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -65,6 +66,7 @@ androidx-compose-animation-core = { group = "androidx.compose.animation", name =
 roomdatabasebackup = { group = "de.raphaelebner", name = "roomdatabasebackup", version.ref = "roomdatabasebackup" }
 play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
 user-messaging-platform = { group = "com.google.android.ump", name = "user-messaging-platform", version.ref = "userMessagingPlatform" }
+materialKolor = { group = "com.materialkolor", name = "material-kolor", version.ref = "materialKolor" }
 
 
 [plugins]

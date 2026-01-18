@@ -25,7 +25,7 @@ class EventWidgetOptionsDataStore(
 ) {
 
     private val defaultEventWidgetOptions = EventWidgetOptions(
-        theme = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
+        theme = null,
         timeStatusCounter = true,
         dynamicTimeStatusCounter = false,
         replaceProgressWithTimeLeft = false,
@@ -52,8 +52,8 @@ class EventWidgetOptionsDataStore(
         context.eventWidgetOptionsDataStore.data.map { prefs ->
             EventWidgetOptions(
                 theme = prefs[getThemeKey(widgetId)]?.let { themeName ->
-                    runCatching { WidgetTheme.valueOf(themeName) }.getOrDefault(defaultEventWidgetOptions.theme)
-                } ?: defaultEventWidgetOptions.theme,
+                    runCatching { WidgetTheme.valueOf(themeName) }.getOrNull()
+                },
                 timeStatusCounter = prefs[getTimeStatusCounterKey(widgetId)] ?: defaultEventWidgetOptions.timeStatusCounter,
                 dynamicTimeStatusCounter = prefs[getDynamicTimeStatusCounterKey(widgetId)] ?: defaultEventWidgetOptions.dynamicTimeStatusCounter,
                 replaceProgressWithTimeLeft = prefs[getReplaceProgressWithTimeLeftKey(widgetId)] ?: defaultEventWidgetOptions.replaceProgressWithTimeLeft,
@@ -67,7 +67,7 @@ class EventWidgetOptionsDataStore(
 
     suspend fun updateOptions(widgetId: Int, options: EventWidgetOptions) {
         context.eventWidgetOptionsDataStore.edit { prefs ->
-            prefs[getThemeKey(widgetId)] = options.theme.name
+            options.theme?.let { prefs[getThemeKey(widgetId)] = it.name }
             prefs[getTimeStatusCounterKey(widgetId)] = options.timeStatusCounter
             prefs[getDynamicTimeStatusCounterKey(widgetId)] = options.dynamicTimeStatusCounter
             prefs[getReplaceProgressWithTimeLeftKey(widgetId)] = options.replaceProgressWithTimeLeft

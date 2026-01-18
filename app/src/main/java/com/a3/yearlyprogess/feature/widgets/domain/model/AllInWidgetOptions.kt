@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AllInWidgetOptions(
-    val theme: WidgetTheme,
+    val theme: WidgetTheme?,
     val showDay: Boolean,
     val showWeek: Boolean,
     val showMonth: Boolean,

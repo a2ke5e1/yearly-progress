@@ -33,8 +33,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 36
-        versionCode = 213
-        versionName = "4.0.0-alpha14"
+        versionCode = 214
+        versionName = "4.0.0-alpha15"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -104,6 +104,7 @@ dependencies {
     implementation(libs.roomdatabasebackup)
     implementation(libs.play.services.ads)
     implementation(libs.user.messaging.platform)
+    implementation(libs.materialKolor)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

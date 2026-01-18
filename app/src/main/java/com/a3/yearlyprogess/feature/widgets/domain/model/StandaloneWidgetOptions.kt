@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class StandaloneWidgetOptions(
-    val theme: WidgetTheme,
+    val theme: WidgetTheme?,
     val widgetType: StandaloneWidgetType?,
     val widgetShape: WidgetShape,
     val timeLeftCounter: Boolean,

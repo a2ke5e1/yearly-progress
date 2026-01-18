@@ -25,7 +25,7 @@ class AllInWidgetOptionsDataStore(
 ) {
 
     private val defaultAllInWidgetOptions = AllInWidgetOptions(
-        theme = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
+        theme = null,
         showDay = true,
         showWeek = true,
         showMonth = true,
@@ -55,8 +55,8 @@ class AllInWidgetOptionsDataStore(
         context.allInWidgetOptionsDataStore.data.map { prefs ->
             AllInWidgetOptions(
                 theme = prefs[getThemeKey(widgetId)]?.let { themeName ->
-                    runCatching { WidgetTheme.valueOf(themeName) }.getOrDefault(defaultAllInWidgetOptions.theme)
-                } ?: defaultAllInWidgetOptions.theme,
+                    runCatching { WidgetTheme.valueOf(themeName) }.getOrNull()
+                },
                 showDay = prefs[getShowDayKey(widgetId)] ?: defaultAllInWidgetOptions.showDay,
                 showWeek = prefs[getShowWeekKey(widgetId)] ?: defaultAllInWidgetOptions.showWeek,
                 showMonth = prefs[getShowMonthKey(widgetId)] ?: defaultAllInWidgetOptions.showMonth,
@@ -72,7 +72,7 @@ class AllInWidgetOptionsDataStore(
 
     suspend fun updateOptions(widgetId: Int, options: AllInWidgetOptions) {
         context.allInWidgetOptionsDataStore.edit { prefs ->
-            prefs[getThemeKey(widgetId)] = options.theme.name
+            options.theme?.let { prefs[getThemeKey(widgetId)] = it.name }
             prefs[getShowDayKey(widgetId)] = options.showDay
             prefs[getShowWeekKey(widgetId)] = options.showWeek
             prefs[getShowMonthKey(widgetId)] = options.showMonth

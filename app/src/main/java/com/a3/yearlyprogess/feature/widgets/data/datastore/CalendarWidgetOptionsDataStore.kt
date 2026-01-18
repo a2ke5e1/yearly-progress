@@ -29,11 +29,8 @@ class CalendarWidgetOptionsDataStore(private val context: Context) {
 
     fun getOptions(appWidgetId: Int): Flow<CalendarWidgetOptions> {
         return context.calendarWidgetDataStore.data.map { preferences ->
-            val themeStr = preferences[getThemeKey(appWidgetId)] ?: WidgetTheme.DEFAULT.name
-            val theme = try {
-                WidgetTheme.valueOf(themeStr)
-            } catch (e: IllegalArgumentException) {
-                WidgetTheme.DEFAULT
+            val theme =  preferences[getThemeKey(appWidgetId)]?.let { themeName ->
+                runCatching { WidgetTheme.valueOf(themeName) }.getOrNull()
             }
 
             val selectedCalendarIdsStr = preferences[getSelectedCalendarIdsKey(appWidgetId)] ?: ""
@@ -58,7 +55,7 @@ class CalendarWidgetOptionsDataStore(private val context: Context) {
 
     suspend fun updateOptions(appWidgetId: Int, options: CalendarWidgetOptions) {
         context.calendarWidgetDataStore.edit { preferences ->
-            preferences[getThemeKey(appWidgetId)] = options.theme.name
+            options.theme?.let { preferences[getThemeKey(appWidgetId)] = it.name }
             preferences[getTimeStatusCounterKey(appWidgetId)] = options.timeStatusCounter
             preferences[getDynamicTimeStatusCounterKey(appWidgetId)] = options.dynamicTimeStatusCounter
             preferences[getReplaceProgressWithTimeLeftKey(appWidgetId)] = options.replaceProgressWithTimeLeft

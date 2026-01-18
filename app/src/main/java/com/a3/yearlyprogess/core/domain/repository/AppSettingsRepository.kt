@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.core.domain.repository
 import android.icu.util.ULocale
 import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.util.CalculationType
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import kotlinx.coroutines.flow.Flow
 
 interface AppSettingsRepository {
@@ -17,6 +18,7 @@ interface AppSettingsRepository {
     suspend fun setDecimalDigits(decimalDigits: Int)
     suspend fun setSelectedCalendarIds(calendarIds: Set<Long>)
     suspend fun setAutomaticallyDetectLocation(enabled: Boolean)
+    suspend fun setAppTheme(theme: WidgetTheme)
 
     // Notification settings
     suspend fun setProgressShowNotification(enabled: Boolean)

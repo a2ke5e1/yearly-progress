@@ -60,14 +60,12 @@ fun ThemeSelector(
         buildList {
             addAll(themes.take(initialThemesToShow))
             if (isAndroid12AndUp) {
-                add(WidgetTheme.DYNAMIC)
+                if (WidgetTheme.DYNAMIC !in this) add(WidgetTheme.DYNAMIC)
             }
-            // distinct() or a conditional check ensures the selectedTheme is present
-            // without duplicates if it was already added above.
             if (selectedTheme !in this) {
                 add(selectedTheme)
             }
-        }
+        }.distinct()
     }
     val lastIndex = initialThemes.lastIndex
 
@@ -234,8 +232,7 @@ fun ThemeOption(
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                text = theme.name.replace('_', ' ').lowercase()
-                    .replaceFirstChar { it.uppercase() },
+                text = theme.displayName,
                 style = MaterialTheme.typography.bodyLarge,
                 color = if (selected) {
                     MaterialTheme.colorScheme.onPrimaryContainer

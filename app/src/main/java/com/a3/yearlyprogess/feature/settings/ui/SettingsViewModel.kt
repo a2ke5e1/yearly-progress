@@ -14,6 +14,7 @@ import com.a3.yearlyprogess.feature.settings.ui.domain.model.LocationMode
 import com.a3.yearlyprogess.feature.settings.ui.domain.model.LocationScreen
 import com.a3.yearlyprogess.feature.settings.ui.domain.model.LocationUiState
 import com.a3.yearlyprogess.feature.settings.util.CityDataParser
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,6 +85,12 @@ class SettingsViewModel @Inject constructor(
     fun setDecimalDigits(decimalDigits: Int) {
         viewModelScope.launch {
             appSettingsRepository.setDecimalDigits(decimalDigits)
+        }
+    }
+
+    fun setAppTheme(theme: WidgetTheme) {
+        viewModelScope.launch {
+            appSettingsRepository.setAppTheme(theme)
         }
     }
 

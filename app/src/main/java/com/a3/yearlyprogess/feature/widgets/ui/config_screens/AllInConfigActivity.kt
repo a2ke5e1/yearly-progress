@@ -51,6 +51,7 @@ import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import com.a3.yearlyprogess.feature.widgets.domain.model.AllInWidgetOptions
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.AllInWidget.Companion.createAllInOneWidgetRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.components.SharedWidgetSettings
 import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
@@ -194,7 +195,7 @@ fun WidgetPreview(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Widget Preview",
+            text = stringResource(R.string.widget_preview),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 12.dp)
@@ -303,7 +304,7 @@ fun AllInSettingsContent(
 
         // Shared widget settings
         SharedWidgetSettings(
-            theme = options.theme,
+            theme = options.theme ?: WidgetTheme.DEFAULT,
             timeStatusCounter = options.timeLeftCounter,
             dynamicTimeStatusCounter = options.dynamicLeftCounter,
             replaceProgressWithTimeLeft = options.replaceProgressWithDaysLeft,

@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.feature.widgets.ui.config_screens
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.feature.widgets.domain.model.EventWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
@@ -12,6 +13,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,12 +21,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EventWidgetConfigViewModel @Inject constructor(
-    private val repository: EventWidgetOptionsRepository
+    private val repository: EventWidgetOptionsRepository,
+    private val appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
 
     private val _options = MutableStateFlow(
         EventWidgetOptions(
-            theme = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
+            theme = null,
             timeStatusCounter = true,
             dynamicTimeStatusCounter = false,
             replaceProgressWithTimeLeft = false,
@@ -65,7 +68,15 @@ class EventWidgetConfigViewModel @Inject constructor(
             // Collect the flow from repository to populate the UI with saved data
             repository.getOptions(appWidgetId).collect { savedOptions ->
                 // Only update if we actually got options back (DataStore might return defaults)
-                _options.value = savedOptions
+
+                val effectiveTheme = savedOptions.theme ?: run {
+                    val appSettings = appSettingsRepository.appSettings.first()
+                    appSettings.appTheme
+                }
+
+                _options.value = savedOptions.copy(
+                    theme = effectiveTheme,
+                )
             }
         }
     }

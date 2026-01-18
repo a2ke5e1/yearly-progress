@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.util.SizeF
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.TimePeriod
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil.Companion.toFormattedTimePeriod
 import com.a3.yearlyprogess.core.util.styleFormatted
 import com.a3.yearlyprogess.feature.widgets.domain.model.AllInWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.domain.repository.AllInWidgetOptionsRepository
 import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +30,9 @@ class AllInWidget : BaseWidget() {
     @Inject
     lateinit var allInWidgetOptionsRepository: AllInWidgetOptionsRepository
 
+    @Inject
+    lateinit var appSettingsRepository: AppSettingsRepository
+
     override fun updateWidget(context: Context, appWidgetId: Int): RemoteViews {
         val yp = YearlyProgressUtil()
         val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -35,7 +40,17 @@ class AllInWidget : BaseWidget() {
 
         // Load user configuration
         val userConfig = runBlocking(Dispatchers.IO) {
-            allInWidgetOptionsRepository.getOptions(appWidgetId).first()
+            val options = allInWidgetOptionsRepository.getOptions(appWidgetId).first()
+
+            // If theme is null, get it from AppSettings
+            if (options.theme == null) {
+                val appSettings = appSettingsRepository.appSettings.first()
+                allInWidgetOptionsRepository.updateTheme(appWidgetId, appSettings.appTheme)
+                options.copy(theme = appSettings.appTheme)
+            } else {
+                options
+            }
+
         }
 
 
@@ -53,7 +68,7 @@ class AllInWidget : BaseWidget() {
             userConfig: AllInWidgetOptions,
             maxItems: Int = 4
         ) {
-            val colors = WidgetColors.fromTheme(context, userConfig.theme)
+            val colors = WidgetColors.fromTheme(context, userConfig.theme ?: WidgetTheme.DEFAULT)
             
             // Clear existing views to ensure we only show current items and they are packed together
             views.removeAllViews(R.id.itemsContainer)
@@ -103,7 +118,7 @@ class AllInWidget : BaseWidget() {
                 itemView.setTextViewText(R.id.progressTitle, item.first)
                 
                 val progressViews = RemoteViews(context.packageName, R.layout.circular_progress_bars_container)
-                WidgetRenderer.applyCircularProgressBar(progressViews, item.second.toInt(), userConfig.theme)
+                WidgetRenderer.applyCircularProgressBar(progressViews, item.second.toInt(), userConfig.theme ?: WidgetTheme.DEFAULT)
                 
                 progressViews.setInt(R.id.circularProgressBackground, "setColorFilter", colors.backgroundColor)
                 val alpha = ((userConfig.backgroundTransparency / 100.0) * 255).toInt()

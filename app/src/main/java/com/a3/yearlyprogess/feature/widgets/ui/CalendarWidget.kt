@@ -17,6 +17,7 @@ import android.widget.RemoteViews
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import com.a3.yearlyprogess.core.util.formatEventDateTime
@@ -49,6 +50,9 @@ class CalendarWidget : BaseWidget() {
     @Inject
     lateinit var calendarWidgetOptionsRepository: CalendarWidgetOptionsRepository
 
+    @Inject
+    lateinit var appSettingsRepository: AppSettingsRepository
+
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
@@ -60,7 +64,19 @@ class CalendarWidget : BaseWidget() {
                 Log.d("CalendarWidget", "Received swiper action: ${intent.action}")
 
                 val userConfig = runBlocking(Dispatchers.IO) {
-                    calendarWidgetOptionsRepository.getOptions(appWidgetId).first()
+                    val options = calendarWidgetOptionsRepository.getOptions(appWidgetId).first()
+
+                    // If theme is null, get it from AppSettings
+                    if (options.theme == null) {
+                        val appSettings = appSettingsRepository.appSettings.first()
+                        calendarWidgetOptionsRepository.updateOptions(appWidgetId, options.copy(
+                            theme = appSettings.appTheme
+                        ))
+                        options.copy(theme = appSettings.appTheme)
+                    } else {
+                        options
+                    }
+
                 }
 
                 val events = getCalendarEvents(context, userConfig.selectedCalendarIds)
@@ -70,7 +86,7 @@ class CalendarWidget : BaseWidget() {
                         context = context,
                         events = events,
                         widgetId = appWidgetId,
-                        widgetTheme = userConfig.theme
+                        widgetTheme = userConfig.theme ?: WidgetTheme.DEFAULT
                     )
 
                     when (intent.action) {
@@ -89,8 +105,20 @@ class CalendarWidget : BaseWidget() {
         val manager = AppWidgetManager.getInstance(context)
         val options = manager.getAppWidgetOptions(appWidgetId)
 
-        val userConfig: CalendarWidgetOptions = runBlocking(Dispatchers.IO) {
-            calendarWidgetOptionsRepository.getOptions(appWidgetId).first()
+        val userConfig = runBlocking(Dispatchers.IO) {
+            val options = calendarWidgetOptionsRepository.getOptions(appWidgetId).first()
+
+            // If theme is null, get it from AppSettings
+            if (options.theme == null) {
+                val appSettings = appSettingsRepository.appSettings.first()
+                calendarWidgetOptionsRepository.updateOptions(appWidgetId, options.copy(
+                    theme = appSettings.appTheme
+                ))
+                options.copy(theme = appSettings.appTheme)
+            } else {
+                options
+            }
+
         }
 
         // Check calendar permission
@@ -99,14 +127,14 @@ class CalendarWidget : BaseWidget() {
             return WidgetRenderer.errorWidgetRemoteView(
                 context,
                 "Calendar Permission Required",
-                userConfig.theme,
+                userConfig.theme ?: WidgetTheme.DEFAULT,
             )
         }
 
         val events = getCalendarEvents(context, userConfig.selectedCalendarIds)
 
         if (events.isEmpty()) {
-            return emptyCalendarRemoteView(context, userConfig.theme)
+            return emptyCalendarRemoteView(context, userConfig.theme ?: WidgetTheme.DEFAULT)
         }
 
         // Use WidgetSwiper to get current event
@@ -114,13 +142,13 @@ class CalendarWidget : BaseWidget() {
             context = context,
             events = events,
             widgetId = appWidgetId,
-            widgetTheme = userConfig.theme
+            widgetTheme = userConfig.theme ?: WidgetTheme.DEFAULT
         )
 
         val event = swiper.current()
 
         if (event == null) {
-            return emptyCalendarRemoteView(context, userConfig.theme)
+            return emptyCalendarRemoteView(context, userConfig.theme ?: WidgetTheme.DEFAULT)
         }
 
         val indicator = swiper.indicator()
@@ -129,7 +157,7 @@ class CalendarWidget : BaseWidget() {
             context,
             event,
             yp,
-            userConfig.theme,
+            userConfig.theme ?: WidgetTheme.DEFAULT,
             userConfig,
             options,
             appWidgetId,
