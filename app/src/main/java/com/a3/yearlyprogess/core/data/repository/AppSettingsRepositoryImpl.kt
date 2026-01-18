@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.core.data.repository
 import android.content.Context
 import android.icu.util.Calendar
 import android.icu.util.ULocale
+import android.os.Build
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -17,13 +18,12 @@ import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.CalculationType
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.core.util.ProgressSettings
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.map
-import kotlin.collections.toSet
 
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "yearly_progress_settings")
@@ -58,7 +58,12 @@ class AppSettingsRepositoryImpl @Inject constructor(
             selectedCalendarIds = preferences[PreferencesKeys.SELECTED_CALENDAR_IDS]
                 ?.map { it.toLong() }
                 ?.toSet() ?: emptySet(),
-            automaticallyDetectLocation = preferences[PreferencesKeys.AUTOMATICALLY_DETECT_LOCATION] ?: false
+            automaticallyDetectLocation = preferences[PreferencesKeys.AUTOMATICALLY_DETECT_LOCATION]
+                ?: false,
+            appTheme = WidgetTheme.valueOf(
+                preferences[PreferencesKeys.APP_THEME]
+                    ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC.name else WidgetTheme.DEFAULT.name,
+            )
         )
     }
 
@@ -104,6 +109,12 @@ class AppSettingsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun setAppTheme(theme: WidgetTheme) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.APP_THEME] = theme.name
+        }
+    }
+
     override suspend fun setProgressShowNotification(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION] = enabled
@@ -142,6 +153,7 @@ class AppSettingsRepositoryImpl @Inject constructor(
             preferences[PreferencesKeys.WEEK_START_DAY] = appSettings.progressSettings.weekStartDay
             preferences[PreferencesKeys.DECIMAL_DIGITS] = appSettings.progressSettings.decimalDigits
             preferences[PreferencesKeys.SELECTED_CALENDAR_IDS] = appSettings.selectedCalendarIds.map { it.toString() }.toSet()
+            preferences[PreferencesKeys.APP_THEME] = appSettings.appTheme.name
 
             // Notification settings
             preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION] = appSettings.notificationSettings.progressShowNotification
@@ -160,6 +172,7 @@ class AppSettingsRepositoryImpl @Inject constructor(
         val DECIMAL_DIGITS = intPreferencesKey("decimal_digits")
         val SELECTED_CALENDAR_IDS = stringSetPreferencesKey("selected_calendar_ids")
         val AUTOMATICALLY_DETECT_LOCATION = booleanPreferencesKey("automatically_detect_location")
+        val APP_THEME = stringPreferencesKey("app_theme")
 
         // Notification preferences
         val PROGRESS_SHOW_NOTIFICATION = booleanPreferencesKey("progress_show_notification")

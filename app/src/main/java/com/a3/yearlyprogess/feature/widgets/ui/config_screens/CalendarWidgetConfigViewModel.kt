@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.feature.widgets.ui.config_screens
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.feature.widgets.domain.model.CalendarWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
@@ -12,6 +13,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,12 +21,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarWidgetConfigViewModel @Inject constructor(
-    private val repository: CalendarWidgetOptionsRepository
+    private val repository: CalendarWidgetOptionsRepository,
+    private val appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
 
     private val _options = MutableStateFlow(
         CalendarWidgetOptions(
-            theme = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
+            theme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
             timeStatusCounter = true,
             dynamicTimeStatusCounter = false,
             replaceProgressWithTimeLeft = false,
@@ -41,6 +44,13 @@ class CalendarWidgetConfigViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private var currentWidgetId: Int? = null
+
+    init {
+        viewModelScope.launch {
+            val appTheme = appSettingsRepository.appSettings.first().appTheme
+            _options.update { it.copy(theme = appTheme) }
+        }
+    }
 
     fun setWidgetId(widgetId: Int) {
         this.currentWidgetId = widgetId

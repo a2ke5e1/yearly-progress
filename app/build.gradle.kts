@@ -104,6 +104,7 @@ dependencies {
     implementation(libs.roomdatabasebackup)
     implementation(libs.play.services.ads)
     implementation(libs.user.messaging.platform)
+    implementation(libs.materialKolor)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
