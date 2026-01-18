@@ -52,6 +52,7 @@ import com.a3.yearlyprogess.feature.events.presentation.CalendarUiState
 import com.a3.yearlyprogess.feature.events.presentation.ImportEventsViewModel
 import com.a3.yearlyprogess.feature.events.ui.components.CalendarPermissionDialog
 import com.a3.yearlyprogess.feature.events.ui.components.CalendarRequiredCard
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.components.CalendarSelectionList
 import com.a3.yearlyprogess.feature.widgets.ui.components.SharedWidgetSettings
 import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
@@ -251,7 +252,7 @@ fun CalendarSettingsTab(
         Spacer(Modifier.height(8.dp))
 
         SharedWidgetSettings(
-            theme = options.theme,
+            theme = options.theme ?: WidgetTheme.DEFAULT,
             timeStatusCounter = options.timeStatusCounter,
             dynamicTimeStatusCounter = options.dynamicTimeStatusCounter,
             replaceProgressWithTimeLeft = options.replaceProgressWithTimeLeft,

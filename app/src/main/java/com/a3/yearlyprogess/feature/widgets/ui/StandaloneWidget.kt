@@ -11,6 +11,7 @@ import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.core.util.Resource
 import com.a3.yearlyprogess.core.util.TimePeriod
@@ -25,6 +26,7 @@ import com.a3.yearlyprogess.domain.repository.SunriseSunsetRepository
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.domain.repository.StandaloneWidgetOptionsRepository
 import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer
 import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer.applyTextViewTextSize
@@ -62,6 +64,9 @@ open class StandaloneWidget(
 
     @Inject
     lateinit var locationRepository: LocationRepository
+    
+    @Inject
+    lateinit var appSettingsRepository: AppSettingsRepository
 
 
     override fun updateWidget(context: Context, appWidgetId: Int): RemoteViews {
@@ -72,7 +77,17 @@ open class StandaloneWidget(
         // Load user configuration
         val userConfig = runBlocking(Dispatchers.IO) {
             standaloneWidgetOptionsRepository.updateWidgetType(appWidgetId, widgetType)
-            standaloneWidgetOptionsRepository.getOptions(appWidgetId).first()
+            val options = standaloneWidgetOptionsRepository.getOptions(appWidgetId).first()
+
+            // If theme is null, get it from AppSettings
+            if (options.theme == null) {
+                val appSettings = appSettingsRepository.appSettings.first()
+                standaloneWidgetOptionsRepository.updateTheme(appWidgetId, appSettings.appTheme)
+                options.copy(theme = appSettings.appTheme)
+            } else {
+                options
+            }
+
         }
 
         val sunsetData = runBlocking(Dispatchers.IO) {
@@ -104,7 +119,7 @@ open class StandaloneWidget(
             return WidgetRenderer.errorWidgetRemoteView(
                 context,
                 "Location Permission Required",
-                userConfig.theme,
+                userConfig.theme!!,
             )
         }
 
@@ -576,7 +591,7 @@ open class StandaloneWidget(
             }
 
             // Apply theme from user config
-            val colors = WidgetColors.fromTheme(context, userConfig.theme)
+            val colors = WidgetColors.fromTheme(context, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyTheme(views, colors)
 
             // Apply background color with transparency
@@ -587,7 +602,7 @@ open class StandaloneWidget(
             applyTexts(views, progress, widgetName, daysLeft, currentValue, userConfig)
 
             // Apply progress bar
-            WidgetRenderer.applyLinearProgressBar(views, progress.roundToInt(), userConfig.theme)
+            WidgetRenderer.applyLinearProgressBar(views, progress.roundToInt(), userConfig.theme ?: WidgetTheme.DEFAULT)
 
             // Apply font scale
             applyFontScaleRectangular(views, userConfig.fontScale, context)
@@ -703,34 +718,34 @@ open class StandaloneWidget(
             }
 
             // Apply theme from user config
-            val colors = WidgetColors.fromTheme(context, userConfig.theme)
+            val colors = WidgetColors.fromTheme(context, userConfig.theme ?: WidgetTheme.DEFAULT)
 
             // Apply to large view
             applyTheme(large, colors)
             large.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(large, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetRenderer.applyCloverProgressContainer(large, progress, userConfig.theme)
+            WidgetRenderer.applyCloverProgressContainer(large, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleCloverLarge(large, userConfig.fontScale, context)
 
             // Apply to square view
             applyTheme(square, colors)
             square.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(square, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetRenderer.applyCloverProgressContainer(square, progress, userConfig.theme)
+            WidgetRenderer.applyCloverProgressContainer(square, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleClover(square, userConfig.fontScale, context)
 
             // Apply to small view
             applyTheme(small, colors)
             small.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(small, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetRenderer.applyCloverProgressContainer(small, progress, userConfig.theme)
+            WidgetRenderer.applyCloverProgressContainer(small, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleCloverSmall(small, userConfig.fontScale, context)
 
             // Apply to extra small view
             applyTheme(xSmall, colors)
             xSmall.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(xSmall, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetRenderer.applyCloverProgressContainer(xSmall, progress, userConfig.theme)
+            WidgetRenderer.applyCloverProgressContainer(xSmall, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleCloverExtraSmall(xSmall, userConfig.fontScale, context)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -869,20 +884,20 @@ open class StandaloneWidget(
             }
 
             // Apply theme from user config
-            val colors = WidgetColors.fromTheme(context, userConfig.theme)
+            val colors = WidgetColors.fromTheme(context, userConfig.theme ?: WidgetTheme.DEFAULT)
 
             // Apply to large/medium view
             applyTheme(large, colors)
             large.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(large, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetRenderer.applyPillProgressContainer(large, progress, userConfig.theme)
+            WidgetRenderer.applyPillProgressContainer(large, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScalePillMedium(large, userConfig.fontScale, context)
 
             // Apply to small view
             applyTheme(small, colors)
             small.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
             applyTexts(small, progress, widgetName, daysLeft, currentValue, userConfig)
-            WidgetRenderer.applyPillProgressContainer(small, progress, userConfig.theme)
+            WidgetRenderer.applyPillProgressContainer(small, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScalePillSmall(small, userConfig.fontScale, context)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

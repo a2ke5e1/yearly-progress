@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CalendarWidgetOptions(
-    val theme: WidgetTheme = WidgetTheme.DEFAULT,
+    val theme: WidgetTheme?,
     val timeStatusCounter: Boolean = true,
     val dynamicTimeStatusCounter: Boolean = false,
     val replaceProgressWithTimeLeft: Boolean = false,

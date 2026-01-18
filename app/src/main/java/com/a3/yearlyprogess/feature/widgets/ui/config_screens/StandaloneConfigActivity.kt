@@ -53,6 +53,7 @@ import com.a3.yearlyprogess.feature.home.HomeUiState
 import com.a3.yearlyprogess.feature.home.HomeViewModel
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions.Companion.WidgetShape
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.cloverRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.pillRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.rectangularRemoteView
@@ -223,7 +224,7 @@ fun WidgetPreview(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Widget Preview",
+                text = stringResource(R.string.widget_preview),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 12.dp)
@@ -353,16 +354,14 @@ fun StandaloneSettingsContent(
         // Widget Shape Selector (specific to Standalone widget)
         WidgetShapeSelector(
             selectedShape = options.widgetShape,
-            onShapeSelected = { shape ->
-                viewModel.updateWidgetShape(shape)
-            },
+            onShapeSelected = viewModel::updateWidgetShape,
             Modifier.padding(horizontal = 16.dp)
         )
 
         Spacer(Modifier.height(8.dp))
 
         SharedWidgetSettings(
-            theme = options.theme,
+            theme = options.theme ?: WidgetTheme.DEFAULT,
             timeStatusCounter = options.timeLeftCounter,
             dynamicTimeStatusCounter = options.dynamicLeftCounter,
             replaceProgressWithTimeLeft = options.replaceProgressWithDaysLeft,

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EventWidgetOptions(
-    val theme: WidgetTheme,
+    val theme: WidgetTheme?,
     val timeStatusCounter: Boolean,
     val dynamicTimeStatusCounter: Boolean,
     val replaceProgressWithTimeLeft: Boolean,

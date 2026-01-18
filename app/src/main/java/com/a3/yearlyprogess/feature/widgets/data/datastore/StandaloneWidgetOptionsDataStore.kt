@@ -28,7 +28,7 @@ class StandaloneWidgetOptionsDataStore(
 ) {
 
     private val defaultStandaloneWidgetOptions = StandaloneWidgetOptions(
-        theme = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
+        theme = null,
         widgetType = null,
         widgetShape = WidgetShape.RECTANGULAR,
         timeLeftCounter = true,
@@ -54,8 +54,8 @@ class StandaloneWidgetOptionsDataStore(
         context.standaloneWidgetOptionsDataStore.data.map { prefs ->
             StandaloneWidgetOptions(
                 theme = prefs[getThemeKey(widgetId)]?.let { themeName ->
-                    runCatching { WidgetTheme.valueOf(themeName) }.getOrDefault(defaultStandaloneWidgetOptions.theme)
-                } ?: defaultStandaloneWidgetOptions.theme,
+                    runCatching { WidgetTheme.valueOf(themeName) }.getOrNull()
+                },  // Returns null if not set
                 widgetType = prefs[getWidgetTypeKey(widgetId)]?.let { typeName ->
                     runCatching { StandaloneWidgetType.valueOf(typeName) }.getOrNull()
                 },
@@ -73,7 +73,7 @@ class StandaloneWidgetOptionsDataStore(
 
     suspend fun updateOptions(widgetId: Int, options: StandaloneWidgetOptions) {
         context.standaloneWidgetOptionsDataStore.edit { prefs ->
-            prefs[getThemeKey(widgetId)] = options.theme.name
+            options.theme?.let { prefs[getThemeKey(widgetId)] = it.name }
             options.widgetType?.let { prefs[getWidgetTypeKey(widgetId)] = it.name }
             prefs[getWidgetShapeKey(widgetId)] = options.widgetShape.name
             prefs[getTimeLeftCounterKey(widgetId)] = options.timeLeftCounter

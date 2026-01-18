@@ -48,6 +48,7 @@ import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 import com.a3.yearlyprogess.feature.events.ui.components.EventList
 import com.a3.yearlyprogess.feature.widgets.domain.model.EventWidgetOptions
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.components.SharedWidgetSettings
 import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
@@ -233,7 +234,7 @@ fun EventSettingsTab(
         Spacer(Modifier.height(8.dp))
 
         SharedWidgetSettings(
-            theme = options.theme,
+            theme = options.theme ?: WidgetTheme.DEFAULT,
             timeStatusCounter = options.timeStatusCounter,
             dynamicTimeStatusCounter = options.dynamicTimeStatusCounter,
             replaceProgressWithTimeLeft = options.replaceProgressWithTimeLeft,
