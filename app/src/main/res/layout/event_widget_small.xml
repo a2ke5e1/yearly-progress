@@ -14,7 +14,6 @@
         android:id="@+id/imageContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/app_widget_background"
         android:clipToOutline="true"
         android:foreground="@drawable/event_widget_background_scrim"
         android:scaleType="centerCrop" />

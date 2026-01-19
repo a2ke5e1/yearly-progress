@@ -154,18 +154,33 @@ class EventWidget : BaseWidget() {
         private fun applyTheme(
             views: RemoteViews,
             colors: WidgetColors,
-            backgroundLuminance: Double?
+            backgroundLuminance: Double?,
+            transparency: Int
         ) {
             views.setTextColor(R.id.eventTitle, colors.primaryColor)
             views.setTextColor(R.id.eventProgressText, colors.primaryColor)
             views.setTextColor(R.id.widgetDaysLeft, colors.accentColor)
 
+            // Apply background color with transparency
+            val alpha = ((transparency / 100.0) * 255).toInt().coerceIn(0, 255)
+
             if (backgroundLuminance == null) {
                 views.setTextColor(R.id.eventDesc, colors.secondaryColor)
                 views.setTextColor(R.id.currentDate, colors.secondaryColor)
                 views.setTextColor(R.id.eventTime, colors.secondaryColor)
+                views.setInt(R.id.widgetContainer, "setImageAlpha", alpha)
+                views.setViewVisibility(R.id.widgetContainer, View.VISIBLE)
+                views.setViewVisibility(R.id.imageContainer, View.GONE)
                 return
             }
+
+
+            // For RemoteViews, we use setInt with "setImageAlpha" or setInt with "setBackgroundColor"
+            // But since widgetContainer is an ImageView with a src, we need to set the image alpha or tint
+
+            views.setInt(R.id.imageContainer, "setImageAlpha", alpha)
+            views.setViewVisibility(R.id.widgetContainer, View.GONE)
+            views.setViewVisibility(R.id.imageContainer, View.VISIBLE)
 
             val blendedColor =
                 if (backgroundLuminance < 0.45) {
@@ -351,11 +366,6 @@ class EventWidget : BaseWidget() {
             val colors = WidgetColors.fromTheme(context, theme)
 
 
-            // Apply background colors
-            small.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
-            tall.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
-            wide.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
-
             // Apply progress bars
             WidgetRenderer.applyLinearProgressBar(small, eventData.progress.roundToInt(), theme)
             WidgetRenderer.applyLinearProgressBar(tall, eventData.progress.roundToInt(), theme)
@@ -368,9 +378,9 @@ class EventWidget : BaseWidget() {
 
 
             // event images and Apply theme to all layouts
-            applyTheme(small, colors, applyEventImage(context, small, event))
-            applyTheme(tall, colors, applyEventImage(context, tall, event))
-            applyTheme(wide, colors, applyEventImage(context, wide, event))
+            applyTheme(small, colors, applyEventImage(context, small, event), userConfig.backgroundTransparency)
+            applyTheme(tall, colors, applyEventImage(context, tall, event), userConfig.backgroundTransparency)
+            applyTheme(wide, colors, applyEventImage(context, wide, event), userConfig.backgroundTransparency)
 
             // Apply swiper actions if appWidgetId is valid
             if (appWidgetId != -1) {

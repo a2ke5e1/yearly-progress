@@ -16,8 +16,7 @@
         android:scaleType="centerCrop"
         android:layout_height="match_parent"
         android:clipToOutline="true"
-        android:foreground="@drawable/event_widget_background_scrim"
-        android:background="@drawable/app_widget_background"/>
+        android:foreground="@drawable/event_widget_background_scrim"/>
 
     <RelativeLayout
         style="@style/Widget.YearlyProgress.AppWidget.Container"
