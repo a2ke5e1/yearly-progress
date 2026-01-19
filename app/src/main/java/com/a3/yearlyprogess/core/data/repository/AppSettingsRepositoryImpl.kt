@@ -45,7 +45,7 @@ class AppSettingsRepositoryImpl @Inject constructor(
                 calculationType = CalculationType.valueOf(
                     preferences[PreferencesKeys.CALCULATION_TYPE] ?: CalculationType.ELAPSED.name
                 ),
-                weekStartDay = preferences[PreferencesKeys.WEEK_START_DAY] ?: calendar.firstDayOfWeek,
+                weekStartDay = preferences[PreferencesKeys.WEEK_START_DAY]?.takeIf { it != 0 } ?: calendar.firstDayOfWeek,
                 decimalDigits = preferences[PreferencesKeys.DECIMAL_DIGITS] ?: 13
             ),
             notificationSettings = NotificationSettings(

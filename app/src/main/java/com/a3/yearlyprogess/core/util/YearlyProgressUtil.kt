@@ -32,6 +32,9 @@ data class ProgressSettings(
 ) {
     val uLocale: ULocale
         get() = ULocale.forLanguageTag(localeTag)
+
+    val validatedWeekStartDay: Int
+        get() = if (weekStartDay in Calendar.SUNDAY..Calendar.SATURDAY) weekStartDay else Calendar.getInstance(uLocale).firstDayOfWeek
 }
 
 class YearlyProgressUtil(val settings: ProgressSettings = ProgressSettings()) {
@@ -92,9 +95,10 @@ class YearlyProgressUtil(val settings: ProgressSettings = ProgressSettings()) {
             }
 
             TimePeriod.WEEK -> {
+                val weekStartDay = settings.validatedWeekStartDay
                 // This logic correctly finds the beginning of the current week
-                cal.firstDayOfWeek = settings.weekStartDay
-                cal.set(Calendar.DAY_OF_WEEK, settings.weekStartDay)
+                cal.firstDayOfWeek = weekStartDay
+                cal.set(Calendar.DAY_OF_WEEK, weekStartDay)
 
                 // Reset time to the beginning of the day (midnight)
                 cal.set(Calendar.HOUR_OF_DAY, 0)
