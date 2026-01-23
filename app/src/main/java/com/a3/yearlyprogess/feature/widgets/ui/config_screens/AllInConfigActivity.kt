@@ -47,6 +47,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
@@ -85,7 +86,12 @@ class AllInConfigActivity : ComponentActivity() {
         }
 
         setContent {
-            YearlyProgressTheme {
+            val mainViewModel: MainViewModel = hiltViewModel()
+            val appSettings by mainViewModel.appSettings.collectAsState()
+
+            YearlyProgressTheme(
+                appTheme = appSettings?.appTheme ?: WidgetTheme.DEFAULT
+            ) {
                 AllInWidgetConfigScreen(
                     appWidgetId = appWidgetId,
                     onSaveSuccess = {

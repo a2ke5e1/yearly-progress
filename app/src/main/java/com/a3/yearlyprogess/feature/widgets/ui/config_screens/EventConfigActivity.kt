@@ -85,7 +85,12 @@ class EventConfigActivity : ComponentActivity() {
         }
 
         setContent {
-            YearlyProgressTheme {
+            val mainViewModel: MainViewModel = hiltViewModel()
+            val appSettings by mainViewModel.appSettings.collectAsState()
+
+            YearlyProgressTheme(
+                appTheme = appSettings?.appTheme ?: WidgetTheme.DEFAULT
+            ) {
                 EventWidgetConfigScreen(
                     appWidgetId = appWidgetId,
                     onSaveSuccess = {

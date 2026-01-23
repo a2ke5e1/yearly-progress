@@ -37,16 +37,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.a3.yearlyprogess.R
+import com.a3.yearlyprogess.app.MainViewModel
 import com.a3.yearlyprogess.core.ui.theme.YearlyProgressTheme
 import com.a3.yearlyprogess.feature.events.presentation.CalendarUiState
 import com.a3.yearlyprogess.feature.events.presentation.ImportEventsViewModel
@@ -99,7 +97,12 @@ class CalendarConfigActivity : ComponentActivity() {
         }
 
         setContent {
-            YearlyProgressTheme {
+            val mainViewModel: MainViewModel = hiltViewModel()
+            val appSettings by mainViewModel.appSettings.collectAsState()
+
+            YearlyProgressTheme(
+                appTheme = appSettings?.appTheme ?: WidgetTheme.DEFAULT
+            ) {
                 CalendarWidgetConfigScreen(
                     appWidgetId = appWidgetId,
                     onSaveSuccess = {
