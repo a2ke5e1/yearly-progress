@@ -63,18 +63,18 @@ class CalendarWidget : BaseWidget() {
             ACTION_NEXT, ACTION_PREV -> {
                 Log.d("CalendarWidget", "Received swiper action: ${intent.action}")
 
-                val userConfig = runBlocking(Dispatchers.IO) {
+                val (userConfig, progressSettings) = runBlocking(Dispatchers.IO) {
                     val options = calendarWidgetOptionsRepository.getOptions(appWidgetId).first()
+                    val appSettings = appSettingsRepository.appSettings.first()
 
                     // If theme is null, get it from AppSettings
                     if (options.theme == null) {
-                        val appSettings = appSettingsRepository.appSettings.first()
                         calendarWidgetOptionsRepository.updateOptions(appWidgetId, options.copy(
                             theme = appSettings.appTheme
                         ))
-                        options.copy(theme = appSettings.appTheme)
+                        Pair(options.copy(theme = appSettings.appTheme), appSettings.progressSettings)
                     } else {
-                        options
+                        Pair(options, appSettings.progressSettings)
                     }
 
                 }
@@ -101,25 +101,25 @@ class CalendarWidget : BaseWidget() {
     }
 
     override fun updateWidget(context: Context, appWidgetId: Int): RemoteViews {
-        val yp = YearlyProgressUtil()
         val manager = AppWidgetManager.getInstance(context)
         val options = manager.getAppWidgetOptions(appWidgetId)
 
-        val userConfig = runBlocking(Dispatchers.IO) {
+        val (userConfig, progressSettings) = runBlocking(Dispatchers.IO) {
             val options = calendarWidgetOptionsRepository.getOptions(appWidgetId).first()
+            val appSettings = appSettingsRepository.appSettings.first()
 
             // If theme is null, get it from AppSettings
             if (options.theme == null) {
-                val appSettings = appSettingsRepository.appSettings.first()
                 calendarWidgetOptionsRepository.updateOptions(appWidgetId, options.copy(
                     theme = appSettings.appTheme
                 ))
-                options.copy(theme = appSettings.appTheme)
+                Pair(options.copy(theme = appSettings.appTheme), appSettings.progressSettings)
             } else {
-                options
+                Pair(options, appSettings.progressSettings)
             }
-
         }
+        val yp = YearlyProgressUtil(progressSettings)
+
 
         // Check calendar permission
         if (context.checkSelfPermission(Manifest.permission.READ_CALENDAR) !=

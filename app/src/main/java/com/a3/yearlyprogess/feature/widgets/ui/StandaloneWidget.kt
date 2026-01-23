@@ -70,25 +70,23 @@ open class StandaloneWidget(
 
 
     override fun updateWidget(context: Context, appWidgetId: Int): RemoteViews {
-        val yp = YearlyProgressUtil()
         val manager = AppWidgetManager.getInstance(context)
         val bundleOptions = manager.getAppWidgetOptions(appWidgetId)
 
         // Load user configuration
-        val userConfig = runBlocking(Dispatchers.IO) {
+        val (userConfig, progressSettings) = runBlocking(Dispatchers.IO) {
             standaloneWidgetOptionsRepository.updateWidgetType(appWidgetId, widgetType)
             val options = standaloneWidgetOptionsRepository.getOptions(appWidgetId).first()
-
+            val appSettings = appSettingsRepository.appSettings.first()
             // If theme is null, get it from AppSettings
             if (options.theme == null) {
-                val appSettings = appSettingsRepository.appSettings.first()
                 standaloneWidgetOptionsRepository.updateTheme(appWidgetId, appSettings.appTheme)
-                options.copy(theme = appSettings.appTheme)
+                Pair(options.copy(theme = appSettings.appTheme), appSettings.progressSettings)
             } else {
-                options
+                Pair(options, appSettings.progressSettings)
             }
-
         }
+        val yp = YearlyProgressUtil(progressSettings)
 
         val sunsetData = runBlocking(Dispatchers.IO) {
             if (widgetType != StandaloneWidgetType.DAY_LIGHT && widgetType != StandaloneWidgetType.NIGHT_LIGHT) {

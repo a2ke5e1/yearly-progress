@@ -87,33 +87,30 @@ class EventWidget : BaseWidget() {
     }
 
     override fun updateWidget(context: Context, appWidgetId: Int): RemoteViews {
-        val yp = YearlyProgressUtil()
         val manager = AppWidgetManager.getInstance(context)
         val options = manager.getAppWidgetOptions(appWidgetId)
 
-        val (userConfig, events) = runBlocking {
+        val (userConfig, events, progressSettings) = runBlocking {
             withContext(Dispatchers.IO) {
                 var config = eventWidgetOptionsRepository
                     .getOptions(appWidgetId)
                     .first()
-
-
+                val appSettings = appSettingsRepository.appSettings.first()
                 config = if (config.theme == null) {
-                    val appSettings = appSettingsRepository.appSettings.first()
                     eventWidgetOptionsRepository.updateTheme(appWidgetId, appSettings.appTheme)
                     config.copy(theme = appSettings.appTheme)
                 } else {
                     config
                 }
 
-
                 val events = config.selectedEventIds.mapNotNull { id ->
                     eventRepository.getEvent(id)
                 }
-
-                config to events
+                Triple(config , events , appSettings.progressSettings)
             }
         }
+        val yp = YearlyProgressUtil(progressSettings)
+
 
         Log.d("EventWidget", "Selected Event Ids ${userConfig.selectedEventIds}")
         Log.d("EventWidget", "Selected Events ${events}")

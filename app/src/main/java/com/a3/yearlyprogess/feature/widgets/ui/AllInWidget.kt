@@ -34,24 +34,23 @@ class AllInWidget : BaseWidget() {
     lateinit var appSettingsRepository: AppSettingsRepository
 
     override fun updateWidget(context: Context, appWidgetId: Int): RemoteViews {
-        val yp = YearlyProgressUtil()
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
 
         // Load user configuration
-        val userConfig = runBlocking(Dispatchers.IO) {
+        val (userConfig, progressSettings) = runBlocking(Dispatchers.IO) {
             val options = allInWidgetOptionsRepository.getOptions(appWidgetId).first()
+            val appSettings = appSettingsRepository.appSettings.first()
 
             // If theme is null, get it from AppSettings
             if (options.theme == null) {
-                val appSettings = appSettingsRepository.appSettings.first()
                 allInWidgetOptionsRepository.updateTheme(appWidgetId, appSettings.appTheme)
-                options.copy(theme = appSettings.appTheme)
+                Pair(options.copy(theme = appSettings.appTheme), appSettings.progressSettings)
             } else {
-                options
+                Pair(options, appSettings.progressSettings)
             }
-
         }
+        val yp = YearlyProgressUtil(progressSettings)
 
 
         return createAllInOneWidgetRemoteView(context, yp, userConfig, options)
