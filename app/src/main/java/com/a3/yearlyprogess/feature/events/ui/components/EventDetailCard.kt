@@ -1,6 +1,12 @@
 package com.a3.yearlyprogess.feature.events.ui.components
 
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Intent
 import android.icu.text.NumberFormat
+import android.os.Build
+import android.os.Bundle
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,18 +18,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -42,7 +47,6 @@ import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.interaction.PressAnimationConfig
 import com.a3.yearlyprogess.core.ui.interaction.applyPressGesture
 import com.a3.yearlyprogess.core.ui.interaction.rememberPressInteractionState
@@ -51,9 +55,12 @@ import com.a3.yearlyprogess.core.util.ProgressSettings
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import com.a3.yearlyprogess.core.util.formatEventDateTime
 import com.a3.yearlyprogess.core.util.formatEventTimeStatus
-import com.a3.yearlyprogess.core.util.toTimePeriodText
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 import com.a3.yearlyprogess.feature.home.ui.components.FormattedPercentage
+import com.a3.yearlyprogess.feature.widgets.domain.model.EventWidgetOptions
+import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
+import com.a3.yearlyprogess.feature.widgets.ui.EventWidget
+import com.a3.yearlyprogess.feature.widgets.update.PinEventWidgetReceiver
 import kotlinx.coroutines.delay
 
 
@@ -203,11 +210,70 @@ fun EventDetailCard(
                     modifier = Modifier
                         .weight(1f),
                 ) {
-                    Text(
-                        text = event.eventTitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = event.eventTitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.weight(1f, fill = false)
+                        )
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
+                            if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
+                                IconButton(
+                                    onClick = {
+                                        val myProvider = ComponentName(context, EventWidget::class.java)
+                                        val successCallback = Intent(context, PinEventWidgetReceiver::class.java).apply {
+                                            putExtra(PinEventWidgetReceiver.EXTRA_EVENT_ID, event.id)
+                                        }.let { intent ->
+                                            PendingIntent.getBroadcast(
+                                                context,
+                                                event.id,
+                                                intent,
+                                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                                            )
+                                        }
+
+                                        val remoteViews = EventWidget.responsiveRemoteView(
+                                            context = context,
+                                            event = event,
+                                            yp = progressUtil,
+                                            theme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
+                                            userConfig = EventWidgetOptions(
+                                                theme = null,
+                                                timeStatusCounter = true,
+                                                dynamicTimeStatusCounter = false,
+                                                replaceProgressWithTimeLeft = false,
+                                                decimalDigits = decimals,
+                                                backgroundTransparency = 100,
+                                                fontScale = 1.0f,
+                                                showEventImage = true
+                                            )
+                                        )
+
+                                        val bundle = Bundle().apply {
+                                            putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
+                                        }
+
+                                        appWidgetManager.requestPinAppWidget(myProvider, bundle, successCallback)
+                                    },
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.PushPin,
+                                        contentDescription = "Pin to home screen",
+                                        modifier = Modifier.size(18.dp),
+                                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                                    )
+                                }
+                            }
+                        }
+                    }
+
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -246,7 +312,6 @@ fun EventDetailCard(
                             modifier = Modifier.size(70.dp)
                         )
                         FormattedPercentage(
-//                           modifier = Modifier.offset((4).dp),
                             value = uiState.progress,
                             digits = decimals,
                             style = style.progressTextStyle,

@@ -81,6 +81,9 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".feature.widgets.update.PinEventWidgetReceiver"
+            android:exported="false" />
+
 
 
         <!-- Widgets -->

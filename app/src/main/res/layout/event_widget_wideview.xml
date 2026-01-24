@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:scaleType="centerCrop"
         android:layout_height="match_parent"
+        android:background="@drawable/app_widget_inner_clipping"
         android:clipToOutline="true"
         android:foreground="@drawable/event_widget_background_scrim"/>
 
