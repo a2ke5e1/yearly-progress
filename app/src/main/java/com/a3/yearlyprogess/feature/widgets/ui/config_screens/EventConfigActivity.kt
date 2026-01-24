@@ -295,6 +295,7 @@ fun EventSelectionTab(
                 onItemClick = { event ->
                     configViewModel.toggleEventSelection(event.id)
                 },
+                showPinOption = false,
                 onItemLongPress = { configViewModel.toggleEventSelection(it.id) },
                 settings = settings.progressSettings
             )

@@ -31,6 +31,7 @@ fun EventList(
     selectedIds: Set<Int>,
     modifier: Modifier = Modifier,
     emptyText: String,
+    showPinOption: Boolean = true,
     emptyPadding: PaddingValues = PaddingValues(8.dp),
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onItemClick: (Event) -> Unit,
@@ -81,6 +82,7 @@ fun EventList(
             EventDetailCard(
                 event = event,
                 isSelected = isSelected,
+                showPinOption = showPinOption,
                 onClick = { onItemClick(event) },
                 onLongPress = { onItemLongPress(event) },
                 style = EventDetailCardDefaults.eventDetailCardStyle(
@@ -127,4 +129,3 @@ private fun resolveCornerStyle(
                 else -> CardCornerStyle.MiddleInList
             }
     }
-
