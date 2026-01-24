@@ -248,8 +248,8 @@ class EventWidget : BaseWidget() {
         }
 
         /**
-        *  Returns bitmaps average luminance
-        */
+         *  Returns bitmaps average luminance
+         */
         private fun applyEventImage(
             context: Context,
             views: RemoteViews,
@@ -362,6 +362,11 @@ class EventWidget : BaseWidget() {
             val eventData = calculateEventData(context, event, yp, userConfig)
             val colors = WidgetColors.fromTheme(context, theme)
 
+
+            // Apply background colors
+            small.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
+            tall.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
+            wide.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
 
             // Apply progress bars
             WidgetRenderer.applyLinearProgressBar(small, eventData.progress.roundToInt(), theme)
