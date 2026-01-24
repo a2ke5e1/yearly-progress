@@ -21,10 +21,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.PushPin
+import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -125,6 +128,7 @@ fun EventDetailCard(
     event: Event,
     onClick: () -> Unit,
     isSelected: Boolean = false,
+    showPinOption: Boolean = true,
     onLongPress: (() -> Unit)? = null,
     settings: ProgressSettings = ProgressSettings(),
     refreshInterval: Long = 16L,
@@ -221,10 +225,10 @@ fun EventDetailCard(
                             modifier = Modifier.weight(1f, fill = false)
                         )
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (showPinOption) {
                             val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
                             if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
-                                IconButton(
+                                FilledTonalIconButton(
                                     onClick = {
                                         val myProvider = ComponentName(context, EventWidget::class.java)
                                         val successCallback = Intent(context, PinEventWidgetReceiver::class.java).apply {
@@ -261,13 +265,13 @@ fun EventDetailCard(
 
                                         appWidgetManager.requestPinAppWidget(myProvider, bundle, successCallback)
                                     },
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(24.dp),
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.PushPin,
+                                        imageVector = Icons.Outlined.PushPin,
                                         contentDescription = "Pin to home screen",
-                                        modifier = Modifier.size(18.dp),
-                                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                                        modifier = Modifier.size(12.dp),
+                                        tint = IconButtonDefaults.filledTonalIconButtonColors().contentColor,
                                     )
                                 }
                             }

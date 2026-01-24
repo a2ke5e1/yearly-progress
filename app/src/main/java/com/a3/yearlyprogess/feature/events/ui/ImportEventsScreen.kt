@@ -275,6 +275,7 @@ fun ImportEventsScreen(
                 EventList(
                     events = events,
                     selectedIds = selectedIds,
+                    showPinOption = false,
                     emptyText = "No events found",
                     contentPadding = innerPadding,
                     onItemClick = { importEventsViewModel.toggleSelection(it.id) },
