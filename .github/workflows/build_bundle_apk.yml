@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "ADMOB_APPLICATION_ID=${{ secrets.ADMOB_APPLICATION_ID }}" >> env.properties
           echo "ADMOB_NATIVE_AD_UNIT=${{ secrets.ADMOB_NATIVE_AD_UNIT }}" >> env.properties
-          echo "SIGNING_KEYSTORE_FILE=\keystore\\release_keystore.jks" >> env.properties
+          echo "SIGNING_KEYSTORE_FILE=/keystore/release_keystore.jks" >> env.properties
           echo "SIGNING_STORE_PASSWORD=${{ secrets.SIGNING_STORE_PASSWORD }}" >> env.properties
           echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}" >> env.properties
           echo "SIGNING_KEY_PASSWORD=${{ secrets.SIGNING_KEY_PASSWORD }}" >> env.properties
