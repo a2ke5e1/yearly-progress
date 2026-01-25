@@ -6,7 +6,12 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.detekt)
     id("kotlin-parcelize")
+}
+
+detekt {
+    config.setFrom(file("$rootDir/config/detekt/detekt.yml"))
 }
 
 val envProperties = Properties().apply {
@@ -76,6 +81,12 @@ android {
         compose = true
         buildConfig = true
         resValues = true
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
