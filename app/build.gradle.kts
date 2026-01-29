@@ -38,8 +38,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 36
-        versionCode = 217
-        versionName = "4.0.0-alpha18"
+        versionCode = 218
+        versionName = "4.0.0-alpha19"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

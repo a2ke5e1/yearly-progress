@@ -15,7 +15,7 @@ class WidgetUpdateAlarmHandler(private val context: Context) {
     val sender = PendingIntent.getBroadcast(context, service, intent, PendingIntent.FLAG_IMMUTABLE)
     val c = Calendar.getInstance()
     val l = c.timeInMillis + (5 * 1000)
-    am?.setAndAllowWhileIdle(AlarmManager.RTC, l, sender)
+    am?.set(AlarmManager.RTC, l, sender)
   }
 
   fun cancelAlarmManager() {
