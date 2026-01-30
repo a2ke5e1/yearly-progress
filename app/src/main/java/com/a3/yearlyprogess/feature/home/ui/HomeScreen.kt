@@ -268,10 +268,6 @@ private fun HomeScreenGrid(
             )
         }
 
-        item {
-            AdCard()
-        }
-
         when (state) {
             is HomeUiState.Loading -> {
                 item {
@@ -322,6 +318,10 @@ private fun HomeScreenGrid(
                     )
                 }
             }
+        }
+
+        item {
+            AdCard()
         }
     }
 }
