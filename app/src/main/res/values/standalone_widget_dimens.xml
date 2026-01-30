@@ -3,7 +3,7 @@
     <!-- Text Size for standalone widgets -->
 
     <!-- Rectangular shaped standalone widgets -->
-    <dimen name="standalone_rect_widget_text_size_widget_type">11sp</dimen>
+    <dimen name="standalone_rect_widget_text_size_widget_type">8sp</dimen>
     <dimen name="standalone_rect_widget_text_size_widget_days_left">10sp</dimen>
     <dimen name="standalone_rect_widget_text_size_widget_progress">18sp</dimen>
     <dimen name="standalone_rect_widget_text_size_widget_current_value">11sp</dimen>

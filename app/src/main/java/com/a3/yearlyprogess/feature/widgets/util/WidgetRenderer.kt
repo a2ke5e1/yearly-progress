@@ -351,7 +351,7 @@ object WidgetRenderer {
         @IdRes viewId: Int,
         @DimenRes defaultTextSize: Int,
         fontScale: Float = 1f,
-        minSp: Float = 8f,
+        minSp: Float = 4f,
         maxSp: Float = 32f
     ) {
         val baseSp = getSpValue(context, defaultTextSize)
