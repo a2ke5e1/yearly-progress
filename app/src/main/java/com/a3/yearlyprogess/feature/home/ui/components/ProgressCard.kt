@@ -35,7 +35,9 @@ import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.core.util.ProgressSettings
 import com.a3.yearlyprogess.core.util.TimePeriod
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 data class ProgressCardStyle(
     val cardHeight: Dp,
@@ -110,7 +112,11 @@ fun ProgressCard(
         progressUtil
     ) {
         while (true) {
-            value = progressUtil.calculateProgress(startTime, endTime)
+            // Switch to Default dispatcher for the calculation
+            val newProgress = withContext(Dispatchers.Default) {
+                progressUtil.calculateProgress(startTime, endTime)
+            }
+            value = newProgress
             delay(refreshInterval)
         }
     }

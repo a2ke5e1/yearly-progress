@@ -29,13 +29,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -52,8 +49,9 @@ import com.a3.yearlyprogess.feature.home.HomeViewModel
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.config_screens.AllInWidgetConfigViewModel
 import com.a3.yearlyprogess.feature.widgets.ui.config_screens.StandaloneWidgetConfigViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-
+import kotlinx.coroutines.withContext
 
 @Immutable
 data class WidgetPreviewItem(
@@ -79,6 +77,9 @@ fun WidgetPreviewScreen(
     allInOneWidgetConfigViewModel: AllInWidgetConfigViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    // Use application context for background threads to avoid leaking Activity context
+    val appContext = context.applicationContext
+
     val yp = remember { YearlyProgressUtil() }
     val appSettings by mainViewModel.appSettings.collectAsState()
     val homeUiState by homeViewModel.uiState.collectAsState()
@@ -87,22 +88,9 @@ fun WidgetPreviewScreen(
     val sunsetData = (homeUiState as? HomeUiState.Success)?.data
     val appTheme = appSettings?.appTheme ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT
 
-
-    val tick by produceState(
-        initialValue = 0L,
-    ) {
-        while (true) {
-            delay(500)
-            value = System.currentTimeMillis()
-        }
-    }
-
-
     val widgetItems = WIDGET_PREVIEW_ITEMS
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+
+    Column(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 160.dp),
             contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
@@ -114,44 +102,58 @@ fun WidgetPreviewScreen(
                 items = widgetItems,
                 key = { it.type.name }
             ) { item ->
-                val remoteViews = remember(item, tick, sunsetData, appTheme) {
-                    val options = userWidgetDefaultOptions.copy(
-                        widgetType = item.type,
-                        theme = appTheme
-                    )
-                    if (item.type == StandaloneWidgetType.DAY_LIGHT || item.type == StandaloneWidgetType.NIGHT_LIGHT) {
-                        StandaloneWidget.rectangularRemoteView(
-                            context,
-                            yp,
-                            options,
-                            sunsetData,
-                            false
-                        )
-                    } else {
-                        StandaloneWidget.rectangularRemoteView(context, yp, options, false)
-                    }
-                }
-                WidgetPreviewCard(remoteViews) {
-                    pinWidget(context, item.componentClass, remoteViews)
-                }
-            }
-            item(key = "all_in_one", span = { GridItemSpan(maxLineSpan) }) {
-                val remoteViews = remember(tick, appTheme) {
-                    val bundleOptions = Bundle().apply {
-                        putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 320)
-                        putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 220)
-                    }
-                    AllInWidget.createAllInOneWidgetRemoteView(
-                        context, yp, allInOneWidgetDefaultOptions.copy(
+                // Move generation logic to a helper composable
+                AsyncWidgetPreviewLoader(
+                    updateInterval = 1000L,
+                    producer = {
+                        // This block runs on Dispatchers.Default (Background)
+                        val options = userWidgetDefaultOptions.copy(
+                            widgetType = item.type,
                             theme = appTheme
-                        ),
-                        bundleOptions, isWidgetPreview = true
-                    )
-                }
-                WidgetPreviewCard(remoteViews) {
-                    pinWidget(context, AllInWidget::class.java, remoteViews)
+                        )
+                        if (item.type == StandaloneWidgetType.DAY_LIGHT || item.type == StandaloneWidgetType.NIGHT_LIGHT) {
+                            StandaloneWidget.rectangularRemoteView(
+                                appContext, // Pass appContext
+                                yp,
+                                options,
+                                sunsetData,
+                                false
+                            )
+                        } else {
+                            StandaloneWidget.rectangularRemoteView(appContext, yp, options, false)
+                        }
+                    }
+                ) { remoteViews ->
+                    // This block runs on UI thread when data is ready
+                    WidgetPreviewCard(remoteViews) {
+                        pinWidget(context, item.componentClass, remoteViews)
+                    }
                 }
             }
+
+            item(key = "all_in_one", span = { GridItemSpan(maxLineSpan) }) {
+                AsyncWidgetPreviewLoader(
+                    updateInterval = 1000L,
+                    producer = {
+                        val bundleOptions = Bundle().apply {
+                            putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 320)
+                            putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 220)
+                        }
+                        AllInWidget.createAllInOneWidgetRemoteView(
+                            appContext,
+                            yp,
+                            allInOneWidgetDefaultOptions.copy(theme = appTheme),
+                            bundleOptions,
+                            isWidgetPreview = true
+                        )
+                    }
+                ) { remoteViews ->
+                    WidgetPreviewCard(remoteViews) {
+                        pinWidget(context, AllInWidget::class.java, remoteViews)
+                    }
+                }
+            }
+
             item(key = "native_ad_card", span = { GridItemSpan(maxLineSpan) }) {
                 AdCard(
                     modifier = Modifier
@@ -160,6 +162,40 @@ fun WidgetPreviewScreen(
                 )
             }
         }
+    }
+}
+
+/**
+ * A helper that generates the RemoteViews on a background thread
+ * and updates the UI state only when ready.
+ */
+@Composable
+fun AsyncWidgetPreviewLoader(
+    updateInterval: Long,
+    producer: suspend () -> RemoteViews,
+    content: @Composable (RemoteViews) -> Unit
+) {
+    // produceState launches a coroutine scoped to this Composable
+    val remoteViews by produceState<RemoteViews?>(initialValue = null, key1 = producer) {
+        while (true) {
+            // Generate on Background Thread
+            val newView = withContext(Dispatchers.Default) {
+                producer()
+            }
+            // Update State (triggers recomposition of content only)
+            value = newView
+
+            // Wait for next tick
+            delay(updateInterval)
+        }
+    }
+
+    // Only render content if we have a view
+    remoteViews?.let {
+        content(it)
+    } ?: run {
+        // Optional: Add a placeholder/loading box here if needed to prevent layout jumps on first load
+        Box(modifier = Modifier.fillMaxWidth().height(105.dp))
     }
 }
 
@@ -172,7 +208,6 @@ fun WidgetPreviewCard(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Container for RemoteViews
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -213,12 +248,15 @@ fun RemoteViewsHost(remoteViews: RemoteViews) {
                     val view = remoteViews.apply(context, this)
                     addView(view)
                 } catch (e: Exception) {
+                    // Handle inflation errors
                 }
             }
         },
         update = { host ->
             host.getChildAt(0)?.let { view ->
                 try {
+                    // This reapply is lighter than apply, but still runs on Main.
+                    // Since we offloaded the creation, this should be smooth enough.
                     remoteViews.reapply(host.context, view)
                 } catch (e: Exception) {
                     host.removeAllViews()
