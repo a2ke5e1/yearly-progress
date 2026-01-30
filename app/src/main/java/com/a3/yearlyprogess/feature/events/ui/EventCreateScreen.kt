@@ -39,11 +39,14 @@ import androidx.compose.material.icons.filled.AddPhotoAlternate
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -551,29 +554,27 @@ fun EventCreateScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MaterialDateTimeChip(
     label: String, onClick: () -> Unit, modifier: Modifier = Modifier
 ) {
-    Surface(
+    Button(
         onClick = onClick,
         modifier = modifier.height(64.dp),
-        shape = RoundedCornerShape(8.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 0.dp
+        shapes = ButtonDefaults.shapes(
+            pressedShape = ButtonDefaults.shapes().shape,
+            shape = ButtonDefaults.shapes().pressedShape
+        ),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }
 
@@ -611,7 +612,7 @@ fun WeekdayChip(
     val isSelected = day in selectedWeekdays
 
     val animatedCorner by animateDpAsState(
-        targetValue = if (!isSelected) 8.dp else 12.dp,
+        targetValue = if (!isSelected) 8.dp else 18.dp,
         animationSpec = tween(
             durationMillis = 100,
             easing = LinearOutSlowInEasing
@@ -773,7 +774,7 @@ private fun WeekdayChipRow(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Weekday.entries.forEach { weekday ->
             WeekdayChip(
