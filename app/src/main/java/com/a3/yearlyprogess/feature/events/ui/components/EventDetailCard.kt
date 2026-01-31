@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -206,91 +208,28 @@ fun EventDetailCard(
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxSize(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
                 Column(
                     modifier = Modifier
                         .weight(1f),
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
+                    Text(
                             text = event.eventTitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleMediumEmphasized,
                             color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.weight(1f, fill = false)
                         )
-
-                        if (showPinOption) {
-                            val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
-                            if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
-                                FilledTonalIconButton(
-                                    onClick = {
-                                        val myProvider = ComponentName(context, EventWidget::class.java)
-                                        val successCallback = Intent(context, PinEventWidgetReceiver::class.java).apply {
-                                            putExtra(PinEventWidgetReceiver.EXTRA_EVENT_ID, event.id)
-                                        }.let { intent ->
-                                            PendingIntent.getBroadcast(
-                                                context,
-                                                event.id,
-                                                intent,
-                                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-                                            )
-                                        }
-
-                                        val remoteViews = EventWidget.responsiveRemoteView(
-                                            context = context,
-                                            event = event,
-                                            yp = progressUtil,
-                                            theme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
-                                            userConfig = EventWidgetOptions(
-                                                theme = null,
-                                                timeStatusCounter = true,
-                                                dynamicTimeStatusCounter = false,
-                                                replaceProgressWithTimeLeft = false,
-                                                decimalDigits = decimals,
-                                                backgroundTransparency = 100,
-                                                fontScale = 1.0f,
-                                                showEventImage = true
-                                            )
-                                        )
-
-                                        val bundle = Bundle().apply {
-                                            putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
-                                        }
-
-                                        appWidgetManager.requestPinAppWidget(myProvider, bundle, successCallback)
-                                    },
-                                    modifier = Modifier.size(24.dp),
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.PushPin,
-                                        contentDescription = "Pin to home screen",
-                                        modifier = Modifier.size(12.dp),
-                                        tint = IconButtonDefaults.filledTonalIconButtonColors().contentColor,
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = uiState.formattedText,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
+                    Text(
+                        text = uiState.formattedText,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Justify,
+                    )
                     Text(
                         text = uiState.statusText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelSmall,
                         color =  MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
                     )
@@ -300,31 +239,81 @@ fun EventDetailCard(
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.bodySmall,
                             color =  MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2
+                            textAlign = TextAlign.Justify,
+                            maxLines = 4
                         )
                     }
                 }
-
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(start = 8.dp)
-                    ) {
-                        CircularWavyProgressIndicator(
-                            progress = {
-                                uiState.progress.toFloat() / 100
-                            },
-                            modifier = Modifier.size(70.dp)
-                        )
-                        FormattedPercentage(
-                            value = uiState.progress,
-                            digits = decimals,
-                            style = style.progressTextStyle,
-                        )
-                    }
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.padding(start = 8.dp).align(Alignment.CenterVertically)
+                ) {
+                    CircularWavyProgressIndicator(
+                        progress = {
+                            uiState.progress.toFloat() / 100
+                        },
+                        modifier = Modifier.size(80.dp),
+                    )
+                    FormattedPercentage(
+                        value = uiState.progress,
+                        digits = decimals,
+                        style = style.progressTextStyle,
+                    )
                 }
-
-
             }
+        }
+
+        if (showPinOption) {
+            val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
+            if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
+                FilledTonalIconButton(
+                    onClick = {
+                        val myProvider = ComponentName(context, EventWidget::class.java)
+                        val successCallback = Intent(context, PinEventWidgetReceiver::class.java).apply {
+                            putExtra(PinEventWidgetReceiver.EXTRA_EVENT_ID, event.id)
+                        }.let { intent ->
+                            PendingIntent.getBroadcast(
+                                context,
+                                event.id,
+                                intent,
+                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                            )
+                        }
+
+                        val remoteViews = EventWidget.responsiveRemoteView(
+                            context = context,
+                            event = event,
+                            yp = progressUtil,
+                            theme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT,
+                            userConfig = EventWidgetOptions(
+                                theme = null,
+                                timeStatusCounter = true,
+                                dynamicTimeStatusCounter = false,
+                                replaceProgressWithTimeLeft = false,
+                                decimalDigits = decimals,
+                                backgroundTransparency = 100,
+                                fontScale = 1.0f,
+                                showEventImage = true
+                            )
+                        )
+
+                        val bundle = Bundle().apply {
+                            putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
+                        }
+
+                        appWidgetManager.requestPinAppWidget(myProvider, bundle, successCallback)
+                    },
+                    modifier = Modifier.size(24.dp).align(Alignment.TopEnd).offset((-12).dp, (10).dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.PushPin,
+                        contentDescription = "Pin to home screen",
+                        modifier = Modifier.size(12.dp),
+                        tint = IconButtonDefaults.filledTonalIconButtonColors().contentColor,
+                    )
+                }
+            }
+        }
 
         // Selection Overlay
         if (isSelected) {
