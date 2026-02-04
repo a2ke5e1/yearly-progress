@@ -28,7 +28,7 @@ animationCore = "1.10.2"
 roomdatabasebackup = "1.1.0"
 playServicesAds = "24.9.0"
 userMessagingPlatform = "4.0.0"
-materialKolor = "4.1.0"
+materialKolor = "4.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
