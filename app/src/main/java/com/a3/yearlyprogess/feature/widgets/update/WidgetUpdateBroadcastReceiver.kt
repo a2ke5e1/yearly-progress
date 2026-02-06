@@ -45,6 +45,12 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
         val pendingResult = goAsync()
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
+        val forceNotificationState = if (intent.hasExtra(EXTRA_FORCE_NOTIFICATION)) {
+            intent.getBooleanExtra(EXTRA_FORCE_NOTIFICATION, false)
+        } else {
+            null
+        }
+
         scope.launch {
             try {
                 // Update all widgets
@@ -53,12 +59,22 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
 
                 // Get current settings (use first() instead of collect to avoid hanging)
                 val settings = appSettingsRepository.appSettings.first()
+                // 3. Apply the override if it exists
+                val updatedSettings = if (forceNotificationState != null) {
+                    settings.copy(
+                        notificationSettings = settings.notificationSettings.copy(
+                            progressShowNotification = forceNotificationState
+                        )
+                    )
+                } else {
+                    settings
+                }
 
                 // Update notification
-                yearlyProgressNotification.showProgressNotification(settings)
+                yearlyProgressNotification.showProgressNotification(updatedSettings)
 
                 // Cancel alarm if no widgets are active and notification is disabled
-                if (totalWidgetCount == 0 && !settings.notificationSettings.progressShowNotification) {
+                if (totalWidgetCount == 0 && !updatedSettings.notificationSettings.progressShowNotification) {
                     Log.d(TAG, "No widgets active and notification disabled - canceling alarm")
                     WidgetUpdateAlarmHandler(context).cancelAlarmManager()
                 } else {
@@ -108,5 +124,6 @@ class WidgetUpdateBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         private const val TAG = "WidgetUpdateReceiver"
+        const val EXTRA_FORCE_NOTIFICATION = "EXTRA_FORCE_NOTIFICATION"
     }
 }

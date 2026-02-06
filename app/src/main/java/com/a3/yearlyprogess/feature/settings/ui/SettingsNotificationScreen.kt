@@ -2,6 +2,7 @@ package com.a3.yearlyprogess.feature.settings.ui
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -56,37 +57,20 @@ fun SettingsNotificationScreen(
                     description = stringResource(R.string.shows_progress_in_the_notification),
                     checked = notificationSettings.progressShowNotification,
                     onCheckedChange = { newValue ->
-                        if (newValue) {
-                            if (!yearlyProgressNotification.hasAppNotificationPermission()) {
-                                // Request notification permission if needed
-                                (context as? Activity)?.let { activity ->
-                                    yearlyProgressNotification.requestNotificationPermission(activity)
-                                }
+                        if (newValue && !yearlyProgressNotification.hasAppNotificationPermission()) {
+                            (context as ComponentActivity).let { activity ->
+                                yearlyProgressNotification.requestNotificationPermission(activity)
                             }
+                            return@Switch
                         }
 
-                        // Broadcast widget update
-                        val widgetUpdateServiceIntent =
-                            Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+                        viewModel.setProgressShowNotification(newValue)
+
+                        val widgetUpdateServiceIntent = Intent(context, WidgetUpdateBroadcastReceiver::class.java).apply {
+                            // Pass the new boolean value here
+                            putExtra(WidgetUpdateBroadcastReceiver.EXTRA_FORCE_NOTIFICATION, newValue)
+                        }
                         context.sendBroadcast(widgetUpdateServiceIntent)
-
-                        // Update notification status
-                        scope.launch {
-                            viewModel.setProgressShowNotification(newValue)
-
-                            // Update notification immediately based on new setting
-                            if (newValue) {
-                                yearlyProgressNotification.showProgressNotification(
-                                    settings.copy(
-                                        notificationSettings = notificationSettings.copy(
-                                            progressShowNotification = newValue
-                                        )
-                                    )
-                                )
-                            } else {
-                                yearlyProgressNotification.hideProgressNotification()
-                            }
-                        }
                     }
                 )
             }
