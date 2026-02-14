@@ -30,6 +30,8 @@
     <string name="year">Year</string>
     <string name="time_in">in %1$s</string>
     <string name="time_left">%1$s left</string>
+    <string name="left">left</string>
+    <string name="completed">completed</string>
     <string name="progress_card_total_duration">of %1$ss</string>
 
     <string name="add_event">Add Event</string>

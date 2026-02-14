@@ -67,17 +67,22 @@ class YearlyProgressNotification @Inject constructor(
 
         val progressInfo = mutableListOf<String>()
         if (notificationSettings.progressShowNotificationDay) {
-            progressInfo.add("Day: %.2f%%".format(dayProgress))
+            progressInfo.add("${context.getString(R.string.day)}: %.2f%%".format(dayProgress))
         }
         if (notificationSettings.progressShowNotificationWeek) {
-            progressInfo.add("Week: %.2f%%".format(weekProgress))
+            progressInfo.add("${context.getString(R.string.week)}: %.2f%%".format(weekProgress))
         }
         if (notificationSettings.progressShowNotificationMonth) {
-            progressInfo.add("Month: %.2f%%".format(monthProgress))
+            progressInfo.add("${context.getString(R.string.month)}: %.2f%%".format(monthProgress))
         }
         if (notificationSettings.progressShowNotificationYear) {
-            progressInfo.add("Year: %.2f%%".format(yearProgress))
+            progressInfo.add("${context.getString(R.string.year)}: %.2f%%".format(yearProgress))
         }
+
+        val contentText = progressInfo.joinWithAnd() + " " +  when (appSettings.progressSettings.calculationType) {
+            CalculationType.REMAINING -> (context.getString(R.string.left))
+            CalculationType.ELAPSED -> (context.getString(R.string.completed))
+        } + "."
 
         val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
         val pendingIntent =
@@ -86,8 +91,7 @@ class YearlyProgressNotification @Inject constructor(
         val notification =
             NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(context.getString(R.string.app_name))
-                .setContentText(progressInfo.joinWithAnd())
+                .setContentText(contentText)
                 .setSilent(true)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_LOW)

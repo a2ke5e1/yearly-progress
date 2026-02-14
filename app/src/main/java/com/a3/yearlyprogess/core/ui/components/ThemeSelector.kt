@@ -217,7 +217,7 @@ fun ThemeOption(
         color = if (selected) {
             MaterialTheme.colorScheme.primaryContainer
         } else {
-            MaterialTheme.colorScheme.surfaceVariant
+            MaterialTheme.colorScheme.surfaceContainerLow
         },
     ) {
         Row(
