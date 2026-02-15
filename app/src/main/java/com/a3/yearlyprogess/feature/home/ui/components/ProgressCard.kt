@@ -5,24 +5,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -105,14 +102,11 @@ fun ProgressCard(
         derivedStateOf { progressUtil.calculateEndTime(timePeriod) }
     }
     val duration = (endTime - startTime) / 1000
-    val progress by produceState(
+    val progressState = produceState(
         initialValue = progressUtil.calculateProgress(startTime, endTime),
-        startTime,
-        endTime,
-        progressUtil
+        startTime, endTime, progressUtil
     ) {
         while (true) {
-            // Switch to Default dispatcher for the calculation
             val newProgress = withContext(Dispatchers.Default) {
                 progressUtil.calculateProgress(startTime, endTime)
             }
@@ -127,27 +121,28 @@ fun ProgressCard(
 
     val pressState = rememberPressInteractionState(style.pressConfig)
     val animatedCorners = pressState.animateCorners(default = style.cornerStyle)
+    val animatedShape = style.cornerStyle.toAnimatedShape(animatedCorners)
 
     Box(
         modifier = modifier
             .height(style.cardHeight)
             .fillMaxWidth()
-            .clip(style.cornerStyle.toAnimatedShape(animatedCorners))
+            .graphicsLayer {
+                shape = animatedShape
+                clip = true
+            }
             .background(style.backgroundColor)
             .applyPressGesture(pressState)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth((progress / 100).toFloat().coerceIn(0f, 1f))
-                .background(
-                    style.progressBarColor,
-                    shape = animatedCorners.toShape()
+            .drawWithContent {
+                val currentProgress = progressState.value
+                val progressFraction = (currentProgress / 100).toFloat().coerceIn(0f, 1f)
+                drawRect(
+                    color = style.progressBarColor,
+                    size = size.copy(width = size.width * progressFraction)
                 )
-                .clip(animatedCorners.toShape())
-                .align(Alignment.CenterStart)
-        )
-
+                drawContent()
+            }
+    ) {
         Column(
             modifier = Modifier.padding(style.cardPadding),
             horizontalAlignment = Alignment.Start
@@ -171,7 +166,7 @@ fun ProgressCard(
             Spacer(modifier = Modifier.height(16.dp))
 
             FormattedPercentage(
-                value = progress,
+                progressProvider = { progressState.value },
                 digits = decimals,
                 style = style.progressTextStyle
             )

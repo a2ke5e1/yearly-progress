@@ -255,7 +255,7 @@ fun EventDetailCard(
                         modifier = Modifier.size(80.dp),
                     )
                     FormattedPercentage(
-                        value = uiState.progress,
+                        progressProvider = { uiState.progress },
                         digits = decimals,
                         style = style.progressTextStyle,
                     )

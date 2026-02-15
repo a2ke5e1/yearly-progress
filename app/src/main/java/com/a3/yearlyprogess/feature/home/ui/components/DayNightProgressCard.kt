@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,15 +17,12 @@ import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.R
@@ -64,7 +60,7 @@ fun DayNightProgressCard(
     val (startTime, endTime) = remember(sunriseSunsetList, dayLight) {
         getStartAndEndTime(dayLight, sunriseSunsetList)
     }
-    val progress by produceState(
+    val progressState = produceState(
         initialValue = progressUtil.calculateProgress(startTime, endTime),
         key1 = startTime,
         key2 = endTime
@@ -96,27 +92,29 @@ fun DayNightProgressCard(
 
     val pressState = rememberPressInteractionState(style.pressConfig)
     val animatedCorners = pressState.animateCorners(default = style.cornerStyle)
+    val animatedShape = style.cornerStyle.toAnimatedShape(animatedCorners)
+
 
     Box(
         modifier = modifier
             .height(style.cardHeight)
             .fillMaxWidth()
-            .clip(style.cornerStyle.toAnimatedShape(animatedCorners))
+            .graphicsLayer {
+                shape = animatedShape
+                clip = true
+            }
             .background(style.backgroundColor)
             .applyPressGesture(pressState)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth((progress / 100).toFloat().coerceIn(0f, 1f))
-                .background(
-                    style.progressBarColor,
-                    shape = animatedCorners.toShape() // ← Use animated shape!
+            .drawWithContent {
+                val currentProgress = progressState.value
+                val progressFraction = (currentProgress / 100).toFloat().coerceIn(0f, 1f)
+                drawRect(
+                    color = style.progressBarColor,
+                    size = size.copy(width = size.width * progressFraction)
                 )
-                .clip(animatedCorners.toShape()) // ← Also clip to match
-                .align(Alignment.CenterStart)
-        )
-
+                drawContent()
+            }
+    ) {
         Column(
             modifier = Modifier.padding(style.cardPadding),
             horizontalAlignment = Alignment.Start
@@ -143,7 +141,7 @@ fun DayNightProgressCard(
             Spacer(modifier = Modifier.height(16.dp))
 
             FormattedPercentage(
-                value = progress,
+                progressProvider = { progressState.value },
                 digits = decimals,
                 style = style.progressTextStyle
             )
