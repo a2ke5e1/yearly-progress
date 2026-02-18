@@ -26,7 +26,7 @@ coilCompose = "3.3.0"
 material3 = "1.5.0-alpha13"
 animationCore = "1.10.3"
 roomdatabasebackup = "1.1.0"
-playServicesAds = "24.9.0"
+playServicesAds = "25.0.0"
 userMessagingPlatform = "4.0.0"
 materialKolor = "4.1.1"
 
