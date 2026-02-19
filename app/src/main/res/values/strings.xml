@@ -1,180 +1,180 @@
 <resources>
-    <string name="app_name">Yearly Progress</string>
-    <string name="app_label">App</string>
-    <string name="app_version">Version: %1$s</string>
+    <string name="app_name">Прогресс года</string>
+    <string name="app_label">Приложение</string>
+    <string name="app_version">Версия: %1$s</string>
 
-    <string name="okay">Okay</string>
-    <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
-    <string name="add">Add</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="start">Start</string>
-    <string name="search">Search</string>
-    <string name="share">Share</string>
-    <string name="allow">Allow</string>
-    <string name="not_now">Not Now</string>
-    <string name="open_settings">Open Settings</string>
+    <string name="okay">ОК</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="add">Добавить</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="start">Начать</string>
+    <string name="search">Поиск</string>
+    <string name="share">Поделиться</string>
+    <string name="allow">Разрешить</string>
+    <string name="not_now">Не сейчас</string>
+    <string name="open_settings">Открыть настройки</string>
 
-    <string name="progress">Progress</string>
-    <string name="widgets">Widgets</string>
-    <string name="events">Events</string>
-    <string name="calendars">Calendars</string>
-    <string name="settings">Settings</string>
-    <string name="about">About</string>
-    <string name="customization">Customization</string>
+    <string name="progress">Прогресс</string>
+    <string name="widgets">Виджеты</string>
+    <string name="events">События</string>
+    <string name="calendars">Календари</string>
+    <string name="settings">Настройки</string>
+    <string name="about">О приложении</string>
+    <string name="customization">Персонализация</string>
 
-    <string name="day">Day</string>
-    <string name="week">Week</string>
-    <string name="month">Month</string>
-    <string name="year">Year</string>
-    <string name="time_in">in %1$s</string>
-    <string name="time_left">%1$s left</string>
-    <string name="left">left</string>
-    <string name="completed">completed</string>
-    <string name="progress_card_total_duration">of %1$ss</string>
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
+    <string name="time_in">через %1$s</string>
+    <string name="time_left">%1$s осталось</string>
+    <string name="left">осталось</string>
+    <string name="completed">завершено</string>
+    <string name="progress_card_total_duration">из %1$s</string>
 
-    <string name="add_event">Add Event</string>
-    <string name="import_events">Import Events</string>
-    <string name="select_date_range">Select date range</string>
-    <string name="no_events">No Events</string>
-    <string name="no_events_message">No events yet.\nAdd one to get started!</string>
-    <string name="delete_event">Delete Event</string>
-    <string name="all_day">All Day</string>
-    <string name="all_day_event">All Day Event</string>
-    <string name="ongoing">Now</string>
-    <string name="upcoming">Upcoming</string>
+    <string name="add_event">Добавить событие</string>
+    <string name="import_events">Импорт событий</string>
+    <string name="select_date_range">Выберите диапазон даты</string>
+    <string name="no_events">Событий нет</string>
+    <string name="no_events_message">Событий пока нет.\nДобавьте первое!</string>
+    <string name="delete_event">Удалить событие</string>
+    <string name="all_day">Весь день</string>
+    <string name="all_day_event">Весь день</string>
+    <string name="ongoing">Сейчас</string>
+    <string name="upcoming">Предстоящие</string>
     <plurals name="delete_events_selection_confirmation">
-        <item quantity="one">Are you sure you want to delete %d selected event?</item>
-        <item quantity="other">Are you sure you want to delete %d selected events?</item>
+        <item quantity="one">Вы уверены что хотите удалить %d выбранное событие?</item>
+        <item quantity="other">Вы уверены что хотите удалить %d выбранные события?</item>
     </plurals>
 
-    <string name="location">Location</string>
-    <string name="current_location">Current Location</string>
-    <string name="automatically_detect_location">Automatic Detect Location</string>
-    <string name="auto_detected">Auto Detected</string>
-    <string name="detect_current_location">Detect Current Location</string>
-    <string name="detecting">Detecting...</string>
-    <string name="manual_location">Manual Location</string>
-    <string name="suggest_location_manually_message">Set location manually if automatic detection doesn\'t work</string>
-    <string name="no_location_set">No location set</string>
-    <string name="location_required">Location Required</string>
-    <string name="location_card_message">Day and Night progress requires your location to show sunrise and sunset time.</string>
-    <string name="location_card_tooltip">Add location manually or enable automatic detection in settings</string>
-    <string name="location_settings_permission_disabled_message">Location services are disabled on your device. Please enable them to use automatic location detection.</string>
-    <string name="location_supporting_description">Manage location for day/night light widgets.</string>
-    <string name="enter_location">Enter a location</string>
-    <string name="search_city">Search city</string>
-    <string name="select_city">Select City</string>
-    <string name="enter_city_name">Enter city name...</string>
-    <string name="start_typing_to_search_for_a_city">Start typing to search for a city</string>
-    <string name="no_cities_found">No cities found</string>
+    <string name="location">Местоположение</string>
+    <string name="current_location">Текущее местоположение</string>
+    <string name="automatically_detect_location">Автоопределение местоположения</string>
+    <string name="auto_detected">Определено автоматически</string>
+    <string name="detect_current_location">Определить местоположение</string>
+    <string name="detecting">Определение...</string>
+    <string name="manual_location">Указать вручную</string>
+    <string name="suggest_location_manually_message">Укажите местоположение вручную, если автоматическое определение не работает</string>
+    <string name="no_location_set">Местоположение не задано</string>
+    <string name="location_required">Требуется доступ к локации</string>
+    <string name="location_card_message">Прогресс дня и ночи требует доступа к местоположению для отображения времени восхода и заката.</string>
+    <string name="location_card_tooltip">Добавьте локацию вручную или включите автоопределение в настройках</string>
+    <string name="location_settings_permission_disabled_message">Службы геолокации отключены на вашем устройстве. Пожалуйста, включите их для автоматического определения.</string>
+    <string name="location_supporting_description">Настройка локации для виджетов светового дня/ночи.</string>
+    <string name="enter_location">Введите местоположение</string>
+    <string name="search_city">Поиск города</string>
+    <string name="select_city">Выберите город</string>
+    <string name="enter_city_name">Введите название города...</string>
+    <string name="start_typing_to_search_for_a_city">Начните вводить название города на латинице для его поиска</string>
+    <string name="no_cities_found">Города не найдены</string>
 
-    <string name="coordinates">Coordinates</string>
-    <string name="enter_coordinates">Enter Coordinates</string>
-    <string name="coordinates_validation_message">Latitude must be between -90 and 90, longitude between -180 and 180</string>
-    <string name="latitude">Latitude</string>
-    <string name="lat_example">e.g., 40.7128</string>
-    <string name="longitude">Longitude</string>
-    <string name="lon_example">e.g., -74.0060</string>
+    <string name="coordinates">Координаты</string>
+    <string name="enter_coordinates">Введите координаты</string>
+    <string name="coordinates_validation_message">Широта должна быть от -90 до 90, долгота от -180 до 180</string>
+    <string name="latitude">Широта</string>
+    <string name="lat_example">напр., 40.7128</string>
+    <string name="longitude">Долгота</string>
+    <string name="lon_example">напр., -74.0060</string>
 
-    <string name="event_widget">Event Widget</string>
-    <string name="calendar_widget">Calendar Widget</string>
-    <string name="all_in_one_widget">All In One Widget</string>
+    <string name="event_widget">Виджет события</string>
+    <string name="calendar_widget">Виджет календаря</string>
+    <string name="all_in_one_widget">Виджет все вместе</string>
     
     <!-- Widget Descriptions -->
-    <string name="app_widget_description_day">Tracks your progress through the current day in real-time</string>
-    <string name="app_widget_description_week">Shows how much of the current week has elapsed</string>
-    <string name="app_widget_description_month">Displays the percentage of the current month completed</string>
-    <string name="app_widget_description_year">Visualizes your journey through the current year</string>
-    <string name="app_widget_description_event">Keep track of progress for your custom countdowns and events</string>
-    <string name="app_widget_description_calendar">Displays upcoming and ongoing events from your calendars</string>
-    <string name="app_widget_description_all_in_one">Shows progress of day, week, month and year all in one widget</string>
-    <string name="app_widget_description_day_light">Tracks the remaining daylight hours based on your location</string>
-    <string name="app_widget_description_night_light">Shows progress through the night until sunrise</string>
+    <string name="app_widget_description_day">Отслеживает прогресс текущего дня в реальном времени</string>
+    <string name="app_widget_description_week">Показывает, сколько времени прошло с начала недели</string>
+    <string name="app_widget_description_month">Отображает процент завершения текущего месяца</string>
+    <string name="app_widget_description_year">Визуализирует ваш прогресс в течение текущего года</string>
+    <string name="app_widget_description_event">Отслеживайте прогресс ваших личных событий и обратных отсчетов</string>
+    <string name="app_widget_description_calendar">Отображает предстоящие и текущие события из ваших календарей</string>
+    <string name="app_widget_description_all_in_one">Прогресс дня, недели, месяца и года в одном виджете</string>
+    <string name="app_widget_description_day_light">Отслеживает оставшиеся часы светового дня для вашей локации</string>
+    <string name="app_widget_description_night_light">Показывает прогресс ночи до самого рассвета</string>
 
-    <string name="widget_shape">Widget Shape</string>
-    <string name="day_light">Day Light</string>
-    <string name="night_light">Night Light</string>
+    <string name="widget_shape">Форма виджета</string>
+    <string name="day_light">Световой день</string>
+    <string name="night_light">Ночное время</string>
 
-    <string name="backup_restore">Backup &amp; Restore</string>
-    <string name="backup">Backup</string>
-    <string name="restore">Restore</string>
-    <string name="backup_restore_message">Time to reunite with your data - it missed you more than you know</string>
-    <string name="backing_up">Backing up...</string>
-    <string name="restoring">Restoring...</string>
+    <string name="backup_restore">Сохранить &amp; Восстановить</string>
+    <string name="backup">Сохранить</string>
+    <string name="restore">Восстановить</string>
+    <string name="backup_restore_message">Здесь можно создать и восстановить резервную копию ваших данных</string>
+    <string name="backing_up">Копирование...</string>
+    <string name="restoring">Восстановление...</string>
 
-    <string name="calendar_system_label">Select your calendar system</string>
-    <string name="no_calendars_available">No calendars available</string>
-    <string name="first_day_of_the_week">First day of the week</string>
+    <string name="calendar_system_label">Выберите систему календаря</string>
+    <string name="no_calendars_available">Нет доступных календарей</string>
+    <string name="first_day_of_the_week">Первый день недели</string>
 
-    <string name="calculation_mode_label">Calculation Mode</string>
-    <string name="calculation_mode_elapsed">Elapsed (Default)</string>
-    <string name="calculation_mode_remaining">Remaining</string>
+    <string name="calculation_mode_label">Режим расчета</string>
+    <string name="calculation_mode_elapsed">Прошло (по умолчанию)</string>
+    <string name="calculation_mode_remaining">Осталось</string>
 
-    <string name="decimal_places_label">Decimal Places</string>
-    <string name="decimal_places_description">Number of decimal places to show in progress calculations</string>
-    <string name="settings_decimal_digits">Decimal Digits</string>
-    <string name="settings_background_transparency">Background Transparency</string>
-    <string name="settings_font_scale">Font Scale</string>
-    <string name="settings_theme">Theme</string>
-    <string name="widget_preview">Widget Preview</string>
+    <string name="decimal_places_label">Знаки после запятой</string>
+    <string name="decimal_places_description">Количество знаков после запятой в расчетах прогресса</string>
+    <string name="settings_decimal_digits">Десятичные разряды</string>
+    <string name="settings_background_transparency">Прозрачность фона</string>
+    <string name="settings_font_scale">Масштаб шрифта</string>
+    <string name="settings_theme">Тема</string>
+    <string name="widget_preview">Предпросмотр виджета</string>
 
 
-    <string name="progress_notification">Progress Notification</string>
-    <string name="shows_progress_in_the_notification">Shows progress in the notification</string>
-    <string name="settings_time_status_title">Time Status Display</string>
-    <string name="settings_time_status_description">Show time remaining or upcoming (e.g., \"2h left\" or \"in 1h 5m\")</string>
-    <string name="settings_dynamic_time_title">Compact Time Format</string>
-    <string name="settings_dynamic_time_description">Use simplified format (e.g., \"2h left\" or \"in 1h\" instead of \"2h 1m left\")</string>
-    <string name="settings_replace_progress_title">Show Time Instead of Percentage</string>
-    <string name="settings_replace_progress_description">Replace progress percentage with time status</string>
+    <string name="progress_notification">Уведомление о прогрессе</string>
+    <string name="shows_progress_in_the_notification">Показывать прогресс в уведомлении</string>
+    <string name="settings_time_status_title">Отображение времени</string>
+    <string name="settings_time_status_description">Показывать время (напр., \"осталось 2ч\" или \"через 1ч 5м\")</string>
+    <string name="settings_dynamic_time_title">Компактный формат времени</string>
+    <string name="settings_dynamic_time_description">Использовать упрощенный формат (напр., \"осталось 2ч\" или \"через 1ч\" вместо \"2ч 1м осталось\")</string>
+    <string name="settings_replace_progress_title">Показывать время вместо процентов</string>
+    <string name="settings_replace_progress_description">Заменить проценты прогресса на статус времени</string>
 
-    <string name="calendar_permission_title">Calendar Permission Needed</string>
-    <string name="calendar_permission_description">This app needs permission to read your calendar to read your events for the following features:</string>
+    <string name="calendar_permission_title">Необходим доступ к календарю</string>
+    <string name="calendar_permission_description">Приложению требуется доступ к календарю для работы следующих функций:</string>
     <string-array name="calendar_permission_bullet_points">
-        <item>Import events from your calendar to this app.</item>
-        <item>Allow Calendar widget to show your upcoming and ongoing events</item>
+        <item>Импорт событий из календаря в приложение.</item>
+        <item>Разрешить виджету календаря отображать ваши предстоящие и текущие события</item>
     </string-array>
 
-    <string name="location_permission_title">Location Permission Needed</string>
-    <string name="location_permission_description">This app needs your approximate location to show accurate sunrise and sunset times for your area.</string>
+    <string name="location_permission_title">Необходим доступ к местоположению</string>
+    <string name="location_permission_description">Приложению необходимо знать ваше примерное местоположение для точного расчета времени рассвета и заката.</string>
     <string-array name="location_permission_bullet_points">
-        <item>Only city-level accuracy is used</item>
-        <item>Your location data stays on your device</item>
-        <item>You can manually enter coordinates in settings later</item>
+        <item>Используется точность только на уровне города</item>
+        <item>Данные о вашем местоположении остаются на вашем устройстве</item>
+        <item>Вы всегда можете ввести координаты вручную в настройках</item>
     </string-array>
 
-    <string name="share_message">Check out %1$s on Google Play: https://play.google.com/store/apps/details?id=%2$s\nAdd beautiful, customizable widgets to track daily, monthly, and yearly progress.</string>
-    <string name="terms_and_privacy_message">By clicking on start you agree to our &lt;a href=\"%1$s\"&gt;terms of service&lt;/a&gt; and &lt;a href=\"%2$s\"&gt;privacy policy&lt;/a&gt;.</string>
-    <string name="options">Options</string>
+    <string name="share_message">Посмотрите %1$s в Google Play: https://play.google.com/store/apps/details?id=%2$s\nДобавляйте красивые виджеты для отслеживания ежедневного, ежемесячного и ежегодного прогресса.</string>
+    <string name="terms_and_privacy_message">Нажимая «Начать», вы соглашаетесь с нашими &lt;a href=\"%1$s\"&gt;условиями использования&lt;/a&gt; и &lt;a href=\"%2$s\"&gt;политикой конфиденциальности&lt;/a&gt;.</string>
+    <string name="options">Опции</string>
 
     <string-array name="app_calendar_type_entries">
-        <item>Default (Based on Region)</item>
-        <item>Gregorian</item>
-        <item>Buddhist</item>
-        <item>Chinese</item>
-        <item>Coptic</item>
-        <item>Dangi</item>
-        <item>Ethiopic</item>
-        <item>Ethiopic Amete Alem</item>
-        <item>Hebrew</item>
-        <item>Indian</item>
-        <item>Islamic</item>
-        <item>Islamic Civil</item>
-        <item>Islamic TBLA</item>
-        <item>Islamic Umm al-Qura</item>
-        <item>Islamic RGSA</item>
+        <item>По умолчанию (основанный на регионе)</item>
+        <item>Григорианский</item>
+        <item>Буддийский</item>
+        <item>Китайский</item>
+        <item>Коптский</item>
+        <item>Данги</item>
+        <item>Эфиопский</item>
+        <item>Эфиопский Амете Алем</item>
+        <item>Еврейский</item>
+        <item>Индийский</item>
+        <item>Исламский</item>
+        <item>Исламский гражданский</item>
+        <item>Исламский (табличный)</item>
+        <item>Исламский (Умм аль-Кура)</item>
+        <item>Исламский (RGSA)</item>
         <item>ISO 8601</item>
-        <item>Japanese</item>
-        <item>Persian</item>
-        <item>Republic of China (ROC)</item>
+        <item>Японский</item>
+        <item>Персидский</item>
+        <item>Китайская Республика (Тайвань)</item>
     </string-array>
 
-    <string name="settings_migration_title">Settings Migration</string>
-    <string name="settings_migration_message">We found settings from a previous version of the app. Would you like to transfer them to the new version? This will ensure your preferences for notifications, location, and progress display are preserved.</string>
-    <string name="transfer_settings">Transfer Settings</string>
-    <string name="migration_completed">Migration Completed</string>
-    <string name="migration_completed_message">Your settings have been successfully transferred.</string>
+    <string name="settings_migration_title">Перенос настроек</string>
+    <string name="settings_migration_message">Мы нашли настройки от предыдущей версии приложения. Хотите перенести их? Это сохранит ваши предпочтения для уведомлений, локации и отображения прогресса.</string>
+    <string name="transfer_settings">Перенести настройки</string>
+    <string name="migration_completed">Перенос завершен</string>
+    <string name="migration_completed_message">Ваши настройки были успешно перенесены.</string>
 
 </resources>
