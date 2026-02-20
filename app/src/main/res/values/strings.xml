@@ -48,6 +48,18 @@
         <item quantity="one">Are you sure you want to delete %d selected event?</item>
         <item quantity="other">Are you sure you want to delete %d selected events?</item>
     </plurals>
+    <string name="edit_event">Edit Event</string>
+    <string name="create_event">Create Event</string>
+    <string name="schedule">Schedule</string>
+    <string name="end">End</string>
+    <string name="repeat">Repeat</string>
+    <string name="every_year">Every Year</string>
+    <string name="every_month">Every Month</string>
+    <string name="on_weekdays">On Weekdays</string>
+    <string name="event_title">Event Title</string>
+    <string name="enter_event_title">Enter event title</string>
+    <string name="description">Description</string>
+    <string name="enter_event_description_optional">Enter event description (optional)</string>
 
     <string name="location">Location</string>
     <string name="current_location">Current Location</string>

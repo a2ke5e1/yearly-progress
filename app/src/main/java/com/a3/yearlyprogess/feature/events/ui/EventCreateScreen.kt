@@ -59,6 +59,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -71,6 +72,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -86,11 +88,11 @@ import coil3.request.crossfade
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.components.ExpandableSection
 import com.a3.yearlyprogess.core.ui.components.Switch
+import com.a3.yearlyprogess.core.util.resizeImageForAppStorage
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 import com.a3.yearlyprogess.feature.events.domain.model.RepeatDays
 import com.a3.yearlyprogess.feature.events.domain.model.Weekday
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
-import com.a3.yearlyprogess.core.util.resizeImageForAppStorage
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -106,6 +108,8 @@ fun EventCreateScreen(
     onNavigateUp: () -> Unit,
 ) {
     val context = LocalContext.current
+    val eventScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
 
     var eventTitle by remember { mutableStateOf("") }
     var eventDescription by remember { mutableStateOf("") }
@@ -179,12 +183,18 @@ fun EventCreateScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (isEditMode) "Edit Event" else "Create Event") },
+                title = {
+                    Text(
+                        if (isEditMode) stringResource(R.string.edit_event)
+                        else stringResource(R.string.create_event)
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onNavigateUp) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
+                scrollBehavior = eventScrollBehavior
             )
         },
         floatingActionButton = {
@@ -220,7 +230,7 @@ fun EventCreateScreen(
                     onNavigateUp()
                 }
             ) {
-                Icon(Icons.Filled.Save, contentDescription = "Save")
+                Icon(Icons.Filled.Save, contentDescription = stringResource(R.string.save))
             }
         },
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -229,7 +239,9 @@ fun EventCreateScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .verticalScroll(rememberScrollState()),
+                .nestedScroll(eventScrollBehavior.nestedScrollConnection)
+                .verticalScroll(rememberScrollState())
+            ,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 
@@ -319,7 +331,7 @@ fun EventCreateScreen(
 
             // All Day Switch
 
-            ExpandableSection(title = "Schedule", collapsible = false) {
+            ExpandableSection(title = stringResource(R.string.schedule), collapsible = false) {
 
                 // Start Date/Time - Material Design Style
                 Column(
@@ -329,7 +341,7 @@ fun EventCreateScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Start",
+                        text = stringResource(R.string.start),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -371,7 +383,7 @@ fun EventCreateScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "End",
+                        text = stringResource(R.string.end),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -407,10 +419,10 @@ fun EventCreateScreen(
                 }
             }
 
-            ExpandableSection(title = "Repeat") {
+            ExpandableSection(title = stringResource(R.string.repeat)) {
 
                 Switch(
-                    title = "Every Year", checked = repeatEveryYear, onCheckedChange = {
+                    title = stringResource(R.string.every_year), checked = repeatEveryYear, onCheckedChange = {
                         repeatEveryYear = it
                         if (it) {
                             repeatEveryMonth = false
@@ -419,7 +431,7 @@ fun EventCreateScreen(
                     })
 
                 Switch(
-                    title = "Every Month", checked = repeatEveryMonth, onCheckedChange = {
+                    title = stringResource(R.string.every_month), checked = repeatEveryMonth, onCheckedChange = {
                         repeatEveryMonth = it
                         if (it) {
                             repeatEveryYear = false
@@ -428,7 +440,7 @@ fun EventCreateScreen(
                     })
 
                 Switch(
-                    title = "On Weekdays", checked = repeatWeekdays, onCheckedChange = {
+                    title = stringResource(R.string.on_weekdays), checked = repeatWeekdays, onCheckedChange = {
                         repeatWeekdays = it
                         if (it) {
                             repeatEveryYear = false
@@ -740,8 +752,8 @@ private fun EventDetailsSection(
         EventTextField(
             value = eventTitle,
             onValueChange = { onTitleChange(it) },
-            label = "Event Title",
-            placeholder = "Enter event title",
+            label = stringResource(R.string.event_title),
+            placeholder = stringResource(R.string.enter_event_title),
             isError = showError,
             errorText = if (showError) "Event title is required" else null,
             singleLine = true
@@ -752,8 +764,8 @@ private fun EventDetailsSection(
         EventTextField(
             value = eventDescription,
             onValueChange = onDescriptionChange,
-            label = "Description",
-            placeholder = "Enter event description (optional)",
+            label = stringResource(R.string.description),
+            placeholder = stringResource(R.string.enter_event_description_optional),
             maxLines = 5,
             maxHeight = 120.dp
         )
