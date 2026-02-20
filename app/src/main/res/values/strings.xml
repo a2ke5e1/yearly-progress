@@ -81,7 +81,7 @@
     <string name="event_widget">Event Widget</string>
     <string name="calendar_widget">Calendar Widget</string>
     <string name="all_in_one_widget">All In One Widget</string>
-    
+
     <!-- Widget Descriptions -->
     <string name="app_widget_description_day">Tracks your progress through the current day in real-time</string>
     <string name="app_widget_description_week">Shows how much of the current week has elapsed</string>
