@@ -72,7 +72,7 @@ fun MainScaffold(
 
     val topBarTitle = appNavItems.firstOrNull { item ->
         currentDestination?.hierarchy?.any { it.hasRoute(item.route::class) } == true
-    }?.label ?: currentDestination?.label?.toString() ?: "Yearly Progress"
+    }?.let { stringResource(it.labelRes) } ?: currentDestination?.label?.toString() ?: stringResource(R.string.app_name)
     val showFab = currentDestination?.hasRoute(Destination.Events::class) == true
 
 

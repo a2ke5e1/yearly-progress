@@ -148,7 +148,12 @@ fun ProgressCard(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = timePeriod.name.lowercase().replaceFirstChar { it.uppercase() },
+                text =   when (timePeriod) {
+                    TimePeriod.DAY -> stringResource(R.string.day)
+                    TimePeriod.WEEK -> stringResource(R.string.week)
+                    TimePeriod.MONTH -> stringResource(R.string.month)
+                    TimePeriod.YEAR -> stringResource(R.string.year)
+                },
                 style = style.labelTextStyle
             )
 

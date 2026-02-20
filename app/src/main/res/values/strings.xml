@@ -176,5 +176,11 @@
     <string name="transfer_settings">Transfer Settings</string>
     <string name="migration_completed">Migration Completed</string>
     <string name="migration_completed_message">Your settings have been successfully transferred.</string>
+    <string name="join_telegram_group">Join telegram group</string>
+    <string name="for_support_and_feedback">For support and feedback join our telegram group</string>
+    <string name="view_source_code">View Source Code</string>
+    <string name="open_source">Open Source</string>
+    <string name="open_source_desc">This app is open source under GPL-3.0 license. Supported by ads and community contributions.</string>
+    <string name="translation_credits">Translation Credits</string>
 
 </resources>

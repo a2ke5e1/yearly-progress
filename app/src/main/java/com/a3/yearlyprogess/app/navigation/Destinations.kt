@@ -1,5 +1,7 @@
 package com.a3.yearlyprogess.app.navigation
 
+import androidx.annotation.StringRes
+import com.a3.yearlyprogess.R
 import kotlinx.serialization.Serializable
 
 
@@ -51,26 +53,24 @@ sealed class Destination {
 
 data class NavItem(
     val route: Destination,
-    val label: String,
+    @StringRes val labelRes: Int,
 )
 
 val appNavItems = listOf(
     NavItem(
         Destination.Home,
-        "Progress",
-
-        ),
+        R.string.progress,
+    ),
     NavItem(
         Destination.Widgets,
-        "Widgets",
+        R.string.widgets,
     ),
     NavItem(
         Destination.Events,
-        "Events",
-
-        ),
+        R.string.events,
+    ),
     NavItem(
         Destination.SettingsGraph,
-        "Settings"
+        R.string.settings
     )
 )

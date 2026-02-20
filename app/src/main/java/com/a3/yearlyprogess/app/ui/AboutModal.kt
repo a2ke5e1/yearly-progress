@@ -1,7 +1,6 @@
 package com.a3.yearlyprogess.app.ui
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,11 +48,17 @@ import androidx.core.net.toUri
 data class Credits(
     val name: String,
     val username: String? = null,
-    val language: String
+    val language: String,
+    val github: String? = null
 ) {
     fun getTelegramLink(): String? {
         return username?.let { "https://t.me/$it" }
     }
+
+    fun getGithubLink(): String? {
+        return github?.let { "https://github.com/$it" }
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +91,8 @@ private fun AboutModalContent() {
     val credits = listOf(
 //        Credits("ASG13043", "ASG13043", "हिंदी"),
 //        Credits("mojienjoyment", "mojienjoyment", "فارسی"),
-        Credits("Matteo", "Sgattocuki", "Italian")
+        Credits("Matteo", "Sgattocuki", "Italian"),
+        Credits(name = "Максим", language =  "Rusian", github = "gerasimov-mv")
     )
 
     Surface(
@@ -122,7 +128,7 @@ private fun AboutModalContent() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Translation Credits",
+                    text = stringResource(R.string.translation_credits),
                     style = MaterialTheme.typography.labelSmall.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -141,13 +147,13 @@ private fun AboutModalContent() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Open Source",
+                    text = stringResource(R.string.open_source),
                     style = MaterialTheme.typography.labelSmall.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
                 Text(
-                    text = "This app is open source under GPL-3.0 license. Supported by ads and community contributions.",
+                    text = stringResource(R.string.open_source_desc),
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -169,7 +175,7 @@ private fun AboutModalContent() {
                     )
                 ) {
                     Text(
-                        text = "View Source Code",
+                        text = stringResource(R.string.view_source_code),
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
@@ -177,7 +183,7 @@ private fun AboutModalContent() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "For support and feedback join our telegram group",
+                    text = stringResource(R.string.for_support_and_feedback),
                     style = MaterialTheme.typography.labelSmall
                 )
 
@@ -202,7 +208,7 @@ private fun AboutModalContent() {
                     ) {
                         Icon(
                             painterResource(R.drawable.ic_telegram_app),
-                            contentDescription = "Join telegram group",
+                            contentDescription = stringResource(R.string.join_telegram_group),
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -222,7 +228,7 @@ private fun AboutModalContent() {
                     ) {
                         Icon(
                             Icons.Outlined.Share,
-                            contentDescription = "Share"
+                            contentDescription = stringResource(R.string.share),
                         )
                     }
                 }
@@ -235,7 +241,10 @@ private fun AboutModalContent() {
 @Composable
 private fun CreditsItem(credit: Credits) {
     val context = LocalContext.current
-    val link = credit.getTelegramLink()
+    val link =  if (credit.username != null)  { credit.getTelegramLink() }
+                else if (credit.github != null) { credit.getGithubLink() }
+                else null
+
 
     Text(
         text = "${credit.name} - ${credit.language}",
