@@ -1,0 +1,180 @@
+<resources>
+    <string name="app_name">Прогресс года</string>
+    <string name="app_label">Приложение</string>
+    <string name="app_version">Версия: %1$s</string>
+
+    <string name="okay">ОК</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="add">Добавить</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="start">Начать</string>
+    <string name="search">Поиск</string>
+    <string name="share">Поделиться</string>
+    <string name="allow">Разрешить</string>
+    <string name="not_now">Не сейчас</string>
+    <string name="open_settings">Открыть настройки</string>
+
+    <string name="progress">Прогресс</string>
+    <string name="widgets">Виджеты</string>
+    <string name="events">События</string>
+    <string name="calendars">Календари</string>
+    <string name="settings">Настройки</string>
+    <string name="about">О приложении</string>
+    <string name="customization">Персонализация</string>
+
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
+    <string name="time_in">через %1$s</string>
+    <string name="time_left">%1$s осталось</string>
+    <string name="left">осталось</string>
+    <string name="completed">завершено</string>
+    <string name="progress_card_total_duration">из %1$s</string>
+
+    <string name="add_event">Добавить событие</string>
+    <string name="import_events">Импорт событий</string>
+    <string name="select_date_range">Выберите диапазон даты</string>
+    <string name="no_events">Событий нет</string>
+    <string name="no_events_message">Событий пока нет.\nДобавьте первое!</string>
+    <string name="delete_event">Удалить событие</string>
+    <string name="all_day">Весь день</string>
+    <string name="all_day_event">Весь день</string>
+    <string name="ongoing">Сейчас</string>
+    <string name="upcoming">Предстоящие</string>
+    <plurals name="delete_events_selection_confirmation">
+        <item quantity="one">Вы уверены что хотите удалить %d выбранное событие?</item>
+        <item quantity="other">Вы уверены что хотите удалить %d выбранные события?</item>
+    </plurals>
+
+    <string name="location">Местоположение</string>
+    <string name="current_location">Текущее местоположение</string>
+    <string name="automatically_detect_location">Автоопределение местоположения</string>
+    <string name="auto_detected">Определено автоматически</string>
+    <string name="detect_current_location">Определить местоположение</string>
+    <string name="detecting">Определение...</string>
+    <string name="manual_location">Указать вручную</string>
+    <string name="suggest_location_manually_message">Укажите местоположение вручную, если автоматическое определение не работает</string>
+    <string name="no_location_set">Местоположение не задано</string>
+    <string name="location_required">Требуется доступ к локации</string>
+    <string name="location_card_message">Прогресс дня и ночи требует доступа к местоположению для отображения времени восхода и заката.</string>
+    <string name="location_card_tooltip">Добавьте локацию вручную или включите автоопределение в настройках</string>
+    <string name="location_settings_permission_disabled_message">Службы геолокации отключены на вашем устройстве. Пожалуйста, включите их для автоматического определения.</string>
+    <string name="location_supporting_description">Настройка локации для виджетов светового дня/ночи.</string>
+    <string name="enter_location">Введите местоположение</string>
+    <string name="search_city">Поиск города</string>
+    <string name="select_city">Выберите город</string>
+    <string name="enter_city_name">Введите название города...</string>
+    <string name="start_typing_to_search_for_a_city">Начните вводить название города на латинице для его поиска</string>
+    <string name="no_cities_found">Города не найдены</string>
+
+    <string name="coordinates">Координаты</string>
+    <string name="enter_coordinates">Введите координаты</string>
+    <string name="coordinates_validation_message">Широта должна быть от -90 до 90, долгота от -180 до 180</string>
+    <string name="latitude">Широта</string>
+    <string name="lat_example">напр., 40.7128</string>
+    <string name="longitude">Долгота</string>
+    <string name="lon_example">напр., -74.0060</string>
+
+    <string name="event_widget">Виджет события</string>
+    <string name="calendar_widget">Виджет календаря</string>
+    <string name="all_in_one_widget">Виджет все вместе</string>
+
+    <!-- Widget Descriptions -->
+    <string name="app_widget_description_day">Отслеживает прогресс текущего дня в реальном времени</string>
+    <string name="app_widget_description_week">Показывает, сколько времени прошло с начала недели</string>
+    <string name="app_widget_description_month">Отображает процент завершения текущего месяца</string>
+    <string name="app_widget_description_year">Визуализирует ваш прогресс в течение текущего года</string>
+    <string name="app_widget_description_event">Отслеживайте прогресс ваших личных событий и обратных отсчетов</string>
+    <string name="app_widget_description_calendar">Отображает предстоящие и текущие события из ваших календарей</string>
+    <string name="app_widget_description_all_in_one">Прогресс дня, недели, месяца и года в одном виджете</string>
+    <string name="app_widget_description_day_light">Отслеживает оставшиеся часы светового дня для вашей локации</string>
+    <string name="app_widget_description_night_light">Показывает прогресс ночи до самого рассвета</string>
+
+    <string name="widget_shape">Форма виджета</string>
+    <string name="day_light">Световой день</string>
+    <string name="night_light">Ночное время</string>
+
+    <string name="backup_restore">Сохранить &amp; Восстановить</string>
+    <string name="backup">Сохранить</string>
+    <string name="restore">Восстановить</string>
+    <string name="backup_restore_message">Здесь можно создать и восстановить резервную копию ваших данных</string>
+    <string name="backing_up">Копирование...</string>
+    <string name="restoring">Восстановление...</string>
+
+    <string name="calendar_system_label">Выберите систему календаря</string>
+    <string name="no_calendars_available">Нет доступных календарей</string>
+    <string name="first_day_of_the_week">Первый день недели</string>
+
+    <string name="calculation_mode_label">Режим расчета</string>
+    <string name="calculation_mode_elapsed">Прошло (по умолчанию)</string>
+    <string name="calculation_mode_remaining">Осталось</string>
+
+    <string name="decimal_places_label">Знаки после запятой</string>
+    <string name="decimal_places_description">Количество знаков после запятой в расчетах прогресса</string>
+    <string name="settings_decimal_digits">Десятичные разряды</string>
+    <string name="settings_background_transparency">Прозрачность фона</string>
+    <string name="settings_font_scale">Масштаб шрифта</string>
+    <string name="settings_theme">Тема</string>
+    <string name="widget_preview">Предпросмотр виджета</string>
+
+
+    <string name="progress_notification">Уведомление о прогрессе</string>
+    <string name="shows_progress_in_the_notification">Показывать прогресс в уведомлении</string>
+    <string name="settings_time_status_title">Отображение времени</string>
+    <string name="settings_time_status_description">Показывать время (напр., \"осталось 2ч\" или \"через 1ч 5м\")</string>
+    <string name="settings_dynamic_time_title">Компактный формат времени</string>
+    <string name="settings_dynamic_time_description">Использовать упрощенный формат (напр., \"осталось 2ч\" или \"через 1ч\" вместо \"2ч 1м осталось\")</string>
+    <string name="settings_replace_progress_title">Показывать время вместо процентов</string>
+    <string name="settings_replace_progress_description">Заменить проценты прогресса на статус времени</string>
+
+    <string name="calendar_permission_title">Необходим доступ к календарю</string>
+    <string name="calendar_permission_description">Приложению требуется доступ к календарю для работы следующих функций:</string>
+    <string-array name="calendar_permission_bullet_points">
+        <item>Импорт событий из календаря в приложение.</item>
+        <item>Разрешить виджету календаря отображать ваши предстоящие и текущие события</item>
+    </string-array>
+
+    <string name="location_permission_title">Необходим доступ к местоположению</string>
+    <string name="location_permission_description">Приложению необходимо знать ваше примерное местоположение для точного расчета времени рассвета и заката.</string>
+    <string-array name="location_permission_bullet_points">
+        <item>Используется точность только на уровне города</item>
+        <item>Данные о вашем местоположении остаются на вашем устройстве</item>
+        <item>Вы всегда можете ввести координаты вручную в настройках</item>
+    </string-array>
+
+    <string name="share_message">Посмотрите %1$s в Google Play: https://play.google.com/store/apps/details?id=%2$s\nДобавляйте красивые виджеты для отслеживания ежедневного, ежемесячного и ежегодного прогресса.</string>
+    <string name="terms_and_privacy_message">Нажимая «Начать», вы соглашаетесь с нашими &lt;a href=\"%1$s\"&gt;условиями использования&lt;/a&gt; и &lt;a href=\"%2$s\"&gt;политикой конфиденциальности&lt;/a&gt;.</string>
+    <string name="options">Опции</string>
+
+    <string-array name="app_calendar_type_entries">
+        <item>По умолчанию (основанный на регионе)</item>
+        <item>Григорианский</item>
+        <item>Буддийский</item>
+        <item>Китайский</item>
+        <item>Коптский</item>
+        <item>Данги</item>
+        <item>Эфиопский</item>
+        <item>Эфиопский Амете Алем</item>
+        <item>Еврейский</item>
+        <item>Индийский</item>
+        <item>Исламский</item>
+        <item>Исламский гражданский</item>
+        <item>Исламский (табличный)</item>
+        <item>Исламский (Умм аль-Кура)</item>
+        <item>Исламский (RGSA)</item>
+        <item>ISO 8601</item>
+        <item>Японский</item>
+        <item>Персидский</item>
+        <item>Китайская Республика (Тайвань)</item>
+    </string-array>
+
+    <string name="settings_migration_title">Перенос настроек</string>
+    <string name="settings_migration_message">Мы нашли настройки от предыдущей версии приложения. Хотите перенести их? Это сохранит ваши предпочтения для уведомлений, локации и отображения прогресса.</string>
+    <string name="transfer_settings">Перенести настройки</string>
+    <string name="migration_completed">Перенос завершен</string>
+    <string name="migration_completed_message">Ваши настройки были успешно перенесены.</string>
+
+</resources>
