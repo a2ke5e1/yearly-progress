@@ -502,7 +502,7 @@ open class StandaloneWidget(
             context: Context,
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
-            isWidthClickable: Boolean = true
+            isWidgetClickable: Boolean = true
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
@@ -519,7 +519,7 @@ open class StandaloneWidget(
                 timePeriod.name,
                 daysLeft,
                 currentValue,
-                isWidthClickable
+                isWidgetClickable
             )
         }
 
@@ -528,7 +528,7 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
-            isWidthClickable: Boolean = true
+            isWidgetClickable: Boolean = true
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
@@ -569,7 +569,7 @@ open class StandaloneWidget(
                 widgetName,
                 daysLeft,
                 SpannableString(currentValue),
-                isWidthClickable
+                isWidgetClickable
             )
         }
 
@@ -580,11 +580,11 @@ open class StandaloneWidget(
             widgetName: String,
             daysLeft: String,
             currentValue: SpannableString,
-            isWidthClickable: Boolean
+            isWidgetClickable: Boolean
         ): RemoteViews {
             val views = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
 
-            if (isWidthClickable) {
+            if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(views, context)
             }
 
@@ -616,7 +616,7 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             options: Bundle? = null,
-            isWidthClickable: Boolean = true
+            isWidgetClickable: Boolean = true
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
@@ -638,7 +638,7 @@ open class StandaloneWidget(
                 daysLeft,
                 currentValue,
                 options,
-                isWidthClickable
+                isWidgetClickable
             )
         }
 
@@ -648,7 +648,7 @@ open class StandaloneWidget(
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
             options: Bundle? = null,
-            isWidthClickable: Boolean = true
+            isWidgetClickable: Boolean = true
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
@@ -688,7 +688,7 @@ open class StandaloneWidget(
                 daysLeft,
                 SpannableString(currentValue),
                 options,
-                isWidthClickable
+                isWidgetClickable
             )
         }
 
@@ -701,14 +701,14 @@ open class StandaloneWidget(
             daysLeft: String,
             currentValue: SpannableString,
             options: Bundle? = null,
-            isWidthClickable: Boolean
+            isWidgetClickable: Boolean
         ): RemoteViews {
             val large = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout_large)
             val square = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout)
             val small = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout_small)
             val xSmall = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout_extra_small)
 
-            if (isWidthClickable) {
+            if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(large, context)
                 WidgetRenderer.onParentTap(square, context)
                 WidgetRenderer.onParentTap(small, context)
@@ -776,7 +776,7 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             options: Bundle? = null,
-            isWidthClickable: Boolean = true
+            isWidgetClickable: Boolean = true
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
@@ -797,7 +797,7 @@ open class StandaloneWidget(
                 daysLeft,
                 currentValue,
                 options,
-                isWidthClickable
+                isWidgetClickable
             )
         }
 
@@ -816,7 +816,7 @@ open class StandaloneWidget(
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
             options: Bundle? = null,
-            isWidthClickable: Boolean = true
+            isWidgetClickable: Boolean = true
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
@@ -856,7 +856,7 @@ open class StandaloneWidget(
                 daysLeft,
                 SpannableString(currentValue),
                 options,
-                isWidthClickable
+                isWidgetClickable
             )
         }
 
@@ -869,14 +869,14 @@ open class StandaloneWidget(
             daysLeft: String,
             currentValue: SpannableString,
             options: Bundle? = null,
-            isWidthClickable: Boolean
+            isWidgetClickable: Boolean
         ): RemoteViews {
             val large =
                 RemoteViews(context.packageName, R.layout.standalone_widget_pill_layout_medium)
             val small =
                 RemoteViews(context.packageName, R.layout.standalone_widget_pill_layout_small)
 
-            if (isWidthClickable) {
+            if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(large, context)
                 WidgetRenderer.onParentTap(small, context)
             }

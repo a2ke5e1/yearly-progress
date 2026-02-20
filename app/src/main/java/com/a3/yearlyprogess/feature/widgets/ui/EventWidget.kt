@@ -306,6 +306,7 @@ class EventWidget : BaseWidget() {
 
             views.setOnClickPendingIntent(R.id.next_btn, nextPendingIntent)
             views.setOnClickPendingIntent(R.id.prev_btn, prevPendingIntent)
+            WidgetRenderer.onParentTap(views, context, R.id.home_btn)
         }
 
         private fun calculateEventData(

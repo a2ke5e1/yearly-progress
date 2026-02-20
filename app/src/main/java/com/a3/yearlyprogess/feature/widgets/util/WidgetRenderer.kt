@@ -367,12 +367,12 @@ object WidgetRenderer {
         return view
     }
 
-     fun onParentTap(view: RemoteViews, context: Context) {
+     fun onParentTap(view: RemoteViews, context: Context, @IdRes viewId: Int? = null) {
         val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
             ?: Intent(context, MainActivity::class.java)
 
         view.setOnClickPendingIntent(
-            R.id.background,
+            viewId ?: R.id.background,
             PendingIntent.getActivity(
                 context,
                 0,
