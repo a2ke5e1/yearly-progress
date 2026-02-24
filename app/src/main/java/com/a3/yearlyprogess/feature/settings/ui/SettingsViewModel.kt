@@ -94,6 +94,12 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setEventProgressDecimalDigits(decimalDigits: Int) {
+        viewModelScope.launch {
+            appSettingsRepository.setEventDecimalDigits(decimalDigits)
+        }
+    }
+
     // ============================================================
     // Notification Settings
     // ============================================================

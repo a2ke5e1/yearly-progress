@@ -55,7 +55,7 @@ fun EventListScreen(
                 }
             },
             onItemLongPress = { viewModel.toggleSelection(it.id) },
-            settings = settings.progressSettings
+            settings = settings
         )
     }
 

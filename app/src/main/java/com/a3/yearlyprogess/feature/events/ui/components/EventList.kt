@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.core.util.ProgressSettings
 import com.a3.yearlyprogess.feature.events.domain.model.Event
@@ -36,7 +37,7 @@ fun EventList(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onItemClick: (Event) -> Unit,
     onItemLongPress: (Event) -> Unit,
-    settings: ProgressSettings
+    settings: AppSettings
 ) {
     if (events.isEmpty()) {
         Box(

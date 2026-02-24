@@ -52,6 +52,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.ui.interaction.PressAnimationConfig
 import com.a3.yearlyprogess.core.ui.interaction.applyPressGesture
 import com.a3.yearlyprogess.core.ui.interaction.rememberPressInteractionState
@@ -96,7 +97,7 @@ object EventDetailCardDefaults {
         titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(
             color = MaterialTheme.colorScheme.onSurface
         ),
-        progressTextStyle: TextStyle = MaterialTheme.typography.bodyLarge.copy(
+        progressTextStyle: TextStyle = MaterialTheme.typography.bodySmall.copy(
             color = MaterialTheme.colorScheme.onPrimaryContainer,
         ),
         durationTextStyle: TextStyle = MaterialTheme.typography.bodySmall.copy(
@@ -132,12 +133,12 @@ fun EventDetailCard(
     isSelected: Boolean = false,
     showPinOption: Boolean = true,
     onLongPress: (() -> Unit)? = null,
-    settings: ProgressSettings = ProgressSettings(),
     refreshInterval: Long = 16L,
     style: EventDetailCardStyle = EventDetailCardDefaults.eventDetailCardStyle(),
+    settings: AppSettings
 ) {
-    val decimals = settings.decimalDigits.coerceIn(0, 2)
-    val progressUtil = remember { YearlyProgressUtil(settings) }
+    val decimals = settings.eventProgressDecimalDigits.coerceIn(0, 6)
+    val progressUtil = remember { YearlyProgressUtil(settings.progressSettings) }
     val context = LocalContext.current
 
     val uiState by produceState(

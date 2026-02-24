@@ -188,6 +188,8 @@ class ImportEventsViewModel @Inject constructor(
                         selectedCalendarIds = settings.selectedCalendarIds,
                         dateRange = filter
                     )
+                } else if (permission == CalendarPermissionState.Available && availableCalendars.isEmpty()) {
+                    _uiState.value = CalendarUiState.Error("No calendars found")
                 }
             }
         }

@@ -25,7 +25,7 @@ fun FormattedPercentage(
     val currentProgress = progressProvider()
     val locale = Locale.getDefault()
     val formatter = remember(digits, locale) {
-        val pattern = "0." + "0".repeat(digits.coerceAtLeast(0))
+        val pattern = if (digits > 0)  "0." + "0".repeat(digits.coerceAtLeast(0)) else "0"
         DecimalFormat(pattern, DecimalFormatSymbols(locale))
     }
 

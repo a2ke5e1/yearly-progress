@@ -20,6 +20,9 @@ interface AppSettingsRepository {
     suspend fun setAutomaticallyDetectLocation(enabled: Boolean)
     suspend fun setAppTheme(theme: WidgetTheme)
 
+    suspend fun setEventDecimalDigits(decimalDigits: Int)
+
+
     // Notification settings
     suspend fun setProgressShowNotification(enabled: Boolean)
     suspend fun setProgressShowNotificationYear(enabled: Boolean)

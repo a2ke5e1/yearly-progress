@@ -63,7 +63,8 @@ class AppSettingsRepositoryImpl @Inject constructor(
             appTheme = WidgetTheme.valueOf(
                 preferences[PreferencesKeys.APP_THEME]
                     ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC.name else WidgetTheme.DEFAULT.name,
-            )
+            ),
+            eventProgressDecimalDigits =  preferences[PreferencesKeys.EVENT_PROGRESS_DECIMAL_DIGITS] ?: 2
         )
     }
 
@@ -115,6 +116,12 @@ class AppSettingsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun setEventDecimalDigits(decimalDigits: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.EVENT_PROGRESS_DECIMAL_DIGITS] = decimalDigits
+        }
+    }
+
     override suspend fun setProgressShowNotification(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION] = enabled
@@ -154,6 +161,7 @@ class AppSettingsRepositoryImpl @Inject constructor(
             preferences[PreferencesKeys.DECIMAL_DIGITS] = appSettings.progressSettings.decimalDigits
             preferences[PreferencesKeys.SELECTED_CALENDAR_IDS] = appSettings.selectedCalendarIds.map { it.toString() }.toSet()
             preferences[PreferencesKeys.APP_THEME] = appSettings.appTheme.name
+            preferences[PreferencesKeys.EVENT_PROGRESS_DECIMAL_DIGITS] = appSettings.eventProgressDecimalDigits
 
             // Notification settings
             preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION] = appSettings.notificationSettings.progressShowNotification
@@ -170,6 +178,7 @@ class AppSettingsRepositoryImpl @Inject constructor(
         val CALCULATION_TYPE = stringPreferencesKey("calculation_type")
         val WEEK_START_DAY = intPreferencesKey("week_start_day")
         val DECIMAL_DIGITS = intPreferencesKey("decimal_digits")
+        val EVENT_PROGRESS_DECIMAL_DIGITS = intPreferencesKey("event_progress_decimal_digits")
         val SELECTED_CALENDAR_IDS = stringSetPreferencesKey("selected_calendar_ids")
         val AUTOMATICALLY_DETECT_LOCATION = booleanPreferencesKey("automatically_detect_location")
         val APP_THEME = stringPreferencesKey("app_theme")

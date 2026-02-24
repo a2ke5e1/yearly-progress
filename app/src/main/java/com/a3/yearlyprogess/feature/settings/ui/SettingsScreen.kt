@@ -67,7 +67,6 @@ fun SettingsHomeScreen(
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val view = LocalView.current
-    val scope = rememberCoroutineScope()
     val settings by viewModel.settings.collectAsState()
 
     LazyColumn(modifier = modifier) {
@@ -183,5 +182,27 @@ fun SettingsHomeScreen(
                 }
             )
         }
+
+        item {
+            Text(
+                text = stringResource(R.string.events),
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = MaterialTheme.colorScheme.primary
+                ),
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        item {
+            Slider(
+                title = stringResource(R.string.decimal_places_label),
+                description = stringResource(R.string.decimal_places_description),
+                value = settings.eventProgressDecimalDigits.toFloat(),
+                onValueChange = { viewModel.setEventProgressDecimalDigits(it.toInt()) },
+                valueRange = 0f..6f,
+                steps = 5,
+            )
+        }
+
     }
 }

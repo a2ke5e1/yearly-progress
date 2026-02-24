@@ -291,13 +291,13 @@ fun EventSelectionTab(
             EventList(
                 events = events,
                 selectedIds = options.selectedEventIds,
-                emptyText = "No events yet. Add one to get started!",
+                emptyText = stringResource(R.string.no_events_message),
                 onItemClick = { event ->
                     configViewModel.toggleEventSelection(event.id)
                 },
                 showPinOption = false,
                 onItemLongPress = { configViewModel.toggleEventSelection(it.id) },
-                settings = settings.progressSettings
+                settings = settings
             )
         }
     }

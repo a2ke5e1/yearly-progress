@@ -32,9 +32,11 @@ import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -66,7 +68,7 @@ import com.a3.yearlyprogess.feature.events.ui.components.EventDetailCard
 import com.a3.yearlyprogess.feature.events.ui.components.EventDetailCardDefaults
 import com.a3.yearlyprogess.feature.events.ui.components.EventList
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ImportEventsScreen(
     navController: NavHostController,
@@ -238,7 +240,7 @@ fun ImportEventsScreen(
                         .padding(innerPadding),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    LoadingIndicator()
                 }
             }
 
@@ -249,7 +251,7 @@ fun ImportEventsScreen(
                         .padding(innerPadding),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    LoadingIndicator()
                 }
             }
 
@@ -280,7 +282,7 @@ fun ImportEventsScreen(
                     contentPadding = innerPadding,
                     onItemClick = { importEventsViewModel.toggleSelection(it.id) },
                     onItemLongPress = { importEventsViewModel.toggleSelection(it.id) },
-                    settings = settings.progressSettings
+                    settings = settings
                 )
             }
 
