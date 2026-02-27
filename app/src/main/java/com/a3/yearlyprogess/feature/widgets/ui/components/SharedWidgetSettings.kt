@@ -14,6 +14,7 @@ import com.a3.yearlyprogess.core.ui.components.Slider
 import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.core.ui.components.ThemeSelector
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
+import java.text.NumberFormat
 import kotlin.math.roundToInt
 
 /**
@@ -135,6 +136,10 @@ fun SharedWidgetSettings(
                 valueRange = 0f..100f,
                 onValueChange = { value ->
                     onBackgroundTransparencyChange(value.roundToInt())
+                },
+                labelFormatter = {
+                    val format = NumberFormat.getPercentInstance()
+                    format.format(it/100)
                 }
             )
         }

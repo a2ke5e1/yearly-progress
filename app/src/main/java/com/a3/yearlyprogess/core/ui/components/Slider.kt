@@ -1,16 +1,15 @@
 package com.a3.yearlyprogess.core.ui.components
 
 import androidx.annotation.IntRange
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -32,15 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import java.text.NumberFormat
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -54,6 +51,10 @@ fun Slider(
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     @IntRange(from = 0) steps: Int = 0,
     onValueChange: (Float) -> Unit,
+    labelFormatter: (Float) -> String = {
+        val format = NumberFormat.getNumberInstance()
+        format.format(it)
+    }
 ) {
     val haptic = LocalHapticFeedback.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -110,23 +111,21 @@ fun Slider(
                     Box(
                         contentAlignment = Alignment.Center
                     ) {
-                        if (showLabel) {
-                            TooltipLabel(
-                                text = formatValue(value, valueRange, steps),
-                                visible = true,
-                                modifier = Modifier
-                                    .offset(y = (-26).dp)
-                                    .layout { measurable, constraints ->
-                                        val placeable = measurable.measure(constraints)
-                                        layout(0, 0) {
-                                            placeable.placeRelative(
-                                                x = -placeable.width / 2,
-                                                y = -placeable.height
-                                            )
-                                        }
+                        TooltipLabel(
+                            text = labelFormatter(value),
+                            visible = showLabel,
+                            modifier = Modifier
+                                .offset(y = (-26).dp)
+                                .layout { measurable, constraints ->
+                                    val placeable = measurable.measure(constraints)
+                                    layout(0, 0) {
+                                        placeable.placeRelative(
+                                            x = -placeable.width / 2,
+                                            y = -placeable.height
+                                        )
                                     }
-                            )
-                        }
+                                }
+                        )
                         SliderDefaults.Thumb(
                             interactionSource = interactionSource,
                             enabled = !disabled
@@ -148,19 +147,36 @@ fun Slider(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun TooltipLabel(
-    text: String, visible: Boolean, modifier: Modifier = Modifier
+    text: String,
+    visible: Boolean,
+    modifier: Modifier = Modifier
 ) {
-    // Animate alpha and scale
-    val alpha by animateFloatAsState(
-        targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(durationMillis = if (visible) 83 else 117),
-        label = "label_alpha"
+
+    val animatedScale  by animateFloatAsState(
+        targetValue = if (visible) 1f else 0.92f,
+        animationSpec = spring(
+            stiffness = Spring.StiffnessHigh,
+            dampingRatio = Spring.DampingRatioNoBouncy
+        ),
+        label = "tooltip_scale"
     )
 
-    val scale by animateFloatAsState(
-        targetValue = if (visible) 1f else 0.8f,
-        animationSpec = tween(durationMillis = if (visible) 83 else 117),
-        label = "label_scale"
+    val animatedAlpha  by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = spring(
+            stiffness = Spring.StiffnessMedium,
+            dampingRatio = Spring.DampingRatioNoBouncy
+        ),
+        label = "tooltip_alpha"
+    )
+
+    val animatedTranslationY  by animateFloatAsState(
+        targetValue = if (visible) 0f else 6f,
+        animationSpec = spring(
+            stiffness = Spring.StiffnessHigh,
+            dampingRatio = Spring.DampingRatioNoBouncy
+        ),
+        label = "tooltip_translation"
     )
 
     Surface(
@@ -169,10 +185,15 @@ private fun TooltipLabel(
         shadowElevation = 0.dp,
         tonalElevation = 0.dp,
         modifier = modifier
+            .graphicsLayer {
+                alpha = animatedAlpha
+                scaleX = animatedScale
+                scaleY = animatedScale
+                translationY = animatedTranslationY
+                transformOrigin = TransformOrigin(0.5f, 1f)
+            }
             .widthIn(min = 48.dp)
             .heightIn(min = 44.dp)
-            .alpha(alpha)
-            .scale(scale)
     ) {
         Text(
             text = text,
@@ -182,15 +203,5 @@ private fun TooltipLabel(
                 .wrapContentSize(Alignment.Center)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         )
-    }
-}
-
-private fun formatValue(
-    value: Float, valueRange: ClosedFloatingPointRange<Float>, steps: Int
-): String {
-    return if (steps > 0) {
-        value.roundToInt().toString()
-    } else {
-        "%.1f".format(value)
     }
 }
