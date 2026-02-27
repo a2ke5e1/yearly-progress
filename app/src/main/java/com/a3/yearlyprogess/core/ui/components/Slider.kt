@@ -25,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +55,8 @@ fun Slider(
     val isDragging by interactionSource.collectIsDraggedAsState()
     val isPressed by interactionSource.collectIsPressedAsState()
     val showLabel = isDragging || isPressed
+    val lastStep = remember { mutableStateOf<Int?>(null) }
+
 
     Column(
         modifier = modifier
@@ -88,8 +91,17 @@ fun Slider(
                 enabled = !disabled,
                 value = value,
                 onValueChange = { newValue ->
-                    if (steps > 0 && newValue != value) {
-                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    if (steps > 0) {
+                        val stepSize =
+                            (valueRange.endInclusive - valueRange.start) / (steps + 1)
+
+                        val currentStep =
+                            ((newValue - valueRange.start) / stepSize).roundToInt()
+
+                        if (currentStep != lastStep.value) {
+                            lastStep.value = currentStep
+                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        }
                     }
                     onValueChange(newValue)
                 },
