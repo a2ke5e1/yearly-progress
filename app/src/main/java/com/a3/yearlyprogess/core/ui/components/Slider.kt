@@ -6,9 +6,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -30,8 +32,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.IntOffset
@@ -75,18 +80,6 @@ fun Slider(
         }
 
         Spacer(Modifier.height(2.dp))
-
-        BoxWithConstraints(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            val density = LocalDensity.current
-            val maxWidthPx = with(density) { maxWidth.toPx() }
-
-            // Calculate thumb position based on value
-            val normalizedValue =
-                (value - valueRange.start) / (valueRange.endInclusive - valueRange.start)
-            val thumbPositionPx = normalizedValue * maxWidthPx
-
             Slider(
                 enabled = !disabled,
                 value = value,
@@ -113,28 +106,43 @@ fun Slider(
                 valueRange = valueRange,
                 steps = steps,
                 interactionSource = interactionSource,
+                thumb = { sliderState ->
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (showLabel) {
+                            TooltipLabel(
+                                text = formatValue(value, valueRange, steps),
+                                visible = true,
+                                modifier = Modifier
+                                    .offset(y = (-26).dp)
+                                    .layout { measurable, constraints ->
+                                        val placeable = measurable.measure(constraints)
+                                        layout(0, 0) {
+                                            placeable.placeRelative(
+                                                x = -placeable.width / 2,
+                                                y = -placeable.height
+                                            )
+                                        }
+                                    }
+                            )
+                        }
+                        SliderDefaults.Thumb(
+                            interactionSource = interactionSource,
+                            enabled = !disabled
+                        )
+                    }
+                },
                 track = { sliderState ->
                     SliderDefaults.Track(
                         sliderState = sliderState,
                         modifier = Modifier.height(40.dp),
                         trackCornerSize = 12.dp
                     )
-                })
-
-            // Value indicator that follows the thumb
-            if (showLabel) {
-                TooltipLabel(
-                    text = formatValue(value, valueRange, steps),
-                    visible = showLabel,
-                    modifier = Modifier.offset {
-                            IntOffset(
-                                x = thumbPositionPx.toInt() - with(density) { 12.dp.roundToPx() },
-                                y = with(density) { (-48).dp.roundToPx() })
-                        }
-                )
-            }
+                }
+            )
         }
-    }
+
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
