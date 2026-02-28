@@ -22,5 +22,6 @@ data class AppSettings(
     val selectedCalendarIds: Set<Long> = emptySet(),
     val automaticallyDetectLocation: Boolean = false,
     val appTheme: WidgetTheme = WidgetTheme.DEFAULT,
-    @IntRange(from = 0) val eventProgressDecimalDigits: Int = 2
+    @IntRange(from = 0) val eventProgressDecimalDigits: Int = 2,
+    val disableWidgetClickToApp: Boolean = false
 )

@@ -64,7 +64,8 @@ class AppSettingsRepositoryImpl @Inject constructor(
                 preferences[PreferencesKeys.APP_THEME]
                     ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC.name else WidgetTheme.DEFAULT.name,
             ),
-            eventProgressDecimalDigits =  preferences[PreferencesKeys.EVENT_PROGRESS_DECIMAL_DIGITS] ?: 2
+            eventProgressDecimalDigits =  preferences[PreferencesKeys.EVENT_PROGRESS_DECIMAL_DIGITS] ?: 2,
+            disableWidgetClickToApp = preferences[PreferencesKeys.DISABLE_WIDGET_CLICK_TO_APP] ?: false
         )
     }
 
@@ -122,6 +123,12 @@ class AppSettingsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun setDisableWidgetClickToApp(disabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DISABLE_WIDGET_CLICK_TO_APP] = disabled
+        }
+    }
+
     override suspend fun setProgressShowNotification(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION] = enabled
@@ -162,6 +169,7 @@ class AppSettingsRepositoryImpl @Inject constructor(
             preferences[PreferencesKeys.SELECTED_CALENDAR_IDS] = appSettings.selectedCalendarIds.map { it.toString() }.toSet()
             preferences[PreferencesKeys.APP_THEME] = appSettings.appTheme.name
             preferences[PreferencesKeys.EVENT_PROGRESS_DECIMAL_DIGITS] = appSettings.eventProgressDecimalDigits
+            preferences[PreferencesKeys.DISABLE_WIDGET_CLICK_TO_APP] = appSettings.disableWidgetClickToApp
 
             // Notification settings
             preferences[PreferencesKeys.PROGRESS_SHOW_NOTIFICATION] = appSettings.notificationSettings.progressShowNotification
@@ -182,6 +190,7 @@ class AppSettingsRepositoryImpl @Inject constructor(
         val SELECTED_CALENDAR_IDS = stringSetPreferencesKey("selected_calendar_ids")
         val AUTOMATICALLY_DETECT_LOCATION = booleanPreferencesKey("automatically_detect_location")
         val APP_THEME = stringPreferencesKey("app_theme")
+        val DISABLE_WIDGET_CLICK_TO_APP = booleanPreferencesKey("disable_widget_click_to_app")
 
         // Notification preferences
         val PROGRESS_SHOW_NOTIFICATION = booleanPreferencesKey("progress_show_notification")

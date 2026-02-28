@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -31,13 +30,13 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.components.SelectItemDialog
 import com.a3.yearlyprogess.core.ui.components.SelectableItem
 import com.a3.yearlyprogess.core.ui.components.Slider
+import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.core.ui.components.SwitchWithOptions
 import com.a3.yearlyprogess.core.ui.components.ThemeSelector
 import com.a3.yearlyprogess.core.util.CalculationType
 import com.a3.yearlyprogess.core.util.YearlyProgressNotification
 import com.a3.yearlyprogess.core.util.toSelectableItem
 import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
-import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @Composable
@@ -204,5 +203,23 @@ fun SettingsHomeScreen(
             )
         }
 
+        item {
+            Text(
+                text = stringResource(R.string.widgets),
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = MaterialTheme.colorScheme.primary
+                ),
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        item {
+            Switch(
+                title = stringResource(R.string.disable_widget_click_to_app),
+                description = stringResource(R.string.disable_widget_click_to_app_desc),
+                checked = settings.disableWidgetClickToApp,
+                onCheckedChange = { viewModel.setDisableWidgetClickToApp(it) }
+            )
+        }
     }
 }

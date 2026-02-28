@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
@@ -41,6 +40,7 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 import androidx.core.graphics.get
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
+import com.a3.yearlyprogess.core.util.ProgressSettings
 
 
 @AndroidEntryPoint
@@ -90,7 +90,7 @@ class EventWidget : BaseWidget() {
         val manager = AppWidgetManager.getInstance(context)
         val options = manager.getAppWidgetOptions(appWidgetId)
 
-        val (userConfig, events, progressSettings) = runBlocking {
+        val data = runBlocking {
             withContext(Dispatchers.IO) {
                 var config = eventWidgetOptionsRepository
                     .getOptions(appWidgetId)
@@ -106,25 +106,25 @@ class EventWidget : BaseWidget() {
                 val events = config.selectedEventIds.mapNotNull { id ->
                     eventRepository.getEvent(id)
                 }
-                Triple(config , events , appSettings.progressSettings)
+                EventWidgetData(config, events, appSettings.progressSettings, appSettings.disableWidgetClickToApp)
             }
         }
-        val yp = YearlyProgressUtil(progressSettings)
+        val yp = YearlyProgressUtil(data.progressSettings)
 
 
-        Log.d("EventWidget", "Selected Event Ids ${userConfig.selectedEventIds}")
-        Log.d("EventWidget", "Selected Events ${events}")
+        Log.d("EventWidget", "Selected Event Ids ${data.userConfig.selectedEventIds}")
+        Log.d("EventWidget", "Selected Events ${data.events}")
 
         // Use swiper to get current event
         val swiper = WidgetSwiper.forEvents(
             context = context,
-            events = events,
+            events = data.events,
             widgetId = appWidgetId,
-            widgetTheme = userConfig.theme ?: WidgetTheme.DEFAULT
+            widgetTheme = data.userConfig.theme ?: WidgetTheme.DEFAULT
         )
         val event = swiper.current()
 
-        val theme: WidgetTheme = userConfig.theme ?: WidgetTheme.DEFAULT
+        val theme: WidgetTheme = data.userConfig.theme ?: WidgetTheme.DEFAULT
         val indicator = swiper.indicator()
 
         if (event == null) {
@@ -136,13 +136,21 @@ class EventWidget : BaseWidget() {
             event,
             yp,
             theme,
-            userConfig,
+            data.userConfig,
             options,
             appWidgetId,
-            indicator
+            indicator,
+            isWidgetClickable = !data.disableWidgetClickToApp
         )
         return views
     }
+
+    private data class EventWidgetData(
+        val userConfig: EventWidgetOptions,
+        val events: List<Event>,
+        val progressSettings: ProgressSettings,
+        val disableWidgetClickToApp: Boolean
+    )
 
     companion object {
         const val ACTION_NEXT = "com.a3.yearlyprogess.feature.widgets.ui.EventWidget.ACTION_NEXT"
@@ -280,7 +288,8 @@ class EventWidget : BaseWidget() {
         private fun applySwiperActions(
             views: RemoteViews,
             context: Context,
-            appWidgetId: Int
+            appWidgetId: Int,
+            isWidgetClickable: Boolean = true
         ) {
             val nextIntent = Intent(context, EventWidget::class.java).apply {
                 action = ACTION_NEXT
@@ -306,7 +315,9 @@ class EventWidget : BaseWidget() {
 
             views.setOnClickPendingIntent(R.id.next_btn, nextPendingIntent)
             views.setOnClickPendingIntent(R.id.prev_btn, prevPendingIntent)
-            WidgetRenderer.onParentTap(views, context, R.id.home_btn)
+            if (isWidgetClickable) {
+                WidgetRenderer.onParentTap(views, context, R.id.home_btn)
+            }
         }
 
         private fun calculateEventData(
@@ -354,7 +365,8 @@ class EventWidget : BaseWidget() {
             userConfig: EventWidgetOptions,
             options: Bundle? = null,
             appWidgetId: Int = -1,
-            indicator: SpannableString = SpannableString("")
+            indicator: SpannableString = SpannableString(""),
+            isWidgetClickable: Boolean = true
         ): RemoteViews {
             val small = RemoteViews(context.packageName, R.layout.event_widget_small)
             val tall = RemoteViews(context.packageName, R.layout.event_widget_tallview)
@@ -387,9 +399,9 @@ class EventWidget : BaseWidget() {
 
             // Apply swiper actions if appWidgetId is valid
             if (appWidgetId != -1) {
-                applySwiperActions(small, context, appWidgetId)
-                applySwiperActions(tall, context, appWidgetId)
-                applySwiperActions(wide, context, appWidgetId)
+                applySwiperActions(small, context, appWidgetId, isWidgetClickable)
+                applySwiperActions(tall, context, appWidgetId, isWidgetClickable)
+                applySwiperActions(wide, context, appWidgetId, isWidgetClickable)
             }
 
             // Apply font scaling for small layout
@@ -528,7 +540,7 @@ class EventWidget : BaseWidget() {
     /**
      * Data class to hold calculated event display data
      */
-    data class EventDisplayData(
+    private data class EventDisplayData(
         val progress: Double,
         val styledProgressBar: SpannableString,
         val timeStatusText: String,

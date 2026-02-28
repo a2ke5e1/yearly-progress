@@ -63,7 +63,7 @@ class CalendarWidget : BaseWidget() {
             ACTION_NEXT, ACTION_PREV -> {
                 Log.d("CalendarWidget", "Received swiper action: ${intent.action}")
 
-                val (userConfig, progressSettings) = runBlocking(Dispatchers.IO) {
+                val (userConfig, _) = runBlocking(Dispatchers.IO) {
                     val options = calendarWidgetOptionsRepository.getOptions(appWidgetId).first()
                     val appSettings = appSettingsRepository.appSettings.first()
 
@@ -104,7 +104,7 @@ class CalendarWidget : BaseWidget() {
         val manager = AppWidgetManager.getInstance(context)
         val options = manager.getAppWidgetOptions(appWidgetId)
 
-        val (userConfig, progressSettings) = runBlocking(Dispatchers.IO) {
+        val (userConfig, progressSettings, disableWidgetClickToApp) = runBlocking(Dispatchers.IO) {
             val options = calendarWidgetOptionsRepository.getOptions(appWidgetId).first()
             val appSettings = appSettingsRepository.appSettings.first()
 
@@ -113,9 +113,9 @@ class CalendarWidget : BaseWidget() {
                 calendarWidgetOptionsRepository.updateOptions(appWidgetId, options.copy(
                     theme = appSettings.appTheme
                 ))
-                Pair(options.copy(theme = appSettings.appTheme), appSettings.progressSettings)
+                Triple(options.copy(theme = appSettings.appTheme), appSettings.progressSettings, appSettings.disableWidgetClickToApp)
             } else {
-                Pair(options, appSettings.progressSettings)
+                Triple(options, appSettings.progressSettings, appSettings.disableWidgetClickToApp)
             }
         }
         val yp = YearlyProgressUtil(progressSettings)
@@ -161,7 +161,8 @@ class CalendarWidget : BaseWidget() {
             userConfig,
             options,
             appWidgetId,
-            indicator
+            indicator,
+            isWidgetClickable = !disableWidgetClickToApp
         )
     }
 
@@ -337,7 +338,8 @@ class CalendarWidget : BaseWidget() {
         private fun applySwiperActions(
             views: RemoteViews,
             context: Context,
-            appWidgetId: Int
+            appWidgetId: Int,
+            isWidgetClickable: Boolean = true
         ) {
             val nextIntent = Intent(context, CalendarWidget::class.java).apply {
                 action = ACTION_NEXT
@@ -363,6 +365,10 @@ class CalendarWidget : BaseWidget() {
 
             views.setOnClickPendingIntent(R.id.next_btn, nextPendingIntent)
             views.setOnClickPendingIntent(R.id.prev_btn, prevPendingIntent)
+
+            if (isWidgetClickable) {
+                WidgetRenderer.onParentTap(views, context, R.id.home_btn)
+            }
         }
 
         private fun calculateEventData(
@@ -414,7 +420,8 @@ class CalendarWidget : BaseWidget() {
             userConfig: CalendarWidgetOptions,
             options: Bundle? = null,
             appWidgetId: Int = -1,
-            indicator: SpannableString = SpannableString("")
+            indicator: SpannableString = SpannableString(""),
+            isWidgetClickable: Boolean = true
         ): RemoteViews {
             val small = RemoteViews(context.packageName, R.layout.calendar_widget_small_layout)
 //            val tall = RemoteViews(context.packageName, R.layout.calendar_widget_tallview)
@@ -463,9 +470,9 @@ class CalendarWidget : BaseWidget() {
 
             // Apply swiper actions if appWidgetId is valid
             if (appWidgetId != -1) {
-                applySwiperActions(small, context, appWidgetId)
-//                applySwiperActions(tall, context, appWidgetId)
-                applySwiperActions(wide, context, appWidgetId)
+                applySwiperActions(small, context, appWidgetId, isWidgetClickable)
+//                applySwiperActions(tall, context, appWidgetId, isWidgetClickable)
+                applySwiperActions(wide, context, appWidgetId, isWidgetClickable)
             }
 
             // Apply font scaling (similar to EventWidget)

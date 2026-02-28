@@ -74,16 +74,16 @@ open class StandaloneWidget(
         val bundleOptions = manager.getAppWidgetOptions(appWidgetId)
 
         // Load user configuration
-        val (userConfig, progressSettings) = runBlocking(Dispatchers.IO) {
+        val (userConfig, progressSettings, disableWidgetClickToApp) = runBlocking(Dispatchers.IO) {
             standaloneWidgetOptionsRepository.updateWidgetType(appWidgetId, widgetType)
             val options = standaloneWidgetOptionsRepository.getOptions(appWidgetId).first()
             val appSettings = appSettingsRepository.appSettings.first()
             // If theme is null, get it from AppSettings
             if (options.theme == null) {
                 standaloneWidgetOptionsRepository.updateTheme(appWidgetId, appSettings.appTheme)
-                Pair(options.copy(theme = appSettings.appTheme), appSettings.progressSettings)
+                Triple(options.copy(theme = appSettings.appTheme), appSettings.progressSettings, appSettings.disableWidgetClickToApp)
             } else {
-                Pair(options, appSettings.progressSettings)
+                Triple(options, appSettings.progressSettings, appSettings.disableWidgetClickToApp)
             }
         }
         val yp = YearlyProgressUtil(progressSettings)
@@ -133,6 +133,7 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
+                    isWidgetClickable = !disableWidgetClickToApp
                 )
 
                 StandaloneWidgetType.NIGHT_LIGHT -> rectangularRemoteView(
@@ -140,9 +141,10 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
+                    isWidgetClickable = !disableWidgetClickToApp
                 )
 
-                else -> rectangularRemoteView(context, yp, userConfig)
+                else -> rectangularRemoteView(context, yp, userConfig, isWidgetClickable = !disableWidgetClickToApp)
             }
 
             WidgetShape.CLOVER -> when (widgetType) {
@@ -151,7 +153,8 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
-                    bundleOptions
+                    bundleOptions,
+                    isWidgetClickable = !disableWidgetClickToApp
                 )
 
                 StandaloneWidgetType.NIGHT_LIGHT -> cloverRemoteView(
@@ -159,10 +162,11 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
-                    bundleOptions
+                    bundleOptions,
+                    isWidgetClickable = !disableWidgetClickToApp
                 )
 
-                else -> cloverRemoteView(context, yp, userConfig, bundleOptions)
+                else -> cloverRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp)
             }
 
             WidgetShape.PILL -> when (widgetType) {
@@ -171,7 +175,8 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
-                    bundleOptions
+                    bundleOptions,
+                    isWidgetClickable = !disableWidgetClickToApp
                 )
 
                 StandaloneWidgetType.NIGHT_LIGHT -> pillRemoteView(
@@ -179,10 +184,11 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
-                    bundleOptions
+                    bundleOptions,
+                    isWidgetClickable = !disableWidgetClickToApp
                 )
 
-                else -> pillRemoteView(context, yp, userConfig, bundleOptions)
+                else -> pillRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp)
             }
         }
 

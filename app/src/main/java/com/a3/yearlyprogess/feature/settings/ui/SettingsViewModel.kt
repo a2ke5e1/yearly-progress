@@ -100,6 +100,12 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setDisableWidgetClickToApp(disabled: Boolean) {
+        viewModelScope.launch {
+            appSettingsRepository.setDisableWidgetClickToApp(disabled)
+        }
+    }
+
     // ============================================================
     // Notification Settings
     // ============================================================

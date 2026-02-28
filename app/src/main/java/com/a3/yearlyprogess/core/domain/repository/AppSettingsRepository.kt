@@ -22,6 +22,7 @@ interface AppSettingsRepository {
 
     suspend fun setEventDecimalDigits(decimalDigits: Int)
 
+    suspend fun setDisableWidgetClickToApp(disabled: Boolean)
 
     // Notification settings
     suspend fun setProgressShowNotification(enabled: Boolean)

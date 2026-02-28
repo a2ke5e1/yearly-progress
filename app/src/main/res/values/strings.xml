@@ -194,5 +194,7 @@
     <string name="open_source">Open Source</string>
     <string name="open_source_desc">This app is open source under GPL-3.0 license. Supported by ads and community contributions.</string>
     <string name="translation_credits">Translation Credits</string>
+    <string name="disable_widget_click_to_app">Disable Widget Click-to-App</string>
+    <string name="disable_widget_click_to_app_desc">Stop widgets from opening the app when tapped</string>
 
 </resources>
