@@ -33,7 +33,7 @@ fun EventList(
     emptyText: String,
     showPinOption: Boolean = true,
     emptyPadding: PaddingValues = PaddingValues(8.dp),
-    contentPadding: PaddingValues = PaddingValues(0.dp),
+    contentPadding: PaddingValues = PaddingValues(top = 8.dp),
     onItemClick: (Event) -> Unit,
     onItemLongPress: (Event) -> Unit,
     settings: AppSettings

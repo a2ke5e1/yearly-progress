@@ -291,6 +291,16 @@ fun AppTopBar(
         },
         scrollBehavior = scrollBehavior,
         modifier = modifier,
+        colors = if (isActionMode) {
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                navigationIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
+            TopAppBarDefaults.topAppBarColors()
+        }
     )
 
     if (showDeleteDialogBox) {
