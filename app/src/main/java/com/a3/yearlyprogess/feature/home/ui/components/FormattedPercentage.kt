@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
+import androidx.compose.ui.platform.LocalLocale
 
 @Composable
 fun FormattedPercentage(
@@ -23,7 +24,7 @@ fun FormattedPercentage(
     modifier: Modifier = Modifier
 ) {
     val currentProgress = progressProvider()
-    val locale = Locale.getDefault()
+    val locale = LocalLocale.current.platformLocale
     val formatter = remember(digits, locale) {
         val pattern = if (digits > 0)  "0." + "0".repeat(digits.coerceAtLeast(0)) else "0"
         DecimalFormat(pattern, DecimalFormatSymbols(locale))

@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.PushPin
@@ -29,6 +31,7 @@ import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -85,6 +89,7 @@ data class EventDetailCardStyle(
 
 object EventDetailCardDefaults {
 
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
     @Composable
     fun eventDetailCardStyle(
         cardHeight: Dp = 160.dp,
@@ -97,8 +102,8 @@ object EventDetailCardDefaults {
         titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(
             color = MaterialTheme.colorScheme.onSurface
         ),
-        progressTextStyle: TextStyle = MaterialTheme.typography.bodySmall.copy(
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+        progressTextStyle: TextStyle = MaterialTheme.typography.bodyMediumEmphasized.copy(
+            color = MaterialTheme.colorScheme.primary,
         ),
         durationTextStyle: TextStyle = MaterialTheme.typography.bodySmall.copy(
             color = MaterialTheme.colorScheme.onSurface
@@ -118,6 +123,7 @@ object EventDetailCardDefaults {
     )
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 data class EventProgressState(
     val progress: Double,
     val statusText: String,
@@ -172,7 +178,7 @@ fun EventDetailCard(
 
     Box(
         modifier = modifier
-            .height(style.cardHeight)
+//            .height(style.cardHeight)
             .fillMaxWidth()
             .background(
                 color = animatedBackgroundColor,
@@ -203,7 +209,7 @@ fun EventDetailCard(
         // Content
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(16.dp, 24.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -244,22 +250,43 @@ fun EventDetailCard(
                             maxLines = 4
                         )
                     }
+                    if (settings.useClassicEventCards) {
+                        FormattedPercentage(
+                            progressProvider = { uiState.progress },
+                            digits = decimals,
+                            style = MaterialTheme.typography.headlineSmallEmphasized.copy(
+                                color = MaterialTheme.colorScheme.primary,
+                            ),
+                            modifier = Modifier.padding(top = 12.dp)
+                        )
+
+                        LinearProgressIndicator(
+                            progress = { uiState.progress.toFloat() / 100f },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
                 }
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.padding(start = 8.dp).align(Alignment.CenterVertically)
-                ) {
-                    CircularWavyProgressIndicator(
-                        progress = {
-                            uiState.progress.toFloat() / 100
-                        },
-                        modifier = Modifier.size(80.dp),
-                    )
-                    FormattedPercentage(
-                        progressProvider = { uiState.progress },
-                        digits = decimals,
-                        style = style.progressTextStyle,
-                    )
+
+                if (!settings.useClassicEventCards) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        CircularWavyProgressIndicator(
+                            progress = {
+                                uiState.progress.toFloat() / 100
+                            },
+                            modifier = Modifier.size(80.dp),
+                        )
+                        FormattedPercentage(
+                            progressProvider = { uiState.progress },
+                            digits = decimals,
+                            style = style.progressTextStyle,
+                        )
+                    }
                 }
             }
         }

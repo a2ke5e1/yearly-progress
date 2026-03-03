@@ -30,4 +30,6 @@ interface AppSettingsRepository {
     suspend fun setProgressShowNotificationMonth(enabled: Boolean)
     suspend fun setProgressShowNotificationWeek(enabled: Boolean)
     suspend fun setProgressShowNotificationDay(enabled: Boolean)
+
+    suspend fun setUseClassicEventCards(enabled: Boolean)
 }

@@ -37,6 +37,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -287,7 +288,9 @@ fun AppTopBar(
                     }
                 }
             }
-        }, scrollBehavior = scrollBehavior, modifier = modifier,
+        },
+        scrollBehavior = scrollBehavior,
+        modifier = modifier,
     )
 
     if (showDeleteDialogBox) {

@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
-import com.a3.yearlyprogess.core.util.ProgressSettings
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 
 @Composable

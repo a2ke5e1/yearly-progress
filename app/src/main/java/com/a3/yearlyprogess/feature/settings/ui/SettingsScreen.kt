@@ -204,6 +204,16 @@ fun SettingsHomeScreen(
         }
 
         item {
+            Switch(
+                title = stringResource(R.string.classic_event_cards),
+                description = stringResource(R.string.classic_event_cards_desc),
+                checked = settings.useClassicEventCards,
+                onCheckedChange = { viewModel.setUseClassicEventCards(it) },
+                modifier = Modifier.padding(vertical = 12.dp)
+            )
+        }
+
+        item {
             Text(
                 text = stringResource(R.string.widgets),
                 style = MaterialTheme.typography.labelLarge.copy(

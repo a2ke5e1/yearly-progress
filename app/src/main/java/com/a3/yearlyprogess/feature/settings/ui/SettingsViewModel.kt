@@ -106,6 +106,12 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setUseClassicEventCards(enabled: Boolean) {
+        viewModelScope.launch {
+            appSettingsRepository.setUseClassicEventCards(enabled)
+        }
+    }
+
     // ============================================================
     // Notification Settings
     // ============================================================

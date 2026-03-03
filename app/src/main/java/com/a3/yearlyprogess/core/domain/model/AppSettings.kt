@@ -23,5 +23,6 @@ data class AppSettings(
     val automaticallyDetectLocation: Boolean = false,
     val appTheme: WidgetTheme = WidgetTheme.DEFAULT,
     @IntRange(from = 0) val eventProgressDecimalDigits: Int = 2,
-    val disableWidgetClickToApp: Boolean = false
+    val disableWidgetClickToApp: Boolean = false,
+    val useClassicEventCards: Boolean = false
 )

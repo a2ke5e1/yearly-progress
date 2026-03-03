@@ -196,5 +196,7 @@
     <string name="translation_credits">Translation Credits</string>
     <string name="disable_widget_click_to_app">Disable Widget Click-to-App</string>
     <string name="disable_widget_click_to_app_desc">Stop widgets from opening the app when tapped</string>
+    <string name="classic_event_cards">Classic Event Cards</string>
+    <string name="classic_event_cards_desc">Use a linear progress bar instead of a circular wavy one</string>
 
 </resources>
