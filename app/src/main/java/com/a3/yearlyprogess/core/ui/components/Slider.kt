@@ -1,7 +1,9 @@
 package com.a3.yearlyprogess.core.ui.components
 
 import androidx.annotation.IntRange
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
@@ -152,16 +155,16 @@ private fun TooltipLabel(
     modifier: Modifier = Modifier
 ) {
 
-    val animatedScale  by animateFloatAsState(
-        targetValue = if (visible) 1f else 0.92f,
+    val animatedScale by animateFloatAsState(
+        targetValue = if (visible) 1f else 0.5f, // Dropped to 0.5f to better mimic the thumb size when hidden
         animationSpec = spring(
-            stiffness = Spring.StiffnessHigh,
+            stiffness = Spring.StiffnessMedium,
             dampingRatio = Spring.DampingRatioNoBouncy
         ),
         label = "tooltip_scale"
     )
 
-    val animatedAlpha  by animateFloatAsState(
+    val animatedAlpha by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
         animationSpec = spring(
             stiffness = Spring.StiffnessMedium,
@@ -170,10 +173,10 @@ private fun TooltipLabel(
         label = "tooltip_alpha"
     )
 
-    val animatedTranslationY  by animateFloatAsState(
-        targetValue = if (visible) 0f else 6f,
+    val animatedTranslationY by animateFloatAsState(
+        targetValue = if (visible) 0f else 20f, // Increased translation to make it pull out of the thumb
         animationSpec = spring(
-            stiffness = Spring.StiffnessHigh,
+            stiffness = Spring.StiffnessMedium,
             dampingRatio = Spring.DampingRatioNoBouncy
         ),
         label = "tooltip_translation"
@@ -194,6 +197,12 @@ private fun TooltipLabel(
             }
             .widthIn(min = 48.dp)
             .heightIn(min = 44.dp)
+            .animateContentSize(
+                animationSpec = spring(
+                    stiffness = Spring.StiffnessMedium,
+                    dampingRatio = Spring.DampingRatioNoBouncy
+                )
+            )
     ) {
         Text(
             text = text,
