@@ -49,6 +49,19 @@
         <item quantity="other">Вы уверены что хотите удалить %d выбранные события?</item>
     </plurals>
 
+    <string name="edit_event">Редактировать событие</string>
+    <string name="create_event">Создать событие</string>
+    <string name="schedule">Расписание</string>
+    <string name="end">Окончание</string>
+    <string name="repeat">Повтор</string>
+    <string name="every_year">Каждый год</string>
+    <string name="every_month">Каждый месяц</string>
+    <string name="on_weekdays">По будням</string>
+    <string name="event_title">Название события</string>
+    <string name="enter_event_title">Введите название события</string>
+    <string name="description">Описание</string>
+    <string name="enter_event_description_optional">Введите описание (необязательно)</string>
+
     <string name="location">Местоположение</string>
     <string name="current_location">Текущее местоположение</string>
     <string name="automatically_detect_location">Автоопределение местоположения</string>
@@ -176,5 +189,16 @@
     <string name="transfer_settings">Перенести настройки</string>
     <string name="migration_completed">Перенос завершен</string>
     <string name="migration_completed_message">Ваши настройки были успешно перенесены.</string>
+
+    <string name="join_telegram_group">Присоединиться к группе в Telegram</string>
+    <string name="for_support_and_feedback">Для поддержки и обратной связи присоединяйтесь к нашей группе в Telegram</string>
+    <string name="view_source_code">Исходный код</string>
+    <string name="open_source">Открытый исходный код</string>
+    <string name="open_source_desc">Это приложение имеет открытый исходный код под лицензией GPL-3.0. Поддерживается рекламой и вкладом сообщества.</string>
+    <string name="translation_credits">Авторы перевода</string>
+    <string name="disable_widget_click_to_app">Отключить переход в приложение при нажатии на виджет</string>
+    <string name="disable_widget_click_to_app_desc">Запретить открытие приложения при нажатии на виджет</string>
+    <string name="classic_event_cards">Классические карточки событий</string>
+    <string name="classic_event_cards_desc">Использовать линейный индикатор прогресса вместо кругового волнистого</string>
 
 </resources>
