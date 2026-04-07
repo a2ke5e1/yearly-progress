@@ -4,7 +4,7 @@ It is a progress tracking app which tracks the progress of time i.e; day, week, 
 It can also track Custom events. 
 
 
-![Yearly Progress](https://www.a3group.co.in/_next/image?url=%2Fyearly-progress%2Fimages%2Fcover-banner.webp&w=1920&q=100)
+![Yearly Progress](https://www.a3group.co.in/yearly-progress%2Fimages%2Fcover-banner.webp)
 
 
 ## License
