@@ -36,7 +36,7 @@ object CommunityUtil {
 
     fun onViewSourceCode(context: Context) {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = SUPPORT_GROUP_URL.toUri()
+        intent.data = SOURCE_CODE_URL.toUri()
         context.startActivity(intent)
     }
 
