@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.google.services)
     alias(libs.plugins.com.google.firebase.crashlytics)
     id("kotlin-parcelize")
 }
