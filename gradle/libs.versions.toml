@@ -30,7 +30,7 @@ playServicesAds = "25.2.0"
 userMessagingPlatform = "4.0.0"
 materialKolor = "4.1.1"
 firebaseCrashlytics = "20.0.4"
-firebaseCrashlyticsPlugin = "3.0.6"
+firebaseCrashlyticsPlugin = "3.0.7"
 google-services = "4.4.4"
 
 [libraries]
