@@ -29,7 +29,7 @@ roomdatabasebackup = "1.1.0"
 playServicesAds = "25.2.0"
 userMessagingPlatform = "4.0.0"
 materialKolor = "4.1.1"
-firebaseCrashlytics = "20.0.4"
+firebaseCrashlytics = "20.0.5"
 firebaseCrashlyticsPlugin = "3.0.7"
 google-services = "4.4.4"
 
