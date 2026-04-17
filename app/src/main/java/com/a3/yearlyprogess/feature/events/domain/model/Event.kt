@@ -18,110 +18,92 @@ data class Event(
     val eventEndTime: Date,
     val repeatEventDays: List<RepeatDays> = emptyList(),
     val hasWeekDays: Boolean = false,
-    val backgroundImageUri: String? = null
+    val backgroundImageUri: String? = null,
+    
+    val recurrenceType: RecurrenceType = RecurrenceType.NONE,
+    val recurrenceInterval: Int = 1,
+    val recurrenceEndType: RecurrenceEndType = RecurrenceEndType.NEVER,
+    val recurrenceEndDate: Long? = null,
+    val recurrenceEndOccurrences: Int? = null,
 ) : Parcelable {
-    // Keep the existing nextStartAndEndTime() function
+
     fun nextStartAndEndTime(currentTime: Long = System.currentTimeMillis()): Pair<Long, Long> {
+        if (recurrenceType == RecurrenceType.NONE) {
+            return Pair(eventStartTime.time, eventEndTime.time)
+        }
+
         var nextStartTime = eventStartTime.time
         var nextEndTime = eventEndTime.time
 
-        // If event has not completed, return current start and end time
         if (currentTime < nextEndTime) {
             return Pair(nextStartTime, nextEndTime)
         }
 
-        // If event is not repeating, return current start and end time
-        if (repeatEventDays.isEmpty()) {
-            return Pair(nextStartTime, nextEndTime)
+        val eventStartCalendar = Calendar.getInstance().apply { timeInMillis = nextStartTime }
+        val duration = nextEndTime - nextStartTime
+
+        var occurrenceCount = 1
+        var lastValidStart = nextStartTime
+        var lastValidEnd = nextEndTime
+
+        val repeatDaysMapped = repeatEventDays.mapNotNull {
+            when (it) {
+                RepeatDays.SUNDAY -> Calendar.SUNDAY
+                RepeatDays.MONDAY -> Calendar.MONDAY
+                RepeatDays.TUESDAY -> Calendar.TUESDAY
+                RepeatDays.WEDNESDAY -> Calendar.WEDNESDAY
+                RepeatDays.THURSDAY -> Calendar.THURSDAY
+                RepeatDays.FRIDAY -> Calendar.FRIDAY
+                RepeatDays.SATURDAY -> Calendar.SATURDAY
+                else -> null
+            }
         }
 
-        val currCalendar = Calendar.getInstance()
-        currCalendar.timeInMillis = currentTime
-        val eventStartCalendar = Calendar.getInstance()
-        val eventEndCalendar = Calendar.getInstance()
-
-        // Handle yearly recurrence
-        if (repeatEventDays.contains(RepeatDays.EVERY_YEAR)) {
-            eventStartCalendar.timeInMillis = nextStartTime
-            eventEndCalendar.timeInMillis = nextEndTime
-
-            while (currCalendar.timeInMillis >= eventEndCalendar.timeInMillis) {
-                eventStartCalendar.add(Calendar.YEAR, 1)
-                eventEndCalendar.add(Calendar.YEAR, 1)
+        while (true) {
+            // Check if current `next` is past the end conditions
+            if (recurrenceEndType == RecurrenceEndType.AFTER_OCCURRENCES && recurrenceEndOccurrences != null) {
+                if (occurrenceCount > recurrenceEndOccurrences) {
+                    return Pair(lastValidStart, lastValidEnd)
+                }
+            }
+            if (recurrenceEndType == RecurrenceEndType.ON_DATE && recurrenceEndDate != null) {
+                if (nextStartTime > recurrenceEndDate) {
+                    return Pair(lastValidStart, lastValidEnd)
+                }
             }
 
-            nextStartTime = eventStartCalendar.timeInMillis
-            nextEndTime = eventEndCalendar.timeInMillis
-        }
-
-        // Handle monthly recurrence
-        if (repeatEventDays.contains(RepeatDays.EVERY_MONTH)) {
-            eventStartCalendar.timeInMillis = nextStartTime
-            eventEndCalendar.timeInMillis = nextEndTime
-            while (currCalendar.timeInMillis >= eventEndCalendar.timeInMillis) {
-                eventStartCalendar.add(Calendar.MONTH, 1)
-                eventEndCalendar.add(Calendar.MONTH, 1)
+            // We know current `next` is valid. Is it in the future?
+            if (nextEndTime > currentTime) {
+                return Pair(nextStartTime, nextEndTime)
             }
-            nextStartTime = eventStartCalendar.timeInMillis
-            nextEndTime = eventEndCalendar.timeInMillis
-        }
 
-        if (!hasWeekDays) {
-            return Pair(nextStartTime, nextEndTime)
-        }
+            // Otherwise, it is valid but in the past, so it becomes our new `lastValid`
+            lastValidStart = nextStartTime
+            lastValidEnd = nextEndTime
 
-        val repeatWeekDays =
-            repeatEventDays
-                .map {
-                    when (it) {
-                        RepeatDays.SUNDAY -> Calendar.SUNDAY
-                        RepeatDays.MONDAY -> Calendar.MONDAY
-                        RepeatDays.TUESDAY -> Calendar.TUESDAY
-                        RepeatDays.WEDNESDAY -> Calendar.WEDNESDAY
-                        RepeatDays.THURSDAY -> Calendar.THURSDAY
-                        RepeatDays.FRIDAY -> Calendar.FRIDAY
-                        RepeatDays.SATURDAY -> Calendar.SATURDAY
-                        else -> -1
+            // Calculate the NEXT occurrence
+            when (recurrenceType) {
+                RecurrenceType.DAILY -> eventStartCalendar.add(Calendar.DAY_OF_YEAR, recurrenceInterval)
+                RecurrenceType.WEEKLY -> {
+                    if (repeatDaysMapped.isEmpty()) {
+                        eventStartCalendar.add(Calendar.WEEK_OF_YEAR, recurrenceInterval)
+                    } else {
+                        do {
+                            eventStartCalendar.add(Calendar.DAY_OF_YEAR, 1)
+                            if (eventStartCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                                if (recurrenceInterval > 1) {
+                                    eventStartCalendar.add(Calendar.WEEK_OF_YEAR, recurrenceInterval - 1)
+                                }
+                            }
+                        } while (!repeatDaysMapped.contains(eventStartCalendar.get(Calendar.DAY_OF_WEEK)))
                     }
                 }
-                .filter { it != -1 }
-                .toList()
-
-        if (repeatWeekDays.isEmpty()) {
-            return Pair(nextStartTime, nextEndTime)
-        }
-
-        val cal = Calendar.getInstance()
-        cal.timeInMillis = currentTime
-
-        val (startHour, startMinute) =
-            Calendar.getInstance().run {
-                timeInMillis = nextStartTime
-                Pair(get(Calendar.HOUR_OF_DAY), get(Calendar.MINUTE))
+                RecurrenceType.MONTHLY -> eventStartCalendar.add(Calendar.MONTH, recurrenceInterval)
+                RecurrenceType.YEARLY -> eventStartCalendar.add(Calendar.YEAR, recurrenceInterval)
             }
-        val (endHour, endMinute) =
-            Calendar.getInstance().run {
-                timeInMillis = nextEndTime
-                Pair(get(Calendar.HOUR_OF_DAY), get(Calendar.MINUTE))
-            }
-
-        while (!repeatWeekDays.contains(cal.get(Calendar.DAY_OF_WEEK))) {
-            cal.add(Calendar.DAY_OF_MONTH, 1)
+            nextStartTime = eventStartCalendar.timeInMillis
+            nextEndTime = nextStartTime + duration
+            occurrenceCount++
         }
-
-        cal.set(Calendar.HOUR_OF_DAY, startHour)
-        cal.set(Calendar.MINUTE, startMinute)
-        cal.set(Calendar.SECOND, 0)
-
-        nextStartTime = cal.timeInMillis
-
-        cal.set(Calendar.HOUR_OF_DAY, endHour)
-        cal.set(Calendar.MINUTE, endMinute)
-        cal.set(Calendar.SECOND, 0)
-
-        nextEndTime = cal.timeInMillis
-
-        return Pair(nextStartTime, nextEndTime)
     }
-
 }
