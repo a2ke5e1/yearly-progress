@@ -328,7 +328,14 @@ class EventWidget : BaseWidget() {
         ): EventDisplayData {
             val (startTime, endTime) = event.nextStartAndEndTime()
             val progress = yp.calculateProgress(startTime, endTime)
-            val styledProgressBar = progress.styleFormatted(userConfig.decimalDigits)
+            
+            val customProgress = event.getCustomProgressString()
+            val styledProgressBar = if (customProgress != null) {
+                SpannableString(customProgress)
+            } else {
+                progress.styleFormatted(userConfig.decimalDigits)
+            }
+
             val timeStatusText = formatEventTimeStatus(
                 context,
                 startTime,

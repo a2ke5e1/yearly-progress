@@ -10,11 +10,14 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,13 +33,16 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddPhotoAlternate
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -45,13 +51,19 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuGroup
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -72,13 +84,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -90,8 +105,11 @@ import com.a3.yearlyprogess.core.ui.components.ExpandableSection
 import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.core.util.resizeImageForAppStorage
 import com.a3.yearlyprogess.feature.events.domain.model.Event
+import com.a3.yearlyprogess.feature.events.domain.model.RateUnit
 import com.a3.yearlyprogess.feature.events.domain.model.RepeatDays
 import com.a3.yearlyprogess.feature.events.domain.model.Weekday
+import com.a3.yearlyprogess.feature.events.domain.model.RecurrenceType
+import com.a3.yearlyprogess.feature.events.domain.model.RecurrenceEndType
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -100,7 +118,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun EventCreateScreen(
     eventId: Int? = null,
@@ -121,12 +139,21 @@ fun EventCreateScreen(
     var isStartDateTime by remember { mutableStateOf(true) }
     var isEditingDate by remember { mutableStateOf(false) }
     var isEditingTime by remember { mutableStateOf(false) }
-    var repeatEveryYear by remember { mutableStateOf(false) }
-    var repeatEveryMonth by remember { mutableStateOf(false) }
-    var repeatWeekdays by remember { mutableStateOf(false) }
+    var recurrenceType by remember { mutableStateOf(RecurrenceType.NONE) }
+    var recurrenceInterval by remember { mutableStateOf(1) }
+    var recurrenceEndType by remember { mutableStateOf(RecurrenceEndType.NEVER) }
+    var recurrenceEndDate by remember { mutableStateOf<Long?>(null) }
+    var recurrenceEndOccurrences by remember { mutableStateOf<Int?>(null) }
+    var showCustomRepeatDialog by remember { mutableStateOf(false) }
     var selectedWeekdays by remember { mutableStateOf(setOf<RepeatDays>()) }
     var showError by remember { mutableStateOf(false) }
     var savedImagePath by remember { mutableStateOf<String?>(null) }
+    
+    var customProgressPrefix by remember { mutableStateOf("") }
+    var customProgressSuffix by remember { mutableStateOf("") }
+    var customProgressRate by remember { mutableStateOf("") }
+    var customProgressRateUnit by remember { mutableStateOf<RateUnit?>(null) }
+
     val isEditMode = eventId != null
 
     // Image picker launcher
@@ -163,12 +190,17 @@ fun EventCreateScreen(
                 isAllDay = event.allDayEvent
                 startDateTime = event.eventStartTime.time
                 endDateTime = event.eventEndTime.time
-                repeatEveryYear = event.repeatEventDays.contains(RepeatDays.EVERY_YEAR)
-                repeatEveryMonth = event.repeatEventDays.contains(RepeatDays.EVERY_MONTH)
-                repeatWeekdays = event.hasWeekDays
-                selectedWeekdays = event.repeatEventDays.filter {
-                    it != RepeatDays.EVERY_YEAR && it != RepeatDays.EVERY_MONTH
-                }.toSet()
+                recurrenceType = event.recurrenceType
+                recurrenceInterval = event.recurrenceInterval
+                recurrenceEndType = event.recurrenceEndType
+                recurrenceEndDate = event.recurrenceEndDate
+                recurrenceEndOccurrences = event.recurrenceEndOccurrences
+                selectedWeekdays = event.repeatEventDays.toSet()
+                
+                customProgressPrefix = event.customProgressPrefix ?: ""
+                customProgressSuffix = event.customProgressSuffix ?: ""
+                customProgressRate = event.customProgressRate?.toString() ?: ""
+                customProgressRateUnit = event.customProgressRateUnit
 
                 event.backgroundImageUri?.let { path ->
                     val file = File(path)
@@ -205,11 +237,6 @@ fun EventCreateScreen(
                         return@FloatingActionButton
                     }
 
-                    val repeatDays = mutableListOf<RepeatDays>()
-                    if (repeatEveryYear) repeatDays.add(RepeatDays.EVERY_YEAR)
-                    if (repeatEveryMonth) repeatDays.add(RepeatDays.EVERY_MONTH)
-                    if (repeatWeekdays) repeatDays.addAll(selectedWeekdays)
-
                     val event = Event(
                         id = eventId ?: 0,
                         eventTitle = eventTitle,
@@ -217,9 +244,18 @@ fun EventCreateScreen(
                         allDayEvent = isAllDay,
                         eventStartTime = Date(startDateTime),
                         eventEndTime = Date(endDateTime),
-                        repeatEventDays = repeatDays,
-                        hasWeekDays = repeatWeekdays,
-                        backgroundImageUri = savedImagePath
+                        repeatEventDays = selectedWeekdays.toList(),
+                        hasWeekDays = selectedWeekdays.isNotEmpty(),
+                        backgroundImageUri = savedImagePath,
+                        recurrenceType = recurrenceType,
+                        recurrenceInterval = recurrenceInterval,
+                        recurrenceEndType = recurrenceEndType,
+                        recurrenceEndDate = recurrenceEndDate,
+                        recurrenceEndOccurrences = recurrenceEndOccurrences,
+                        customProgressPrefix = customProgressPrefix.ifBlank { null },
+                        customProgressSuffix = customProgressSuffix.ifBlank { null },
+                        customProgressRate = customProgressRate.toDoubleOrNull(),
+                        customProgressRateUnit = customProgressRateUnit
                     )
 
                     if (isEditMode) {
@@ -300,13 +336,13 @@ fun EventCreateScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Filled.AddPhotoAlternate,
-                            contentDescription = "Add image",
+                            contentDescription = stringResource(R.string.add_image),
                             modifier = Modifier.size(48.dp),
                             tint = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Add Image",
+                            text = stringResource(R.string.add_image),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -419,52 +455,202 @@ fun EventCreateScreen(
                 }
             }
 
-            ExpandableSection(title = stringResource(R.string.repeat)) {
+            ExpandableSection(title = stringResource(R.string.repeat), collapsible = false) {
+                var expanded by remember { mutableStateOf(false) }
+                val rotation by animateFloatAsState(
+                    targetValue = if (expanded) 180f else 0f,
+                    animationSpec = spring(),
+                    label = "dropdown_rotation"
+                )
+                
+                val repeatText = when (recurrenceType) {
+                    RecurrenceType.NONE -> stringResource(R.string.does_not_repeat)
+                    RecurrenceType.DAILY -> if (recurrenceInterval == 1) stringResource(R.string.every_day) else stringResource(R.string.custom)
+                    RecurrenceType.WEEKLY -> if (recurrenceInterval == 1 && selectedWeekdays.isEmpty()) stringResource(R.string.every_week) else stringResource(R.string.custom)
+                    RecurrenceType.MONTHLY -> if (recurrenceInterval == 1) stringResource(R.string.every_month) else stringResource(R.string.custom)
+                    RecurrenceType.YEARLY -> if (recurrenceInterval == 1) stringResource(R.string.every_year) else stringResource(R.string.custom)
+                }
 
-                Switch(
-                    title = stringResource(R.string.every_year), checked = repeatEveryYear, onCheckedChange = {
-                        repeatEveryYear = it
-                        if (it) {
-                            repeatEveryMonth = false
-                            repeatWeekdays = false
-                        }
-                    })
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)) {
+                    Button(
+                        onClick = { expanded = true },
+                        modifier = Modifier.fillMaxWidth(),
+                        shapes = ButtonDefaults.shapes(
+                            pressedShape = ButtonDefaults.shapes().shape,
+                            shape = ButtonDefaults.shapes().pressedShape
+                        ),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        ),
+                        contentPadding = ButtonDefaults.contentPaddingFor(
+                            ButtonDefaults.MediumContainerHeight, false , true
+                        )
+                    ) {
+                        Text(repeatText, modifier = Modifier.weight(1f), textAlign = TextAlign.Start)
+                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, modifier = Modifier.rotate(rotation))
+                    }
 
-                Switch(
-                    title = stringResource(R.string.every_month), checked = repeatEveryMonth, onCheckedChange = {
-                        repeatEveryMonth = it
-                        if (it) {
-                            repeatEveryYear = false
-                            repeatWeekdays = false
-                        }
-                    })
-
-                Switch(
-                    title = stringResource(R.string.on_weekdays), checked = repeatWeekdays, onCheckedChange = {
-                        repeatWeekdays = it
-                        if (it) {
-                            repeatEveryYear = false
-                            repeatEveryMonth = false
-                        }
-                    })
-            }
-
-            // Weekday Selection
-            AnimatedVisibility(
-                visible = repeatWeekdays,
-                enter = expandVertically() + fadeIn(),
-                exit = shrinkVertically() + fadeOut()
-            ) {
-                WeekdaySelector(
-                    selectedWeekdays = selectedWeekdays,
-                    onWeekdayToggle = { day ->
-                        selectedWeekdays = if (selectedWeekdays.contains(day)) {
-                            selectedWeekdays - day
-                        } else {
-                            selectedWeekdays + day
+                    DropdownMenuPopup(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        DropdownMenuGroup(
+                            shapes = MenuDefaults.groupShape(0, 1)
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.does_not_repeat)) },
+                                onClick = {
+                                    recurrenceType = RecurrenceType.NONE; recurrenceInterval =
+                                    1; expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.every_day)) },
+                                onClick = {
+                                    recurrenceType = RecurrenceType.DAILY; recurrenceInterval =
+                                    1; expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.every_week)) },
+                                onClick = {
+                                    recurrenceType = RecurrenceType.WEEKLY; recurrenceInterval =
+                                    1; selectedWeekdays = emptySet(); expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.every_month)) },
+                                onClick = {
+                                    recurrenceType = RecurrenceType.MONTHLY; recurrenceInterval =
+                                    1; expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.every_year)) },
+                                onClick = {
+                                    recurrenceType = RecurrenceType.YEARLY; recurrenceInterval =
+                                    1; expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.custom)) },
+                                onClick = { showCustomRepeatDialog = true; expanded = false }
+                            )
                         }
                     }
-                )
+                }
+            }
+
+            ExpandableSection(
+                modifier = Modifier
+                    .padding(top = 8.dp),
+                title = stringResource(R.string.custom_progress), collapsible = true , initiallyExpanded = false) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = customProgressPrefix,
+                            onValueChange = { customProgressPrefix = it },
+                            label = { Text(stringResource(R.string.prefix)) },
+                            placeholder = { Text("$") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+                        OutlinedTextField(
+                            value = customProgressSuffix,
+                            onValueChange = { customProgressSuffix = it },
+                            label = { Text(stringResource(R.string.suffix)) },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = customProgressRate,
+                            onValueChange = {
+                                if (it.isEmpty() || it.all { char -> char.isDigit() || char == '.' }) {
+                                    customProgressRate = it
+                                }
+                            },
+                            label = { Text(stringResource(R.string.rate)) },
+                            placeholder = { Text("200") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+
+                        var unitExpanded by remember { mutableStateOf(false) }
+                        Box(modifier = Modifier.weight(1f)) {
+                            OutlinedTextField(
+                                value = customProgressRateUnit?.name?.lowercase()?.replaceFirstChar { it.uppercase() } ?: "Per...",
+                                onValueChange = {},
+                                label = { Text(stringResource(R.string.unit)) },
+                                readOnly = true,
+                                trailingIcon = {
+                                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null)
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { unitExpanded = true }
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .clickable { unitExpanded = true }
+                            )
+                            DropdownMenu(
+                                expanded = unitExpanded,
+                                onDismissRequest = { unitExpanded = false },
+                                modifier = Modifier.fillMaxWidth(0.45f)
+                            ) {
+                                RateUnit.entries.forEach { unit ->
+                                    DropdownMenuItem(
+                                        text = { Text("Per ${unit.name.lowercase().replaceFirstChar { it.uppercase() }}") },
+                                        onClick = {
+                                            customProgressRateUnit = unit
+                                            unitExpanded = false
+                                        }
+                                    )
+                                }
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.none)) },
+                                    onClick = {
+                                        customProgressRateUnit = null
+                                        unitExpanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    
+                    Text(
+                        text = stringResource(R.string.note_event_custom_progress),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(80.dp))
@@ -564,6 +750,27 @@ fun EventCreateScreen(
             }
         )
     }
+
+    if (showCustomRepeatDialog) {
+        CustomRepeatDialog(
+            initialType = if (recurrenceType == RecurrenceType.NONE) RecurrenceType.WEEKLY else recurrenceType,
+            initialInterval = recurrenceInterval,
+            initialEndType = recurrenceEndType,
+            initialEndDate = recurrenceEndDate,
+            initialEndOccurrences = recurrenceEndOccurrences,
+            initialWeekdays = selectedWeekdays,
+            onDismiss = { showCustomRepeatDialog = false },
+            onSave = { type, interval, endType, endDate, endOccurrences, weekdays ->
+                recurrenceType = type
+                recurrenceInterval = interval
+                recurrenceEndType = endType
+                recurrenceEndDate = endDate
+                recurrenceEndOccurrences = endOccurrences
+                selectedWeekdays = weekdays
+                showCustomRepeatDialog = false
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -595,21 +802,14 @@ fun WeekdaySelector(
     selectedWeekdays: Set<RepeatDays>,
     onWeekdayToggle: (RepeatDays) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            WeekdayChipRow(
-                selectedWeekdays = selectedWeekdays,
-                onWeekdayToggle = onWeekdayToggle
-            )
-        }
+        WeekdayChipRow(
+            selectedWeekdays = selectedWeekdays,
+            onWeekdayToggle = onWeekdayToggle
+        )
     }
 }
 
@@ -672,7 +872,7 @@ fun WeekdayChip(
         Box(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 12.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -800,6 +1000,153 @@ private fun WeekdayChipRow(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomRepeatDialog(
+    initialType: RecurrenceType,
+    initialInterval: Int,
+    initialEndType: RecurrenceEndType,
+    initialEndDate: Long?,
+    initialEndOccurrences: Int?,
+    initialWeekdays: Set<RepeatDays>,
+    onDismiss: () -> Unit,
+    onSave: (RecurrenceType, Int, RecurrenceEndType, Long?, Int?, Set<RepeatDays>) -> Unit
+) {
+    var type by remember { mutableStateOf(initialType) }
+    var intervalStr by remember { mutableStateOf(initialInterval.toString()) }
+    var endType by remember { mutableStateOf(initialEndType) }
+    var endDate by remember { mutableStateOf(initialEndDate ?: System.currentTimeMillis()) }
+    var endOccurrencesStr by remember { mutableStateOf(initialEndOccurrences?.toString() ?: "1") }
+    var weekdays by remember { mutableStateOf(initialWeekdays) }
+    
+    var showDatePicker by remember { mutableStateOf(false) }
 
-
-
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.custom_recurrence)) },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(stringResource(R.string.repeat_every))
+                    OutlinedTextField(
+                        value = intervalStr,
+                        onValueChange = { if (it.isEmpty() || it.all { char -> char.isDigit() }) intervalStr = it },
+                        modifier = Modifier.width(64.dp),
+                        singleLine = true
+                    )
+                    
+                    var unitExpanded by remember { mutableStateOf(false) }
+                    Box {
+                        TextButton(onClick = { unitExpanded = true }) {
+                            Text(when(type) {
+                                RecurrenceType.DAILY -> pluralStringResource(R.plurals.day, intervalStr.toIntOrNull() ?: 1)
+                                RecurrenceType.WEEKLY -> pluralStringResource(R.plurals.week, intervalStr.toIntOrNull() ?: 1)
+                                RecurrenceType.MONTHLY -> pluralStringResource(R.plurals.month, intervalStr.toIntOrNull() ?: 1)
+                                RecurrenceType.YEARLY -> pluralStringResource(R.plurals.year, intervalStr.toIntOrNull() ?: 1)
+                                else -> pluralStringResource(R.plurals.week, intervalStr.toIntOrNull() ?: 1)
+                            })
+                        }
+                        DropdownMenu(expanded = unitExpanded, onDismissRequest = { unitExpanded = false }) {
+                            listOf(
+                                RecurrenceType.DAILY to  pluralStringResource(R.plurals.day, intervalStr.toIntOrNull() ?: 1),
+                                RecurrenceType.WEEKLY to  pluralStringResource(R.plurals.week, intervalStr.toIntOrNull() ?: 1),
+                                RecurrenceType.MONTHLY to  pluralStringResource(R.plurals.month, intervalStr.toIntOrNull() ?: 1),
+                                RecurrenceType.YEARLY to  pluralStringResource(R.plurals.year, intervalStr.toIntOrNull() ?: 1)
+                            ).forEach { (valType, label) ->
+                                DropdownMenuItem(
+                                    text = { Text(label) },
+                                    onClick = { type = valType; unitExpanded = false }
+                                )
+                            }
+                        }
+                    }
+                }
+                
+                if (type == RecurrenceType.WEEKLY) {
+                    Text(stringResource(R.string.repeat_on), style = MaterialTheme.typography.labelMedium)
+                    WeekdaySelector(selectedWeekdays = weekdays, onWeekdayToggle = {
+                        weekdays = if (it in weekdays) weekdays - it else weekdays + it
+                    })
+                }
+                
+                Text(stringResource(R.string.ends), style = MaterialTheme.typography.titleSmall)
+                
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(selected = endType == RecurrenceEndType.NEVER, onClick = { endType = RecurrenceEndType.NEVER })
+                    Text(stringResource(R.string.never), modifier = Modifier.padding(start = 8.dp))
+                }
+                
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(selected = endType == RecurrenceEndType.ON_DATE, onClick = { endType = RecurrenceEndType.ON_DATE })
+                    Text(stringResource(R.string.on), modifier = Modifier.padding(start = 8.dp))
+                    Spacer(Modifier.width(8.dp))
+                    TextButton(onClick = { 
+                        endType = RecurrenceEndType.ON_DATE
+                        showDatePicker = true 
+                    }) {
+                        val format = java.text.SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+                        Text(format.format(java.util.Date(endDate)))
+                    }
+                }
+                
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(selected = endType == RecurrenceEndType.AFTER_OCCURRENCES, onClick = { endType = RecurrenceEndType.AFTER_OCCURRENCES })
+                    Text(stringResource(R.string.after), modifier = Modifier.padding(start = 8.dp))
+                    Spacer(Modifier.width(8.dp))
+                    OutlinedTextField(
+                        value = endOccurrencesStr,
+                        onValueChange = { 
+                            if (it.isEmpty() || it.all { char -> char.isDigit() }) {
+                                endOccurrencesStr = it
+                                endType = RecurrenceEndType.AFTER_OCCURRENCES
+                            }
+                        },
+                        modifier = Modifier.width(64.dp),
+                        singleLine = true
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.occurrences))
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                val interval = intervalStr.toIntOrNull()?.coerceAtLeast(1) ?: 1
+                val occ = endOccurrencesStr.toIntOrNull()?.coerceAtLeast(1) ?: 1
+                onSave(type, interval, endType, endDate, occ, weekdays)
+            }) {
+                Text("Done")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+    
+    if (showDatePicker) {
+        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = endDate)
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    datePickerState.selectedDateMillis?.let { endDate = it }
+                    showDatePicker = false
+                }) { Text("OK") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+}

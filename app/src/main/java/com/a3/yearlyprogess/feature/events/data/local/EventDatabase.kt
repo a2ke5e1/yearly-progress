@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.a3.yearlyprogess.feature.events.domain.model.Converters
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 
-@Database(entities = [Event::class], version = 4, exportSchema = false)
+@Database(entities = [Event::class], version = 6, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class EventDatabase : RoomDatabase() {
 
@@ -30,6 +30,8 @@ abstract class EventDatabase : RoomDatabase() {
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_3)
                     .addMigrations(MIGRATION_3_4)
+                    .addMigrations(MIGRATION_4_5)
+                    .addMigrations(MIGRATION_5_6)
                     .fallbackToDestructiveMigration(true)
                     .build()
                 INSTANCE = instance
@@ -58,6 +60,36 @@ abstract class EventDatabase : RoomDatabase() {
                 db.execSQL(
                     "ALTER TABLE event_table ADD COLUMN backgroundImageUri TEXT DEFAULT NULL"
                 )
+            }
+        }
+
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE event_table ADD COLUMN recurrenceType TEXT NOT NULL DEFAULT 'NONE'")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN recurrenceInterval INTEGER NOT NULL DEFAULT 1")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN recurrenceEndType TEXT NOT NULL DEFAULT 'NEVER'")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN recurrenceEndDate INTEGER DEFAULT NULL")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN recurrenceEndOccurrences INTEGER DEFAULT NULL")
+
+                db.execSQL("""
+                    UPDATE event_table 
+                    SET recurrenceType = 
+                        CASE 
+                            WHEN repeatEventDays LIKE '%EVERY_YEAR%' THEN 'YEARLY'
+                            WHEN repeatEventDays LIKE '%EVERY_MONTH%' THEN 'MONTHLY'
+                            WHEN hasWeekDays = 1 THEN 'WEEKLY'
+                            ELSE 'NONE'
+                        END
+                """.trimIndent())
+            }
+        }
+
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE event_table ADD COLUMN customProgressPrefix TEXT DEFAULT NULL")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN customProgressSuffix TEXT DEFAULT NULL")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN customProgressRate REAL DEFAULT NULL")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN customProgressRateUnit TEXT DEFAULT NULL")
             }
         }
     }

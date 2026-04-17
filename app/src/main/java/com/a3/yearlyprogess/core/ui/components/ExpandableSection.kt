@@ -2,11 +2,14 @@ package com.a3.yearlyprogess.core.ui.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -35,7 +38,8 @@ fun ExpandableSection(
 
     val rotation by animateFloatAsState(
         targetValue = if (expanded) 180f else 0f,
-        label = ""
+        animationSpec = spring(),
+        label = "dropdown_rotation"
     )
 
     Column(
@@ -47,6 +51,7 @@ fun ExpandableSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(min = 64.dp)
                 .then(
                     if (collapsible) Modifier.clickable { expanded = !expanded }
                     else Modifier    // when not collapsible, clicking does nothing

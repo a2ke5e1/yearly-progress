@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.core.domain.model.AppSettings
+import com.a3.yearlyprogess.core.ui.components.ad.AdCard
+import com.a3.yearlyprogess.core.ui.components.ad.AdCardDefaults
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 
@@ -95,6 +97,12 @@ fun EventList(
                 ),
                 settings = settings
             )
+        }
+
+        if (events.size > 1) {
+            item {
+                AdCard()
+            }
         }
 
         item {
