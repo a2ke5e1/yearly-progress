@@ -128,6 +128,7 @@ data class EventProgressState(
     val progress: Double,
     val statusText: String,
     val formattedText: String,
+    val customProgress: String? = null
 )
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -153,10 +154,12 @@ fun EventDetailCard(
     ) {
         val (start, end) = event.nextStartAndEndTime()
         while (true) {
+            val currentTime = System.currentTimeMillis()
             value = EventProgressState(
                 progress = progressUtil.calculateProgress(start, end),
                 statusText = formatEventTimeStatus(context, start, end),
-                formattedText = formatEventDateTime(context, start, end, event.allDayEvent)
+                formattedText = formatEventDateTime(context, start, end, event.allDayEvent),
+                customProgress = event.getCustomProgressString(currentTime)
             )
             delay(refreshInterval)
         }
@@ -251,14 +254,24 @@ fun EventDetailCard(
                         )
                     }
                     if (settings.useClassicEventCards) {
-                        FormattedPercentage(
-                            progressProvider = { uiState.progress },
-                            digits = decimals,
-                            style = MaterialTheme.typography.headlineSmallEmphasized.copy(
-                                color = MaterialTheme.colorScheme.primary,
-                            ),
-                            modifier = Modifier.padding(top = 12.dp)
-                        )
+                        if (uiState.customProgress != null) {
+                            Text(
+                                text = uiState.customProgress!!,
+                                style = MaterialTheme.typography.headlineSmallEmphasized.copy(
+                                    color = MaterialTheme.colorScheme.primary,
+                                ),
+                                modifier = Modifier.padding(top = 12.dp)
+                            )
+                        } else {
+                            FormattedPercentage(
+                                progressProvider = { uiState.progress },
+                                digits = decimals,
+                                style = MaterialTheme.typography.headlineSmallEmphasized.copy(
+                                    color = MaterialTheme.colorScheme.primary,
+                                ),
+                                modifier = Modifier.padding(top = 12.dp)
+                            )
+                        }
 
                         LinearProgressIndicator(
                             progress = { uiState.progress.toFloat() / 100f },
@@ -281,11 +294,19 @@ fun EventDetailCard(
                             },
                             modifier = Modifier.size(80.dp),
                         )
-                        FormattedPercentage(
-                            progressProvider = { uiState.progress },
-                            digits = decimals,
-                            style = style.progressTextStyle,
-                        )
+                        if (uiState.customProgress != null) {
+                            Text(
+                                text = uiState.customProgress!!,
+                                style = style.progressTextStyle,
+                                textAlign = TextAlign.Center
+                            )
+                        } else {
+                            FormattedPercentage(
+                                progressProvider = { uiState.progress },
+                                digits = decimals,
+                                style = style.progressTextStyle,
+                            )
+                        }
                     }
                 }
             }

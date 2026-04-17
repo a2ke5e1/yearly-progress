@@ -212,6 +212,13 @@
     <string name="repeat_every">Repeat every</string>
     <string name="custom_recurrence">Custom recurrence</string>
     <string name="add_image">Add Image</string>
+    <string name="custom_progress">Custom Progress</string>
+    <string name="prefix">Prefix</string>
+    <string name="suffix">Suffix</string>
+    <string name="rate">Rate</string>
+    <string name="unit">Unit</string>
+    <string name="none">None</string>
+    <string name="note_event_custom_progress">If set, progress will display calculated value based on rate instead of percentage.</string>
     <plurals name="day">
         <item quantity="one">Day</item>
         <item quantity="other">Days</item>

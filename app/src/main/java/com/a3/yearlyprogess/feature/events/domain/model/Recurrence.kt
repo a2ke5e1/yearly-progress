@@ -7,3 +7,7 @@ enum class RecurrenceType {
 enum class RecurrenceEndType {
     NEVER, ON_DATE, AFTER_OCCURRENCES
 }
+
+enum class RateUnit {
+    SECOND, MINUTE, HOUR, DAY, TOTAL
+}

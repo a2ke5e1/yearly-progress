@@ -11,11 +11,13 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +42,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddPhotoAlternate
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -102,6 +105,7 @@ import com.a3.yearlyprogess.core.ui.components.ExpandableSection
 import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.core.util.resizeImageForAppStorage
 import com.a3.yearlyprogess.feature.events.domain.model.Event
+import com.a3.yearlyprogess.feature.events.domain.model.RateUnit
 import com.a3.yearlyprogess.feature.events.domain.model.RepeatDays
 import com.a3.yearlyprogess.feature.events.domain.model.Weekday
 import com.a3.yearlyprogess.feature.events.domain.model.RecurrenceType
@@ -144,6 +148,12 @@ fun EventCreateScreen(
     var selectedWeekdays by remember { mutableStateOf(setOf<RepeatDays>()) }
     var showError by remember { mutableStateOf(false) }
     var savedImagePath by remember { mutableStateOf<String?>(null) }
+    
+    var customProgressPrefix by remember { mutableStateOf("") }
+    var customProgressSuffix by remember { mutableStateOf("") }
+    var customProgressRate by remember { mutableStateOf("") }
+    var customProgressRateUnit by remember { mutableStateOf<RateUnit?>(null) }
+
     val isEditMode = eventId != null
 
     // Image picker launcher
@@ -186,6 +196,11 @@ fun EventCreateScreen(
                 recurrenceEndDate = event.recurrenceEndDate
                 recurrenceEndOccurrences = event.recurrenceEndOccurrences
                 selectedWeekdays = event.repeatEventDays.toSet()
+                
+                customProgressPrefix = event.customProgressPrefix ?: ""
+                customProgressSuffix = event.customProgressSuffix ?: ""
+                customProgressRate = event.customProgressRate?.toString() ?: ""
+                customProgressRateUnit = event.customProgressRateUnit
 
                 event.backgroundImageUri?.let { path ->
                     val file = File(path)
@@ -236,7 +251,11 @@ fun EventCreateScreen(
                         recurrenceInterval = recurrenceInterval,
                         recurrenceEndType = recurrenceEndType,
                         recurrenceEndDate = recurrenceEndDate,
-                        recurrenceEndOccurrences = recurrenceEndOccurrences
+                        recurrenceEndOccurrences = recurrenceEndOccurrences,
+                        customProgressPrefix = customProgressPrefix.ifBlank { null },
+                        customProgressSuffix = customProgressSuffix.ifBlank { null },
+                        customProgressRate = customProgressRate.toDoubleOrNull(),
+                        customProgressRateUnit = customProgressRateUnit
                     )
 
                     if (isEditMode) {
@@ -440,16 +459,16 @@ fun EventCreateScreen(
                 var expanded by remember { mutableStateOf(false) }
                 val rotation by animateFloatAsState(
                     targetValue = if (expanded) 180f else 0f,
-                    animationSpec = tween(durationMillis = 250),
+                    animationSpec = spring(),
                     label = "dropdown_rotation"
                 )
                 
                 val repeatText = when (recurrenceType) {
-                    RecurrenceType.NONE -> "Does not repeat"
-                    RecurrenceType.DAILY -> if (recurrenceInterval == 1) "Every day" else "Custom..."
-                    RecurrenceType.WEEKLY -> if (recurrenceInterval == 1 && selectedWeekdays.isEmpty()) "Every week" else "Custom..."
-                    RecurrenceType.MONTHLY -> if (recurrenceInterval == 1) "Every month" else "Custom..."
-                    RecurrenceType.YEARLY -> if (recurrenceInterval == 1) "Every year" else "Custom..."
+                    RecurrenceType.NONE -> stringResource(R.string.does_not_repeat)
+                    RecurrenceType.DAILY -> if (recurrenceInterval == 1) stringResource(R.string.every_day) else stringResource(R.string.custom)
+                    RecurrenceType.WEEKLY -> if (recurrenceInterval == 1 && selectedWeekdays.isEmpty()) stringResource(R.string.every_week) else stringResource(R.string.custom)
+                    RecurrenceType.MONTHLY -> if (recurrenceInterval == 1) stringResource(R.string.every_month) else stringResource(R.string.custom)
+                    RecurrenceType.YEARLY -> if (recurrenceInterval == 1) stringResource(R.string.every_year) else stringResource(R.string.custom)
                 }
 
                 Box(modifier = Modifier
@@ -471,7 +490,7 @@ fun EventCreateScreen(
                         )
                     ) {
                         Text(repeatText, modifier = Modifier.weight(1f), textAlign = TextAlign.Start)
-                        Icon(Icons.Filled.ArrowDropDown, contentDescription = null, modifier = Modifier.rotate(rotation))
+                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, modifier = Modifier.rotate(rotation))
                     }
 
                     DropdownMenuPopup(
@@ -525,6 +544,112 @@ fun EventCreateScreen(
                             )
                         }
                     }
+                }
+            }
+
+            ExpandableSection(
+                modifier = Modifier
+                    .padding(top = 8.dp),
+                title = stringResource(R.string.custom_progress), collapsible = true , initiallyExpanded = false) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = customProgressPrefix,
+                            onValueChange = { customProgressPrefix = it },
+                            label = { Text(stringResource(R.string.prefix)) },
+                            placeholder = { Text("$") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+                        OutlinedTextField(
+                            value = customProgressSuffix,
+                            onValueChange = { customProgressSuffix = it },
+                            label = { Text(stringResource(R.string.suffix)) },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = customProgressRate,
+                            onValueChange = {
+                                if (it.isEmpty() || it.all { char -> char.isDigit() || char == '.' }) {
+                                    customProgressRate = it
+                                }
+                            },
+                            label = { Text(stringResource(R.string.rate)) },
+                            placeholder = { Text("200") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+
+                        var unitExpanded by remember { mutableStateOf(false) }
+                        Box(modifier = Modifier.weight(1f)) {
+                            OutlinedTextField(
+                                value = customProgressRateUnit?.name?.lowercase()?.replaceFirstChar { it.uppercase() } ?: "Per...",
+                                onValueChange = {},
+                                label = { Text(stringResource(R.string.unit)) },
+                                readOnly = true,
+                                trailingIcon = {
+                                    Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null)
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { unitExpanded = true }
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .clickable { unitExpanded = true }
+                            )
+                            DropdownMenu(
+                                expanded = unitExpanded,
+                                onDismissRequest = { unitExpanded = false },
+                                modifier = Modifier.fillMaxWidth(0.45f)
+                            ) {
+                                RateUnit.entries.forEach { unit ->
+                                    DropdownMenuItem(
+                                        text = { Text("Per ${unit.name.lowercase().replaceFirstChar { it.uppercase() }}") },
+                                        onClick = {
+                                            customProgressRateUnit = unit
+                                            unitExpanded = false
+                                        }
+                                    )
+                                }
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.none)) },
+                                    onClick = {
+                                        customProgressRateUnit = null
+                                        unitExpanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    
+                    Text(
+                        text = stringResource(R.string.note_event_custom_progress),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
                 }
             }
 
@@ -1025,6 +1150,3 @@ fun CustomRepeatDialog(
         }
     }
 }
-
-
-

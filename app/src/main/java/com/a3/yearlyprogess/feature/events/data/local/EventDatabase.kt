@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.a3.yearlyprogess.feature.events.domain.model.Converters
 import com.a3.yearlyprogess.feature.events.domain.model.Event
 
-@Database(entities = [Event::class], version = 5, exportSchema = false)
+@Database(entities = [Event::class], version = 6, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class EventDatabase : RoomDatabase() {
 
@@ -31,6 +31,7 @@ abstract class EventDatabase : RoomDatabase() {
                     .addMigrations(MIGRATION_2_3)
                     .addMigrations(MIGRATION_3_4)
                     .addMigrations(MIGRATION_4_5)
+                    .addMigrations(MIGRATION_5_6)
                     .fallbackToDestructiveMigration(true)
                     .build()
                 INSTANCE = instance
@@ -80,6 +81,15 @@ abstract class EventDatabase : RoomDatabase() {
                             ELSE 'NONE'
                         END
                 """.trimIndent())
+            }
+        }
+
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE event_table ADD COLUMN customProgressPrefix TEXT DEFAULT NULL")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN customProgressSuffix TEXT DEFAULT NULL")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN customProgressRate REAL DEFAULT NULL")
+                db.execSQL("ALTER TABLE event_table ADD COLUMN customProgressRateUnit TEXT DEFAULT NULL")
             }
         }
     }

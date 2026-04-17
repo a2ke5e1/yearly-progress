@@ -1,6 +1,5 @@
 package com.a3.yearlyprogess.feature.events.domain.model
 
-
 import androidx.room.TypeConverter
 import java.util.Date
 
@@ -54,5 +53,15 @@ class Converters {
         } catch (e: Exception) {
             RecurrenceEndType.NEVER
         }
+    }
+
+    @TypeConverter
+    fun fromRateUnit(value: RateUnit?): String? {
+        return value?.name
+    }
+
+    @TypeConverter
+    fun toRateUnit(value: String?): RateUnit? {
+        return value?.let { RateUnit.valueOf(it) }
     }
 }

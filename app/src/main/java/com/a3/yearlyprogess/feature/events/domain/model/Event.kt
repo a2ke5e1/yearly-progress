@@ -10,6 +10,7 @@ import java.time.DayOfWeek
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.Locale
 
 @Parcelize
 @Entity(tableName = "event_table")
@@ -29,7 +30,49 @@ data class Event(
     val recurrenceEndType: RecurrenceEndType = RecurrenceEndType.NEVER,
     val recurrenceEndDate: Long? = null,
     val recurrenceEndOccurrences: Int? = null,
+
+    val customProgressPrefix: String? = null,
+    val customProgressSuffix: String? = null,
+    val customProgressRate: Double? = null,
+    val customProgressRateUnit: RateUnit? = null,
 ) : Parcelable {
+
+    fun getCustomProgressString(currentTime: Long = System.currentTimeMillis()): String? {
+        val rate = customProgressRate ?: return null
+        val unit = customProgressRateUnit ?: return null
+        
+        val (nextStart, nextEnd) = nextStartAndEndTime(currentTime)
+        if (currentTime < nextStart) return null
+        
+        val value = when (unit) {
+            RateUnit.TOTAL -> {
+                val totalDuration = (nextEnd - nextStart).toDouble()
+                if (totalDuration <= 0) 0.0
+                else {
+                    val elapsed = (currentTime - nextStart).toDouble()
+                    (elapsed / totalDuration) * rate
+                }
+            }
+            RateUnit.SECOND -> (currentTime - nextStart) / 1000.0 * rate
+            RateUnit.MINUTE -> (currentTime - nextStart) / (1000.0 * 60.0) * rate
+            RateUnit.HOUR -> (currentTime - nextStart) / (1000.0 * 60.0 * 60.0) * rate
+            RateUnit.DAY -> (currentTime - nextStart) / (1000.0 * 60.0 * 60.0 * 24.0) * rate
+        }
+
+        val formattedValue = if (value % 1.0 == 0.0) {
+            value.toLong().toString()
+        } else {
+            String.format(Locale.getDefault(), "%.2f", value)
+        }
+
+        return buildString {
+            customProgressPrefix?.let { append(it) }
+            append(formattedValue)
+            customProgressSuffix?.let { 
+                append(it)
+            }
+        }
+    }
 
     companion object {
         private const val MAX_ITERATION = 10_0000
