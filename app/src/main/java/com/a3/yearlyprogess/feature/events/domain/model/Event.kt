@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import java.util.Calendar
 import java.util.Date
 import kotlinx.parcelize.Parcelize
+import java.time.DayOfWeek
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -87,13 +88,13 @@ data class Event(
                 } else {
                     repeatEventDays.mapNotNull {
                         when (it) {
-                            RepeatDays.MONDAY -> java.time.DayOfWeek.MONDAY
-                            RepeatDays.TUESDAY -> java.time.DayOfWeek.TUESDAY
-                            RepeatDays.WEDNESDAY -> java.time.DayOfWeek.WEDNESDAY
-                            RepeatDays.THURSDAY -> java.time.DayOfWeek.THURSDAY
-                            RepeatDays.FRIDAY -> java.time.DayOfWeek.FRIDAY
-                            RepeatDays.SATURDAY -> java.time.DayOfWeek.SATURDAY
-                            RepeatDays.SUNDAY -> java.time.DayOfWeek.SUNDAY
+                            RepeatDays.MONDAY -> DayOfWeek.MONDAY
+                            RepeatDays.TUESDAY -> DayOfWeek.TUESDAY
+                            RepeatDays.WEDNESDAY -> DayOfWeek.WEDNESDAY
+                            RepeatDays.THURSDAY -> DayOfWeek.THURSDAY
+                            RepeatDays.FRIDAY -> DayOfWeek.FRIDAY
+                            RepeatDays.SATURDAY -> DayOfWeek.SATURDAY
+                            RepeatDays.SUNDAY -> DayOfWeek.SUNDAY
                             else -> null
                         }
                     }.toSet()
