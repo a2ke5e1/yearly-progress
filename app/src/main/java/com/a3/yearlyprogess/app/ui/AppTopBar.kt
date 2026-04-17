@@ -13,6 +13,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,12 +28,15 @@ import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuGroup
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -72,7 +76,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppTopBar(
     modifier: Modifier = Modifier,
@@ -244,47 +248,59 @@ fun AppTopBar(
                         Icon(Icons.Default.MoreVert, contentDescription = "More")
                     }
                 }
-                DropdownMenu(
-                    expanded = expanded, onDismissRequest = { expanded = false }) {
-                    if (onImportEvents != null) {
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.import_events)) },
-                            onClick = {
-                                performFeedback()
-                                expanded = false
-                                onImportEvents()
-                            })
-                    }
-                    if (showBackAndRestore) {
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.backup_restore)) },
-                            onClick = {
-                                performFeedback()
-                                expanded = false
-                                showBackupRestoreDialog = true
-                            }
-                        )
-                    }
-                    if(onSettingsClick != null) {
-                        DropdownMenuItem(text = { Text(stringResource(R.string.settings)) }, onClick = {
-                            performFeedback()
-                            expanded = false
-                            onSettingsClick()
-                        })
-                    }
-                    if (showShareButton) {
-                        DropdownMenuItem(text = { Text(stringResource(R.string.share)) }, onClick = {
-                            performFeedback()
-                            expanded = false
-                            CommunityUtil.onShare(context)
-                        })
-                    }
-                    if (showAboutButton) {
-                        DropdownMenuItem(text = { Text(stringResource(R.string.about)) }, onClick = {
-                            performFeedback()
-                            expanded = false
-                            showAboutDialogBox = true
-                        })
+                DropdownMenuPopup(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                ) {
+                    DropdownMenuGroup(
+                        shapes = MenuDefaults.groupShapes()
+                    ) {
+                        if (onImportEvents != null) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.import_events)) },
+                                onClick = {
+                                    performFeedback()
+                                    expanded = false
+                                    onImportEvents()
+                                })
+                        }
+                        if (showBackAndRestore) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.backup_restore)) },
+                                onClick = {
+                                    performFeedback()
+                                    expanded = false
+                                    showBackupRestoreDialog = true
+                                }
+                            )
+                        }
+                        if (onSettingsClick != null) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.settings)) },
+                                onClick = {
+                                    performFeedback()
+                                    expanded = false
+                                    onSettingsClick()
+                                })
+                        }
+                        if (showShareButton) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.share)) },
+                                onClick = {
+                                    performFeedback()
+                                    expanded = false
+                                    CommunityUtil.onShare(context)
+                                })
+                        }
+                        if (showAboutButton) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.about)) },
+                                onClick = {
+                                    performFeedback()
+                                    expanded = false
+                                    showAboutDialogBox = true
+                                })
+                        }
                     }
                 }
             }
