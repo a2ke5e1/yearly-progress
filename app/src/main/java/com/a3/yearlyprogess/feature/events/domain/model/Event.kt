@@ -27,6 +27,10 @@ data class Event(
     val recurrenceEndOccurrences: Int? = null,
 ) : Parcelable {
 
+    companion object {
+        private const val MAX_ITERATION = 10_0000
+    }
+
     fun nextStartAndEndTime(currentTime: Long = System.currentTimeMillis()): Pair<Long, Long> {
         if (recurrenceType == RecurrenceType.NONE) {
             return Pair(eventStartTime.time, eventEndTime.time)
@@ -59,7 +63,7 @@ data class Event(
             }
         }
 
-        while (true) {
+        while (occurrenceCount < MAX_ITERATION) {
             // Check if current `next` is past the end conditions
             if (recurrenceEndType == RecurrenceEndType.AFTER_OCCURRENCES && recurrenceEndOccurrences != null) {
                 if (occurrenceCount > recurrenceEndOccurrences) {
@@ -105,5 +109,7 @@ data class Event(
             nextEndTime = nextStartTime + duration
             occurrenceCount++
         }
+
+        return Pair(lastValidStart, lastValidEnd)
     }
 }
