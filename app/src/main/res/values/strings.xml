@@ -199,4 +199,33 @@
     <string name="classic_event_cards">Classic Event Cards</string>
     <string name="classic_event_cards_desc">Use a linear progress bar instead of a circular wavy one</string>
 
+    <string name="does_not_repeat">Does not repeat</string>
+    <string name="every_day">Every Day</string>
+    <string name="every_week">Every week</string>
+    <string name="custom">Custom</string>
+    <string name="never">Never</string>
+    <string name="on">On</string>
+    <string name="after">After</string>
+    <string name="occurrences">occurrences</string>
+    <string name="ends">Ends</string>
+    <string name="repeat_on">Repeat on</string>
+    <string name="repeat_every">Repeat every</string>
+    <string name="custom_recurrence">Custom recurrence</string>
+    <string name="add_image">Add Image</string>
+    <plurals name="day">
+        <item quantity="one">Day</item>
+        <item quantity="other">Days</item>
+    </plurals>
+    <plurals name="week">
+        <item quantity="one">Week</item>
+        <item quantity="other">Weeks</item>
+    </plurals>
+    <plurals name="month">
+        <item quantity="one">Month</item>
+        <item quantity="other">Months</item>
+    </plurals>
+    <plurals name="year">
+        <item quantity="one">Year</item>
+        <item quantity="other">Years</item>
+    </plurals>
 </resources>
