@@ -181,7 +181,7 @@ fun EventDetailCard(
 
     Box(
         modifier = modifier
-//            .height(style.cardHeight)
+            .height(style.cardHeight)
             .fillMaxWidth()
             .background(
                 color = animatedBackgroundColor,
