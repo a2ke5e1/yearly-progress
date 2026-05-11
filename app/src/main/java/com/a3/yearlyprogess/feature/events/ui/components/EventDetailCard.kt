@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
@@ -181,7 +183,7 @@ fun EventDetailCard(
 
     Box(
         modifier = modifier
-            .height(style.cardHeight)
+//            .height(style.cardHeight)
             .fillMaxWidth()
             .background(
                 color = animatedBackgroundColor,
@@ -204,7 +206,7 @@ fun EventDetailCard(
                 contentScale = ContentScale.Crop,
                 alpha = 0.2f,
                 modifier = Modifier
-                    .fillMaxSize()
+                    .matchParentSize()
                     .clip(style.cornerStyle.toAnimatedShape(animatedCorners))
             )
         }
