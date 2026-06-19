@@ -4,15 +4,19 @@ import android.content.Context
 import android.os.Build
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.feature.widgets.domain.model.AllInWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 import javax.inject.Singleton
 
 private const val PREFERENCES_NAME = "all_in_widget_options_preferences"
@@ -52,7 +56,16 @@ class AllInWidgetOptionsDataStore(
     private fun getFontScaleKey(widgetId: Int) = floatPreferencesKey("font_scale_$widgetId")
 
     fun getOptionsFlow(widgetId: Int): Flow<AllInWidgetOptions> =
-        context.allInWidgetOptionsDataStore.data.map { prefs ->
+        context.allInWidgetOptionsDataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    Log.e("AllInWidgetOptionsDataStore", "Error reading preferences", exception)
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { prefs ->
             AllInWidgetOptions(
                 theme = prefs[getThemeKey(widgetId)]?.let { themeName ->
                     runCatching { WidgetTheme.valueOf(themeName) }.getOrNull()

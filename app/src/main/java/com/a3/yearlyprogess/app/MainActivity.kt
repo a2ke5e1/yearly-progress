@@ -61,6 +61,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         // Initialize RoomBackup BEFORE the Activity is STARTED
         roomBackup = RoomBackup(this).apply {
@@ -79,8 +80,6 @@ class MainActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition {
             viewModel.appSettings.value?.isFirstLaunch == null
         }
-
-        enableEdgeToEdge()
 
         setContent {
             val appSettings by viewModel.appSettings.collectAsState()

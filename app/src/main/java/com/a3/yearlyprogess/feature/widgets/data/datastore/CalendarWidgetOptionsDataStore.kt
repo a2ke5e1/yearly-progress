@@ -5,14 +5,18 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.feature.widgets.domain.model.CalendarWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 
 private val Context.calendarWidgetDataStore: DataStore<Preferences> by preferencesDataStore(name = "calendar_widget_options")
 
@@ -28,7 +32,16 @@ class CalendarWidgetOptionsDataStore(private val context: Context) {
     private fun getSelectedCalendarIdsKey(appWidgetId: Int) = stringPreferencesKey("calendar_widget_${appWidgetId}_selected_calendar_ids")
 
     fun getOptions(appWidgetId: Int): Flow<CalendarWidgetOptions> {
-        return context.calendarWidgetDataStore.data.map { preferences ->
+        return context.calendarWidgetDataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    Log.e("CalendarWidgetOptionsDataStore", "Error reading preferences", exception)
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
             val theme =  preferences[getThemeKey(appWidgetId)]?.let { themeName ->
                 runCatching { WidgetTheme.valueOf(themeName) }.getOrNull()
             }

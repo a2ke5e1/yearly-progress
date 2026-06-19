@@ -4,13 +4,16 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.data.remote.ResultDto
 import com.a3.yearlyprogess.domain.model.SunriseSunset
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
+import java.io.IOException
 
 val Context.sunriseSunsetDataStore: DataStore<Preferences> by preferencesDataStore(
     name = "sunrise_sunset_cache"
@@ -44,7 +47,16 @@ object SunriseSunsetCache {
         startDate: String,
         endDate: String
     ): List<ResultDto>? {
-        val prefs = context.sunriseSunsetDataStore.data.first()
+        val prefs = context.sunriseSunsetDataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    Log.e("SunriseSunsetCache", "Error reading cache", exception)
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .first()
         val json = prefs[cacheKey(lat, lon, startDate, endDate)]
         return if (json != null) {
             Log.d("SunriseSunsetCache", "Cache hit for $lat,$lon [$startDate → $endDate]")

@@ -6,11 +6,15 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.a3.yearlyprogess.core.util.Log
 import com.a3.yearlyprogess.domain.model.Location
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,7 +32,16 @@ class LocationPreferences @Inject constructor(
         private val PERMISSION_ASKED_KEY = booleanPreferencesKey("permission_asked")
     }
 
-    val savedLocation: Flow<Location?> = context.dataStore.data.map { preferences ->
+    val savedLocation: Flow<Location?> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.e("LocationPreferences", "Error reading location preferences", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
         val hasSavedLocation = preferences[HAS_SAVED_LOCATION_KEY] ?: false
         if (hasSavedLocation) {
             Location(
@@ -41,7 +54,16 @@ class LocationPreferences @Inject constructor(
         }
     }
 
-    val wasPermissionAsked: Flow<Boolean> = context.dataStore.data.map { preferences ->
+    val wasPermissionAsked: Flow<Boolean> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.e("LocationPreferences", "Error reading permission asked preferences", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
         preferences[PERMISSION_ASKED_KEY] ?: false
     }
 

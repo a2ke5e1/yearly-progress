@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.core.emptyPreferences
 import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.domain.model.NotificationSettings
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
@@ -21,7 +22,9 @@ import com.a3.yearlyprogess.core.util.ProgressSettings
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -34,7 +37,16 @@ class AppSettingsRepositoryImpl @Inject constructor(
     @param:ApplicationContext private val context: Context
 ) : AppSettingsRepository {
 
-    override val appSettings: Flow<AppSettings> = context.dataStore.data.map { preferences ->
+    override val appSettings: Flow<AppSettings> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.e("AppSettingsRepository", "Error reading preferences", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
         val uLocale = ULocale(preferences[PreferencesKeys.LOCALE] ?: ULocale.getDefault().toString())
         val calendar = Calendar.getInstance(uLocale)
         Log.d("appSettings", preferences.toString())
