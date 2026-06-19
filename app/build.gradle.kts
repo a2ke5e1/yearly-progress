@@ -34,14 +34,14 @@ fun getEnvProperty(key: String, required: Boolean = false): String {
 android {
     namespace = "com.a3.yearlyprogess"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
     defaultConfig {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
-        targetSdk = 36
-        versionCode = 233
-        versionName = "4.0.4"
+        targetSdk = 37
+        versionCode = 234
+        versionName = "4.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
