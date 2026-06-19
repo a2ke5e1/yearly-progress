@@ -55,19 +55,19 @@ object ProgressCardDefaults {
     fun progressCardStyle(
         cardHeight: Dp = 160.dp,
         cardPadding: Dp = 18.dp,
-        progressBarColor: Color = MaterialTheme.colorScheme.primaryContainer,
+        progressBarColor: Color = MaterialTheme.colorScheme.surfaceVariant,
         backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
         labelTextStyle: TextStyle = MaterialTheme.typography.labelSmall.copy(
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(
             color = MaterialTheme.colorScheme.onSurface
         ),
         progressTextStyle: TextStyle = MaterialTheme.typography.displaySmall.copy(
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            color = MaterialTheme.colorScheme.primary
         ),
         durationTextStyle: TextStyle = MaterialTheme.typography.bodySmall.copy(
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         cornerStyle: CardCornerStyle = CardCornerStyle.Default,
         pressConfig: PressAnimationConfig = PressAnimationConfig()
