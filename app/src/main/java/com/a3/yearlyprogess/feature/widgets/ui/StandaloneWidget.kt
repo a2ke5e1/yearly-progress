@@ -33,6 +33,7 @@ import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer.applyTextViewTex
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 import java.time.Instant
@@ -41,6 +42,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import javax.inject.Inject
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.milliseconds
 
 enum class StandaloneWidgetType {
     DAY,
@@ -97,9 +99,9 @@ open class StandaloneWidget(
             val lon = location.longitude
 
             // Use withTimeoutOrNull to prevent the widget from hanging/blocking indefinitely
-            val result = withTimeoutOrNull(1000L) { // 1 second timeout
+            val result = withTimeoutOrNull(1000L.milliseconds) { // 1 second timeout
                 sunriseSunsetRepository.getSunriseSunset(lat, lon)
-                    .first { it is Resource.Success } // Only take the first SUCCESS item
+                    .firstOrNull { it is Resource.Success } // Only take the first SUCCESS item
             }
 
             Log.d("StandaloneWidget", "Sunset Result after timeout/filter: $result")
