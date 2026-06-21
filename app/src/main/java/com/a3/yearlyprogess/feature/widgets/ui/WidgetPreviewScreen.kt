@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RemoteViews
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -272,16 +273,24 @@ fun RemoteViewsHost(remoteViews: RemoteViews) {
 }
 
 private fun pinWidget(context: Context, widgetClass: Class<*>, remoteViews: RemoteViews? = null) {
-    val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
-    val myProvider = ComponentName(context, widgetClass)
+    try {
+        val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
+        val myProvider = ComponentName(context, widgetClass)
 
-    var bundle: Bundle? = null
-    if (remoteViews != null) {
-        bundle = Bundle()
-        bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
-    }
+        var bundle: Bundle? = null
+        if (remoteViews != null) {
+            bundle = Bundle()
+            bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
+        }
 
-    if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
-        appWidgetManager.requestPinAppWidget(myProvider, bundle, null)
+        if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
+            appWidgetManager.requestPinAppWidget(myProvider, bundle, null)
+        }
+    } catch (ex: Exception) {
+        Toast.makeText(
+            context,
+            "Failed to pin the widget!",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
