@@ -55,8 +55,8 @@ object ProgressCardDefaults {
     fun progressCardStyle(
         cardHeight: Dp = 160.dp,
         cardPadding: Dp = 18.dp,
-        progressBarColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-        backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+        progressBarColor: Color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
+        backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
         labelTextStyle: TextStyle = MaterialTheme.typography.labelSmall.copy(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         ),
