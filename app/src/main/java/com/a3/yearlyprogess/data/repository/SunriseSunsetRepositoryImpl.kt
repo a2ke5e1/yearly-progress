@@ -8,6 +8,8 @@ import com.a3.yearlyprogess.data.mapper.toDomain
 import com.a3.yearlyprogess.data.remote.SunriseSunsetApi
 import com.a3.yearlyprogess.domain.model.SunriseSunset
 import com.a3.yearlyprogess.domain.repository.SunriseSunsetRepository
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -52,6 +54,8 @@ class SunriseSunsetRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             Log.w("SunriseSunsetRepository", "Failed to fetch data", e)
+            Firebase.crashlytics.recordException(e)
+            Firebase.crashlytics.log("Failed to fetch sunset/sunrise data ${e.printStackTrace()}")
             if (e is CancellationException) throw e
             emit(Resource.Error("Failed to fetch data", e))
         }
