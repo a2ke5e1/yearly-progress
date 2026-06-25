@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.core.ui.components
 import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,9 +29,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
@@ -48,6 +51,7 @@ fun <T>SelectItemDialog(
     selectedItem: SelectableItem<T>,
     onItemSelected: (index: Int, SelectableItem<T>) -> Unit,
     disabled: Boolean = false,
+    shape: Shape = MaterialTheme.shapes.largeIncreased,
     renderSelectedItem: @Composable (SelectableItem<T>) -> Unit = {
         Text(
             it.name,
@@ -63,25 +67,34 @@ fun <T>SelectItemDialog(
     val haptic = LocalHapticFeedback.current
     val view = LocalView.current
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(
-                enabled = !disabled,
-            ) {
-                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                showDialog = true
-            }
-            .alpha(if (!disabled) 1f else 0.5f)
-            .animateContentSize(),
+    Row(
+        modifier =
+            Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(shape)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                title,
-                style = MaterialTheme.typography.titleMedium,
-            )
-            AnimatedVisibility(visible = true) { renderSelectedItem(selectedItem) }
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .clickable(
+                    enabled = !disabled,
+                ) {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    showDialog = true
+                }
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                .alpha(if (!disabled) 1f else 0.5f)
+                .animateContentSize()
+            ,
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    title,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                AnimatedVisibility(visible = true) { renderSelectedItem(selectedItem) }
+            }
         }
     }
 
