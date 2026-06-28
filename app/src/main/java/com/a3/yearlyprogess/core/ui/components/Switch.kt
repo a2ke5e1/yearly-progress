@@ -3,6 +3,7 @@ package com.a3.yearlyprogess.core.ui.components
 import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
@@ -31,6 +35,7 @@ fun Switch(
     description: String? = null,
     checked: Boolean,
     disabled: Boolean = false,
+    shape: Shape = MaterialTheme.shapes.largeIncreased,
     onCheckedChange: (Boolean) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -47,10 +52,11 @@ fun Switch(
             modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
+                .clip(shape)
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
                 .clickable(
                     enabled = !disabled,
                     interactionSource = interactionSource,
-                    indication = null
                 ) {
                     triggerFeedback()
                     onCheckedChange(!checked)
@@ -60,6 +66,7 @@ fun Switch(
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         Column(
             modifier = Modifier.weight(1f).fillMaxHeight()
+                .padding(start = 16.dp, bottom = 16.dp, top = 16.dp)
                 .alpha(if (!disabled) 1f else 0.5f)
             ,
             verticalArrangement = Arrangement.Center) {
@@ -77,6 +84,7 @@ fun Switch(
 
         Switch(
             checked = checked,
+            modifier = Modifier.padding(end = 16.dp),
             onCheckedChange = {
                 triggerFeedback()
                 onCheckedChange(it)

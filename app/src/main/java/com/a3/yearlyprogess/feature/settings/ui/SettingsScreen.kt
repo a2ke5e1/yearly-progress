@@ -5,13 +5,18 @@ import android.icu.text.DateFormatSymbols
 import android.icu.util.ULocale
 import android.view.SoundEffectConstants
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +24,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -55,6 +62,7 @@ fun getLocaleSelectableItems(): List<SelectableItem<ULocale>> {
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SettingsHomeScreen(
     viewModel: SettingsViewModel,
@@ -103,83 +111,95 @@ fun SettingsHomeScreen(
         }
 
         item {
-            ThemeSelector(
-                selectedTheme = settings.appTheme,
-                onThemeSelected = { viewModel.setAppTheme(it) },
-                modifier = Modifier.padding(16.dp)
-            )
-        }
+            val TOTAL_SECTION_COUNT = 5
+            Column(
+                verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
+            ) {
+                ThemeSelector(
+                    selectedTheme = settings.appTheme,
+                    onThemeSelected = { viewModel.setAppTheme(it) },
+                    modifier = Modifier.padding(16.dp),
+                )
+                SelectItemDialog(
+                    title = stringResource(R.string.calendar_system_label),
+                    items = getLocaleSelectableItems(),
+                    selectedItem = settings.progressSettings.uLocale.toSelectableItem(),
+                    onItemSelected = { _, item -> viewModel.setLocale(item.value) },
+                    shape = segmentedShapes(0, TOTAL_SECTION_COUNT)
+                )
 
-        item {
-            SelectItemDialog(
-                title = stringResource(R.string.calendar_system_label),
-                items = getLocaleSelectableItems(),
-                selectedItem = settings.progressSettings.uLocale.toSelectableItem(),
-                onItemSelected = { _, item -> viewModel.setLocale(item.value) },
-            )
-        }
+                SelectItemDialog(
+                    title = stringResource(R.string.calculation_mode_label),
+                    items = CalculationType.entries.map { it.toSelectableItem() },
+                    selectedItem = settings.progressSettings.calculationType.toSelectableItem(),
+                    onItemSelected = { _, item -> viewModel.setCalculationType(item.value) },
+                    shape = segmentedShapes(1, TOTAL_SECTION_COUNT)
 
-        item {
-            SelectItemDialog(
-                title = stringResource(R.string.calculation_mode_label),
-                items = CalculationType.entries.map { it.toSelectableItem() },
-                selectedItem = settings.progressSettings.calculationType.toSelectableItem(),
-                onItemSelected = { _, item -> viewModel.setCalculationType(item.value) },
-            )
-        }
+                )
+                val daysOfWeek = remember {
+                    val dayNames = DateFormatSymbols.getInstance().weekdays
+                    listOf(
+                        SelectableItem(name = dayNames[Calendar.SUNDAY], value = Calendar.SUNDAY),
+                        SelectableItem(name = dayNames[Calendar.MONDAY], value = Calendar.MONDAY),
+                        SelectableItem(name = dayNames[Calendar.TUESDAY], value = Calendar.TUESDAY),
+                        SelectableItem(
+                            name = dayNames[Calendar.WEDNESDAY],
+                            value = Calendar.WEDNESDAY
+                        ),
+                        SelectableItem(
+                            name = dayNames[Calendar.THURSDAY],
+                            value = Calendar.THURSDAY
+                        ),
+                        SelectableItem(name = dayNames[Calendar.FRIDAY], value = Calendar.FRIDAY),
+                        SelectableItem(
+                            name = dayNames[Calendar.SATURDAY],
+                            value = Calendar.SATURDAY
+                        )
+                    )
+                }
 
-        item {
-            val daysOfWeek = remember {
-                val dayNames = DateFormatSymbols.getInstance().weekdays
-                listOf(
-                    SelectableItem(name = dayNames[Calendar.SUNDAY], value = Calendar.SUNDAY),
-                    SelectableItem(name = dayNames[Calendar.MONDAY], value = Calendar.MONDAY),
-                    SelectableItem(name = dayNames[Calendar.TUESDAY], value = Calendar.TUESDAY),
-                    SelectableItem(name = dayNames[Calendar.WEDNESDAY], value = Calendar.WEDNESDAY),
-                    SelectableItem(name = dayNames[Calendar.THURSDAY], value = Calendar.THURSDAY),
-                    SelectableItem(name = dayNames[Calendar.FRIDAY], value = Calendar.FRIDAY),
-                    SelectableItem(name = dayNames[Calendar.SATURDAY], value = Calendar.SATURDAY)
+                val selectedDay =
+                    daysOfWeek.find { it.value == settings.progressSettings.weekStartDay }
+                        ?: daysOfWeek.first()
+
+                SelectItemDialog(
+                    title = stringResource(R.string.first_day_of_the_week),
+                    items = daysOfWeek,
+                    selectedItem = selectedDay,
+                    onItemSelected = { _, item -> viewModel.setWeekStartDay(item.value) },
+                    shape = segmentedShapes(2, TOTAL_SECTION_COUNT)
+                )
+                Slider(
+                    title = stringResource(R.string.decimal_places_label),
+                    description = stringResource(R.string.decimal_places_description),
+                    value = settings.progressSettings.decimalDigits.toFloat(),
+                    onValueChange = { viewModel.setDecimalDigits(it.toInt()) },
+                    valueRange = 0f..13f,
+                    steps = 12,
+                    shape = segmentedShapes(3, TOTAL_SECTION_COUNT)
+                )
+                ListItem(
+                    colors = ListItemDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                    ),
+                    headlineContent = { Text(stringResource(R.string.location)) },
+                    supportingContent = { Text(stringResource(R.string.location_supporting_description)) },
+                    trailingContent = {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = null
+                        )
+                    },
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clip(segmentedShapes(4, TOTAL_SECTION_COUNT))
+                        .clickable {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        onNavigateToLocation()
+                    }
                 )
             }
-
-            val selectedDay = daysOfWeek.find { it.value == settings.progressSettings.weekStartDay }
-                ?: daysOfWeek.first()
-
-            SelectItemDialog(
-                title = stringResource(R.string.first_day_of_the_week),
-                items = daysOfWeek,
-                selectedItem = selectedDay,
-                onItemSelected = { _, item -> viewModel.setWeekStartDay(item.value) },
-            )
-        }
-
-        item {
-            Slider(
-                title = stringResource(R.string.decimal_places_label),
-                description = stringResource(R.string.decimal_places_description),
-                value = settings.progressSettings.decimalDigits.toFloat(),
-                onValueChange = { viewModel.setDecimalDigits(it.toInt()) },
-                valueRange = 0f..13f,
-                steps = 12,
-            )
-        }
-
-        item {
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.location)) },
-                supportingContent = { Text(stringResource(R.string.location_supporting_description)) },
-                trailingContent = {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = null
-                    )
-                },
-                modifier = Modifier.clickable {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
-                    onNavigateToLocation()
-                }
-            )
         }
 
         item {
@@ -193,24 +213,26 @@ fun SettingsHomeScreen(
         }
 
         item {
-            Slider(
-                title = stringResource(R.string.decimal_places_label),
-                description = stringResource(R.string.decimal_places_description),
-                value = settings.eventProgressDecimalDigits.toFloat(),
-                onValueChange = { viewModel.setEventProgressDecimalDigits(it.toInt()) },
-                valueRange = 0f..6f,
-                steps = 5,
-            )
-        }
-
-        item {
-            Switch(
-                title = stringResource(R.string.classic_event_cards),
-                description = stringResource(R.string.classic_event_cards_desc),
-                checked = settings.useClassicEventCards,
-                onCheckedChange = { viewModel.setUseClassicEventCards(it) },
-                modifier = Modifier.padding(vertical = 12.dp)
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
+            ) {
+                Slider(
+                    title = stringResource(R.string.decimal_places_label),
+                    description = stringResource(R.string.decimal_places_description),
+                    value = settings.eventProgressDecimalDigits.toFloat(),
+                    onValueChange = { viewModel.setEventProgressDecimalDigits(it.toInt()) },
+                    valueRange = 0f..6f,
+                    steps = 5,
+                    shape = segmentedShapes(0, 2)
+                )
+                Switch(
+                    title = stringResource(R.string.classic_event_cards),
+                    description = stringResource(R.string.classic_event_cards_desc),
+                    checked = settings.useClassicEventCards,
+                    onCheckedChange = { viewModel.setUseClassicEventCards(it) },
+                    shape = segmentedShapes(1, 2)
+                )
+            }
         }
 
         item {
@@ -230,6 +252,35 @@ fun SettingsHomeScreen(
                 checked = settings.disableWidgetClickToApp,
                 onCheckedChange = { viewModel.setDisableWidgetClickToApp(it) }
             )
+        }
+    }
+}
+
+
+@Composable
+fun segmentedShapes(
+    index: Int,
+    count: Int,
+): Shape {
+    val defaultShapes = MaterialTheme.shapes.extraSmall
+    val overrideShape = MaterialTheme.shapes.largeIncreased
+    return remember(index, count, defaultShapes, overrideShape) {
+        when {
+            count == 1 -> defaultShapes
+            index == 0 -> {
+                defaultShapes.copy(
+                    topStart = overrideShape.topStart,
+                    topEnd = overrideShape.topEnd
+                )
+            }
+
+            index == count - 1 -> {
+                defaultShapes.copy(
+                    bottomStart = overrideShape.bottomStart,
+                    bottomEnd = overrideShape.bottomEnd,
+                )
+            }
+            else -> defaultShapes
         }
     }
 }

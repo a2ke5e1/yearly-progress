@@ -6,11 +6,13 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +36,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -54,6 +58,7 @@ fun Slider(
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     @IntRange(from = 0) steps: Int = 0,
     onValueChange: (Float) -> Unit,
+    shape: Shape = MaterialTheme.shapes.largeIncreased,
     labelFormatter: (Float) -> String = {
         val format = NumberFormat.getNumberInstance()
         format.format(it)
@@ -66,24 +71,30 @@ fun Slider(
     val showLabel = isDragging || isPressed
     val lastStep = remember { mutableStateOf<Int?>(null) }
 
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-            .alpha(if (!disabled) 1f else 0.5f)
+    Row(
+        modifier =
+            Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(shape)
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
-        Text(title, style = MaterialTheme.typography.titleMedium)
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .alpha(if (!disabled) 1f else 0.5f)
+        ) {
+            Text(title, style = MaterialTheme.typography.titleMedium)
 
-        if (description != null) {
-            Text(
-                description, style = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+            if (description != null) {
+                Text(
+                    description, style = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 )
-            )
-        }
+            }
 
-        Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.height(2.dp))
             Slider(
                 enabled = !disabled,
                 value = value,
@@ -144,6 +155,7 @@ fun Slider(
                 }
             )
         }
+    }
 
 }
 

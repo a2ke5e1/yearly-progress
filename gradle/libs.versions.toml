@@ -24,14 +24,14 @@ accompanistPermissions = "0.37.3"
 room = "2.8.4"
 coilCompose = "3.4.0"
 material3 = "1.5.0-alpha22"
-animationCore = "1.11.0"
+animationCore = "1.11.3"
 roomdatabasebackup = "1.1.0"
-playServicesAds = "25.2.0"
+playServicesAds = "25.4.0"
 userMessagingPlatform = "4.0.0"
 materialKolor = "4.1.1"
 firebaseCrashlytics = "20.0.5"
 firebaseCrashlyticsPlugin = "3.0.7"
-google-services = "4.4.4"
+google-services = "4.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

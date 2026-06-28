@@ -4,12 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +31,9 @@ import com.a3.yearlyprogess.core.util.YearlyProgressNotification
 import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
 import kotlinx.coroutines.launch
 
+private const val TOTAL_OPTION_COUNT = 4
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SettingsNotificationScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
@@ -42,17 +48,12 @@ fun SettingsNotificationScreen(
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
+        verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)
     ) {
         item {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-            ) {
+
                 Switch(
-                    modifier = Modifier.padding(16.dp),
                     title = stringResource(R.string.progress_notification),
                     description = stringResource(R.string.shows_progress_in_the_notification),
                     checked = notificationSettings.progressShowNotification,
@@ -73,7 +74,6 @@ fun SettingsNotificationScreen(
                         context.sendBroadcast(widgetUpdateServiceIntent)
                     }
                 )
-            }
         }
 
         item {
@@ -103,7 +103,8 @@ fun SettingsNotificationScreen(
                             )
                         }
                     }
-                }
+                },
+                shape = segmentedShapes(0, TOTAL_OPTION_COUNT)
             )
         }
 
@@ -126,7 +127,8 @@ fun SettingsNotificationScreen(
                             )
                         }
                     }
-                }
+                },
+                shape = segmentedShapes(1, TOTAL_OPTION_COUNT)
             )
         }
 
@@ -149,7 +151,8 @@ fun SettingsNotificationScreen(
                             )
                         }
                     }
-                }
+                },
+                shape = segmentedShapes(2, TOTAL_OPTION_COUNT)
             )
         }
 
@@ -172,7 +175,8 @@ fun SettingsNotificationScreen(
                             )
                         }
                     }
-                }
+                },
+                shape = segmentedShapes(3, TOTAL_OPTION_COUNT)
             )
         }
     }
