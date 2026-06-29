@@ -34,6 +34,11 @@ fun getStartAndEndTime(dayLight: Boolean, results: List<SunriseSunset>): Pair<Lo
 
 object SunriseSunsetCache {
 
+    private val jsonConfig = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+    }
+
     private fun cacheKey(lat: Double, lon: Double, startDate: String, endDate: String) =
         stringPreferencesKey("sunrise_sunset_${lat}_${lon}_${startDate}_${endDate}")
 
@@ -61,7 +66,7 @@ object SunriseSunsetCache {
         return if (json != null) {
             Log.d("SunriseSunsetCache", "Cache hit for $lat,$lon [$startDate → $endDate]")
             try {
-                Json.decodeFromString<List<ResultDto>>(json)
+                jsonConfig.decodeFromString<List<ResultDto>>(json)
             } catch (e: Exception) {
                 Log.w("SunriseSunsetCache", "Failed to decode cached data", e)
                 null
@@ -85,7 +90,7 @@ object SunriseSunsetCache {
         data: List<ResultDto>
     ) {
         try {
-            val json = Json.encodeToString(data)
+            val json = jsonConfig.encodeToString(data)
             context.sunriseSunsetDataStore.edit { prefs ->
                 prefs.clear() // clear old cache completely
                 prefs[cacheKey(lat, lon, startDate, endDate)] = json

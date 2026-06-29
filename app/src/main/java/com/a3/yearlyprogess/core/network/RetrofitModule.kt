@@ -27,6 +27,7 @@ object RetrofitModule {
         val contentType = "application/json".toMediaType()
         val json = Json {
             ignoreUnknownKeys = true // important: ignores extra fields from API
+            coerceInputValues = true
         }
 
         return Retrofit.Builder()
