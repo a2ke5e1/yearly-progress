@@ -75,8 +75,7 @@ fun Slider(
         modifier =
             Modifier.fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .clip(shape)
-                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                .background(color = MaterialTheme.colorScheme.surfaceContainerLow, shape = shape)
     ) {
         Column(
             modifier = modifier
@@ -123,7 +122,7 @@ fun Slider(
                 interactionSource = interactionSource,
                 thumb = { sliderState ->
                     Box(
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         TooltipLabel(
                             text = labelFormatter(value),
