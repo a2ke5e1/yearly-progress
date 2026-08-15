@@ -13,8 +13,12 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.app.MainActivity
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetColors
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
+import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
 
 object WidgetRenderer {
+
+    private const val START_APP_REQUEST_CODE = 200
+    private const val UPDATE_REQUEST_CODE = 201
 
     private val linearProgressIds = listOf(
         R.id.widgetProgressBarDefault,
@@ -375,7 +379,21 @@ object WidgetRenderer {
             viewId ?: R.id.background,
             PendingIntent.getActivity(
                 context,
-                0,
+                START_APP_REQUEST_CODE,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            ),
+        )
+    }
+
+    fun onParentTapToUpdate(view: RemoteViews, context: Context, @IdRes viewId: Int? = null) {
+        val intent = Intent(context, WidgetUpdateBroadcastReceiver::class.java)
+
+        view.setOnClickPendingIntent(
+            viewId ?: R.id.background,
+            PendingIntent.getBroadcast(
+                context,
+                UPDATE_REQUEST_CODE,
                 intent,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
             ),

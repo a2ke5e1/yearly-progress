@@ -135,7 +135,8 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
                 StandaloneWidgetType.NIGHT_LIGHT -> rectangularRemoteView(
@@ -143,10 +144,11 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
-                else -> rectangularRemoteView(context, yp, userConfig, isWidgetClickable = !disableWidgetClickToApp)
+                else -> rectangularRemoteView(context, yp, userConfig, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
             }
 
             WidgetShape.CLOVER -> when (widgetType) {
@@ -156,7 +158,8 @@ open class StandaloneWidget(
                     userConfig,
                     sunsetData,
                     bundleOptions,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
                 StandaloneWidgetType.NIGHT_LIGHT -> cloverRemoteView(
@@ -165,10 +168,11 @@ open class StandaloneWidget(
                     userConfig,
                     sunsetData,
                     bundleOptions,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
-                else -> cloverRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp)
+                else -> cloverRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
             }
 
             WidgetShape.PILL -> when (widgetType) {
@@ -178,7 +182,8 @@ open class StandaloneWidget(
                     userConfig,
                     sunsetData,
                     bundleOptions,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
                 StandaloneWidgetType.NIGHT_LIGHT -> pillRemoteView(
@@ -187,10 +192,11 @@ open class StandaloneWidget(
                     userConfig,
                     sunsetData,
                     bundleOptions,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
-                else -> pillRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp)
+                else -> pillRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
             }
         }
 
@@ -510,7 +516,8 @@ open class StandaloneWidget(
             context: Context,
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
@@ -527,7 +534,8 @@ open class StandaloneWidget(
                 timePeriod.name,
                 daysLeft,
                 currentValue,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -536,7 +544,8 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
@@ -577,7 +586,8 @@ open class StandaloneWidget(
                 widgetName,
                 daysLeft,
                 SpannableString(currentValue),
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -588,12 +598,15 @@ open class StandaloneWidget(
             widgetName: String,
             daysLeft: String,
             currentValue: SpannableString,
-            isWidgetClickable: Boolean
+            isWidgetClickable: Boolean,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val views = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
 
             if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(views, context)
+            } else if (appWidgetId != -1) {
+                WidgetRenderer.onParentTapToUpdate(views, context)
             }
 
             // Apply theme from user config
@@ -624,7 +637,8 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             options: Bundle? = null,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
@@ -646,7 +660,8 @@ open class StandaloneWidget(
                 daysLeft,
                 currentValue,
                 options,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -656,7 +671,8 @@ open class StandaloneWidget(
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
             options: Bundle? = null,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
@@ -696,7 +712,8 @@ open class StandaloneWidget(
                 daysLeft,
                 SpannableString(currentValue),
                 options,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -709,7 +726,8 @@ open class StandaloneWidget(
             daysLeft: String,
             currentValue: SpannableString,
             options: Bundle? = null,
-            isWidgetClickable: Boolean
+            isWidgetClickable: Boolean,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val large = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout_large)
             val square = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout)
@@ -721,6 +739,11 @@ open class StandaloneWidget(
                 WidgetRenderer.onParentTap(square, context)
                 WidgetRenderer.onParentTap(small, context)
                 WidgetRenderer.onParentTap(xSmall, context)
+            } else if (appWidgetId != -1) {
+                WidgetRenderer.onParentTapToUpdate(large, context)
+                WidgetRenderer.onParentTapToUpdate(square, context)
+                WidgetRenderer.onParentTapToUpdate(small, context)
+                WidgetRenderer.onParentTapToUpdate(xSmall, context)
             }
 
             // Apply theme from user config
@@ -784,7 +807,8 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             options: Bundle? = null,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
@@ -805,7 +829,8 @@ open class StandaloneWidget(
                 daysLeft,
                 currentValue,
                 options,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -824,7 +849,8 @@ open class StandaloneWidget(
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
             options: Bundle? = null,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
@@ -864,7 +890,8 @@ open class StandaloneWidget(
                 daysLeft,
                 SpannableString(currentValue),
                 options,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -877,7 +904,8 @@ open class StandaloneWidget(
             daysLeft: String,
             currentValue: SpannableString,
             options: Bundle? = null,
-            isWidgetClickable: Boolean
+            isWidgetClickable: Boolean,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val large =
                 RemoteViews(context.packageName, R.layout.standalone_widget_pill_layout_medium)
@@ -887,6 +915,9 @@ open class StandaloneWidget(
             if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(large, context)
                 WidgetRenderer.onParentTap(small, context)
+            } else if (appWidgetId != -1) {
+                WidgetRenderer.onParentTapToUpdate(large, context)
+                WidgetRenderer.onParentTapToUpdate(small, context)
             }
 
             // Apply theme from user config
