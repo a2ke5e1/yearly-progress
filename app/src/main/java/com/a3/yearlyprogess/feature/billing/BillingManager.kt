@@ -207,6 +207,11 @@ class BillingManager @Inject constructor(
         }
 
         val result = acknowledgeIfNeeded(purchase)
+        if (result is PurchaseResult.Success &&
+            purchase.products.contains(PRODUCT_ID)
+        ) {
+            _isAdFree.value = true
+        }
         _purchaseEvents.emit(result)
     }
 
