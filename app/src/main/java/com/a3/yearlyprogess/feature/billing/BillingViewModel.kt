@@ -21,19 +21,11 @@ class PurchaseViewModel @Inject constructor(
 
     val products: StateFlow<List<ProductDetails>> = billingManager.productDetails
 
-    private val _uiState = MutableStateFlow<PurchaseUiState>(PurchaseUiState.Idle)
+    private val _uiState = MutableStateFlow<PurchaseUiState>(PurchaseUiState.Loading)
     val uiState: StateFlow<PurchaseUiState> = _uiState.asStateFlow()
 
     init {
-        billingManager.startConnection {
-            viewModelScope.launch {
-                billingManager.queryOneTimeProducts(listOf(BillingManager.PRODUCT_ID))
-                val owned = billingManager.restorePurchases()
-                if (owned.any { it.products.contains(BillingManager.PRODUCT_ID) }) {
-                    _uiState.value = PurchaseUiState.Purchased
-                }
-            }
-        }
+        loadProducts()
 
         viewModelScope.launch {
             billingManager.purchaseEvents.collect { result ->
@@ -44,6 +36,25 @@ class PurchaseViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun loadProducts() {
+        _uiState.value = PurchaseUiState.Loading
+        billingManager.startConnection {
+            viewModelScope.launch {
+                billingManager.queryOneTimeProducts(listOf(BillingManager.PRODUCT_ID))
+                val owned = billingManager.restorePurchases()
+                if (owned.any { it.products.contains(BillingManager.PRODUCT_ID) }) {
+                    _uiState.value = PurchaseUiState.Purchased
+                } else {
+                    _uiState.value = PurchaseUiState.Idle
+                }
+            }
+        }
+    }
+
+    fun retry() {
+        loadProducts()
     }
 
     fun buy(
