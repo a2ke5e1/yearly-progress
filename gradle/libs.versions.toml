@@ -1,5 +1,5 @@
 [versions]
-agp = "9.2.1"
+agp = "9.3.1"
 kotlin = "2.3.21"
 coreKtx = "1.18.0"
 junit = "4.13.2"
@@ -32,6 +32,7 @@ materialKolor = "4.1.1"
 firebaseCrashlytics = "20.0.6"
 firebaseCrashlyticsPlugin = "3.0.7"
 google-services = "4.5.0"
+billingVersion = "9.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -71,6 +72,7 @@ play-services-ads = { group = "com.google.android.gms", name = "play-services-ad
 user-messaging-platform = { group = "com.google.android.ump", name = "user-messaging-platform", version.ref = "userMessagingPlatform" }
 materialKolor = { group = "com.materialkolor", name = "material-kolor", version.ref = "materialKolor" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+billing-client = {group = "com.android.billingclient", name = "billing-ktx", version.ref = "billingVersion"}
 
 
 [plugins]
