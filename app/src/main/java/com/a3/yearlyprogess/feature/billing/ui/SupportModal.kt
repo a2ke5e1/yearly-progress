@@ -34,22 +34,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.util.segmentedShapes
 import com.a3.yearlyprogess.feature.billing.PurchaseViewModel
 import com.a3.yearlyprogess.feature.billing.model.PurchaseUiState
 import com.android.billingclient.api.ProductDetails
 
-
+@Composable
 private fun tierDisplayName(purchaseOptionId: String?): String = when (purchaseOptionId) {
-    "supporter" -> "Ad-Free Experience"
-    "super-supporter" -> "Support Development"
-    "support-more" -> "Support the Developer"
-    else -> purchaseOptionId ?: "Donate"
+    "supporter" -> stringResource(R.string.support_tier_ad_free)
+    "super-supporter" -> stringResource(R.string.support_tier_support_development)
+    "support-more" -> stringResource(R.string.support_tier_support_developer)
+    else -> purchaseOptionId ?: stringResource(R.string.support_tier_donate)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,7 +70,7 @@ fun SupportDeveloperModal(
             ) {
                 Icon(
                     Icons.Default.Close,
-                    contentDescription = "Close dialog",
+                    contentDescription = stringResource(R.string.support_close_dialog),
                     modifier = Modifier.size(16.dp),
                 )
             }
@@ -94,8 +96,8 @@ private fun SupportDeveloperModalContent() {
             when (uiState) {
                 is PurchaseUiState.Loading -> {
                     SupportHeader(
-                        title = "Support the Developer",
-                        subtitle = "Donate any amount to unlock an\nad-free experience forever",
+                        title = stringResource(R.string.support_title),
+                        subtitle = stringResource(R.string.support_subtitle),
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                     LoadingContent()
@@ -107,8 +109,8 @@ private fun SupportDeveloperModalContent() {
 
                 is PurchaseUiState.Error -> {
                     SupportHeader(
-                        title = "Support the Developer",
-                        subtitle = "Donate any amount to unlock an\nad-free experience forever",
+                        title = stringResource(R.string.support_title),
+                        subtitle = stringResource(R.string.support_subtitle),
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     ErrorContent(
@@ -119,8 +121,8 @@ private fun SupportDeveloperModalContent() {
 
                 is PurchaseUiState.Idle -> {
                     SupportHeader(
-                        title = "Support the Developer",
-                        subtitle = "Donate any amount to unlock an\nad-free experience forever",
+                        title = stringResource(R.string.support_title),
+                        subtitle = stringResource(R.string.support_subtitle),
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -244,7 +246,7 @@ private fun IdleContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "One-time purchase · No subscription",
+            text = stringResource(R.string.support_one_time_purchase),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -265,13 +267,13 @@ private fun PurchasedContent() {
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = "Thank You!",
+            text = stringResource(R.string.support_thank_you_title),
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Your generous donation means the world.\nYou now enjoy an ad-free experience forever!",
+            text = stringResource(R.string.support_thank_you_subtitle),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -280,7 +282,7 @@ private fun PurchasedContent() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "You're already supporting us —\nthank you for being amazing!",
+            text = stringResource(R.string.support_already_supporting),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -319,7 +321,7 @@ private fun UnavailableContent(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Donation options are currently unavailable.\nPlease try again later.",
+                    text = stringResource(R.string.support_unavailable),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -362,7 +364,7 @@ private fun ErrorContent(
                 modifier = Modifier.size(18.dp),
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Try Again")
+            Text(text = stringResource(R.string.support_try_again))
         }
     }
 }

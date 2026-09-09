@@ -236,4 +236,20 @@
         <item quantity="one">Year</item>
         <item quantity="other">Years</item>
     </plurals>
+
+    <!-- Support Developer Modal -->
+    <string name="support_title">Support the Developer</string>
+    <string name="support_subtitle">Donate any amount to unlock an\nad-free experience forever</string>
+    <string name="support_close_dialog">Close dialog</string>
+    <string name="support_tier_ad_free">Ad-Free Experience</string>
+    <string name="support_tier_support_development">Support Development</string>
+    <string name="support_tier_support_developer">Support the Developer</string>
+    <string name="support_tier_donate">Donate</string>
+    <string name="support_one_time_purchase">One-time purchase · No subscription</string>
+    <string name="support_thank_you_title">Thank You!</string>
+    <string name="support_thank_you_subtitle">Your generous donation means the world.\nYou now enjoy an ad-free experience forever!</string>
+    <string name="support_already_supporting">You\'re already supporting us —\nthank you for being amazing!</string>
+    <string name="support_unavailable">Donation options are currently unavailable.\nPlease try again later.</string>
+    <string name="support_try_again">Try Again</string>
+
 </resources>
