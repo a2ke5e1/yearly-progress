@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,11 +32,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +62,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.a3.yearlyprogess.feature.billing.PurchaseViewModel
 import com.a3.yearlyprogess.feature.billing.model.PurchaseUiState
+import com.a3.yearlyprogess.feature.billing.ui.SupportDeveloperModal
 
 data class Credits(
     val name: String,
@@ -104,9 +114,7 @@ private fun AboutModalContent() {
         Credits(name = "Максим", language =  "Rusian", github = "gerasimov-mv")
     )
     val viewModel: PurchaseViewModel = hiltViewModel()
-    val activity = LocalActivity.current
-    val products by viewModel.products.collectAsStateWithLifecycle()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var supportModalOpen by rememberSaveable { mutableStateOf(false) }
 
     Surface(
         modifier = Modifier.clip(MaterialTheme.shapes.largeIncreased),
@@ -125,7 +133,6 @@ private fun AboutModalContent() {
                     .background(color = Color.White)
             )
             Column(
-
             ) {
                 Text(
                     text = stringResource(R.string.app_name),
@@ -206,81 +213,111 @@ private fun AboutModalContent() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Button(
-                        onClick = {
-                            CommunityUtil.onJoinSupportGroup(context)
-                        },
-                        contentPadding = PaddingValues(all = 16.dp),
-                        shapes = ButtonDefaults.shapes(
-                            shape = RoundedCornerShape(10.dp),
-                            pressedShape = RoundedCornerShape(16.dp)
-                        ), colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                            contentColor = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        Icon(
-                            painterResource(R.drawable.ic_telegram_app),
-                            contentDescription = stringResource(R.string.join_telegram_group),
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
 
-                    Button(
-                        onClick = {
-                            CommunityUtil.onShare(context)
-                        },
-                        contentPadding = PaddingValues(all = 16.dp),
-                        shapes = ButtonDefaults.shapes(
-                            shape = RoundedCornerShape(10.dp),
-                            pressedShape = RoundedCornerShape(16.dp)
-                        ), colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                            contentColor = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        Icon(
-                            Icons.Outlined.Share,
-                            contentDescription = stringResource(R.string.share),
-                        )
-                    }
-                }
-
-                Column(modifier = Modifier.padding(16.dp)) {
-                    when (val state = uiState) {
-                        is PurchaseUiState.Purchased -> Text("Purchase complete — content unlocked.")
-                        is PurchaseUiState.Error -> Text("Error: ${state.message}")
-                        PurchaseUiState.Idle -> {
-                            if (products.isEmpty()) {
-                                CircularProgressIndicator()
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                                PlainTooltip {
+                                    Text(
+                                    text = stringResource(R.string.support_developer_and_remove_ads),
+                                )
                             }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        Button(
+                            onClick = {
+                                supportModalOpen = true
+                            },
+                            contentPadding = PaddingValues(all = 16.dp),
+                            shapes = ButtonDefaults.shapes(
+                                shape = RoundedCornerShape(10.dp),
+                                pressedShape = RoundedCornerShape(16.dp)
+                            ), colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                                contentColor = MaterialTheme.colorScheme.primary
+                            )
+                        ) {
+                            Icon(
+                                Icons.Outlined.VolunteerActivism,
+                                contentDescription = stringResource(R.string.support_developer_and_remove_ads),
+                            )
                         }
                     }
 
-                    products.forEach { product ->
-
-                        product.oneTimePurchaseOfferDetailsList
-                            .orEmpty()
-                            .forEach { offer ->
-
-                                Button(
-                                    onClick = {
-                                        activity?.let {
-                                            viewModel.buy(it, product, offer)
-                                        }
-                                    }
-                                ) {
-                                    Text(
-                                        "Buy ${product.name} — ${offer.formattedPrice}"
-                                    )
-                                }
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip {
+                                Text(
+                                    text = stringResource(R.string.join_telegram_group),
+                                )
                             }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        Button(
+                            onClick = {
+                                CommunityUtil.onJoinSupportGroup(context)
+                            },
+                            contentPadding = PaddingValues(all = 16.dp),
+                            shapes = ButtonDefaults.shapes(
+                                shape = RoundedCornerShape(10.dp),
+                                pressedShape = RoundedCornerShape(16.dp)
+                            ), colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                                contentColor = MaterialTheme.colorScheme.primary
+                            )
+                        ) {
+                            Icon(
+                                painterResource(R.drawable.ic_telegram_app),
+                                contentDescription = stringResource(R.string.join_telegram_group),
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
+
+
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip {
+                                Text(
+                                    text = stringResource(R.string.share),
+                                )
+                            }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        Button(
+                            onClick = {
+                                CommunityUtil.onShare(context)
+                            },
+                            contentPadding = PaddingValues(all = 16.dp),
+                            shapes = ButtonDefaults.shapes(
+                                shape = RoundedCornerShape(10.dp),
+                                pressedShape = RoundedCornerShape(16.dp)
+                            ), colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                                contentColor = MaterialTheme.colorScheme.primary
+                            )
+                        ) {
+                            Icon(
+                                Icons.Outlined.Share,
+                                contentDescription = stringResource(R.string.share),
+                            )
+                        }
                     }
                 }
 
             }
         }
     }
+
+    SupportDeveloperModal(
+        open = supportModalOpen,
+        onDismissRequest = { supportModalOpen = false }
+    )
 }
 
 @Composable

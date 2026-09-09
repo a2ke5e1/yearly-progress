@@ -219,6 +219,7 @@
     <string name="unit">Unit</string>
     <string name="none">None</string>
     <string name="note_event_custom_progress">If set, progress will display calculated value based on rate instead of percentage.</string>
+    <string name="support_developer_and_remove_ads">Support Developer and Remove ads</string>
     <plurals name="day">
         <item quantity="one">Day</item>
         <item quantity="other">Days</item>
