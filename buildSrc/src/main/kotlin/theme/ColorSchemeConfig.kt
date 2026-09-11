@@ -56,7 +56,7 @@ fun roleColorName(seedKey: String, role: String): String =
  * background color is only referenced by the `WidgetProgressTheme` styles
  * (`android:progressBackgroundTint`) and is therefore a color alias alone.
  *
- * Order: background -> surfaceContainerHighest, backgroundLow -> surfaceContainerHigh,
+ * Order: background -> surfaceContainer, backgroundLow -> surfaceContainerLow,
  * primary -> primary, secondary -> onSurfaceVariant, accent -> tertiary,
  * progressBarBackground -> outlineVariant.
  */

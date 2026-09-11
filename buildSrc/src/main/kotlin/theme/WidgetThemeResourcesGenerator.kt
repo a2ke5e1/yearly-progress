@@ -26,7 +26,8 @@ data class GeneratedFile(val path: File, val content: String)
  *  - `values-v31/widget_themes.xml`, `values-v31/widget_styles.xml` (DYNAMIC theme + progress style)
  *  - `layout/standalone_progress_bar_containers.xml`, `standalone_clover_*`, `standalone_pill_*`,
  *    `circular_progress_bars_container.xml` (one view per theme; ids tracked by `WidgetThemeIds`)
- *  - `WidgetTheme.kt` (enum with seedArgb), `WidgetThemeIds.kt` (view-id maps), `WidgetPalette.kt`
+ *  - `WidgetTheme.kt` (enum with seedArgb), `WidgetThemeIds.kt` (view-id maps), `WidgetColors.kt`
+ *    (the full Material 3 role set + legacy colors read from the `WidgetTheme` styleable)
  */
 object WidgetThemeResourcesGenerator {
 
@@ -58,7 +59,7 @@ object WidgetThemeResourcesGenerator {
         files += GeneratedFile(File(output.resDir, "layout/circular_progress_bars_container.xml"), circularContainerLayout())
         files += GeneratedFile(File(output.modelDir, "WidgetTheme.kt"), widgetThemeEnum())
         files += GeneratedFile(File(output.utilDir, "WidgetThemeIds.kt"), widgetThemeIds())
-        files += GeneratedFile(File(output.modelDir, "WidgetPalette.kt"), widgetPaletteKt())
+        files += GeneratedFile(File(output.modelDir, "WidgetColors.kt"), widgetColorsKt())
         return files
     }
 
@@ -457,9 +458,9 @@ object WidgetThemeResourcesGenerator {
 
     // endregion
 
-    // region WidgetPalette.kt
+    // region WidgetColors.kt
 
-    fun widgetPaletteKt(): String {
+    fun widgetColorsKt(): String {
         val sb = StringBuilder()
         sb.appendLine(KOTLIN_HEADER)
         sb.appendLine("package com.a3.yearlyprogess.feature.widgets.domain.model")
@@ -467,8 +468,10 @@ object WidgetThemeResourcesGenerator {
         sb.appendLine("import android.content.Context")
         sb.appendLine("import com.a3.yearlyprogess.R")
         sb.appendLine()
-        sb.appendLine("data class WidgetPalette(")
-        sb.appendLine("    val id: String,")
+        sb.appendLine("data class WidgetColors(")
+        legacyAliases.forEach { alias ->
+            sb.appendLine("    val ${legacyField(alias)}: Int,")
+        }
         roles.forEach { role ->
             sb.appendLine(
                 "    val ${role.replaceFirstChar { it.lowercase() }}: Int,"
@@ -476,11 +479,19 @@ object WidgetThemeResourcesGenerator {
         }
         sb.appendLine(") {")
         sb.appendLine("    companion object {")
-        sb.appendLine("        fun fromTheme(context: Context, theme: WidgetTheme): WidgetPalette {")
+        sb.appendLine("        fun fromTheme(context: Context, theme: WidgetTheme): WidgetColors {")
         sb.appendLine("            val res = context.resources")
         sb.appendLine("            val ta = context.obtainStyledAttributes(theme.themeRes, R.styleable.WidgetTheme)")
-        sb.appendLine("            val palette = WidgetPalette(")
-        sb.appendLine("                id = theme.name,")
+        sb.appendLine("            val colors = WidgetColors(")
+        legacyAliases.forEach { alias ->
+            val field = legacyField(alias)
+            sb.appendLine("                $field = ta.getColor(")
+            sb.appendLine(
+                "                    R.styleable.WidgetTheme_${legacyAttr(alias)}," +
+                    " res.getColor(R.color.widget_default_${alias.resourceName}, null)"
+            )
+            sb.appendLine("                ),")
+        }
         roles.forEach { role ->
             val prop = role.replaceFirstChar { it.lowercase() }
             sb.appendLine("                $prop = ta.getColor(")
@@ -492,7 +503,7 @@ object WidgetThemeResourcesGenerator {
         }
         sb.appendLine("            )")
         sb.appendLine("            ta.recycle()")
-        sb.appendLine("            return palette")
+        sb.appendLine("            return colors")
         sb.appendLine("        }")
         sb.appendLine("    }")
         sb.appendLine("}")
@@ -583,4 +594,11 @@ object WidgetThemeResourcesGenerator {
         "accent_color" -> "widgetAccentColor"
         else -> error("Unknown legacy alias: ${alias.resourceName}")
     }
+
+    /** Alias resource name (snake case) -> Kotlin field name, e.g. `background_low_color` -> `backgroundLowColor`. */
+    private fun legacyField(alias: LegacyAliases.Alias): String =
+        alias.resourceName
+            .split('_')
+            .mapIndexed { index, part -> if (index == 0) part else part.replaceFirstChar { it.uppercase() } }
+            .joinToString("")
 }

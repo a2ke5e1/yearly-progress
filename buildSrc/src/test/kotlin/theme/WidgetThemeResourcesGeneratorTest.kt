@@ -36,7 +36,7 @@ class WidgetThemeResourcesGeneratorTest {
     fun `legacy aliases - five theme attrs and six colors`() {
         assertEquals(5, LegacyAliases.all.size)
         assertEquals(6, LegacyAliases.allColors.size)
-        assertEquals("surfaceContainerHighest", LegacyAliases.all.first().role)
+        assertEquals("surfaceContainer", LegacyAliases.all.first().role)
         assertEquals("outlineVariant", LegacyAliases.allColors.last().role)
         assertFalse(LegacyAliases.all.map { it.resourceName }.contains("progress_bar_background"))
         assertTrue(LegacyAliases.allColors.map { it.resourceName }.contains("progress_bar_background"))
@@ -121,6 +121,29 @@ class WidgetThemeResourcesGeneratorTest {
         assertFalse(darkXml.contains("system_error"))
         assertEquals("#B3261E", Regex("<color name=\"widget_dynamic_error\">([^<]+)</color>").find(lightXml)!!.groupValues[1])
         assertEquals("#F2B8B5", Regex("<color name=\"widget_dynamic_error\">([^<]+)</color>").find(darkXml)!!.groupValues[1])
+    }
+
+    @Test
+    fun `widget colors kt exposes legacy plus every scheme role`() {
+        val kt = WidgetThemeResourcesGenerator.widgetColorsKt()
+        listOf("backgroundColor", "backgroundLowColor", "primaryColor", "secondaryColor", "accentColor")
+            .forEach { field -> assertTrue(kt.contains("    val ${field}: Int,")) }
+        ColorSchemeRoles.all.forEach { role ->
+            val prop = role.replaceFirstChar { it.lowercase() }
+            assertTrue("missing $prop field", kt.contains("    val $prop: Int,"))
+            assertTrue(
+                "missing $prop read",
+                kt.contains("R.styleable.WidgetTheme_${roleAttr(role)}") &&
+                    kt.contains("R.color.${roleColorName("DEFAULT", role)}")
+            )
+        }
+        assertTrue(kt.contains("fun fromTheme(context: Context, theme: WidgetTheme): WidgetColors"))
+        assertEquals(
+            "legacy defaults only (no stale scheme-role defaults on legacy attrs)",
+            kt.lines().count { it.contains("widget_default_") },
+            53,
+        )
+        assertTrue(kt.count { it == ',' } > 0)
     }
 
     @Test
