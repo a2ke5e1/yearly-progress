@@ -251,5 +251,6 @@
     <string name="support_already_supporting">You\'re already supporting us —\nthank you for being amazing!</string>
     <string name="support_unavailable">Donation options are currently unavailable.\nPlease try again later.</string>
     <string name="support_try_again">Try Again</string>
+    <string name="remove_ads">Remove Ads</string>
 
 </resources>

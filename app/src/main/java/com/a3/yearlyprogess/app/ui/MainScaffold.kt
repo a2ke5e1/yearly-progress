@@ -32,6 +32,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
@@ -138,6 +139,7 @@ fun MainScaffold(
     }
 
     val topBar: @Composable () -> Unit = {
+        val hideRemoveAd by mainViewModel.billingManager.isAdFree.collectAsStateWithLifecycle()
         AppTopBar(
             title = topBarTitle,
             scrollBehavior = currentScrollBehavior,
@@ -152,7 +154,8 @@ fun MainScaffold(
             backupManager = backupManager,
             showShareButton = true,
             showAboutButton = true,
-            showBackAndRestore = true
+            showBackAndRestore = true,
+            showRemoveAds = !hideRemoveAd
         )
     }
 

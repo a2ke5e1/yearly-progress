@@ -113,7 +113,6 @@ private fun AboutModalContent() {
         Credits("Matteo", "Sgattocuki", "Italian"),
         Credits(name = "Максим", language =  "Rusian", github = "gerasimov-mv")
     )
-    val viewModel: PurchaseViewModel = hiltViewModel()
     var supportModalOpen by rememberSaveable { mutableStateOf(false) }
 
     Surface(
@@ -121,7 +120,7 @@ private fun AboutModalContent() {
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Image(
