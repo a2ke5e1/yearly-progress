@@ -11,12 +11,4 @@
         <item name="appWidgetInnerRadius">@android:dimen/system_app_widget_inner_radius</item>
     </style>
 
-
-    <style name="WidgetTheme.Dynamic" parent="WidgetTheme.Default">
-        <item name="widgetBackgroundColor">@color/widget_dynamic_background_color</item>
-        <item name="widgetBackgroundLowColor">@color/widget_dynamic_background_low_color</item>
-        <item name="widgetPrimaryColor">@color/widget_dynamic_primary_color</item>
-        <item name="widgetSecondaryColor">@color/widget_dynamic_secondary_color</item>
-        <item name="widgetAccentColor">@color/widget_dynamic_accent_color</item>
-    </style>
 </resources>

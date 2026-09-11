@@ -12,6 +12,28 @@ plugins {
     id("kotlin-parcelize")
 }
 
+val widgetResDir = layout.projectDirectory.dir("src/main/res")
+val widgetModelDir = layout.projectDirectory.dir("src/main/java/com/a3/yearlyprogess/feature/widgets/domain/model")
+val widgetUtilDir = layout.projectDirectory.dir("src/main/java/com/a3/yearlyprogess/feature/widgets/util")
+
+val generateWidgetThemeResources =
+    tasks.register("generateWidgetThemeResources", theme.GenerateWidgetThemeResourcesTask::class.java) {
+        resDir.set(widgetResDir)
+        modelDir.set(widgetModelDir)
+        utilDir.set(widgetUtilDir)
+    }
+
+val verifyWidgetThemeResources =
+    tasks.register("verifyWidgetThemeResources", theme.VerifyWidgetThemeResourcesTask::class.java) {
+        resDir.set(widgetResDir)
+        modelDir.set(widgetModelDir)
+        utilDir.set(widgetUtilDir)
+    }
+
+tasks.named("preBuild") {
+    dependsOn(generateWidgetThemeResources)
+}
+
 detekt {
     config.setFrom(file("$rootDir/config/detekt/detekt.yml"))
 }

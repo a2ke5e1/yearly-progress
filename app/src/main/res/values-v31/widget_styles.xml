@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED FILE - DO NOT EDIT. Regenerate with the app `generateWidgetThemeResources` task. -->
+<resources>
+    <style name="WidgetProgressTheme.Dynamic" parent="WidgetProgressBarBase">
+        <item name="android:progressTint">@color/widget_dynamic_primary_color</item>
+        <item name="android:progressBackgroundTint">@color/widget_dynamic_progress_bar_background</item>
+    </style>
+</resources>
