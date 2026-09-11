@@ -70,6 +70,7 @@ object WidgetThemeResourcesGenerator {
             isDark = isDark,
             isAmoled = false,
             style = PaletteStyle.Expressive,
+            primary = Color(seed.toInt()),
         )
 
     internal fun roleColor(scheme: ColorScheme, role: String): Color = when (role) {
