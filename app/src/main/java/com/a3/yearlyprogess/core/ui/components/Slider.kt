@@ -27,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.SliderState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -94,9 +95,18 @@ fun Slider(
             }
 
             Spacer(Modifier.height(2.dp))
+            val sliderState = remember(steps, valueRange) {
+                SliderState(
+                    value = value,
+                    steps = steps,
+                    trackRange = valueRange
+                )
+            }
+            sliderState.value = value
+
             Slider(
+                state = sliderState,
                 enabled = !disabled,
-                value = value,
                 onValueChange = { newValue ->
                     if (steps > 0) {
                         val stepSize =
@@ -117,10 +127,8 @@ fun Slider(
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                     }
                 },
-                valueRange = valueRange,
-                steps = steps,
                 interactionSource = interactionSource,
-                thumb = { sliderState ->
+                thumb = {
                     Box(
                         contentAlignment = Alignment.Center,
                     ) {
@@ -145,9 +153,9 @@ fun Slider(
                         )
                     }
                 },
-                track = { sliderState ->
+                track = { state ->
                     SliderDefaults.Track(
-                        sliderState = sliderState,
+                        sliderState = state,
                         modifier = Modifier.height(40.dp),
                         trackCornerSize = 12.dp
                     )

@@ -102,7 +102,7 @@ fun AboutModal(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 private fun AboutModalContent() {
