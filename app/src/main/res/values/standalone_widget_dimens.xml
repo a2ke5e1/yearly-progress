@@ -45,4 +45,22 @@
     <dimen name="standalone_pill_small_widget_text_size_widget_progress">16sp</dimen>
     <dimen name="standalone_pill_small_widget_text_size_widget_current_value">10sp</dimen>
 
+    <!-- Flower large shaped standalone widgets -->
+    <dimen name="standalone_flower_large_widget_text_size_widget_type">18sp</dimen>
+    <dimen name="standalone_flower_large_widget_text_size_widget_days_left">12sp</dimen>
+    <dimen name="standalone_flower_large_widget_text_size_widget_progress">54sp</dimen>
+    <dimen name="standalone_flower_large_widget_text_size_widget_current_value">24sp</dimen>
+
+    <!-- Flower medium (standard) shaped standalone widgets -->
+    <dimen name="standalone_flower_widget_text_size_widget_type">15sp</dimen>
+    <dimen name="standalone_flower_widget_text_size_widget_days_left">10sp</dimen>
+    <dimen name="standalone_flower_widget_text_size_widget_progress">42sp</dimen>
+    <dimen name="standalone_flower_widget_text_size_widget_current_value">18sp</dimen>
+
+    <!-- Flower small shaped standalone widgets -->
+    <dimen name="standalone_flower_small_widget_text_size_widget_type">10sp</dimen>
+    <dimen name="standalone_flower_small_widget_text_size_widget_days_left">8sp</dimen>
+    <dimen name="standalone_flower_small_widget_text_size_widget_progress">24sp</dimen>
+    <dimen name="standalone_flower_small_widget_text_size_widget_current_value">12sp</dimen>
+
 </resources>
