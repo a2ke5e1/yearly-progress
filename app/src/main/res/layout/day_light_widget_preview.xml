@@ -67,7 +67,7 @@
           android:layout_height="wrap_content"
           android:layout_above="@id/progress_bar_day"
           android:layout_alignEnd="@id/progress_bar_day"
-          android:text="🌇6:41 PM"
+          android:text="☀️"
           android:textColor="@color/widget_dynamic_secondary_color"
           android:textSize="@dimen/standalone_rect_widget_text_size_widget_current_value" />
 

@@ -88,7 +88,17 @@ class StandaloneWidgetConfigViewModel @Inject constructor(
     }
 
     fun updateWidgetShape(shape: WidgetShape) {
-        _options.update { it.copy(widgetShape = shape) }
+        _options.update { current ->
+            if (shape == WidgetShape.BLOSSOM && current.widgetShape != WidgetShape.BLOSSOM) {
+                current.copy(
+                    widgetShape = shape,
+                    decimalPlaces = 0,
+                    timeLeftCounter = false
+                )
+            } else {
+                current.copy(widgetShape = shape)
+            }
+        }
         Log.d("StandaloneWidgetConfigViewModel", "after shape selected ${_options.value}")
     }
 

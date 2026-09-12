@@ -56,7 +56,7 @@ import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.cloverRemoteView
-import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.flowerRemoteView
+import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.blossomRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.pillRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.rectangularRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidgetType
@@ -348,7 +348,7 @@ private fun createRemoteViews(
                 putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 160)
             }
             when (widgetType) {
-                StandaloneWidgetType.DAY_LIGHT -> flowerRemoteView(
+                StandaloneWidgetType.DAY_LIGHT -> blossomRemoteView(
                     context,
                     yp,
                     effectiveConfig,
@@ -356,14 +356,14 @@ private fun createRemoteViews(
                     bundleOptions
                 )
 
-                StandaloneWidgetType.NIGHT_LIGHT -> flowerRemoteView(
+                StandaloneWidgetType.NIGHT_LIGHT -> blossomRemoteView(
                     context,
                     yp,
                     effectiveConfig,
                     sunsetData,
                     bundleOptions
                 )
-                else -> flowerRemoteView(context, yp, effectiveConfig, bundleOptions)
+                else -> blossomRemoteView(context, yp, effectiveConfig, bundleOptions)
             }
         }
     }

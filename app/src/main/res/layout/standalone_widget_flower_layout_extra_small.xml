@@ -17,13 +17,13 @@
         android:layout_gravity="center"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="2dp">
 
-        <!-- Date / Period Badge -->
+        <!-- Date / Period Badge on the Left -->
         <FrameLayout
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="6dp">
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="4dp">
 
             <ImageView
                 android:id="@+id/background_widget_badge"
@@ -39,13 +39,13 @@
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:singleLine="true"
-                android:textSize="@dimen/standalone_flower_small_widget_text_size_widget_current_value"
+                android:textSize="@dimen/standalone_flower_extra_small_widget_text_size_widget_current_value"
                 android:textStyle="bold"
-                tools:text="06" />
+                tools:text="12" />
 
         </FrameLayout>
 
-        <!-- Title and Progress -->
+        <!-- Title and Progress on the Right -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textAllCaps="false"
-                android:textSize="@dimen/standalone_flower_small_widget_text_size_widget_type"
+                android:textSize="@dimen/standalone_flower_extra_small_widget_text_size_widget_type"
                 android:textStyle="bold"
                 tools:text="Day" />
 
@@ -72,20 +72,15 @@
                 android:includeFontPadding="false"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:textSize="@dimen/standalone_flower_small_widget_text_size_widget_progress"
-                tools:text="25%" />
+                android:textSize="@dimen/standalone_flower_extra_small_widget_text_size_widget_progress"
+                tools:text="68%" />
 
+            <!-- Hidden Days Left view to safely handle RemoteViews calls -->
             <TextView
                 android:id="@+id/widgetDaysLeft"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:lineSpacingMultiplier="0.85"
-                android:textSize="@dimen/standalone_flower_small_widget_text_size_widget_days_left"
-                android:visibility="gone"
-                tools:text="112d\nleft" />
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
 
         </LinearLayout>
 

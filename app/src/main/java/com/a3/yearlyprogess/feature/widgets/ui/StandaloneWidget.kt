@@ -36,10 +36,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
@@ -200,7 +196,7 @@ open class StandaloneWidget(
             }
 
             WidgetShape.BLOSSOM -> when (widgetType) {
-                StandaloneWidgetType.DAY_LIGHT -> flowerRemoteView(
+                StandaloneWidgetType.DAY_LIGHT -> blossomRemoteView(
                     context,
                     yp,
                     userConfig,
@@ -210,7 +206,7 @@ open class StandaloneWidget(
                     appWidgetId = appWidgetId
                 )
 
-                StandaloneWidgetType.NIGHT_LIGHT -> flowerRemoteView(
+                StandaloneWidgetType.NIGHT_LIGHT -> blossomRemoteView(
                     context,
                     yp,
                     userConfig,
@@ -220,7 +216,7 @@ open class StandaloneWidget(
                     appWidgetId = appWidgetId
                 )
 
-                else -> flowerRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
+                else -> blossomRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
             }
         }
 
@@ -240,15 +236,29 @@ open class StandaloneWidget(
         }
 
         /**
-         * Apply flower widget theme colors to the widget views
+         * Apply blossom widget theme colors to the widget views
          */
-        private fun applyFlowerTheme(views: RemoteViews, colors: WidgetColors) {
+        private fun applyBlossomTheme(views: RemoteViews, colors: WidgetColors) {
             views.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundLowColor)
             views.setInt(R.id.background_widget_badge, "setColorFilter", colors.tertiary)
             views.setTextColor(R.id.widgetCurrentValue, colors.onTertiary)
             views.setTextColor(R.id.widgetType, colors.primaryColor)
             views.setTextColor(R.id.widgetProgress, colors.primaryColor)
             views.setTextColor(R.id.widgetDaysLeft, colors.secondaryColor)
+        }
+
+        /**
+         * Format days left text for Blossom widget so that "left" is on a new line
+         */
+        private fun formatBlossomDaysLeft(daysLeft: String): String {
+            val trimmed = daysLeft.trim()
+            if (trimmed.isEmpty() || trimmed.contains('\n')) return trimmed
+            val lastSpace = trimmed.lastIndexOf(' ')
+            return if (lastSpace != -1) {
+                trimmed.substring(0, lastSpace) + "\n" + trimmed.substring(lastSpace + 1)
+            } else {
+                trimmed
+            }
         }
 
         /**
@@ -283,9 +293,14 @@ open class StandaloneWidget(
             // Show/hide days left counter
             if (userConfig.timeLeftCounter && !userConfig.replaceProgressWithDaysLeft) {
                 views.setViewVisibility(R.id.widgetDaysLeft, View.VISIBLE)
+                val daysLeftText = if (userConfig.widgetShape == WidgetShape.BLOSSOM) {
+                    formatBlossomDaysLeft(daysLeft)
+                } else {
+                    daysLeft
+                }
                 views.setTextViewText(
                     R.id.widgetDaysLeft,
-                    daysLeft
+                    daysLeftText
                 )
             } else {
                 views.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
@@ -648,6 +663,40 @@ open class StandaloneWidget(
         }
 
         /**
+         * Apply font scaling to flower extra small widget text views
+         */
+        private fun applyFontScaleFlowerExtraSmall(
+            views: RemoteViews,
+            fontScale: Float,
+            context: Context
+        ) {
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetType,
+                defaultTextSize = R.dimen.standalone_flower_extra_small_widget_text_size_widget_type,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetDaysLeft,
+                defaultTextSize = R.dimen.standalone_flower_extra_small_widget_text_size_widget_days_left,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetProgress,
+                defaultTextSize = R.dimen.standalone_flower_extra_small_widget_text_size_widget_progress,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetCurrentValue,
+                defaultTextSize = R.dimen.standalone_flower_extra_small_widget_text_size_widget_current_value,
+                fontScale = fontScale
+            )
+        }
+
+        /**
          * Create rectangular widget view with user configuration
          */
         fun rectangularRemoteView(
@@ -697,18 +746,7 @@ open class StandaloneWidget(
             )
 
 
-            val format =
-                DateTimeFormatter
-                    .ofLocalizedTime(FormatStyle.SHORT)
-                    .withLocale(yp.settings.uLocale.toLocale())
-                    .withZone(ZoneId.systemDefault())
-
-            val currentValue =
-                if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
-                } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
-                }
+            val currentValue = if (dayLight) "☀️" else "🌙"
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -823,18 +861,7 @@ open class StandaloneWidget(
                 yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
             )
 
-            val format =
-                DateTimeFormatter
-                    .ofLocalizedTime(FormatStyle.SHORT)
-                    .withLocale(yp.settings.uLocale.toLocale())
-                    .withZone(ZoneId.systemDefault())
-
-            val currentValue =
-                if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
-                } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
-                }
+            val currentValue = if (dayLight) "☀️" else "🌙"
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -1001,18 +1028,7 @@ open class StandaloneWidget(
                 yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
             )
 
-            val format =
-                DateTimeFormatter
-                    .ofLocalizedTime(FormatStyle.SHORT)
-                    .withLocale(yp.settings.uLocale.toLocale())
-                    .withZone(ZoneId.systemDefault())
-
-            val currentValue =
-                if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
-                } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
-                }
+            val currentValue = if (dayLight) "☀️" else "🌙"
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -1096,7 +1112,7 @@ open class StandaloneWidget(
         /**
          * Create flower widget view with user configuration
          */
-        fun flowerRemoteView(
+        fun blossomRemoteView(
             context: Context,
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
@@ -1115,7 +1131,7 @@ open class StandaloneWidget(
                 yp.getCurrentPeriodValue(timePeriod).toFormattedTimePeriod(yp, timePeriod)
             val widgetName = timePeriod.name
 
-            return flowerRemoteView(
+            return blossomRemoteView(
                 context,
                 yp,
                 userConfig,
@@ -1129,7 +1145,7 @@ open class StandaloneWidget(
             )
         }
 
-        fun flowerRemoteView(
+        fun blossomRemoteView(
             context: Context,
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
@@ -1149,25 +1165,14 @@ open class StandaloneWidget(
                 yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
             )
 
-            val format =
-                DateTimeFormatter
-                    .ofLocalizedTime(FormatStyle.SHORT)
-                    .withLocale(yp.settings.uLocale.toLocale())
-                    .withZone(ZoneId.systemDefault())
-
-            val currentValue =
-                if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
-                } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
-                }
+            val currentValue = if (dayLight) "☀️" else "🌙"
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
                     R.string.night_light
                 )
 
-            return flowerRemoteView(
+            return blossomRemoteView(
                 context,
                 yp,
                 userConfig,
@@ -1181,7 +1186,7 @@ open class StandaloneWidget(
             )
         }
 
-        private fun flowerRemoteView(
+        private fun blossomRemoteView(
             context: Context,
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
@@ -1196,44 +1201,61 @@ open class StandaloneWidget(
             val large = RemoteViews(context.packageName, R.layout.standalone_widget_flower_layout_large)
             val medium = RemoteViews(context.packageName, R.layout.standalone_widget_flower_layout)
             val small = RemoteViews(context.packageName, R.layout.standalone_widget_flower_layout_small)
+            val xSmall = RemoteViews(context.packageName, R.layout.standalone_widget_flower_layout_extra_small)
 
             if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(large, context)
                 WidgetRenderer.onParentTap(medium, context)
                 WidgetRenderer.onParentTap(small, context)
+                WidgetRenderer.onParentTap(xSmall, context)
             } else if (appWidgetId != -1) {
                 WidgetRenderer.onParentTapToUpdate(large, context)
                 WidgetRenderer.onParentTapToUpdate(medium, context)
                 WidgetRenderer.onParentTapToUpdate(small, context)
+                WidgetRenderer.onParentTapToUpdate(xSmall, context)
+            }
+
+            val effectiveConfig = if (userConfig.widgetShape != WidgetShape.BLOSSOM) {
+                userConfig.copy(widgetShape = WidgetShape.BLOSSOM)
+            } else {
+                userConfig
             }
 
             // Apply theme from user config
-            val colors = WidgetColors.fromTheme(context, userConfig.theme ?: WidgetTheme.DEFAULT)
+            val colors = WidgetColors.fromTheme(context, effectiveConfig.theme ?: WidgetTheme.DEFAULT)
 
             // Apply to large view
-            applyFlowerTheme(large, colors)
-            applyTexts(large, progress, widgetName, daysLeft, currentValue, userConfig)
-            applyBackgroundTransparency(large, userConfig.backgroundTransparency)
-            applyFontScaleFlowerLarge(large, userConfig.fontScale, context)
+            applyBlossomTheme(large, colors)
+            applyTexts(large, progress, widgetName, daysLeft, currentValue, effectiveConfig)
+            applyBackgroundTransparency(large, effectiveConfig.backgroundTransparency)
+            applyFontScaleFlowerLarge(large, effectiveConfig.fontScale, context)
 
             // Apply to medium view
-            applyFlowerTheme(medium, colors)
-            applyTexts(medium, progress, widgetName, daysLeft, currentValue, userConfig)
-            applyBackgroundTransparency(medium, userConfig.backgroundTransparency)
-            applyFontScaleFlower(medium, userConfig.fontScale, context)
+            applyBlossomTheme(medium, colors)
+            applyTexts(medium, progress, widgetName, daysLeft, currentValue, effectiveConfig)
+            applyBackgroundTransparency(medium, effectiveConfig.backgroundTransparency)
+            applyFontScaleFlower(medium, effectiveConfig.fontScale, context)
 
             // Apply to small view
-            applyFlowerTheme(small, colors)
-            applyTexts(small, progress, widgetName, daysLeft, currentValue, userConfig)
-            applyBackgroundTransparency(small, userConfig.backgroundTransparency)
-            applyFontScaleFlowerSmall(small, userConfig.fontScale, context)
+            applyBlossomTheme(small, colors)
+            applyTexts(small, progress, widgetName, daysLeft, currentValue, effectiveConfig)
+            applyBackgroundTransparency(small, effectiveConfig.backgroundTransparency)
+            applyFontScaleFlowerSmall(small, effectiveConfig.fontScale, context)
+
+            // Apply to extra small view
+            applyBlossomTheme(xSmall, colors)
+            applyTexts(xSmall, progress, widgetName, daysLeft, currentValue, effectiveConfig)
+            xSmall.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
+            applyBackgroundTransparency(xSmall, effectiveConfig.backgroundTransparency)
+            applyFontScaleFlowerExtraSmall(xSmall, effectiveConfig.fontScale, context)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 return RemoteViews(
                     mapOf(
-                        SizeF(100f, 100f) to small,
-                        SizeF(160f, 160f) to medium,
-                        SizeF(203f, 203f) to large,
+                        SizeF(57f, 57f) to xSmall,
+                        SizeF(110f, 100f) to small,
+                        SizeF(165f, 160f) to medium,
+                        SizeF(230f, 220f) to large,
                     ),
                 )
             } else {
@@ -1241,9 +1263,10 @@ open class StandaloneWidget(
                 val minHeight = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT) ?: 0
 
                 return when {
-                    minWidth >= 180 && minHeight >= 180 -> large
-                    minWidth >= 120 && minHeight >= 120 -> medium
-                    else -> small
+                    minWidth >= 220 && minHeight >= 200 -> large
+                    minWidth >= 160 && minHeight >= 150 -> medium
+                    minWidth >= 110 && minHeight >= 95 -> small
+                    else -> xSmall
                 }
             }
         }
