@@ -36,6 +36,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
@@ -861,7 +865,18 @@ open class StandaloneWidget(
                 yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
             )
 
-            val currentValue = if (dayLight) "☀️" else "🌙"
+            val format =
+                DateTimeFormatter
+                    .ofLocalizedTime(FormatStyle.SHORT)
+                    .withLocale(yp.settings.uLocale.toLocale())
+                    .withZone(ZoneId.systemDefault())
+
+            val currentValue =
+                if (dayLight) {
+                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
+                } else {
+                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
+                }
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -1028,7 +1043,18 @@ open class StandaloneWidget(
                 yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
             )
 
-            val currentValue = if (dayLight) "☀️" else "🌙"
+            val format =
+                DateTimeFormatter
+                    .ofLocalizedTime(FormatStyle.SHORT)
+                    .withLocale(yp.settings.uLocale.toLocale())
+                    .withZone(ZoneId.systemDefault())
+
+            val currentValue =
+                if (dayLight) {
+                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
+                } else {
+                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
+                }
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
