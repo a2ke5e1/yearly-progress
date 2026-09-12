@@ -227,20 +227,28 @@ class YearlyProgressUtil(val settings: ProgressSettings = ProgressSettings()) {
             return spannable
         }
 
-        fun Int.toFormattedTimePeriod(yp: YearlyProgressUtil, timePeriod: TimePeriod): SpannableString {
+        fun Int.toFormattedTimePeriod(
+            yp: YearlyProgressUtil,
+            timePeriod: TimePeriod,
+            shortFormat: Boolean = false,
+        ): SpannableString {
             return when (timePeriod) {
                 TimePeriod.DAY -> this.formattedDay(yp)
                 TimePeriod.MONTH -> SpannableString(yp.getMonthName(this))
                 TimePeriod.WEEK -> SpannableString(yp.getWeekDayName(this))
                 else -> {
-                    val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
-                    numberFormat.maximumFractionDigits = 0
+                    if (shortFormat) {
+                        SpannableString(String.format(Locale.getDefault(), "%02d", this % 100))
+                    } else {
+                        val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()) as DecimalFormat
+                        numberFormat.maximumFractionDigits = 0
 
-                    // Don't add commas to the number
-                    numberFormat.isGroupingUsed = false
+                        // Don't add commas to the number
+                        numberFormat.isGroupingUsed = false
 
-                    val formattedNumber = numberFormat.format(this)
-                    SpannableString(formattedNumber)
+                        val formattedNumber = numberFormat.format(this)
+                        SpannableString(formattedNumber)
+                    }
                 }
             }
         }

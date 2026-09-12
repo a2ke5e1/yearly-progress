@@ -29,7 +29,7 @@
                 android:id="@+id/background_widget_badge"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/background_widget_badge" />
+                android:src="@drawable/background_widget_badge_small" />
 
             <TextView
                 android:id="@+id/widgetCurrentValue"

@@ -1128,7 +1128,7 @@ open class StandaloneWidget(
                 yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
             )
             val currentValue =
-                yp.getCurrentPeriodValue(timePeriod).toFormattedTimePeriod(yp, timePeriod)
+                yp.getCurrentPeriodValue(timePeriod).toFormattedTimePeriod(yp, timePeriod, shortFormat = true)
             val widgetName = timePeriod.name
 
             return blossomRemoteView(
