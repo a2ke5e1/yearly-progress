@@ -3,7 +3,7 @@
 <resources>
     <!-- Dark mode palettes, one seed per theme (Material 3 Expressive) -->
     <!-- Default -->
-    <color name="widget_default_primary">#FF92CEF5</color>
+    <color name="widget_default_primary">#FF94CDF4</color>
     <color name="widget_default_on_primary">#FF00344B</color>
     <color name="widget_default_primary_container">#FF004C6C</color>
     <color name="widget_default_on_primary_container">#FFC6E7FF</color>
@@ -28,10 +28,10 @@
     <color name="widget_default_outline">#FF8B9198</color>
     <color name="widget_default_outline_variant">#FF41484D</color>
     <color name="widget_default_scrim">#FF000000</color>
-    <color name="widget_default_surface_tint">#FF92CEF5</color>
+    <color name="widget_default_surface_tint">#FF94CDF4</color>
     <color name="widget_default_inverse_surface">#FFDFE3E7</color>
     <color name="widget_default_inverse_on_surface">#FF2D3135</color>
-    <color name="widget_default_inverse_primary">#FF216487</color>
+    <color name="widget_default_inverse_primary">#FF256486</color>
     <color name="widget_default_surface_dim">#FF101417</color>
     <color name="widget_default_surface_bright">#FF353A3D</color>
     <color name="widget_default_surface_container_lowest">#FF0A0F12</color>
@@ -40,7 +40,7 @@
     <color name="widget_default_surface_container_high">#FF262A2E</color>
     <color name="widget_default_surface_container_highest">#FF313539</color>
     <color name="widget_default_primary_fixed">#FFC6E7FF</color>
-    <color name="widget_default_primary_fixed_dim">#FF92CEF5</color>
+    <color name="widget_default_primary_fixed_dim">#FF94CDF4</color>
     <color name="widget_default_on_primary_fixed">#FF001E2E</color>
     <color name="widget_default_on_primary_fixed_variant">#FF004C6C</color>
     <color name="widget_default_secondary_fixed">#FFD2E5F4</color>
@@ -58,10 +58,10 @@
     <color name="widget_default_accent_color">@color/widget_default_tertiary</color>
     <color name="widget_default_progress_bar_background">@color/widget_default_outline_variant</color>
     <!-- Green -->
-    <color name="widget_green_primary">#FFABD28F</color>
-    <color name="widget_green_on_primary">#FF193706</color>
-    <color name="widget_green_primary_container">#FF2F4F1B</color>
-    <color name="widget_green_on_primary_container">#FFC7EEA9</color>
+    <color name="widget_green_primary">#FFA0D57D</color>
+    <color name="widget_green_on_primary">#FF153800</color>
+    <color name="widget_green_primary_container">#FF245106</color>
+    <color name="widget_green_on_primary_container">#FFBBF296</color>
     <color name="widget_green_secondary">#FFBDCBAF</color>
     <color name="widget_green_on_secondary">#FF283420</color>
     <color name="widget_green_secondary_container">#FF3E4A35</color>
@@ -83,10 +83,10 @@
     <color name="widget_green_outline">#FF8E9286</color>
     <color name="widget_green_outline_variant">#FF43483E</color>
     <color name="widget_green_scrim">#FF000000</color>
-    <color name="widget_green_surface_tint">#FFABD28F</color>
+    <color name="widget_green_surface_tint">#FFA0D57D</color>
     <color name="widget_green_inverse_surface">#FFE1E4D9</color>
     <color name="widget_green_inverse_on_surface">#FF2E312A</color>
-    <color name="widget_green_inverse_primary">#FF466730</color>
+    <color name="widget_green_inverse_primary">#FF3C6A1F</color>
     <color name="widget_green_surface_dim">#FF11140E</color>
     <color name="widget_green_surface_bright">#FF373A33</color>
     <color name="widget_green_surface_container_lowest">#FF0C0F09</color>
@@ -94,10 +94,10 @@
     <color name="widget_green_surface_container">#FF1D211A</color>
     <color name="widget_green_surface_container_high">#FF282B24</color>
     <color name="widget_green_surface_container_highest">#FF33362F</color>
-    <color name="widget_green_primary_fixed">#FFC7EEA9</color>
-    <color name="widget_green_primary_fixed_dim">#FFABD28F</color>
+    <color name="widget_green_primary_fixed">#FFBBF296</color>
+    <color name="widget_green_primary_fixed_dim">#FFA0D57D</color>
     <color name="widget_green_on_primary_fixed">#FF092100</color>
-    <color name="widget_green_on_primary_fixed_variant">#FF2F4F1B</color>
+    <color name="widget_green_on_primary_fixed_variant">#FF245106</color>
     <color name="widget_green_secondary_fixed">#FFD9E7CA</color>
     <color name="widget_green_secondary_fixed_dim">#FFBDCBAF</color>
     <color name="widget_green_on_secondary_fixed">#FF141E0D</color>
@@ -113,9 +113,9 @@
     <color name="widget_green_accent_color">@color/widget_green_tertiary</color>
     <color name="widget_green_progress_bar_background">@color/widget_green_outline_variant</color>
     <!-- Ocean Blue -->
-    <color name="widget_ocean_primary">#FF99CCFA</color>
+    <color name="widget_ocean_primary">#FF93CCFF</color>
     <color name="widget_ocean_on_primary">#FF003351</color>
-    <color name="widget_ocean_primary_container">#FF074B72</color>
+    <color name="widget_ocean_primary_container">#FF004B73</color>
     <color name="widget_ocean_on_primary_container">#FFCCE5FF</color>
     <color name="widget_ocean_secondary">#FFB8C8DA</color>
     <color name="widget_ocean_on_secondary">#FF23323F</color>
@@ -138,10 +138,10 @@
     <color name="widget_ocean_outline">#FF8C9198</color>
     <color name="widget_ocean_outline_variant">#FF42474E</color>
     <color name="widget_ocean_scrim">#FF000000</color>
-    <color name="widget_ocean_surface_tint">#FF99CCFA</color>
+    <color name="widget_ocean_surface_tint">#FF93CCFF</color>
     <color name="widget_ocean_inverse_surface">#FFE0E2E8</color>
     <color name="widget_ocean_inverse_on_surface">#FF2D3135</color>
-    <color name="widget_ocean_inverse_primary">#FF2C638B</color>
+    <color name="widget_ocean_inverse_primary">#FF006398</color>
     <color name="widget_ocean_surface_dim">#FF101418</color>
     <color name="widget_ocean_surface_bright">#FF36393E</color>
     <color name="widget_ocean_surface_container_lowest">#FF0B0F12</color>
@@ -150,9 +150,9 @@
     <color name="widget_ocean_surface_container_high">#FF272A2E</color>
     <color name="widget_ocean_surface_container_highest">#FF313539</color>
     <color name="widget_ocean_primary_fixed">#FFCCE5FF</color>
-    <color name="widget_ocean_primary_fixed_dim">#FF99CCFA</color>
+    <color name="widget_ocean_primary_fixed_dim">#FF93CCFF</color>
     <color name="widget_ocean_on_primary_fixed">#FF001D31</color>
-    <color name="widget_ocean_on_primary_fixed_variant">#FF074B72</color>
+    <color name="widget_ocean_on_primary_fixed_variant">#FF004B73</color>
     <color name="widget_ocean_secondary_fixed">#FFD4E4F6</color>
     <color name="widget_ocean_secondary_fixed_dim">#FFB8C8DA</color>
     <color name="widget_ocean_on_secondary_fixed">#FF0D1D2A</color>
@@ -169,8 +169,8 @@
     <color name="widget_ocean_progress_bar_background">@color/widget_ocean_outline_variant</color>
     <!-- Sunset Orange -->
     <color name="widget_sunset_primary">#FFFFB599</color>
-    <color name="widget_sunset_on_primary">#FF552009</color>
-    <color name="widget_sunset_primary_container">#FF71361D</color>
+    <color name="widget_sunset_on_primary">#FF5A1C00</color>
+    <color name="widget_sunset_primary_container">#FF7F2B00</color>
     <color name="widget_sunset_on_primary_container">#FFFFDBCE</color>
     <color name="widget_sunset_secondary">#FFE7BEAF</color>
     <color name="widget_sunset_on_secondary">#FF442A20</color>
@@ -196,7 +196,7 @@
     <color name="widget_sunset_surface_tint">#FFFFB599</color>
     <color name="widget_sunset_inverse_surface">#FFF1DFD9</color>
     <color name="widget_sunset_inverse_on_surface">#FF392E2A</color>
-    <color name="widget_sunset_inverse_primary">#FF8E4C32</color>
+    <color name="widget_sunset_inverse_primary">#FFA73A00</color>
     <color name="widget_sunset_surface_dim">#FF1A110E</color>
     <color name="widget_sunset_surface_bright">#FF423733</color>
     <color name="widget_sunset_surface_container_lowest">#FF140C09</color>
@@ -207,7 +207,7 @@
     <color name="widget_sunset_primary_fixed">#FFFFDBCE</color>
     <color name="widget_sunset_primary_fixed_dim">#FFFFB599</color>
     <color name="widget_sunset_on_primary_fixed">#FF370E00</color>
-    <color name="widget_sunset_on_primary_fixed_variant">#FF71361D</color>
+    <color name="widget_sunset_on_primary_fixed_variant">#FF7F2B00</color>
     <color name="widget_sunset_secondary_fixed">#FFFFDBCE</color>
     <color name="widget_sunset_secondary_fixed_dim">#FFE7BEAF</color>
     <color name="widget_sunset_on_secondary_fixed">#FF2C160D</color>
@@ -223,9 +223,9 @@
     <color name="widget_sunset_accent_color">@color/widget_sunset_tertiary</color>
     <color name="widget_sunset_progress_bar_background">@color/widget_sunset_outline_variant</color>
     <!-- Purple Dream -->
-    <color name="widget_purple_primary">#FFDBB9F9</color>
-    <color name="widget_purple_on_primary">#FF3E2458</color>
-    <color name="widget_purple_primary_container">#FF563B71</color>
+    <color name="widget_purple_primary">#FFDDB8FF</color>
+    <color name="widget_purple_on_primary">#FF490080</color>
+    <color name="widget_purple_primary_container">#FF6800B4</color>
     <color name="widget_purple_on_primary_container">#FFF0DBFF</color>
     <color name="widget_purple_secondary">#FFD0C1DA</color>
     <color name="widget_purple_on_secondary">#FF362C3F</color>
@@ -248,10 +248,10 @@
     <color name="widget_purple_outline">#FF968E98</color>
     <color name="widget_purple_outline_variant">#FF4A454E</color>
     <color name="widget_purple_scrim">#FF000000</color>
-    <color name="widget_purple_surface_tint">#FFDBB9F9</color>
+    <color name="widget_purple_surface_tint">#FFDDB8FF</color>
     <color name="widget_purple_inverse_surface">#FFE8E0E8</color>
     <color name="widget_purple_inverse_on_surface">#FF332F35</color>
-    <color name="widget_purple_inverse_primary">#FF6F528A</color>
+    <color name="widget_purple_inverse_primary">#FF861FDD</color>
     <color name="widget_purple_surface_dim">#FF151218</color>
     <color name="widget_purple_surface_bright">#FF3C383E</color>
     <color name="widget_purple_surface_container_lowest">#FF100D12</color>
@@ -260,9 +260,9 @@
     <color name="widget_purple_surface_container_high">#FF2C292E</color>
     <color name="widget_purple_surface_container_highest">#FF373339</color>
     <color name="widget_purple_primary_fixed">#FFF0DBFF</color>
-    <color name="widget_purple_primary_fixed_dim">#FFDBB9F9</color>
-    <color name="widget_purple_on_primary_fixed">#FF280D42</color>
-    <color name="widget_purple_on_primary_fixed_variant">#FF563B71</color>
+    <color name="widget_purple_primary_fixed_dim">#FFDDB8FF</color>
+    <color name="widget_purple_on_primary_fixed">#FF2C0051</color>
+    <color name="widget_purple_on_primary_fixed_variant">#FF6800B4</color>
     <color name="widget_purple_secondary_fixed">#FFEDDDF6</color>
     <color name="widget_purple_secondary_fixed_dim">#FFD0C1DA</color>
     <color name="widget_purple_on_secondary_fixed">#FF211829</color>
@@ -279,8 +279,8 @@
     <color name="widget_purple_progress_bar_background">@color/widget_purple_outline_variant</color>
     <!-- Rose Pink -->
     <color name="widget_rose_primary">#FFFFB3B6</color>
-    <color name="widget_rose_on_primary">#FF561D23</color>
-    <color name="widget_rose_primary_container">#FF723338</color>
+    <color name="widget_rose_on_primary">#FF68001A</color>
+    <color name="widget_rose_primary_container">#FF920028</color>
     <color name="widget_rose_on_primary_container">#FFFFDADA</color>
     <color name="widget_rose_secondary">#FFE6BDBE</color>
     <color name="widget_rose_on_secondary">#FF44292B</color>
@@ -306,7 +306,7 @@
     <color name="widget_rose_surface_tint">#FFFFB3B6</color>
     <color name="widget_rose_inverse_surface">#FFF0DEDE</color>
     <color name="widget_rose_inverse_on_surface">#FF382E2E</color>
-    <color name="widget_rose_inverse_primary">#FF8F4A4F</color>
+    <color name="widget_rose_inverse_primary">#FFBE0037</color>
     <color name="widget_rose_surface_dim">#FF1A1111</color>
     <color name="widget_rose_surface_bright">#FF413737</color>
     <color name="widget_rose_surface_container_lowest">#FF140C0C</color>
@@ -316,8 +316,8 @@
     <color name="widget_rose_surface_container_highest">#FF3D3232</color>
     <color name="widget_rose_primary_fixed">#FFFFDADA</color>
     <color name="widget_rose_primary_fixed_dim">#FFFFB3B6</color>
-    <color name="widget_rose_on_primary_fixed">#FF3B0810</color>
-    <color name="widget_rose_on_primary_fixed_variant">#FF723338</color>
+    <color name="widget_rose_on_primary_fixed">#FF40000C</color>
+    <color name="widget_rose_on_primary_fixed_variant">#FF920028</color>
     <color name="widget_rose_secondary_fixed">#FFFFDADA</color>
     <color name="widget_rose_secondary_fixed_dim">#FFE6BDBE</color>
     <color name="widget_rose_on_secondary_fixed">#FF2C1516</color>
@@ -333,10 +333,10 @@
     <color name="widget_rose_accent_color">@color/widget_rose_tertiary</color>
     <color name="widget_rose_progress_bar_background">@color/widget_rose_outline_variant</color>
     <!-- Mint Fresh -->
-    <color name="widget_mint_primary">#FF8ED5B1</color>
+    <color name="widget_mint_primary">#FF68DBA9</color>
     <color name="widget_mint_on_primary">#FF003825</color>
     <color name="widget_mint_primary_container">#FF005137</color>
-    <color name="widget_mint_on_primary_container">#FFA9F2CC</color>
+    <color name="widget_mint_on_primary_container">#FF85F8C4</color>
     <color name="widget_mint_secondary">#FFB4CCBD</color>
     <color name="widget_mint_on_secondary">#FF1F352A</color>
     <color name="widget_mint_secondary_container">#FF364B40</color>
@@ -358,10 +358,10 @@
     <color name="widget_mint_outline">#FF8A938C</color>
     <color name="widget_mint_outline_variant">#FF404943</color>
     <color name="widget_mint_scrim">#FF000000</color>
-    <color name="widget_mint_surface_tint">#FF8ED5B1</color>
+    <color name="widget_mint_surface_tint">#FF68DBA9</color>
     <color name="widget_mint_inverse_surface">#FFDEE4DE</color>
     <color name="widget_mint_inverse_on_surface">#FF2C322E</color>
-    <color name="widget_mint_inverse_primary">#FF216A4D</color>
+    <color name="widget_mint_inverse_primary">#FF006C4A</color>
     <color name="widget_mint_surface_dim">#FF0F1511</color>
     <color name="widget_mint_surface_bright">#FF353B37</color>
     <color name="widget_mint_surface_container_lowest">#FF0A0F0C</color>
@@ -369,8 +369,8 @@
     <color name="widget_mint_surface_container">#FF1B211D</color>
     <color name="widget_mint_surface_container_high">#FF252B28</color>
     <color name="widget_mint_surface_container_highest">#FF303632</color>
-    <color name="widget_mint_primary_fixed">#FFA9F2CC</color>
-    <color name="widget_mint_primary_fixed_dim">#FF8ED5B1</color>
+    <color name="widget_mint_primary_fixed">#FF85F8C4</color>
+    <color name="widget_mint_primary_fixed_dim">#FF68DBA9</color>
     <color name="widget_mint_on_primary_fixed">#FF002114</color>
     <color name="widget_mint_on_primary_fixed_variant">#FF005137</color>
     <color name="widget_mint_secondary_fixed">#FFCFE9D9</color>
@@ -389,8 +389,8 @@
     <color name="widget_mint_progress_bar_background">@color/widget_mint_outline_variant</color>
     <!-- Coral -->
     <color name="widget_coral_primary">#FFFFB2B7</color>
-    <color name="widget_coral_on_primary">#FF561D24</color>
-    <color name="widget_coral_primary_container">#FF723339</color>
+    <color name="widget_coral_on_primary">#FF67001B</color>
+    <color name="widget_coral_primary_container">#FF92002A</color>
     <color name="widget_coral_on_primary_container">#FFFFDADB</color>
     <color name="widget_coral_secondary">#FFE6BDBE</color>
     <color name="widget_coral_on_secondary">#FF44292B</color>
@@ -416,7 +416,7 @@
     <color name="widget_coral_surface_tint">#FFFFB2B7</color>
     <color name="widget_coral_inverse_surface">#FFF0DEDE</color>
     <color name="widget_coral_inverse_on_surface">#FF382E2E</color>
-    <color name="widget_coral_inverse_primary">#FF8F4A50</color>
+    <color name="widget_coral_inverse_primary">#FFBC0B3B</color>
     <color name="widget_coral_surface_dim">#FF1A1112</color>
     <color name="widget_coral_surface_bright">#FF413737</color>
     <color name="widget_coral_surface_container_lowest">#FF140C0C</color>
@@ -426,8 +426,8 @@
     <color name="widget_coral_surface_container_highest">#FF3D3232</color>
     <color name="widget_coral_primary_fixed">#FFFFDADB</color>
     <color name="widget_coral_primary_fixed_dim">#FFFFB2B7</color>
-    <color name="widget_coral_on_primary_fixed">#FF3B0810</color>
-    <color name="widget_coral_on_primary_fixed_variant">#FF723339</color>
+    <color name="widget_coral_on_primary_fixed">#FF40000D</color>
+    <color name="widget_coral_on_primary_fixed_variant">#FF92002A</color>
     <color name="widget_coral_secondary_fixed">#FFFFDADB</color>
     <color name="widget_coral_secondary_fixed_dim">#FFE6BDBE</color>
     <color name="widget_coral_on_secondary_fixed">#FF2C1517</color>
@@ -443,9 +443,9 @@
     <color name="widget_coral_accent_color">@color/widget_coral_tertiary</color>
     <color name="widget_coral_progress_bar_background">@color/widget_coral_outline_variant</color>
     <!-- Sky Blue -->
-    <color name="widget_sky_primary">#FF99CCFA</color>
+    <color name="widget_sky_primary">#FF93CCFF</color>
     <color name="widget_sky_on_primary">#FF003351</color>
-    <color name="widget_sky_primary_container">#FF074B72</color>
+    <color name="widget_sky_primary_container">#FF004B73</color>
     <color name="widget_sky_on_primary_container">#FFCCE5FF</color>
     <color name="widget_sky_secondary">#FFB8C8DA</color>
     <color name="widget_sky_on_secondary">#FF23323F</color>
@@ -468,10 +468,10 @@
     <color name="widget_sky_outline">#FF8C9198</color>
     <color name="widget_sky_outline_variant">#FF42474E</color>
     <color name="widget_sky_scrim">#FF000000</color>
-    <color name="widget_sky_surface_tint">#FF99CCFA</color>
+    <color name="widget_sky_surface_tint">#FF93CCFF</color>
     <color name="widget_sky_inverse_surface">#FFE0E2E8</color>
     <color name="widget_sky_inverse_on_surface">#FF2D3135</color>
-    <color name="widget_sky_inverse_primary">#FF2C638B</color>
+    <color name="widget_sky_inverse_primary">#FF006398</color>
     <color name="widget_sky_surface_dim">#FF101418</color>
     <color name="widget_sky_surface_bright">#FF36393E</color>
     <color name="widget_sky_surface_container_lowest">#FF0B0F12</color>
@@ -480,9 +480,9 @@
     <color name="widget_sky_surface_container_high">#FF272A2E</color>
     <color name="widget_sky_surface_container_highest">#FF313539</color>
     <color name="widget_sky_primary_fixed">#FFCCE5FF</color>
-    <color name="widget_sky_primary_fixed_dim">#FF99CCFA</color>
+    <color name="widget_sky_primary_fixed_dim">#FF93CCFF</color>
     <color name="widget_sky_on_primary_fixed">#FF001D31</color>
-    <color name="widget_sky_on_primary_fixed_variant">#FF074B72</color>
+    <color name="widget_sky_on_primary_fixed_variant">#FF004B73</color>
     <color name="widget_sky_secondary_fixed">#FFD4E4F6</color>
     <color name="widget_sky_secondary_fixed_dim">#FFB8C8DA</color>
     <color name="widget_sky_on_secondary_fixed">#FF0D1D2A</color>
@@ -498,10 +498,10 @@
     <color name="widget_sky_accent_color">@color/widget_sky_tertiary</color>
     <color name="widget_sky_progress_bar_background">@color/widget_sky_outline_variant</color>
     <!-- Forest Green -->
-    <color name="widget_forest_primary">#FF9BD4A1</color>
+    <color name="widget_forest_primary">#FF79DB8D</color>
     <color name="widget_forest_on_primary">#FF003916</color>
-    <color name="widget_forest_primary_container">#FF1A5129</color>
-    <color name="widget_forest_on_primary_container">#FFB6F1BB</color>
+    <color name="widget_forest_primary_container">#FF005323</color>
+    <color name="widget_forest_on_primary_container">#FF95F8A7</color>
     <color name="widget_forest_secondary">#FFB8CCB6</color>
     <color name="widget_forest_on_secondary">#FF233425</color>
     <color name="widget_forest_secondary_container">#FF394B3B</color>
@@ -523,10 +523,10 @@
     <color name="widget_forest_outline">#FF8B9389</color>
     <color name="widget_forest_outline_variant">#FF414941</color>
     <color name="widget_forest_scrim">#FF000000</color>
-    <color name="widget_forest_surface_tint">#FF9BD4A1</color>
+    <color name="widget_forest_surface_tint">#FF79DB8D</color>
     <color name="widget_forest_inverse_surface">#FFDFE4DC</color>
     <color name="widget_forest_inverse_on_surface">#FF2D322C</color>
-    <color name="widget_forest_inverse_primary">#FF34693F</color>
+    <color name="widget_forest_inverse_primary">#FF006D30</color>
     <color name="widget_forest_surface_dim">#FF101510</color>
     <color name="widget_forest_surface_bright">#FF363A35</color>
     <color name="widget_forest_surface_container_lowest">#FF0B0F0B</color>
@@ -534,10 +534,10 @@
     <color name="widget_forest_surface_container">#FF1C211C</color>
     <color name="widget_forest_surface_container_high">#FF262B26</color>
     <color name="widget_forest_surface_container_highest">#FF313631</color>
-    <color name="widget_forest_primary_fixed">#FFB6F1BB</color>
-    <color name="widget_forest_primary_fixed_dim">#FF9BD4A1</color>
+    <color name="widget_forest_primary_fixed">#FF95F8A7</color>
+    <color name="widget_forest_primary_fixed_dim">#FF79DB8D</color>
     <color name="widget_forest_on_primary_fixed">#FF00210A</color>
-    <color name="widget_forest_on_primary_fixed_variant">#FF1A5129</color>
+    <color name="widget_forest_on_primary_fixed_variant">#FF005323</color>
     <color name="widget_forest_secondary_fixed">#FFD3E8D1</color>
     <color name="widget_forest_secondary_fixed_dim">#FFB8CCB6</color>
     <color name="widget_forest_on_secondary_fixed">#FF0E1F11</color>
@@ -555,7 +555,7 @@
     <!-- Amber Glow -->
     <color name="widget_amber_primary">#FFFFB77D</color>
     <color name="widget_amber_on_primary">#FF4D2600</color>
-    <color name="widget_amber_primary_container">#FF6C3A07</color>
+    <color name="widget_amber_primary_container">#FF6E3900</color>
     <color name="widget_amber_on_primary_container">#FFFFDCC3</color>
     <color name="widget_amber_secondary">#FFE3C0A6</color>
     <color name="widget_amber_on_secondary">#FF422C1A</color>
@@ -581,7 +581,7 @@
     <color name="widget_amber_surface_tint">#FFFFB77D</color>
     <color name="widget_amber_inverse_surface">#FFEFE0D6</color>
     <color name="widget_amber_inverse_on_surface">#FF382F28</color>
-    <color name="widget_amber_inverse_primary">#FF88511E</color>
+    <color name="widget_amber_inverse_primary">#FF904D00</color>
     <color name="widget_amber_surface_dim">#FF19120C</color>
     <color name="widget_amber_surface_bright">#FF413731</color>
     <color name="widget_amber_surface_container_lowest">#FF140D08</color>
@@ -592,7 +592,7 @@
     <color name="widget_amber_primary_fixed">#FFFFDCC3</color>
     <color name="widget_amber_primary_fixed_dim">#FFFFB77D</color>
     <color name="widget_amber_on_primary_fixed">#FF2F1500</color>
-    <color name="widget_amber_on_primary_fixed_variant">#FF6C3A07</color>
+    <color name="widget_amber_on_primary_fixed_variant">#FF6E3900</color>
     <color name="widget_amber_secondary_fixed">#FFFFDCC3</color>
     <color name="widget_amber_secondary_fixed_dim">#FFE3C0A6</color>
     <color name="widget_amber_on_secondary_fixed">#FF2A1707</color>
@@ -608,10 +608,10 @@
     <color name="widget_amber_accent_color">@color/widget_amber_tertiary</color>
     <color name="widget_amber_progress_bar_background">@color/widget_amber_outline_variant</color>
     <!-- Teal Wave -->
-    <color name="widget_teal_primary">#FF82D5CA</color>
+    <color name="widget_teal_primary">#FF6BD8CB</color>
     <color name="widget_teal_on_primary">#FF003732</color>
     <color name="widget_teal_primary_container">#FF005049</color>
-    <color name="widget_teal_on_primary_container">#FF9EF2E6</color>
+    <color name="widget_teal_on_primary_container">#FF89F5E7</color>
     <color name="widget_teal_secondary">#FFB1CCC7</color>
     <color name="widget_teal_on_secondary">#FF1C3531</color>
     <color name="widget_teal_secondary_container">#FF324B48</color>
@@ -633,7 +633,7 @@
     <color name="widget_teal_outline">#FF899390</color>
     <color name="widget_teal_outline_variant">#FF3F4947</color>
     <color name="widget_teal_scrim">#FF000000</color>
-    <color name="widget_teal_surface_tint">#FF82D5CA</color>
+    <color name="widget_teal_surface_tint">#FF6BD8CB</color>
     <color name="widget_teal_inverse_surface">#FFDDE4E1</color>
     <color name="widget_teal_inverse_on_surface">#FF2B3230</color>
     <color name="widget_teal_inverse_primary">#FF006A61</color>
@@ -644,8 +644,8 @@
     <color name="widget_teal_surface_container">#FF1A2120</color>
     <color name="widget_teal_surface_container_high">#FF252B2A</color>
     <color name="widget_teal_surface_container_highest">#FF303635</color>
-    <color name="widget_teal_primary_fixed">#FF9EF2E6</color>
-    <color name="widget_teal_primary_fixed_dim">#FF82D5CA</color>
+    <color name="widget_teal_primary_fixed">#FF89F5E7</color>
+    <color name="widget_teal_primary_fixed_dim">#FF6BD8CB</color>
     <color name="widget_teal_on_primary_fixed">#FF00201D</color>
     <color name="widget_teal_on_primary_fixed_variant">#FF005049</color>
     <color name="widget_teal_secondary_fixed">#FFCCE8E3</color>
@@ -663,9 +663,9 @@
     <color name="widget_teal_accent_color">@color/widget_teal_tertiary</color>
     <color name="widget_teal_progress_bar_background">@color/widget_teal_outline_variant</color>
     <!-- Lavender -->
-    <color name="widget_lavender_primary">#FFD2BCFD</color>
-    <color name="widget_lavender_on_primary">#FF38265C</color>
-    <color name="widget_lavender_primary_container">#FF4F3D74</color>
+    <color name="widget_lavender_primary">#FFD2BBFF</color>
+    <color name="widget_lavender_on_primary">#FF3F008E</color>
+    <color name="widget_lavender_primary_container">#FF5A00C6</color>
     <color name="widget_lavender_on_primary_container">#FFEADDFF</color>
     <color name="widget_lavender_secondary">#FFCDC2DB</color>
     <color name="widget_lavender_on_secondary">#FF342D40</color>
@@ -688,10 +688,10 @@
     <color name="widget_lavender_outline">#FF948F99</color>
     <color name="widget_lavender_outline_variant">#FF49454E</color>
     <color name="widget_lavender_scrim">#FF000000</color>
-    <color name="widget_lavender_surface_tint">#FFD2BCFD</color>
+    <color name="widget_lavender_surface_tint">#FFD2BBFF</color>
     <color name="widget_lavender_inverse_surface">#FFE7E0E8</color>
     <color name="widget_lavender_inverse_on_surface">#FF322F35</color>
-    <color name="widget_lavender_inverse_primary">#FF67548E</color>
+    <color name="widget_lavender_inverse_primary">#FF732EE4</color>
     <color name="widget_lavender_surface_dim">#FF151218</color>
     <color name="widget_lavender_surface_bright">#FF3B383E</color>
     <color name="widget_lavender_surface_container_lowest">#FF0F0D13</color>
@@ -700,9 +700,9 @@
     <color name="widget_lavender_surface_container_high">#FF2B292F</color>
     <color name="widget_lavender_surface_container_highest">#FF36343A</color>
     <color name="widget_lavender_primary_fixed">#FFEADDFF</color>
-    <color name="widget_lavender_primary_fixed_dim">#FFD2BCFD</color>
-    <color name="widget_lavender_on_primary_fixed">#FF220F46</color>
-    <color name="widget_lavender_on_primary_fixed_variant">#FF4F3D74</color>
+    <color name="widget_lavender_primary_fixed_dim">#FFD2BBFF</color>
+    <color name="widget_lavender_on_primary_fixed">#FF25005A</color>
+    <color name="widget_lavender_on_primary_fixed_variant">#FF5A00C6</color>
     <color name="widget_lavender_secondary_fixed">#FFE9DEF8</color>
     <color name="widget_lavender_secondary_fixed_dim">#FFCDC2DB</color>
     <color name="widget_lavender_on_secondary_fixed">#FF1E182B</color>
@@ -719,8 +719,8 @@
     <color name="widget_lavender_progress_bar_background">@color/widget_lavender_outline_variant</color>
     <!-- Crimson -->
     <color name="widget_crimson_primary">#FFFFB3B6</color>
-    <color name="widget_crimson_on_primary">#FF561D23</color>
-    <color name="widget_crimson_primary_container">#FF723338</color>
+    <color name="widget_crimson_on_primary">#FF68001A</color>
+    <color name="widget_crimson_primary_container">#FF920028</color>
     <color name="widget_crimson_on_primary_container">#FFFFDADA</color>
     <color name="widget_crimson_secondary">#FFE6BDBE</color>
     <color name="widget_crimson_on_secondary">#FF44292B</color>
@@ -746,7 +746,7 @@
     <color name="widget_crimson_surface_tint">#FFFFB3B6</color>
     <color name="widget_crimson_inverse_surface">#FFF0DEDE</color>
     <color name="widget_crimson_inverse_on_surface">#FF382E2E</color>
-    <color name="widget_crimson_inverse_primary">#FF8F4A4F</color>
+    <color name="widget_crimson_inverse_primary">#FFBE0037</color>
     <color name="widget_crimson_surface_dim">#FF1A1111</color>
     <color name="widget_crimson_surface_bright">#FF413737</color>
     <color name="widget_crimson_surface_container_lowest">#FF140C0C</color>
@@ -756,8 +756,8 @@
     <color name="widget_crimson_surface_container_highest">#FF3D3232</color>
     <color name="widget_crimson_primary_fixed">#FFFFDADA</color>
     <color name="widget_crimson_primary_fixed_dim">#FFFFB3B6</color>
-    <color name="widget_crimson_on_primary_fixed">#FF3B0810</color>
-    <color name="widget_crimson_on_primary_fixed_variant">#FF723338</color>
+    <color name="widget_crimson_on_primary_fixed">#FF40000C</color>
+    <color name="widget_crimson_on_primary_fixed_variant">#FF920028</color>
     <color name="widget_crimson_secondary_fixed">#FFFFDADA</color>
     <color name="widget_crimson_secondary_fixed_dim">#FFE6BDBE</color>
     <color name="widget_crimson_on_secondary_fixed">#FF2C1516</color>
@@ -774,8 +774,8 @@
     <color name="widget_crimson_progress_bar_background">@color/widget_crimson_outline_variant</color>
     <!-- Indigo Night -->
     <color name="widget_indigo_primary">#FFC3C0FF</color>
-    <color name="widget_indigo_on_primary">#FF2B2A60</color>
-    <color name="widget_indigo_primary_container">#FF424178</color>
+    <color name="widget_indigo_on_primary">#FF1D00A5</color>
+    <color name="widget_indigo_primary_container">#FF3323CC</color>
     <color name="widget_indigo_on_primary_container">#FFE2DFFF</color>
     <color name="widget_indigo_secondary">#FFC7C4DD</color>
     <color name="widget_indigo_on_secondary">#FF2F2E42</color>
@@ -801,7 +801,7 @@
     <color name="widget_indigo_surface_tint">#FFC3C0FF</color>
     <color name="widget_indigo_inverse_surface">#FFE5E1E9</color>
     <color name="widget_indigo_inverse_on_surface">#FF313036</color>
-    <color name="widget_indigo_inverse_primary">#FF5A5892</color>
+    <color name="widget_indigo_inverse_primary">#FF4D44E3</color>
     <color name="widget_indigo_surface_dim">#FF131318</color>
     <color name="widget_indigo_surface_bright">#FF39383F</color>
     <color name="widget_indigo_surface_container_lowest">#FF0E0E13</color>
@@ -811,8 +811,8 @@
     <color name="widget_indigo_surface_container_highest">#FF35343A</color>
     <color name="widget_indigo_primary_fixed">#FFE2DFFF</color>
     <color name="widget_indigo_primary_fixed_dim">#FFC3C0FF</color>
-    <color name="widget_indigo_on_primary_fixed">#FF16134A</color>
-    <color name="widget_indigo_on_primary_fixed_variant">#FF424178</color>
+    <color name="widget_indigo_on_primary_fixed">#FF0F0069</color>
+    <color name="widget_indigo_on_primary_fixed_variant">#FF3323CC</color>
     <color name="widget_indigo_secondary_fixed">#FFE3E0F9</color>
     <color name="widget_indigo_secondary_fixed_dim">#FFC7C4DD</color>
     <color name="widget_indigo_on_secondary_fixed">#FF1A1A2C</color>
@@ -829,8 +829,8 @@
     <color name="widget_indigo_progress_bar_background">@color/widget_indigo_outline_variant</color>
     <!-- Peach -->
     <color name="widget_peach_primary">#FFFFB599</color>
-    <color name="widget_peach_on_primary">#FF552009</color>
-    <color name="widget_peach_primary_container">#FF71361D</color>
+    <color name="widget_peach_on_primary">#FF5A1C00</color>
+    <color name="widget_peach_primary_container">#FF7F2B00</color>
     <color name="widget_peach_on_primary_container">#FFFFDBCE</color>
     <color name="widget_peach_secondary">#FFE7BEAF</color>
     <color name="widget_peach_on_secondary">#FF442A20</color>
@@ -856,7 +856,7 @@
     <color name="widget_peach_surface_tint">#FFFFB599</color>
     <color name="widget_peach_inverse_surface">#FFF1DFD9</color>
     <color name="widget_peach_inverse_on_surface">#FF392E2A</color>
-    <color name="widget_peach_inverse_primary">#FF8E4C32</color>
+    <color name="widget_peach_inverse_primary">#FFA73A00</color>
     <color name="widget_peach_surface_dim">#FF1A110E</color>
     <color name="widget_peach_surface_bright">#FF423733</color>
     <color name="widget_peach_surface_container_lowest">#FF140C09</color>
@@ -867,7 +867,7 @@
     <color name="widget_peach_primary_fixed">#FFFFDBCE</color>
     <color name="widget_peach_primary_fixed_dim">#FFFFB599</color>
     <color name="widget_peach_on_primary_fixed">#FF370E00</color>
-    <color name="widget_peach_on_primary_fixed_variant">#FF71361D</color>
+    <color name="widget_peach_on_primary_fixed_variant">#FF7F2B00</color>
     <color name="widget_peach_secondary_fixed">#FFFFDBCE</color>
     <color name="widget_peach_secondary_fixed_dim">#FFE7BEAF</color>
     <color name="widget_peach_on_secondary_fixed">#FF2C160D</color>
@@ -883,7 +883,7 @@
     <color name="widget_peach_accent_color">@color/widget_peach_tertiary</color>
     <color name="widget_peach_progress_bar_background">@color/widget_peach_outline_variant</color>
     <!-- Cyan Electric -->
-    <color name="widget_cyan_primary">#FF88D1EC</color>
+    <color name="widget_cyan_primary">#FF6CD3F7</color>
     <color name="widget_cyan_on_primary">#FF003543</color>
     <color name="widget_cyan_primary_container">#FF004E61</color>
     <color name="widget_cyan_on_primary_container">#FFB7EAFF</color>
@@ -908,10 +908,10 @@
     <color name="widget_cyan_outline">#FF8A9296</color>
     <color name="widget_cyan_outline_variant">#FF40484C</color>
     <color name="widget_cyan_scrim">#FF000000</color>
-    <color name="widget_cyan_surface_tint">#FF88D1EC</color>
+    <color name="widget_cyan_surface_tint">#FF6CD3F7</color>
     <color name="widget_cyan_inverse_surface">#FFDEE3E6</color>
     <color name="widget_cyan_inverse_on_surface">#FF2C3134</color>
-    <color name="widget_cyan_inverse_primary">#FF07677F</color>
+    <color name="widget_cyan_inverse_primary">#FF006780</color>
     <color name="widget_cyan_surface_dim">#FF0F1416</color>
     <color name="widget_cyan_surface_bright">#FF353A3C</color>
     <color name="widget_cyan_surface_container_lowest">#FF0A0F11</color>
@@ -920,7 +920,7 @@
     <color name="widget_cyan_surface_container_high">#FF252B2D</color>
     <color name="widget_cyan_surface_container_highest">#FF303638</color>
     <color name="widget_cyan_primary_fixed">#FFB7EAFF</color>
-    <color name="widget_cyan_primary_fixed_dim">#FF88D1EC</color>
+    <color name="widget_cyan_primary_fixed_dim">#FF6CD3F7</color>
     <color name="widget_cyan_on_primary_fixed">#FF001F28</color>
     <color name="widget_cyan_on_primary_fixed_variant">#FF004E61</color>
     <color name="widget_cyan_secondary_fixed">#FFCFE6F1</color>
@@ -938,9 +938,9 @@
     <color name="widget_cyan_accent_color">@color/widget_cyan_tertiary</color>
     <color name="widget_cyan_progress_bar_background">@color/widget_cyan_outline_variant</color>
     <!-- Magenta -->
-    <color name="widget_magenta_primary">#FFEDB4EB</color>
-    <color name="widget_magenta_on_primary">#FF49204D</color>
-    <color name="widget_magenta_primary_container">#FF623665</color>
+    <color name="widget_magenta_primary">#FFFDA9FF</color>
+    <color name="widget_magenta_on_primary">#FF580063</color>
+    <color name="widget_magenta_primary_container">#FF7D008C</color>
     <color name="widget_magenta_on_primary_container">#FFFFD6FB</color>
     <color name="widget_magenta_secondary">#FFD8BFD4</color>
     <color name="widget_magenta_on_secondary">#FF3C2B3B</color>
@@ -963,10 +963,10 @@
     <color name="widget_magenta_outline">#FF998D96</color>
     <color name="widget_magenta_outline_variant">#FF4D444C</color>
     <color name="widget_magenta_scrim">#FF000000</color>
-    <color name="widget_magenta_surface_tint">#FFEDB4EB</color>
+    <color name="widget_magenta_surface_tint">#FFFDA9FF</color>
     <color name="widget_magenta_inverse_surface">#FFEBDFE6</color>
     <color name="widget_magenta_inverse_on_surface">#FF352F34</color>
-    <color name="widget_magenta_inverse_primary">#FF7C4E7E</color>
+    <color name="widget_magenta_inverse_primary">#FFA400B7</color>
     <color name="widget_magenta_surface_dim">#FF171216</color>
     <color name="widget_magenta_surface_bright">#FF3E373C</color>
     <color name="widget_magenta_surface_container_lowest">#FF120D11</color>
@@ -975,9 +975,9 @@
     <color name="widget_magenta_surface_container_high">#FF2E282D</color>
     <color name="widget_magenta_surface_container_highest">#FF393338</color>
     <color name="widget_magenta_primary_fixed">#FFFFD6FB</color>
-    <color name="widget_magenta_primary_fixed_dim">#FFEDB4EB</color>
-    <color name="widget_magenta_on_primary_fixed">#FF320936</color>
-    <color name="widget_magenta_on_primary_fixed_variant">#FF623665</color>
+    <color name="widget_magenta_primary_fixed_dim">#FFFDA9FF</color>
+    <color name="widget_magenta_on_primary_fixed">#FF36003D</color>
+    <color name="widget_magenta_on_primary_fixed_variant">#FF7D008C</color>
     <color name="widget_magenta_secondary_fixed">#FFF5DBF1</color>
     <color name="widget_magenta_secondary_fixed_dim">#FFD8BFD4</color>
     <color name="widget_magenta_on_secondary_fixed">#FF251626</color>
@@ -993,10 +993,10 @@
     <color name="widget_magenta_accent_color">@color/widget_magenta_tertiary</color>
     <color name="widget_magenta_progress_bar_background">@color/widget_magenta_outline_variant</color>
     <!-- Lime -->
-    <color name="widget_lime_primary">#FFB1D18A</color>
-    <color name="widget_lime_on_primary">#FF1F3701</color>
-    <color name="widget_lime_primary_container">#FF344E16</color>
-    <color name="widget_lime_on_primary_container">#FFCCEDA4</color>
+    <color name="widget_lime_primary">#FF96D947</color>
+    <color name="widget_lime_on_primary">#FF1E3700</color>
+    <color name="widget_lime_primary_container">#FF2E4F00</color>
+    <color name="widget_lime_on_primary_container">#FFB1F661</color>
     <color name="widget_lime_secondary">#FFBFCBAD</color>
     <color name="widget_lime_on_secondary">#FF2A331E</color>
     <color name="widget_lime_secondary_container">#FF404A33</color>
@@ -1018,10 +1018,10 @@
     <color name="widget_lime_outline">#FF8E9285</color>
     <color name="widget_lime_outline_variant">#FF44483D</color>
     <color name="widget_lime_scrim">#FF000000</color>
-    <color name="widget_lime_surface_tint">#FFB1D18A</color>
+    <color name="widget_lime_surface_tint">#FF96D947</color>
     <color name="widget_lime_inverse_surface">#FFE2E3D8</color>
     <color name="widget_lime_inverse_on_surface">#FF2F312A</color>
-    <color name="widget_lime_inverse_primary">#FF4B662C</color>
+    <color name="widget_lime_inverse_primary">#FF3F6A00</color>
     <color name="widget_lime_surface_dim">#FF12140E</color>
     <color name="widget_lime_surface_bright">#FF383A32</color>
     <color name="widget_lime_surface_container_lowest">#FF0C0F09</color>
@@ -1029,10 +1029,10 @@
     <color name="widget_lime_surface_container">#FF1E201A</color>
     <color name="widget_lime_surface_container_high">#FF282B24</color>
     <color name="widget_lime_surface_container_highest">#FF33362E</color>
-    <color name="widget_lime_primary_fixed">#FFCCEDA4</color>
-    <color name="widget_lime_primary_fixed_dim">#FFB1D18A</color>
+    <color name="widget_lime_primary_fixed">#FFB1F661</color>
+    <color name="widget_lime_primary_fixed_dim">#FF96D947</color>
     <color name="widget_lime_on_primary_fixed">#FF0F2000</color>
-    <color name="widget_lime_on_primary_fixed_variant">#FF344E16</color>
+    <color name="widget_lime_on_primary_fixed_variant">#FF2E4F00</color>
     <color name="widget_lime_secondary_fixed">#FFDBE7C8</color>
     <color name="widget_lime_secondary_fixed_dim">#FFBFCBAD</color>
     <color name="widget_lime_on_secondary_fixed">#FF151E0B</color>
@@ -1049,8 +1049,8 @@
     <color name="widget_lime_progress_bar_background">@color/widget_lime_outline_variant</color>
     <!-- Ruby Red -->
     <color name="widget_ruby_primary">#FFFFB4AB</color>
-    <color name="widget_ruby_on_primary">#FF561E19</color>
-    <color name="widget_ruby_primary_container">#FF73332E</color>
+    <color name="widget_ruby_on_primary">#FF690005</color>
+    <color name="widget_ruby_primary_container">#FF93000B</color>
     <color name="widget_ruby_on_primary_container">#FFFFDAD6</color>
     <color name="widget_ruby_secondary">#FFE7BDB8</color>
     <color name="widget_ruby_on_secondary">#FF442926</color>
@@ -1076,7 +1076,7 @@
     <color name="widget_ruby_surface_tint">#FFFFB4AB</color>
     <color name="widget_ruby_inverse_surface">#FFF1DEDC</color>
     <color name="widget_ruby_inverse_on_surface">#FF392E2D</color>
-    <color name="widget_ruby_inverse_primary">#FF904A43</color>
+    <color name="widget_ruby_inverse_primary">#FFBF0715</color>
     <color name="widget_ruby_surface_dim">#FF1A1110</color>
     <color name="widget_ruby_surface_bright">#FF423735</color>
     <color name="widget_ruby_surface_container_lowest">#FF140C0B</color>
@@ -1086,8 +1086,8 @@
     <color name="widget_ruby_surface_container_highest">#FF3D3231</color>
     <color name="widget_ruby_primary_fixed">#FFFFDAD6</color>
     <color name="widget_ruby_primary_fixed_dim">#FFFFB4AB</color>
-    <color name="widget_ruby_on_primary_fixed">#FF3B0907</color>
-    <color name="widget_ruby_on_primary_fixed_variant">#FF73332E</color>
+    <color name="widget_ruby_on_primary_fixed">#FF410002</color>
+    <color name="widget_ruby_on_primary_fixed_variant">#FF93000B</color>
     <color name="widget_ruby_secondary_fixed">#FFFFDAD6</color>
     <color name="widget_ruby_secondary_fixed_dim">#FFE7BDB8</color>
     <color name="widget_ruby_on_secondary_fixed">#FF2C1513</color>
@@ -1103,10 +1103,10 @@
     <color name="widget_ruby_accent_color">@color/widget_ruby_tertiary</color>
     <color name="widget_ruby_progress_bar_background">@color/widget_ruby_outline_variant</color>
     <!-- Slate Gray -->
-    <color name="widget_slate_primary">#FFA3C9FE</color>
-    <color name="widget_slate_on_primary">#FF00315B</color>
-    <color name="widget_slate_primary_container">#FF1E4875</color>
-    <color name="widget_slate_on_primary_container">#FFD3E4FF</color>
+    <color name="widget_slate_primary">#FFB9C7DF</color>
+    <color name="widget_slate_on_primary">#FF233144</color>
+    <color name="widget_slate_primary_container">#FF3A485B</color>
+    <color name="widget_slate_on_primary_container">#FFD5E3FC</color>
     <color name="widget_slate_secondary">#FFBBC7DB</color>
     <color name="widget_slate_on_secondary">#FF263141</color>
     <color name="widget_slate_secondary_container">#FF3C4758</color>
@@ -1128,10 +1128,10 @@
     <color name="widget_slate_outline">#FF8D9199</color>
     <color name="widget_slate_outline_variant">#FF43474E</color>
     <color name="widget_slate_scrim">#FF000000</color>
-    <color name="widget_slate_surface_tint">#FFA3C9FE</color>
+    <color name="widget_slate_surface_tint">#FFB9C7DF</color>
     <color name="widget_slate_inverse_surface">#FFE1E2E8</color>
     <color name="widget_slate_inverse_on_surface">#FF2E3035</color>
-    <color name="widget_slate_inverse_primary">#FF39608F</color>
+    <color name="widget_slate_inverse_primary">#FF515F74</color>
     <color name="widget_slate_surface_dim">#FF111418</color>
     <color name="widget_slate_surface_bright">#FF37393E</color>
     <color name="widget_slate_surface_container_lowest">#FF0C0E13</color>
@@ -1139,10 +1139,10 @@
     <color name="widget_slate_surface_container">#FF1D2024</color>
     <color name="widget_slate_surface_container_high">#FF272A2F</color>
     <color name="widget_slate_surface_container_highest">#FF32353A</color>
-    <color name="widget_slate_primary_fixed">#FFD3E4FF</color>
-    <color name="widget_slate_primary_fixed_dim">#FFA3C9FE</color>
-    <color name="widget_slate_on_primary_fixed">#FF001C38</color>
-    <color name="widget_slate_on_primary_fixed_variant">#FF1E4875</color>
+    <color name="widget_slate_primary_fixed">#FFD5E3FC</color>
+    <color name="widget_slate_primary_fixed_dim">#FFB9C7DF</color>
+    <color name="widget_slate_on_primary_fixed">#FF0D1C2E</color>
+    <color name="widget_slate_on_primary_fixed_variant">#FF3A485B</color>
     <color name="widget_slate_secondary_fixed">#FFD7E3F8</color>
     <color name="widget_slate_secondary_fixed_dim">#FFBBC7DB</color>
     <color name="widget_slate_on_secondary_fixed">#FF111C2B</color>
@@ -1158,10 +1158,10 @@
     <color name="widget_slate_accent_color">@color/widget_slate_tertiary</color>
     <color name="widget_slate_progress_bar_background">@color/widget_slate_outline_variant</color>
     <!-- Emerald -->
-    <color name="widget_emerald_primary">#FF8ED5B1</color>
+    <color name="widget_emerald_primary">#FF68DBA9</color>
     <color name="widget_emerald_on_primary">#FF003825</color>
     <color name="widget_emerald_primary_container">#FF005137</color>
-    <color name="widget_emerald_on_primary_container">#FFA9F2CC</color>
+    <color name="widget_emerald_on_primary_container">#FF85F8C4</color>
     <color name="widget_emerald_secondary">#FFB4CCBD</color>
     <color name="widget_emerald_on_secondary">#FF1F352A</color>
     <color name="widget_emerald_secondary_container">#FF364B40</color>
@@ -1183,10 +1183,10 @@
     <color name="widget_emerald_outline">#FF8A938C</color>
     <color name="widget_emerald_outline_variant">#FF404943</color>
     <color name="widget_emerald_scrim">#FF000000</color>
-    <color name="widget_emerald_surface_tint">#FF8ED5B1</color>
+    <color name="widget_emerald_surface_tint">#FF68DBA9</color>
     <color name="widget_emerald_inverse_surface">#FFDEE4DE</color>
     <color name="widget_emerald_inverse_on_surface">#FF2C322E</color>
-    <color name="widget_emerald_inverse_primary">#FF216A4D</color>
+    <color name="widget_emerald_inverse_primary">#FF006C4A</color>
     <color name="widget_emerald_surface_dim">#FF0F1511</color>
     <color name="widget_emerald_surface_bright">#FF353B37</color>
     <color name="widget_emerald_surface_container_lowest">#FF0A0F0C</color>
@@ -1194,8 +1194,8 @@
     <color name="widget_emerald_surface_container">#FF1B211D</color>
     <color name="widget_emerald_surface_container_high">#FF252B28</color>
     <color name="widget_emerald_surface_container_highest">#FF303632</color>
-    <color name="widget_emerald_primary_fixed">#FFA9F2CC</color>
-    <color name="widget_emerald_primary_fixed_dim">#FF8ED5B1</color>
+    <color name="widget_emerald_primary_fixed">#FF85F8C4</color>
+    <color name="widget_emerald_primary_fixed_dim">#FF68DBA9</color>
     <color name="widget_emerald_on_primary_fixed">#FF002114</color>
     <color name="widget_emerald_on_primary_fixed_variant">#FF005137</color>
     <color name="widget_emerald_secondary_fixed">#FFCFE9D9</color>
@@ -1213,9 +1213,9 @@
     <color name="widget_emerald_accent_color">@color/widget_emerald_tertiary</color>
     <color name="widget_emerald_progress_bar_background">@color/widget_emerald_outline_variant</color>
     <!-- Fuchsia -->
-    <color name="widget_fuchsia_primary">#FFEDB4EB</color>
-    <color name="widget_fuchsia_on_primary">#FF49204D</color>
-    <color name="widget_fuchsia_primary_container">#FF623665</color>
+    <color name="widget_fuchsia_primary">#FFFDA9FF</color>
+    <color name="widget_fuchsia_on_primary">#FF580063</color>
+    <color name="widget_fuchsia_primary_container">#FF7D008C</color>
     <color name="widget_fuchsia_on_primary_container">#FFFFD6FB</color>
     <color name="widget_fuchsia_secondary">#FFD8BFD4</color>
     <color name="widget_fuchsia_on_secondary">#FF3C2B3B</color>
@@ -1238,10 +1238,10 @@
     <color name="widget_fuchsia_outline">#FF998D96</color>
     <color name="widget_fuchsia_outline_variant">#FF4D444C</color>
     <color name="widget_fuchsia_scrim">#FF000000</color>
-    <color name="widget_fuchsia_surface_tint">#FFEDB4EB</color>
+    <color name="widget_fuchsia_surface_tint">#FFFDA9FF</color>
     <color name="widget_fuchsia_inverse_surface">#FFEBDFE6</color>
     <color name="widget_fuchsia_inverse_on_surface">#FF352F34</color>
-    <color name="widget_fuchsia_inverse_primary">#FF7C4E7E</color>
+    <color name="widget_fuchsia_inverse_primary">#FFA400B7</color>
     <color name="widget_fuchsia_surface_dim">#FF171216</color>
     <color name="widget_fuchsia_surface_bright">#FF3E373C</color>
     <color name="widget_fuchsia_surface_container_lowest">#FF120D11</color>
@@ -1250,9 +1250,9 @@
     <color name="widget_fuchsia_surface_container_high">#FF2E282D</color>
     <color name="widget_fuchsia_surface_container_highest">#FF393338</color>
     <color name="widget_fuchsia_primary_fixed">#FFFFD6FB</color>
-    <color name="widget_fuchsia_primary_fixed_dim">#FFEDB4EB</color>
-    <color name="widget_fuchsia_on_primary_fixed">#FF320936</color>
-    <color name="widget_fuchsia_on_primary_fixed_variant">#FF623665</color>
+    <color name="widget_fuchsia_primary_fixed_dim">#FFFDA9FF</color>
+    <color name="widget_fuchsia_on_primary_fixed">#FF36003D</color>
+    <color name="widget_fuchsia_on_primary_fixed_variant">#FF7D008C</color>
     <color name="widget_fuchsia_secondary_fixed">#FFF5DBF1</color>
     <color name="widget_fuchsia_secondary_fixed_dim">#FFD8BFD4</color>
     <color name="widget_fuchsia_on_secondary_fixed">#FF251626</color>
@@ -1268,7 +1268,7 @@
     <color name="widget_fuchsia_accent_color">@color/widget_fuchsia_tertiary</color>
     <color name="widget_fuchsia_progress_bar_background">@color/widget_fuchsia_outline_variant</color>
     <!-- Yellow Sunshine -->
-    <color name="widget_yellow_primary">#FFF2BE6E</color>
+    <color name="widget_yellow_primary">#FFFFBA46</color>
     <color name="widget_yellow_on_primary">#FF442C00</color>
     <color name="widget_yellow_primary_container">#FF614000</color>
     <color name="widget_yellow_on_primary_container">#FFFFDDB0</color>
@@ -1293,10 +1293,10 @@
     <color name="widget_yellow_outline">#FF9B8F80</color>
     <color name="widget_yellow_outline_variant">#FF4F4539</color>
     <color name="widget_yellow_scrim">#FF000000</color>
-    <color name="widget_yellow_surface_tint">#FFF2BE6E</color>
+    <color name="widget_yellow_surface_tint">#FFFFBA46</color>
     <color name="widget_yellow_inverse_surface">#FFEDE1D4</color>
     <color name="widget_yellow_inverse_on_surface">#FF362F27</color>
-    <color name="widget_yellow_inverse_primary">#FF7E570F</color>
+    <color name="widget_yellow_inverse_primary">#FF805600</color>
     <color name="widget_yellow_surface_dim">#FF18130B</color>
     <color name="widget_yellow_surface_bright">#FF3F382F</color>
     <color name="widget_yellow_surface_container_lowest">#FF120D07</color>
@@ -1305,7 +1305,7 @@
     <color name="widget_yellow_surface_container_high">#FF2F2921</color>
     <color name="widget_yellow_surface_container_highest">#FF3A342B</color>
     <color name="widget_yellow_primary_fixed">#FFFFDDB0</color>
-    <color name="widget_yellow_primary_fixed_dim">#FFF2BE6E</color>
+    <color name="widget_yellow_primary_fixed_dim">#FFFFBA46</color>
     <color name="widget_yellow_on_primary_fixed">#FF281800</color>
     <color name="widget_yellow_on_primary_fixed_variant">#FF614000</color>
     <color name="widget_yellow_secondary_fixed">#FFF9DEBB</color>
@@ -1323,9 +1323,9 @@
     <color name="widget_yellow_accent_color">@color/widget_yellow_tertiary</color>
     <color name="widget_yellow_progress_bar_background">@color/widget_yellow_outline_variant</color>
     <!-- Violet -->
-    <color name="widget_violet_primary">#FFD2BCFD</color>
-    <color name="widget_violet_on_primary">#FF38265C</color>
-    <color name="widget_violet_primary_container">#FF4F3D74</color>
+    <color name="widget_violet_primary">#FFD2BBFF</color>
+    <color name="widget_violet_on_primary">#FF3F008E</color>
+    <color name="widget_violet_primary_container">#FF5A00C6</color>
     <color name="widget_violet_on_primary_container">#FFEADDFF</color>
     <color name="widget_violet_secondary">#FFCDC2DB</color>
     <color name="widget_violet_on_secondary">#FF342D40</color>
@@ -1348,10 +1348,10 @@
     <color name="widget_violet_outline">#FF948F99</color>
     <color name="widget_violet_outline_variant">#FF49454E</color>
     <color name="widget_violet_scrim">#FF000000</color>
-    <color name="widget_violet_surface_tint">#FFD2BCFD</color>
+    <color name="widget_violet_surface_tint">#FFD2BBFF</color>
     <color name="widget_violet_inverse_surface">#FFE7E0E8</color>
     <color name="widget_violet_inverse_on_surface">#FF322F35</color>
-    <color name="widget_violet_inverse_primary">#FF67548E</color>
+    <color name="widget_violet_inverse_primary">#FF732EE4</color>
     <color name="widget_violet_surface_dim">#FF151218</color>
     <color name="widget_violet_surface_bright">#FF3B383E</color>
     <color name="widget_violet_surface_container_lowest">#FF0F0D13</color>
@@ -1360,9 +1360,9 @@
     <color name="widget_violet_surface_container_high">#FF2B292F</color>
     <color name="widget_violet_surface_container_highest">#FF36343A</color>
     <color name="widget_violet_primary_fixed">#FFEADDFF</color>
-    <color name="widget_violet_primary_fixed_dim">#FFD2BCFD</color>
-    <color name="widget_violet_on_primary_fixed">#FF220F46</color>
-    <color name="widget_violet_on_primary_fixed_variant">#FF4F3D74</color>
+    <color name="widget_violet_primary_fixed_dim">#FFD2BBFF</color>
+    <color name="widget_violet_on_primary_fixed">#FF25005A</color>
+    <color name="widget_violet_on_primary_fixed_variant">#FF5A00C6</color>
     <color name="widget_violet_secondary_fixed">#FFE9DEF8</color>
     <color name="widget_violet_secondary_fixed_dim">#FFCDC2DB</color>
     <color name="widget_violet_on_secondary_fixed">#FF1E182B</color>
@@ -1379,8 +1379,8 @@
     <color name="widget_violet_progress_bar_background">@color/widget_violet_outline_variant</color>
     <!-- Steel Blue -->
     <color name="widget_steel_primary">#FFB7C4FF</color>
-    <color name="widget_steel_on_primary">#FF1E2D61</color>
-    <color name="widget_steel_primary_container">#FF364479</color>
+    <color name="widget_steel_on_primary">#FF002682</color>
+    <color name="widget_steel_primary_container">#FF0039B5</color>
     <color name="widget_steel_on_primary_container">#FFDCE1FF</color>
     <color name="widget_steel_secondary">#FFC2C5DD</color>
     <color name="widget_steel_on_secondary">#FF2B3042</color>
@@ -1406,7 +1406,7 @@
     <color name="widget_steel_surface_tint">#FFB7C4FF</color>
     <color name="widget_steel_inverse_surface">#FFE3E1E9</color>
     <color name="widget_steel_inverse_on_surface">#FF2F3036</color>
-    <color name="widget_steel_inverse_primary">#FF4E5B92</color>
+    <color name="widget_steel_inverse_primary">#FF2151DA</color>
     <color name="widget_steel_surface_dim">#FF121318</color>
     <color name="widget_steel_surface_bright">#FF38393F</color>
     <color name="widget_steel_surface_container_lowest">#FF0D0E13</color>
@@ -1416,8 +1416,8 @@
     <color name="widget_steel_surface_container_highest">#FF34343A</color>
     <color name="widget_steel_primary_fixed">#FFDCE1FF</color>
     <color name="widget_steel_primary_fixed_dim">#FFB7C4FF</color>
-    <color name="widget_steel_on_primary_fixed">#FF05164B</color>
-    <color name="widget_steel_on_primary_fixed_variant">#FF364479</color>
+    <color name="widget_steel_on_primary_fixed">#FF001551</color>
+    <color name="widget_steel_on_primary_fixed_variant">#FF0039B5</color>
     <color name="widget_steel_secondary_fixed">#FFDEE1F9</color>
     <color name="widget_steel_secondary_fixed_dim">#FFC2C5DD</color>
     <color name="widget_steel_on_secondary_fixed">#FF171B2C</color>
@@ -1435,7 +1435,7 @@
     <!-- Bronze -->
     <color name="widget_bronze_primary">#FFFFB778</color>
     <color name="widget_bronze_on_primary">#FF4C2700</color>
-    <color name="widget_bronze_primary_container">#FF6B3B04</color>
+    <color name="widget_bronze_primary_container">#FF6C3A00</color>
     <color name="widget_bronze_on_primary_container">#FFFFDCC1</color>
     <color name="widget_bronze_secondary">#FFE2C0A5</color>
     <color name="widget_bronze_on_secondary">#FF412C19</color>
@@ -1461,7 +1461,7 @@
     <color name="widget_bronze_surface_tint">#FFFFB778</color>
     <color name="widget_bronze_inverse_surface">#FFEFE0D5</color>
     <color name="widget_bronze_inverse_on_surface">#FF372F28</color>
-    <color name="widget_bronze_inverse_primary">#FF87521C</color>
+    <color name="widget_bronze_inverse_primary">#FF8E4E00</color>
     <color name="widget_bronze_surface_dim">#FF19120C</color>
     <color name="widget_bronze_surface_bright">#FF413730</color>
     <color name="widget_bronze_surface_container_lowest">#FF130D08</color>
@@ -1472,7 +1472,7 @@
     <color name="widget_bronze_primary_fixed">#FFFFDCC1</color>
     <color name="widget_bronze_primary_fixed_dim">#FFFFB778</color>
     <color name="widget_bronze_on_primary_fixed">#FF2E1500</color>
-    <color name="widget_bronze_on_primary_fixed_variant">#FF6B3B04</color>
+    <color name="widget_bronze_on_primary_fixed_variant">#FF6C3A00</color>
     <color name="widget_bronze_secondary_fixed">#FFFFDCC1</color>
     <color name="widget_bronze_secondary_fixed_dim">#FFE2C0A5</color>
     <color name="widget_bronze_on_secondary_fixed">#FF2A1706</color>
@@ -1488,10 +1488,10 @@
     <color name="widget_bronze_accent_color">@color/widget_bronze_tertiary</color>
     <color name="widget_bronze_progress_bar_background">@color/widget_bronze_outline_variant</color>
     <!-- Aqua -->
-    <color name="widget_aqua_primary">#FF82D5CA</color>
+    <color name="widget_aqua_primary">#FF6BD8CB</color>
     <color name="widget_aqua_on_primary">#FF003732</color>
     <color name="widget_aqua_primary_container">#FF005049</color>
-    <color name="widget_aqua_on_primary_container">#FF9EF2E6</color>
+    <color name="widget_aqua_on_primary_container">#FF89F5E7</color>
     <color name="widget_aqua_secondary">#FFB1CCC7</color>
     <color name="widget_aqua_on_secondary">#FF1C3531</color>
     <color name="widget_aqua_secondary_container">#FF324B48</color>
@@ -1513,7 +1513,7 @@
     <color name="widget_aqua_outline">#FF899390</color>
     <color name="widget_aqua_outline_variant">#FF3F4947</color>
     <color name="widget_aqua_scrim">#FF000000</color>
-    <color name="widget_aqua_surface_tint">#FF82D5CA</color>
+    <color name="widget_aqua_surface_tint">#FF6BD8CB</color>
     <color name="widget_aqua_inverse_surface">#FFDDE4E1</color>
     <color name="widget_aqua_inverse_on_surface">#FF2B3230</color>
     <color name="widget_aqua_inverse_primary">#FF006A61</color>
@@ -1524,8 +1524,8 @@
     <color name="widget_aqua_surface_container">#FF1A2120</color>
     <color name="widget_aqua_surface_container_high">#FF252B2A</color>
     <color name="widget_aqua_surface_container_highest">#FF303635</color>
-    <color name="widget_aqua_primary_fixed">#FF9EF2E6</color>
-    <color name="widget_aqua_primary_fixed_dim">#FF82D5CA</color>
+    <color name="widget_aqua_primary_fixed">#FF89F5E7</color>
+    <color name="widget_aqua_primary_fixed_dim">#FF6BD8CB</color>
     <color name="widget_aqua_on_primary_fixed">#FF00201D</color>
     <color name="widget_aqua_on_primary_fixed_variant">#FF005049</color>
     <color name="widget_aqua_secondary_fixed">#FFCCE8E3</color>
@@ -1544,8 +1544,8 @@
     <color name="widget_aqua_progress_bar_background">@color/widget_aqua_outline_variant</color>
     <!-- Cherry Blossom -->
     <color name="widget_cherry_primary">#FFFFB1C7</color>
-    <color name="widget_cherry_on_primary">#FF551D31</color>
-    <color name="widget_cherry_primary_container">#FF703347</color>
+    <color name="widget_cherry_on_primary">#FF650031</color>
+    <color name="widget_cherry_primary_container">#FF8E0048</color>
     <color name="widget_cherry_on_primary_container">#FFFFD9E2</color>
     <color name="widget_cherry_secondary">#FFE3BDC6</color>
     <color name="widget_cherry_on_secondary">#FF422930</color>
@@ -1571,7 +1571,7 @@
     <color name="widget_cherry_surface_tint">#FFFFB1C7</color>
     <color name="widget_cherry_inverse_surface">#FFEFDFE1</color>
     <color name="widget_cherry_inverse_on_surface">#FF382E30</color>
-    <color name="widget_cherry_inverse_primary">#FF8C4A5F</color>
+    <color name="widget_cherry_inverse_primary">#FFBA0060</color>
     <color name="widget_cherry_surface_dim">#FF191113</color>
     <color name="widget_cherry_surface_bright">#FF413739</color>
     <color name="widget_cherry_surface_container_lowest">#FF140C0E</color>
@@ -1581,8 +1581,8 @@
     <color name="widget_cherry_surface_container_highest">#FF3C3234</color>
     <color name="widget_cherry_primary_fixed">#FFFFD9E2</color>
     <color name="widget_cherry_primary_fixed_dim">#FFFFB1C7</color>
-    <color name="widget_cherry_on_primary_fixed">#FF3A071C</color>
-    <color name="widget_cherry_on_primary_fixed_variant">#FF703347</color>
+    <color name="widget_cherry_on_primary_fixed">#FF3F001C</color>
+    <color name="widget_cherry_on_primary_fixed_variant">#FF8E0048</color>
     <color name="widget_cherry_secondary_fixed">#FFFFD9E2</color>
     <color name="widget_cherry_secondary_fixed_dim">#FFE3BDC6</color>
     <color name="widget_cherry_on_secondary_fixed">#FF2B151C</color>
@@ -1599,8 +1599,8 @@
     <color name="widget_cherry_progress_bar_background">@color/widget_cherry_outline_variant</color>
     <!-- Navy -->
     <color name="widget_navy_primary">#FFB8C4FF</color>
-    <color name="widget_navy_on_primary">#FF1F2D61</color>
-    <color name="widget_navy_primary_container">#FF364379</color>
+    <color name="widget_navy_on_primary">#FF002584</color>
+    <color name="widget_navy_primary_container">#FF173BAB</color>
     <color name="widget_navy_on_primary_container">#FFDDE1FF</color>
     <color name="widget_navy_secondary">#FFC2C5DD</color>
     <color name="widget_navy_on_secondary">#FF2C2F42</color>
@@ -1626,7 +1626,7 @@
     <color name="widget_navy_surface_tint">#FFB8C4FF</color>
     <color name="widget_navy_inverse_surface">#FFE3E1E9</color>
     <color name="widget_navy_inverse_on_surface">#FF2F3036</color>
-    <color name="widget_navy_inverse_primary">#FF4E5B92</color>
+    <color name="widget_navy_inverse_primary">#FF3755C3</color>
     <color name="widget_navy_surface_dim">#FF121318</color>
     <color name="widget_navy_surface_bright">#FF38393F</color>
     <color name="widget_navy_surface_container_lowest">#FF0D0E13</color>
@@ -1636,8 +1636,8 @@
     <color name="widget_navy_surface_container_highest">#FF34343A</color>
     <color name="widget_navy_primary_fixed">#FFDDE1FF</color>
     <color name="widget_navy_primary_fixed_dim">#FFB8C4FF</color>
-    <color name="widget_navy_on_primary_fixed">#FF06164B</color>
-    <color name="widget_navy_on_primary_fixed_variant">#FF364379</color>
+    <color name="widget_navy_on_primary_fixed">#FF001453</color>
+    <color name="widget_navy_on_primary_fixed_variant">#FF173BAB</color>
     <color name="widget_navy_secondary_fixed">#FFDEE1F9</color>
     <color name="widget_navy_secondary_fixed_dim">#FFC2C5DD</color>
     <color name="widget_navy_on_secondary_fixed">#FF171B2C</color>
@@ -1653,10 +1653,10 @@
     <color name="widget_navy_accent_color">@color/widget_navy_tertiary</color>
     <color name="widget_navy_progress_bar_background">@color/widget_navy_outline_variant</color>
     <!-- Sage Green -->
-    <color name="widget_sage_primary">#FF9CD4A0</color>
+    <color name="widget_sage_primary">#FF62DF7D</color>
     <color name="widget_sage_on_primary">#FF003914</color>
-    <color name="widget_sage_primary_container">#FF1C5128</color>
-    <color name="widget_sage_on_primary_container">#FFB7F1BA</color>
+    <color name="widget_sage_primary_container">#FF005320</color>
+    <color name="widget_sage_on_primary_container">#FF7FFC97</color>
     <color name="widget_sage_secondary">#FFB8CCB6</color>
     <color name="widget_sage_on_secondary">#FF243425</color>
     <color name="widget_sage_secondary_container">#FF3A4B3A</color>
@@ -1678,10 +1678,10 @@
     <color name="widget_sage_outline">#FF8B9389</color>
     <color name="widget_sage_outline_variant">#FF414941</color>
     <color name="widget_sage_scrim">#FF000000</color>
-    <color name="widget_sage_surface_tint">#FF9CD4A0</color>
+    <color name="widget_sage_surface_tint">#FF62DF7D</color>
     <color name="widget_sage_inverse_surface">#FFE0E4DB</color>
     <color name="widget_sage_inverse_on_surface">#FF2D322C</color>
-    <color name="widget_sage_inverse_primary">#FF35693E</color>
+    <color name="widget_sage_inverse_primary">#FF006E2D</color>
     <color name="widget_sage_surface_dim">#FF101510</color>
     <color name="widget_sage_surface_bright">#FF363A35</color>
     <color name="widget_sage_surface_container_lowest">#FF0B0F0B</color>
@@ -1689,10 +1689,10 @@
     <color name="widget_sage_surface_container">#FF1C211C</color>
     <color name="widget_sage_surface_container_high">#FF262B26</color>
     <color name="widget_sage_surface_container_highest">#FF313630</color>
-    <color name="widget_sage_primary_fixed">#FFB7F1BA</color>
-    <color name="widget_sage_primary_fixed_dim">#FF9CD4A0</color>
+    <color name="widget_sage_primary_fixed">#FF7FFC97</color>
+    <color name="widget_sage_primary_fixed_dim">#FF62DF7D</color>
     <color name="widget_sage_on_primary_fixed">#FF002109</color>
-    <color name="widget_sage_on_primary_fixed_variant">#FF1C5128</color>
+    <color name="widget_sage_on_primary_fixed_variant">#FF005320</color>
     <color name="widget_sage_secondary_fixed">#FFD4E8D1</color>
     <color name="widget_sage_secondary_fixed_dim">#FFB8CCB6</color>
     <color name="widget_sage_on_secondary_fixed">#FF0F1F11</color>
@@ -1709,8 +1709,8 @@
     <color name="widget_sage_progress_bar_background">@color/widget_sage_outline_variant</color>
     <!-- Burgundy -->
     <color name="widget_burgundy_primary">#FFFFB2B7</color>
-    <color name="widget_burgundy_on_primary">#FF561D24</color>
-    <color name="widget_burgundy_primary_container">#FF723339</color>
+    <color name="widget_burgundy_on_primary">#FF67001B</color>
+    <color name="widget_burgundy_primary_container">#FF920029</color>
     <color name="widget_burgundy_on_primary_container">#FFFFDADB</color>
     <color name="widget_burgundy_secondary">#FFE6BDBE</color>
     <color name="widget_burgundy_on_secondary">#FF44292B</color>
@@ -1736,7 +1736,7 @@
     <color name="widget_burgundy_surface_tint">#FFFFB2B7</color>
     <color name="widget_burgundy_inverse_surface">#FFF0DEDE</color>
     <color name="widget_burgundy_inverse_on_surface">#FF382E2E</color>
-    <color name="widget_burgundy_inverse_primary">#FF8F4A4F</color>
+    <color name="widget_burgundy_inverse_primary">#FFBB0F3A</color>
     <color name="widget_burgundy_surface_dim">#FF1A1112</color>
     <color name="widget_burgundy_surface_bright">#FF413737</color>
     <color name="widget_burgundy_surface_container_lowest">#FF140C0C</color>
@@ -1746,8 +1746,8 @@
     <color name="widget_burgundy_surface_container_highest">#FF3D3232</color>
     <color name="widget_burgundy_primary_fixed">#FFFFDADB</color>
     <color name="widget_burgundy_primary_fixed_dim">#FFFFB2B7</color>
-    <color name="widget_burgundy_on_primary_fixed">#FF3B0810</color>
-    <color name="widget_burgundy_on_primary_fixed_variant">#FF723339</color>
+    <color name="widget_burgundy_on_primary_fixed">#FF40000D</color>
+    <color name="widget_burgundy_on_primary_fixed_variant">#FF920029</color>
     <color name="widget_burgundy_secondary_fixed">#FFFFDADB</color>
     <color name="widget_burgundy_secondary_fixed_dim">#FFE6BDBE</color>
     <color name="widget_burgundy_on_secondary_fixed">#FF2C1517</color>
@@ -1763,10 +1763,10 @@
     <color name="widget_burgundy_accent_color">@color/widget_burgundy_tertiary</color>
     <color name="widget_burgundy_progress_bar_background">@color/widget_burgundy_outline_variant</color>
     <!-- Charcoal -->
-    <color name="widget_charcoal_primary">#FFA1CAFD</color>
-    <color name="widget_charcoal_on_primary">#FF003259</color>
-    <color name="widget_charcoal_primary_container">#FF1A4975</color>
-    <color name="widget_charcoal_on_primary_container">#FFD2E4FF</color>
+    <color name="widget_charcoal_primary">#FFBDC7D8</color>
+    <color name="widget_charcoal_on_primary">#FF27313E</color>
+    <color name="widget_charcoal_primary_container">#FF3E4755</color>
+    <color name="widget_charcoal_on_primary_container">#FFD9E3F4</color>
     <color name="widget_charcoal_secondary">#FFBBC7DB</color>
     <color name="widget_charcoal_on_secondary">#FF253140</color>
     <color name="widget_charcoal_secondary_container">#FF3C4858</color>
@@ -1788,10 +1788,10 @@
     <color name="widget_charcoal_outline">#FF8D9199</color>
     <color name="widget_charcoal_outline_variant">#FF43474E</color>
     <color name="widget_charcoal_scrim">#FF000000</color>
-    <color name="widget_charcoal_surface_tint">#FFA1CAFD</color>
+    <color name="widget_charcoal_surface_tint">#FFBDC7D8</color>
     <color name="widget_charcoal_inverse_surface">#FFE1E2E8</color>
     <color name="widget_charcoal_inverse_on_surface">#FF2E3135</color>
-    <color name="widget_charcoal_inverse_primary">#FF36618E</color>
+    <color name="widget_charcoal_inverse_primary">#FF555F6D</color>
     <color name="widget_charcoal_surface_dim">#FF111418</color>
     <color name="widget_charcoal_surface_bright">#FF36393E</color>
     <color name="widget_charcoal_surface_container_lowest">#FF0B0E13</color>
@@ -1799,10 +1799,10 @@
     <color name="widget_charcoal_surface_container">#FF1D2024</color>
     <color name="widget_charcoal_surface_container_high">#FF272A2F</color>
     <color name="widget_charcoal_surface_container_highest">#FF32353A</color>
-    <color name="widget_charcoal_primary_fixed">#FFD2E4FF</color>
-    <color name="widget_charcoal_primary_fixed_dim">#FFA1CAFD</color>
-    <color name="widget_charcoal_on_primary_fixed">#FF001D36</color>
-    <color name="widget_charcoal_on_primary_fixed_variant">#FF1A4975</color>
+    <color name="widget_charcoal_primary_fixed">#FFD9E3F4</color>
+    <color name="widget_charcoal_primary_fixed_dim">#FFBDC7D8</color>
+    <color name="widget_charcoal_on_primary_fixed">#FF121C28</color>
+    <color name="widget_charcoal_on_primary_fixed_variant">#FF3E4755</color>
     <color name="widget_charcoal_secondary_fixed">#FFD7E3F8</color>
     <color name="widget_charcoal_secondary_fixed_dim">#FFBBC7DB</color>
     <color name="widget_charcoal_on_secondary_fixed">#FF101C2B</color>
@@ -1818,10 +1818,10 @@
     <color name="widget_charcoal_accent_color">@color/widget_charcoal_tertiary</color>
     <color name="widget_charcoal_progress_bar_background">@color/widget_charcoal_outline_variant</color>
     <!-- Turquoise -->
-    <color name="widget_turquoise_primary">#FF81D5CB</color>
+    <color name="widget_turquoise_primary">#FF80D5CB</color>
     <color name="widget_turquoise_on_primary">#FF003733</color>
     <color name="widget_turquoise_primary_container">#FF00504A</color>
-    <color name="widget_turquoise_on_primary_container">#FF9DF2E7</color>
+    <color name="widget_turquoise_on_primary_container">#FF9CF2E8</color>
     <color name="widget_turquoise_secondary">#FFB1CCC8</color>
     <color name="widget_turquoise_on_secondary">#FF1C3532</color>
     <color name="widget_turquoise_secondary_container">#FF324B48</color>
@@ -1843,7 +1843,7 @@
     <color name="widget_turquoise_outline">#FF899391</color>
     <color name="widget_turquoise_outline_variant">#FF3F4947</color>
     <color name="widget_turquoise_scrim">#FF000000</color>
-    <color name="widget_turquoise_surface_tint">#FF81D5CB</color>
+    <color name="widget_turquoise_surface_tint">#FF80D5CB</color>
     <color name="widget_turquoise_inverse_surface">#FFDDE4E2</color>
     <color name="widget_turquoise_inverse_on_surface">#FF2B3231</color>
     <color name="widget_turquoise_inverse_primary">#FF006A63</color>
@@ -1854,8 +1854,8 @@
     <color name="widget_turquoise_surface_container">#FF1A2120</color>
     <color name="widget_turquoise_surface_container_high">#FF252B2A</color>
     <color name="widget_turquoise_surface_container_highest">#FF303635</color>
-    <color name="widget_turquoise_primary_fixed">#FF9DF2E7</color>
-    <color name="widget_turquoise_primary_fixed_dim">#FF81D5CB</color>
+    <color name="widget_turquoise_primary_fixed">#FF9CF2E8</color>
+    <color name="widget_turquoise_primary_fixed_dim">#FF80D5CB</color>
     <color name="widget_turquoise_on_primary_fixed">#FF00201D</color>
     <color name="widget_turquoise_on_primary_fixed_variant">#FF00504A</color>
     <color name="widget_turquoise_secondary_fixed">#FFCCE8E4</color>
@@ -1873,9 +1873,9 @@
     <color name="widget_turquoise_accent_color">@color/widget_turquoise_tertiary</color>
     <color name="widget_turquoise_progress_bar_background">@color/widget_turquoise_outline_variant</color>
     <!-- Mauve -->
-    <color name="widget_mauve_primary">#FFD2BCFD</color>
-    <color name="widget_mauve_on_primary">#FF38265C</color>
-    <color name="widget_mauve_primary_container">#FF4F3D74</color>
+    <color name="widget_mauve_primary">#FFD2BBFF</color>
+    <color name="widget_mauve_on_primary">#FF3F008E</color>
+    <color name="widget_mauve_primary_container">#FF5A00C6</color>
     <color name="widget_mauve_on_primary_container">#FFEADDFF</color>
     <color name="widget_mauve_secondary">#FFCDC2DB</color>
     <color name="widget_mauve_on_secondary">#FF342D40</color>
@@ -1898,10 +1898,10 @@
     <color name="widget_mauve_outline">#FF948F99</color>
     <color name="widget_mauve_outline_variant">#FF49454E</color>
     <color name="widget_mauve_scrim">#FF000000</color>
-    <color name="widget_mauve_surface_tint">#FFD2BCFD</color>
+    <color name="widget_mauve_surface_tint">#FFD2BBFF</color>
     <color name="widget_mauve_inverse_surface">#FFE7E0E8</color>
     <color name="widget_mauve_inverse_on_surface">#FF322F35</color>
-    <color name="widget_mauve_inverse_primary">#FF67548E</color>
+    <color name="widget_mauve_inverse_primary">#FF732EE4</color>
     <color name="widget_mauve_surface_dim">#FF151218</color>
     <color name="widget_mauve_surface_bright">#FF3B383E</color>
     <color name="widget_mauve_surface_container_lowest">#FF0F0D13</color>
@@ -1910,9 +1910,9 @@
     <color name="widget_mauve_surface_container_high">#FF2B292F</color>
     <color name="widget_mauve_surface_container_highest">#FF36343A</color>
     <color name="widget_mauve_primary_fixed">#FFEADDFF</color>
-    <color name="widget_mauve_primary_fixed_dim">#FFD2BCFD</color>
-    <color name="widget_mauve_on_primary_fixed">#FF220F46</color>
-    <color name="widget_mauve_on_primary_fixed_variant">#FF4F3D74</color>
+    <color name="widget_mauve_primary_fixed_dim">#FFD2BBFF</color>
+    <color name="widget_mauve_on_primary_fixed">#FF25005A</color>
+    <color name="widget_mauve_on_primary_fixed_variant">#FF5A00C6</color>
     <color name="widget_mauve_secondary_fixed">#FFE9DEF8</color>
     <color name="widget_mauve_secondary_fixed_dim">#FFCDC2DB</color>
     <color name="widget_mauve_on_secondary_fixed">#FF1E182B</color>
@@ -1930,7 +1930,7 @@
     <!-- Gold -->
     <color name="widget_gold_primary">#FFFFB77D</color>
     <color name="widget_gold_on_primary">#FF4D2600</color>
-    <color name="widget_gold_primary_container">#FF6C3A07</color>
+    <color name="widget_gold_primary_container">#FF6E3900</color>
     <color name="widget_gold_on_primary_container">#FFFFDCC3</color>
     <color name="widget_gold_secondary">#FFE3C0A6</color>
     <color name="widget_gold_on_secondary">#FF422C1A</color>
@@ -1956,7 +1956,7 @@
     <color name="widget_gold_surface_tint">#FFFFB77D</color>
     <color name="widget_gold_inverse_surface">#FFEFE0D6</color>
     <color name="widget_gold_inverse_on_surface">#FF382F28</color>
-    <color name="widget_gold_inverse_primary">#FF88511E</color>
+    <color name="widget_gold_inverse_primary">#FF904D00</color>
     <color name="widget_gold_surface_dim">#FF19120C</color>
     <color name="widget_gold_surface_bright">#FF413731</color>
     <color name="widget_gold_surface_container_lowest">#FF140D08</color>
@@ -1967,7 +1967,7 @@
     <color name="widget_gold_primary_fixed">#FFFFDCC3</color>
     <color name="widget_gold_primary_fixed_dim">#FFFFB77D</color>
     <color name="widget_gold_on_primary_fixed">#FF2F1500</color>
-    <color name="widget_gold_on_primary_fixed_variant">#FF6C3A07</color>
+    <color name="widget_gold_on_primary_fixed_variant">#FF6E3900</color>
     <color name="widget_gold_secondary_fixed">#FFFFDCC3</color>
     <color name="widget_gold_secondary_fixed_dim">#FFE3C0A6</color>
     <color name="widget_gold_on_secondary_fixed">#FF2A1707</color>
@@ -1983,10 +1983,10 @@
     <color name="widget_gold_accent_color">@color/widget_gold_tertiary</color>
     <color name="widget_gold_progress_bar_background">@color/widget_gold_outline_variant</color>
     <!-- Seafoam -->
-    <color name="widget_seafoam_primary">#FF8ED5B1</color>
+    <color name="widget_seafoam_primary">#FF68DBA9</color>
     <color name="widget_seafoam_on_primary">#FF003825</color>
     <color name="widget_seafoam_primary_container">#FF005137</color>
-    <color name="widget_seafoam_on_primary_container">#FFA9F2CC</color>
+    <color name="widget_seafoam_on_primary_container">#FF85F8C4</color>
     <color name="widget_seafoam_secondary">#FFB4CCBD</color>
     <color name="widget_seafoam_on_secondary">#FF1F352A</color>
     <color name="widget_seafoam_secondary_container">#FF364B40</color>
@@ -2008,10 +2008,10 @@
     <color name="widget_seafoam_outline">#FF8A938C</color>
     <color name="widget_seafoam_outline_variant">#FF404943</color>
     <color name="widget_seafoam_scrim">#FF000000</color>
-    <color name="widget_seafoam_surface_tint">#FF8ED5B1</color>
+    <color name="widget_seafoam_surface_tint">#FF68DBA9</color>
     <color name="widget_seafoam_inverse_surface">#FFDEE4DE</color>
     <color name="widget_seafoam_inverse_on_surface">#FF2C322E</color>
-    <color name="widget_seafoam_inverse_primary">#FF216A4D</color>
+    <color name="widget_seafoam_inverse_primary">#FF006C4A</color>
     <color name="widget_seafoam_surface_dim">#FF0F1511</color>
     <color name="widget_seafoam_surface_bright">#FF353B37</color>
     <color name="widget_seafoam_surface_container_lowest">#FF0A0F0C</color>
@@ -2019,8 +2019,8 @@
     <color name="widget_seafoam_surface_container">#FF1B211D</color>
     <color name="widget_seafoam_surface_container_high">#FF252B28</color>
     <color name="widget_seafoam_surface_container_highest">#FF303632</color>
-    <color name="widget_seafoam_primary_fixed">#FFA9F2CC</color>
-    <color name="widget_seafoam_primary_fixed_dim">#FF8ED5B1</color>
+    <color name="widget_seafoam_primary_fixed">#FF85F8C4</color>
+    <color name="widget_seafoam_primary_fixed_dim">#FF68DBA9</color>
     <color name="widget_seafoam_on_primary_fixed">#FF002114</color>
     <color name="widget_seafoam_on_primary_fixed_variant">#FF005137</color>
     <color name="widget_seafoam_secondary_fixed">#FFCFE9D9</color>
@@ -2039,8 +2039,8 @@
     <color name="widget_seafoam_progress_bar_background">@color/widget_seafoam_outline_variant</color>
     <!-- Raspberry -->
     <color name="widget_raspberry_primary">#FFFFB1C3</color>
-    <color name="widget_raspberry_on_primary">#FF551D2E</color>
-    <color name="widget_raspberry_primary_container">#FF713344</color>
+    <color name="widget_raspberry_on_primary">#FF66002D</color>
+    <color name="widget_raspberry_primary_container">#FF8F0042</color>
     <color name="widget_raspberry_on_primary_container">#FFFFD9E0</color>
     <color name="widget_raspberry_secondary">#FFE4BDC4</color>
     <color name="widget_raspberry_on_secondary">#FF43292F</color>
@@ -2066,7 +2066,7 @@
     <color name="widget_raspberry_surface_tint">#FFFFB1C3</color>
     <color name="widget_raspberry_inverse_surface">#FFEFDEE1</color>
     <color name="widget_raspberry_inverse_on_surface">#FF382E30</color>
-    <color name="widget_raspberry_inverse_primary">#FF8D4A5C</color>
+    <color name="widget_raspberry_inverse_primary">#FFB81059</color>
     <color name="widget_raspberry_surface_dim">#FF191113</color>
     <color name="widget_raspberry_surface_bright">#FF413738</color>
     <color name="widget_raspberry_surface_container_lowest">#FF140C0E</color>
@@ -2076,8 +2076,8 @@
     <color name="widget_raspberry_surface_container_highest">#FF3C3234</color>
     <color name="widget_raspberry_primary_fixed">#FFFFD9E0</color>
     <color name="widget_raspberry_primary_fixed_dim">#FFFFB1C3</color>
-    <color name="widget_raspberry_on_primary_fixed">#FF3A071A</color>
-    <color name="widget_raspberry_on_primary_fixed_variant">#FF713344</color>
+    <color name="widget_raspberry_on_primary_fixed">#FF3F0019</color>
+    <color name="widget_raspberry_on_primary_fixed_variant">#FF8F0042</color>
     <color name="widget_raspberry_secondary_fixed">#FFFFD9E0</color>
     <color name="widget_raspberry_secondary_fixed_dim">#FFE4BDC4</color>
     <color name="widget_raspberry_on_secondary_fixed">#FF2B151B</color>
@@ -2094,8 +2094,8 @@
     <color name="widget_raspberry_progress_bar_background">@color/widget_raspberry_outline_variant</color>
     <!-- Midnight -->
     <color name="widget_midnight_primary">#FFC3C0FF</color>
-    <color name="widget_midnight_on_primary">#FF2C2960</color>
-    <color name="widget_midnight_primary_container">#FF424078</color>
+    <color name="widget_midnight_on_primary">#FF1F00A4</color>
+    <color name="widget_midnight_primary_container">#FF372ABF</color>
     <color name="widget_midnight_on_primary_container">#FFE3DFFF</color>
     <color name="widget_midnight_secondary">#FFC7C4DD</color>
     <color name="widget_midnight_on_secondary">#FF2F2E42</color>
@@ -2121,7 +2121,7 @@
     <color name="widget_midnight_surface_tint">#FFC3C0FF</color>
     <color name="widget_midnight_inverse_surface">#FFE5E1E9</color>
     <color name="widget_midnight_inverse_on_surface">#FF313036</color>
-    <color name="widget_midnight_inverse_primary">#FF5A5891</color>
+    <color name="widget_midnight_inverse_primary">#FF5148D7</color>
     <color name="widget_midnight_surface_dim">#FF131318</color>
     <color name="widget_midnight_surface_bright">#FF39383F</color>
     <color name="widget_midnight_surface_container_lowest">#FF0E0E13</color>
@@ -2131,8 +2131,8 @@
     <color name="widget_midnight_surface_container_highest">#FF35343A</color>
     <color name="widget_midnight_primary_fixed">#FFE3DFFF</color>
     <color name="widget_midnight_primary_fixed_dim">#FFC3C0FF</color>
-    <color name="widget_midnight_on_primary_fixed">#FF16134A</color>
-    <color name="widget_midnight_on_primary_fixed_variant">#FF424078</color>
+    <color name="widget_midnight_on_primary_fixed">#FF100069</color>
+    <color name="widget_midnight_on_primary_fixed_variant">#FF372ABF</color>
     <color name="widget_midnight_secondary_fixed">#FFE3E0F9</color>
     <color name="widget_midnight_secondary_fixed_dim">#FFC7C4DD</color>
     <color name="widget_midnight_on_secondary_fixed">#FF1A1A2C</color>
@@ -2148,10 +2148,10 @@
     <color name="widget_midnight_accent_color">@color/widget_midnight_tertiary</color>
     <color name="widget_midnight_progress_bar_background">@color/widget_midnight_outline_variant</color>
     <!-- Olive -->
-    <color name="widget_olive_primary">#FFB1D18A</color>
-    <color name="widget_olive_on_primary">#FF1F3701</color>
-    <color name="widget_olive_primary_container">#FF344E16</color>
-    <color name="widget_olive_on_primary_container">#FFCCEDA4</color>
+    <color name="widget_olive_primary">#FFA0D663</color>
+    <color name="widget_olive_on_primary">#FF1E3700</color>
+    <color name="widget_olive_primary_container">#FF2E4F00</color>
+    <color name="widget_olive_on_primary_container">#FFBBF37C</color>
     <color name="widget_olive_secondary">#FFBFCBAD</color>
     <color name="widget_olive_on_secondary">#FF2A331E</color>
     <color name="widget_olive_secondary_container">#FF404A33</color>
@@ -2173,10 +2173,10 @@
     <color name="widget_olive_outline">#FF8E9285</color>
     <color name="widget_olive_outline_variant">#FF44483D</color>
     <color name="widget_olive_scrim">#FF000000</color>
-    <color name="widget_olive_surface_tint">#FFB1D18A</color>
+    <color name="widget_olive_surface_tint">#FFA0D663</color>
     <color name="widget_olive_inverse_surface">#FFE2E3D8</color>
     <color name="widget_olive_inverse_on_surface">#FF2F312A</color>
-    <color name="widget_olive_inverse_primary">#FF4B662C</color>
+    <color name="widget_olive_inverse_primary">#FF3E6A00</color>
     <color name="widget_olive_surface_dim">#FF12140E</color>
     <color name="widget_olive_surface_bright">#FF383A32</color>
     <color name="widget_olive_surface_container_lowest">#FF0C0F09</color>
@@ -2184,10 +2184,10 @@
     <color name="widget_olive_surface_container">#FF1E201A</color>
     <color name="widget_olive_surface_container_high">#FF282B24</color>
     <color name="widget_olive_surface_container_highest">#FF33362E</color>
-    <color name="widget_olive_primary_fixed">#FFCCEDA4</color>
-    <color name="widget_olive_primary_fixed_dim">#FFB1D18A</color>
+    <color name="widget_olive_primary_fixed">#FFBBF37C</color>
+    <color name="widget_olive_primary_fixed_dim">#FFA0D663</color>
     <color name="widget_olive_on_primary_fixed">#FF0F2000</color>
-    <color name="widget_olive_on_primary_fixed_variant">#FF344E16</color>
+    <color name="widget_olive_on_primary_fixed_variant">#FF2E4F00</color>
     <color name="widget_olive_secondary_fixed">#FFDBE7C8</color>
     <color name="widget_olive_secondary_fixed_dim">#FFBFCBAD</color>
     <color name="widget_olive_on_secondary_fixed">#FF151E0B</color>
@@ -2204,8 +2204,8 @@
     <color name="widget_olive_progress_bar_background">@color/widget_olive_outline_variant</color>
     <!-- Salmon -->
     <color name="widget_salmon_primary">#FFFFB4AB</color>
-    <color name="widget_salmon_on_primary">#FF561E19</color>
-    <color name="widget_salmon_primary_container">#FF73332E</color>
+    <color name="widget_salmon_on_primary">#FF690005</color>
+    <color name="widget_salmon_primary_container">#FF93000B</color>
     <color name="widget_salmon_on_primary_container">#FFFFDAD6</color>
     <color name="widget_salmon_secondary">#FFE7BDB8</color>
     <color name="widget_salmon_on_secondary">#FF442926</color>
@@ -2231,7 +2231,7 @@
     <color name="widget_salmon_surface_tint">#FFFFB4AB</color>
     <color name="widget_salmon_inverse_surface">#FFF1DEDC</color>
     <color name="widget_salmon_inverse_on_surface">#FF392E2D</color>
-    <color name="widget_salmon_inverse_primary">#FF904A43</color>
+    <color name="widget_salmon_inverse_primary">#FFBF0715</color>
     <color name="widget_salmon_surface_dim">#FF1A1110</color>
     <color name="widget_salmon_surface_bright">#FF423735</color>
     <color name="widget_salmon_surface_container_lowest">#FF140C0B</color>
@@ -2241,8 +2241,8 @@
     <color name="widget_salmon_surface_container_highest">#FF3D3231</color>
     <color name="widget_salmon_primary_fixed">#FFFFDAD6</color>
     <color name="widget_salmon_primary_fixed_dim">#FFFFB4AB</color>
-    <color name="widget_salmon_on_primary_fixed">#FF3B0907</color>
-    <color name="widget_salmon_on_primary_fixed_variant">#FF73332E</color>
+    <color name="widget_salmon_on_primary_fixed">#FF410002</color>
+    <color name="widget_salmon_on_primary_fixed_variant">#FF93000B</color>
     <color name="widget_salmon_secondary_fixed">#FFFFDAD6</color>
     <color name="widget_salmon_secondary_fixed_dim">#FFE7BDB8</color>
     <color name="widget_salmon_on_secondary_fixed">#FF2C1513</color>
@@ -2259,8 +2259,8 @@
     <color name="widget_salmon_progress_bar_background">@color/widget_salmon_outline_variant</color>
     <!-- Periwinkle -->
     <color name="widget_periwinkle_primary">#FFC0C1FF</color>
-    <color name="widget_periwinkle_on_primary">#FF292A60</color>
-    <color name="widget_periwinkle_primary_container">#FF3F4178</color>
+    <color name="widget_periwinkle_on_primary">#FF1000A9</color>
+    <color name="widget_periwinkle_primary_container">#FF2F2EBE</color>
     <color name="widget_periwinkle_on_primary_container">#FFE1E0FF</color>
     <color name="widget_periwinkle_secondary">#FFC6C4DD</color>
     <color name="widget_periwinkle_on_secondary">#FF2E2F42</color>
@@ -2286,7 +2286,7 @@
     <color name="widget_periwinkle_surface_tint">#FFC0C1FF</color>
     <color name="widget_periwinkle_inverse_surface">#FFE4E1E9</color>
     <color name="widget_periwinkle_inverse_on_surface">#FF303036</color>
-    <color name="widget_periwinkle_inverse_primary">#FF575992</color>
+    <color name="widget_periwinkle_inverse_primary">#FF494BD6</color>
     <color name="widget_periwinkle_surface_dim">#FF131318</color>
     <color name="widget_periwinkle_surface_bright">#FF39383F</color>
     <color name="widget_periwinkle_surface_container_lowest">#FF0E0E13</color>
@@ -2296,8 +2296,8 @@
     <color name="widget_periwinkle_surface_container_highest">#FF35343A</color>
     <color name="widget_periwinkle_primary_fixed">#FFE1E0FF</color>
     <color name="widget_periwinkle_primary_fixed_dim">#FFC0C1FF</color>
-    <color name="widget_periwinkle_on_primary_fixed">#FF13144B</color>
-    <color name="widget_periwinkle_on_primary_fixed_variant">#FF3F4178</color>
+    <color name="widget_periwinkle_on_primary_fixed">#FF07006C</color>
+    <color name="widget_periwinkle_on_primary_fixed_variant">#FF2F2EBE</color>
     <color name="widget_periwinkle_secondary_fixed">#FFE2E0F9</color>
     <color name="widget_periwinkle_secondary_fixed_dim">#FFC6C4DD</color>
     <color name="widget_periwinkle_on_secondary_fixed">#FF191A2C</color>
@@ -2314,8 +2314,8 @@
     <color name="widget_periwinkle_progress_bar_background">@color/widget_periwinkle_outline_variant</color>
     <!-- Autumn -->
     <color name="widget_autumn_primary">#FFFFB59D</color>
-    <color name="widget_autumn_on_primary">#FF55200C</color>
-    <color name="widget_autumn_primary_container">#FF723520</color>
+    <color name="widget_autumn_on_primary">#FF5D1800</color>
+    <color name="widget_autumn_primary_container">#FF832600</color>
     <color name="widget_autumn_on_primary_container">#FFFFDBD0</color>
     <color name="widget_autumn_secondary">#FFE7BDB1</color>
     <color name="widget_autumn_on_secondary">#FF442A21</color>
@@ -2341,7 +2341,7 @@
     <color name="widget_autumn_surface_tint">#FFFFB59D</color>
     <color name="widget_autumn_inverse_surface">#FFF1DFDA</color>
     <color name="widget_autumn_inverse_on_surface">#FF392E2B</color>
-    <color name="widget_autumn_inverse_primary">#FF8F4C35</color>
+    <color name="widget_autumn_inverse_primary">#FFAC3400</color>
     <color name="widget_autumn_surface_dim">#FF1A110F</color>
     <color name="widget_autumn_surface_bright">#FF423733</color>
     <color name="widget_autumn_surface_container_lowest">#FF140C0A</color>
@@ -2352,7 +2352,7 @@
     <color name="widget_autumn_primary_fixed">#FFFFDBD0</color>
     <color name="widget_autumn_primary_fixed_dim">#FFFFB59D</color>
     <color name="widget_autumn_on_primary_fixed">#FF390C00</color>
-    <color name="widget_autumn_on_primary_fixed_variant">#FF723520</color>
+    <color name="widget_autumn_on_primary_fixed_variant">#FF832600</color>
     <color name="widget_autumn_secondary_fixed">#FFFFDBD0</color>
     <color name="widget_autumn_secondary_fixed_dim">#FFE7BDB1</color>
     <color name="widget_autumn_on_secondary_fixed">#FF2C160E</color>
@@ -2368,10 +2368,10 @@
     <color name="widget_autumn_accent_color">@color/widget_autumn_tertiary</color>
     <color name="widget_autumn_progress_bar_background">@color/widget_autumn_outline_variant</color>
     <!-- Graphite -->
-    <color name="widget_graphite_primary">#FF82D3E0</color>
-    <color name="widget_graphite_on_primary">#FF00363D</color>
-    <color name="widget_graphite_primary_container">#FF004F58</color>
-    <color name="widget_graphite_on_primary_container">#FF9EEFFD</color>
+    <color name="widget_graphite_primary">#FFC8C6C6</color>
+    <color name="widget_graphite_on_primary">#FF303030</color>
+    <color name="widget_graphite_primary_container">#FF474747</color>
+    <color name="widget_graphite_on_primary_container">#FFE4E2E2</color>
     <color name="widget_graphite_secondary">#FFB1CBD0</color>
     <color name="widget_graphite_on_secondary">#FF1C3438</color>
     <color name="widget_graphite_secondary_container">#FF334B4F</color>
@@ -2393,10 +2393,10 @@
     <color name="widget_graphite_outline">#FF899294</color>
     <color name="widget_graphite_outline_variant">#FF3F484A</color>
     <color name="widget_graphite_scrim">#FF000000</color>
-    <color name="widget_graphite_surface_tint">#FF82D3E0</color>
+    <color name="widget_graphite_surface_tint">#FFC8C6C6</color>
     <color name="widget_graphite_inverse_surface">#FFDEE3E5</color>
     <color name="widget_graphite_inverse_on_surface">#FF2B3133</color>
-    <color name="widget_graphite_inverse_primary">#FF006874</color>
+    <color name="widget_graphite_inverse_primary">#FF5E5E5E</color>
     <color name="widget_graphite_surface_dim">#FF0E1415</color>
     <color name="widget_graphite_surface_bright">#FF343A3B</color>
     <color name="widget_graphite_surface_container_lowest">#FF090F10</color>
@@ -2404,10 +2404,10 @@
     <color name="widget_graphite_surface_container">#FF1B2122</color>
     <color name="widget_graphite_surface_container_high">#FF252B2C</color>
     <color name="widget_graphite_surface_container_highest">#FF303637</color>
-    <color name="widget_graphite_primary_fixed">#FF9EEFFD</color>
-    <color name="widget_graphite_primary_fixed_dim">#FF82D3E0</color>
-    <color name="widget_graphite_on_primary_fixed">#FF001F24</color>
-    <color name="widget_graphite_on_primary_fixed_variant">#FF004F58</color>
+    <color name="widget_graphite_primary_fixed">#FFE4E2E2</color>
+    <color name="widget_graphite_primary_fixed_dim">#FFC8C6C6</color>
+    <color name="widget_graphite_on_primary_fixed">#FF1B1C1C</color>
+    <color name="widget_graphite_on_primary_fixed_variant">#FF474747</color>
     <color name="widget_graphite_secondary_fixed">#FFCDE7EC</color>
     <color name="widget_graphite_secondary_fixed_dim">#FFB1CBD0</color>
     <color name="widget_graphite_on_secondary_fixed">#FF051F23</color>
@@ -2423,10 +2423,10 @@
     <color name="widget_graphite_accent_color">@color/widget_graphite_tertiary</color>
     <color name="widget_graphite_progress_bar_background">@color/widget_graphite_outline_variant</color>
     <!-- Spring -->
-    <color name="widget_spring_primary">#FF9CD4A0</color>
+    <color name="widget_spring_primary">#FF62DF7D</color>
     <color name="widget_spring_on_primary">#FF003914</color>
-    <color name="widget_spring_primary_container">#FF1C5128</color>
-    <color name="widget_spring_on_primary_container">#FFB7F1BA</color>
+    <color name="widget_spring_primary_container">#FF005320</color>
+    <color name="widget_spring_on_primary_container">#FF7FFC97</color>
     <color name="widget_spring_secondary">#FFB8CCB6</color>
     <color name="widget_spring_on_secondary">#FF243425</color>
     <color name="widget_spring_secondary_container">#FF3A4B3A</color>
@@ -2448,10 +2448,10 @@
     <color name="widget_spring_outline">#FF8B9389</color>
     <color name="widget_spring_outline_variant">#FF414941</color>
     <color name="widget_spring_scrim">#FF000000</color>
-    <color name="widget_spring_surface_tint">#FF9CD4A0</color>
+    <color name="widget_spring_surface_tint">#FF62DF7D</color>
     <color name="widget_spring_inverse_surface">#FFE0E4DB</color>
     <color name="widget_spring_inverse_on_surface">#FF2D322C</color>
-    <color name="widget_spring_inverse_primary">#FF35693E</color>
+    <color name="widget_spring_inverse_primary">#FF006E2D</color>
     <color name="widget_spring_surface_dim">#FF101510</color>
     <color name="widget_spring_surface_bright">#FF363A35</color>
     <color name="widget_spring_surface_container_lowest">#FF0B0F0B</color>
@@ -2459,10 +2459,10 @@
     <color name="widget_spring_surface_container">#FF1C211C</color>
     <color name="widget_spring_surface_container_high">#FF262B26</color>
     <color name="widget_spring_surface_container_highest">#FF313630</color>
-    <color name="widget_spring_primary_fixed">#FFB7F1BA</color>
-    <color name="widget_spring_primary_fixed_dim">#FF9CD4A0</color>
+    <color name="widget_spring_primary_fixed">#FF7FFC97</color>
+    <color name="widget_spring_primary_fixed_dim">#FF62DF7D</color>
     <color name="widget_spring_on_primary_fixed">#FF002109</color>
-    <color name="widget_spring_on_primary_fixed_variant">#FF1C5128</color>
+    <color name="widget_spring_on_primary_fixed_variant">#FF005320</color>
     <color name="widget_spring_secondary_fixed">#FFD4E8D1</color>
     <color name="widget_spring_secondary_fixed_dim">#FFB8CCB6</color>
     <color name="widget_spring_on_secondary_fixed">#FF0F1F11</color>
@@ -2479,8 +2479,8 @@
     <color name="widget_spring_progress_bar_background">@color/widget_spring_outline_variant</color>
     <!-- Blush -->
     <color name="widget_blush_primary">#FFFFB3B6</color>
-    <color name="widget_blush_on_primary">#FF561D23</color>
-    <color name="widget_blush_primary_container">#FF723338</color>
+    <color name="widget_blush_on_primary">#FF68001A</color>
+    <color name="widget_blush_primary_container">#FF920028</color>
     <color name="widget_blush_on_primary_container">#FFFFDADA</color>
     <color name="widget_blush_secondary">#FFE6BDBE</color>
     <color name="widget_blush_on_secondary">#FF44292B</color>
@@ -2506,7 +2506,7 @@
     <color name="widget_blush_surface_tint">#FFFFB3B6</color>
     <color name="widget_blush_inverse_surface">#FFF0DEDE</color>
     <color name="widget_blush_inverse_on_surface">#FF382E2E</color>
-    <color name="widget_blush_inverse_primary">#FF8F4A4F</color>
+    <color name="widget_blush_inverse_primary">#FFBE0037</color>
     <color name="widget_blush_surface_dim">#FF1A1111</color>
     <color name="widget_blush_surface_bright">#FF413737</color>
     <color name="widget_blush_surface_container_lowest">#FF140C0C</color>
@@ -2516,8 +2516,8 @@
     <color name="widget_blush_surface_container_highest">#FF3D3232</color>
     <color name="widget_blush_primary_fixed">#FFFFDADA</color>
     <color name="widget_blush_primary_fixed_dim">#FFFFB3B6</color>
-    <color name="widget_blush_on_primary_fixed">#FF3B0810</color>
-    <color name="widget_blush_on_primary_fixed_variant">#FF723338</color>
+    <color name="widget_blush_on_primary_fixed">#FF40000C</color>
+    <color name="widget_blush_on_primary_fixed_variant">#FF920028</color>
     <color name="widget_blush_secondary_fixed">#FFFFDADA</color>
     <color name="widget_blush_secondary_fixed_dim">#FFE6BDBE</color>
     <color name="widget_blush_on_secondary_fixed">#FF2C1516</color>
@@ -2534,8 +2534,8 @@
     <color name="widget_blush_progress_bar_background">@color/widget_blush_outline_variant</color>
     <!-- Cobalt -->
     <color name="widget_cobalt_primary">#FFB8C4FF</color>
-    <color name="widget_cobalt_on_primary">#FF1F2D61</color>
-    <color name="widget_cobalt_primary_container">#FF364379</color>
+    <color name="widget_cobalt_on_primary">#FF002584</color>
+    <color name="widget_cobalt_primary_container">#FF173BAB</color>
     <color name="widget_cobalt_on_primary_container">#FFDDE1FF</color>
     <color name="widget_cobalt_secondary">#FFC2C5DD</color>
     <color name="widget_cobalt_on_secondary">#FF2C2F42</color>
@@ -2561,7 +2561,7 @@
     <color name="widget_cobalt_surface_tint">#FFB8C4FF</color>
     <color name="widget_cobalt_inverse_surface">#FFE3E1E9</color>
     <color name="widget_cobalt_inverse_on_surface">#FF2F3036</color>
-    <color name="widget_cobalt_inverse_primary">#FF4E5B92</color>
+    <color name="widget_cobalt_inverse_primary">#FF3755C3</color>
     <color name="widget_cobalt_surface_dim">#FF121318</color>
     <color name="widget_cobalt_surface_bright">#FF38393F</color>
     <color name="widget_cobalt_surface_container_lowest">#FF0D0E13</color>
@@ -2571,8 +2571,8 @@
     <color name="widget_cobalt_surface_container_highest">#FF34343A</color>
     <color name="widget_cobalt_primary_fixed">#FFDDE1FF</color>
     <color name="widget_cobalt_primary_fixed_dim">#FFB8C4FF</color>
-    <color name="widget_cobalt_on_primary_fixed">#FF06164B</color>
-    <color name="widget_cobalt_on_primary_fixed_variant">#FF364379</color>
+    <color name="widget_cobalt_on_primary_fixed">#FF001453</color>
+    <color name="widget_cobalt_on_primary_fixed_variant">#FF173BAB</color>
     <color name="widget_cobalt_secondary_fixed">#FFDEE1F9</color>
     <color name="widget_cobalt_secondary_fixed_dim">#FFC2C5DD</color>
     <color name="widget_cobalt_on_secondary_fixed">#FF171B2C</color>
@@ -2588,10 +2588,10 @@
     <color name="widget_cobalt_accent_color">@color/widget_cobalt_tertiary</color>
     <color name="widget_cobalt_progress_bar_background">@color/widget_cobalt_outline_variant</color>
     <!-- Pistachio -->
-    <color name="widget_pistachio_primary">#FFB1D18A</color>
-    <color name="widget_pistachio_on_primary">#FF1F3701</color>
-    <color name="widget_pistachio_primary_container">#FF344E16</color>
-    <color name="widget_pistachio_on_primary_container">#FFCCEDA4</color>
+    <color name="widget_pistachio_primary">#FFA0D663</color>
+    <color name="widget_pistachio_on_primary">#FF1E3700</color>
+    <color name="widget_pistachio_primary_container">#FF2E4F00</color>
+    <color name="widget_pistachio_on_primary_container">#FFBBF37C</color>
     <color name="widget_pistachio_secondary">#FFBFCBAD</color>
     <color name="widget_pistachio_on_secondary">#FF2A331E</color>
     <color name="widget_pistachio_secondary_container">#FF404A33</color>
@@ -2613,10 +2613,10 @@
     <color name="widget_pistachio_outline">#FF8E9285</color>
     <color name="widget_pistachio_outline_variant">#FF44483D</color>
     <color name="widget_pistachio_scrim">#FF000000</color>
-    <color name="widget_pistachio_surface_tint">#FFB1D18A</color>
+    <color name="widget_pistachio_surface_tint">#FFA0D663</color>
     <color name="widget_pistachio_inverse_surface">#FFE2E3D8</color>
     <color name="widget_pistachio_inverse_on_surface">#FF2F312A</color>
-    <color name="widget_pistachio_inverse_primary">#FF4B662C</color>
+    <color name="widget_pistachio_inverse_primary">#FF3E6A00</color>
     <color name="widget_pistachio_surface_dim">#FF12140E</color>
     <color name="widget_pistachio_surface_bright">#FF383A32</color>
     <color name="widget_pistachio_surface_container_lowest">#FF0C0F09</color>
@@ -2624,10 +2624,10 @@
     <color name="widget_pistachio_surface_container">#FF1E201A</color>
     <color name="widget_pistachio_surface_container_high">#FF282B24</color>
     <color name="widget_pistachio_surface_container_highest">#FF33362E</color>
-    <color name="widget_pistachio_primary_fixed">#FFCCEDA4</color>
-    <color name="widget_pistachio_primary_fixed_dim">#FFB1D18A</color>
+    <color name="widget_pistachio_primary_fixed">#FFBBF37C</color>
+    <color name="widget_pistachio_primary_fixed_dim">#FFA0D663</color>
     <color name="widget_pistachio_on_primary_fixed">#FF0F2000</color>
-    <color name="widget_pistachio_on_primary_fixed_variant">#FF344E16</color>
+    <color name="widget_pistachio_on_primary_fixed_variant">#FF2E4F00</color>
     <color name="widget_pistachio_secondary_fixed">#FFDBE7C8</color>
     <color name="widget_pistachio_secondary_fixed_dim">#FFBFCBAD</color>
     <color name="widget_pistachio_on_secondary_fixed">#FF151E0B</color>
@@ -2643,9 +2643,9 @@
     <color name="widget_pistachio_accent_color">@color/widget_pistachio_tertiary</color>
     <color name="widget_pistachio_progress_bar_background">@color/widget_pistachio_outline_variant</color>
     <!-- Mocha -->
-    <color name="widget_mocha_primary">#FFFFB778</color>
-    <color name="widget_mocha_on_primary">#FF4C2700</color>
-    <color name="widget_mocha_primary_container">#FF6B3B04</color>
+    <color name="widget_mocha_primary">#FFF5BB8A</color>
+    <color name="widget_mocha_on_primary">#FF4A2803</color>
+    <color name="widget_mocha_primary_container">#FF653E17</color>
     <color name="widget_mocha_on_primary_container">#FFFFDCC1</color>
     <color name="widget_mocha_secondary">#FFE2C0A5</color>
     <color name="widget_mocha_on_secondary">#FF412C19</color>
@@ -2668,10 +2668,10 @@
     <color name="widget_mocha_outline">#FF9E8E82</color>
     <color name="widget_mocha_outline_variant">#FF51443A</color>
     <color name="widget_mocha_scrim">#FF000000</color>
-    <color name="widget_mocha_surface_tint">#FFFFB778</color>
+    <color name="widget_mocha_surface_tint">#FFF5BB8A</color>
     <color name="widget_mocha_inverse_surface">#FFEFE0D5</color>
     <color name="widget_mocha_inverse_on_surface">#FF372F28</color>
-    <color name="widget_mocha_inverse_primary">#FF87521B</color>
+    <color name="widget_mocha_inverse_primary">#FF80552C</color>
     <color name="widget_mocha_surface_dim">#FF19120C</color>
     <color name="widget_mocha_surface_bright">#FF413730</color>
     <color name="widget_mocha_surface_container_lowest">#FF130D08</color>
@@ -2680,9 +2680,9 @@
     <color name="widget_mocha_surface_container_high">#FF312822</color>
     <color name="widget_mocha_surface_container_highest">#FF3C332C</color>
     <color name="widget_mocha_primary_fixed">#FFFFDCC1</color>
-    <color name="widget_mocha_primary_fixed_dim">#FFFFB778</color>
+    <color name="widget_mocha_primary_fixed_dim">#FFF5BB8A</color>
     <color name="widget_mocha_on_primary_fixed">#FF2E1500</color>
-    <color name="widget_mocha_on_primary_fixed_variant">#FF6B3B04</color>
+    <color name="widget_mocha_on_primary_fixed_variant">#FF653E17</color>
     <color name="widget_mocha_secondary_fixed">#FFFFDCC1</color>
     <color name="widget_mocha_secondary_fixed_dim">#FFE2C0A5</color>
     <color name="widget_mocha_on_secondary_fixed">#FF2A1706</color>
@@ -2698,9 +2698,9 @@
     <color name="widget_mocha_accent_color">@color/widget_mocha_tertiary</color>
     <color name="widget_mocha_progress_bar_background">@color/widget_mocha_outline_variant</color>
     <!-- Lilac -->
-    <color name="widget_lilac_primary">#FFD2BCFD</color>
-    <color name="widget_lilac_on_primary">#FF38265C</color>
-    <color name="widget_lilac_primary_container">#FF4F3D74</color>
+    <color name="widget_lilac_primary">#FFD2BBFF</color>
+    <color name="widget_lilac_on_primary">#FF3F008E</color>
+    <color name="widget_lilac_primary_container">#FF5A00C6</color>
     <color name="widget_lilac_on_primary_container">#FFEADDFF</color>
     <color name="widget_lilac_secondary">#FFCDC2DB</color>
     <color name="widget_lilac_on_secondary">#FF342D40</color>
@@ -2723,10 +2723,10 @@
     <color name="widget_lilac_outline">#FF948F99</color>
     <color name="widget_lilac_outline_variant">#FF49454E</color>
     <color name="widget_lilac_scrim">#FF000000</color>
-    <color name="widget_lilac_surface_tint">#FFD2BCFD</color>
+    <color name="widget_lilac_surface_tint">#FFD2BBFF</color>
     <color name="widget_lilac_inverse_surface">#FFE7E0E8</color>
     <color name="widget_lilac_inverse_on_surface">#FF322F35</color>
-    <color name="widget_lilac_inverse_primary">#FF67548E</color>
+    <color name="widget_lilac_inverse_primary">#FF732EE4</color>
     <color name="widget_lilac_surface_dim">#FF151218</color>
     <color name="widget_lilac_surface_bright">#FF3B383E</color>
     <color name="widget_lilac_surface_container_lowest">#FF0F0D13</color>
@@ -2735,9 +2735,9 @@
     <color name="widget_lilac_surface_container_high">#FF2B292F</color>
     <color name="widget_lilac_surface_container_highest">#FF36343A</color>
     <color name="widget_lilac_primary_fixed">#FFEADDFF</color>
-    <color name="widget_lilac_primary_fixed_dim">#FFD2BCFD</color>
-    <color name="widget_lilac_on_primary_fixed">#FF220F46</color>
-    <color name="widget_lilac_on_primary_fixed_variant">#FF4F3D74</color>
+    <color name="widget_lilac_primary_fixed_dim">#FFD2BBFF</color>
+    <color name="widget_lilac_on_primary_fixed">#FF25005A</color>
+    <color name="widget_lilac_on_primary_fixed_variant">#FF5A00C6</color>
     <color name="widget_lilac_secondary_fixed">#FFE9DEF8</color>
     <color name="widget_lilac_secondary_fixed_dim">#FFCDC2DB</color>
     <color name="widget_lilac_on_secondary_fixed">#FF1E182B</color>
@@ -2754,8 +2754,8 @@
     <color name="widget_lilac_progress_bar_background">@color/widget_lilac_outline_variant</color>
     <!-- Tangerine -->
     <color name="widget_tangerine_primary">#FFFFB59D</color>
-    <color name="widget_tangerine_on_primary">#FF55200C</color>
-    <color name="widget_tangerine_primary_container">#FF723520</color>
+    <color name="widget_tangerine_on_primary">#FF5D1800</color>
+    <color name="widget_tangerine_primary_container">#FF832600</color>
     <color name="widget_tangerine_on_primary_container">#FFFFDBD0</color>
     <color name="widget_tangerine_secondary">#FFE7BDB1</color>
     <color name="widget_tangerine_on_secondary">#FF442A21</color>
@@ -2781,7 +2781,7 @@
     <color name="widget_tangerine_surface_tint">#FFFFB59D</color>
     <color name="widget_tangerine_inverse_surface">#FFF1DFDA</color>
     <color name="widget_tangerine_inverse_on_surface">#FF392E2B</color>
-    <color name="widget_tangerine_inverse_primary">#FF8F4C35</color>
+    <color name="widget_tangerine_inverse_primary">#FFAC3400</color>
     <color name="widget_tangerine_surface_dim">#FF1A110F</color>
     <color name="widget_tangerine_surface_bright">#FF423733</color>
     <color name="widget_tangerine_surface_container_lowest">#FF140C0A</color>
@@ -2792,7 +2792,7 @@
     <color name="widget_tangerine_primary_fixed">#FFFFDBD0</color>
     <color name="widget_tangerine_primary_fixed_dim">#FFFFB59D</color>
     <color name="widget_tangerine_on_primary_fixed">#FF390C00</color>
-    <color name="widget_tangerine_on_primary_fixed_variant">#FF723520</color>
+    <color name="widget_tangerine_on_primary_fixed_variant">#FF832600</color>
     <color name="widget_tangerine_secondary_fixed">#FFFFDBD0</color>
     <color name="widget_tangerine_secondary_fixed_dim">#FFE7BDB1</color>
     <color name="widget_tangerine_on_secondary_fixed">#FF2C160E</color>
@@ -2808,9 +2808,9 @@
     <color name="widget_tangerine_accent_color">@color/widget_tangerine_tertiary</color>
     <color name="widget_tangerine_progress_bar_background">@color/widget_tangerine_outline_variant</color>
     <!-- Arctic -->
-    <color name="widget_arctic_primary">#FF99CCFA</color>
+    <color name="widget_arctic_primary">#FF93CCFF</color>
     <color name="widget_arctic_on_primary">#FF003351</color>
-    <color name="widget_arctic_primary_container">#FF074B72</color>
+    <color name="widget_arctic_primary_container">#FF004B73</color>
     <color name="widget_arctic_on_primary_container">#FFCCE5FF</color>
     <color name="widget_arctic_secondary">#FFB8C8DA</color>
     <color name="widget_arctic_on_secondary">#FF23323F</color>
@@ -2833,10 +2833,10 @@
     <color name="widget_arctic_outline">#FF8C9198</color>
     <color name="widget_arctic_outline_variant">#FF42474E</color>
     <color name="widget_arctic_scrim">#FF000000</color>
-    <color name="widget_arctic_surface_tint">#FF99CCFA</color>
+    <color name="widget_arctic_surface_tint">#FF93CCFF</color>
     <color name="widget_arctic_inverse_surface">#FFE0E2E8</color>
     <color name="widget_arctic_inverse_on_surface">#FF2D3135</color>
-    <color name="widget_arctic_inverse_primary">#FF2C638B</color>
+    <color name="widget_arctic_inverse_primary">#FF006398</color>
     <color name="widget_arctic_surface_dim">#FF101418</color>
     <color name="widget_arctic_surface_bright">#FF36393E</color>
     <color name="widget_arctic_surface_container_lowest">#FF0B0F12</color>
@@ -2845,9 +2845,9 @@
     <color name="widget_arctic_surface_container_high">#FF272A2E</color>
     <color name="widget_arctic_surface_container_highest">#FF313539</color>
     <color name="widget_arctic_primary_fixed">#FFCCE5FF</color>
-    <color name="widget_arctic_primary_fixed_dim">#FF99CCFA</color>
+    <color name="widget_arctic_primary_fixed_dim">#FF93CCFF</color>
     <color name="widget_arctic_on_primary_fixed">#FF001D31</color>
-    <color name="widget_arctic_on_primary_fixed_variant">#FF074B72</color>
+    <color name="widget_arctic_on_primary_fixed_variant">#FF004B73</color>
     <color name="widget_arctic_secondary_fixed">#FFD4E4F6</color>
     <color name="widget_arctic_secondary_fixed_dim">#FFB8C8DA</color>
     <color name="widget_arctic_on_secondary_fixed">#FF0D1D2A</color>
@@ -2863,9 +2863,9 @@
     <color name="widget_arctic_accent_color">@color/widget_arctic_tertiary</color>
     <color name="widget_arctic_progress_bar_background">@color/widget_arctic_outline_variant</color>
     <!-- Plum -->
-    <color name="widget_plum_primary">#FFDBB9F9</color>
-    <color name="widget_plum_on_primary">#FF3E2458</color>
-    <color name="widget_plum_primary_container">#FF563B71</color>
+    <color name="widget_plum_primary">#FFDDB8FF</color>
+    <color name="widget_plum_on_primary">#FF490080</color>
+    <color name="widget_plum_primary_container">#FF6800B4</color>
     <color name="widget_plum_on_primary_container">#FFF0DBFF</color>
     <color name="widget_plum_secondary">#FFD0C1DA</color>
     <color name="widget_plum_on_secondary">#FF362C3F</color>
@@ -2888,10 +2888,10 @@
     <color name="widget_plum_outline">#FF968E98</color>
     <color name="widget_plum_outline_variant">#FF4A454E</color>
     <color name="widget_plum_scrim">#FF000000</color>
-    <color name="widget_plum_surface_tint">#FFDBB9F9</color>
+    <color name="widget_plum_surface_tint">#FFDDB8FF</color>
     <color name="widget_plum_inverse_surface">#FFE8E0E8</color>
     <color name="widget_plum_inverse_on_surface">#FF332F35</color>
-    <color name="widget_plum_inverse_primary">#FF6F528A</color>
+    <color name="widget_plum_inverse_primary">#FF832AD3</color>
     <color name="widget_plum_surface_dim">#FF151218</color>
     <color name="widget_plum_surface_bright">#FF3C383E</color>
     <color name="widget_plum_surface_container_lowest">#FF100D12</color>
@@ -2900,9 +2900,9 @@
     <color name="widget_plum_surface_container_high">#FF2C292E</color>
     <color name="widget_plum_surface_container_highest">#FF373339</color>
     <color name="widget_plum_primary_fixed">#FFF0DBFF</color>
-    <color name="widget_plum_primary_fixed_dim">#FFDBB9F9</color>
-    <color name="widget_plum_on_primary_fixed">#FF280D42</color>
-    <color name="widget_plum_on_primary_fixed_variant">#FF563B71</color>
+    <color name="widget_plum_primary_fixed_dim">#FFDDB8FF</color>
+    <color name="widget_plum_on_primary_fixed">#FF2C0051</color>
+    <color name="widget_plum_on_primary_fixed_variant">#FF6800B4</color>
     <color name="widget_plum_secondary_fixed">#FFEDDDF6</color>
     <color name="widget_plum_secondary_fixed_dim">#FFD0C1DA</color>
     <color name="widget_plum_on_secondary_fixed">#FF211829</color>
@@ -2918,10 +2918,10 @@
     <color name="widget_plum_accent_color">@color/widget_plum_tertiary</color>
     <color name="widget_plum_progress_bar_background">@color/widget_plum_outline_variant</color>
     <!-- Honeydew -->
-    <color name="widget_honeydew_primary">#FF9CD4A0</color>
+    <color name="widget_honeydew_primary">#FF62DF7D</color>
     <color name="widget_honeydew_on_primary">#FF003914</color>
-    <color name="widget_honeydew_primary_container">#FF1C5128</color>
-    <color name="widget_honeydew_on_primary_container">#FFB7F1BA</color>
+    <color name="widget_honeydew_primary_container">#FF005320</color>
+    <color name="widget_honeydew_on_primary_container">#FF7FFC97</color>
     <color name="widget_honeydew_secondary">#FFB8CCB6</color>
     <color name="widget_honeydew_on_secondary">#FF243425</color>
     <color name="widget_honeydew_secondary_container">#FF3A4B3A</color>
@@ -2943,10 +2943,10 @@
     <color name="widget_honeydew_outline">#FF8B9389</color>
     <color name="widget_honeydew_outline_variant">#FF414941</color>
     <color name="widget_honeydew_scrim">#FF000000</color>
-    <color name="widget_honeydew_surface_tint">#FF9CD4A0</color>
+    <color name="widget_honeydew_surface_tint">#FF62DF7D</color>
     <color name="widget_honeydew_inverse_surface">#FFE0E4DB</color>
     <color name="widget_honeydew_inverse_on_surface">#FF2D322C</color>
-    <color name="widget_honeydew_inverse_primary">#FF35693E</color>
+    <color name="widget_honeydew_inverse_primary">#FF006E2D</color>
     <color name="widget_honeydew_surface_dim">#FF101510</color>
     <color name="widget_honeydew_surface_bright">#FF363A35</color>
     <color name="widget_honeydew_surface_container_lowest">#FF0B0F0B</color>
@@ -2954,10 +2954,10 @@
     <color name="widget_honeydew_surface_container">#FF1C211C</color>
     <color name="widget_honeydew_surface_container_high">#FF262B26</color>
     <color name="widget_honeydew_surface_container_highest">#FF313630</color>
-    <color name="widget_honeydew_primary_fixed">#FFB7F1BA</color>
-    <color name="widget_honeydew_primary_fixed_dim">#FF9CD4A0</color>
+    <color name="widget_honeydew_primary_fixed">#FF7FFC97</color>
+    <color name="widget_honeydew_primary_fixed_dim">#FF62DF7D</color>
     <color name="widget_honeydew_on_primary_fixed">#FF002109</color>
-    <color name="widget_honeydew_on_primary_fixed_variant">#FF1C5128</color>
+    <color name="widget_honeydew_on_primary_fixed_variant">#FF005320</color>
     <color name="widget_honeydew_secondary_fixed">#FFD4E8D1</color>
     <color name="widget_honeydew_secondary_fixed_dim">#FFB8CCB6</color>
     <color name="widget_honeydew_on_secondary_fixed">#FF0F1F11</color>

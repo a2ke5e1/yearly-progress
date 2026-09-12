@@ -67,7 +67,7 @@ object WidgetThemeResourcesGenerator {
 
     fun schemeFor(seed: UInt, isDark: Boolean): ColorScheme =
         dynamicColorScheme(
-            seedColor = Color(seed.toInt()),
+            primary = Color(seed.toInt()),
             isDark = isDark,
         )
 

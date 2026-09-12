@@ -38,7 +38,7 @@ fun YearlyProgressTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
         else -> remember(seedColor, darkTheme) {
-            dynamicColorScheme(seedColor = seedColor, isDark = darkTheme)
+            dynamicColorScheme(primary = seedColor, isDark = darkTheme)
         }
     }
 
