@@ -113,7 +113,11 @@ class WidgetThemeResourcesGeneratorTest {
             assertTrue(dark, dark.matches(systemColorRegex))
         }
         assertEquals("@android:color/system_accent1_600", DynamicSystemPalette.byRole["primary"]!!.first.resource)
-        assertEquals("@android:color/system_accent1_900", DynamicSystemPalette.byRole["onPrimary"]!!.second.resource)
+        // 31-33 refined to the doc's exact coarse cells (on-primary/on-secondary/on-tertiary tones 0/700/800).
+        assertEquals("@android:color/system_accent1_0", DynamicSystemPalette.byRole["onPrimary"]!!.first.resource)
+        assertEquals("@android:color/system_accent1_800", DynamicSystemPalette.byRole["onPrimary"]!!.second.resource)
+        assertEquals("@android:color/system_accent2_0", DynamicSystemPalette.byRole["onSecondary"]!!.first.resource)
+        assertEquals("@android:color/system_neutral2_700", DynamicSystemPalette.byRole["onSurfaceVariant"]!!.first.resource)
         // Error roles fall back to fixed M3 hex because system_error_* requires API 35+.
         val lightXml = WidgetThemeResourcesGenerator.dynamicColorsXml(isDark = false)
         val darkXml = WidgetThemeResourcesGenerator.dynamicColorsXml(isDark = true)
@@ -121,6 +125,36 @@ class WidgetThemeResourcesGeneratorTest {
         assertFalse(darkXml.contains("system_error"))
         assertEquals("#B3261E", Regex("<color name=\"widget_dynamic_error\">([^<]+)</color>").find(lightXml)!!.groupValues[1])
         assertEquals("#F2B8B5", Regex("<color name=\"widget_dynamic_error\">([^<]+)</color>").find(darkXml)!!.groupValues[1])
+    }
+
+    @Test
+    fun `v34 dynamic palette uses the refined 34plus system resources`() {
+        val light = WidgetThemeResourcesGenerator.dynamicColorsXml(
+            isDark = false, api = WidgetThemeResourcesGenerator.DynamicApi.V34
+        )
+        val dark = WidgetThemeResourcesGenerator.dynamicColorsXml(
+            isDark = true, api = WidgetThemeResourcesGenerator.DynamicApi.V34
+        )
+        // Every role must resolve to the API 34+ refined palette (no coarse accent/neutral tones).
+        ColorSchemeRoles.all.forEach { role ->
+            val rx = Regex("<color name=\"widget_dynamic_${roleSnake(role)}\">([^<]+)</color>")
+            val lightVal = rx.find(light)?.groupValues?.get(1) ?: error("missing light $role")
+            val darkVal = rx.find(dark)?.groupValues?.get(1) ?: error("missing dark $role")
+            assertTrue("light $role: $lightVal", lightVal.startsWith("@android:color/system_"))
+            assertTrue("dark $role: $darkVal", darkVal.startsWith("@android:color/system_"))
+        }
+        assertFalse(light.contains("system_accent"))
+        assertFalse(light.contains("#"))
+        // The coarse palette must not leak through, except the doc-less `scrim` role.
+        val coarseResidue = Regex("@android:color/system_(?:accent[123]|neutral[12])_\\d+").findAll(light).toList()
+        assertEquals("only scrim keeps a coarse value", listOf("@android:color/system_neutral1_1000"), coarseResidue.map { it.value })
+        assertTrue(light.contains("@android:color/system_primary_light"))
+        assertTrue(light.contains("@android:color/system_surface_container_light"))
+        assertTrue(dark.contains("@android:color/system_surface_container_dark"))
+        assertTrue(dark.contains("@android:color/system_error_dark"))
+        assertEquals("@android:color/system_neutral1_1000",
+            Regex("<color name=\"widget_dynamic_scrim\">([^<]+)</color>").find(light)!!.groupValues[1])
+        assertTrue(light.contains("tools:targetApi=\"34\""))
     }
 
     @Test
@@ -189,6 +223,8 @@ class WidgetThemeResourcesGeneratorTest {
             "values/widget_attrs.xml",
             "values-v31/widget_colors.xml",
             "values-night-v31/widget_colors.xml",
+            "values-v34/widget_colors.xml",
+            "values-night-v34/widget_colors.xml",
             "values-v31/widget_themes.xml",
             "values-v31/widget_styles.xml",
             "layout/standalone_progress_bar_containers.xml",

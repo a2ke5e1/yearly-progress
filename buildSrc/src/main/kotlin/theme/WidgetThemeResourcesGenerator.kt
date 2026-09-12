@@ -22,7 +22,8 @@ data class GeneratedFile(val path: File, val content: String)
  *  - `values/widget_colors.xml`, `values-night/widget_colors.xml` (light/dark seeded palettes + legacy aliases)
  *  - `values/widget_themes.xml`, `values/widget_styles.xml` (seeded widget themes + progress styles)
  *  - `values/widget_attrs.xml` (WidgetTheme styleable incl. one attr per scheme role)
- *  - `values-v31/widget_colors.xml` + `values-night-v31/widget_colors.xml` (DYNAMIC Material You colors)
+ *  - `values-v31/widget_colors.xml` + `values-night-v31/widget_colors.xml` (DYNAMIC Material You, 31-33 coarse palette)
+ *  - `values-v34/widget_colors.xml` + `values-night-v34/widget_colors.xml` (DYNAMIC Material You, 34+ refined palette)
  *  - `values-v31/widget_themes.xml`, `values-v31/widget_styles.xml` (DYNAMIC theme + progress style)
  *  - `layout/standalone_progress_bar_containers.xml`, `standalone_clover_*`, `standalone_pill_*`,
  *    `circular_progress_bars_container.xml` (one view per theme; ids tracked by `WidgetThemeIds`)
@@ -51,6 +52,8 @@ object WidgetThemeResourcesGenerator {
         files += GeneratedFile(File(output.resDir, "values/widget_attrs.xml"), widgetAttrsXml())
         files += GeneratedFile(File(output.resDir, "values-v31/widget_colors.xml"), dynamicColorsXml(isDark = false))
         files += GeneratedFile(File(output.resDir, "values-night-v31/widget_colors.xml"), dynamicColorsXml(isDark = true))
+        files += GeneratedFile(File(output.resDir, "values-v34/widget_colors.xml"), dynamicColorsXml(isDark = false, api = DynamicApi.V34))
+        files += GeneratedFile(File(output.resDir, "values-night-v34/widget_colors.xml"), dynamicColorsXml(isDark = true, api = DynamicApi.V34))
         files += GeneratedFile(File(output.resDir, "values-v31/widget_themes.xml"), dynamicThemesXml())
         files += GeneratedFile(File(output.resDir, "values-v31/widget_styles.xml"), dynamicStylesXml())
         files += GeneratedFile(File(output.resDir, "layout/standalone_progress_bar_containers.xml"), standaloneLinearLayout())
@@ -233,45 +236,81 @@ object WidgetThemeResourcesGenerator {
 
     // endregion
 
-    // region values-v31 (DYNAMIC / Material You)
+    // region values-v31/values-v34 (DYNAMIC / Material You)
 
-    fun dynamicColorsXml(isDark: Boolean): String {
+    /** Which Android dynamic color generation to emit: 31-33 coarse `system_*` or 34+ refined `system_*_light/_dark`. */
+    enum class DynamicApi { V31, V34 }
+
+    fun dynamicColorsXml(isDark: Boolean, api: DynamicApi = DynamicApi.V31): String {
         val sb = StringBuilder()
         sb.appendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
         sb.appendLine(GENERATED_HEADER)
-        sb.appendLine("<resources>")
-        // Existing hand-tuned DYNAMIC legacy colors (kept verbatim).
-        val legacyLight = listOf(
-            "widget_dynamic_background_color" to "@android:color/system_neutral2_50",
-            "widget_dynamic_background_low_color" to "@android:color/system_neutral2_100",
-            "widget_dynamic_primary_color" to "@android:color/system_accent1_600",
-            "widget_dynamic_secondary_color" to "@android:color/system_neutral1_400",
-            "widget_dynamic_accent_color" to "@android:color/system_accent3_600",
-            "widget_dynamic_progress_bar_background" to "@android:color/system_neutral2_200",
-        )
-        val legacyDark = listOf(
-            "widget_dynamic_background_color" to "@android:color/system_neutral2_800",
-            "widget_dynamic_background_low_color" to "@android:color/system_neutral2_700",
-            "widget_dynamic_primary_color" to "@android:color/system_accent1_100",
-            "widget_dynamic_secondary_color" to "@android:color/system_neutral1_400",
-            "widget_dynamic_accent_color" to "@android:color/system_accent3_200",
-            "widget_dynamic_progress_bar_background" to "@android:color/system_neutral1_500",
-        )
+        val resourcesTag = if (api == DynamicApi.V34) {
+            "<resources xmlns:tools=\"http://schemas.android.com/tools\" tools:targetApi=\"34\">"
+        } else {
+            "<resources>"
+        }
+        sb.appendLine(resourcesTag)
+        // Existing hand-tuned DYNAMIC legacy colors (kept verbatim for 31-33).
+        val legacyLight = if (api == DynamicApi.V34) {
+            listOf(
+                "widget_dynamic_background_color" to "@android:color/system_surface_container_light",
+                "widget_dynamic_background_low_color" to "@android:color/system_surface_container_low_light",
+                "widget_dynamic_primary_color" to "@android:color/system_primary_light",
+                "widget_dynamic_secondary_color" to "@android:color/system_on_surface_variant_light",
+                "widget_dynamic_accent_color" to "@android:color/system_tertiary_light",
+                "widget_dynamic_progress_bar_background" to "@android:color/system_outline_variant_light",
+            )
+        } else {
+            listOf(
+                "widget_dynamic_background_color" to "@android:color/system_neutral2_50",
+                "widget_dynamic_background_low_color" to "@android:color/system_neutral2_100",
+                "widget_dynamic_primary_color" to "@android:color/system_accent1_600",
+                "widget_dynamic_secondary_color" to "@android:color/system_neutral1_400",
+                "widget_dynamic_accent_color" to "@android:color/system_accent3_600",
+                "widget_dynamic_progress_bar_background" to "@android:color/system_neutral2_200",
+            )
+        }
+        val legacyDark = if (api == DynamicApi.V34) {
+            listOf(
+                "widget_dynamic_background_color" to "@android:color/system_surface_container_dark",
+                "widget_dynamic_background_low_color" to "@android:color/system_surface_container_low_dark",
+                "widget_dynamic_primary_color" to "@android:color/system_primary_dark",
+                "widget_dynamic_secondary_color" to "@android:color/system_on_surface_variant_dark",
+                "widget_dynamic_accent_color" to "@android:color/system_tertiary_dark",
+                "widget_dynamic_progress_bar_background" to "@android:color/system_outline_variant_dark",
+            )
+        } else {
+            listOf(
+                "widget_dynamic_background_color" to "@android:color/system_neutral2_800",
+                "widget_dynamic_background_low_color" to "@android:color/system_neutral2_700",
+                "widget_dynamic_primary_color" to "@android:color/system_accent1_100",
+                "widget_dynamic_secondary_color" to "@android:color/system_neutral1_400",
+                "widget_dynamic_accent_color" to "@android:color/system_accent3_200",
+                "widget_dynamic_progress_bar_background" to "@android:color/system_neutral1_500",
+            )
+        }
         (if (isDark) legacyDark else legacyLight).forEach { (name, res) ->
             sb.appendLine("    <color name=\"$name\">$res</color>")
         }
         sb.appendLine()
-        sb.appendLine("    <!-- Full Material 3 role set following the wallpaper (Material You) -->")
+        sb.appendLine("    <!-- ${if (api == DynamicApi.V34) "Refined Material You role set (Android 14+)" else "Full Material 3 role set following the wallpaper (Material You)"} -->")
         roles.forEach { role ->
-            val (light, dark) = dynamicByRole.getValue(role)
-            val res = if (isDark) dark.resource else light.resource
-            if (light.palette == "error") {
-                // The system_error_* palette only ships with API 35+; fall back to fixed
-                // Material 3 error colors so DYNAMIC themes resolve on API 31-34 devices.
-                val hex = DynamicSystemPalette.errorHex.getValue(role)
-                sb.appendLine("    <color name=\"${roleColorName("DYNAMIC", role)}\">${if (isDark) hex.second else hex.first}</color>")
-            } else {
+            if (api == DynamicApi.V34) {
+                val (light, dark) = DynamicSystemPalette.api34.getValue(role)
+                val res = if (isDark) dark else light
                 sb.appendLine("    <color name=\"${roleColorName("DYNAMIC", role)}\">$res</color>")
+            } else {
+                val (light, dark) = dynamicByRole.getValue(role)
+                val res = if (isDark) dark.resource else light.resource
+                if (light.palette == "error") {
+                    // The system_error_* palette only ships with API 35+; fall back to fixed
+                    // Material 3 error colors so DYNAMIC themes resolve on API 31-34 devices.
+                    val hex = DynamicSystemPalette.errorHex.getValue(role)
+                    sb.appendLine("    <color name=\"${roleColorName("DYNAMIC", role)}\">${if (isDark) hex.second else hex.first}</color>")
+                } else {
+                    sb.appendLine("    <color name=\"${roleColorName("DYNAMIC", role)}\">$res</color>")
+                }
             }
         }
         sb.appendLine()
