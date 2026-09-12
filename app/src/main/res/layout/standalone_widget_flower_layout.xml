@@ -1,0 +1,94 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/widgetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/background_flower_solid" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Date / Period Badge -->
+        <FrameLayout
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="12dp">
+
+            <ImageView
+                android:id="@+id/background_widget_badge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/background_widget_badge" />
+
+            <TextView
+                android:id="@+id/widgetCurrentValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:singleLine="true"
+                android:textSize="@dimen/standalone_flower_widget_text_size_widget_current_value"
+                android:textStyle="bold"
+                tools:text="06" />
+
+        </FrameLayout>
+
+        <!-- Title and Progress -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/widgetType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textAllCaps="false"
+                android:textSize="@dimen/standalone_flower_widget_text_size_widget_type"
+                android:textStyle="bold"
+                tools:text="Day" />
+
+            <TextView
+                android:id="@+id/widgetProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:includeFontPadding="false"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/standalone_flower_widget_text_size_widget_progress"
+                tools:text="25%" />
+
+            <TextView
+                android:id="@+id/widgetDaysLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:lineSpacingMultiplier="0.85"
+                android:textSize="@dimen/standalone_flower_widget_text_size_widget_days_left"
+                android:visibility="gone"
+                tools:text="112d\nleft" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

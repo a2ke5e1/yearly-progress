@@ -1,0 +1,89 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/widgetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/background_flower_solid" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
+        <!-- Date / Period Badge on the Left -->
+        <FrameLayout
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="4dp">
+
+            <ImageView
+                android:id="@+id/background_widget_badge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/background_widget_badge_extra_small" />
+
+            <TextView
+                android:id="@+id/widgetCurrentValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:singleLine="true"
+                android:textSize="@dimen/standalone_flower_extra_small_widget_text_size_widget_current_value"
+                android:textStyle="bold"
+                tools:text="12" />
+
+        </FrameLayout>
+
+        <!-- Title and Progress on the Right -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/widgetType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textAllCaps="false"
+                android:textSize="@dimen/standalone_flower_extra_small_widget_text_size_widget_type"
+                android:textStyle="bold"
+                tools:text="Day" />
+
+            <TextView
+                android:id="@+id/widgetProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:includeFontPadding="false"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/standalone_flower_extra_small_widget_text_size_widget_progress"
+                tools:text="68%" />
+
+            <!-- Hidden Days Left view to safely handle RemoteViews calls -->
+            <TextView
+                android:id="@+id/widgetDaysLeft"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

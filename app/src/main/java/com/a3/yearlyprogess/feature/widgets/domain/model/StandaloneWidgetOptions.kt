@@ -21,7 +21,8 @@ data class StandaloneWidgetOptions(
         enum class WidgetShape {
             RECTANGULAR,
             CLOVER,
-            PILL
+            PILL,
+            BLOSSOM
         }
     }
 }
