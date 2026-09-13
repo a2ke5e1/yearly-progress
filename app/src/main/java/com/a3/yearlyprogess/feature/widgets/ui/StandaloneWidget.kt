@@ -237,7 +237,9 @@ open class StandaloneWidget(
             views.setTextColor(R.id.widgetType, colors.primaryColor)
             views.setTextColor(R.id.widgetDaysLeft, colors.secondaryColor)
             views.setTextColor(R.id.widgetCurrentValue, colors.secondaryColor)
+            views.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.secondaryColor)
         }
+
 
         /**
          * Apply blossom widget theme colors to the widget views
@@ -703,7 +705,7 @@ open class StandaloneWidget(
 
 
 
-        private fun applyBlossomIcons(views: RemoteViews, widgetType: StandaloneWidgetType?) {
+        private fun applySunsetSunriseIcons(views: RemoteViews, widgetType: StandaloneWidgetType?) {
             when (widgetType) {
                 StandaloneWidgetType.DAY_LIGHT ->
                     views.setImageViewResource(R.id.widgetCurrentValueImg, R.drawable.sunny_24dp)
@@ -771,9 +773,9 @@ open class StandaloneWidget(
 
             val currentValue =
                 if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
+                    "${format.format(Instant.ofEpochMilli(endTime))}"
                 } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
+                    "${format.format(Instant.ofEpochMilli(endTime))}"
                 }
 
             val widgetName =
@@ -820,6 +822,8 @@ open class StandaloneWidget(
             // Apply background color with transparency
             views.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
             applyBackgroundTransparency(views, userConfig.backgroundTransparency)
+
+            applySunsetSunriseIcons(views, userConfig.widgetType)
 
             // Apply text content with user config
             applyTexts(views, progress, widgetName, daysLeft, currentValue, userConfig)
@@ -1279,14 +1283,14 @@ open class StandaloneWidget(
             applyTexts(large, progress, widgetName, daysLeft, currentValue, effectiveConfig)
             applyBackgroundTransparency(large, effectiveConfig.backgroundTransparency)
             applyFontScaleFlowerLarge(large, effectiveConfig.fontScale, context)
-            applyBlossomIcons(large, userConfig.widgetType)
+            applySunsetSunriseIcons(large, userConfig.widgetType)
 
             // Apply to medium view
             applyBlossomTheme(medium, colors)
             applyTexts(medium, progress, widgetName, daysLeft, currentValue, effectiveConfig)
             applyBackgroundTransparency(medium, effectiveConfig.backgroundTransparency)
             applyFontScaleFlower(medium, effectiveConfig.fontScale, context)
-            applyBlossomIcons(medium, userConfig.widgetType)
+            applySunsetSunriseIcons(medium, userConfig.widgetType)
 
 
             // Apply to small view
@@ -1294,7 +1298,7 @@ open class StandaloneWidget(
             applyTexts(small, progress, widgetName, daysLeft, currentValue, effectiveConfig)
             applyBackgroundTransparency(small, effectiveConfig.backgroundTransparency)
             applyFontScaleFlowerSmall(small, effectiveConfig.fontScale, context)
-            applyBlossomIcons(small, userConfig.widgetType)
+            applySunsetSunriseIcons(small, userConfig.widgetType)
 
 
             // Apply to extra small view
@@ -1303,7 +1307,7 @@ open class StandaloneWidget(
             xSmall.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
             applyBackgroundTransparency(xSmall, effectiveConfig.backgroundTransparency)
             applyFontScaleFlowerExtraSmall(xSmall, effectiveConfig.fontScale, context)
-            applyBlossomIcons(xSmall, userConfig.widgetType)
+            applySunsetSunriseIcons(xSmall, userConfig.widgetType)
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
