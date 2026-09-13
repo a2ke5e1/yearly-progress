@@ -245,6 +245,7 @@ open class StandaloneWidget(
         private fun applyBlossomTheme(views: RemoteViews, colors: WidgetColors) {
             views.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundLowColor)
             views.setInt(R.id.background_widget_badge, "setColorFilter", colors.tertiary)
+            views.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.onTertiary)
             views.setTextColor(R.id.widgetCurrentValue, colors.onTertiary)
             views.setTextColor(R.id.widgetType, colors.primaryColor)
             views.setTextColor(R.id.widgetProgress, colors.primaryColor)
@@ -700,6 +701,18 @@ open class StandaloneWidget(
             )
         }
 
+
+
+        private fun applyBlossomIcons(views: RemoteViews, widgetType: StandaloneWidgetType?) {
+            when (widgetType) {
+                StandaloneWidgetType.DAY_LIGHT ->
+                    views.setImageViewResource(R.id.widgetCurrentValueImg, R.drawable.sunny_24dp)
+                StandaloneWidgetType.NIGHT_LIGHT ->
+                    views.setImageViewResource(R.id.widgetCurrentValueImg, R.drawable.bedtime_24dp)
+                else -> {}
+            }
+        }
+
         /**
          * Create rectangular widget view with user configuration
          */
@@ -750,7 +763,18 @@ open class StandaloneWidget(
             )
 
 
-            val currentValue = if (dayLight) "☀️" else "🌙"
+            val format =
+                DateTimeFormatter
+                    .ofLocalizedTime(FormatStyle.SHORT)
+                    .withLocale(yp.settings.uLocale.toLocale())
+                    .withZone(ZoneId.systemDefault())
+
+            val currentValue =
+                if (dayLight) {
+                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
+                } else {
+                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
+                }
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -1191,7 +1215,7 @@ open class StandaloneWidget(
                 yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
             )
 
-            val currentValue = if (dayLight) "☀️" else "🌙"
+            val currentValue = ""
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -1255,18 +1279,23 @@ open class StandaloneWidget(
             applyTexts(large, progress, widgetName, daysLeft, currentValue, effectiveConfig)
             applyBackgroundTransparency(large, effectiveConfig.backgroundTransparency)
             applyFontScaleFlowerLarge(large, effectiveConfig.fontScale, context)
+            applyBlossomIcons(large, userConfig.widgetType)
 
             // Apply to medium view
             applyBlossomTheme(medium, colors)
             applyTexts(medium, progress, widgetName, daysLeft, currentValue, effectiveConfig)
             applyBackgroundTransparency(medium, effectiveConfig.backgroundTransparency)
             applyFontScaleFlower(medium, effectiveConfig.fontScale, context)
+            applyBlossomIcons(medium, userConfig.widgetType)
+
 
             // Apply to small view
             applyBlossomTheme(small, colors)
             applyTexts(small, progress, widgetName, daysLeft, currentValue, effectiveConfig)
             applyBackgroundTransparency(small, effectiveConfig.backgroundTransparency)
             applyFontScaleFlowerSmall(small, effectiveConfig.fontScale, context)
+            applyBlossomIcons(small, userConfig.widgetType)
+
 
             // Apply to extra small view
             applyBlossomTheme(xSmall, colors)
@@ -1274,6 +1303,8 @@ open class StandaloneWidget(
             xSmall.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
             applyBackgroundTransparency(xSmall, effectiveConfig.backgroundTransparency)
             applyFontScaleFlowerExtraSmall(xSmall, effectiveConfig.fontScale, context)
+            applyBlossomIcons(xSmall, userConfig.widgetType)
+
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 return RemoteViews(

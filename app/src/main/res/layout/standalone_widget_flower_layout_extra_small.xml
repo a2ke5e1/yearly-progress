@@ -43,6 +43,15 @@
                 android:textStyle="bold"
                 tools:text="12" />
 
+            <ImageView
+                android:id="@+id/widgetCurrentValueImg"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                tools:src="@drawable/sunny_24dp"
+                 />
+
         </FrameLayout>
 
         <!-- Title and Progress on the Right -->
