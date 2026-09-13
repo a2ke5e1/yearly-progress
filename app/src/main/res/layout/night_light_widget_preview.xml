@@ -61,6 +61,7 @@
       </LinearLayout>
 
        <LinearLayout
+           android:id="@+id/text_day"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:gravity="center_vertical"
