@@ -37,6 +37,14 @@
                 android:textSize="@dimen/standalone_clover_extra_small_widget_text_size_widget_type"
                 android:textStyle="normal" />
 
+            <ImageView
+                android:id="@+id/widgetCurrentValueImg"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                tools:src="@drawable/sunny_24dp" />
+
             <TextView
                 android:id="@+id/widgetCurrentValue"
                 android:layout_width="wrap_content"

@@ -707,11 +707,17 @@ open class StandaloneWidget(
 
         private fun applySunsetSunriseIcons(views: RemoteViews, widgetType: StandaloneWidgetType?) {
             when (widgetType) {
-                StandaloneWidgetType.DAY_LIGHT ->
+                StandaloneWidgetType.DAY_LIGHT -> {
+                    views.setViewVisibility(R.id.widgetCurrentValueImg, View.VISIBLE)
                     views.setImageViewResource(R.id.widgetCurrentValueImg, R.drawable.sunny_24dp)
-                StandaloneWidgetType.NIGHT_LIGHT ->
+                }
+                StandaloneWidgetType.NIGHT_LIGHT -> {
+                    views.setViewVisibility(R.id.widgetCurrentValueImg, View.VISIBLE)
                     views.setImageViewResource(R.id.widgetCurrentValueImg, R.drawable.bedtime_24dp)
-                else -> {}
+                }
+                else -> {
+                    views.setViewVisibility(R.id.widgetCurrentValueImg, View.GONE)
+                }
             }
         }
 
@@ -899,12 +905,7 @@ open class StandaloneWidget(
                     .withLocale(yp.settings.uLocale.toLocale())
                     .withZone(ZoneId.systemDefault())
 
-            val currentValue =
-                if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
-                } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
-                }
+            val currentValue = "${format.format(Instant.ofEpochMilli(endTime))}"
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -960,6 +961,8 @@ open class StandaloneWidget(
             // Apply to large view
             applyTheme(large, colors)
             large.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            large.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(large, userConfig.widgetType)
             applyTexts(large, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyCloverProgressContainer(large, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleCloverLarge(large, userConfig.fontScale, context)
@@ -967,6 +970,8 @@ open class StandaloneWidget(
             // Apply to square view
             applyTheme(square, colors)
             square.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            square.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(square, userConfig.widgetType)
             applyTexts(square, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyCloverProgressContainer(square, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleClover(square, userConfig.fontScale, context)
@@ -974,6 +979,8 @@ open class StandaloneWidget(
             // Apply to small view
             applyTheme(small, colors)
             small.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            small.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(small, userConfig.widgetType)
             applyTexts(small, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyCloverProgressContainer(small, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleCloverSmall(small, userConfig.fontScale, context)
@@ -981,7 +988,12 @@ open class StandaloneWidget(
             // Apply to extra small view
             applyTheme(xSmall, colors)
             xSmall.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            xSmall.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(xSmall, userConfig.widgetType)
             applyTexts(xSmall, progress, widgetName, daysLeft, currentValue, userConfig)
+            if (userConfig.widgetType == StandaloneWidgetType.DAY_LIGHT || userConfig.widgetType == StandaloneWidgetType.NIGHT_LIGHT) {
+                xSmall.setViewVisibility(R.id.widgetCurrentValue, View.GONE)
+            }
             WidgetRenderer.applyCloverProgressContainer(xSmall, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleCloverExtraSmall(xSmall, userConfig.fontScale, context)
 
@@ -1077,12 +1089,7 @@ open class StandaloneWidget(
                     .withLocale(yp.settings.uLocale.toLocale())
                     .withZone(ZoneId.systemDefault())
 
-            val currentValue =
-                if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
-                } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
-                }
+            val currentValue = "${format.format(Instant.ofEpochMilli(endTime))}"
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -1134,6 +1141,8 @@ open class StandaloneWidget(
             // Apply to large/medium view
             applyTheme(large, colors)
             large.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            large.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(large, userConfig.widgetType)
             applyTexts(large, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyPillProgressContainer(large, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScalePillMedium(large, userConfig.fontScale, context)
@@ -1141,6 +1150,8 @@ open class StandaloneWidget(
             // Apply to small view
             applyTheme(small, colors)
             small.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            small.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(small, userConfig.widgetType)
             applyTexts(small, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyPillProgressContainer(small, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScalePillSmall(small, userConfig.fontScale, context)
