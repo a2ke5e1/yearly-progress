@@ -85,6 +85,9 @@
         <receiver android:name=".feature.widgets.update.PinEventWidgetReceiver"
             android:exported="false" />
 
+        <receiver android:name=".feature.widgets.update.PinStandaloneWidgetReceiver"
+            android:exported="false" />
+
 
 
         <!-- Widgets -->

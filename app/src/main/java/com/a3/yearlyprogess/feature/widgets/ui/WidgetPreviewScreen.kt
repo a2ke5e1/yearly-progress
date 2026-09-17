@@ -1,8 +1,10 @@
 package com.a3.yearlyprogess.feature.widgets.ui
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
@@ -47,9 +49,12 @@ import com.a3.yearlyprogess.core.ui.components.ad.AdCard
 import com.a3.yearlyprogess.core.util.YearlyProgressUtil
 import com.a3.yearlyprogess.feature.home.HomeUiState
 import com.a3.yearlyprogess.feature.home.HomeViewModel
+import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.config_screens.AllInWidgetConfigViewModel
 import com.a3.yearlyprogess.feature.widgets.ui.config_screens.StandaloneWidgetConfigViewModel
+import com.a3.yearlyprogess.feature.widgets.ui.config_screens.createRemoteViews
+import com.a3.yearlyprogess.feature.widgets.update.PinStandaloneWidgetReceiver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -61,14 +66,22 @@ data class WidgetPreviewItem(
     val componentClass: Class<*>
 )
 
-private val WIDGET_PREVIEW_ITEMS = listOf(
-    WidgetPreviewItem(R.string.day, StandaloneWidgetType.DAY, DayWidget::class.java),
-    WidgetPreviewItem(R.string.week, StandaloneWidgetType.WEEK, WeekWidget::class.java),
-    WidgetPreviewItem(R.string.month, StandaloneWidgetType.MONTH, MonthWidget::class.java),
-    WidgetPreviewItem(R.string.year, StandaloneWidgetType.YEAR, YearWidget::class.java),
-    WidgetPreviewItem(R.string.day_light, StandaloneWidgetType.DAY_LIGHT, DayLightWidget::class.java),
-    WidgetPreviewItem(R.string.night_light, StandaloneWidgetType.NIGHT_LIGHT, NightLightWidget::class.java)
+private data class WidgetTypeGroup(
+    @param:StringRes val titleRes: Int,
+    val type: StandaloneWidgetType,
+    val componentClass: Class<*>
 )
+
+private val WIDGET_TYPE_GROUPS = listOf(
+    WidgetTypeGroup(R.string.day, StandaloneWidgetType.DAY, DayWidget::class.java),
+    WidgetTypeGroup(R.string.week, StandaloneWidgetType.WEEK, WeekWidget::class.java),
+    WidgetTypeGroup(R.string.month, StandaloneWidgetType.MONTH, MonthWidget::class.java),
+    WidgetTypeGroup(R.string.year, StandaloneWidgetType.YEAR, YearWidget::class.java),
+    WidgetTypeGroup(R.string.day_light, StandaloneWidgetType.DAY_LIGHT, DayLightWidget::class.java),
+    WidgetTypeGroup(R.string.night_light, StandaloneWidgetType.NIGHT_LIGHT, NightLightWidget::class.java)
+)
+
+private val ALL_SHAPES = StandaloneWidgetOptions.Companion.WidgetShape.entries
 
 @Composable
 fun WidgetPreviewScreen(
@@ -87,9 +100,8 @@ fun WidgetPreviewScreen(
     val userWidgetDefaultOptions by configViewModel.options.collectAsState()
     val allInOneWidgetDefaultOptions by allInOneWidgetConfigViewModel.options.collectAsState()
     val sunsetData = (homeUiState as? HomeUiState.Success)?.data
-    val appTheme = appSettings?.appTheme ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT
-
-    val widgetItems = WIDGET_PREVIEW_ITEMS
+    val appTheme = appSettings?.appTheme
+        ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WidgetTheme.DYNAMIC else WidgetTheme.DEFAULT
 
     Column(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
@@ -99,35 +111,39 @@ fun WidgetPreviewScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            items(
-                items = widgetItems,
-                key = { it.type.name }
-            ) { item ->
-                // Move generation logic to a helper composable
-                AsyncWidgetPreviewLoader(
-                    updateInterval = 1000L,
-                    producer = {
-                        // This block runs on Dispatchers.Default (Background)
-                        val options = userWidgetDefaultOptions.copy(
-                            widgetType = item.type,
-                            theme = appTheme
-                        )
-                        if (item.type == StandaloneWidgetType.DAY_LIGHT || item.type == StandaloneWidgetType.NIGHT_LIGHT) {
-                            StandaloneWidget.rectangularRemoteView(
-                                appContext, // Pass appContext
-                                yp,
-                                options,
-                                sunsetData,
-                                false
-                            )
-                        } else {
-                            StandaloneWidget.rectangularRemoteView(appContext, yp, options, false)
+            WIDGET_TYPE_GROUPS.forEach { group ->
+                // Section header for each widget type
+                item(
+                    key = "header_${group.type.name}",
+                    span = { GridItemSpan(maxLineSpan) }
+                ) {
+                    Text(
+                        text = stringResource(group.titleRes),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                    )
+                }
+
+                // All shapes for this widget type
+                items(
+                    items = ALL_SHAPES.toList(),
+                    key = { shape -> "${group.type.name}_${shape.name}" }
+                ) { shape ->
+                    val options = userWidgetDefaultOptions.copy(
+                        widgetType = group.type,
+                        widgetShape = shape,
+                        theme = appTheme
+                    )
+                    AsyncWidgetPreviewLoader(
+                        updateInterval = 1000L,
+                        producer = {
+                            createRemoteViews(appContext, yp, options, sunsetData)
                         }
-                    }
-                ) { remoteViews ->
-                    // This block runs on UI thread when data is ready
-                    WidgetPreviewCard(remoteViews) {
-                        pinWidget(context, item.componentClass, remoteViews)
+                    ) { remoteViews ->
+                        WidgetPreviewCard(remoteViews) {
+                            pinWidget(context, group.componentClass, remoteViews, shape)
+                        }
                     }
                 }
             }
@@ -272,7 +288,16 @@ fun RemoteViewsHost(remoteViews: RemoteViews) {
     )
 }
 
-private fun pinWidget(context: Context, widgetClass: Class<*>, remoteViews: RemoteViews? = null) {
+/**
+ * Pins a widget to the home screen. If [shape] is provided, a [PendingIntent] is created
+ * so that [PinStandaloneWidgetReceiver] saves the shape for the newly pinned widget ID.
+ */
+private fun pinWidget(
+    context: Context,
+    widgetClass: Class<*>,
+    remoteViews: RemoteViews? = null,
+    shape: StandaloneWidgetOptions.Companion.WidgetShape? = null
+) {
     try {
         val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
         val myProvider = ComponentName(context, widgetClass)
@@ -283,8 +308,23 @@ private fun pinWidget(context: Context, widgetClass: Class<*>, remoteViews: Remo
             bundle.putParcelable(AppWidgetManager.EXTRA_APPWIDGET_PREVIEW, remoteViews)
         }
 
+        val successCallback = if (shape != null) {
+            Intent(context, PinStandaloneWidgetReceiver::class.java).apply {
+                putExtra(PinStandaloneWidgetReceiver.EXTRA_WIDGET_SHAPE, shape.name)
+            }.let { intent ->
+                PendingIntent.getBroadcast(
+                    context,
+                    shape.ordinal,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                )
+            }
+        } else {
+            null
+        }
+
         if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
-            appWidgetManager.requestPinAppWidget(myProvider, bundle, null)
+            appWidgetManager.requestPinAppWidget(myProvider, bundle, successCallback)
         }
     } catch (ex: Exception) {
         Toast.makeText(
