@@ -216,60 +216,58 @@ fun WidgetPreview(
     val context = LocalContext.current
     val yp = remember { YearlyProgressUtil() }
     val state by viewModel.uiState.collectAsState()
-    val sunsetData = if (state is HomeUiState.Success) {
-        (state as HomeUiState.Success).data
-    } else null
+    val sunsetData = if (state is HomeUiState.Success) {(state as HomeUiState.Success).data } else null
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.surfaceContainerLowest,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .clip(shape = RoundedCornerShape(16.dp))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(R.string.widget_preview),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-
-        // Widget preview container
-        Box(
-            modifier = Modifier
-                .width(200.dp)
-                .height(120.dp)
-                .clip(RoundedCornerShape(12.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            // Use the shape as a key to force recomposition when shape changes
-            key(options.widgetShape, options.widgetType, sunsetData) {
-                AndroidView(
-                    factory = { ctx ->
-                        createRemoteViews(ctx, yp, options, sunsetData).apply(ctx, null)
-                    },
-                    update = { view ->
-                        createRemoteViews(context, yp, options, sunsetData).reapply(
-                            context,
-                            view
-                        )
-                    },
-                    modifier = Modifier.fillMaxSize()
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    shape = RoundedCornerShape(16.dp)
                 )
+                .clip(shape = RoundedCornerShape(16.dp))
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.widget_preview),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            // Widget preview container
+            Box(
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(120.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                // Use the shape as a key to force recomposition when shape changes
+                key(options.widgetShape, options.widgetType, sunsetData) {
+                    AndroidView(
+                        factory = { ctx ->
+                            createRemoteViews(ctx, yp, options, sunsetData).apply(ctx, null)
+                        },
+                        update = { view ->
+                            createRemoteViews(context, yp, options, sunsetData).reapply(
+                                context,
+                                view
+                            )
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
         }
-    }
 }
 
 /**
  * Helper function to create RemoteViews based on widget options.
  * This avoids duplicating logic in the AndroidView's factory and update blocks.
  */
-internal fun createRemoteViews(
+private fun createRemoteViews(
     context: Context,
     yp: YearlyProgressUtil, userConfig: StandaloneWidgetOptions, sunsetData: List<SunriseSunset>?
 ): RemoteViews {
@@ -290,7 +288,6 @@ internal fun createRemoteViews(
                 effectiveConfig,
                 sunsetData,
             )
-
             else -> rectangularRemoteView(context, yp, effectiveConfig)
         }
 
@@ -315,7 +312,6 @@ internal fun createRemoteViews(
                     sunsetData,
                     bundleOptions
                 )
-
                 else -> cloverRemoteView(context, yp, effectiveConfig, bundleOptions)
             }
 
@@ -342,7 +338,6 @@ internal fun createRemoteViews(
                     sunsetData,
                     bundleOptions
                 )
-
                 else -> pillRemoteView(context, yp, effectiveConfig, bundleOptions)
             }
         }
@@ -368,7 +363,6 @@ internal fun createRemoteViews(
                     sunsetData,
                     bundleOptions
                 )
-
                 else -> blossomRemoteView(context, yp, effectiveConfig, bundleOptions)
             }
         }
@@ -409,6 +403,6 @@ fun StandaloneSettingsContent(
             onDecimalDigitsChange = viewModel::updateDecimalPlaces,
             onBackgroundTransparencyChange = viewModel::updateBackgroundTransparency,
             onFontScaleChange = viewModel::updateFontScale,
-        )
+           )
     }
 }
