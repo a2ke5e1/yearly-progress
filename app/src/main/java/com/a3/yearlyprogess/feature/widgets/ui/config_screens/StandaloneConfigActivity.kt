@@ -56,13 +56,13 @@ import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions
 import com.a3.yearlyprogess.feature.widgets.domain.model.StandaloneWidgetOptions.Companion.WidgetShape
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.cloverRemoteView
+import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.blossomRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.pillRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidget.Companion.rectangularRemoteView
 import com.a3.yearlyprogess.feature.widgets.ui.StandaloneWidgetType
 import com.a3.yearlyprogess.feature.widgets.ui.components.WidgetShapeSelector
 import com.a3.yearlyprogess.feature.widgets.ui.components.SharedWidgetSettings
 import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
-import com.a3.yearlyprogess.feature.widgets.util.WidgetRenderer
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -271,24 +271,24 @@ private fun createRemoteViews(
     context: Context,
     yp: YearlyProgressUtil, userConfig: StandaloneWidgetOptions, sunsetData: List<SunriseSunset>?
 ): RemoteViews {
-    val widgetType = userConfig.widgetType
-    return when (userConfig.widgetShape) {
+    val widgetType = userConfig.widgetType ?: StandaloneWidgetType.DAY
+    val effectiveConfig = if (userConfig.widgetType == null) userConfig.copy(widgetType = widgetType) else userConfig
+    return when (effectiveConfig.widgetShape) {
         WidgetShape.RECTANGULAR -> when (widgetType) {
             StandaloneWidgetType.DAY_LIGHT -> rectangularRemoteView(
                 context,
                 yp,
-                userConfig,
+                effectiveConfig,
                 sunsetData,
             )
 
             StandaloneWidgetType.NIGHT_LIGHT -> rectangularRemoteView(
                 context,
                 yp,
-                userConfig,
+                effectiveConfig,
                 sunsetData,
             )
-            null -> WidgetRenderer.errorWidgetRemoteView(context, "Error failed to load preview")
-            else -> rectangularRemoteView(context, yp, userConfig)
+            else -> rectangularRemoteView(context, yp, effectiveConfig)
         }
 
         WidgetShape.CLOVER -> {
@@ -300,7 +300,7 @@ private fun createRemoteViews(
                 StandaloneWidgetType.DAY_LIGHT -> cloverRemoteView(
                     context,
                     yp,
-                    userConfig,
+                    effectiveConfig,
                     sunsetData,
                     bundleOptions
                 )
@@ -308,12 +308,11 @@ private fun createRemoteViews(
                 StandaloneWidgetType.NIGHT_LIGHT -> cloverRemoteView(
                     context,
                     yp,
-                    userConfig,
+                    effectiveConfig,
                     sunsetData,
                     bundleOptions
                 )
-                null -> WidgetRenderer.errorWidgetRemoteView(context, "Error failed to load preview")
-                else -> cloverRemoteView(context, yp, userConfig, bundleOptions)
+                else -> cloverRemoteView(context, yp, effectiveConfig, bundleOptions)
             }
 
         }
@@ -327,7 +326,7 @@ private fun createRemoteViews(
                 StandaloneWidgetType.DAY_LIGHT -> pillRemoteView(
                     context,
                     yp,
-                    userConfig,
+                    effectiveConfig,
                     sunsetData,
                     bundleOptions
                 )
@@ -335,16 +334,39 @@ private fun createRemoteViews(
                 StandaloneWidgetType.NIGHT_LIGHT -> pillRemoteView(
                     context,
                     yp,
-                    userConfig,
+                    effectiveConfig,
                     sunsetData,
                     bundleOptions
                 )
-                null -> WidgetRenderer.errorWidgetRemoteView(context, "Error failed to load preview")
-                else -> pillRemoteView(context, yp, userConfig, bundleOptions)
+                else -> pillRemoteView(context, yp, effectiveConfig, bundleOptions)
+            }
+        }
+
+        WidgetShape.BLOSSOM -> {
+            val bundleOptions = Bundle().apply {
+                putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 160)
+                putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 160)
+            }
+            when (widgetType) {
+                StandaloneWidgetType.DAY_LIGHT -> blossomRemoteView(
+                    context,
+                    yp,
+                    effectiveConfig,
+                    sunsetData,
+                    bundleOptions
+                )
+
+                StandaloneWidgetType.NIGHT_LIGHT -> blossomRemoteView(
+                    context,
+                    yp,
+                    effectiveConfig,
+                    sunsetData,
+                    bundleOptions
+                )
+                else -> blossomRemoteView(context, yp, effectiveConfig, bundleOptions)
             }
         }
     }
-
 }
 
 @Composable

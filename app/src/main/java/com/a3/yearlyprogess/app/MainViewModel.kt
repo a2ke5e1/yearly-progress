@@ -9,6 +9,7 @@ import com.a3.yearlyprogess.core.data.migration.SettingsMigrationManager
 import com.a3.yearlyprogess.core.domain.model.AppSettings
 import com.a3.yearlyprogess.core.domain.repository.AppSettingsRepository
 import com.a3.yearlyprogess.core.util.IConsentManager
+import com.a3.yearlyprogess.feature.billing.BillingManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
     private val migrationManager: SettingsMigrationManager,
-    val consentManager: IConsentManager
+    val consentManager: IConsentManager,
+    val billingManager: BillingManager
 ) : ViewModel() {
 
     val appSettings: StateFlow<AppSettings?> = appSettingsRepository.appSettings
@@ -37,6 +39,9 @@ class MainViewModel @Inject constructor(
     init {
         if (migrationManager.hasLegacySettings()) {
             showMigrationDialog = true
+        }
+        viewModelScope.launch {
+            billingManager.restorePurchases()
         }
     }
 

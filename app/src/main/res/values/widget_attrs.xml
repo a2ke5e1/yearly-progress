@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED FILE - DO NOT EDIT. Regenerate with the app `generateWidgetThemeResources` task. -->
+<resources>
+    <declare-styleable name="WidgetTheme">
+        <attr name="widgetBackgroundColor" format="color" />
+        <attr name="widgetBackgroundLowColor" format="color" />
+        <attr name="widgetPrimaryColor" format="color" />
+        <attr name="widgetSecondaryColor" format="color" />
+        <attr name="widgetAccentColor" format="color" />
+        <attr name="widgetPrimary" format="color" />
+        <attr name="widgetOnPrimary" format="color" />
+        <attr name="widgetPrimaryContainer" format="color" />
+        <attr name="widgetOnPrimaryContainer" format="color" />
+        <attr name="widgetSecondary" format="color" />
+        <attr name="widgetOnSecondary" format="color" />
+        <attr name="widgetSecondaryContainer" format="color" />
+        <attr name="widgetOnSecondaryContainer" format="color" />
+        <attr name="widgetTertiary" format="color" />
+        <attr name="widgetOnTertiary" format="color" />
+        <attr name="widgetTertiaryContainer" format="color" />
+        <attr name="widgetOnTertiaryContainer" format="color" />
+        <attr name="widgetError" format="color" />
+        <attr name="widgetOnError" format="color" />
+        <attr name="widgetErrorContainer" format="color" />
+        <attr name="widgetOnErrorContainer" format="color" />
+        <attr name="widgetBackground" format="color" />
+        <attr name="widgetOnBackground" format="color" />
+        <attr name="widgetSurface" format="color" />
+        <attr name="widgetOnSurface" format="color" />
+        <attr name="widgetSurfaceVariant" format="color" />
+        <attr name="widgetOnSurfaceVariant" format="color" />
+        <attr name="widgetOutline" format="color" />
+        <attr name="widgetOutlineVariant" format="color" />
+        <attr name="widgetScrim" format="color" />
+        <attr name="widgetSurfaceTint" format="color" />
+        <attr name="widgetInverseSurface" format="color" />
+        <attr name="widgetInverseOnSurface" format="color" />
+        <attr name="widgetInversePrimary" format="color" />
+        <attr name="widgetSurfaceDim" format="color" />
+        <attr name="widgetSurfaceBright" format="color" />
+        <attr name="widgetSurfaceContainerLowest" format="color" />
+        <attr name="widgetSurfaceContainerLow" format="color" />
+        <attr name="widgetSurfaceContainer" format="color" />
+        <attr name="widgetSurfaceContainerHigh" format="color" />
+        <attr name="widgetSurfaceContainerHighest" format="color" />
+        <attr name="widgetPrimaryFixed" format="color" />
+        <attr name="widgetPrimaryFixedDim" format="color" />
+        <attr name="widgetOnPrimaryFixed" format="color" />
+        <attr name="widgetOnPrimaryFixedVariant" format="color" />
+        <attr name="widgetSecondaryFixed" format="color" />
+        <attr name="widgetSecondaryFixedDim" format="color" />
+        <attr name="widgetOnSecondaryFixed" format="color" />
+        <attr name="widgetOnSecondaryFixedVariant" format="color" />
+        <attr name="widgetTertiaryFixed" format="color" />
+        <attr name="widgetTertiaryFixedDim" format="color" />
+        <attr name="widgetOnTertiaryFixed" format="color" />
+        <attr name="widgetOnTertiaryFixedVariant" format="color" />
+    </declare-styleable>
+</resources>

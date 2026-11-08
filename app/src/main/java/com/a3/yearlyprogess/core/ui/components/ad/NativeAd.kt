@@ -33,6 +33,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.style.CardCornerStyle
 import com.a3.yearlyprogess.core.util.Log
@@ -40,13 +42,25 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
-import java.util.Arrays
 
 @Composable
 fun AdCard(
+    style: AdCardStyle = AdCardDefaults.adCardStyle(),
+    modifier: Modifier = Modifier,
+    viewmodel: AdViewModel = hiltViewModel()
+) {
+    val isAdFree by viewmodel.isAdFree.collectAsStateWithLifecycle()
+    if (!isAdFree) {
+        AdCardContent(
+            style = style,
+            modifier = modifier,
+        )
+    }
+}
+@Composable
+private fun AdCardContent(
     style: AdCardStyle = AdCardDefaults.adCardStyle(), modifier: Modifier = Modifier
 ) {
     var nativeAd by remember { mutableStateOf<NativeAd?>(null) }

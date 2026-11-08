@@ -368,6 +368,8 @@ class CalendarWidget : BaseWidget() {
 
             if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(views, context, R.id.home_btn)
+            } else {
+                WidgetRenderer.onParentTapToUpdate(views, context, R.id.home_btn)
             }
         }
 

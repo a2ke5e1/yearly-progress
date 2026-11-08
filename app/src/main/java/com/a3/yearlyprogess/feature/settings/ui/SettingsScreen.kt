@@ -5,7 +5,6 @@ import android.icu.text.DateFormatSymbols
 import android.icu.util.ULocale
 import android.view.SoundEffectConstants
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -42,6 +40,7 @@ import com.a3.yearlyprogess.core.ui.components.SwitchWithOptions
 import com.a3.yearlyprogess.core.ui.components.ThemeSelector
 import com.a3.yearlyprogess.core.util.CalculationType
 import com.a3.yearlyprogess.core.util.YearlyProgressNotification
+import com.a3.yearlyprogess.core.util.segmentedShapes
 import com.a3.yearlyprogess.core.util.toSelectableItem
 import com.a3.yearlyprogess.feature.widgets.update.WidgetUpdateBroadcastReceiver
 import java.util.Calendar
@@ -257,30 +256,3 @@ fun SettingsHomeScreen(
 }
 
 
-@Composable
-fun segmentedShapes(
-    index: Int,
-    count: Int,
-): Shape {
-    val defaultShapes = MaterialTheme.shapes.extraSmall
-    val overrideShape = MaterialTheme.shapes.largeIncreased
-    return remember(index, count, defaultShapes, overrideShape) {
-        when {
-            count == 1 -> defaultShapes
-            index == 0 -> {
-                defaultShapes.copy(
-                    topStart = overrideShape.topStart,
-                    topEnd = overrideShape.topEnd
-                )
-            }
-
-            index == count - 1 -> {
-                defaultShapes.copy(
-                    bottomStart = overrideShape.bottomStart,
-                    bottomEnd = overrideShape.bottomEnd,
-                )
-            }
-            else -> defaultShapes
-        }
-    }
-}

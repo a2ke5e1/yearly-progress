@@ -5,14 +5,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.ui.components.Slider
 import com.a3.yearlyprogess.core.ui.components.Switch
 import com.a3.yearlyprogess.core.ui.components.ThemeSelector
+import com.a3.yearlyprogess.core.util.segmentedShapes
 import com.a3.yearlyprogess.feature.widgets.domain.model.WidgetTheme
 import java.text.NumberFormat
 import kotlin.math.roundToInt
@@ -48,6 +57,7 @@ import kotlin.math.roundToInt
  * @param showBackgroundTransparency Whether to show background transparency slider (default: true)
  * @param showFontScale Whether to show font scale slider (default: true)
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SharedWidgetSettings(
     theme: WidgetTheme,
@@ -73,7 +83,7 @@ fun SharedWidgetSettings(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
     ) {
         if (showTheme) {
             // Theme Selector
@@ -82,76 +92,96 @@ fun SharedWidgetSettings(
                 onThemeSelected = onThemeChange,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-
             Spacer(Modifier.height(8.dp))
         }
 
-        if (showTimeStatusCounter) {
-            // Time Status Counter
-            Switch(
-                title = stringResource(R.string.settings_time_status_title),
-                description = stringResource(R.string.settings_time_status_description),
-                checked = timeStatusCounter,
-                onCheckedChange = onTimeStatusCounterChange
-            )
-
-            // Dynamic Time Status Counter
-            Switch(
-                title = stringResource(R.string.settings_dynamic_time_title),
-                description = stringResource(R.string.settings_dynamic_time_description),
-                checked = dynamicTimeStatusCounter,
-                onCheckedChange = onDynamicTimeStatusCounterChange,
-                disabled = !timeStatusCounter
-            )
-
-            // Replace Progress with Time Left
-            Switch(
-                title = stringResource(R.string.settings_replace_progress_title),
-                description = stringResource(R.string.settings_replace_progress_description),
-                checked = replaceProgressWithTimeLeft,
-                onCheckedChange = onReplaceProgressChange,
-                disabled = !timeStatusCounter
-            )
-        }
-
-        if (showDecimalDigits) {
-            // Decimal Digits Slider
-            Slider(
-                title = stringResource(R.string.settings_decimal_digits),
-                value = decimalDigits.toFloat(),
-                valueRange = 0f..5f,
-                steps = 4,
-                onValueChange = { value ->
-                    onDecimalDigitsChange(value.roundToInt())
-                },
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
-
-        if (showBackgroundTransparency) {
-            // Background Transparency Slider
-            Slider(
-                title = stringResource(R.string.settings_background_transparency),
-                value = backgroundTransparency.toFloat(),
-                valueRange = 0f..100f,
-                onValueChange = { value ->
-                    onBackgroundTransparencyChange(value.roundToInt())
-                },
-                labelFormatter = {
-                    val format = NumberFormat.getPercentInstance()
-                    format.format(it/100)
+        val items = buildList<@Composable (Shape) -> Unit> {
+            if (showTimeStatusCounter) {
+                // Time Status Counter
+                add { shape ->
+                    Switch(
+                        title = stringResource(R.string.settings_time_status_title),
+                        description = stringResource(R.string.settings_time_status_description),
+                        checked = timeStatusCounter,
+                        onCheckedChange = onTimeStatusCounterChange,
+                        shape = shape
+                    )
                 }
-            )
+
+                // Dynamic Time Status Counter
+                add { shape ->
+                    Switch(
+                        title = stringResource(R.string.settings_dynamic_time_title),
+                        description = stringResource(R.string.settings_dynamic_time_description),
+                        checked = dynamicTimeStatusCounter,
+                        onCheckedChange = onDynamicTimeStatusCounterChange,
+                        disabled = !timeStatusCounter,
+                        shape = shape
+                    )
+                }
+
+                // Replace Progress with Time Left
+                add { shape ->
+                    Switch(
+                        title = stringResource(R.string.settings_replace_progress_title),
+                        description = stringResource(R.string.settings_replace_progress_description),
+                        checked = replaceProgressWithTimeLeft,
+                        onCheckedChange = onReplaceProgressChange,
+                        disabled = !timeStatusCounter,
+                        shape = shape
+                    )
+                }
+            }
+            if (showDecimalDigits) {
+                // Decimal Digits Slider
+                add { shape ->
+                    Slider(
+                        title = stringResource(R.string.settings_decimal_digits),
+                        value = decimalDigits.toFloat(),
+                        valueRange = 0f..5f,
+                        steps = 4,
+                        onValueChange = { value ->
+                            onDecimalDigitsChange(value.roundToInt())
+                        },
+                        modifier = Modifier.padding(top = 8.dp),
+                        shape = shape
+                    )
+                }
+            }
+            if (showBackgroundTransparency) {
+                // Background Transparency Slider
+                add { shape ->
+                    Slider(
+                        title = stringResource(R.string.settings_background_transparency),
+                        value = backgroundTransparency.toFloat(),
+                        valueRange = 0f..100f,
+                        onValueChange = { value ->
+                            onBackgroundTransparencyChange(value.roundToInt())
+                        },
+                        labelFormatter = {
+                            val format = NumberFormat.getPercentInstance()
+                            format.format(it/100)
+                        },
+                        shape = shape
+                    )
+                }
+            }
+            if (showFontScale) {
+                // Font Scale Slider
+                add { shape ->
+                    Slider(
+                        title = stringResource(R.string.settings_font_scale),
+                        value = fontScale,
+                        valueRange = 0.5f..2.0f,
+                        onValueChange = onFontScaleChange,
+                        shape = shape
+                    )
+                }
+            }
         }
 
-        if (showFontScale) {
-            // Font Scale Slider
-            Slider(
-                title = stringResource(R.string.settings_font_scale),
-                value = fontScale,
-                valueRange = 0.5f..2.0f,
-                onValueChange = onFontScaleChange
-            )
+        items.forEachIndexed { index, item ->
+            item(segmentedShapes(index, items.size))
         }
     }
 }

@@ -53,7 +53,7 @@ class AllInWidget : BaseWidget() {
         val yp = YearlyProgressUtil(progressSettings)
 
 
-        return createAllInOneWidgetRemoteView(context, yp, userConfig, options, isWidgetClickable = !disableWidgetClickToApp)
+        return createAllInOneWidgetRemoteView(context, yp, userConfig, options, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
     }
 
     companion object {
@@ -66,7 +66,8 @@ class AllInWidget : BaseWidget() {
             yp: YearlyProgressUtil,
             userConfig: AllInWidgetOptions,
             maxItems: Int = 4,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ) {
             val colors = WidgetColors.fromTheme(context, userConfig.theme ?: WidgetTheme.DEFAULT)
             
@@ -133,6 +134,8 @@ class AllInWidget : BaseWidget() {
             // Set click action to open main activity
             if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(views, context)
+            } else if (appWidgetId != -1) {
+                WidgetRenderer.onParentTapToUpdate(views, context)
             }
         }
 
@@ -142,7 +145,8 @@ class AllInWidget : BaseWidget() {
             userConfig: AllInWidgetOptions,
             options: Bundle,
             isWidgetPreview: Boolean = false,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !isWidgetPreview) {
                 val xlarge = RemoteViews(context.packageName, R.layout.all_in_widget)
@@ -152,12 +156,12 @@ class AllInWidget : BaseWidget() {
                 val square = RemoteViews(context.packageName, R.layout.all_in_widget_square)
                 val tall = RemoteViews(context.packageName, R.layout.all_in_widget_vertical)
 
-                initiateView(context, xlarge, yp, userConfig, maxItems = 4, isWidgetClickable = isWidgetClickable)
-                initiateView(context, large, yp, userConfig, maxItems = 3, isWidgetClickable = isWidgetClickable)
-                initiateView(context, medium, yp, userConfig, maxItems = 2, isWidgetClickable = isWidgetClickable)
-                initiateView(context, small, yp, userConfig, maxItems = 1, isWidgetClickable = isWidgetClickable)
-                initiateView(context, square, yp, userConfig, maxItems = 4, isWidgetClickable = isWidgetClickable)
-                initiateView(context, tall, yp, userConfig, maxItems = 3, isWidgetClickable = isWidgetClickable)
+                initiateView(context, xlarge, yp, userConfig, maxItems = 4, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
+                initiateView(context, large, yp, userConfig, maxItems = 3, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
+                initiateView(context, medium, yp, userConfig, maxItems = 2, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
+                initiateView(context, small, yp, userConfig, maxItems = 1, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
+                initiateView(context, square, yp, userConfig, maxItems = 4, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
+                initiateView(context, tall, yp, userConfig, maxItems = 3, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
 
                 val viewMapping: Map<SizeF, RemoteViews> = mapOf(
                     SizeF(300f, 80f) to xlarge,
@@ -176,32 +180,32 @@ class AllInWidget : BaseWidget() {
                 return when {
                     minWidth >= 300 -> {
                         val v = RemoteViews(context.packageName, R.layout.all_in_widget)
-                        initiateView(context, v, yp, userConfig, maxItems = 4, isWidgetClickable = isWidgetClickable)
+                        initiateView(context, v, yp, userConfig, maxItems = 4, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
                         v
                     }
                     minWidth >= 220 -> {
                         val v = RemoteViews(context.packageName, R.layout.all_in_widget)
-                        initiateView(context, v, yp, userConfig, maxItems = 3, isWidgetClickable = isWidgetClickable)
+                        initiateView(context, v, yp, userConfig, maxItems = 3, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
                         v
                     }
                     minHeight >= 200 && minWidth <= 120 -> {
                         val v = RemoteViews(context.packageName, R.layout.all_in_widget_vertical)
-                        initiateView(context, v, yp, userConfig, maxItems = 3, isWidgetClickable = isWidgetClickable)
+                        initiateView(context, v, yp, userConfig, maxItems = 3, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
                         v
                     }
                     minWidth >= 130 && minHeight >= 130 -> {
                         val v = RemoteViews(context.packageName, R.layout.all_in_widget_square)
-                        initiateView(context, v, yp, userConfig, maxItems = 4, isWidgetClickable = isWidgetClickable)
+                        initiateView(context, v, yp, userConfig, maxItems = 4, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
                         v
                     }
                     minWidth >= 160 -> {
                         val v = RemoteViews(context.packageName, R.layout.all_in_widget)
-                        initiateView(context, v, yp, userConfig, maxItems = 2, isWidgetClickable = isWidgetClickable)
+                        initiateView(context, v, yp, userConfig, maxItems = 2, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
                         v
                     }
                     else -> {
                         val v = RemoteViews(context.packageName, R.layout.all_in_widget)
-                        initiateView(context, v, yp, userConfig, maxItems = 1, isWidgetClickable = isWidgetClickable)
+                        initiateView(context, v, yp, userConfig, maxItems = 1, isWidgetClickable = isWidgetClickable, appWidgetId = appWidgetId)
                         v
                     }
                 }

@@ -12,6 +12,28 @@ plugins {
     id("kotlin-parcelize")
 }
 
+val widgetResDir = layout.projectDirectory.dir("src/main/res")
+val widgetModelDir = layout.projectDirectory.dir("src/main/java/com/a3/yearlyprogess/feature/widgets/domain/model")
+val widgetUtilDir = layout.projectDirectory.dir("src/main/java/com/a3/yearlyprogess/feature/widgets/util")
+
+val generateWidgetThemeResources =
+    tasks.register("generateWidgetThemeResources", theme.GenerateWidgetThemeResourcesTask::class.java) {
+        resDir.set(widgetResDir)
+        modelDir.set(widgetModelDir)
+        utilDir.set(widgetUtilDir)
+    }
+
+val verifyWidgetThemeResources =
+    tasks.register("verifyWidgetThemeResources", theme.VerifyWidgetThemeResourcesTask::class.java) {
+        resDir.set(widgetResDir)
+        modelDir.set(widgetModelDir)
+        utilDir.set(widgetUtilDir)
+    }
+
+tasks.named("preBuild") {
+    dependsOn(generateWidgetThemeResources)
+}
+
 detekt {
     config.setFrom(file("$rootDir/config/detekt/detekt.yml"))
 }
@@ -40,8 +62,8 @@ android {
         applicationId = "com.a3.yearlyprogess"
         minSdk = 30
         targetSdk = 37
-        versionCode = 242
-        versionName = "4.0.13"
+        versionCode = 252
+        versionName = "4.1.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -125,6 +147,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.billing.client)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

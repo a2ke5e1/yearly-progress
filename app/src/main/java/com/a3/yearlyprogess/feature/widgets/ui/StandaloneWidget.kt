@@ -135,7 +135,8 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
                 StandaloneWidgetType.NIGHT_LIGHT -> rectangularRemoteView(
@@ -143,10 +144,11 @@ open class StandaloneWidget(
                     yp,
                     userConfig,
                     sunsetData,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
-                else -> rectangularRemoteView(context, yp, userConfig, isWidgetClickable = !disableWidgetClickToApp)
+                else -> rectangularRemoteView(context, yp, userConfig, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
             }
 
             WidgetShape.CLOVER -> when (widgetType) {
@@ -156,7 +158,8 @@ open class StandaloneWidget(
                     userConfig,
                     sunsetData,
                     bundleOptions,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
                 StandaloneWidgetType.NIGHT_LIGHT -> cloverRemoteView(
@@ -165,10 +168,11 @@ open class StandaloneWidget(
                     userConfig,
                     sunsetData,
                     bundleOptions,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
-                else -> cloverRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp)
+                else -> cloverRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
             }
 
             WidgetShape.PILL -> when (widgetType) {
@@ -178,7 +182,8 @@ open class StandaloneWidget(
                     userConfig,
                     sunsetData,
                     bundleOptions,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
                 StandaloneWidgetType.NIGHT_LIGHT -> pillRemoteView(
@@ -187,10 +192,35 @@ open class StandaloneWidget(
                     userConfig,
                     sunsetData,
                     bundleOptions,
-                    isWidgetClickable = !disableWidgetClickToApp
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
                 )
 
-                else -> pillRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp)
+                else -> pillRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
+            }
+
+            WidgetShape.BLOSSOM -> when (widgetType) {
+                StandaloneWidgetType.DAY_LIGHT -> blossomRemoteView(
+                    context,
+                    yp,
+                    userConfig,
+                    sunsetData,
+                    bundleOptions,
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
+                )
+
+                StandaloneWidgetType.NIGHT_LIGHT -> blossomRemoteView(
+                    context,
+                    yp,
+                    userConfig,
+                    sunsetData,
+                    bundleOptions,
+                    isWidgetClickable = !disableWidgetClickToApp,
+                    appWidgetId = appWidgetId
+                )
+
+                else -> blossomRemoteView(context, yp, userConfig, bundleOptions, isWidgetClickable = !disableWidgetClickToApp, appWidgetId = appWidgetId)
             }
         }
 
@@ -207,6 +237,35 @@ open class StandaloneWidget(
             views.setTextColor(R.id.widgetType, colors.primaryColor)
             views.setTextColor(R.id.widgetDaysLeft, colors.secondaryColor)
             views.setTextColor(R.id.widgetCurrentValue, colors.secondaryColor)
+            views.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.secondaryColor)
+        }
+
+
+        /**
+         * Apply blossom widget theme colors to the widget views
+         */
+        private fun applyBlossomTheme(views: RemoteViews, colors: WidgetColors) {
+            views.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundLowColor)
+            views.setInt(R.id.background_widget_badge, "setColorFilter", colors.tertiary)
+            views.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.onTertiary)
+            views.setTextColor(R.id.widgetCurrentValue, colors.onTertiary)
+            views.setTextColor(R.id.widgetType, colors.primaryColor)
+            views.setTextColor(R.id.widgetProgress, colors.primaryColor)
+            views.setTextColor(R.id.widgetDaysLeft, colors.secondaryColor)
+        }
+
+        /**
+         * Format days left text for Blossom widget so that "left" is on a new line
+         */
+        private fun formatBlossomDaysLeft(daysLeft: String): String {
+            val trimmed = daysLeft.trim()
+            if (trimmed.isEmpty() || trimmed.contains('\n')) return trimmed
+            val lastSpace = trimmed.lastIndexOf(' ')
+            return if (lastSpace != -1) {
+                trimmed.substring(0, lastSpace) + "\n" + trimmed.substring(lastSpace + 1)
+            } else {
+                trimmed
+            }
         }
 
         /**
@@ -241,9 +300,14 @@ open class StandaloneWidget(
             // Show/hide days left counter
             if (userConfig.timeLeftCounter && !userConfig.replaceProgressWithDaysLeft) {
                 views.setViewVisibility(R.id.widgetDaysLeft, View.VISIBLE)
+                val daysLeftText = if (userConfig.widgetShape == WidgetShape.BLOSSOM) {
+                    formatBlossomDaysLeft(daysLeft)
+                } else {
+                    daysLeft
+                }
                 views.setTextViewText(
                     R.id.widgetDaysLeft,
-                    daysLeft
+                    daysLeftText
                 )
             } else {
                 views.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
@@ -504,13 +568,168 @@ open class StandaloneWidget(
         }
 
         /**
+         * Apply font scaling to flower large widget text views
+         */
+        private fun applyFontScaleFlowerLarge(
+            views: RemoteViews,
+            fontScale: Float,
+            context: Context
+        ) {
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetType,
+                defaultTextSize = R.dimen.standalone_flower_large_widget_text_size_widget_type,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetDaysLeft,
+                defaultTextSize = R.dimen.standalone_flower_large_widget_text_size_widget_days_left,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetProgress,
+                defaultTextSize = R.dimen.standalone_flower_large_widget_text_size_widget_progress,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetCurrentValue,
+                defaultTextSize = R.dimen.standalone_flower_large_widget_text_size_widget_current_value,
+                fontScale = fontScale
+            )
+        }
+
+        /**
+         * Apply font scaling to flower (medium) widget text views
+         */
+        private fun applyFontScaleFlower(
+            views: RemoteViews,
+            fontScale: Float,
+            context: Context
+        ) {
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetType,
+                defaultTextSize = R.dimen.standalone_flower_widget_text_size_widget_type,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetDaysLeft,
+                defaultTextSize = R.dimen.standalone_flower_widget_text_size_widget_days_left,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetProgress,
+                defaultTextSize = R.dimen.standalone_flower_widget_text_size_widget_progress,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetCurrentValue,
+                defaultTextSize = R.dimen.standalone_flower_widget_text_size_widget_current_value,
+                fontScale = fontScale
+            )
+        }
+
+        /**
+         * Apply font scaling to flower small widget text views
+         */
+        private fun applyFontScaleFlowerSmall(
+            views: RemoteViews,
+            fontScale: Float,
+            context: Context
+        ) {
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetType,
+                defaultTextSize = R.dimen.standalone_flower_small_widget_text_size_widget_type,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetDaysLeft,
+                defaultTextSize = R.dimen.standalone_flower_small_widget_text_size_widget_days_left,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetProgress,
+                defaultTextSize = R.dimen.standalone_flower_small_widget_text_size_widget_progress,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetCurrentValue,
+                defaultTextSize = R.dimen.standalone_flower_small_widget_text_size_widget_current_value,
+                fontScale = fontScale
+            )
+        }
+
+        /**
+         * Apply font scaling to flower extra small widget text views
+         */
+        private fun applyFontScaleFlowerExtraSmall(
+            views: RemoteViews,
+            fontScale: Float,
+            context: Context
+        ) {
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetType,
+                defaultTextSize = R.dimen.standalone_flower_extra_small_widget_text_size_widget_type,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetDaysLeft,
+                defaultTextSize = R.dimen.standalone_flower_extra_small_widget_text_size_widget_days_left,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetProgress,
+                defaultTextSize = R.dimen.standalone_flower_extra_small_widget_text_size_widget_progress,
+                fontScale = fontScale
+            )
+            views.applyTextViewTextSize(
+                context = context,
+                viewId = R.id.widgetCurrentValue,
+                defaultTextSize = R.dimen.standalone_flower_extra_small_widget_text_size_widget_current_value,
+                fontScale = fontScale
+            )
+        }
+
+
+
+        private fun applySunsetSunriseIcons(views: RemoteViews, widgetType: StandaloneWidgetType?) {
+            when (widgetType) {
+                StandaloneWidgetType.DAY_LIGHT -> {
+                    views.setViewVisibility(R.id.widgetCurrentValueImg, View.VISIBLE)
+                    views.setImageViewResource(R.id.widgetCurrentValueImg, R.drawable.sunny_24dp)
+                }
+                StandaloneWidgetType.NIGHT_LIGHT -> {
+                    views.setViewVisibility(R.id.widgetCurrentValueImg, View.VISIBLE)
+                    views.setImageViewResource(R.id.widgetCurrentValueImg, R.drawable.bedtime_24dp)
+                }
+                else -> {
+                    views.setViewVisibility(R.id.widgetCurrentValueImg, View.GONE)
+                }
+            }
+        }
+
+        /**
          * Create rectangular widget view with user configuration
          */
         fun rectangularRemoteView(
             context: Context,
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
@@ -527,7 +746,8 @@ open class StandaloneWidget(
                 timePeriod.name,
                 daysLeft,
                 currentValue,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -536,7 +756,8 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
@@ -558,9 +779,9 @@ open class StandaloneWidget(
 
             val currentValue =
                 if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
+                    "${format.format(Instant.ofEpochMilli(endTime))}"
                 } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
+                    "${format.format(Instant.ofEpochMilli(endTime))}"
                 }
 
             val widgetName =
@@ -577,7 +798,8 @@ open class StandaloneWidget(
                 widgetName,
                 daysLeft,
                 SpannableString(currentValue),
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -588,12 +810,15 @@ open class StandaloneWidget(
             widgetName: String,
             daysLeft: String,
             currentValue: SpannableString,
-            isWidgetClickable: Boolean
+            isWidgetClickable: Boolean,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val views = RemoteViews(context.packageName, R.layout.standalone_widget_layout)
 
             if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(views, context)
+            } else if (appWidgetId != -1) {
+                WidgetRenderer.onParentTapToUpdate(views, context)
             }
 
             // Apply theme from user config
@@ -603,6 +828,8 @@ open class StandaloneWidget(
             // Apply background color with transparency
             views.setInt(R.id.widgetContainer, "setColorFilter", colors.backgroundColor)
             applyBackgroundTransparency(views, userConfig.backgroundTransparency)
+
+            applySunsetSunriseIcons(views, userConfig.widgetType)
 
             // Apply text content with user config
             applyTexts(views, progress, widgetName, daysLeft, currentValue, userConfig)
@@ -624,7 +851,8 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             options: Bundle? = null,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
@@ -646,7 +874,8 @@ open class StandaloneWidget(
                 daysLeft,
                 currentValue,
                 options,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -656,7 +885,8 @@ open class StandaloneWidget(
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
             options: Bundle? = null,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
@@ -675,12 +905,7 @@ open class StandaloneWidget(
                     .withLocale(yp.settings.uLocale.toLocale())
                     .withZone(ZoneId.systemDefault())
 
-            val currentValue =
-                if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
-                } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
-                }
+            val currentValue = "${format.format(Instant.ofEpochMilli(endTime))}"
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -696,7 +921,8 @@ open class StandaloneWidget(
                 daysLeft,
                 SpannableString(currentValue),
                 options,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -709,7 +935,8 @@ open class StandaloneWidget(
             daysLeft: String,
             currentValue: SpannableString,
             options: Bundle? = null,
-            isWidgetClickable: Boolean
+            isWidgetClickable: Boolean,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val large = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout_large)
             val square = RemoteViews(context.packageName, R.layout.standalone_widget_clover_layout)
@@ -721,6 +948,11 @@ open class StandaloneWidget(
                 WidgetRenderer.onParentTap(square, context)
                 WidgetRenderer.onParentTap(small, context)
                 WidgetRenderer.onParentTap(xSmall, context)
+            } else if (appWidgetId != -1) {
+                WidgetRenderer.onParentTapToUpdate(large, context)
+                WidgetRenderer.onParentTapToUpdate(square, context)
+                WidgetRenderer.onParentTapToUpdate(small, context)
+                WidgetRenderer.onParentTapToUpdate(xSmall, context)
             }
 
             // Apply theme from user config
@@ -729,6 +961,8 @@ open class StandaloneWidget(
             // Apply to large view
             applyTheme(large, colors)
             large.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            large.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(large, userConfig.widgetType)
             applyTexts(large, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyCloverProgressContainer(large, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleCloverLarge(large, userConfig.fontScale, context)
@@ -736,6 +970,8 @@ open class StandaloneWidget(
             // Apply to square view
             applyTheme(square, colors)
             square.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            square.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(square, userConfig.widgetType)
             applyTexts(square, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyCloverProgressContainer(square, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleClover(square, userConfig.fontScale, context)
@@ -743,6 +979,8 @@ open class StandaloneWidget(
             // Apply to small view
             applyTheme(small, colors)
             small.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            small.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(small, userConfig.widgetType)
             applyTexts(small, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyCloverProgressContainer(small, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleCloverSmall(small, userConfig.fontScale, context)
@@ -750,7 +988,12 @@ open class StandaloneWidget(
             // Apply to extra small view
             applyTheme(xSmall, colors)
             xSmall.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            xSmall.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(xSmall, userConfig.widgetType)
             applyTexts(xSmall, progress, widgetName, daysLeft, currentValue, userConfig)
+            if (userConfig.widgetType == StandaloneWidgetType.DAY_LIGHT || userConfig.widgetType == StandaloneWidgetType.NIGHT_LIGHT) {
+                xSmall.setViewVisibility(R.id.widgetCurrentValue, View.GONE)
+            }
             WidgetRenderer.applyCloverProgressContainer(xSmall, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScaleCloverExtraSmall(xSmall, userConfig.fontScale, context)
 
@@ -784,7 +1027,8 @@ open class StandaloneWidget(
             yp: YearlyProgressUtil,
             userConfig: StandaloneWidgetOptions,
             options: Bundle? = null,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
             val progress = yp.calculateProgress(timePeriod)
@@ -805,7 +1049,8 @@ open class StandaloneWidget(
                 daysLeft,
                 currentValue,
                 options,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -824,7 +1069,8 @@ open class StandaloneWidget(
             userConfig: StandaloneWidgetOptions,
             sunriseSunsetData: List<SunriseSunset>?,
             options: Bundle? = null,
-            isWidgetClickable: Boolean = true
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
             if (sunriseSunsetData == null) {
@@ -843,12 +1089,7 @@ open class StandaloneWidget(
                     .withLocale(yp.settings.uLocale.toLocale())
                     .withZone(ZoneId.systemDefault())
 
-            val currentValue =
-                if (dayLight) {
-                    "🌇 ${format.format(Instant.ofEpochMilli(endTime))}"
-                } else {
-                    "🌅 ${format.format(Instant.ofEpochMilli(endTime))}"
-                }
+            val currentValue = "${format.format(Instant.ofEpochMilli(endTime))}"
 
             val widgetName =
                 if (dayLight) context.getString(R.string.day_light) else context.getString(
@@ -864,7 +1105,8 @@ open class StandaloneWidget(
                 daysLeft,
                 SpannableString(currentValue),
                 options,
-                isWidgetClickable
+                isWidgetClickable,
+                appWidgetId
             )
         }
 
@@ -877,7 +1119,8 @@ open class StandaloneWidget(
             daysLeft: String,
             currentValue: SpannableString,
             options: Bundle? = null,
-            isWidgetClickable: Boolean
+            isWidgetClickable: Boolean,
+            appWidgetId: Int = -1,
         ): RemoteViews {
             val large =
                 RemoteViews(context.packageName, R.layout.standalone_widget_pill_layout_medium)
@@ -887,6 +1130,9 @@ open class StandaloneWidget(
             if (isWidgetClickable) {
                 WidgetRenderer.onParentTap(large, context)
                 WidgetRenderer.onParentTap(small, context)
+            } else if (appWidgetId != -1) {
+                WidgetRenderer.onParentTapToUpdate(large, context)
+                WidgetRenderer.onParentTapToUpdate(small, context)
             }
 
             // Apply theme from user config
@@ -895,6 +1141,8 @@ open class StandaloneWidget(
             // Apply to large/medium view
             applyTheme(large, colors)
             large.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            large.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(large, userConfig.widgetType)
             applyTexts(large, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyPillProgressContainer(large, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScalePillMedium(large, userConfig.fontScale, context)
@@ -902,6 +1150,8 @@ open class StandaloneWidget(
             // Apply to small view
             applyTheme(small, colors)
             small.setTextColor(R.id.widgetCurrentValue, colors.accentColor)
+            small.setInt(R.id.widgetCurrentValueImg, "setColorFilter", colors.accentColor)
+            applySunsetSunriseIcons(small, userConfig.widgetType)
             applyTexts(small, progress, widgetName, daysLeft, currentValue, userConfig)
             WidgetRenderer.applyPillProgressContainer(small, progress, userConfig.theme ?: WidgetTheme.DEFAULT)
             applyFontScalePillSmall(small, userConfig.fontScale, context)
@@ -920,6 +1170,175 @@ open class StandaloneWidget(
                 return when {
                     minWidth >= 160 && minHeight >= 160 -> large
                     else -> small
+                }
+            }
+        }
+
+        /**
+         * Create flower widget view with user configuration
+         */
+        fun blossomRemoteView(
+            context: Context,
+            yp: YearlyProgressUtil,
+            userConfig: StandaloneWidgetOptions,
+            options: Bundle? = null,
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
+        ): RemoteViews {
+            val timePeriod = mapWidgetTypeToTimePeriod(userConfig)
+            val progress = yp.calculateProgress(timePeriod)
+            val endTime = yp.calculateEndTime(timePeriod)
+            val daysLeft = context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
+            )
+            val currentValue =
+                yp.getCurrentPeriodValue(timePeriod).toFormattedTimePeriod(yp, timePeriod, shortFormat = true)
+            val widgetName = timePeriod.name
+
+            return blossomRemoteView(
+                context,
+                yp,
+                userConfig,
+                progress,
+                widgetName,
+                daysLeft,
+                currentValue,
+                options,
+                isWidgetClickable,
+                appWidgetId
+            )
+        }
+
+        fun blossomRemoteView(
+            context: Context,
+            yp: YearlyProgressUtil,
+            userConfig: StandaloneWidgetOptions,
+            sunriseSunsetData: List<SunriseSunset>?,
+            options: Bundle? = null,
+            isWidgetClickable: Boolean = true,
+            appWidgetId: Int = -1,
+        ): RemoteViews {
+            val dayLight = userConfig.widgetType === StandaloneWidgetType.DAY_LIGHT
+            if (sunriseSunsetData == null) {
+                return WidgetRenderer.errorWidgetRemoteView(context, "Failed to load sunset data")
+            }
+            val (startTime, endTime) = getStartAndEndTime(dayLight, sunriseSunsetData)
+            val progress = yp.calculateProgress(startTime, endTime)
+            val daysLeft = context.getString(
+                R.string.time_left,
+                yp.calculateTimeLeft(endTime).toTimePeriodText(userConfig.dynamicLeftCounter)
+            )
+
+            val currentValue = ""
+
+            val widgetName =
+                if (dayLight) context.getString(R.string.day_light) else context.getString(
+                    R.string.night_light
+                )
+
+            return blossomRemoteView(
+                context,
+                yp,
+                userConfig,
+                progress,
+                widgetName,
+                daysLeft,
+                SpannableString(currentValue),
+                options,
+                isWidgetClickable,
+                appWidgetId
+            )
+        }
+
+        private fun blossomRemoteView(
+            context: Context,
+            yp: YearlyProgressUtil,
+            userConfig: StandaloneWidgetOptions,
+            progress: Double,
+            widgetName: String,
+            daysLeft: String,
+            currentValue: SpannableString,
+            options: Bundle? = null,
+            isWidgetClickable: Boolean,
+            appWidgetId: Int = -1,
+        ): RemoteViews {
+            val large = RemoteViews(context.packageName, R.layout.standalone_widget_flower_layout_large)
+            val medium = RemoteViews(context.packageName, R.layout.standalone_widget_flower_layout)
+            val small = RemoteViews(context.packageName, R.layout.standalone_widget_flower_layout_small)
+            val xSmall = RemoteViews(context.packageName, R.layout.standalone_widget_flower_layout_extra_small)
+
+            if (isWidgetClickable) {
+                WidgetRenderer.onParentTap(large, context)
+                WidgetRenderer.onParentTap(medium, context)
+                WidgetRenderer.onParentTap(small, context)
+                WidgetRenderer.onParentTap(xSmall, context)
+            } else if (appWidgetId != -1) {
+                WidgetRenderer.onParentTapToUpdate(large, context)
+                WidgetRenderer.onParentTapToUpdate(medium, context)
+                WidgetRenderer.onParentTapToUpdate(small, context)
+                WidgetRenderer.onParentTapToUpdate(xSmall, context)
+            }
+
+            val effectiveConfig = if (userConfig.widgetShape != WidgetShape.BLOSSOM) {
+                userConfig.copy(widgetShape = WidgetShape.BLOSSOM)
+            } else {
+                userConfig
+            }
+
+            // Apply theme from user config
+            val colors = WidgetColors.fromTheme(context, effectiveConfig.theme ?: WidgetTheme.DEFAULT)
+
+            // Apply to large view
+            applyBlossomTheme(large, colors)
+            applyTexts(large, progress, widgetName, daysLeft, currentValue, effectiveConfig)
+            applyBackgroundTransparency(large, effectiveConfig.backgroundTransparency)
+            applyFontScaleFlowerLarge(large, effectiveConfig.fontScale, context)
+            applySunsetSunriseIcons(large, userConfig.widgetType)
+
+            // Apply to medium view
+            applyBlossomTheme(medium, colors)
+            applyTexts(medium, progress, widgetName, daysLeft, currentValue, effectiveConfig)
+            applyBackgroundTransparency(medium, effectiveConfig.backgroundTransparency)
+            applyFontScaleFlower(medium, effectiveConfig.fontScale, context)
+            applySunsetSunriseIcons(medium, userConfig.widgetType)
+
+
+            // Apply to small view
+            applyBlossomTheme(small, colors)
+            applyTexts(small, progress, widgetName, daysLeft, currentValue, effectiveConfig)
+            applyBackgroundTransparency(small, effectiveConfig.backgroundTransparency)
+            applyFontScaleFlowerSmall(small, effectiveConfig.fontScale, context)
+            applySunsetSunriseIcons(small, userConfig.widgetType)
+
+
+            // Apply to extra small view
+            applyBlossomTheme(xSmall, colors)
+            applyTexts(xSmall, progress, widgetName, daysLeft, currentValue, effectiveConfig)
+            xSmall.setViewVisibility(R.id.widgetDaysLeft, View.GONE)
+            applyBackgroundTransparency(xSmall, effectiveConfig.backgroundTransparency)
+            applyFontScaleFlowerExtraSmall(xSmall, effectiveConfig.fontScale, context)
+            applySunsetSunriseIcons(xSmall, userConfig.widgetType)
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                return RemoteViews(
+                    mapOf(
+                        SizeF(57f, 57f) to xSmall,
+                        SizeF(110f, 100f) to small,
+                        SizeF(165f, 160f) to medium,
+                        SizeF(230f, 220f) to large,
+                    ),
+                )
+            } else {
+                val minWidth = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) ?: 0
+                val minHeight = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT) ?: 0
+
+                return when {
+                    minWidth >= 220 && minHeight >= 200 -> large
+                    minWidth >= 160 && minHeight >= 150 -> medium
+                    minWidth >= 110 && minHeight >= 95 -> small
+                    else -> xSmall
                 }
             }
         }

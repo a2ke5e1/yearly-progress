@@ -70,6 +70,7 @@ import com.a3.yearlyprogess.R
 import com.a3.yearlyprogess.core.backup.BackupManager
 import com.a3.yearlyprogess.core.util.CommunityUtil
 import com.a3.yearlyprogess.feature.backup_restore.BackupRestoreDialog
+import com.a3.yearlyprogess.feature.billing.ui.SupportDeveloperModal
 import com.a3.yearlyprogess.feature.events.presentation.EventViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -90,7 +91,8 @@ fun AppTopBar(
     backupManager: BackupManager? = null,
     showShareButton: Boolean = false,
     showAboutButton: Boolean = false,
-    showBackAndRestore: Boolean = false
+    showBackAndRestore: Boolean = false,
+    showRemoveAds: Boolean = false,
 ) {
     val view = LocalView.current
     var expanded by remember { mutableStateOf(false) }
@@ -100,6 +102,7 @@ fun AppTopBar(
     var showDeleteDialogBox by remember { mutableStateOf(false) }
     var showBackupRestoreDialog by remember { mutableStateOf(false) }
     var showAboutDialogBox by remember { mutableStateOf(false) }
+    var showSupportDialogBox by remember { mutableStateOf(false) }
 
     var isBackupInProgress by remember { mutableStateOf(false) }
     var isRestoreInProgress by remember { mutableStateOf(false) }
@@ -292,6 +295,15 @@ fun AppTopBar(
                                     CommunityUtil.onShare(context)
                                 })
                         }
+                        if (showRemoveAds) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.remove_ads)) },
+                                onClick = {
+                                    performFeedback()
+                                    expanded = false
+                                    showSupportDialogBox = true
+                                })
+                        }
                         if (showAboutButton) {
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.about)) },
@@ -395,6 +407,10 @@ fun AppTopBar(
         )
     }
 
+    SupportDeveloperModal(
+        open = showSupportDialogBox,
+        onDismissRequest = { showSupportDialogBox = false }
+    )
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

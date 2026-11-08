@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED FILE - DO NOT EDIT. Regenerate with the app `generateWidgetThemeResources` task. -->
+<resources>
+    <style name="WidgetTheme.Dynamic" parent="WidgetTheme.Default">
+        <item name="widgetBackgroundColor">@color/widget_dynamic_background_color</item>
+        <item name="widgetBackgroundLowColor">@color/widget_dynamic_background_low_color</item>
+        <item name="widgetPrimaryColor">@color/widget_dynamic_primary_color</item>
+        <item name="widgetSecondaryColor">@color/widget_dynamic_secondary_color</item>
+        <item name="widgetAccentColor">@color/widget_dynamic_accent_color</item>
+        <item name="widgetPrimary">@color/widget_dynamic_primary</item>
+        <item name="widgetOnPrimary">@color/widget_dynamic_on_primary</item>
+        <item name="widgetPrimaryContainer">@color/widget_dynamic_primary_container</item>
+        <item name="widgetOnPrimaryContainer">@color/widget_dynamic_on_primary_container</item>
+        <item name="widgetSecondary">@color/widget_dynamic_secondary</item>
+        <item name="widgetOnSecondary">@color/widget_dynamic_on_secondary</item>
+        <item name="widgetSecondaryContainer">@color/widget_dynamic_secondary_container</item>
+        <item name="widgetOnSecondaryContainer">@color/widget_dynamic_on_secondary_container</item>
+        <item name="widgetTertiary">@color/widget_dynamic_tertiary</item>
+        <item name="widgetOnTertiary">@color/widget_dynamic_on_tertiary</item>
+        <item name="widgetTertiaryContainer">@color/widget_dynamic_tertiary_container</item>
+        <item name="widgetOnTertiaryContainer">@color/widget_dynamic_on_tertiary_container</item>
+        <item name="widgetError">@color/widget_dynamic_error</item>
+        <item name="widgetOnError">@color/widget_dynamic_on_error</item>
+        <item name="widgetErrorContainer">@color/widget_dynamic_error_container</item>
+        <item name="widgetOnErrorContainer">@color/widget_dynamic_on_error_container</item>
+        <item name="widgetBackground">@color/widget_dynamic_background</item>
+        <item name="widgetOnBackground">@color/widget_dynamic_on_background</item>
+        <item name="widgetSurface">@color/widget_dynamic_surface</item>
+        <item name="widgetOnSurface">@color/widget_dynamic_on_surface</item>
+        <item name="widgetSurfaceVariant">@color/widget_dynamic_surface_variant</item>
+        <item name="widgetOnSurfaceVariant">@color/widget_dynamic_on_surface_variant</item>
+        <item name="widgetOutline">@color/widget_dynamic_outline</item>
+        <item name="widgetOutlineVariant">@color/widget_dynamic_outline_variant</item>
+        <item name="widgetScrim">@color/widget_dynamic_scrim</item>
+        <item name="widgetSurfaceTint">@color/widget_dynamic_surface_tint</item>
+        <item name="widgetInverseSurface">@color/widget_dynamic_inverse_surface</item>
+        <item name="widgetInverseOnSurface">@color/widget_dynamic_inverse_on_surface</item>
+        <item name="widgetInversePrimary">@color/widget_dynamic_inverse_primary</item>
+        <item name="widgetSurfaceDim">@color/widget_dynamic_surface_dim</item>
+        <item name="widgetSurfaceBright">@color/widget_dynamic_surface_bright</item>
+        <item name="widgetSurfaceContainerLowest">@color/widget_dynamic_surface_container_lowest</item>
+        <item name="widgetSurfaceContainerLow">@color/widget_dynamic_surface_container_low</item>
+        <item name="widgetSurfaceContainer">@color/widget_dynamic_surface_container</item>
+        <item name="widgetSurfaceContainerHigh">@color/widget_dynamic_surface_container_high</item>
+        <item name="widgetSurfaceContainerHighest">@color/widget_dynamic_surface_container_highest</item>
+        <item name="widgetPrimaryFixed">@color/widget_dynamic_primary_fixed</item>
+        <item name="widgetPrimaryFixedDim">@color/widget_dynamic_primary_fixed_dim</item>
+        <item name="widgetOnPrimaryFixed">@color/widget_dynamic_on_primary_fixed</item>
+        <item name="widgetOnPrimaryFixedVariant">@color/widget_dynamic_on_primary_fixed_variant</item>
+        <item name="widgetSecondaryFixed">@color/widget_dynamic_secondary_fixed</item>
+        <item name="widgetSecondaryFixedDim">@color/widget_dynamic_secondary_fixed_dim</item>
+        <item name="widgetOnSecondaryFixed">@color/widget_dynamic_on_secondary_fixed</item>
+        <item name="widgetOnSecondaryFixedVariant">@color/widget_dynamic_on_secondary_fixed_variant</item>
+        <item name="widgetTertiaryFixed">@color/widget_dynamic_tertiary_fixed</item>
+        <item name="widgetTertiaryFixedDim">@color/widget_dynamic_tertiary_fixed_dim</item>
+        <item name="widgetOnTertiaryFixed">@color/widget_dynamic_on_tertiary_fixed</item>
+        <item name="widgetOnTertiaryFixedVariant">@color/widget_dynamic_on_tertiary_fixed_variant</item>
+    </style>
+</resources>

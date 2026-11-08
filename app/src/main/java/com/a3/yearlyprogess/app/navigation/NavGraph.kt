@@ -1,5 +1,8 @@
 package com.a3.yearlyprogess.app.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -33,23 +36,42 @@ fun AppNavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        // Latest native Activity launch animation (Scale + Fade)
         enterTransition = {
-            fadeIn(animationSpec = tween(300)) + 
-            scaleIn(initialScale = 0.92f, animationSpec = tween(300))
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = spring(
+                    dampingRatio = 1.0f,
+                    stiffness = Spring.StiffnessMediumLow,
+                ),
+            )
         },
         exitTransition = {
-            fadeOut(animationSpec = tween(150)) + 
-            scaleOut(targetScale = 1.08f, animationSpec = tween(150))
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = spring(
+                    dampingRatio = 1.0f,
+                    stiffness = Spring.StiffnessMediumLow,
+                ),
+            )
         },
         popEnterTransition = {
-            fadeIn(animationSpec = tween(300)) + 
-            scaleIn(initialScale = 1.08f, animationSpec = tween(300))
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = spring(
+                    dampingRatio = 1.0f,
+                    stiffness = Spring.StiffnessMediumLow,
+                ),
+            )
         },
         popExitTransition = {
-            fadeOut(animationSpec = tween(150)) + 
-            scaleOut(targetScale = 0.92f, animationSpec = tween(150))
-        }
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = spring(
+                    dampingRatio = 1.0f,
+                    stiffness = Spring.StiffnessMediumLow,
+                ),
+            )
+        },
     ) {
         composable<Destination.Welcome> {
             WelcomeScreen(

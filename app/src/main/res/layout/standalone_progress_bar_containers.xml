@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED FILE - DO NOT EDIT. Regenerate with the app `generateWidgetThemeResources` task. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
 
     <ProgressBar
         android:id="@+id/widgetProgressBarDefault"
@@ -19,15 +21,6 @@
         android:max="100"
         android:progress="20"
         android:theme="@style/WidgetProgressTheme.Green" />
-
-    <ProgressBar
-        android:id="@+id/widgetProgressBarDynamic"
-        style="@style/WidgetProgressBarBase"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="20"
-        android:theme="@style/WidgetProgressTheme.Dynamic" />
-
 
     <ProgressBar
         android:id="@+id/widgetProgressBarOcean"
@@ -444,5 +437,13 @@
         android:max="100"
         android:progress="20"
         android:theme="@style/WidgetProgressTheme.Honeydew" />
+
+    <ProgressBar
+        android:id="@+id/widgetProgressBarDynamic"
+        style="@style/WidgetProgressBarBase"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="20"
+        android:theme="@style/WidgetProgressTheme.Dynamic" />
 
 </LinearLayout>
