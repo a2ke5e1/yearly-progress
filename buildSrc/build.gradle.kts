@@ -9,7 +9,7 @@ repositories {
 
 dependencies {
     implementation("com.materialkolor:material-kolor-jvm:5.0.1")
-    implementation("org.jetbrains.compose.material3:material3:1.12.0-alpha03")
+    implementation("org.jetbrains.compose.material3:material3:1.13.0-beta02")
 
     testImplementation("junit:junit:4.13.2")
 }
